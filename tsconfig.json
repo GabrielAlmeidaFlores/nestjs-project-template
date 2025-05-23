@@ -1,0 +1,92 @@
+{
+  "compilerOptions": {
+    // === Path Aliases ===
+    "paths": {
+      "@core/*": ["./src/core/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@infra/*": ["./src/infra/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@route/*": ["./src/route/*"],
+      "@handler/*": ["./src/handler/*"],
+      "@base/*": ["./src/*"]
+    },
+
+    // === Strict Type-Checking Options ===
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // === Additional Strictness Checks ===
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+    "strictPropertyInitialization": false,
+
+    // === Module Configuration (unchanged) ===
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": false,
+    "resolveJsonModule": false,
+    "allowImportingTsExtensions": false,
+
+    // === Output and Target Settings (unchanged) ===
+    "target": "ES2021",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "noEmitOnError": true,
+    "incremental": false,
+    "composite": false,
+
+    // === Code Quality and Consistency ===
+    "allowJs": false,
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": false,
+    "importHelpers": true,
+    "downlevelIteration": false,
+    "suppressExcessPropertyErrors": false,
+    "suppressImplicitAnyIndexErrors": false,
+
+    // === Tooling and Compatibility ===
+    "isolatedModules": true,
+    "disableReferencedProjectLoad": true,
+    "disableSolutionSearching": true,
+    "disableSourceOfProjectReferenceRedirect": true,
+
+    // Decorators Settings
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+
+  // === File Inclusion/Exclusion ===
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__tests__/*"
+  ],
+
+  // === Additional Strictness ===
+  "references": [],
+  "typeAcquisition": {
+    "enable": false
+  }
+}
