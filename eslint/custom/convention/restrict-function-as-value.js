@@ -5,7 +5,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     type: 'problem',
     docs: {
       description:
-        'Disallow function calls as values (e.g., arguments, object properties, control flow). Require assigning to a variable first. Allows builder chains, decorators, and safe fallback expressions.',
+        'Disallow function calls as values (e.g., arguments, object properties, control flow). Require assigning to a variable first. Allows builder chains, decorators, awaits, type assertions, and fallbacks.',
       category: 'Best Practices',
     },
     schema: [],
@@ -31,34 +31,18 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       return false;
     }
 
-    function isPartOfBuilderChain(node) {
-      return (
-        node.parent &&
-        (node.parent.type === 'MemberExpression' || node.parent.type === 'CallExpression') &&
-        node.parent.callee === node
-      );
-    }
-
-    function unwrapTypeCasts(node) {
+    function unwrapExpression(node) {
       let current = node;
       while (
         current.parent &&
-        (current.parent.type === 'TSAsExpression' || current.parent.type === 'TypeAssertion')
+        (current.parent.type === 'TSAsExpression' ||
+          current.parent.type === 'TypeAssertion' ||
+          current.parent.type === 'AwaitExpression' ||
+          current.parent.type === 'UnaryExpression') // for `void`
       ) {
         current = current.parent;
       }
       return current;
-    }
-
-    function isPureExpressionStatement(node) {
-      let current = node;
-      while (
-        current.parent &&
-        (current.parent.type === 'MemberExpression' || current.parent.type === 'CallExpression')
-      ) {
-        current = current.parent;
-      }
-      return current.parent?.type === 'ExpressionStatement';
     }
 
     function isInsideSafeAssignmentContext(node) {
@@ -81,10 +65,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           return true;
         }
 
-        if (
-          parent.type === 'VariableDeclarator' &&
-          parent.init === current
-        ) {
+        if (parent.type === 'VariableDeclarator' && parent.init === current) {
           return true;
         }
 
@@ -94,15 +75,28 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       return false;
     }
 
+    function isFinalExpressionStatement(node) {
+      let current = unwrapExpression(node);
+      while (
+        current.parent &&
+        (current.parent.type === 'MemberExpression' ||
+          current.parent.type === 'CallExpression')
+      ) {
+        current = current.parent;
+      }
+
+      return current.parent?.type === 'ExpressionStatement';
+    }
+
     return {
       CallExpression(node) {
-        const unwrapped = unwrapTypeCasts(node);
+        const unwrapped = unwrapExpression(node);
         const parent = unwrapped.parent;
 
         if (!parent) return;
 
         if (isInsideDecorator(node)) return;
-        if (isPureExpressionStatement(node)) return;
+        if (isFinalExpressionStatement(node)) return;
         if (isInsideSafeAssignmentContext(unwrapped)) return;
 
         if (parent.type === 'ReturnStatement') return;
@@ -112,9 +106,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           (parent.type === 'ArrowFunctionExpression' ||
             parent.type === 'FunctionExpression') &&
           parent.body === node
-        ) return;
-
-        if (isPartOfBuilderChain(node)) return;
+        )
+          return;
 
         if (
           parent.type === 'CallExpression' &&
