@@ -3,7 +3,7 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Enforce that function calls must be encapsulated in variables except for standalone calls, callbacks, decorators, and class properties',
+        'Enforce that function calls must be encapsulated in variables',
       category: 'Best Practices',
     },
     schema: [],
