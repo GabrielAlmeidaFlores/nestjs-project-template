@@ -7,6 +7,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       description:
         'Disallow function calls as values (e.g., arguments, object properties, control flow). Require assigning to a variable first. Allows builder chains, decorators, awaits, type assertions, and fallbacks.',
       category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {
