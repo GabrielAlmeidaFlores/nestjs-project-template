@@ -1,12 +1,11 @@
 module.exports = {
   meta: {
-    type: 'problem',
+    type: "problem",
     docs: {
-      description:
-        'Enforce that function calls must be encapsulated in variables',
-      category: 'Best Practices',
+      description: "Enforce that function calls must be encapsulated in variables",
+      category: "Best Practices",
     },
-    schema: [],
+    schema: []
   },
   create(context) {
     function isInsideDecorator(node) {
@@ -20,18 +19,15 @@ module.exports = {
       return false;
     }
 
-    function isClassProperty(node) {
-      let parent = node.parent;
-      while (parent) {
-        if (parent.type === 'PropertyDefinition') {
-          return true;
-        }
-        if (parent.type === 'ClassBody' || parent.type === 'ClassDeclaration') {
-          return false;
-        }
-        parent = parent.parent;
-      }
-      return false;
+    function isPropertyAssignment(node) {
+      const parent = node.parent;
+      return (
+        (parent.type === 'AssignmentExpression' && 
+         parent.left.type === 'MemberExpression' &&
+         parent.parent.type === 'ExpressionStatement') ||
+        parent.type === 'PropertyDefinition' ||
+        parent.type === 'Property'
+      );
     }
 
     return {
@@ -40,7 +36,7 @@ module.exports = {
           return;
         }
 
-        if (isClassProperty(node)) {
+        if (isPropertyAssignment(node)) {
           return;
         }
 
@@ -54,9 +50,9 @@ module.exports = {
 
         const isInsideCallback = [
           'ArrowFunctionExpression',
-          'FunctionExpression',
+          'FunctionExpression'
         ].includes(node.parent.type);
-
+        
         if (isInsideCallback) {
           return;
         }
@@ -67,10 +63,9 @@ module.exports = {
 
         context.report({
           node,
-          message:
-            'All function calls must be encapsulated in a variable before use',
+          message: 'All function calls must be encapsulated in a variable before use'
         });
-      },
+      }
     };
-  },
+  }
 };
