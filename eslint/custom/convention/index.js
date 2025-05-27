@@ -10,7 +10,6 @@ module.exports = {
         'restrict-name-suffix': require('./restrict-name-suffix.js'),
         'restrict-error-name-suffix': require('./restrict-error-name-suffix.js'),
         'restrict-constructor-parameter-order': require('./restrict-constructor-parameter-order.js'),
-        'restrict-function-as-value': require('./restrict-function-as-value.js'),
         'restrict-if-block-size': require('./restrict-if-block-size.js'),
         'restrict-inline-logic': require('./restrict-inline-logic.js')
       },
@@ -28,7 +27,6 @@ module.exports = {
     'convention-rule/restrict-name-suffix': 'error',
     'convention-rule/restrict-error-name-suffix': 'error',
     'convention-rule/restrict-constructor-parameter-order': 'error',
-    'convention-rule/restrict-function-as-value': 'error',
     'convention-rule/restrict-if-block-size': 'error',
     'convention-rule/restrict-inline-logic': 'error'
   },

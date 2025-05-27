@@ -5,7 +5,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     type: 'problem',
     docs: {
       description:
-        'Restrict inline logic expressions in control flow, function arguments, object properties, or arrays. Require extraction into named variables to improve clarity and maintainability',
+        'Disallow inline logic (binary, logical, unary) and function calls in control flow, arguments, and object properties. Require assigning to a named variable first. Allows decorators, final expressions, and safe assignment.',
       category: 'Best Practices',
       recommended: true,
       suggestion: false,
@@ -14,6 +14,14 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     messages: {
       noInlineLogic:
         'Avoid inline logic. Assign the result to a clearly named variable first.',
+      noInlineCall:
+        'Function calls used as values must be encapsulated in variables.',
+      noInlineArgument:
+        'Do not pass function calls directly as arguments. Assign to a variable first.',
+      noInlineControlFlow:
+        'Do not use function calls in control flow conditions. Assign to a variable first.',
+      noInlineObjectValue:
+        'Do not use function calls as object property values. Assign to a variable first.',
     },
   },
   defaultOptions: [],
@@ -25,7 +33,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       'CallExpression',
     ]);
 
-    function isDisallowedTest(node) {
+    function isDisallowedExpression(node) {
       if (
         node.type === 'UnaryExpression' &&
         node.operator === '!' &&
@@ -46,6 +54,66 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       return false;
     }
 
+    function unwrapExpression(node) {
+      let current = node;
+      while (
+        current.parent &&
+        (current.parent.type === 'TSAsExpression' ||
+          current.parent.type === 'TypeAssertion' ||
+          current.parent.type === 'AwaitExpression' ||
+          current.parent.type === 'UnaryExpression')
+      ) {
+        current = current.parent;
+      }
+      return current;
+    }
+
+    function isInsideSafeAssignmentContext(node) {
+      let current = node;
+      while (current.parent) {
+        const parent = current.parent;
+
+        if (
+          parent.type === 'LogicalExpression' ||
+          parent.type === 'ConditionalExpression'
+        ) {
+          current = parent;
+          continue;
+        }
+
+        if (
+          parent.type === 'AssignmentExpression' &&
+          parent.right === current
+        ) {
+          return true;
+        }
+
+        if (
+          parent.type === 'VariableDeclarator' &&
+          parent.init === current
+        ) {
+          return true;
+        }
+
+        break;
+      }
+
+      return false;
+    }
+
+    function isFinalExpressionStatement(node) {
+      let current = unwrapExpression(node);
+      while (
+        current.parent &&
+        (current.parent.type === 'MemberExpression' ||
+          current.parent.type === 'CallExpression')
+      ) {
+        current = current.parent;
+      }
+
+      return current.parent?.type === 'ExpressionStatement';
+    }
+
     function isInLoopCondition(node) {
       const parent = node.parent;
       return (
@@ -55,60 +123,80 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       );
     }
 
-    function reportIfDisallowed(node) {
-      if (
-        node.parent &&
-        node.parent.type === 'VariableDeclarator' &&
-        node.parent.init === node
-      ) {
+    function reportDisallowedExpression(node) {
+      if (isInsideDecorator(node)) return;
+      if (isInsideSafeAssignmentContext(node)) return;
+      if (isFinalExpressionStatement(node)) return;
+      if (isInLoopCondition(node)) return;
+
+      if (node.type === 'CallExpression') {
+        const parent = node.parent;
+
+        if (
+          parent?.type === 'CallExpression' &&
+          parent.arguments.includes(node)
+        ) {
+          context.report({ node, messageId: 'noInlineArgument' });
+          return;
+        }
+
+        if (
+          parent?.type === 'Property' &&
+          parent.value === node &&
+          parent.parent.type === 'ObjectExpression'
+        ) {
+          context.report({ node, messageId: 'noInlineObjectValue' });
+          return;
+        }
+
+        if (
+          ['IfStatement', 'WhileStatement', 'SwitchStatement', 'DoWhileStatement'].includes(
+            parent?.type,
+          )
+        ) {
+          context.report({ node, messageId: 'noInlineControlFlow' });
+          return;
+        }
+
+        context.report({ node, messageId: 'noInlineCall' });
         return;
       }
 
-      if (isInsideDecorator(node)) {
-        return;
-      }
-
-      if (isInLoopCondition(node)) {
-        return;
-      }
-
-      if (isDisallowedTest(node)) {
-        context.report({ node, messageId: 'noInlineLogic' });
-      }
+      context.report({ node, messageId: 'noInlineLogic' });
     }
 
     return {
       IfStatement(node) {
-        reportIfDisallowed(node.test);
+        reportDisallowedExpression(node.test);
       },
       WhileStatement(node) {
-        reportIfDisallowed(node.test);
+        reportDisallowedExpression(node.test);
       },
       DoWhileStatement(node) {
-        reportIfDisallowed(node.test);
+        reportDisallowedExpression(node.test);
       },
       ForStatement(node) {
-        if (node.test) reportIfDisallowed(node.test);
+        if (node.test) reportDisallowedExpression(node.test);
       },
       ConditionalExpression(node) {
-        reportIfDisallowed(node.test);
+        reportDisallowedExpression(node.test);
       },
       ArrayExpression(node) {
         for (const element of node.elements) {
-          if (element) reportIfDisallowed(element);
+          if (element && isDisallowedExpression(element)) {
+            reportDisallowedExpression(element);
+          }
         }
       },
       Property(node) {
-        if (node.value && node.value !== node.key) {
-          reportIfDisallowed(node.value);
+        if (node.value && node.value !== node.key && isDisallowedExpression(node.value)) {
+          reportDisallowedExpression(node.value);
         }
       },
       CallExpression(node) {
-        if (isInsideDecorator(node)) return;
-
         for (const arg of node.arguments) {
-          if (disallowedTypes.has(arg.type)) {
-            reportIfDisallowed(arg);
+          if (isDisallowedExpression(arg)) {
+            reportDisallowedExpression(arg);
           }
         }
       },
