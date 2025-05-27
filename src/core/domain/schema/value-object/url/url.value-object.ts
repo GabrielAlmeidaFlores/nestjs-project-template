@@ -9,7 +9,9 @@ export class Url extends BaseValueObject<Url> {
   public constructor(value: string) {
     super(value);
 
-    if (!Url.isValid(value)) {
+    const isUrlValid = Url.isValid(value);
+
+    if (!isUrlValid) {
       throw new InvalidUrlError();
     }
 

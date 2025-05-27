@@ -9,7 +9,9 @@ class HashTransformerUtil {
   protected readonly _type = HashTransformerUtil.name;
 
   public static hash(value?: string): string | undefined {
-    if (typeof value !== 'string') {
+    const isValueNotAString = typeof value !== 'string';
+
+    if (isValueNotAString) {
       return value;
     }
 
