@@ -21,8 +21,15 @@ jobs:
           node-version: 22.15.0
           cache: 'yarn'
 
-      - name: Install dependencies
-        run: yarn install --check-files
+      - name: Verify dependency integrity (fail on warning)
+        run: |
+          set -o pipefail
+          yarn install --frozen-lockfile --check-files 2>&1 | tee output.log
+          if grep -i warning output.log; then
+            echo "❌ Dependency warnings found. Failing..."
+            exit 1
+          fi
+
 
       - name: Run build
         run: yarn build
