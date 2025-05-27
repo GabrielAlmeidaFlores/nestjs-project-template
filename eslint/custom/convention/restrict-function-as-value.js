@@ -40,7 +40,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         (current.parent.type === 'TSAsExpression' ||
           current.parent.type === 'TypeAssertion' ||
           current.parent.type === 'AwaitExpression' ||
-          current.parent.type === 'UnaryExpression') // for `void`
+          current.parent.type === 'UnaryExpression') 
       ) {
         current = current.parent;
       }
