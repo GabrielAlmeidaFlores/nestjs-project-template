@@ -1,4 +1,4 @@
-name: PR Checks
+name: PR Workflow
 
 on:
   pull_request:
