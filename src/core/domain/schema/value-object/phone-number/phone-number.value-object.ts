@@ -7,7 +7,9 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
   public constructor(value: string) {
     super(value);
 
-    if (!PhoneNumber.isValid(value)) {
+    const isValidPhoneNumber = PhoneNumber.isValid(value);
+
+    if (!isValidPhoneNumber) {
       throw new InvalidPhoneNumberError();
     }
   }

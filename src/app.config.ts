@@ -12,20 +12,11 @@ import type { PackageJson } from 'type-fest';
 class AppConfigUtils {
   protected readonly _type = AppConfigUtils.name;
 
-  protected loadPackageJson(): PackageJson | null {
-    const possiblePaths = [join(process.cwd(), 'package.json')];
-
-    for (const path of possiblePaths) {
-      try {
-        const packageJson = JSON.parse(
-          readFileSync(path, 'utf-8'),
-        ) as PackageJson;
-
-        return packageJson;
-      } catch {}
-    }
-
-    return null;
+  protected loadPackageJson(): PackageJson {
+    const currentWorkingDir = process.cwd();
+    const packageJsonPath = join(currentWorkingDir, 'package.json');
+    const packageJsonAsString = readFileSync(packageJsonPath, 'utf-8');
+    return JSON.parse(packageJsonAsString) as PackageJson;
   }
 }
 
@@ -71,19 +62,17 @@ export class AppConfig extends AppConfigUtils {
   public swagger(): this {
     const packageJson = this.loadPackageJson();
 
-    const config = new DocumentBuilder().addBearerAuth();
+    const config = new DocumentBuilder();
 
-    if (
-      packageJson &&
-      packageJson.name !== undefined &&
-      packageJson.description !== undefined &&
-      packageJson.version !== undefined
-    ) {
-      config
-        .setTitle(packageJson.name)
-        .setDescription(packageJson.description)
-        .setVersion(packageJson.version);
-    }
+    const projectTitle = packageJson.name ?? '';
+    const projectDescription = packageJson.description ?? '';
+    const projectVersion = packageJson.version ?? '';
+
+    config
+      .addBearerAuth()
+      .setTitle(projectTitle)
+      .setDescription(projectDescription)
+      .setVersion(projectVersion);
 
     const build = config.build();
 

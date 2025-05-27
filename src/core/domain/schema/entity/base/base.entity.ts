@@ -27,7 +27,9 @@ export abstract class BaseEntity {
   ): void {
     const isInvalid = false;
 
-    if (validate.includes(isInvalid)) {
+    const validationFailed = validate.includes(isInvalid);
+
+    if (validationFailed) {
       throw new error();
     }
   }

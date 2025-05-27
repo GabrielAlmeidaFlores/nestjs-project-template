@@ -7,7 +7,9 @@ export class PostalCode extends BaseValueObject<PostalCode> {
   public constructor(value: string) {
     super(value);
 
-    if (!PostalCode.isValid(value)) {
+    const isValidPostalCode = PostalCode.isValid(value);
+
+    if (!isValidPostalCode) {
       throw new InvalidPostalCodeError();
     }
   }

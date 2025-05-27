@@ -11,7 +11,9 @@ export abstract class BaseAutoMapperProfile {
     valueObjectClass: new (value: string) => T,
     value: string | null,
   ): T | null {
-    if (value === null) {
+    const isValueNull = value === null;
+
+    if (isValueNull) {
       return null;
     }
 
@@ -21,7 +23,9 @@ export abstract class BaseAutoMapperProfile {
   protected convertOptionalValueObjectToString<T extends BaseValueObject<T>>(
     valueObject: T | null,
   ): string | null {
-    if (valueObject === null) {
+    const isValueObjectNull = valueObject === null;
+
+    if (isValueObjectNull) {
       return null;
     }
 

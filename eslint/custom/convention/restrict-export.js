@@ -4,6 +4,8 @@ module.exports = {
     docs: {
       description: 'Disallow multiple exports per file.',
       category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     fixable: null,
     schema: [],
@@ -17,7 +19,7 @@ module.exports = {
         const exportDeclarations = node.body.filter(
           (n) =>
             n.type === 'ExportNamedDeclaration' ||
-            n.type === 'ExportDefaultDeclaration'
+            n.type === 'ExportDefaultDeclaration',
         );
 
         let exportCount = 0;

@@ -96,29 +96,30 @@ export class CustomerEntity extends BaseEntity {
     const maxNameLength = 50;
     const nameRegex = /^[A-Za-z ]+$/;
 
+    const hasMinimumLength = name.length > minNameLength;
+    const hasMaximumLength = name.length < maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(name);
+
     this.validateAllOrThrow(
-      [
-        name.length > minNameLength,
-        name.length < maxNameLength,
-        nameRegex.test(name),
-      ],
+      [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
       InvalidCustomerNameError,
     );
   }
 
   public static validatePassword(password: string | Hash): void {
-    if (password instanceof Hash) {
+    const isHashedPassword = password instanceof Hash;
+    if (isHashedPassword) {
       return;
     }
 
     const minPasswordLength = 3;
     const maxPasswordLength = 50;
 
+    const hasMinimumLength = password.length > minPasswordLength;
+    const hasMaximumLength = password.length < maxPasswordLength;
+
     this.validateAllOrThrow(
-      [
-        password.length > minPasswordLength,
-        password.length < maxPasswordLength,
-      ],
+      [hasMinimumLength, hasMaximumLength],
       InvalidCustomerPasswordError,
     );
   }

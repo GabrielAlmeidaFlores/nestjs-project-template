@@ -1,12 +1,14 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator(() => '')({
-  name: 'class-error-suffix',
+  type: 'problem',
   meta: {
     docs: {
       description:
-        'Require classes extending Error (directly or indirectly) to end with "Error".',
-      recommended: 'warn',
+        'Require classes extending Error (directly or indirectly) to end with "Error"',
+      category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     messages: {
       classErrorSuffix: 'Class extending Error should end with "Error".',

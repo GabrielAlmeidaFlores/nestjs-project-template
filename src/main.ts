@@ -14,9 +14,13 @@ async function bootstrap(): Promise<void> {
     new FastifyAdapter(),
   );
 
-  const appConfig = new AppConfig(app).cors().globalPrefix().globalPipes();
+  const appConfig = new AppConfig(app);
+  appConfig.cors().globalPrefix().globalPipes();
 
-  if (NodeApplicationVariable.NODE_ENV === 'development') {
+  const isDevelopmentEnvironment =
+    NodeApplicationVariable.NODE_ENV === 'development';
+
+  if (isDevelopmentEnvironment) {
     appConfig.swagger();
   }
 
@@ -25,4 +29,5 @@ async function bootstrap(): Promise<void> {
     FrameworkApplicationVariable.FRAMEWORK_HOST,
   );
 }
+
 void bootstrap();

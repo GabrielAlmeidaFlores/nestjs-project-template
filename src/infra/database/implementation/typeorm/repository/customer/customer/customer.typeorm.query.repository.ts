@@ -25,15 +25,18 @@ export class CustomerTypeormQueryRepository
 
   public async findCustomerByUniqueKeys(
     email: Email,
-    numeroCelular: PhoneNumber,
+    phoneNumber: PhoneNumber,
   ): Promise<CustomerEntity | null> {
+    const emailAsString = email.toString();
+    const phoneNumberAsString = phoneNumber.toString();
+
     const data = await this.findOne({
       where: [
         {
-          email: email.toString(),
+          email: emailAsString,
         },
         {
-          phoneNumber: numeroCelular.toString(),
+          phoneNumber: phoneNumberAsString,
         },
       ],
     });

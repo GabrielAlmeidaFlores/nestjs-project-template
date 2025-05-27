@@ -44,183 +44,213 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     listBaseDto: ListDataInputModel,
     options?: FindManyOptions<T>,
   ): Promise<ListedDataOutputModel<T>> {
-    const order = this.generateOrder(listBaseDto.sortField);
-    const where = this.generateWhere(listBaseDto.field, listBaseDto.search);
+    const sortField = listBaseDto.sortField;
+    const order = this.generateSortOrder(sortField);
 
+    const field = listBaseDto.field;
+    const search = listBaseDto.search;
+    const where = this.generateSearchWhere(field, search);
+
+    const currentPage = listBaseDto.page;
+    const itemsPerPage = listBaseDto.limit;
     const paginationOffset = 1;
-    const skip = (listBaseDto.page - paginationOffset) * listBaseDto.limit;
+    const skip = (currentPage - paginationOffset) * itemsPerPage;
 
-    const findAndCountOptions: FindManyOptions<T> = {
-      take: listBaseDto.limit,
-      skip,
-      order,
-    };
-
-    findAndCountOptions.relations = options?.relations ?? {};
-
-    findAndCountOptions.select = options?.select ?? {};
-
-    findAndCountOptions.order = options?.order ?? order;
-
-    findAndCountOptions.where = options?.where
+    const resolvedOrder = options?.order ?? order;
+    const resolvedRelations = options?.relations ?? {};
+    const resolvedSelect = options?.select ?? {};
+    const resolvedWhere = options?.where
       ? this.mergeWhereConditions(where, options.where)
       : where;
+
+    const findAndCountOptions: FindManyOptions<T> = {
+      take: itemsPerPage,
+      skip,
+      order: resolvedOrder,
+      relations: resolvedRelations,
+      select: resolvedSelect,
+      where: resolvedWhere,
+    };
 
     const [data, count] =
       await this.repository.findAndCount(findAndCountOptions);
 
     return new ListedDataOutputModel({
-      page: listBaseDto.page,
-      limit: listBaseDto.limit,
+      page: currentPage,
+      limit: itemsPerPage,
       totalItems: count,
       resource: data,
     });
   }
 
-  private generateOrder(sortField: string | null): FindOptionsOrder<T> {
-    const order: FindOptionsOrder<T> = {};
-
-    if (sortField !== null) {
-      const ordination = sortField.startsWith('-') ? 'DESC' : 'ASC';
-      const field = sortField.replace('-', '');
-
-      if (field.includes('.')) {
-        return this.generateOrderToSubObjects(field, ordination);
-      }
-
-      Object.assign(order, {
-        [field]: ordination,
-      });
+  private generateSortOrder(sortField: string | null): FindOptionsOrder<T> {
+    const isSortFieldMissing = sortField === null;
+    if (isSortFieldMissing) {
+      return {};
     }
 
-    return order;
+    const isDescendingSort = sortField.startsWith('-');
+    const sortDirection: 'ASC' | 'DESC' = isDescendingSort ? 'DESC' : 'ASC';
+    const normalizedField = sortField.replace('-', '');
+    const isNestedField = normalizedField.includes('.');
+
+    if (isNestedField) {
+      return this.generateNestedSortOrder(normalizedField, sortDirection);
+    }
+
+    return { [normalizedField]: sortDirection } as FindOptionsOrder<T>;
   }
 
-  private generateOrderToSubObjects(
+  private generateNestedSortOrder(
     sortField: string,
-    sortOrder: 'ASC' | 'DESC' = 'ASC',
+    sortDirection: 'ASC' | 'DESC',
   ): FindOptionsOrder<T> {
-    const fields = sortField.split('.');
+    const pathSegments = sortField.split('.');
+    const rootLevelOrder: Record<string, unknown> = {};
+    let currentLevel = rootLevelOrder;
 
-    const orderByType: Record<string, unknown> = {};
-    let currentLevel: Record<string, unknown> = orderByType;
+    const sliceStartIndex = 0;
+    const sliceEndOffset = 1;
+    const sliceEndIndex = pathSegments.length - sliceEndOffset;
+    const intermediateSegments = pathSegments.slice(
+      sliceStartIndex,
+      sliceEndIndex,
+    );
 
-    const firstIndex = 0;
-    const lastIndex = -1;
-
-    for (const field of fields.slice(firstIndex, lastIndex)) {
+    for (const segment of intermediateSegments) {
       const nextLevel: Record<string, unknown> = {};
-      currentLevel[field] = nextLevel;
+      currentLevel[segment] = nextLevel;
       currentLevel = nextLevel;
     }
 
-    const lastFieldIndex = fields.length + lastIndex;
-    currentLevel[fields[lastFieldIndex] as string] = sortOrder;
+    const lastSegmentIndex = pathSegments.length - sliceEndOffset;
+    const lastSegment = pathSegments[lastSegmentIndex] as string;
+    currentLevel[lastSegment] = sortDirection;
 
-    return orderByType as FindOptionsOrder<T>;
+    return rootLevelOrder as FindOptionsOrder<T>;
   }
 
-  private generateWhere(
+  private generateSearchWhere(
     field: string | null,
     search: string | null,
   ): FindOptionsWhere<T>[] | FindOptionsWhere<T> {
-    const where: FindOptionsWhere<T> = {};
-
-    if (search !== null) {
-      if (field !== null) {
-        if (field.includes('.')) {
-          const whereSubObjects = this.generateWhereToSearchSubObjects(
-            field,
-            search,
-          );
-          Object.assign(where, whereSubObjects);
-          return where;
-        }
-
-        Object.assign(where, { [field]: Like(`%${search}%`) });
-        return where;
-      }
-
-      type EntityKeysType =
-        | keyof BaseTypeormEntity
-        | keyof CustomerTypeormEntity;
-
-      const excludedColumns: EntityKeysType[] = [
-        'id',
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-        'password',
-      ];
-
-      const entity: EntityMetadata = this.repository.metadata;
-      const columns: string[] = entity.columns
-        .filter(
-          (column) =>
-            !excludedColumns.includes(column.propertyName as EntityKeysType),
-        )
-        .map((column) => column.propertyName);
-
-      return columns.map(
-        (column): FindOptionsWhere<T> =>
-          ({
-            [column]: Like(`%${search}%`),
-          }) as FindOptionsWhere<T>,
-      );
+    const isSearchMissing = search === null;
+    if (isSearchMissing) {
+      return {};
     }
 
-    return where;
-  }
-
-  private mergeWhereConditions(
-    a: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
-    b: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
-  ): FindOptionsWhere<T> | FindOptionsWhere<T>[] {
-    const isArrayA = Array.isArray(a);
-    const isArrayB = Array.isArray(b);
-
-    if (!isArrayA && !isArrayB) {
-      return { ...a, ...b };
+    const isFieldProvided = field !== null;
+    if (isFieldProvided) {
+      return this.generateSearchWhereWithField(field, search);
     }
 
-    const arrayA = isArrayA ? a : [a];
-    const arrayB = isArrayB ? b : [b];
-
-    return [...arrayA, ...arrayB];
+    return this.generateSearchWhereAcrossAllFields(search);
   }
 
-  private generateWhereToSearchSubObjects(
+  private generateSearchWhereWithField(
     field: string,
     search: string,
   ): FindOptionsWhere<T> {
-    const fields: string[] = field.split('.');
+    const isNestedField = field.includes('.');
+    if (isNestedField) {
+      return this.generateNestedSearchWhere(field, search);
+    }
 
-    let subObjectsWhere: FindOptionsWhere<T> = {};
+    const databaseSearchOperation = Like(`%${search}%`);
+    const likeCondition = { [field]: databaseSearchOperation };
+    return likeCondition as FindOptionsWhere<T>;
+  }
 
-    const minFieldDepth = 2;
+  private generateSearchWhereAcrossAllFields(
+    search: string,
+  ): FindOptionsWhere<T>[] {
+    type EntityKeysType = keyof BaseTypeormEntity | keyof CustomerTypeormEntity;
 
-    for (let i = fields.length; i > minFieldDepth; i--) {
-      const offSetToParentKey = -2;
-      const offSetToChildKey = -1;
+    const excludedFields: EntityKeysType[] = [
+      'id',
+      'createdAt',
+      'updatedAt',
+      'deletedAt',
+      'password',
+    ];
 
-      const parentKey = fields[i - offSetToParentKey];
-      const childKey = fields[i - offSetToChildKey];
+    const entityMetadata: EntityMetadata = this.repository.metadata;
+    const entityColumns = entityMetadata.columns;
 
-      if (typeof parentKey !== 'string' || typeof childKey !== 'string') {
+    const excludedFieldNames = excludedFields as string[];
+
+    const filteredColumns = entityColumns.filter((column) => {
+      const columnName = column.propertyName;
+      const isExcluded = excludedFieldNames.includes(columnName);
+      return !isExcluded;
+    });
+
+    const searchableColumnNames = filteredColumns.map((column) => {
+      const columnName = column.propertyName;
+      return columnName;
+    });
+
+    const searchConditions = searchableColumnNames.map((columnName) => {
+      const databaseSearchOperation = Like(`%${search}%`);
+      const likeCondition = { [columnName]: databaseSearchOperation };
+      return likeCondition as FindOptionsWhere<T>;
+    });
+
+    return searchConditions;
+  }
+
+  private generateNestedSearchWhere(
+    field: string,
+    search: string,
+  ): FindOptionsWhere<T> {
+    const path = field.split('.');
+    let nestedWhere: FindOptionsWhere<T> = {};
+    const minDepthForNesting = 2;
+    const parentOffset = 2;
+    const childOffset = 1;
+
+    for (let i = path.length; i > minDepthForNesting; i--) {
+      const parentKey = path[i - parentOffset];
+      const childKey = path[i - childOffset];
+
+      const areKeysValid =
+        typeof parentKey === 'string' && typeof childKey === 'string';
+      if (!areKeysValid) {
         continue;
       }
 
-      if (i === fields.length) {
-        Object.assign(subObjectsWhere, {
-          [parentKey]: { [childKey]: Like(`%${search}%`) },
-        });
+      const isInnermostLevel = i === path.length;
+      if (isInnermostLevel) {
+        const databaseSearchOperation = Like(`%${search}%`);
+
+        nestedWhere = {
+          [parentKey]: { [childKey]: databaseSearchOperation },
+        } as FindOptionsWhere<T>;
       } else {
-        subObjectsWhere = {
-          [parentKey]: subObjectsWhere,
+        nestedWhere = {
+          [parentKey]: nestedWhere,
         } as FindOptionsWhere<T>;
       }
     }
 
-    return subObjectsWhere;
+    return nestedWhere;
+  }
+
+  private mergeWhereConditions(
+    baseConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
+    additionalConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
+  ): FindOptionsWhere<T>[] {
+    const isBaseArray = Array.isArray(baseConditions);
+    const isAdditionalArray = Array.isArray(additionalConditions);
+
+    const normalizedBaseConditions = isBaseArray
+      ? baseConditions
+      : [baseConditions];
+
+    const normalizedAdditionalConditions = isAdditionalArray
+      ? additionalConditions
+      : [additionalConditions];
+
+    return [...normalizedBaseConditions, ...normalizedAdditionalConditions];
   }
 }

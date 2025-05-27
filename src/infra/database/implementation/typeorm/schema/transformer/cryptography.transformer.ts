@@ -13,7 +13,9 @@ class CryptographyTransformerUtil {
   protected readonly _type = CryptographyTransformerUtil.name;
 
   public static encrypt(value?: string): string | undefined {
-    if (typeof value !== 'string') {
+    const isValueNotAString = typeof value !== 'string';
+
+    if (isValueNotAString) {
       return value;
     }
 
@@ -28,7 +30,9 @@ class CryptographyTransformerUtil {
   }
 
   public static decrypt(value?: string): string | undefined {
-    if (typeof value !== 'string') {
+    const isValueNotAString = typeof value !== 'string';
+
+    if (isValueNotAString) {
       return value;
     }
 

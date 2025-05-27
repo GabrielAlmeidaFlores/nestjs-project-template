@@ -1,9 +1,11 @@
 module.exports = {
+  type: 'problem',
   meta: {
-    type: 'problem',
     docs: {
       description: 'Disallow relative imports',
+      category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [
       {

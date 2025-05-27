@@ -24,49 +24,85 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
   }
 
   private createMappings(): void {
+    this.mapOrmEntityToDomainEntity();
+    this.mapDomainEntityToOrmEntity();
+  }
+
+  private mapOrmEntityToDomainEntity(): void {
+    const convertOrmEntityToDomainEntity = (
+      source: CustomerTypeormEntity,
+    ): CustomerEntity => {
+      const id = new Guid(source.id);
+      const email = new Email(source.email);
+      const phoneNumber = new PhoneNumber(source.phoneNumber);
+      const profilePicture = this.convertOptionalStringToValueObject(
+        Url,
+        source.profilePicture,
+      );
+      const countryState = this.convertStringToEnum(
+        CountryStateEnum,
+        source.countryState,
+      );
+      const postalCode = new PostalCode(source.postalCode);
+      const federalDocument = new FederalDocument(source.federalDocument);
+      const password = new Hash(source.password);
+
+      return CustomerEntity.build({
+        ...source,
+        id,
+        email,
+        phoneNumber,
+        profilePicture,
+        countryState,
+        postalCode,
+        federalDocument,
+        password,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
+
     createMap(
       this.mapper,
       CustomerTypeormEntity,
       CustomerEntity,
-      constructUsing((source: CustomerTypeormEntity) => {
-        return CustomerEntity.build({
-          ...source,
-          id: new Guid(source.id),
-          email: new Email(source.email),
-          phoneNumber: new PhoneNumber(source.phoneNumber),
-          profilePicture: this.convertOptionalStringToValueObject(
-            Url,
-            source.profilePicture,
-          ),
-          countryState: this.convertStringToEnum(
-            CountryStateEnum,
-            source.countryState,
-          ),
-          postalCode: new PostalCode(source.postalCode),
-          federalDocument: new FederalDocument(source.federalDocument),
-          password: new Hash(source.password),
-        });
-      }),
+      mappingFunction,
     );
+  }
+
+  private mapDomainEntityToOrmEntity(): void {
+    const convertDomainEntityToOrmEntity = (
+      source: CustomerEntity,
+    ): CustomerTypeormEntity => {
+      const id = source.id.toString();
+      const email = source.email.toString();
+      const phoneNumber = source.phoneNumber.toString();
+      const profilePicture = this.convertOptionalValueObjectToString(
+        source.profilePicture,
+      );
+      const postalCode = source.postalCode.toString();
+      const federalDocument = source.federalDocument.toString();
+      const password = source.password.toString();
+
+      return CustomerTypeormEntity.build({
+        ...source,
+        id,
+        email,
+        phoneNumber,
+        profilePicture,
+        postalCode,
+        federalDocument,
+        password,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
 
     createMap(
       this.mapper,
       CustomerEntity,
       CustomerTypeormEntity,
-      constructUsing((source: CustomerEntity) => {
-        return CustomerTypeormEntity.build({
-          ...source,
-          id: source.id.toString(),
-          email: source.email.toString(),
-          phoneNumber: source.password.toString(),
-          profilePicture: this.convertOptionalValueObjectToString(
-            source.profilePicture,
-          ),
-          postalCode: source.postalCode.toString(),
-          federalDocument: source.federalDocument.toString(),
-          password: source.password.toString(),
-        });
-      }),
+      mappingFunction,
     );
   }
 }

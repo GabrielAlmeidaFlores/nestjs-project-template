@@ -1,10 +1,12 @@
 module.exports = {
+  type: 'problem',
   meta: {
-    type: 'suggestion',
     docs: {
       description:
         'Enforce constructor parameter order: super params first, then no modifier → public → protected → private',
-      category: 'Stylistic Issues',
+      category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     fixable: null,
     schema: [],

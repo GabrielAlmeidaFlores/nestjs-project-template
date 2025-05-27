@@ -15,11 +15,12 @@ export class ListedDataOutputModel<T> {
     resource: T[];
   }) {
     const defaultMinTotalPages = 0;
+    const totalPagesEstimate = props.totalItems / props.limit;
 
     this.page = props.page;
     this.limit = props.limit;
     this.totalItems = props.totalItems;
-    this.totalPages = Math.ceil(props.totalItems / props.limit);
+    this.totalPages = Math.ceil(totalPagesEstimate);
     this.totalPages = this.totalPages ? this.totalPages : defaultMinTotalPages;
     this.amountItemsCurrentPage = props.resource.length;
     this.resource = this.resource;

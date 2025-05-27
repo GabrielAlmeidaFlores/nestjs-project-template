@@ -1,11 +1,12 @@
 module.exports = {
+  type: 'problem',
   meta: {
-    type: 'problem',
     docs: {
       description:
         "Enforce @RequireBuildMethod decorator on non-abstract classes ending with 'Entity' or 'ResponseDto'",
       category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

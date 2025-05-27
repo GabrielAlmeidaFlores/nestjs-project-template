@@ -9,8 +9,9 @@ export class EnvironmentVariable {
     type: StringConstructor | NumberConstructor | BooleanConstructor,
   ): T {
     const value = process.env[key];
+    const isVariableMissing = value === undefined;
 
-    if (value === undefined) {
+    if (isVariableMissing) {
       throw new MissingApplicationVariableError();
     }
 
@@ -24,7 +25,9 @@ export class EnvironmentVariable {
   ): T {
     const value = process.env[key];
 
-    if (value === undefined) {
+    const isVariableMissing = value === undefined;
+
+    if (isVariableMissing) {
       return defaultValue;
     }
 
@@ -39,15 +42,20 @@ export class EnvironmentVariable {
     rawValue: string,
     type: StringConstructor | NumberConstructor | BooleanConstructor,
   ): T {
-    if (type === Number) {
+    const isNumber = type === Number;
+    if (isNumber) {
       const num = Number(rawValue);
-      if (isNaN(num)) {
+      const isNotNumber = isNaN(num);
+
+      if (isNotNumber) {
         throw new MissingApplicationVariableError();
       }
+
       return num as T;
     }
 
-    if (type === Boolean) {
+    const isBoolean = type === Boolean;
+    if (isBoolean) {
       return (rawValue === 'true') as T;
     }
 

@@ -4,12 +4,15 @@ module.exports = {
       rules: {
         'require-class-type-property': require('./require-class-type-property.js'),
         'require-kebab-case-base-filename': require('./require-kebab-case-base-filename.js'),
-        'require-class-property-initialization': require("./require-class-property-initialization.js"), 
+        'require-class-property-initialization': require('./require-class-property-initialization.js'),
         'restrict-import': require('./restrict-import.js'),
         'restrict-export': require('./restrict-export.js'),
         'restrict-name-suffix': require('./restrict-name-suffix.js'),
         'restrict-error-name-suffix': require('./restrict-error-name-suffix.js'),
         'restrict-constructor-parameter-order': require('./restrict-constructor-parameter-order.js'),
+        'restrict-if-block-size': require('./restrict-if-block-size.js'),
+        'restrict-inline-logic': require('./restrict-inline-logic.js'),
+        'restrict-inline-call': require('./restrict-inline-call.js')
       },
     },
   },
@@ -25,5 +28,8 @@ module.exports = {
     'convention-rule/restrict-name-suffix': 'error',
     'convention-rule/restrict-error-name-suffix': 'error',
     'convention-rule/restrict-constructor-parameter-order': 'error',
+    'convention-rule/restrict-if-block-size': 'error',
+    'convention-rule/restrict-inline-logic': 'error',
+    'convention-rule/restrict-inline-call': 'error'
   },
 };

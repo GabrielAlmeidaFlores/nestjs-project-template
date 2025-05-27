@@ -1,10 +1,12 @@
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     docs: {
       description:
         'Enforce non-abstract classes to have a protected readonly _type property with <ClassName>.name',
+      category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [
       {
