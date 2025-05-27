@@ -1,16 +1,13 @@
-const lib = require('./lib/index.js')
+const lib = require('./lib/index.js');
+const pattern = require('./pattern/index.js');
 
 module.exports = {
   plugin: {
     ...lib.plugin,
-    'local-rule': {
-      rules: {
-        'require-build-method-decorator': require('./require-build-method-decorator.js'),
-      },
-    },
+    ...pattern.plugin,
   },
   rules: {
     ...lib.rules,
-    'local-rule/require-build-method-decorator': 'error',
+    ...pattern.rules,
   },
 };
