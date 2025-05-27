@@ -5,7 +5,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     type: 'problem',
     docs: {
       description:
-        'Disallow inline logic expressions in control flow, function arguments, object properties, or arrays. Require extraction into named variables to improve clarity and maintainability. Allows logic inside decorators, for-loops, and while-loops.',
+        'Restrict inline logic expressions in control flow, function arguments, object properties, or arrays. Require extraction into named variables to improve clarity and maintainability',
       category: 'Best Practices',
       recommended: true,
       suggestion: false,

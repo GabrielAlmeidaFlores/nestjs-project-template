@@ -2,8 +2,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        'Prohibits if statement blocks from having more than 10 lines',
+      description: "Disallow 'if' statement blocks longer than 15 lines",
       category: 'Best Practices',
       recommended: true,
       suggestion: false,
@@ -15,12 +14,16 @@ module.exports = {
       IfStatement(node) {
         if (node.consequent && node.consequent.type === 'BlockStatement') {
           const block = node.consequent;
-          const lineCount = block.loc.end.line - block.loc.start.line + 1;
+          const startLine = block.loc.start.line;
+          const endLine = block.loc.end.line;
+          const lineCount = endLine - startLine + 1;
 
-          if (lineCount > 10) {
+          const maxAllowedLines = 15;
+
+          if (lineCount > maxAllowedLines) {
             context.report({
               node,
-              message: `O bloco 'if' tem ${lineCount} linhas, o que excede o limite de 10 linhas permitido.`,
+              message: `The 'if' block contains ${lineCount} lines, which exceeds the maximum allowed limit of ${maxAllowedLines}.`,
             });
           }
         }
