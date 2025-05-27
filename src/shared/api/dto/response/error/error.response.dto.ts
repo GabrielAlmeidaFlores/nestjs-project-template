@@ -1,17 +1,19 @@
-import { ApiProperty } from '@nestjs/swagger';
-
+import { ResponseDto } from '@shared/api/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/decorator/property/dto-property/response/response-dto-number-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/decorator/property/dto-property/response/response-dto-string-property.decorator';
 import { RequireBuildMethod } from '@shared/system/decorator/class/require-build-method/require-build-method.decorator';
 import { PublicPropertyType } from '@shared/system/type/public-property.type';
 
+@ResponseDto()
 @RequireBuildMethod<ErrorResponseDto>()
 export class ErrorResponseDto {
-  @ApiProperty()
+  @ResponseDtoStringProperty()
   public message: string;
 
-  @ApiProperty()
+  @ResponseDtoStringProperty()
   public error: string;
 
-  @ApiProperty()
+  @ResponseDtoNumberProperty()
   public statusCode: number;
 
   protected readonly _type = ErrorResponseDto.name;
