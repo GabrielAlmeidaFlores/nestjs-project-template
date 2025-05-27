@@ -5,8 +5,10 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Require kebab-case for base filenames (before dot suffixes), allowing optional leading underscore.',
+        'Require kebab-case for base filenames (before dot suffixes), allowing optional leading underscore',
+      category: 'Stylistic Issues',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

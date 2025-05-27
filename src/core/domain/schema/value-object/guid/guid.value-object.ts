@@ -7,7 +7,9 @@ export class Guid extends BaseValueObject<Guid> {
   public constructor(value: string) {
     super(value);
 
-    if (!Guid.isValid(value)) {
+    const isValidGuid = Guid.isValid(value);
+
+    if (!isValidGuid) {
       throw new InvalidGuidError();
     }
   }
@@ -18,19 +20,21 @@ export class Guid extends BaseValueObject<Guid> {
     const uuidVariantHighBits = 0x8;
     const bitwiseZero = 0;
 
-    const value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-      /[xy]/g,
-      (c) => {
-        const randomHexDigit = (Math.random() * hexBase) | bitwiseZero;
-        const v =
-          c === 'x'
-            ? randomHexDigit
-            : (randomHexDigit & uuidVariantMask) | uuidVariantHighBits;
-        return v.toString(hexBase);
-      },
-    );
+    const uuidPattern = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 
-    return new Guid(value);
+    const generatedUuid = uuidPattern.replace(/[xy]/g, (placeholderChar) => {
+      const rawRandom = Math.random();
+      const randomHexDigit = (rawRandom * hexBase) | bitwiseZero;
+
+      const isXPlaceholder = placeholderChar === 'x';
+      const calculatedDigit = isXPlaceholder
+        ? randomHexDigit
+        : (randomHexDigit & uuidVariantMask) | uuidVariantHighBits;
+
+      return calculatedDigit.toString(hexBase);
+    });
+
+    return new Guid(generatedUuid);
   }
 
   public static isValid(value: string): boolean {

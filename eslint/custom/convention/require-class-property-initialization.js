@@ -4,7 +4,9 @@ module.exports = {
     docs: {
       description:
         'Require all class properties to be assigned in constructor if constructor exists, ignoring properties starting with "_"',
-      category: 'Best Practices',
+      category: 'Possible Errors',
+      recommended: true,
+      suggestion: false,
     },
     fixable: null,
     schema: [],
@@ -31,7 +33,7 @@ module.exports = {
               member.type === 'ClassProperty') &&
             !member.static &&
             member.key.type === 'Identifier' &&
-            !member.key.name.startsWith('_'), 
+            !member.key.name.startsWith('_'),
         );
 
         const assignedProperties = new Set();

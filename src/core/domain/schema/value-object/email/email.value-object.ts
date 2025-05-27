@@ -7,7 +7,9 @@ export class Email extends BaseValueObject<Email> {
   public constructor(value: string) {
     super(value);
 
-    if (!Email.isValid(value)) {
+    const isValidEmail = Email.isValid(value);
+
+    if (!isValidEmail) {
       throw new InvalidEmailError();
     }
   }

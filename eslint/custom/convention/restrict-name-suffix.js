@@ -1,10 +1,12 @@
 module.exports = {
+  type: 'problem',
   meta: {
-    type: 'suggestion',
     docs: {
       description:
         'Require interfaces to end with "Interface", all type aliases to end with "Type", and enums to end with "Enum"',
       category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     fixable: null,
     schema: [],
