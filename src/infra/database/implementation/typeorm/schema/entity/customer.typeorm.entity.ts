@@ -24,7 +24,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   })
   public federalDocument: string;
 
-  @Column({ name: 'phone_number', type: 'varchar', length: 20, unique: true })
+  @Column({ name: 'phone_number', type: 'varchar', length: 20 })
   public phoneNumber: string;
 
   @Column({
