@@ -32,6 +32,10 @@ module.exports = {
           return;
         }
 
+        if (!node.id || node.id.name.startsWith('_')) {
+          return
+        };
+
         const className = node.id.name;
         let foundProperty = null;
 

@@ -1,6 +1,6 @@
 import type { HttpStatus, Type } from '@nestjs/common';
 
-export type SuccessResponseType =
+export type BuildEndpointSuccessResponseSpecificationType =
   | {
       statusCode: HttpStatus.OK;
       description: string;

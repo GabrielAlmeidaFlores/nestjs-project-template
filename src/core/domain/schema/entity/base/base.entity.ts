@@ -1,7 +1,7 @@
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
 import type { InvalidInputError } from '@core/error/invalid-input.error';
-import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class BaseEntity {
   public readonly id: Guid;
@@ -9,28 +9,24 @@ export abstract class BaseEntity {
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
 
-  protected constructor(
-    id: Guid | null,
-    createdAt: Date | null,
-    updatedAt: Date | null,
-    deletedAt: Date | null,
-  ) {
-    this.id = id ?? Guid.generate();
-    this.createdAt = createdAt ?? new Date();
-    this.updatedAt = updatedAt ?? new Date();
-    this.deletedAt = deletedAt;
+  protected constructor(props: BaseEntityPropsInterface) {
+    this.id = props.id ?? Guid.generate();
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
+    this.deletedAt = props.deletedAt ?? null;
   }
 
   protected static validateAllOrThrow<T extends InvalidInputError>(
     validate: Array<boolean>,
-    error: ConstructorType<T>,
+    error: () => T,
   ): void {
     const isInvalid = false;
 
     const validationFailed = validate.includes(isInvalid);
 
     if (validationFailed) {
-      throw new error();
+      const errorInstance = error();
+      throw errorInstance;
     }
   }
 }

@@ -13,14 +13,14 @@ export function BaseDtoEnumProperty(
 
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
-    type: enumType,
+    enum: enumType,
   });
   const expose = Expose();
   const validation = IsEnum(enumType);
 
   const decorators = [apiProperty, expose, validation];
 
-  if (propertyIsRequired) {
+  if (!propertyIsRequired) {
     decorators.push(IsOptional());
   }
 

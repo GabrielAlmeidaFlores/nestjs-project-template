@@ -20,7 +20,7 @@ export function BaseDtoNumberProperty(
 
   const decorators = [apiProperty, expose, type, validation];
 
-  if (propertyIsRequired) {
+  if (!propertyIsRequired) {
     decorators.push(IsOptional());
   }
 

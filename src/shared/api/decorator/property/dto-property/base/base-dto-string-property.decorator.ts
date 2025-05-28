@@ -18,7 +18,7 @@ export function BaseDtoStringProperty(
 
   const decorators = [apiProperty, expose, validation];
 
-  if (propertyIsRequired) {
+  if (!propertyIsRequired) {
     decorators.push(IsOptional());
   }
 

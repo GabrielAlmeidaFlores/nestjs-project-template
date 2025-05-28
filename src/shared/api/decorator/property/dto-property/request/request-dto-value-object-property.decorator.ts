@@ -3,8 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { IsOptional, registerDecorator } from 'class-validator';
 
-import { InvalidInputError } from '@core/error/invalid-input.error';
-
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
 import type { ValidationArguments } from 'class-validator';
@@ -26,22 +24,16 @@ function IsValidValueObject<T extends BaseValueObject<T>>(
         validate(value: unknown, _args: ValidationArguments): boolean {
           const isDirectInstance = value instanceof valueObjectClass;
           if (isDirectInstance) {
-            lastErrorMessage = null;
             return true;
           }
 
-          const isStringValue = typeof value === 'string';
-
-          if (!isStringValue) {
-            return false;
-          }
-
           try {
-            const instance = new valueObjectClass(value);
+            const parsedValue = String(value);
+            const instance = new valueObjectClass(parsedValue);
             const isValid = instance instanceof valueObjectClass;
             return isValid;
           } catch (err) {
-            const isValueObjectError = err instanceof InvalidInputError;
+            const isValueObjectError = err instanceof Error;
 
             if (isValueObjectError) {
               lastErrorMessage = err.message;
@@ -87,7 +79,7 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
 
   const decorators = [apiProperty, expose, validation, transform];
 
-  if (propertyIsRequired) {
+  if (!propertyIsRequired) {
     decorators.push(IsOptional());
   }
 
