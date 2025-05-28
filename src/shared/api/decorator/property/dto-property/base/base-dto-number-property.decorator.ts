@@ -4,6 +4,7 @@ import { Expose, Type } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoNumberProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
@@ -16,7 +17,13 @@ export function BaseDtoNumberProperty(
   });
   const expose = Expose();
   const type = Type(() => Number);
-  const validation = IsNumber();
+  const validation = IsNumber(
+    {},
+    {
+      message: (args: ValidationArguments) =>
+        `'${args.value}' não é uma número válida`,
+    },
+  );
 
   const decorators = [apiProperty, expose, type, validation];
 

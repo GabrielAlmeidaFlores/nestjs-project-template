@@ -4,6 +4,7 @@ import { Expose } from 'class-transformer';
 import { IsString, IsOptional } from 'class-validator';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoStringProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
@@ -14,7 +15,10 @@ export function BaseDtoStringProperty(
     required: propertyIsRequired,
   });
   const expose = Expose();
-  const validation = IsString();
+  const validation = IsString({
+    message: (args: ValidationArguments) =>
+      `'${args.value}' não é uma string válida`,
+  });
 
   const decorators = [apiProperty, expose, validation];
 

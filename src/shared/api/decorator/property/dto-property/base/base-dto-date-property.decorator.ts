@@ -4,6 +4,7 @@ import { Expose, Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoDateProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
@@ -16,7 +17,10 @@ export function BaseDtoDateProperty(
   });
   const expose = Expose();
   const type = Type(() => Date);
-  const validation = IsDate();
+  const validation = IsDate({
+    message: (args: ValidationArguments) =>
+      `'${args.value}' não é uma data válida`,
+  });
 
   const decorators = [apiProperty, expose, type, validation];
 
