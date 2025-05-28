@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import { InvalidApplicationVariableTypeError } from '@shared/system/constant/application-variable/utils/error/invalid-application-variable.error';
 import { MissingApplicationVariableError } from '@shared/system/constant/application-variable/utils/error/missing-application-variable.error';
-import 'dotenv/config';
 
 export class EnvironmentVariable {
   protected readonly _type = EnvironmentVariable.name;
@@ -23,6 +23,7 @@ export class EnvironmentVariable {
       throw new InvalidApplicationVariableTypeError({
         variableName: key,
         expectedType: type.name,
+        currentValue: value,
       });
     }
 
@@ -42,21 +43,18 @@ export class EnvironmentVariable {
       return defaultValue;
     }
 
-    try {
-      const convertedValue = this.convertValue<T>(value, type);
-      const conversionFailed = convertedValue === null;
+    const convertedValue = this.convertValue<T>(value, type);
+    const conversionFailed = convertedValue === null;
 
-      if (conversionFailed) {
-        throw new InvalidApplicationVariableTypeError({
-          variableName: key,
-          expectedType: type.name,
-        });
-      }
-
-      return convertedValue;
-    } catch {
-      return defaultValue;
+    if (conversionFailed) {
+      throw new InvalidApplicationVariableTypeError({
+        variableName: key,
+        expectedType: type.name,
+        currentValue: value,
+      });
     }
+
+    return convertedValue;
   }
 
   private convertValue<T>(
