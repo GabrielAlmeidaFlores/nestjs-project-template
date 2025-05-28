@@ -17,10 +17,9 @@ async function bootstrap(): Promise<void> {
   const appConfig = new AppConfig(app);
   appConfig.cors().globalPrefix().globalPipes();
 
-  const runningInProductionEnvironment =
-    NodeApplicationVariable.PRODUCTION_ENVIRONMENT === true;
-
-  if (runningInProductionEnvironment) {
+  const isProductionEnvironment =
+    NodeApplicationVariable.PRODUCTION_ENVIRONMENT;
+  if (!isProductionEnvironment) {
     appConfig.swagger();
   }
 
