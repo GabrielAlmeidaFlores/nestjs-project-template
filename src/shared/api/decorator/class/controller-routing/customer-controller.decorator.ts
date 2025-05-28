@@ -1,5 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { applyDecorators, Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 export function CustomerController(path: string): ClassDecorator {
-  return Controller(`customer/${path}`);
+  const controller = Controller(`customer/${path}`);
+  const apiTags = ApiTags(`customer/${path}`);
+
+  return applyDecorators(controller, apiTags);
 }

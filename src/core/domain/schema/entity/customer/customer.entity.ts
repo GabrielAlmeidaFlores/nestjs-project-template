@@ -1,19 +1,16 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidCustomerNameError } from '@core/domain/schema/entity/customer/error/invalid-customer-name.error';
 import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/error/invalid-custommer-password.error';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
-import { RequireBuildMethod } from '@shared/system/decorator/class/require-build-method/require-build-method.decorator';
-import { PublicPropertyType } from '@shared/system/type/public-property.type';
 
+import type { CustomerEntityPropsInterface } from '@core/domain/schema/entity/customer/customer.entity.props.interface';
 import type { CountryStateEnum } from '@core/domain/schema/enum/country-state.enum';
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import type { Url } from '@core/domain/schema/value-object/url/url.value-object';
 
-@RequireBuildMethod<CustomerEntity>()
 export class CustomerEntity extends BaseEntity {
   public readonly name: string;
   public readonly email: Email;
@@ -32,63 +29,23 @@ export class CustomerEntity extends BaseEntity {
 
   protected readonly _type = CustomerEntity.name;
 
-  public constructor(
-    id: Guid | null,
-    createdAt: Date | null,
-    updatedAt: Date | null,
-    deletedAt: Date | null,
-    name: string,
-    email: Email,
-    federalDocument: FederalDocument,
-    phoneNumber: PhoneNumber,
-    password: string | Hash,
-    profilePicture: Url | null,
-    mfaSecret: string | null,
-    city: string,
-    neighborhood: string,
-    countryState: CountryStateEnum,
-    postalCode: PostalCode,
-    addressNumber: string,
-  ) {
-    CustomerEntity.validateName(name);
-    CustomerEntity.validatePassword(password);
+  public constructor(props: CustomerEntityPropsInterface) {
+    CustomerEntity.validateName(props.name);
+    CustomerEntity.validatePassword(props.password);
 
-    super(id, createdAt, updatedAt, deletedAt);
-    this.name = name;
-    this.email = email;
-    this.federalDocument = federalDocument;
-    this.phoneNumber = phoneNumber;
-    this.password = password;
-    this.profilePicture = profilePicture;
-    this.mfaSecret = mfaSecret;
-    this.city = city;
-    this.neighborhood = neighborhood;
-    this.countryState = countryState;
-    this.postalCode = postalCode;
-    this.addressNumber = addressNumber;
-  }
-
-  public static build(
-    props: PublicPropertyType<CustomerEntity>,
-  ): CustomerEntity {
-    return new CustomerEntity(
-      props.id,
-      props.createdAt,
-      props.updatedAt,
-      props.deletedAt,
-      props.name,
-      props.email,
-      props.federalDocument,
-      props.phoneNumber,
-      props.password,
-      props.profilePicture,
-      props.mfaSecret,
-      props.city,
-      props.neighborhood,
-      props.countryState,
-      props.postalCode,
-      props.addressNumber,
-    );
+    super(props);
+    this.name = props.name;
+    this.email = props.email;
+    this.federalDocument = props.federalDocument;
+    this.phoneNumber = props.phoneNumber;
+    this.password = props.password;
+    this.profilePicture = props.profilePicture ?? null;
+    this.mfaSecret = props.mfaSecret ?? null;
+    this.city = props.city;
+    this.neighborhood = props.neighborhood;
+    this.countryState = props.countryState;
+    this.postalCode = props.postalCode;
+    this.addressNumber = props.addressNumber;
   }
 
   public static validateName(name: string): void {
@@ -102,7 +59,11 @@ export class CustomerEntity extends BaseEntity {
 
     this.validateAllOrThrow(
       [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
-      InvalidCustomerNameError,
+      () =>
+        new InvalidCustomerNameError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
     );
   }
 
@@ -120,7 +81,11 @@ export class CustomerEntity extends BaseEntity {
 
     this.validateAllOrThrow(
       [hasMinimumLength, hasMaximumLength],
-      InvalidCustomerPasswordError,
+      () =>
+        new InvalidCustomerPasswordError({
+          maxLength: maxPasswordLength,
+          minLength: minPasswordLength,
+        }),
     );
   }
 }

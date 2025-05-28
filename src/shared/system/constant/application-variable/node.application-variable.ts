@@ -3,11 +3,11 @@ import { EnvironmentVariable } from '@shared/system/constant/application-variabl
 export class NodeApplicationVariable {
   public static readonly source = new EnvironmentVariable();
 
-  public static readonly NODE_ENV: 'development' | 'production' =
+  public static readonly PRODUCTION_ENVIRONMENT: boolean =
     NodeApplicationVariable.source.getOrDefault(
-      'NODE_ENV',
-      String,
-      'development',
+      'PRODUCTION_ENVIRONMENT',
+      Boolean,
+      false,
     );
 
   protected readonly _type = NodeApplicationVariable.name;

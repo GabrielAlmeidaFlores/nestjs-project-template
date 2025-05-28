@@ -1,13 +1,11 @@
 import { Column, Entity } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
+import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity.props.interface';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
-import { RequireBuildMethod } from '@shared/system/decorator/class/require-build-method/require-build-method.decorator';
-import { PublicPropertyType } from '@shared/system/type/public-property.type';
 
 @Entity({ name: 'customer' })
-@RequireBuildMethod<CustomerTypeormEntity>()
 export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
@@ -94,59 +92,25 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
 
   protected readonly _type = CustomerTypeormEntity.name;
 
-  public constructor(
-    id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    deletedAt: Date | null,
-    name: string,
-    email: string,
-    federalDocument: string,
-    phoneNumber: string,
-    password: string,
-    profilePicture: string | null,
-    mfaSecret: string | null,
-    city: string,
-    neighborhood: string,
-    countryState: string,
-    postalCode: string,
-    addressNumber: string,
-  ) {
-    super(id, createdAt, updatedAt, deletedAt);
-    this.name = name;
-    this.email = email;
-    this.federalDocument = federalDocument;
-    this.phoneNumber = phoneNumber;
-    this.password = password;
-    this.profilePicture = profilePicture;
-    this.mfaSecret = mfaSecret;
-    this.city = city;
-    this.neighborhood = neighborhood;
-    this.countryState = countryState;
-    this.postalCode = postalCode;
-    this.addressNumber = addressNumber;
-  }
+  public constructor(props?: CustomerTypeormEntityPropsInterface) {
+    super(props);
 
-  public static build(
-    props: PublicPropertyType<CustomerTypeormEntity>,
-  ): CustomerTypeormEntity {
-    return new CustomerTypeormEntity(
-      props.id,
-      props.createdAt,
-      props.updatedAt,
-      props.deletedAt,
-      props.name,
-      props.email,
-      props.federalDocument,
-      props.phoneNumber,
-      props.password,
-      props.profilePicture,
-      props.mfaSecret,
-      props.city,
-      props.neighborhood,
-      props.countryState,
-      props.postalCode,
-      props.addressNumber,
-    );
+    const isConstructedByOrm = props === undefined;
+    if (isConstructedByOrm) {
+      return;
+    }
+
+    this.name = props.name;
+    this.email = props.email;
+    this.federalDocument = props.federalDocument;
+    this.phoneNumber = props.phoneNumber;
+    this.password = props.password;
+    this.profilePicture = props.profilePicture ?? null;
+    this.mfaSecret = props.mfaSecret ?? null;
+    this.city = props.city;
+    this.neighborhood = props.neighborhood;
+    this.countryState = props.countryState;
+    this.postalCode = props.postalCode;
+    this.addressNumber = props.addressNumber;
   }
 }
