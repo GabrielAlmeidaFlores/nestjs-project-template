@@ -6,7 +6,7 @@
       "@shared/*": ["./src/shared/*"],
       "@infra/*": ["./src/infra/*"],
       "@lib/*": ["./src/lib/*"],
-      "@route/*": ["./src/route/*"],
+      "@api/*": ["./src/api/*"],
       "@handler/*": ["./src/handler/*"],
       "@base/*": ["./src/*"]
     },
