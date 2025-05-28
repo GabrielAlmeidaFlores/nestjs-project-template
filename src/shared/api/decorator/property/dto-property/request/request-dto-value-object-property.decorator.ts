@@ -14,8 +14,6 @@ function IsValidValueObject<T extends BaseValueObject<T>>(
     const validatorName = 'IsValidValueObject';
     const propertyKey = propertyName.toString();
 
-    let lastErrorMessage: string | null = null;
-
     registerDecorator({
       name: validatorName,
       target: object.constructor,
@@ -27,25 +25,26 @@ function IsValidValueObject<T extends BaseValueObject<T>>(
             return true;
           }
 
-          try {
-            const parsedValue = String(value);
-            const instance = new valueObjectClass(parsedValue);
-            const isValid = instance instanceof valueObjectClass;
-            return isValid;
-          } catch (err) {
-            const isValueObjectError = err instanceof Error;
-
-            if (isValueObjectError) {
-              lastErrorMessage = err.message;
-            }
-
-            return false;
-          }
+          return false;
         },
-        defaultMessage(): string {
-          return (
-            lastErrorMessage ?? `Invalid value for ${valueObjectClass.name}.`
-          );
+        defaultMessage(args: ValidationArguments): string {
+          try {
+            const property = args.property;
+            const dto = {
+              ...(args.object as Record<string, unknown>),
+            };
+            const value = String(dto[property]);
+
+            new valueObjectClass(value);
+          } catch (err) {
+            const isErrorInstance = err instanceof Error;
+
+            if (isErrorInstance) {
+              return err.message;
+            }
+          }
+
+          return 'Invalid value object';
         },
       },
     });
@@ -67,13 +66,13 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
   const transform = Transform(({ value }) => {
     const isInvalidInput = typeof value !== 'string';
     if (isInvalidInput) {
-      return undefined;
+      return String(value);
     }
 
     try {
       return new valueObjectClass(value);
     } catch {
-      return undefined;
+      return value;
     }
   });
 

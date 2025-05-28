@@ -4,6 +4,7 @@ import { Expose } from 'class-transformer';
 import { IsEnum, IsOptional } from 'class-validator';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoEnumProperty(
   enumType: object,
@@ -16,7 +17,13 @@ export function BaseDtoEnumProperty(
     enum: enumType,
   });
   const expose = Expose();
-  const validation = IsEnum(enumType);
+  const validation = IsEnum(enumType, {
+    message: (args: ValidationArguments) => {
+      const enumValues = Object.values(enumType);
+      const allowedValue = enumValues.join(', ');
+      return `'${args.value}' não é compatível com os valores esperados: ${allowedValue}`;
+    },
+  });
 
   const decorators = [apiProperty, expose, validation];
 
