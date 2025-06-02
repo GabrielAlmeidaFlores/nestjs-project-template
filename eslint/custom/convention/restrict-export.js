@@ -1,4 +1,7 @@
-module.exports = {
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'single-export-per-file',
   meta: {
     type: 'problem',
     docs: {
@@ -13,6 +16,7 @@ module.exports = {
       singleExport: 'Files should only contain a single export.',
     },
   },
+  defaultOptions: [],
   create(context) {
     return {
       Program(node) {
@@ -52,4 +56,4 @@ module.exports = {
       },
     };
   },
-};
+});

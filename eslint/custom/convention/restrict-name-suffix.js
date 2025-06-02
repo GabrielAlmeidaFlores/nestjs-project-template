@@ -1,6 +1,9 @@
-module.exports = {
-  type: 'problem',
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'enforce-type-naming-suffixes',
   meta: {
+    type: 'problem',
     docs: {
       description:
         'Require interfaces to end with "Interface", all type aliases to end with "Type", and enums to end with "Enum"',
@@ -16,6 +19,7 @@ module.exports = {
       enumSuffix: 'Enum name should end with "Enum".',
     },
   },
+  defaultOptions: [],
   create(context) {
     return {
       TSInterfaceDeclaration(node) {
@@ -47,4 +51,4 @@ module.exports = {
       },
     };
   },
-};
+});

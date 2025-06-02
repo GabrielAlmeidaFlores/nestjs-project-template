@@ -1,4 +1,7 @@
-module.exports = {
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'enforce-type-property',
   meta: {
     type: 'problem',
     docs: {
@@ -22,6 +25,8 @@ module.exports = {
     ],
   },
 
+  defaultOptions: [],
+
   create(context) {
     const options = context.options[0] || {};
     const propertyName = options.propertyName || '_type';
@@ -33,8 +38,8 @@ module.exports = {
         }
 
         if (!node.id || node.id.name.startsWith('_')) {
-          return
-        };
+          return;
+        }
 
         const className = node.id.name;
         let foundProperty = null;
@@ -85,4 +90,4 @@ module.exports = {
       },
     };
   },
-};
+});

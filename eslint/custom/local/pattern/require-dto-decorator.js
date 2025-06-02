@@ -7,7 +7,9 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     docs: {
       description:
         'Ensure RequestDto and ResponseDto classes use their respective decorators',
-      recommended: 'error',
+      category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

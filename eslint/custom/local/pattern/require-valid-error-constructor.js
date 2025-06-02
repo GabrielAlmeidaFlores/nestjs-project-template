@@ -4,6 +4,13 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
   name: 'require-valid-error-constructor',
   meta: {
     type: 'problem',
+    docs: {
+      description:
+        'Ensure that classes indirectly extending BaseError have a valid public constructor with proper parameters and a super(message) call.',
+      category: 'Best Practices',
+      recommended: true,
+      suggestion: false,
+    },
     schema: [],
     messages: {
       missingConstructor: 'Error class must have a valid public constructor.',
@@ -27,7 +34,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
       const directBase = baseChain[0];
       if (!directBase || directBase.symbol?.getName() === 'BaseError') {
-        return false; 
+        return false;
       }
 
       while (baseChain.length > 0) {
