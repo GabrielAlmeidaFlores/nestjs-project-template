@@ -1,4 +1,7 @@
-module.exports = {
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'require-constructor-assignment',
   meta: {
     type: 'problem',
     docs: {
@@ -15,6 +18,7 @@ module.exports = {
         'Property "{{property}}" is declared but not assigned in the constructor.',
     },
   },
+  defaultOptions: [],
   create(context) {
     return {
       ClassDeclaration(node) {
@@ -69,4 +73,4 @@ module.exports = {
       },
     };
   },
-};
+});

@@ -1,6 +1,9 @@
-module.exports = {
-  type: 'problem',
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'no-relative-imports',
   meta: {
+    type: 'problem',
     docs: {
       description: 'Disallow relative imports',
       category: 'Best Practices',
@@ -25,7 +28,7 @@ module.exports = {
       },
     ],
   },
-
+  defaultOptions: [],
   create(context) {
     const restrictedPatterns = [
       {
@@ -52,4 +55,4 @@ module.exports = {
       },
     };
   },
-};
+});

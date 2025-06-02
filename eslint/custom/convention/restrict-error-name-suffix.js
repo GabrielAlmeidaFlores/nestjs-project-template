@@ -1,8 +1,9 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
-module.exports = ESLintUtils.RuleCreator(() => '')({
-  type: 'problem',
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'require-error-suffix',
   meta: {
+    type: 'problem',
     docs: {
       description:
         'Require classes extending Error (directly or indirectly) to end with "Error"',
