@@ -12,7 +12,9 @@ module.exports = {
         'restrict-constructor-parameter-order': require('./restrict-constructor-parameter-order.js'),
         'restrict-if-block-size': require('./restrict-if-block-size.js'),
         'restrict-inline-logic': require('./restrict-inline-logic.js'),
-        'restrict-inline-call': require('./restrict-inline-call.js')
+        'restrict-inline-call': require('./restrict-inline-call.js'),
+        'restrict-comments': require('./restrict-comments.js'),
+        'restrict-chained-bracket-notation': require('./restrict-chained-bracket-notation.js')
       },
     },
   },
@@ -30,6 +32,8 @@ module.exports = {
     'convention-rule/restrict-constructor-parameter-order': 'error',
     'convention-rule/restrict-if-block-size': 'error',
     'convention-rule/restrict-inline-logic': 'error',
-    'convention-rule/restrict-inline-call': 'error'
+    'convention-rule/restrict-inline-call': 'error',
+    'convention-rule/restrict-comments': 'error',
+    'convention-rule/restrict-chained-bracket-notation': 'error'
   },
 };
