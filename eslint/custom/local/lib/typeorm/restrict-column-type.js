@@ -10,6 +10,7 @@ const expectedTypeMap = {
   integer: 'number',
   tinyint: 'number',
   smallint: 'number',
+  bigint: 'string',
   float: 'number',
   double: 'number',
   timestamp: 'Date',
