@@ -1,6 +1,8 @@
+const { ESLintUtils } = require('@typescript-eslint/utils');
 const path = require('path');
 
-module.exports = {
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'enforce-kebab-case-filenames',
   meta: {
     type: 'problem',
     docs: {
@@ -16,6 +18,8 @@ module.exports = {
         'Filename base "{{name}}" should be in kebab-case (can optionally start with "_").',
     },
   },
+
+  defaultOptions: [],
 
   create(context) {
     const filenameWithExt = context.getFilename();
@@ -35,4 +39,4 @@ module.exports = {
 
     return {};
   },
-};
+});

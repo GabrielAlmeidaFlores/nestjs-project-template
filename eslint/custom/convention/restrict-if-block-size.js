@@ -1,4 +1,7 @@
-module.exports = {
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'max-if-block-lines',
   meta: {
     type: 'problem',
     docs: {
@@ -9,6 +12,7 @@ module.exports = {
     },
     schema: [],
   },
+  defaultOptions: [],
   create(context) {
     return {
       IfStatement(node) {
@@ -30,4 +34,4 @@ module.exports = {
       },
     };
   },
-};
+});

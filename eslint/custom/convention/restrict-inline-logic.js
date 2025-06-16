@@ -1,6 +1,7 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'no-inline-logic-expressions',
   meta: {
     type: 'problem',
     docs: {
@@ -8,6 +9,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         'Disallow inline logic expressions (binary, logical, unary) in control flow, object values, and array literals. Requires assigning to a variable first.',
       category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {
