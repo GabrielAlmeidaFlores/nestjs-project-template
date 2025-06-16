@@ -1,4 +1,4 @@
-export enum CountryStateEnum {
+export enum StateCodeEnum {
   AC = 'AC',
   AL = 'AL',
   AP = 'AP',
