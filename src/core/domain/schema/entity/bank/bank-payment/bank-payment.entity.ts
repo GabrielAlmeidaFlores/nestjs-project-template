@@ -12,7 +12,7 @@ export class BankPaymentEntity extends BaseEntity {
   public readonly discountPercentage: number;
   public readonly status: StatusEnum;
   public readonly dueDate: Date;
-  public readonly paymentDate: Date;
+  public readonly paymentDate: Date | null;
   public readonly installmentNumber: number | null;
   public readonly costumerConfirmDate: Date | null;
   public readonly pixQrCode: string | null;
