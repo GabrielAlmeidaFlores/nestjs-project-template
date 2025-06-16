@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { SignUpRequestDto } from '@api/customer/auth/dto/request/sign-up.request.dto';
-import { CustomerEmailAlreadyInUseError } from '@api/customer/auth/error/customer-email-already-in-use.error';
 import { CustomerCommandRepositoryGateway } from '@core/domain/repository/customer/customer/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
+import { SignUpRequestDto } from '@module/customer/auth/dto/request/sign-up.request.dto';
+import { CustomerEmailAlreadyInUseError } from '@module/customer/auth/error/customer-email-already-in-use.error';
 
 @Injectable()
 export class SignUpUseCase {

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { SignUpUseCase } from '@api/customer/auth/use-case/signup.use-case';
-import { AuthController } from '@base/api/customer/auth/auth.controller';
 import { DatabaseModule } from '@infra/database/database.module';
+import { AuthController } from '@module/customer/auth/auth.controller';
+import { SignUpUseCase } from '@module/customer/auth/use-case/signup.use-case';
 
 @Module({
   imports: [DatabaseModule],
