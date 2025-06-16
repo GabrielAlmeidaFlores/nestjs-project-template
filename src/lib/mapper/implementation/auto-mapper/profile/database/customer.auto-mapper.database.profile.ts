@@ -3,7 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
-import { CountryStateEnum } from '@core/domain/schema/enum/country-state.enum';
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
@@ -40,7 +40,7 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
         source.profilePicture,
       );
       const countryState = this.convertStringToEnum(
-        CountryStateEnum,
+        StateCodeEnum,
         source.countryState,
       );
       const postalCode = new PostalCode(source.postalCode);
