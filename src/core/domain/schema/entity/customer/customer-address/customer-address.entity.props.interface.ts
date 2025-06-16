@@ -1,5 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
+import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 

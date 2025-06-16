@@ -1,12 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
-import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
-import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization.entity';
-import type { OrganizationMemberEntityPropsInterface } from '@core/domain/schema/entity/organization-member/organization-member.entity.props.interface';
+import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
+import type { OrganizationMemberEntityPropsInterface } from '@core/domain/schema/entity/organization/organization-member/organization-member.entity.props.interface';
+import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class OrganizationMemberEntity extends BaseEntity {
   public readonly organization: OrganizationEntity;
-  public readonly customer: CustomerEntity;
+  public readonly customer: Guid;
 
   protected readonly _type = OrganizationMemberEntity.name;
 
