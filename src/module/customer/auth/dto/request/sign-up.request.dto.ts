@@ -1,4 +1,4 @@
-import { CountryStateEnum } from '@core/domain/schema/enum/country-state.enum';
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -32,8 +32,8 @@ export class SignUpRequestDto {
   @RequestDtoStringProperty()
   public neighborhood: string;
 
-  @RequestDtoEnumProperty(CountryStateEnum)
-  public countryState: CountryStateEnum;
+  @RequestDtoEnumProperty(StateCodeEnum)
+  public countryState: StateCodeEnum;
 
   @RequestDtoValueObjectProperty(PostalCode)
   public postalCode: PostalCode;
