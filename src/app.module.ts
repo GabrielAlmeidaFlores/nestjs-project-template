@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { ClientModule } from '@base/api/customer/client.module';
+import { ClientModule } from '@module/customer/client.module';
 
 @Module({
   imports: [ClientModule],

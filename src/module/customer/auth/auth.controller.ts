@@ -1,7 +1,7 @@
 import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
 
-import { SignUpRequestDto } from '@api/customer/auth/dto/request/sign-up.request.dto';
-import { SignUpUseCase } from '@api/customer/auth/use-case/signup.use-case';
+import { SignUpRequestDto } from '@module/customer/auth/dto/request/sign-up.request.dto';
+import { SignUpUseCase } from '@module/customer/auth/use-case/signup.use-case';
 import { CustomerController } from '@shared/api/decorator/class/controller-routing/customer-controller.decorator';
 import { BuildEndpointSpecification } from '@shared/api/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
