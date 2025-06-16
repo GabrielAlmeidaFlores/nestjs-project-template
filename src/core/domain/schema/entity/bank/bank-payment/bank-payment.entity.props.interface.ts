@@ -10,8 +10,8 @@ export interface BankPaymentEntityPropsInterface extends BaseEntityPropsInterfac
     discountPercentage: number;
     status: StatusEnum;
     dueDate: Date;
-    paymentDate: Date;
-    installmentNumber: number;
+    paymentDate: Date | null;
+    installmentNumber: number | null;
     costumerConfirmDate: Date | null;
-    pixQrCode: string;
+    pixQrCode: string | null;
 }
