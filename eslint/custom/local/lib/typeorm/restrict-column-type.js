@@ -10,6 +10,7 @@ const expectedTypeMap = {
   integer: 'number',
   tinyint: 'number',
   smallint: 'number',
+  bigint: 'string',
   float: 'number',
   double: 'number',
   timestamp: 'Date',
@@ -22,12 +23,15 @@ const expectedTypeMap = {
 };
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'match-column-type-to-ts-type',
   meta: {
     type: 'problem',
     docs: {
       description:
         'Ensures that the `type` passed to @Column matches the declared TypeScript type (e.g., `decimal` should be typed as string).',
+      category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

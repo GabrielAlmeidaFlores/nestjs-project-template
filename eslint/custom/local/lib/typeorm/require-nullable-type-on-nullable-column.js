@@ -1,6 +1,7 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'column-nullable-requires-null',
   meta: {
     type: 'problem',
     docs: {
@@ -8,6 +9,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         'Ensure properties with `@Column({ nullable: true })` include `null` in their type.',
       category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

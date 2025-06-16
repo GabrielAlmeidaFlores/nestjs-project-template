@@ -1,6 +1,7 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'no-inline-function-calls',
   meta: {
     type: 'problem',
     docs: {
@@ -8,6 +9,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         'Disallow function calls used directly as arguments, control flow conditions, or object property values. Requires assigning the result to a variable first.',
       category: 'Best Practices',
       recommended: true,
+      suggestion: false,
     },
     schema: [],
     messages: {

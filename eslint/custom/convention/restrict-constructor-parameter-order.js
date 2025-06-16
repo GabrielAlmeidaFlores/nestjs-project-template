@@ -1,6 +1,9 @@
-module.exports = {
-  type: 'problem',
+const { ESLintUtils } = require('@typescript-eslint/utils');
+
+module.exports = ESLintUtils.RuleCreator.withoutDocs({
+  name: 'enforce-constructor-param-order',
   meta: {
+    type: 'problem',
     docs: {
       description:
         'Enforce constructor parameter order: super params first, then no modifier → public → protected → private',
@@ -17,6 +20,8 @@ module.exports = {
         'Constructor parameters for super call should come first and in the same order.',
     },
   },
+
+  defaultOptions: [],
 
   create(context) {
     function getModifierRank(param) {
@@ -118,4 +123,4 @@ module.exports = {
       },
     };
   },
-};
+});

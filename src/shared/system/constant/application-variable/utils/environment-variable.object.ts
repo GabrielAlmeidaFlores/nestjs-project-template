@@ -1,5 +1,6 @@
-import { MissingApplicationVariableError } from '@shared/system/constant/application-variable/utils/error/missing-application-variable.error';
 import 'dotenv/config';
+import { InvalidApplicationVariableTypeError } from '@shared/system/constant/application-variable/utils/error/invalid-application-variable.error';
+import { MissingApplicationVariableError } from '@shared/system/constant/application-variable/utils/error/missing-application-variable.error';
 
 export class EnvironmentVariable {
   protected readonly _type = EnvironmentVariable.name;
@@ -12,10 +13,21 @@ export class EnvironmentVariable {
     const isVariableMissing = value === undefined;
 
     if (isVariableMissing) {
-      throw new MissingApplicationVariableError();
+      throw new MissingApplicationVariableError({ variableName: key });
     }
 
-    return this.convertValue<T>(value, type);
+    const convertedValue = this.convertValue<T>(value, type);
+    const conversionFailed = convertedValue === null;
+
+    if (conversionFailed) {
+      throw new InvalidApplicationVariableTypeError({
+        variableName: key,
+        expectedType: type.name,
+        currentValue: value,
+      });
+    }
+
+    return convertedValue;
   }
 
   public getOrDefault<T>(
@@ -31,24 +43,31 @@ export class EnvironmentVariable {
       return defaultValue;
     }
 
-    try {
-      return this.convertValue<T>(value, type);
-    } catch {
-      return defaultValue;
+    const convertedValue = this.convertValue<T>(value, type);
+    const conversionFailed = convertedValue === null;
+
+    if (conversionFailed) {
+      throw new InvalidApplicationVariableTypeError({
+        variableName: key,
+        expectedType: type.name,
+        currentValue: value,
+      });
     }
+
+    return convertedValue;
   }
 
   private convertValue<T>(
     rawValue: string,
     type: StringConstructor | NumberConstructor | BooleanConstructor,
-  ): T {
+  ): T | null {
     const isNumber = type === Number;
     if (isNumber) {
       const num = Number(rawValue);
       const isNotNumber = isNaN(num);
 
       if (isNotNumber) {
-        throw new MissingApplicationVariableError();
+        return null;
       }
 
       return num as T;
@@ -56,6 +75,13 @@ export class EnvironmentVariable {
 
     const isBoolean = type === Boolean;
     if (isBoolean) {
+      const lowerValue = rawValue.toLowerCase();
+      const isValidBoolean = lowerValue === 'true' || lowerValue === 'false';
+
+      if (!isValidBoolean) {
+        return null;
+      }
+
       return (rawValue === 'true') as T;
     }
 

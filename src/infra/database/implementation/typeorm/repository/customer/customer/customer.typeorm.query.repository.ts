@@ -4,9 +4,8 @@ import { Repository } from 'typeorm';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 
 export class CustomerTypeormQueryRepository
@@ -23,22 +22,15 @@ export class CustomerTypeormQueryRepository
     super(repository);
   }
 
-  public async findCustomerByUniqueKeys(
+  public async findCustomerByEmail(
     email: Email,
-    phoneNumber: PhoneNumber,
   ): Promise<CustomerEntity | null> {
     const emailAsString = email.toString();
-    const phoneNumberAsString = phoneNumber.toString();
 
     const data = await this.findOne({
-      where: [
-        {
-          email: emailAsString,
-        },
-        {
-          phoneNumber: phoneNumberAsString,
-        },
-      ],
+      where: {
+        email: emailAsString,
+      },
     });
 
     if (!data) {

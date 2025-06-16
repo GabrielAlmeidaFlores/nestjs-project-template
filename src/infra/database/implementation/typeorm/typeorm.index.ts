@@ -2,8 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.query.repository';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { typeormDataSource } from '@infra/database/implementation/typeorm/typeorm.data-source';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -11,8 +10,6 @@ import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity
 import type { DataSourceOptions } from 'typeorm';
 
 export class TypeormIndex {
-  public static readonly typeormDataSource = typeormDataSource;
-
   public static readonly entities: EntityClassOrSchema[] = [
     CustomerTypeormEntity,
   ];
@@ -34,7 +31,7 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
-    migrations: ['src/infra/database/implementation/typeorm/migration/*.ts'],
+    migrations: ['src/infra/database/implementation/typeorm/migration/*.js'],
     synchronize: false,
   };
 

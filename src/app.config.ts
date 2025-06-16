@@ -1,12 +1,15 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { ValidationPipe, type INestApplication } from '@nestjs/common';
+import {
+  BadRequestException,
+  ValidationPipe,
+  type INestApplication,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
-import type { ValidationError } from 'class-validator';
 import type { PackageJson } from 'type-fest';
 
 class AppConfigUtils {
@@ -48,13 +51,23 @@ export class AppConfig extends AppConfigUtils {
         transform: true,
         transformOptions: {
           enableImplicitConversion: true,
-          excludeExtraneousValues: true,
         },
-        exceptionFactory: (errors): ValidationError | undefined => {
-          return errors[0];
+        exceptionFactory: (errors): BadRequestException => {
+          const firstError = errors[0];
+          const firstErrorConstraints = firstError?.constraints;
+
+          if (firstErrorConstraints) {
+            const message = Object.values(firstErrorConstraints);
+
+            return new BadRequestException(message[0]);
+          }
+
+          return new BadRequestException();
         },
       }),
     );
+
+    return this;
 
     return this;
   }
