@@ -1,9 +1,9 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { InvalidCustomerNameError } from '@core/domain/schema/entity/customer/error/invalid-customer-name.error';
-import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/error/invalid-custommer-password.error';
+import { InvalidCustomerNameError } from '@core/domain/schema/entity/customer/customer/error/invalid-customer-name.error';
+import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/customer/error/invalid-custommer-password.error';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 
-import type { CustomerEntityPropsInterface } from '@core/domain/schema/entity/customer/customer.entity.props.interface';
+import type { CustomerEntityPropsInterface } from '@core/domain/schema/entity/customer/customer/customer.entity.props.interface';
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
