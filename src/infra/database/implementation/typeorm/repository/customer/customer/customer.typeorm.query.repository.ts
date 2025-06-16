@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
-import { CustomerEntity } from '@core/domain/schema/entity/customer/customer.entity';
+import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
