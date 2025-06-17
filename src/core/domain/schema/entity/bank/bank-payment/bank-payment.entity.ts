@@ -2,7 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
 import type { BankPaymentEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity.props.interface';
 import type { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
-import type { StatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
+import type { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 
 export class BankPaymentEntity extends BaseEntity {
   public readonly bankExternalId: string;
@@ -10,7 +10,7 @@ export class BankPaymentEntity extends BaseEntity {
   public readonly value: string;
   public readonly netValue: string;
   public readonly discountPercentage: number;
-  public readonly status: StatusEnum;
+  public readonly status: PaymentStatusEnum;
   public readonly dueDate: Date;
   public readonly paymentDate: Date | null;
   public readonly installmentNumber: number | null;
