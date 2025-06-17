@@ -3,6 +3,6 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 
 export interface AffiliateCustomerEnabledPaymentPlanEntityPropsInterface
   extends BaseEntityPropsInterface {
-  affiliateCustomerId: Guid;
-  paymentPlanId: Guid;
+  affiliateCustomer: Guid;
+  paymentPlan: Guid;
 }
