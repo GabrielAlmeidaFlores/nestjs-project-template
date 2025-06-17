@@ -2,7 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
 import type { BankTransferEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity.props.interface';
 import type { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
-import type { StatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
+import type { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class BankTransferEntity extends BaseEntity {
@@ -11,11 +11,11 @@ export class BankTransferEntity extends BaseEntity {
   public readonly transferMethod: TransferMethodEnum;
   public readonly value: string;
   public readonly netValue: number;
-  public readonly status: StatusEnum;
+  public readonly status: TransferStatusEnum;
   public readonly effectiveDate: Date | null;
   public readonly scheduleDate: Date | null;
   public readonly failReason: string | null;
-  public readonly bankPaynebt: Guid;
+  public readonly bankPayment: Guid;
 
   protected readonly _type = BankTransferEntity.name;
 
@@ -31,6 +31,6 @@ export class BankTransferEntity extends BaseEntity {
     this.effectiveDate = props.effectiveDate;
     this.scheduleDate = props.scheduleDate;
     this.failReason = props.failReason;
-    this.bankPaynebt = props.bankPaynebt;
+    this.bankPayment = props.bankPayment;
   }
 }
