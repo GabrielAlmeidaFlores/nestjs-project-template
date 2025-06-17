@@ -4,7 +4,7 @@ import type { AffiliateCustomerEntityPropsInterface } from '@core/domain/schema/
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class AffiliateCustomerEntity extends BaseEntity {
-  public readonly customerId: Guid;
+  public readonly customer: Guid;
   public readonly pixAdressKey: string | null;
   public readonly pixAdressKeyType: string | null;
   public readonly paymentCommissionPercentage: number;
@@ -17,7 +17,7 @@ export class AffiliateCustomerEntity extends BaseEntity {
   public constructor(props: AffiliateCustomerEntityPropsInterface) {
     super(props);
 
-    this.customerId = props.customerId;
+    this.customer = props.customer;
     this.pixAdressKey = props.pixAdressKey;
     this.pixAdressKeyType = props.pixAdressKeyType;
     this.paymentCommissionPercentage = props.paymentCommissionPercentage;

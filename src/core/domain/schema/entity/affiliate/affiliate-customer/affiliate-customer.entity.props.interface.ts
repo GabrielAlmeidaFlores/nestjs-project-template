@@ -3,7 +3,7 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 
 export interface AffiliateCustomerEntityPropsInterface
   extends BaseEntityPropsInterface {
-  customerId: Guid;
+  customer: Guid;
   pixAdressKey: string | null;
   pixAdressKeyType: string | null;
   paymentCommissionPercentage: number;
