@@ -1,1 +1,1 @@
-export enum StatusEnum {}
+export enum PaymentStatusEnum {}
