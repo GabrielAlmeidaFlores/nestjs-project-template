@@ -5,9 +5,8 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 
 export class OrganizationCreditPurchaseEntity extends BaseEntity {
   public readonly organization: Guid;
-  public readonly paidResources: Guid;
+  public readonly bankPayment: Guid;
   public readonly creditAmount: number;
-  public readonly customer: Guid;
 
   protected readonly _type = OrganizationCreditPurchaseEntity.name;
 
@@ -15,8 +14,7 @@ export class OrganizationCreditPurchaseEntity extends BaseEntity {
     super(props);
 
     this.organization = props.organization;
-    this.paidResources = props.paidResources;
+    this.bankPayment = props.bankPayment;
     this.creditAmount = props.creditAmount;
-    this.customer = props.customer;
   }
 }

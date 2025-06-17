@@ -4,7 +4,6 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 export interface OrganizationCreditPurchaseEntityPropsInterface
   extends BaseEntityPropsInterface {
   organization: Guid;
-  paidResources: Guid;
+  bankPayment: Guid;
   creditAmount: number;
-  customer: Guid;
 }
