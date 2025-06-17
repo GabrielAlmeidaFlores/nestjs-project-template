@@ -4,8 +4,8 @@ import type { AffiliateCustomerEnabledPaymentPlanEntityPropsInterface } from '@c
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class AffiliateCustomerEnabledPaymentPlanEntity extends BaseEntity {
-  public readonly affiliateCustomerId: Guid;
-  public readonly paymentPlanId: Guid;
+  public readonly affiliateCustomer: Guid;
+  public readonly paymentPlan: Guid;
 
   protected readonly _type = AffiliateCustomerEnabledPaymentPlanEntity.name;
 
@@ -14,7 +14,7 @@ export class AffiliateCustomerEnabledPaymentPlanEntity extends BaseEntity {
   ) {
     super(props);
 
-    this.affiliateCustomerId = props.affiliateCustomerId;
-    this.paymentPlanId = props.paymentPlanId;
+    this.affiliateCustomer = props.affiliateCustomer;
+    this.paymentPlan = props.paymentPlan;
   }
 }
