@@ -1,4 +1,4 @@
-import type { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import type { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 type WithIdType = { id: BaseEntity['id'] };

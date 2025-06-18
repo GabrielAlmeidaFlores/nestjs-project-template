@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 import { InvalidCustomerNameError } from '@core/domain/schema/entity/customer/customer/error/invalid-customer-name.error';
 import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/customer/error/invalid-customer-password.error';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';

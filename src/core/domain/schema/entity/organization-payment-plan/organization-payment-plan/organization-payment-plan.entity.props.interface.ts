@@ -1,4 +1,4 @@
-import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base/base.entity.props.interface';
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
 import type { PaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity';
 import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
