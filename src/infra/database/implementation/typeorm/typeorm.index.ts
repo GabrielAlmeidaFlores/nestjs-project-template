@@ -2,7 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.query.repository';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
