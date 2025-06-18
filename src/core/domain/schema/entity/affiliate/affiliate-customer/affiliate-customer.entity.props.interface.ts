@@ -1,9 +1,10 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
+import type { RelationType } from '@core/domain/schema/type/relation.type';
 
 export interface AffiliateCustomerEntityPropsInterface
   extends BaseEntityPropsInterface {
-  customer: Guid;
+  customer: RelationType<CustomerEntity>;
   pixAddressKey: string | null;
   pixAddressKeyType: string | null;
   paymentCommissionPercentage: number;

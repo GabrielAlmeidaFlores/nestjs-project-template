@@ -1,8 +1,10 @@
+import type { AffiliateCustomerEntity } from '@core/domain/schema/entity/affiliate/affiliate-customer/affiliate-customer.entity';
+import type { BankTransferEntity } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity';
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { RelationType } from '@core/domain/schema/type/relation.type';
 
 export interface AffiliateCustomerPaymentEntityPropsInterface
   extends BaseEntityPropsInterface {
-  affiliateCustomer: Guid;
-  bankTransfer: Guid;
+  affiliateCustomer: AffiliateCustomerEntity;
+  bankTransfer: RelationType<BankTransferEntity>;
 }
