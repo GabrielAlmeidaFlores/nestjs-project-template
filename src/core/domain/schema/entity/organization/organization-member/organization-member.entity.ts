@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';

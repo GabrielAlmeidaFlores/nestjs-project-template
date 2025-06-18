@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { CustomerProfessionalDataEntityPropsInterface } from '@core/domain/schema/entity/customer/customer-professional-data/customer-professional-data.entity.props.interface';

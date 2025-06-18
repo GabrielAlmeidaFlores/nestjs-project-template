@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
 import type { OrganizationEntityPropsInterface } from '@core/domain/schema/entity/organization/organization/organization.entity.props.interface';
 

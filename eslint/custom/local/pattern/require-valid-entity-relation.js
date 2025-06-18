@@ -103,6 +103,10 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
             const entityFileName = entityDecl.getSourceFile()?.fileName || '';
             const entityContext = getBoundedContextFromPath(entityFileName);
 
+            if (entityContext === 'base' || currentBoundedContext === 'base') {
+              continue;
+            }
+
             const isSameContext = entityContext === currentBoundedContext;
 
             if (isSameContext && isWrappedInRelationModel) {
