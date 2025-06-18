@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
-import { CostumerAddressTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity.props.interface';
+import { CustomerAddressTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity.props.interface';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
 @Entity({ name: 'customer_address' })
@@ -56,7 +56,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
 
   protected readonly _type = CustomerAddressTypeormEntity.name;
 
-  public constructor(props?: CostumerAddressTypeormEntityPropsInterface) {
+  public constructor(props?: CustomerAddressTypeormEntityPropsInterface) {
     super(props);
 
     const isConstructedByOrm = props === undefined;
