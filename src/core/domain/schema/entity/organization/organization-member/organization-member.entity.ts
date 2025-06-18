@@ -7,7 +7,7 @@ import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
 export class OrganizationMemberEntity extends BaseEntity {
   public readonly organization: OrganizationEntity;
-  public readonly customer: RelationModel<CustomerEntity> | CustomerEntity;
+  public readonly customer: RelationModel<CustomerEntity>;
 
   protected readonly _type = OrganizationMemberEntity.name;
 
