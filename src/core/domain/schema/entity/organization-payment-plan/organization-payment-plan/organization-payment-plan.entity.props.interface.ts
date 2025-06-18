@@ -3,12 +3,13 @@ import type { OrganizationEntity } from '@core/domain/schema/entity/organization
 import type { PaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity';
 import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 export interface OrganizationPaymentPlanEntityPropsInterface
   extends BaseEntityPropsInterface {
   name: string;
   description: string;
-  price: number;
+  price: DecimalValue;
   maxMemberLimit: number;
   monthlyCreditAmount: number;
   cycle: PaymentPlanCycleEnum;
