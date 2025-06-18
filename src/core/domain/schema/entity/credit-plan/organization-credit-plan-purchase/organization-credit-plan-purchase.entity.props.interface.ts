@@ -2,7 +2,7 @@ import type { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-pay
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
 import type { CreditPlanEntity } from '@core/domain/schema/entity/credit-plan/credit-plan/credit-plan.entity';
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
-import type { RelationType } from '@core/domain/schema/type/relation.type';
+import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
 export interface OrganizationCreditPlanPurchaseEntityPropsInterface
   extends BaseEntityPropsInterface {
@@ -10,6 +10,6 @@ export interface OrganizationCreditPlanPurchaseEntityPropsInterface
   creditAmount: number;
   active: boolean;
   creditPlan: CreditPlanEntity;
-  organization: RelationType<OrganizationEntity>;
-  bankPayment: RelationType<BankPaymentEntity>;
+  organization: RelationModel<OrganizationEntity>;
+  bankPayment: RelationModel<BankPaymentEntity>;
 }

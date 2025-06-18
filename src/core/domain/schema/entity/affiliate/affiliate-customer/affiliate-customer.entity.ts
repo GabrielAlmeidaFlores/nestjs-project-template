@@ -2,7 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
 import type { AffiliateCustomerEntityPropsInterface } from '@core/domain/schema/entity/affiliate/affiliate-customer/affiliate-customer.entity.props.interface';
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
-import type { RelationType } from '@core/domain/schema/type/relation.type';
+import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
 export class AffiliateCustomerEntity extends BaseEntity {
   public readonly pixAddressKey: string | null;
@@ -11,7 +11,7 @@ export class AffiliateCustomerEntity extends BaseEntity {
   public readonly paymentPlanDiscountPercentage: number;
   public readonly paymentPlanDiscountValidUntil: Date;
   public readonly paymentPlanDiscountRedemptionLimit: number;
-  public readonly customer: RelationType<CustomerEntity>;
+  public readonly customer: RelationModel<CustomerEntity>;
 
   protected readonly _type = AffiliateCustomerEntity.name;
 
