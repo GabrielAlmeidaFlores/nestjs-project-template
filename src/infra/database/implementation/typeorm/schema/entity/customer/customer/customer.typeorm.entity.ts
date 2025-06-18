@@ -12,14 +12,13 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({ name: 'email', type: 'varchar', length: 100, unique: true })
+  @Column({ name: 'email', type: 'varchar', length: 100 })
   public email: string;
 
   @Column({
     name: 'federal_document',
     type: 'decimal',
     length: 50,
-    unique: true,
     transformer: CryptographyTransformer,
   })
   public federalDocument: string;
