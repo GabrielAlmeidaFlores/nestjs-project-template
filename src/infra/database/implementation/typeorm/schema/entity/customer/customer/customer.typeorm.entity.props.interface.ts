@@ -11,5 +11,5 @@ export interface CustomerTypeormEntityPropsInterface
   bankExternalId: string;
   profilePicture: string | null;
   mfaSecret: string | null;
-  customerAddress: CustomerAddressTypeormEntity;
+  customerAddress: CustomerAddressTypeormEntity | undefined;
 }

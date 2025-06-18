@@ -59,7 +59,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   public bankExternalId: string;
 
   @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer)
-  public customerAddress: CustomerAddressTypeormEntity;
+  public customerAddress: CustomerAddressTypeormEntity | undefined;
 
   protected readonly _type = CustomerTypeormEntity.name;
 

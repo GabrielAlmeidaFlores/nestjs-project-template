@@ -72,6 +72,7 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
         phoneNumber,
         federalDocument,
         password,
+        customerAddress: undefined,
       });
     };
 
