@@ -6,15 +6,16 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     type: 'problem',
     docs: {
       description:
-        'Ensure properties with `@Column({ nullable: true })` include `null` in their type.',
+        'Ensure that `@Column({ nullable: true })` fields include `null` in their type and vice versa.',
       category: 'Best Practices',
       recommended: true,
-      suggestion: false,
     },
     schema: [],
     messages: {
       missingNullType:
         'Property is marked as `nullable: true` but its type does not include `null`.',
+      missingNullableOption:
+        'Property includes `null` in its type but is not marked as `nullable: true`.',
     },
   },
   defaultOptions: [],
@@ -22,6 +23,9 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     return {
       PropertyDefinition(node) {
         if (!node.decorators || !node.typeAnnotation) return;
+
+        let isNullableTrue = false;
+        let hasColumnDecorator = false;
 
         for (const decorator of node.decorators) {
           const expression = decorator.expression;
@@ -33,32 +37,42 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           )
             continue;
 
+          hasColumnDecorator = true;
+
           const [firstArg] = expression.arguments;
-          if (!firstArg || firstArg.type !== 'ObjectExpression') continue;
-
-          const nullableProperty = firstArg.properties.find(
-            (prop) =>
-              prop.type === 'Property' &&
-              prop.key.type === 'Identifier' &&
-              prop.key.name === 'nullable' &&
-              prop.value.type === 'Literal' &&
-              prop.value.value === true,
-          );
-
-          if (!nullableProperty) continue;
-
-          const typeNode = node.typeAnnotation.typeAnnotation;
-
-          const includesNull =
-            typeNode.type === 'TSUnionType' &&
-            typeNode.types.some((t) => t.type === 'TSNullKeyword');
-
-          if (!includesNull) {
-            context.report({
-              node,
-              messageId: 'missingNullType',
-            });
+          if (firstArg?.type === 'ObjectExpression') {
+            isNullableTrue = firstArg.properties.some(
+              (prop) =>
+                prop.type === 'Property' &&
+                prop.key.type === 'Identifier' &&
+                prop.key.name === 'nullable' &&
+                prop.value.type === 'Literal' &&
+                prop.value.value === true,
+            );
           }
+        }
+
+        if (!hasColumnDecorator) return;
+
+        const typeNode = node.typeAnnotation.typeAnnotation;
+
+        const includesNull =
+          typeNode.type === 'TSUnionType'
+            ? typeNode.types.some((t) => t.type === 'TSNullKeyword')
+            : typeNode.type === 'TSNullKeyword';
+
+        if (isNullableTrue && !includesNull) {
+          context.report({
+            node,
+            messageId: 'missingNullType',
+          });
+        }
+
+        if (!isNullableTrue && includesNull) {
+          context.report({
+            node,
+            messageId: 'missingNullableOption',
+          });
         }
       },
     };
