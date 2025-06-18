@@ -4,8 +4,7 @@ import type { PaymentPlanEnabledPaidResourceEntityPropsInterface } from '@core/d
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
 export class PaymentPlanEnabledPaidResourceEntity {
-  public readonly applicationPaidResource:
-    RelationModel<ApplicationPaidResourceEntity>
+  public readonly applicationPaidResource: RelationModel<ApplicationPaidResourceEntity>;
   public readonly paymentPlan: PaymentPlanEntity;
 
   protected readonly _type = PaymentPlanEnabledPaidResourceEntity.name;
