@@ -1,8 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
+import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
 import type { OrganizationPaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/organization-payment-plan.entity.props.interface';
+import type { PaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity';
 import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { RelationType } from '@core/domain/schema/type/relation.type';
 
 export class OrganizationPaymentPlanEntity extends BaseEntity {
   public readonly name: string;
@@ -11,8 +13,8 @@ export class OrganizationPaymentPlanEntity extends BaseEntity {
   public readonly maxMemberLimit: number;
   public readonly monthlyCreditAmount: number;
   public readonly cycle: PaymentPlanCycleEnum;
-  public readonly paymentPlan: Guid;
-  public readonly organization: Guid;
+  public readonly paymentPlan: RelationType<PaymentPlanEntity>;
+  public readonly organization: RelationType<OrganizationEntity>;
 
   protected readonly _type = OrganizationPaymentPlanEntity.name;
 
