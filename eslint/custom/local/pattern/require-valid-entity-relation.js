@@ -72,7 +72,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
           const typesToCheck = propType.isUnion() ? propType.types : [propType];
 
-          // ❌ Proíbe qualquer union com RelationModel
           if (typesToCheck.length > 1) {
             const hasRelationModel = typesToCheck.some(isRelationModelType);
             const hasEntity = typesToCheck.some(isEntity);
