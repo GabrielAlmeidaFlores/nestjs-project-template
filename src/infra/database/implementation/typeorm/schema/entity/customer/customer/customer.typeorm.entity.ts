@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
-import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity.props.interface';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
+import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity.props.interface';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
 
@@ -16,7 +16,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'federal_document',
     type: 'decimal',
-    length: 255,
+    length: 50,
     unique: true,
     transformer: CryptographyTransformer,
   })
@@ -36,7 +36,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'profile_picture',
     type: 'varchar',
-    length: 255,
+    length: 50,
     nullable: true,
   })
   public profilePicture: string | null;
@@ -44,51 +44,18 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'mfa_secret',
     type: 'varchar',
-    length: 255,
+    length: 50,
     nullable: true,
     transformer: CryptographyTransformer,
   })
   public mfaSecret: string | null;
 
   @Column({
-    name: 'city',
+    name: 'bank_external_id',
     type: 'varchar',
-    length: 255,
-    transformer: CryptographyTransformer,
+    length: 50,
   })
-  public city: string;
-
-  @Column({
-    name: 'neighborhood',
-    type: 'varchar',
-    length: 255,
-    transformer: CryptographyTransformer,
-  })
-  public neighborhood: string;
-
-  @Column({
-    name: 'country_state',
-    type: 'varchar',
-    length: 255,
-    transformer: CryptographyTransformer,
-  })
-  public countryState: string;
-
-  @Column({
-    name: 'postal_code',
-    type: 'varchar',
-    length: 255,
-    transformer: CryptographyTransformer,
-  })
-  public postalCode: string;
-
-  @Column({
-    name: 'address_number',
-    type: 'varchar',
-    length: 255,
-    transformer: CryptographyTransformer,
-  })
-  public addressNumber: string;
+  public bankExternalId: string;
 
   protected readonly _type = CustomerTypeormEntity.name;
 
@@ -105,12 +72,8 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     this.federalDocument = props.federalDocument;
     this.phoneNumber = props.phoneNumber;
     this.password = props.password;
-    this.profilePicture = props.profilePicture ?? null;
-    this.mfaSecret = props.mfaSecret ?? null;
-    this.city = props.city;
-    this.neighborhood = props.neighborhood;
-    this.countryState = props.countryState;
-    this.postalCode = props.postalCode;
-    this.addressNumber = props.addressNumber;
+    this.bankExternalId = props.bankExternalId;
+    this.profilePicture = props.profilePicture;
+    this.mfaSecret = props.mfaSecret;
   }
 }

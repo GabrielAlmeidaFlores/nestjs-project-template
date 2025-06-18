@@ -1,22 +1,19 @@
 import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { Url } from '@core/domain/schema/value-object/url/url.value-object';
 import { Injectable } from '@nestjs/common';
 
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
-import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
-export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
-  protected readonly _type = CustomerAutoMapperDatabaseProfile.name;
+export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
+  protected readonly _type = CustomerDatabaseAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     super();
@@ -35,15 +32,6 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
       const id = new Guid(source.id);
       const email = new Email(source.email);
       const phoneNumber = new PhoneNumber(source.phoneNumber);
-      const profilePicture = this.convertOptionalStringToValueObject(
-        Url,
-        source.profilePicture,
-      );
-      const countryState = this.convertStringToEnum(
-        StateCodeEnum,
-        source.countryState,
-      );
-      const postalCode = new PostalCode(source.postalCode);
       const federalDocument = new FederalDocument(source.federalDocument);
       const password = new Hash(source.password);
 
@@ -52,9 +40,6 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
         id,
         email,
         phoneNumber,
-        profilePicture,
-        countryState,
-        postalCode,
         federalDocument,
         password,
       });
@@ -77,10 +62,6 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
       const id = source.id.toString();
       const email = source.email.toString();
       const phoneNumber = source.phoneNumber.toString();
-      const profilePicture = this.convertOptionalValueObjectToString(
-        source.profilePicture,
-      );
-      const postalCode = source.postalCode.toString();
       const federalDocument = source.federalDocument.toString();
       const password = source.password.toString();
 
@@ -89,8 +70,6 @@ export class CustomerAutoMapperDatabaseProfile extends BaseAutoMapperProfile {
         id,
         email,
         phoneNumber,
-        profilePicture,
-        postalCode,
         federalDocument,
         password,
       });
