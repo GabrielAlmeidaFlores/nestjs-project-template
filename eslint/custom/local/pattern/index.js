@@ -4,13 +4,11 @@ module.exports = {
       rules: {
         'require-dto-decorator': require('./require-dto-decorator.js'),
         'require-valid-error-constructor': require('./require-valid-error-constructor.js'),
-        'require-valid-entity-relation': require('./require-valid-entity-relation.js'),
       },
     },
   },
   rules: {
     'pattern-rule/require-dto-decorator': 'error',
     'pattern-rule/require-valid-error-constructor': 'error',
-    'pattern-rule/require-valid-entity-relation': 'error',
   },
 };
