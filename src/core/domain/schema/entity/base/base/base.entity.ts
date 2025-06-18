@@ -1,6 +1,6 @@
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
-import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base/base.entity.props.interface';
 import type { InvalidInputError } from '@core/error/invalid-input.error';
 
 export abstract class BaseEntity {

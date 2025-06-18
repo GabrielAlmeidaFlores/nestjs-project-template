@@ -3,7 +3,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
-import { CustomerAutoMapperDatabaseProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/customer.auto-mapper.database.profile';
+import { CustomerDatabaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/customer.database.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { CustomerAutoMapperDatabaseProfile } from '@lib/mapper/implementation/au
       strategyInitializer: classes(),
     }),
   ],
-  providers: [AutoMapperService, CustomerAutoMapperDatabaseProfile],
+  providers: [AutoMapperService, CustomerDatabaseAutoMapperProfile],
   exports: [AutoMapperService],
 })
 export class AutoMapperModule {
