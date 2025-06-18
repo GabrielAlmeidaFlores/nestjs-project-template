@@ -3,12 +3,13 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import type { BankPaymentEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity.props.interface';
 import type { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
 import type { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 export class BankPaymentEntity extends BaseEntity {
   public readonly bankExternalId: string;
   public readonly paymentMethod: PaymentMethodEnum;
-  public readonly value: string;
-  public readonly netValue: string;
+  public readonly value: DecimalValue;
+  public readonly netValue: DecimalValue;
   public readonly discountPercentage: number;
   public readonly status: PaymentStatusEnum;
   public readonly dueDate: Date;
