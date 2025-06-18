@@ -1,4 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidCustomerAdressCityError } from '@core/domain/schema/entity/customer/customer-address/error/invalid-customer-adress-city.error';
+import { InvalidCustomerAdressNeighborhoodError } from '@core/domain/schema/entity/customer/customer-address/error/invalid-customer-adress-neighborhood.error';
 
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { CustomerAddressEntityPropsInterface } from '@core/domain/schema/entity/customer/customer-address/customer-address.entity.props.interface';
@@ -24,5 +26,39 @@ export class CustomerAddressEntity extends BaseEntity {
     this.neighborhood = props.neighborhood;
     this.addressNumber = props.addressNumber;
     this.customer = props.customer;
+  }
+
+  public static validateCity(name: string): void {
+    const minNameLength = 1;
+    const maxNameLength = 100;
+
+    const hasMinimumLength = name.length > minNameLength;
+    const hasMaximumLength = name.length < maxNameLength;
+
+    this.validateAllOrThrow(
+      [hasMinimumLength, hasMaximumLength],
+      () =>
+        new InvalidCustomerAdressCityError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
+    );
+  }
+
+  public static validateNeighborhood(name: string): void {
+    const minNameLength = 3;
+    const maxNameLength = 100;
+
+    const hasMinimumLength = name.length > minNameLength;
+    const hasMaximumLength = name.length < maxNameLength;
+
+    this.validateAllOrThrow(
+      [hasMinimumLength, hasMaximumLength],
+      () =>
+        new InvalidCustomerAdressNeighborhoodError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
+    );
   }
 }
