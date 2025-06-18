@@ -18,6 +18,9 @@ export class CustomerAddressEntity extends BaseEntity {
   protected readonly _type = CustomerAddressEntity.name;
 
   public constructor(props: CustomerAddressEntityPropsInterface) {
+    CustomerAddressEntity.validateCity(props.city);
+    CustomerAddressEntity.validateNeighborhood(props.neighborhood);
+
     super(props);
 
     this.postalCode = props.postalCode;
