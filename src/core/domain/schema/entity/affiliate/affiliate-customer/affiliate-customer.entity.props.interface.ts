@@ -4,8 +4,8 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 export interface AffiliateCustomerEntityPropsInterface
   extends BaseEntityPropsInterface {
   customer: Guid;
-  pixAdressKey: string | null;
-  pixAdressKeyType: string | null;
+  pixAddressKey: string | null;
+  pixAddressKeyType: string | null;
   paymentCommissionPercentage: number;
   paymentPlanDiscountPercentage: number;
   paymentPlanDiscountValidUntil: Date;

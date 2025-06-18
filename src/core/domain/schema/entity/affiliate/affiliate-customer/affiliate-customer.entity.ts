@@ -5,8 +5,8 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 
 export class AffiliateCustomerEntity extends BaseEntity {
   public readonly customer: Guid;
-  public readonly pixAdressKey: string | null;
-  public readonly pixAdressKeyType: string | null;
+  public readonly pixAddressKey: string | null;
+  public readonly pixAddressKeyType: string | null;
   public readonly paymentCommissionPercentage: number;
   public readonly paymentPlanDiscountPercentage: number;
   public readonly paymentPlanDiscountValidUntil: Date;
@@ -18,8 +18,8 @@ export class AffiliateCustomerEntity extends BaseEntity {
     super(props);
 
     this.customer = props.customer;
-    this.pixAdressKey = props.pixAdressKey;
-    this.pixAdressKeyType = props.pixAdressKeyType;
+    this.pixAddressKey = props.pixAddressKey;
+    this.pixAddressKeyType = props.pixAddressKeyType;
     this.paymentCommissionPercentage = props.paymentCommissionPercentage;
     this.paymentPlanDiscountPercentage = props.paymentPlanDiscountPercentage;
     this.paymentPlanDiscountValidUntil = props.paymentPlanDiscountValidUntil;
