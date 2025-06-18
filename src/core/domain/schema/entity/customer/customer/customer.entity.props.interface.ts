@@ -1,4 +1,4 @@
-import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base/base.entity.props.interface';
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';

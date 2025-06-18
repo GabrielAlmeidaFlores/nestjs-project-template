@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 import { InvalidCityError } from '@core/domain/schema/entity/customer/customer-address/error/invalid-customer-adress-city.error';
 import { InvalidNeighborhoodError } from '@core/domain/schema/entity/customer/customer-address/error/invalid-customer-adress-neighborhood.error';
 

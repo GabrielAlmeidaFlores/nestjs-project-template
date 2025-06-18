@@ -1,4 +1,4 @@
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
 import type { AffiliateCustomerEntity } from '@core/domain/schema/entity/affiliate/affiliate-customer/affiliate-customer.entity';
 import type { AffiliateCustomerEnabledPaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/affiliate/affiliate-customer-enabled-payment-plan/affiliate-customer-enabled-payment-plan.entity.props.interface';
