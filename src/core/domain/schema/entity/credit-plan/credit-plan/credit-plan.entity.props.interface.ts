@@ -1,8 +1,9 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 export interface CreditPlanEntityPropsInterface
   extends BaseEntityPropsInterface {
-  price: string;
+  price: DecimalValue;
   creditAmount: number;
   active: boolean;
 }

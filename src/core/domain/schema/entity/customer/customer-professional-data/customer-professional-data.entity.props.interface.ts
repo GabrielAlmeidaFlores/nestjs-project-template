@@ -1,11 +1,11 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { OccupationAreaEnum } from '@core/domain/schema/entity/customer/customer-professional-data/enum/professional-data-occupation.enum';
-import type { StateEnum } from '@core/domain/schema/entity/customer/customer-professional-data/enum/professional-data-state.enum';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 
 export interface CustomerProfessionalDataEntityPropsInterface
   extends BaseEntityPropsInterface {
   occupationArea: OccupationAreaEnum;
-  state: StateEnum;
-  customerProfessionalData: Guid;
+  stateCode: StateCodeEnum;
+  customer: CustomerEntity;
 }

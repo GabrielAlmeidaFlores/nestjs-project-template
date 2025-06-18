@@ -1,5 +1,6 @@
 import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
+import { Url } from '@core/domain/schema/value-object/url/url.value-object';
 import { Injectable } from '@nestjs/common';
 
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
@@ -10,7 +11,6 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { Url } from '@core/domain/schema/value-object/url/url.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
