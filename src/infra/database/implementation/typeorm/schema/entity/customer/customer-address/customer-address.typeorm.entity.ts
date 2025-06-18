@@ -17,7 +17,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   public postalCode: string;
 
   @Column({
-    name: 'state_coode',
+    name: 'state_code',
     type: 'varchar',
     length: 50,
     transformer: CryptographyTransformer,
