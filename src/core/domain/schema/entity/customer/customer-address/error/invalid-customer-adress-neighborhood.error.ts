@@ -5,7 +5,7 @@ export class InvalidNeighborhoodError extends InvalidInputError {
 
   public constructor(props: { maxLength: number; minLength: number }) {
     super(
-      `O nome do bairro deve conter de ${props.minLength} a ${props.maxLength} caracteres e pode incluir apenas letras, espaços e caracteres especiais (acentuação)`,
+      `O nome do bairro deve conter de ${props.minLength} a ${props.maxLength} caracteres e pode incluir apenas letras, espaços e caracteres especiais.`,
     );
   }
 }
