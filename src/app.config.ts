@@ -8,6 +8,11 @@ import {
 } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { ForbiddenErrorExceptionFilter } from '@shared/api/exception-filter/forbidden.error.exception-filter';
+import { InvalidInputErrorExceptionFilter } from '@shared/api/exception-filter/invalid-input.error.exception-filter';
+import { NotFoundErrorExceptionFilter } from '@shared/api/exception-filter/not-found.error.exception-filter';
+import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/unauthorized.error.exception-filter';
+import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
 import type { PackageJson } from 'type-fest';
@@ -35,6 +40,16 @@ export class AppConfig extends AppConfigUtils {
       origin: true,
       methods: '*',
     });
+
+    return this;
+  }
+
+  public globalApiFilters(): this {
+    this.app.useGlobalFilters(new ForbiddenErrorExceptionFilter());
+    this.app.useGlobalFilters(new InvalidInputErrorExceptionFilter());
+    this.app.useGlobalFilters(new NotFoundErrorExceptionFilter());
+    this.app.useGlobalFilters(new UnauthorizedErrorExceptionFilter());
+    this.app.useGlobalFilters(new UnexpectedErrorExceptionFilter());
 
     return this;
   }
