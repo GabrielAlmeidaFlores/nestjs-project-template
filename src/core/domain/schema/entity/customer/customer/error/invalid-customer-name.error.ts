@@ -5,7 +5,7 @@ export class InvalidCustomerNameError extends InvalidInputError {
 
   public constructor(props: { maxLength: number; minLength: number }) {
     super(
-      `O nome deve conter de ${props.minLength} a ${props.maxLength} caracteres e pode incluir apenas letras e espaços`,
+      `O nome deve conter de ${props.minLength} a ${props.maxLength} caracteres e pode incluir apenas letras, espaços e caracteres especiais (acentuação)`,
     );
   }
 }

@@ -1,6 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidCustomerNameError } from '@core/domain/schema/entity/customer/customer/error/invalid-customer-name.error';
-import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/customer/error/invalid-custommer-password.error';
+import { InvalidCustomerPasswordError } from '@core/domain/schema/entity/customer/customer/error/invalid-customer-password.error';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 
 import type { CustomerEntityPropsInterface } from '@core/domain/schema/entity/customer/customer/customer.entity.props.interface';
@@ -38,7 +38,7 @@ export class CustomerEntity extends BaseEntity {
   public static validateName(name: string): void {
     const minNameLength = 3;
     const maxNameLength = 50;
-    const nameRegex = /^[A-Za-z ]+$/;
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
 
     const hasMinimumLength = name.length > minNameLength;
     const hasMaximumLength = name.length < maxNameLength;
