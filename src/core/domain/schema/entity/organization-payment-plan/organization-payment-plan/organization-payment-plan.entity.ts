@@ -5,11 +5,12 @@ import type { OrganizationPaymentPlanEntityPropsInterface } from '@core/domain/s
 import type { PaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity';
 import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 export class OrganizationPaymentPlanEntity extends BaseEntity {
   public readonly name: string;
   public readonly description: string;
-  public readonly price: number;
+  public readonly price: DecimalValue;
   public readonly maxMemberLimit: number;
   public readonly monthlyCreditAmount: number;
   public readonly cycle: PaymentPlanCycleEnum;
