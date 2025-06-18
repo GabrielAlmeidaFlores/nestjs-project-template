@@ -1,4 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidPaymentPlanDescriptionError } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/error/invalid-payment-plan-description.error';
+import { InvalidPaymentPlanNameError } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/error/invalid-payment-plan-name.error';
 
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
 import type { OrganizationPaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/organization-payment-plan.entity.props.interface';
@@ -20,6 +22,9 @@ export class OrganizationPaymentPlanEntity extends BaseEntity {
   protected readonly _type = OrganizationPaymentPlanEntity.name;
 
   public constructor(props: OrganizationPaymentPlanEntityPropsInterface) {
+    OrganizationPaymentPlanEntity.validateName(props.name);
+    OrganizationPaymentPlanEntity.validateDescription(props.description);
+
     super(props);
 
     this.name = props.name;
@@ -30,5 +35,43 @@ export class OrganizationPaymentPlanEntity extends BaseEntity {
     this.cycle = props.cycle;
     this.paymentPlan = props.paymentPlan;
     this.organization = props.organization;
+  }
+
+  public static validateName(name: string): void {
+    const minNameLength = 3;
+    const maxNameLength = 100;
+    const nameRegex = /^[A-Za-z0-9\s]+$/;
+
+    const hasMinimumLength = name.length > minNameLength;
+    const hasMaximumLength = name.length < maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(name);
+
+    this.validateAllOrThrow(
+      [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
+      () =>
+        new InvalidPaymentPlanNameError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
+    );
+  }
+
+  public static validateDescription(name: string): void {
+    const minNameLength = 3;
+    const maxNameLength = 255;
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/;
+
+    const hasMinimumLength = name.length > minNameLength;
+    const hasMaximumLength = name.length < maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(name);
+
+    this.validateAllOrThrow(
+      [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
+      () =>
+        new InvalidPaymentPlanDescriptionError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
+    );
   }
 }
