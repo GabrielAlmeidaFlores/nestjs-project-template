@@ -1,6 +1,8 @@
 import type { ApplicationPaidResourceEnum } from '@core/domain/schema/entity/application-paid-resource/application-paid-resource/enum/application-paid-resource.enum';
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
 
-export interface ApplicationPaidResourceEntityPropsInterface {
+export interface ApplicationPaidResourceEntityPropsInterface
+  extends BaseEntityPropsInterface {
   resource: ApplicationPaidResourceEnum;
   creditCost: number;
   description: string;
