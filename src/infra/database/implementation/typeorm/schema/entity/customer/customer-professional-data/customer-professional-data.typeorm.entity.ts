@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
-import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { OccupationAreaEnum } from '@core/domain/schema/entity/customer/customer-professional-data/enum/professional-data-occupation.enum';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
@@ -21,7 +20,7 @@ export class CustomerProfessionalDataTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({
     name: 'customer_id',
   })
-  public customer: CustomerEntity;
+  public customer: CustomerTypeormEntity;
 
   protected readonly _type = CustomerProfessionalDataTypeormEntity.name;
 
