@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
-import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
 import { CustomerAddressTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity.props.interface';
@@ -52,7 +51,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({
     name: 'customer_id',
   })
-  public customer: CustomerEntity;
+  public customer: CustomerTypeormEntity;
 
   protected readonly _type = CustomerAddressTypeormEntity.name;
 
