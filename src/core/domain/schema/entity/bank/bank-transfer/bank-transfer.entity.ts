@@ -29,9 +29,9 @@ export class BankTransferEntity extends BaseEntity {
     this.value = props.value;
     this.netValue = props.netValue;
     this.status = props.status;
-    this.effectiveDate = props.effectiveDate;
-    this.scheduleDate = props.scheduleDate;
-    this.failReason = props.failReason;
+    this.effectiveDate = props.effectiveDate ?? null;
+    this.scheduleDate = props.scheduleDate ?? null;
+    this.failReason = props.failReason ?? null;
     this.bankPayment = props.bankPayment;
   }
 }
