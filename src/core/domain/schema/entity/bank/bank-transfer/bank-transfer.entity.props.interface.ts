@@ -12,8 +12,8 @@ export interface BankTransferEntityPropsInterface
   value: DecimalValue;
   netValue: DecimalValue;
   status: TransferStatusEnum;
-  effectiveDate: Date | null;
-  scheduleDate: Date | null;
-  failReason: string | null;
+  effectiveDate?: Date | null;
+  scheduleDate?: Date | null;
+  failReason?: string | null;
   bankPayment: Guid;
 }

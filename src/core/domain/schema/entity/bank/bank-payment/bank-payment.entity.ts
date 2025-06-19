@@ -30,9 +30,9 @@ export class BankPaymentEntity extends BaseEntity {
     this.discountPercentage = props.discountPercentage;
     this.status = props.status;
     this.dueDate = props.dueDate;
-    this.paymentDate = props.paymentDate;
-    this.installmentNumber = props.installmentNumber;
-    this.costumerConfirmDate = props.costumerConfirmDate;
-    this.pixQrCode = props.pixQrCode;
+    this.paymentDate = props.paymentDate ?? null;
+    this.installmentNumber = props.installmentNumber ?? null;
+    this.costumerConfirmDate = props.costumerConfirmDate ?? null;
+    this.pixQrCode = props.pixQrCode ?? null;
   }
 }
