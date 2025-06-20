@@ -1,10 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
-import type { PaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity.props.interface';
-import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
+import type { AvailablePaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/payment-plan/available-payment-plan/available-payment-plan.entity.props.interface';
+import type { PaymentPlanCycleEnum } from '@core/domain/schema/entity/payment-plan/enum/payment-plan-cycle.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
-export class PaymentPlanEntity extends BaseEntity {
+export class AvailablePaymentPlanEntity extends BaseEntity {
   public readonly name: string;
   public readonly description: string;
   public readonly price: DecimalValue;
@@ -13,9 +13,9 @@ export class PaymentPlanEntity extends BaseEntity {
   public readonly active: boolean;
   public readonly cycle: PaymentPlanCycleEnum;
 
-  protected readonly _type = PaymentPlanEntity.name;
+  protected readonly _type = AvailablePaymentPlanEntity.name;
 
-  public constructor(props: PaymentPlanEntityPropsInterface) {
+  public constructor(props: AvailablePaymentPlanEntityPropsInterface) {
     super(props);
 
     this.name = props.name;
