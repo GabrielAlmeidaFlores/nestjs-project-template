@@ -1,4 +1,5 @@
 import type { BaseTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity.props.interface';
+import type { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 
 export interface CustomerTypeormEntityPropsInterface
   extends BaseTypeormEntityPropsInterface {
@@ -10,4 +11,5 @@ export interface CustomerTypeormEntityPropsInterface
   bankExternalId: string;
   profilePicture: string | null;
   mfaSecret: string | null;
+  organizationMemberCustomer: OrganizationMemberTypeormEntity[] | undefined;
 }
