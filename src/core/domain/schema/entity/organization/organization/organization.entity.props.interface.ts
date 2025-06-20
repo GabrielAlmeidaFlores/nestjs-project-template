@@ -3,5 +3,5 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 export interface OrganizationEntityPropsInterface
   extends BaseEntityPropsInterface {
   name: string;
-  organizationLogo: string | null;
+  organizationLogo?: string | null;
 }

@@ -5,8 +5,8 @@ import type { RelationModel } from '@core/domain/schema/model/relation.model';
 export interface AffiliateCustomerEntityPropsInterface
   extends BaseEntityPropsInterface {
   customer: RelationModel<CustomerEntity>;
-  pixAddressKey: string | null;
-  pixAddressKeyType: string | null;
+  pixAddressKey?: string | null;
+  pixAddressKeyType?: string | null;
   paymentCommissionPercentage: number;
   paymentPlanDiscountPercentage: number;
   paymentPlanDiscountValidUntil: Date;

@@ -1,7 +1,9 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity.props.interface';
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
+import { CustomerProfessionalDataTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-professional-data/customer-professional-data.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
@@ -11,14 +13,13 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({ name: 'email', type: 'varchar', length: 100, unique: true })
+  @Column({ name: 'email', type: 'varchar', length: 100 })
   public email: string;
 
   @Column({
     name: 'federal_document',
     type: 'decimal',
     length: 50,
-    unique: true,
     transformer: CryptographyTransformer,
   })
   public federalDocument: string;
@@ -61,6 +62,17 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @OneToMany(() => OrganizationMemberTypeormEntity, (entity) => entity.customer)
   public organizationMember: OrganizationMemberTypeormEntity[] | undefined;
 
+  @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer)
+  public customerAddress: CustomerAddressTypeormEntity | undefined;
+
+  @OneToOne(
+    () => CustomerProfessionalDataTypeormEntity,
+    (entity) => entity.customer,
+  )
+  public customerProfessionalData:
+    | CustomerProfessionalDataTypeormEntity
+    | undefined;
+
   protected readonly _type = CustomerTypeormEntity.name;
 
   public constructor(props?: CustomerTypeormEntityPropsInterface) {
@@ -79,6 +91,8 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture;
     this.mfaSecret = props.mfaSecret;
+    this.customerAddress = props.customerAddress;
+    this.customerProfessionalData = props.customerProfessionalData;
     this.organizationMember = props.organizationMember;
   }
 }

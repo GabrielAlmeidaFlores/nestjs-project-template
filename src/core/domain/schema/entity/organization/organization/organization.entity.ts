@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
+import { InvalidOrganizationNameError } from '@core/domain/schema/entity/organization/organization/error/invalid-organization-name.error';
 
 import type { OrganizationEntityPropsInterface } from '@core/domain/schema/entity/organization/organization/organization.entity.props.interface';
 
