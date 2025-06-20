@@ -1,4 +1,4 @@
-import type { ApplicationPaidResourceEntity } from '@core/domain/schema/entity/payment-plan/application-paid-resource/application-paid-resource.entity';
+import type { ApplicationPaidResourceEntity } from '@core/domain/schema/entity/application-resource/application-paid-resource/application-paid-resource.entity';
 import type { AuditableBaseEntityPropsInterface } from '@core/domain/schema/entity/base/auditable-base/auditable-base.entity.props.interface';
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
