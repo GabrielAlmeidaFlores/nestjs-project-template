@@ -1,11 +1,11 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
-import { InvalidPaymentPlanDescriptionError } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/error/invalid-payment-plan-description.error';
-import { InvalidPaymentPlanNameError } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/error/invalid-payment-plan-name.error';
+import { InvalidPaymentPlanDescriptionError } from '@core/domain/schema/entity/payment-plan/organization-payment-plan/error/invalid-payment-plan-description.error';
+import { InvalidPaymentPlanNameError } from '@core/domain/schema/entity/payment-plan/organization-payment-plan/error/invalid-payment-plan-name.error';
 
 import type { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
-import type { OrganizationPaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/organization-payment-plan.entity.props.interface';
-import type { PaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/payment-plan/payment-plan.entity';
-import type { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan-cycle.enum';
+import type { AvailablePaymentPlanEntity } from '@core/domain/schema/entity/payment-plan/available-payment-plan/available-payment-plan.entity';
+import type { PaymentPlanCycleEnum } from '@core/domain/schema/entity/payment-plan/enum/payment-plan-cycle.enum';
+import type { OrganizationPaymentPlanEntityPropsInterface } from '@core/domain/schema/entity/payment-plan/organization-payment-plan/organization-payment-plan.entity.props.interface';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
@@ -16,7 +16,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity {
   public readonly maxMemberLimit: number;
   public readonly monthlyCreditAmount: number;
   public readonly cycle: PaymentPlanCycleEnum;
-  public readonly paymentPlan: RelationModel<PaymentPlanEntity>;
+  public readonly availablePaymentPlan: AvailablePaymentPlanEntity;
   public readonly organization: RelationModel<OrganizationEntity>;
 
   protected readonly _type = OrganizationPaymentPlanEntity.name;
@@ -33,7 +33,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity {
     this.maxMemberLimit = props.maxMemberLimit;
     this.monthlyCreditAmount = props.monthlyCreditAmount;
     this.cycle = props.cycle;
-    this.paymentPlan = props.paymentPlan;
+    this.availablePaymentPlan = props.availablePaymentPlan;
     this.organization = props.organization;
   }
 

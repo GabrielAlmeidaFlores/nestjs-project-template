@@ -4,7 +4,7 @@ import { InvalidNeighborhoodError } from '@core/domain/schema/entity/customer/cu
 
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import type { CustomerAddressEntityPropsInterface } from '@core/domain/schema/entity/customer/customer-address/customer-address.entity.props.interface';
-import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
+import type { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 
 export class CustomerAddressEntity extends BaseEntity {
