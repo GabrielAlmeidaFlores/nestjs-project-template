@@ -7,13 +7,13 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 
 @Entity({ name: 'application_paid_resource' })
 export class ApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'resource', type: 'enum', length: 50 })
+  @Column({ name: 'resource', type: 'simple-enum' })
   public resource: ApplicationPaidResourceEnum;
 
   @Column({ name: 'credit_cost', type: 'number', length: 50 })
   public creditCost: number;
 
-  @Column({ name: 'description', type: 'enum', length: 50 })
+  @Column({ name: 'description', type: 'enum', length: 255 })
   public description: string;
 
   @OneToMany(

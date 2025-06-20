@@ -16,16 +16,12 @@ export class AvailablePaymentPlanEnabledPaidResourceTypeormEntity extends BaseTy
     | ApplicationPaidResourceTypeormEntity[]
     | undefined;
 
-  // ------------------------------------------- FAzendo esse de baixo
-
   @ManyToOne(
     () => AvailablePaymentPlanTypeormEntity,
-    (entity) => entity.availablePaymentPlan,
+    (entity) => entity.availablePaymentPlanEnabledPaidResource,
   )
   @JoinColumn({ name: 'available_payment_plan_id' })
   public availablePaymentPlan: AvailablePaymentPlanTypeormEntity[] | undefined;
-
-  // --------------
 
   protected readonly _type =
     AvailablePaymentPlanEnabledPaidResourceTypeormEntity.name;
