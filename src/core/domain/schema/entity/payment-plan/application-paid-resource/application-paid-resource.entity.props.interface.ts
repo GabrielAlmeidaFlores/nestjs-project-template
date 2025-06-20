@@ -5,6 +5,5 @@ export interface ApplicationPaidResourceEntityPropsInterface
   extends BaseEntityPropsInterface {
   resource: ApplicationPaidResourceEnum;
   creditCost: number;
-  name: string;
   description: string;
 }
