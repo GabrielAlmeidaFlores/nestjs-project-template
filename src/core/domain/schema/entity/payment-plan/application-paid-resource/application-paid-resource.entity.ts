@@ -1,11 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
-import type { ApplicationPaidResourceEntityPropsInterface } from '@core/domain/schema/entity/application-paid-resource/application-paid-resource/application-paid-resource.entity.props.interface';
-import type { ApplicationPaidResourceEnum } from '@core/domain/schema/entity/application-paid-resource/application-paid-resource/enum/application-paid-resource.enum';
+import type { ApplicationPaidResourceEntityPropsInterface } from '@core/domain/schema/entity/payment-plan/application-paid-resource/application-paid-resource.entity.props.interface';
+import type { ApplicationPaidResourceEnum } from '@core/domain/schema/entity/payment-plan/application-paid-resource/enum/application-paid-resource.enum';
 
 export class ApplicationPaidResourceEntity extends BaseEntity {
   public readonly resource: ApplicationPaidResourceEnum;
   public readonly creditCost: number;
+  public readonly name: string;
   public readonly description: string;
 
   protected readonly _type = ApplicationPaidResourceEntity.name;
@@ -15,6 +16,7 @@ export class ApplicationPaidResourceEntity extends BaseEntity {
 
     this.resource = props.resource;
     this.creditCost = props.creditCost;
+    this.name = props.name;
     this.description = props.description;
   }
 }

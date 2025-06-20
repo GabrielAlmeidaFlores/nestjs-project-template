@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { CustomerProfessionalDataEntity } from '@core/domain/schema/entity/customer/customer-professional-data/customer-professional-data.entity';
-import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
+import { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
 import { CustomerProfessionalDataTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-professional-data/customer-professional-data.typeorm.entity';
