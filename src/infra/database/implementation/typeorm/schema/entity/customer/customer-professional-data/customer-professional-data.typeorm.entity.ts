@@ -30,7 +30,6 @@ export class CustomerProfessionalDataTypeormEntity extends BaseTypeormEntity {
     super(props);
 
     const isConstructedByOrm = props === undefined;
-
     if (isConstructedByOrm) {
       return;
     }
