@@ -59,9 +59,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   public bankExternalId: string;
 
   @OneToMany(() => OrganizationMemberTypeormEntity, (entity) => entity.customer)
-  public organizationMemberCustomer:
-    | OrganizationMemberTypeormEntity[]
-    | undefined;
+  public organizationMember: OrganizationMemberTypeormEntity[] | undefined;
 
   protected readonly _type = CustomerTypeormEntity.name;
 
@@ -81,6 +79,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture;
     this.mfaSecret = props.mfaSecret;
-    this.organizationMemberCustomer = props.organizationMemberCustomer;
+    this.organizationMember = props.organizationMember;
   }
 }

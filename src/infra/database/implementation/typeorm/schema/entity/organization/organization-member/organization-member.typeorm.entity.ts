@@ -10,14 +10,11 @@ export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
     () => OrganizationTypeormEntity,
     (entity) => entity.organizationMember,
   )
-  @JoinColumn({ name: 'organization' })
+  @JoinColumn({ name: 'organization_id' })
   public organization: OrganizationTypeormEntity;
 
-  @ManyToOne(
-    () => CustomerTypeormEntity,
-    (entity) => entity.organizationMemberCustomer,
-  )
-  @JoinColumn({ name: 'name' })
+  @ManyToOne(() => CustomerTypeormEntity, (entity) => entity.organizationMember)
+  @JoinColumn({ name: 'customer_id' })
   public customer: CustomerTypeormEntity;
 
   protected readonly _type = OrganizationMemberTypeormEntity.name;
