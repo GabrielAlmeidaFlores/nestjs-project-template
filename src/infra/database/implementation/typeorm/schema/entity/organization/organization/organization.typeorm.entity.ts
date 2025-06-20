@@ -8,7 +8,7 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({ name: 'organization_logo', type: 'varchar', length: 255 })
+  @Column({ name: 'organization_logo', type: 'varchar', length: 50 })
   public organizationLogo: string;
 
   protected readonly _type = OrganizationTypeormEntity.name;
