@@ -3,8 +3,8 @@ import { EnvironmentVariable } from '@shared/system/constant/application-variabl
 export class NodeApplicationVariable {
   public static readonly source = new EnvironmentVariable();
 
-  public static readonly PRODUCTION_ENVIRONMENT: boolean =
-    NodeApplicationVariable.source.getOrDefault(
+  public static readonly PRODUCTION_ENVIRONMENT =
+    NodeApplicationVariable.source.getOrDefault<boolean>(
       'PRODUCTION_ENVIRONMENT',
       Boolean,
       false,

@@ -17,7 +17,7 @@ export class CreateBankPaymentPlanInputModel {
   public remoteIp: string;
   public creditCard: BankCreditCardInfoInputModel;
   public creditCardHolderInfo: BankCreditCardHolderInfoInputModel;
-  public discountPercentage: number;
+  public discountPercentage: number | null;
 
   protected readonly _type = CreateBankPaymentPlanInputModel.name;
 

@@ -12,7 +12,7 @@ export class CreateBankPaymentOutputModel {
   public dueDate: Date;
   public description: string;
   public paymentPlan: Guid;
-  public discountPercentage: number;
+  public discountPercentage: number | null;
 
   protected readonly _type = CreateBankPaymentOutputModel.name;
 

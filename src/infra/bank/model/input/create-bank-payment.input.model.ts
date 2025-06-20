@@ -10,7 +10,8 @@ export class CreateBankPaymentInputModel {
   public dueDate: Date;
   public description: string;
   public paymentPlan: Guid;
-  public discountPercentage: number;
+  public discountPercentage: number | null;
+  public installmentCount: number | null;
 
   protected readonly _type = CreateBankPaymentInputModel.name;
 
@@ -22,5 +23,6 @@ export class CreateBankPaymentInputModel {
     this.description = props.description;
     this.paymentPlan = props.paymentPlan;
     this.discountPercentage = props.discountPercentage;
+    this.installmentCount = props.installmentCount;
   }
 }
