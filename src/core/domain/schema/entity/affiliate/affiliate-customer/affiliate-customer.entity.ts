@@ -19,8 +19,8 @@ export class AffiliateCustomerEntity extends BaseEntity {
     super(props);
 
     this.customer = props.customer;
-    this.pixAddressKey = props.pixAddressKey;
-    this.pixAddressKeyType = props.pixAddressKeyType;
+    this.pixAddressKey = props.pixAddressKey ?? null;
+    this.pixAddressKeyType = props.pixAddressKeyType ?? null;
     this.paymentCommissionPercentage = props.paymentCommissionPercentage;
     this.paymentPlanDiscountPercentage = props.paymentPlanDiscountPercentage;
     this.paymentPlanDiscountValidUntil = props.paymentPlanDiscountValidUntil;

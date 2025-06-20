@@ -1,4 +1,4 @@
-import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
+import { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';

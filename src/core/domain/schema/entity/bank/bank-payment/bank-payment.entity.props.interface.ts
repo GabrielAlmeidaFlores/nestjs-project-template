@@ -12,8 +12,8 @@ export interface BankPaymentEntityPropsInterface
   discountPercentage: number;
   status: PaymentStatusEnum;
   dueDate: Date;
-  paymentDate: Date | null;
-  installmentNumber: number | null;
-  costumerConfirmDate: Date | null;
-  pixQrCode: string | null;
+  paymentDate?: Date | null;
+  installmentNumber?: number | null;
+  costumerConfirmDate?: Date | null;
+  pixQrCode?: string | null;
 }
