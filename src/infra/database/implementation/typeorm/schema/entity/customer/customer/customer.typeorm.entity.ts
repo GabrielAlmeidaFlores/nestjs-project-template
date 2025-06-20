@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity.props.interface';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
 
@@ -57,6 +58,11 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   })
   public bankExternalId: string;
 
+  @OneToMany(() => OrganizationMemberTypeormEntity, (entity) => entity.customer)
+  public organizationMemberCustomer:
+    | OrganizationMemberTypeormEntity[]
+    | undefined;
+
   protected readonly _type = CustomerTypeormEntity.name;
 
   public constructor(props?: CustomerTypeormEntityPropsInterface) {
@@ -75,5 +81,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture;
     this.mfaSecret = props.mfaSecret;
+    this.organizationMemberCustomer = props.organizationMemberCustomer;
   }
 }

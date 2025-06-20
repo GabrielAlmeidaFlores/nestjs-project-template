@@ -1,34 +1,24 @@
-import { Column, Entity } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
-import { OrganizationMemberTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity.props.interface';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization/organization.typeorm.entity';
 
 @Entity({ name: 'organization_member' })
 export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'organization', type: 'varchar', length: 100 })
-  public organization: string;
+  @ManyToOne(
+    () => OrganizationTypeormEntity,
+    (entity) => entity.organizationMember,
+  )
+  @JoinColumn({ name: 'organization' })
+  public organization: OrganizationTypeormEntity;
 
-  @Column({ name: 'customer', type: 'varchar', length: 100 })
-  public customer: string;
-
-  @Column({
-    name: 'owner',
-    type: 'boolean',
-  })
-  public owner: boolean;
+  @ManyToOne(
+    () => CustomerTypeormEntity,
+    (entity) => entity.organizationMemberCustomer,
+  )
+  @JoinColumn({ name: 'name' })
+  public customer: CustomerTypeormEntity;
 
   protected readonly _type = OrganizationMemberTypeormEntity.name;
-
-  public constructor(props?: OrganizationMemberTypeormEntityPropsInterface) {
-    super(props);
-
-    const isConstructedByOrm = props === undefined;
-    if (isConstructedByOrm) {
-      return;
-    }
-
-    this.organization = props.organization;
-    this.customer = props.customer;
-    this.owner = props.owner;
-  }
 }
