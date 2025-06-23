@@ -1,4 +1,4 @@
-export enum BankSubscriptionCycleEnum {
+export enum BankPaymentPlanCycleEnum {
   MONTHLY = 'MONTHLY',
   YEARLY = 'YEARLY',
 }

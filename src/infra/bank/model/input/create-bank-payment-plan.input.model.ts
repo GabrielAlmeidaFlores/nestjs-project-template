@@ -1,16 +1,16 @@
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { BankPaymentMethodEnum } from '@infra/bank/enum/bank-payment-method.enum';
-import type { BankSubscriptionCycleEnum } from '@infra/bank/enum/bank-subscription-cycle.enum';
+import type { BankPaymentPlanCycleEnum } from '@infra/bank/enum/bank-payment-plan-cycle.enum';
 import type { BankCreditCardHolderInfoInputModel } from '@infra/bank/model/input/bank-credit-card-holder-info.input.model';
 import type { BankCreditCardInfoInputModel } from '@infra/bank/model/input/bank-credit-card-info.input.model';
 import type { PublicPropertyType } from '@shared/system/type/public-property.type';
 
 export class CreateBankPaymentPlanInputModel {
-  public customer: string;
+  public customerId: string;
   public paymentMethod: BankPaymentMethodEnum;
   public value: DecimalValue;
   public nextDueDate: Date;
-  public cycle: BankSubscriptionCycleEnum;
+  public cycle: BankPaymentPlanCycleEnum;
   public description: string;
   public externalReference: string;
   public maxPayments: number;
@@ -24,7 +24,7 @@ export class CreateBankPaymentPlanInputModel {
   public constructor(
     props: PublicPropertyType<CreateBankPaymentPlanInputModel>,
   ) {
-    this.customer = props.customer;
+    this.customerId = props.customerId;
     this.paymentMethod = props.paymentMethod;
     this.value = props.value;
     this.nextDueDate = props.nextDueDate;

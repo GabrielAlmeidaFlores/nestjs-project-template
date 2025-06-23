@@ -14,9 +14,10 @@ import { AsaasApplicationVariable } from '@shared/system/constant/application-va
 
 import type { CreateBankCustomerInputModel } from '@infra/bank/model/input/create-bank-customer.input.model';
 import type { CreateBankPaymentPlanInputModel } from '@infra/bank/model/input/create-bank-payment-plan.input.model';
-import type { CreateBankPaymentInputModel } from '@infra/bank/model/input/create-bank-payment.input.model';
+import type { CreateBankChargeInputModel } from '@infra/bank/model/input/create-bank-charge.input.model';
 import type { CreateBankPaymentPlanOutputModel } from '@infra/bank/model/output/create-bank-payment-plan.output.model';
-import type { CreateBankPaymentOutputModel } from '@infra/bank/model/output/create-bank-payment.output.model';
+import type { CreateBankChargeOutputModel } from '@infra/bank/model/output/create-bank-charge.output.model';
+import { CreateAsaasChargeInputModel } from '@infra/bank/implementation/asaas/model/input/create-asaas-charge.input.model';
 
 @Injectable()
 export class AsaasService implements BankGateway {
@@ -71,13 +72,11 @@ export class AsaasService implements BankGateway {
     });
   }
 
-  public createPayment(
-    props: CreateBankPaymentInputModel,
-  ): Promise<CreateBankPaymentOutputModel> {
-    throw new Error('Method not implemented.');
-  }
+  public createCharge(
+    props: CreateBankChargeInputModel,
+  ): Promise<CreateBankChargeOutputModel> {}
 
-  public createPaymentPlan(
+  public createBankPaymentPlan(
     props: CreateBankPaymentPlanInputModel,
   ): Promise<CreateBankPaymentPlanOutputModel> {
     throw new Error('Method not implemented.');
