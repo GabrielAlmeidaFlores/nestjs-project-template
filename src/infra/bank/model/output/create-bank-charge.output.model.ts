@@ -3,26 +3,28 @@ import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-obje
 import type { BankPaymentMethodEnum } from '@infra/bank/enum/bank-payment-method.enum';
 import type { PublicPropertyType } from '@shared/system/type/public-property.type';
 
-export class CreateBankPaymentInputModel {
+export class CreateBankChargeOutputModel {
+  public id: string;
   public customer: string;
   public billingType: BankPaymentMethodEnum;
   public value: DecimalValue;
+  public netValue: DecimalValue;
   public dueDate: Date;
   public description: string;
   public paymentPlan: Guid;
   public discountPercentage: number | null;
-  public installmentCount: number | null;
 
-  protected readonly _type = CreateBankPaymentInputModel.name;
+  protected readonly _type = CreateBankChargeOutputModel.name;
 
-  public constructor(props: PublicPropertyType<CreateBankPaymentInputModel>) {
+  public constructor(props: PublicPropertyType<CreateBankChargeOutputModel>) {
+    this.id = props.id;
     this.customer = props.customer;
     this.billingType = props.billingType;
     this.value = props.value;
+    this.netValue = props.netValue;
     this.dueDate = props.dueDate;
     this.description = props.description;
     this.paymentPlan = props.paymentPlan;
     this.discountPercentage = props.discountPercentage;
-    this.installmentCount = props.installmentCount;
   }
 }
