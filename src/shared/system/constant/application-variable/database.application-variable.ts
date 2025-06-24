@@ -6,62 +6,62 @@ export class DatabaseApplicationVariable {
   public static readonly source = new EnvironmentVariable();
 
   public static readonly DATABASE_HOST =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_HOST',
       String,
     );
 
   public static readonly DATABASE_PORT =
-    DatabaseApplicationVariable.source.getOrThrow<number>(
+    DatabaseApplicationVariable.source.getValueOrThrow<number>(
       'DATABASE_PORT',
       Number,
     );
 
   public static readonly DATABASE_NAME =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_NAME',
       String,
     );
 
   public static readonly DATABASE_USERNAME =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_USERNAME',
       String,
     );
 
   public static readonly DATABASE_PASSWORD =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_PASSWORD',
       String,
     );
 
   public static readonly DATABASE_SYNCHRONIZE =
-    DatabaseApplicationVariable.source.getOrDefault<boolean>(
+    DatabaseApplicationVariable.source.getValueOrDefault<boolean>(
       'DATABASE_SYNCHRONIZE',
       Boolean,
       DatabaseApplicationVariable.defaultDatabaseSynchronize,
     );
 
   public static readonly DATABASE_HASH_SALT_ROUNDS =
-    DatabaseApplicationVariable.source.getOrThrow<number>(
+    DatabaseApplicationVariable.source.getValueOrThrow<number>(
       'DATABASE_HASH_SALT_ROUNDS',
       Number,
     );
 
   public static readonly DATABASE_CRYPTOGRAPHY_SECRET =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_CRYPTOGRAPHY_SECRET',
       String,
     );
 
   public static readonly DATABASE_CRYPTOGRAPHY_IV =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_CRYPTOGRAPHY_IV',
       String,
     );
 
   public static readonly DATABASE_CRYPTOGRAPHY_METHOD =
-    DatabaseApplicationVariable.source.getOrThrow<string>(
+    DatabaseApplicationVariable.source.getValueOrThrow<string>(
       'DATABASE_CRYPTOGRAPHY_METHOD',
       String,
     );

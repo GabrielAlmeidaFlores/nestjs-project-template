@@ -4,10 +4,10 @@ export class AsaasApplicationVariable {
   public static readonly source = new EnvironmentVariable();
 
   public static readonly ASAAS_URL =
-    AsaasApplicationVariable.source.getOrThrow<string>('ASAAS_URL', String);
+    AsaasApplicationVariable.source.getValueOrThrow<string>('ASAAS_URL', String);
 
   public static readonly BANK_ACCESS_TOKEN =
-    AsaasApplicationVariable.source.getOrThrow<string>(
+    AsaasApplicationVariable.source.getValueOrThrow<string>(
       'BANK_ACCESS_TOKEN',
       String,
     );

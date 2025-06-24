@@ -16,10 +16,10 @@ export class AvailablePaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'price', type: 'decimal' })
   public price: string;
 
-  @Column({ name: 'max_member_limit', type: 'number' })
+  @Column({ name: 'max_member_limit', type: 'int' })
   public maxMemberLimit: number;
 
-  @Column({ name: 'monthly_credit_amount', type: 'number' })
+  @Column({ name: 'monthly_credit_amount', type: 'int' })
   public monthlyCreditAmount: number;
 
   @Column({ name: 'active', type: 'boolean' })

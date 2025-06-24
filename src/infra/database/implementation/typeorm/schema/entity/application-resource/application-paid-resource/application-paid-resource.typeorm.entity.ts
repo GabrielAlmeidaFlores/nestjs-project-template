@@ -10,10 +10,10 @@ export class ApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'resource', type: 'simple-enum' })
   public resource: ApplicationPaidResourceEnum;
 
-  @Column({ name: 'credit_cost', type: 'number', length: 50 })
+  @Column({ name: 'credit_cost', type: 'int' })
   public creditCost: number;
 
-  @Column({ name: 'description', type: 'enum', length: 255 })
+  @Column({ name: 'description', type: 'varchar', length: 255 })
   public description: string;
 
   @OneToMany(
