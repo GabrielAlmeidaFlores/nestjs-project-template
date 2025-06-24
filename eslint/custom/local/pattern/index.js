@@ -13,6 +13,7 @@ module.exports = {
     'pattern-rule/require-dto-decorator': 'error',
     'pattern-rule/require-valid-error-constructor': 'error',
     'pattern-rule/require-valid-entity-relation': 'error',
-    'pattern-rule/require-ddd-entity-nullable-properties-to-be-optional': 'error',
+    'pattern-rule/require-ddd-entity-nullable-properties-to-be-optional':
+      'error',
   },
 };

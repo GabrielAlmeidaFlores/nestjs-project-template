@@ -13,7 +13,7 @@ module.exports = {
         'restrict-if-block-size': require('./restrict-if-block-size.js'),
         'restrict-inline-logic': require('./restrict-inline-logic.js'),
         'restrict-inline-call': require('./restrict-inline-call.js'),
-        'restrict-chained-bracket-notation': require('./restrict-chained-bracket-notation.js')
+        'restrict-chained-bracket-notation': require('./restrict-chained-bracket-notation.js'),
       },
     },
   },
@@ -32,6 +32,6 @@ module.exports = {
     'convention-rule/restrict-if-block-size': 'error',
     'convention-rule/restrict-inline-logic': 'error',
     'convention-rule/restrict-inline-call': 'error',
-    'convention-rule/restrict-chained-bracket-notation': 'error'
+    'convention-rule/restrict-chained-bracket-notation': 'error',
   },
 };

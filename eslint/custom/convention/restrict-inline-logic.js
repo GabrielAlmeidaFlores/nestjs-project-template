@@ -13,17 +13,26 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     },
     schema: [],
     messages: {
-      noInlineLogic: 'Avoid inline logic. Assign the result to a clearly named variable first.',
+      noInlineLogic:
+        'Avoid inline logic. Assign the result to a clearly named variable first.',
     },
   },
   defaultOptions: [],
   create(context) {
-    const disallowedTypes = new Set(['BinaryExpression', 'LogicalExpression', 'UnaryExpression']);
+    const disallowedTypes = new Set([
+      'BinaryExpression',
+      'LogicalExpression',
+      'UnaryExpression',
+    ]);
 
     function isDisallowed(node) {
       return (
         disallowedTypes.has(node.type) &&
-        !(node.type === 'UnaryExpression' && node.operator === '!' && node.argument.type === 'Identifier')
+        !(
+          node.type === 'UnaryExpression' &&
+          node.operator === '!' &&
+          node.argument.type === 'Identifier'
+        )
       );
     }
 
@@ -37,7 +46,9 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     }
 
     function isSafeVariableInit(node) {
-      return node.parent?.type === 'VariableDeclarator' && node.parent.init === node;
+      return (
+        node.parent?.type === 'VariableDeclarator' && node.parent.init === node
+      );
     }
 
     function isLoopTest(node) {

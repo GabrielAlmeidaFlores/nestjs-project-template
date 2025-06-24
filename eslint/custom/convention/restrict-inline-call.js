@@ -13,10 +13,14 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     },
     schema: [],
     messages: {
-      noInlineCall: 'Function calls used as values must be encapsulated in variables.',
-      noInlineArgument: 'Do not pass function calls directly as arguments. Assign to a variable first.',
-      noInlineControlFlow: 'Do not use function calls in control flow conditions. Assign to a variable first.',
-      noInlineObjectValue: 'Do not use function calls as object property values. Assign to a variable first.',
+      noInlineCall:
+        'Function calls used as values must be encapsulated in variables.',
+      noInlineArgument:
+        'Do not pass function calls directly as arguments. Assign to a variable first.',
+      noInlineControlFlow:
+        'Do not use function calls in control flow conditions. Assign to a variable first.',
+      noInlineObjectValue:
+        'Do not use function calls as object property values. Assign to a variable first.',
     },
   },
   defaultOptions: [],
@@ -34,7 +38,12 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       let current = node;
       while (
         current.parent &&
-        ['TSAsExpression', 'TypeAssertion', 'AwaitExpression', 'UnaryExpression'].includes(current.parent.type)
+        [
+          'TSAsExpression',
+          'TypeAssertion',
+          'AwaitExpression',
+          'UnaryExpression',
+        ].includes(current.parent.type)
       ) {
         current = current.parent;
       }
@@ -45,13 +54,16 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       let current = node;
       while (current.parent) {
         const parent = current.parent;
-        if (['LogicalExpression', 'ConditionalExpression'].includes(parent.type)) {
+        if (
+          ['LogicalExpression', 'ConditionalExpression'].includes(parent.type)
+        ) {
           current = parent;
           continue;
         }
         if (
-          parent.type === 'AssignmentExpression' && parent.right === current ||
-          parent.type === 'VariableDeclarator' && parent.init === current
+          (parent.type === 'AssignmentExpression' &&
+            parent.right === current) ||
+          (parent.type === 'VariableDeclarator' && parent.init === current)
         ) {
           return true;
         }
@@ -76,23 +88,43 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         const unwrapped = unwrap(node);
         const parent = unwrapped.parent;
 
-        if (!parent || isInsideDecorator(node) || isFinalExpressionStatement(node) || isSafeAssignment(unwrapped)) {
+        if (
+          !parent ||
+          isInsideDecorator(node) ||
+          isFinalExpressionStatement(node) ||
+          isSafeAssignment(unwrapped)
+        ) {
           return;
         }
 
         if (parent.type === 'ReturnStatement') return;
         if (parent.type === 'PropertyDefinition') return;
         if (
-          ['ArrowFunctionExpression', 'FunctionExpression'].includes(parent.type) &&
+          ['ArrowFunctionExpression', 'FunctionExpression'].includes(
+            parent.type,
+          ) &&
           parent.body === node
-        ) return;
+        )
+          return;
 
-        if (parent.type === 'CallExpression' && parent.arguments.includes(node)) {
+        if (
+          parent.type === 'CallExpression' &&
+          parent.arguments.includes(node)
+        ) {
           context.report({ node, messageId: 'noInlineArgument' });
-        } else if (parent.type === 'Property' && parent.value === node && parent.parent.type === 'ObjectExpression') {
+        } else if (
+          parent.type === 'Property' &&
+          parent.value === node &&
+          parent.parent.type === 'ObjectExpression'
+        ) {
           context.report({ node, messageId: 'noInlineObjectValue' });
         } else if (
-          ['IfStatement', 'WhileStatement', 'SwitchStatement', 'DoWhileStatement'].includes(parent.type)
+          [
+            'IfStatement',
+            'WhileStatement',
+            'SwitchStatement',
+            'DoWhileStatement',
+          ].includes(parent.type)
         ) {
           context.report({ node, messageId: 'noInlineControlFlow' });
         } else {

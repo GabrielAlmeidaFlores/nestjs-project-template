@@ -6,7 +6,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
   meta: {
     type: 'problem',
     docs: {
-      description: 'Enforce correct entity relation typing across bounded contexts.',
+      description:
+        'Enforce correct entity relation typing across bounded contexts.',
       category: 'Best Practices',
       recommended: true,
     },
@@ -35,9 +36,9 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     const currentBoundedContext = getBoundedContextFromPath(fileName);
 
     function isEntity(type) {
-      return type.symbol?.getDeclarations()?.some((decl) =>
-        decl.getText().includes('extends BaseEntity'),
-      );
+      return type.symbol
+        ?.getDeclarations()
+        ?.some((decl) => decl.getText().includes('extends BaseEntity'));
     }
 
     function isRelationModelType(type) {
@@ -48,7 +49,10 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       if (type.aliasTypeArguments?.length === 1) {
         return type.aliasTypeArguments[0];
       }
-      if (type.symbol?.name === 'RelationModel' && type.typeArguments?.length === 1) {
+      if (
+        type.symbol?.name === 'RelationModel' &&
+        type.typeArguments?.length === 1
+      ) {
         return type.typeArguments[0];
       }
       return null;
@@ -60,7 +64,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         const classSymbol = typeChecker.getSymbolAtLocation(classType.name);
         if (!classSymbol) return;
 
-        const classTypeDetails = typeChecker.getDeclaredTypeOfSymbol(classSymbol);
+        const classTypeDetails =
+          typeChecker.getDeclaredTypeOfSymbol(classSymbol);
         const properties = classTypeDetails.getProperties();
 
         for (const prop of properties) {
@@ -68,7 +73,10 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           if (!declarations || declarations.length === 0) continue;
 
           const declaration = declarations[0];
-          const propType = typeChecker.getTypeOfSymbolAtLocation(prop, declaration);
+          const propType = typeChecker.getTypeOfSymbolAtLocation(
+            prop,
+            declaration,
+          );
 
           const typesToCheck = propType.isUnion() ? propType.types : [propType];
 

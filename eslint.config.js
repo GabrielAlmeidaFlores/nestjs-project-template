@@ -53,7 +53,7 @@ module.exports = [
       ...plugins['@typescript-eslint'].configs.strict.rules,
       ...plugins.import.configs.recommended.rules,
       ...plugins.import.configs.typescript.rules,
-      '@typescript-eslint/no-unsafe-function-type': 'off'
+      '@typescript-eslint/no-unsafe-function-type': 'off',
     },
   },
 ];
