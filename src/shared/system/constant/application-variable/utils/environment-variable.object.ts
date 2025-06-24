@@ -5,7 +5,40 @@ import { MissingApplicationVariableError } from '@shared/system/constant/applica
 export class EnvironmentVariable {
   protected readonly _type = EnvironmentVariable.name;
 
-  public getOrThrow<T>(
+  public getArrayOrThrow<T>(
+    key: string,
+    type: StringConstructor | NumberConstructor | BooleanConstructor,
+  ): Array<T> {
+    const value = process.env[key];
+    const isVariableMissing = value === undefined;
+
+    if (isVariableMissing) {
+      throw new MissingApplicationVariableError({ variableName: key });
+    }
+
+    const rawItems = value.split(',');
+    const items = rawItems.map((item) => item.trim());
+    const convertedItems: T[] = [];
+
+    for (const item of items) {
+      const converted = this.convertValue<T>(item, type);
+      const conversionFailed = converted === null;
+
+      if (conversionFailed) {
+        throw new InvalidApplicationVariableTypeError({
+          variableName: key,
+          expectedType: `${type.name}[]`,
+          currentValue: item,
+        });
+      }
+
+      convertedItems.push(converted);
+    }
+
+    return convertedItems;
+  }
+
+  public getValueOrThrow<T>(
     key: string,
     type: StringConstructor | NumberConstructor | BooleanConstructor,
   ): T {
@@ -30,7 +63,7 @@ export class EnvironmentVariable {
     return convertedValue;
   }
 
-  public getOrDefault<T>(
+  public getValueOrDefault<T>(
     key: string,
     type: StringConstructor | NumberConstructor | BooleanConstructor,
     defaultValue: T,
@@ -59,11 +92,7 @@ export class EnvironmentVariable {
 
   private convertValue<T>(
     rawValue: string,
-    type:
-      | StringConstructor
-      | NumberConstructor
-      | BooleanConstructor
-      | ArrayConstructor,
+    type: StringConstructor | NumberConstructor | BooleanConstructor,
   ): T | null {
     const isNumber = type === Number;
     if (isNumber) {
@@ -87,13 +116,6 @@ export class EnvironmentVariable {
       }
 
       return (rawValue === 'true') as T;
-    }
-
-    const isArray = type === Array;
-    if (isArray) {
-      const removeCommas = rawValue.split(',');
-      const arrayValue = removeCommas.map((item) => item.trim());
-      return arrayValue as T;
     }
 
     return rawValue as T;

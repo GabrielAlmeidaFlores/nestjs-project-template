@@ -18,7 +18,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
 
   @Column({
     name: 'federal_document',
-    type: 'decimal',
+    type: 'varchar',
     length: 50,
     transformer: CryptographyTransformer,
   })

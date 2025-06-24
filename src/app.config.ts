@@ -37,7 +37,6 @@ export class AppConfig extends AppConfigUtils {
   public constructor(private readonly app: INestApplication) {
     super();
   }
-
   public cors(): this {
     this.app.enableCors({
       origin: FrameworkApplicationVariable.FRAMEWORK_CORS_ALLOWED_ORIGIN,

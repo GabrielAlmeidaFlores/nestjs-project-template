@@ -4,7 +4,7 @@ export class NodeApplicationVariable {
   public static readonly source = new EnvironmentVariable();
 
   public static readonly PRODUCTION_ENVIRONMENT =
-    NodeApplicationVariable.source.getOrDefault<boolean>(
+    NodeApplicationVariable.source.getValueOrDefault<boolean>(
       'PRODUCTION_ENVIRONMENT',
       Boolean,
       false,
