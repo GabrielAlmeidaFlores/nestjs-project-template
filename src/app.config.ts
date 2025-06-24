@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+import fastifyCookie from '@fastify/cookie';
 import {
   BadRequestException,
   ValidationPipe,
@@ -15,6 +16,8 @@ import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/u
 import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
 
 class AppConfigUtils {
@@ -37,8 +40,21 @@ export class AppConfig extends AppConfigUtils {
 
   public cors(): this {
     this.app.enableCors({
-      origin: true,
-      methods: '*',
+      origin: FrameworkApplicationVariable.FRAMEWORK_CORS_ALLOWED_ORIGIN,
+      credentials: true,
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      exposedHeaders: ['Set-Cookie'],
+    });
+
+    return this;
+  }
+
+  public cookies(): this {
+    const app = this.app as NestFastifyApplication<RawServerDefault>;
+
+    void app.register(fastifyCookie, {
+      secret: FrameworkApplicationVariable.FRAMEWORK_COOKIES_SECRET,
     });
 
     return this;
