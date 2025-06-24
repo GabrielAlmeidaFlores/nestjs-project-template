@@ -4,7 +4,7 @@ import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import type { PublicPropertyType } from '@shared/system/type/public-property.type';
 
-export class BankCreditCardHolderInfoInputModel {
+export class GetBankCreditCardHolderInfoInputModel {
   public name: string;
   public email: Email;
   public federalDocument: FederalDocument;
@@ -12,10 +12,10 @@ export class BankCreditCardHolderInfoInputModel {
   public addressNumber: string;
   public phone: PhoneNumber;
 
-  protected readonly _type = BankCreditCardHolderInfoInputModel.name;
+  protected readonly _type = GetBankCreditCardHolderInfoInputModel.name;
 
   public constructor(
-    props: PublicPropertyType<BankCreditCardHolderInfoInputModel>,
+    props: PublicPropertyType<GetBankCreditCardHolderInfoInputModel>,
   ) {
     this.name = props.name;
     this.email = props.email;

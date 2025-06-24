@@ -8,7 +8,6 @@ export class CreateBankPaymentPlanOutputModel {
   public customer: string;
   public paymentMethod: BankPaymentMethodEnum;
   public value: DecimalValue;
-  public nextDueDate: Date;
   public cycle: BankPaymentPlanCycleEnum;
   public description: string;
 
@@ -21,7 +20,6 @@ export class CreateBankPaymentPlanOutputModel {
     this.customer = props.customer;
     this.paymentMethod = props.paymentMethod;
     this.value = props.value;
-    this.nextDueDate = props.nextDueDate;
     this.cycle = props.cycle;
     this.description = props.description;
   }
