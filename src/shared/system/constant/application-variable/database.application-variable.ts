@@ -1,6 +1,8 @@
 import { EnvironmentVariable } from '@shared/system/constant/application-variable/utils/environment-variable.object';
 
 export class DatabaseApplicationVariable {
+  public static readonly defaultDatabaseSynchronize = false;
+
   public static readonly source = new EnvironmentVariable();
 
   public static readonly DATABASE_HOST =
@@ -31,6 +33,13 @@ export class DatabaseApplicationVariable {
     DatabaseApplicationVariable.source.getOrThrow<string>(
       'DATABASE_PASSWORD',
       String,
+    );
+
+  public static readonly DATABASE_SYNCHRONIZE =
+    DatabaseApplicationVariable.source.getOrDefault<boolean>(
+      'DATABASE_SYNCHRONIZE',
+      Boolean,
+      DatabaseApplicationVariable.defaultDatabaseSynchronize,
     );
 
   public static readonly DATABASE_HASH_SALT_ROUNDS =
