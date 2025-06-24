@@ -32,7 +32,7 @@ export class TypeormIndex {
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
     migrations: ['src/infra/database/implementation/typeorm/migration/*.js'],
-    synchronize: false,
+    synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 
   protected readonly _type = TypeormIndex.name;
