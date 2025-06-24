@@ -3,7 +3,7 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 import type { OrganizationPaymentPlanEntity } from '@core/domain/schema/entity/organization-payment-plan/organization-payment-plan/organization-payment-plan.entity';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
-export interface OrganizationPaymentPlanSubscriptionEntityPropsInterface
+export interface OrganizationPaymentPlanChargeEntityPropsInterface
   extends BaseEntityPropsInterface {
   bankPayment: RelationModel<BankPaymentEntity>;
   organizationPaymentPlan: OrganizationPaymentPlanEntity;
