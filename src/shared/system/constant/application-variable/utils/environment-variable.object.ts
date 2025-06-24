@@ -59,7 +59,11 @@ export class EnvironmentVariable {
 
   private convertValue<T>(
     rawValue: string,
-    type: StringConstructor | NumberConstructor | BooleanConstructor,
+    type:
+      | StringConstructor
+      | NumberConstructor
+      | BooleanConstructor
+      | ArrayConstructor,
   ): T | null {
     const isNumber = type === Number;
     if (isNumber) {
@@ -83,6 +87,13 @@ export class EnvironmentVariable {
       }
 
       return (rawValue === 'true') as T;
+    }
+
+    const isArray = type === Array;
+    if (isArray) {
+      const removeCommas = rawValue.split(',');
+      const arrayValue = removeCommas.map((item) => item.trim());
+      return arrayValue as T;
     }
 
     return rawValue as T;

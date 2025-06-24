@@ -28,5 +28,17 @@ export class FrameworkApplicationVariable {
       FrameworkApplicationVariable.defaultFrameworkPort,
     );
 
+  public static readonly FRAMEWORK_COOKIES_SECRET =
+    FrameworkApplicationVariable.source.getOrThrow<string>(
+      'FRAMEWORK_COOKIES_SECRET',
+      String,
+    );
+
+  public static readonly FRAMEWORK_CORS_ALLOWED_ORIGIN =
+    FrameworkApplicationVariable.source.getOrThrow<Array<string>>(
+      'FRAMEWORK_CORS_ALLOWED_ORIGIN',
+      String,
+    );
+
   protected readonly _type = FrameworkApplicationVariable.name;
 }
