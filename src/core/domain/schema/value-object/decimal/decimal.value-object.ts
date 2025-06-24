@@ -4,7 +4,9 @@ import { InvalidPostalCodeError } from '@core/domain/schema/value-object/postal-
 export class DecimalValue extends BaseValueObject<DecimalValue> {
   protected readonly _type = DecimalValue.name;
 
-  public constructor(value: string) {
+  public constructor(value: string | number) {
+    value = value.toString();
+
     value = DecimalValue.normalize(value);
 
     super(value);

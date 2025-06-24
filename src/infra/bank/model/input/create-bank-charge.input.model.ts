@@ -5,7 +5,7 @@ import type { PublicPropertyType } from '@shared/system/type/public-property.typ
 
 export class CreateBankChargeInputModel {
   public customerId: string;
-  public billingType: BankPaymentMethodEnum;
+  public billingMethod: BankPaymentMethodEnum;
   public value: DecimalValue;
   public dueDate: Date;
   public description: string;
@@ -17,7 +17,7 @@ export class CreateBankChargeInputModel {
 
   public constructor(props: PublicPropertyType<CreateBankChargeInputModel>) {
     this.customerId = props.customerId;
-    this.billingType = props.billingType;
+    this.billingMethod = props.billingMethod;
     this.value = props.value;
     this.dueDate = props.dueDate;
     this.description = props.description;
