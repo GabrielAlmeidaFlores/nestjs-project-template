@@ -1,4 +1,4 @@
-const convention = require("./convention/index.js")
+const convention = require('./convention/index.js');
 
 module.exports = {
   rules: {
