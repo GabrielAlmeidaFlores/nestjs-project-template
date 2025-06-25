@@ -1,12 +1,13 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsString, IsOptional } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { IsOptional, ValidateNested } from 'class-validator';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
-import type { ValidationArguments } from 'class-validator';
+import type { TypeHelpOptions } from 'class-transformer';
 
-export function BaseDtoStringProperty(
+export function BaseDtoObjectProperty(
+  typeFunction: (type?: TypeHelpOptions) => Function,
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
@@ -15,13 +16,10 @@ export function BaseDtoStringProperty(
     required: propertyIsRequired,
   });
   const expose = Expose();
-  const validation = IsString({
-    message: (args: ValidationArguments) => {
-      return `'${args.property}' não é uma string válida`;
-    },
-  });
+  const objectType = Type(typeFunction);
+  const validateNested = ValidateNested();
 
-  const decorators = [apiProperty, expose, validation];
+  const decorators = [apiProperty, expose, objectType, validateNested];
 
   if (!propertyIsRequired) {
     decorators.push(IsOptional());

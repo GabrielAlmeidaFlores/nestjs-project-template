@@ -52,20 +52,26 @@ function buildEndpointAuthSpecification(
 function buildEndpointResponseSpecification(
   successResponse: BuildEndpointSuccessResponseSpecificationType,
 ): MethodDecorator[] {
+  const isNoContentResponse =
+    successResponse.statusCode === HttpStatus.NO_CONTENT;
+
   const successResponseOptions: ApiResponseOptions = {
     status: successResponse.statusCode,
     description: successResponse.description,
+    ...(isNoContentResponse ? {} : { type: successResponse.type }),
   };
 
   const successResponseSpecification = ApiResponse(successResponseOptions);
   const successResponseStatusCodeSpecification = HttpCode(
     successResponse.statusCode,
   );
+
   const clientSideErrorResponseSpecification = ApiResponse({
     status: '4XX',
     description: 'Client error',
     type: ErrorResponseDto,
   });
+
   const serverSideErrorResponseSpecification = ApiResponse({
     status: '5XX',
     description: 'Server error',
@@ -79,11 +85,7 @@ function buildEndpointResponseSpecification(
     serverSideErrorResponseSpecification,
   ];
 
-  const isNoContentResponse =
-    successResponse.statusCode === HttpStatus.NO_CONTENT;
   if (!isNoContentResponse) {
-    successResponseOptions.type = successResponse.type;
-
     decorators.push(SetMetadata('successResponseType', successResponse.type));
   }
 

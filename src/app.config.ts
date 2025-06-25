@@ -78,12 +78,20 @@ export class AppConfig extends AppConfigUtils {
   public globalPipes(): this {
     this.app.useGlobalPipes(
       new ValidationPipe({
+        whitelist: true,
         transform: true,
         transformOptions: {
           enableImplicitConversion: true,
         },
         exceptionFactory: (errors): BadRequestException => {
-          const firstError = errors[0];
+          let firstError = errors[0];
+
+          const child = firstError?.children;
+
+          if (child) {
+            firstError = child[0];
+          }
+
           const firstErrorConstraints = firstError?.constraints;
 
           if (firstErrorConstraints) {
@@ -96,8 +104,6 @@ export class AppConfig extends AppConfigUtils {
         },
       }),
     );
-
-    return this;
 
     return this;
   }
@@ -120,6 +126,7 @@ export class AppConfig extends AppConfigUtils {
     const build = config.build();
 
     const document = SwaggerModule.createDocument(this.app, build);
+
     SwaggerModule.setup(
       `${FrameworkApplicationVariable.FRAMEWORK_BASE_PATH}/docs`,
       this.app,
