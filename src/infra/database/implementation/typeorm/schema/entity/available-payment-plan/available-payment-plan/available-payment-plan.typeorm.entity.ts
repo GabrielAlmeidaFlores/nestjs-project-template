@@ -25,7 +25,7 @@ export class AvailablePaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'active', type: 'boolean' })
   public active: boolean;
 
-  @Column({ name: 'cycle', type: 'simple-enum' })
+  @Column({ name: 'cycle', type: 'simple-enum', enum: PaymentPlanCycleEnum })
   public cycle: PaymentPlanCycleEnum;
 
   @OneToMany(

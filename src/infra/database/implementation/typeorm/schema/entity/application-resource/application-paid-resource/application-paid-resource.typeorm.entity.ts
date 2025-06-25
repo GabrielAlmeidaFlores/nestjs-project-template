@@ -7,7 +7,11 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 
 @Entity({ name: 'application_paid_resource' })
 export class ApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'resource', type: 'simple-enum' })
+  @Column({
+    name: 'resource',
+    type: 'simple-enum',
+    enum: ApplicationPaidResourceEnum,
+  })
   public resource: ApplicationPaidResourceEnum;
 
   @Column({ name: 'credit_cost', type: 'int' })

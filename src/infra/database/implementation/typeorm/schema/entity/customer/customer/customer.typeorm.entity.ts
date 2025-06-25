@@ -3,7 +3,6 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
 import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity.props.interface';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
-import { CustomerProfessionalDataTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-professional-data/customer-professional-data.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
@@ -65,14 +64,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer)
   public customerAddress: CustomerAddressTypeormEntity | undefined;
 
-  @OneToOne(
-    () => CustomerProfessionalDataTypeormEntity,
-    (entity) => entity.customer,
-  )
-  public customerProfessionalData:
-    | CustomerProfessionalDataTypeormEntity
-    | undefined;
-
   protected readonly _type = CustomerTypeormEntity.name;
 
   public constructor(props?: CustomerTypeormEntityPropsInterface) {
@@ -92,7 +83,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     this.profilePicture = props.profilePicture;
     this.mfaSecret = props.mfaSecret;
     this.customerAddress = props.customerAddress;
-    this.customerProfessionalData = props.customerProfessionalData;
     this.organizationMember = props.organizationMember;
   }
 }
