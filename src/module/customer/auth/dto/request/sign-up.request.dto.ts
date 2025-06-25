@@ -1,6 +1,3 @@
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
-
 import { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
@@ -9,6 +6,7 @@ import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-
 import { RequestDto } from '@shared/api/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-enum-property.decorator';
 import { RequestDtoNumberProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-number-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
 
@@ -54,14 +52,10 @@ class CustomerAddressDto {
 
 @RequestDto()
 export class SignUpRequestDto {
-  @RequestDtoStringProperty()
-  @ValidateNested()
-  @Type(() => CustomerDataDto)
+  @RequestDtoObjectProperty(() => CustomerDataDto)
   public customer: CustomerDataDto;
 
-  @RequestDtoStringProperty()
-  @ValidateNested()
-  @Type(() => CustomerAddressDto)
+  @RequestDtoObjectProperty(() => CustomerAddressDto)
   public customerAddress: CustomerAddressDto;
 
   protected readonly _type = SignUpRequestDto.name;
