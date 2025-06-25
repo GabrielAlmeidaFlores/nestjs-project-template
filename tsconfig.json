@@ -34,7 +34,7 @@
 
     // === Module Configuration (unchanged) ===
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": false,
     "resolveJsonModule": false,
