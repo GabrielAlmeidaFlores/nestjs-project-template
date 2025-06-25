@@ -1,1 +1,3 @@
-export enum ApplicationPaidResourceEnum {}
+export enum ApplicationPaidResourceEnum {
+  ELOY_CHAT = 'ELOY_CHAT',
+}

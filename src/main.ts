@@ -15,7 +15,7 @@ async function bootstrap(): Promise<void> {
   );
 
   const appConfig = new AppConfig(app);
-  appConfig.cors().globalPrefix().globalPipes().globalApiFilters();
+  appConfig.cors().cookies().globalPrefix().globalPipes().globalApiFilters();
 
   const isProductionEnvironment =
     NodeApplicationVariable.PRODUCTION_ENVIRONMENT;

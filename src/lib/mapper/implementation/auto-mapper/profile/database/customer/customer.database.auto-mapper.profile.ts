@@ -73,7 +73,6 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
         federalDocument,
         password,
         customerAddress: undefined,
-        customerProfessionalData: undefined,
         organizationMember: undefined,
       });
     };

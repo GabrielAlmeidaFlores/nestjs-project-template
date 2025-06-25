@@ -1,1 +1,7 @@
-export enum PaymentStatusEnum {}
+export enum PaymentStatusEnum {
+  PENDING = 'PENDING',
+  RECEIVED = 'RECEIVED',
+  CONFIRMED = 'CONFIRMED',
+  OVERDUE = 'OVERDUE',
+  REFUNDED = 'REFUNDED',
+}

@@ -20,7 +20,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:run": "yarn typeorm migration:run -d src/infra/database/implementation/typeorm/typeorm.data-source.ts",
+    "migration:generate": "sh -c 'BRANCH=$(git rev-parse --abbrev-ref HEAD | tr \"/\" \"-\" | tr \"[:upper:]\" \"[:lower:]\") && yarn typeorm migration:generate src/infra/database/implementation/typeorm/migration/${BRANCH}-migration -d src/infra/database/implementation/typeorm/typeorm.data-source.ts'"
   },
   "dependencies": {
     "@automapper/classes": "^8.8.1",
@@ -42,7 +45,9 @@
     "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",
     "fastify": "4.28.1",
+    "fastify-secure-session": "^3.2.0",
     "http-status-codes": "^2.3.0",
+    "ioredis": "^5.6.1",
     "mysql2": "^3.14.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
@@ -54,6 +59,7 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@types/ioredis": "^5.0.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/supertest": "^6.0.0",

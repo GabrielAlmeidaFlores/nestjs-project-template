@@ -21,7 +21,7 @@ export function BaseDtoEnumProperty(
     message: (args: ValidationArguments) => {
       const enumValues = Object.values(enumType);
       const allowedValue = enumValues.join(', ');
-      return `'${args.value}' não é compatível com os valores esperados: ${allowedValue}`;
+      return `'${args.property}' não é compatível com os valores esperados: ${allowedValue}`;
     },
   });
 
