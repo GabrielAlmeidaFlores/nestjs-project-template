@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
+import { instanceToPlain } from 'class-transformer';
 import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
@@ -27,6 +28,6 @@ export class InvalidInputErrorExceptionFilter implements ExceptionFilter {
       statusCode: statusCode,
     });
 
-    response.status(statusCode).send(errorResponse);
+    response.status(statusCode).send(instanceToPlain(errorResponse));
   }
 }
