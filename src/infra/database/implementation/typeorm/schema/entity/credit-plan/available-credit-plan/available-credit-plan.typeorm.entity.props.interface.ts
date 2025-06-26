@@ -1,13 +1,12 @@
 import type { BaseTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity.props.interface';
 import type { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/credit-plan/organization-credit-plan-purchase/organization-credit-plan-purchase.typeorm.entity';
-import type { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 
-export interface OrganizationTypeormEntityPropsInterface
+export interface AvailableCreditPlanTypeormEntityPropsInterface
   extends BaseTypeormEntityPropsInterface {
-  name: string;
-  organizationLogo: string;
-  organizationMember: OrganizationMemberTypeormEntity[] | undefined;
-  organizationCreditPlanPurchase:
+  price: string;
+  creditAmount: number;
+  active: boolean;
+  organizationCreditPlan:
     | OrganizationCreditPlanPurchaseTypeormEntity[]
     | undefined;
 }
