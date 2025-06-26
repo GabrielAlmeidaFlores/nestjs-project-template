@@ -16,8 +16,9 @@ export function BaseDtoStringProperty(
   });
   const expose = Expose();
   const validation = IsString({
-    message: (args: ValidationArguments) =>
-      `'${args.value}' não é uma string válida`,
+    message: (args: ValidationArguments) => {
+      return `'${args.property}' não é uma string válida`;
+    },
   });
 
   const decorators = [apiProperty, expose, validation];

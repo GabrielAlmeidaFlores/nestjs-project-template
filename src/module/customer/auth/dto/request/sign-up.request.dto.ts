@@ -6,11 +6,13 @@ import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-
 import { RequestDto } from '@shared/api/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-enum-property.decorator';
 import { RequestDtoNumberProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-number-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
+import { BaseBuildableBlankDto } from '@shared/api/dto/blank/base-buildable.blank.dto';
 
 @RequestDto()
-export class SignUpRequestDto {
+export class SignUpCustomerDataRequestDto extends BaseBuildableBlankDto {
   @RequestDtoStringProperty()
   public name: string;
 
@@ -26,6 +28,11 @@ export class SignUpRequestDto {
   @RequestDtoStringProperty()
   public password: string;
 
+  protected override readonly _type = SignUpCustomerDataRequestDto.name;
+}
+
+@RequestDto()
+export class SignUpCustomerDataAddressRequestDto extends BaseBuildableBlankDto {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -33,7 +40,7 @@ export class SignUpRequestDto {
   public neighborhood: string;
 
   @RequestDtoEnumProperty(StateCodeEnum)
-  public countryState: StateCodeEnum;
+  public stateCode: StateCodeEnum;
 
   @RequestDtoValueObjectProperty(PostalCode)
   public postalCode: PostalCode;
@@ -41,5 +48,16 @@ export class SignUpRequestDto {
   @RequestDtoNumberProperty()
   public addressNumber: number;
 
-  protected readonly _type = SignUpRequestDto.name;
+  protected override readonly _type = SignUpCustomerDataAddressRequestDto.name;
+}
+
+@RequestDto()
+export class SignUpRequestDto extends BaseBuildableBlankDto {
+  @RequestDtoObjectProperty(() => SignUpCustomerDataRequestDto)
+  public customer: SignUpCustomerDataRequestDto;
+
+  @RequestDtoObjectProperty(() => SignUpCustomerDataAddressRequestDto)
+  public customerAddress: SignUpCustomerDataAddressRequestDto;
+
+  protected override readonly _type = SignUpRequestDto.name;
 }

@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
+import { instanceToPlain } from 'class-transformer';
 import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
@@ -21,12 +22,12 @@ export class ForbiddenErrorExceptionFilter implements ExceptionFilter {
     const statusCode = HttpStatus.FORBIDDEN;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
+    const errorResponse = ErrorResponseDto.build({
       message: exception.message,
       error: reason,
       statusCode: statusCode,
     });
 
-    response.status(statusCode).send(errorResponse);
+    response.status(statusCode).send(instanceToPlain(errorResponse));
   }
 }

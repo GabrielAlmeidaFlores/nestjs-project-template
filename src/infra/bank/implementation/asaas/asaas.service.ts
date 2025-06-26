@@ -27,7 +27,7 @@ import { CreateBankChargeOutputModel } from '@infra/bank/model/output/create-ban
 import { CreateBankCustomerOutputModel } from '@infra/bank/model/output/create-bank-customer.output.model';
 import { CreateBankPaymentPlanOutputModel } from '@infra/bank/model/output/create-bank-payment-plan.output.model';
 import { GetBankChargePixInfoOutputModel } from '@infra/bank/model/output/get-bank-charge-pix-info.output.model';
-import { AsaasApplicationVariable } from '@shared/system/constant/application-variable/asaas.application-variable';
+import { BankApplicationVariable } from '@shared/system/constant/application-variable/bank.application-variable';
 
 import type { CreateBankChargeInputModel } from '@infra/bank/model/input/create-bank-charge.input.model';
 import type { CreateBankCustomerInputModel } from '@infra/bank/model/input/create-bank-customer.input.model';
@@ -41,11 +41,18 @@ export class AsaasService implements BankGateway {
   private readonly asaasRequestHeaders: Record<string, string>;
 
   public constructor(private readonly httpService: HttpService) {
-    this.asaasUrl = new URL(AsaasApplicationVariable.ASAAS_URL);
+    let bankUrl = BankApplicationVariable.BANK_URL;
+
+    const hasTrailingSlash = bankUrl.endsWith('/');
+    if (!hasTrailingSlash) {
+      bankUrl = `${bankUrl}/`;
+    }
+
+    this.asaasUrl = new URL(bankUrl);
     this.asaasRequestHeaders = {
       accept: 'application/json',
       'content-type': 'application/json',
-      access_token: AsaasApplicationVariable.BANK_ACCESS_TOKEN,
+      access_token: BankApplicationVariable.BANK_ACCESS_TOKEN,
     };
   }
 
@@ -63,7 +70,7 @@ export class AsaasService implements BankGateway {
       cpfCnpj,
     });
 
-    const endpoint = new URL('/customer', this.asaasUrl).toString();
+    const endpoint = new URL('customers', this.asaasUrl).toString();
 
     const request = this.httpService.request<CreateAsaasCustomerOutputModel>({
       url: endpoint,
@@ -117,7 +124,7 @@ export class AsaasService implements BankGateway {
       installmentCount: props.installmentCount,
     });
 
-    const endpoint = new URL('/payments', this.asaasUrl).toString();
+    const endpoint = new URL('payments', this.asaasUrl).toString();
 
     const request = this.httpService.request<CreateAsaasChargeOutputModel>({
       url: endpoint,
@@ -175,7 +182,7 @@ export class AsaasService implements BankGateway {
     });
 
     const endpoint = new URL(
-      `/payments/${props.chargeId}/payWithCreditCard`,
+      `payments/${props.chargeId}/payWithCreditCard`,
       this.asaasUrl,
     ).toString();
 
@@ -230,7 +237,7 @@ export class AsaasService implements BankGateway {
       }),
     });
 
-    const endpoint = new URL(`/subscriptions`, this.asaasUrl).toString();
+    const endpoint = new URL(`subscriptions`, this.asaasUrl).toString();
 
     const request =
       this.httpService.request<CreateAsaasSubscriptionOutputModel>({
@@ -259,7 +266,7 @@ export class AsaasService implements BankGateway {
     chargeId: string,
   ): Promise<GetBankChargePixInfoOutputModel> {
     const endpoint = new URL(
-      `/payments/${chargeId}/pixQrCode`,
+      `payments/${chargeId}/pixQrCode`,
       this.asaasUrl,
     ).toString();
 

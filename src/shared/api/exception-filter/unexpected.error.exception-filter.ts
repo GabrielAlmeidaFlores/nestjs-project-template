@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
+import { instanceToPlain } from 'class-transformer';
 import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
@@ -18,15 +19,17 @@ export class UnexpectedErrorExceptionFilter implements ExceptionFilter {
     const http = host.switchToHttp();
     const response = http.getResponse<FastifyReply>();
 
-    const statusCode = HttpStatus.UNAUTHORIZED;
+    const statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
-      message: exception.message,
+    console.error(exception);
+
+    const errorResponse = ErrorResponseDto.build({
+      message: reason,
       error: reason,
       statusCode: statusCode,
     });
 
-    response.status(statusCode).send(errorResponse);
+    response.status(statusCode).send(instanceToPlain(errorResponse));
   }
 }

@@ -7,6 +7,7 @@ import {
   ValidationPipe,
   type INestApplication,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { ForbiddenErrorExceptionFilter } from '@shared/api/exception-filter/forbidden.error.exception-filter';
@@ -14,6 +15,7 @@ import { InvalidInputErrorExceptionFilter } from '@shared/api/exception-filter/i
 import { NotFoundErrorExceptionFilter } from '@shared/api/exception-filter/not-found.error.exception-filter';
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
+import { TransformValidateInterceptor } from '@shared/api/interceptor/transform-validate/transform-validate.interceptor';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -59,7 +61,7 @@ export class AppConfig extends AppConfigUtils {
     return this;
   }
 
-  public globalApiFilters(): this {
+  public globalFilters(): this {
     this.app.useGlobalFilters(new ForbiddenErrorExceptionFilter());
     this.app.useGlobalFilters(new InvalidInputErrorExceptionFilter());
     this.app.useGlobalFilters(new NotFoundErrorExceptionFilter());
@@ -75,15 +77,30 @@ export class AppConfig extends AppConfigUtils {
     return this;
   }
 
+  public globalInterceptor(): this {
+    const reflector = this.app.get(Reflector);
+    this.app.useGlobalInterceptors(new TransformValidateInterceptor(reflector));
+
+    return this;
+  }
+
   public globalPipes(): this {
     this.app.useGlobalPipes(
       new ValidationPipe({
+        whitelist: true,
         transform: true,
         transformOptions: {
           enableImplicitConversion: true,
         },
         exceptionFactory: (errors): BadRequestException => {
-          const firstError = errors[0];
+          let firstError = errors[0];
+
+          const child = firstError?.children;
+
+          if (child && child.length > 0) {
+            firstError = child[0];
+          }
+
           const firstErrorConstraints = firstError?.constraints;
 
           if (firstErrorConstraints) {
@@ -96,8 +113,6 @@ export class AppConfig extends AppConfigUtils {
         },
       }),
     );
-
-    return this;
 
     return this;
   }
@@ -120,6 +135,7 @@ export class AppConfig extends AppConfigUtils {
     const build = config.build();
 
     const document = SwaggerModule.createDocument(this.app, build);
+
     SwaggerModule.setup(
       `${FrameworkApplicationVariable.FRAMEWORK_BASE_PATH}/docs`,
       this.app,
