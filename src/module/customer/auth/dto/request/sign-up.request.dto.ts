@@ -9,9 +9,10 @@ import { RequestDtoNumberProperty } from '@shared/api/decorator/property/dto-pro
 import { RequestDtoObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
+import { BaseBuildableBlankDto } from '@shared/api/dto/blank/base-buildable.blank.dto';
 
 @RequestDto()
-class CustomerDataDto {
+export class SignUpCustomerDataRequestDto extends BaseBuildableBlankDto {
   @RequestDtoStringProperty()
   public name: string;
 
@@ -27,11 +28,11 @@ class CustomerDataDto {
   @RequestDtoStringProperty()
   public password: string;
 
-  protected readonly _type = CustomerDataDto.name;
+  protected override readonly _type = SignUpCustomerDataRequestDto.name;
 }
 
 @RequestDto()
-class CustomerAddressDto {
+export class SignUpCustomerDataAddressRequestDto extends BaseBuildableBlankDto {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -47,16 +48,16 @@ class CustomerAddressDto {
   @RequestDtoNumberProperty()
   public addressNumber: number;
 
-  protected readonly _type = CustomerAddressDto.name;
+  protected override readonly _type = SignUpCustomerDataAddressRequestDto.name;
 }
 
 @RequestDto()
-export class SignUpRequestDto {
-  @RequestDtoObjectProperty(() => CustomerDataDto)
-  public customer: CustomerDataDto;
+export class SignUpRequestDto extends BaseBuildableBlankDto {
+  @RequestDtoObjectProperty(() => SignUpCustomerDataRequestDto)
+  public customer: SignUpCustomerDataRequestDto;
 
-  @RequestDtoObjectProperty(() => CustomerAddressDto)
-  public customerAddress: CustomerAddressDto;
+  @RequestDtoObjectProperty(() => SignUpCustomerDataAddressRequestDto)
+  public customerAddress: SignUpCustomerDataAddressRequestDto;
 
-  protected readonly _type = SignUpRequestDto.name;
+  protected override readonly _type = SignUpRequestDto.name;
 }

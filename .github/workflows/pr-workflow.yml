@@ -40,3 +40,6 @@ jobs:
 
       - name: Run type check
         run: yarn check
+
+      - name: Run unit test
+        run: yarn test

@@ -8,7 +8,10 @@ import { CustomerAddressEntity } from '@core/domain/schema/entity/customer/custo
 import { BankGateway } from '@infra/bank/bank.gateway';
 import { CreateBankCustomerInputModel } from '@infra/bank/model/input/create-bank-customer.input.model';
 import { CreateBankCustomerOutputModel } from '@infra/bank/model/output/create-bank-customer.output.model';
-import { SignUpRequestDto } from '@module/customer/auth/dto/request/sign-up.request.dto';
+import {
+  SignUpCustomerDataRequestDto,
+  SignUpRequestDto,
+} from '@module/customer/auth/dto/request/sign-up.request.dto';
 import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.response.dto';
 import { CustomerEmailAlreadyInUseError } from '@module/customer/auth/error/customer-email-already-in-use.error';
 
@@ -35,7 +38,7 @@ export class SignUpUseCase {
       throw new CustomerEmailAlreadyInUseError();
     }
 
-    const bankCustomer = await this.createCustomerOnBank(dto);
+    const bankCustomer = await this.createCustomerOnBank(dto.customer);
 
     const customer = new CustomerEntity({
       ...dto.customer,
@@ -59,13 +62,13 @@ export class SignUpUseCase {
   }
 
   private async createCustomerOnBank(
-    dto: SignUpRequestDto,
+    customerData: SignUpCustomerDataRequestDto,
   ): Promise<CreateBankCustomerOutputModel> {
     const createCustomerInputModel = new CreateBankCustomerInputModel({
-      name: dto.customer.name,
-      email: dto.customer.email,
-      phoneNumber: dto.customer.phoneNumber,
-      federalDocument: dto.customer.federalDocument,
+      name: customerData.name,
+      email: customerData.email,
+      phoneNumber: customerData.phoneNumber,
+      federalDocument: customerData.federalDocument,
     });
 
     return await this.bankGateway.createCustomer(createCustomerInputModel);
