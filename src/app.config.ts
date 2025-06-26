@@ -15,7 +15,7 @@ import { InvalidInputErrorExceptionFilter } from '@shared/api/exception-filter/i
 import { NotFoundErrorExceptionFilter } from '@shared/api/exception-filter/not-found.error.exception-filter';
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
-import { TransformValidateInterceptor } from '@shared/api/interceptor/transform-validatet.interceptor';
+import { TransformValidateInterceptor } from '@shared/api/interceptor/transform-validate/transform-validate.interceptor';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
