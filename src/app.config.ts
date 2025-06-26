@@ -97,7 +97,7 @@ export class AppConfig extends AppConfigUtils {
 
           const child = firstError?.children;
 
-          if (child) {
+          if (child && child.length > 0) {
             firstError = child[0];
           }
 

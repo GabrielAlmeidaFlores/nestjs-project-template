@@ -42,7 +42,7 @@ export class TransformValidateInterceptor implements NestInterceptor {
       const plain = instanceToPlain(data);
 
       const instance = plainToInstance(dtoClass, plain, {
-        enableImplicitConversion: true,
+        enableImplicitConversion: false,
         exposeUnsetFields: false,
         excludeExtraneousValues: true,
       });
@@ -70,8 +70,7 @@ export class TransformValidateInterceptor implements NestInterceptor {
     let firstError = errors[0];
 
     const child = firstError?.children;
-
-    if (child) {
+    if (child && child.length > 0) {
       firstError = child[0];
     }
 
