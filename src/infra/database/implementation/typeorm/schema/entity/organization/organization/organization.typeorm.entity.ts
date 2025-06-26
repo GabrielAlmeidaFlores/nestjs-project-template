@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
+import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/credit-plan/organization-credit-plan-purchase/organization-credit-plan-purchase.typeorm.entity';
 import { OrganizationTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/organization/organization/organization.typeorm.entity.props.interface';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 
@@ -18,6 +19,14 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
   )
   public organizationMember: OrganizationMemberTypeormEntity[] | undefined;
 
+  @OneToMany(
+    () => OrganizationCreditPlanPurchaseTypeormEntity,
+    (entity) => entity.organization,
+  )
+  public organizationCreditPlanPurchase:
+    | OrganizationCreditPlanPurchaseTypeormEntity[]
+    | undefined;
+
   protected readonly _type = OrganizationTypeormEntity.name;
 
   public constructor(props?: OrganizationTypeormEntityPropsInterface) {
@@ -31,5 +40,6 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
     this.name = props.name;
     this.organizationLogo = props.organizationLogo;
     this.organizationMember = props.organizationMember;
+    this.organizationCreditPlanPurchase = props.organizationCreditPlanPurchase;
   }
 }
