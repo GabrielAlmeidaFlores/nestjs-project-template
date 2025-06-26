@@ -17,31 +17,16 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
     type: String,
   });
   const expose = Expose();
-  const deserialize = Transform(
-    ({ value }) => {
-      const isInstanceOfValueObject = value instanceof valueObjectClass;
-      if (isInstanceOfValueObject) {
-        return value;
-      }
+  const transform = Transform(({ value }) => {
+    const isInstanceOfValueObject = value instanceof valueObjectClass;
+    if (isInstanceOfValueObject) {
+      return value.toString();
+    }
 
-      return new valueObjectClass(value as string);
-    },
-    { toClassOnly: true },
-  );
+    return undefined;
+  });
 
-  const serialize = Transform(
-    ({ value }) => {
-      const isInstanceOfValueObject = value instanceof valueObjectClass;
-      if (isInstanceOfValueObject) {
-        return value.toString();
-      }
-
-      return value as string;
-    },
-    { toPlainOnly: true },
-  );
-
-  const decorators = [apiProperty, expose, serialize, deserialize];
+  const decorators = [apiProperty, expose, transform];
 
   if (!propertyIsRequired) {
     decorators.push(IsOptional());
