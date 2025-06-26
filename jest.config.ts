@@ -1,5 +1,9 @@
+import { readFileSync } from 'fs';
 import { pathsToModuleNameMapper } from 'ts-jest';
-import { compilerOptions } from './tsconfig.json';
+import { resolve } from 'path';
+
+const tsconfigPath = resolve(__dirname, 'tsconfig.json');
+const tsconfig = JSON.parse(readFileSync(tsconfigPath, 'utf8'));
 
 const config = {
   preset: 'ts-jest',
@@ -7,7 +11,7 @@ const config = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   rootDir: '.',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths || {}, {
     prefix: '<rootDir>/',
   }),
   transform: {
