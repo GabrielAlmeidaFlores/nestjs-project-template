@@ -7,7 +7,6 @@ import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementatio
 import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan/available-payment-plan-enabled-paid-resource/available-payment-plan-enabled-paid-resource.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
-import { CustomerProfessionalDataTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-professional-data/customer-professional-data.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization/organization.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
@@ -21,7 +20,6 @@ export class TypeormIndex {
     ApplicationPaidResourceTypeormEntity,
     CustomerTypeormEntity,
     CustomerAddressTypeormEntity,
-    CustomerProfessionalDataTypeormEntity,
     AvailablePaymentPlanTypeormEntity,
     AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
     OrganizationTypeormEntity,
@@ -45,7 +43,7 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
-    migrations: ['src/infra/database/implementation/typeorm/migration/*.js'],
+    migrations: ['src/infra/database/implementation/typeorm/migration/*.ts'],
     synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 

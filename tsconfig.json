@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // === Path Aliases ===
     "paths": {
       "@core/*": ["./src/core/*"],
       "@shared/*": ["./src/shared/*"],
@@ -10,8 +9,6 @@
       "@handler/*": ["./src/handler/*"],
       "@base/*": ["./src/*"]
     },
-
-    // === Strict Type-Checking Options ===
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -23,24 +20,18 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
-    // === Additional Strictness Checks ===
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "exactOptionalPropertyTypes": true,
     "useUnknownInCatchVariables": true,
     "strictPropertyInitialization": false,
-
-    // === Module Configuration (unchanged) ===
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": false,
     "resolveJsonModule": false,
     "allowImportingTsExtensions": false,
-
-    // === Output and Target Settings (unchanged) ===
     "target": "ES2021",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -52,8 +43,6 @@
     "noEmitOnError": true,
     "incremental": false,
     "composite": false,
-
-    // === Code Quality and Consistency ===
     "allowJs": false,
     "checkJs": false,
     "forceConsistentCasingInFileNames": true,
@@ -62,29 +51,20 @@
     "downlevelIteration": false,
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
-
-    // === Tooling and Compatibility ===
     "isolatedModules": true,
     "disableReferencedProjectLoad": true,
     "disableSolutionSearching": true,
     "disableSourceOfProjectReferenceRedirect": true,
-
-    // Decorators Settings
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-
-  // === File Inclusion/Exclusion ===
   "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.spec.ts",
     "**/*.test.ts",
     "**/__tests__/*"
   ],
-
-  // === Additional Strictness ===
   "references": [],
   "typeAcquisition": {
     "enable": false

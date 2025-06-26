@@ -33,7 +33,9 @@ export class CustomerTypeormQueryRepository
       },
     });
 
-    if (!data) {
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
       return null;
     }
 

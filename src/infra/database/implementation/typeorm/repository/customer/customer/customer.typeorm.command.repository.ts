@@ -21,9 +21,9 @@ export class CustomerTypeormCommandRepository
     super(repository);
   }
 
-  public async createCustomer(data: CustomerEntity): Promise<void> {
+  public async createCustomer(props: CustomerEntity): Promise<void> {
     const mappedData = this.mapperGateway.map(
-      data,
+      props,
       CustomerEntity,
       CustomerTypeormEntity,
     );
