@@ -21,7 +21,7 @@ export class InvalidInputErrorExceptionFilter implements ExceptionFilter {
     const statusCode = HttpStatus.BAD_REQUEST;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
+    const errorResponse = ErrorResponseDto.build({
       message: exception.message,
       error: reason,
       statusCode: statusCode,

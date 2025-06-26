@@ -21,7 +21,7 @@ export class ForbiddenErrorExceptionFilter implements ExceptionFilter {
     const statusCode = HttpStatus.FORBIDDEN;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
+    const errorResponse = ErrorResponseDto.build({
       message: exception.message,
       error: reason,
       statusCode: statusCode,

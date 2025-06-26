@@ -7,6 +7,7 @@ import {
   ValidationPipe,
   type INestApplication,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { ForbiddenErrorExceptionFilter } from '@shared/api/exception-filter/forbidden.error.exception-filter';
@@ -14,6 +15,7 @@ import { InvalidInputErrorExceptionFilter } from '@shared/api/exception-filter/i
 import { NotFoundErrorExceptionFilter } from '@shared/api/exception-filter/not-found.error.exception-filter';
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
+import { TransformValidateInterceptor } from '@shared/api/interceptor/transform-validatet.interceptor';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -59,7 +61,7 @@ export class AppConfig extends AppConfigUtils {
     return this;
   }
 
-  public globalApiFilters(): this {
+  public globalFilters(): this {
     this.app.useGlobalFilters(new ForbiddenErrorExceptionFilter());
     this.app.useGlobalFilters(new InvalidInputErrorExceptionFilter());
     this.app.useGlobalFilters(new NotFoundErrorExceptionFilter());
@@ -71,6 +73,13 @@ export class AppConfig extends AppConfigUtils {
 
   public globalPrefix(): this {
     this.app.setGlobalPrefix(FrameworkApplicationVariable.FRAMEWORK_BASE_PATH);
+
+    return this;
+  }
+
+  public globalInterceptor(): this {
+    const reflector = this.app.get(Reflector);
+    this.app.useGlobalInterceptors(new TransformValidateInterceptor(reflector));
 
     return this;
   }
