@@ -21,7 +21,7 @@ export class NotFoundErrorExceptionFilter implements ExceptionFilter {
     const statusCode = HttpStatus.NOT_FOUND;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
+    const errorResponse = ErrorResponseDto.build({
       message: exception.message,
       error: reason,
       statusCode: statusCode,

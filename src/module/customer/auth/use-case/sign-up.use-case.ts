@@ -53,7 +53,7 @@ export class SignUpUseCase {
       customerAddress,
     );
 
-    return new SignUpResponseDto({
+    return SignUpResponseDto.build({
       id: customer.id,
     });
   }

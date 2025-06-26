@@ -1,10 +1,10 @@
 import { ResponseDto } from '@shared/api/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/decorator/property/dto-property/response/response-dto-number-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/decorator/property/dto-property/response/response-dto-string-property.decorator';
-import { PublicPropertyType } from '@shared/system/type/public-property.type';
+import { BaseBuildableBlankDto } from '@shared/api/dto/blank/base-buildable.blank.dto';
 
 @ResponseDto()
-export class ErrorResponseDto {
+export class ErrorResponseDto extends BaseBuildableBlankDto {
   @ResponseDtoStringProperty()
   public message: string;
 
@@ -14,11 +14,5 @@ export class ErrorResponseDto {
   @ResponseDtoNumberProperty()
   public statusCode: number;
 
-  protected readonly _type = ErrorResponseDto.name;
-
-  public constructor(props: PublicPropertyType<ErrorResponseDto>) {
-    this.message = props.message;
-    this.error = props.error;
-    this.statusCode = props.statusCode;
-  }
+  protected override readonly _type = ErrorResponseDto.name;
 }

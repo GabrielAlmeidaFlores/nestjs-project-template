@@ -21,7 +21,7 @@ export class UnauthorizedErrorExceptionFilter implements ExceptionFilter {
     const statusCode = HttpStatus.UNAUTHORIZED;
     const reason = getReasonPhrase(statusCode);
 
-    const errorResponse = new ErrorResponseDto({
+    const errorResponse = ErrorResponseDto.build({
       message: exception.message,
       error: reason,
       statusCode: statusCode,
