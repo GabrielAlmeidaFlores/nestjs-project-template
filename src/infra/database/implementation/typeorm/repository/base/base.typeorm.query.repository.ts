@@ -3,8 +3,8 @@ import { Like } from 'typeorm';
 import { ListedDataOutputModel } from '@core/domain/repository/base/model/output/listed-data.output.model';
 
 import type { ListDataInputModel } from '@core/domain/repository/base/model/input/list-data.input.model';
-import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
-import type { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
+import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import type { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 import type { NotFoundError } from 'rxjs';
 import type {

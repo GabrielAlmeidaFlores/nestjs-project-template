@@ -63,7 +63,7 @@ export class AsaasService implements BankGateway {
     const mobilePhone = props.phoneNumber.toString();
     const cpfCnpj = props.federalDocument.toString();
 
-    const payload = new CreateAsaasCustomerInputModel({
+    const payload = CreateAsaasCustomerInputModel.build({
       name: props.name,
       email,
       mobilePhone,
@@ -84,7 +84,7 @@ export class AsaasService implements BankGateway {
         request,
       );
 
-    return new CreateBankCustomerOutputModel({
+    return CreateBankCustomerOutputModel.build({
       id: response.data.id,
       name: response.data.name,
       email: new Email(response.data.email),
@@ -106,14 +106,14 @@ export class AsaasService implements BankGateway {
     if (hasDiscount) {
       const discountValue = Number(props.discountPercentage);
 
-      discount = new AsaasDiscountInputModel({
+      discount = AsaasDiscountInputModel.build({
         type: AsaasDiscountTypeEnum.PERCENTAGE,
         value: discountValue,
         dueDateLimitDays: null,
       });
     }
 
-    const payload = new CreateAsaasChargeInputModel({
+    const payload = CreateAsaasChargeInputModel.build({
       customer: props.customerId,
       description: props.description,
       dueDate: props.dueDate,
@@ -148,7 +148,7 @@ export class AsaasService implements BankGateway {
       pixInfo = await this.getChargePixInfo(response.data.id);
     } catch {}
 
-    return new CreateBankChargeOutputModel({
+    return CreateBankChargeOutputModel.build({
       id: response.data.id,
       customer: response.data.customer,
       billingMethod: props.billingMethod,
@@ -169,9 +169,9 @@ export class AsaasService implements BankGateway {
     const postalCode = props.creditCardHolderInfo.postalCode.toString();
     const phone = props.creditCardHolderInfo.phone.toString();
 
-    const payload = new PayAsaasChargeInputModel({
-      creditCard: new AsaasCreditCardInfoInputModel(props.creditCard),
-      creditCardHolderInfo: new AsaasCreditCardHolderInfoInputModel({
+    const payload = PayAsaasChargeInputModel.build({
+      creditCard: AsaasCreditCardInfoInputModel.build(props.creditCard),
+      creditCardHolderInfo: AsaasCreditCardHolderInfoInputModel.build({
         name: props.creditCardHolderInfo.name,
         email,
         cpfCnpj,
@@ -211,14 +211,14 @@ export class AsaasService implements BankGateway {
     if (hasDiscount) {
       const discountValue = Number(props.discountPercentage);
 
-      discount = new AsaasDiscountInputModel({
+      discount = AsaasDiscountInputModel.build({
         type: AsaasDiscountTypeEnum.PERCENTAGE,
         value: discountValue,
         dueDateLimitDays: null,
       });
     }
 
-    const payload = new CreateAsaasSubscriptionInputModel({
+    const payload = CreateAsaasSubscriptionInputModel.build({
       customer: props.customerId,
       billingType: AsaasBillingTypeEnum.CREDIT_CARD,
       value,
@@ -226,8 +226,8 @@ export class AsaasService implements BankGateway {
       description: props.description,
       remoteIp: props.remoteIp,
       discount,
-      creditCard: new AsaasCreditCardInfoInputModel(props.creditCard),
-      creditCardHolderInfo: new AsaasCreditCardHolderInfoInputModel({
+      creditCard: AsaasCreditCardInfoInputModel.build(props.creditCard),
+      creditCardHolderInfo: AsaasCreditCardHolderInfoInputModel.build({
         name: props.creditCardHolderInfo.name,
         email,
         cpfCnpj,
@@ -252,7 +252,7 @@ export class AsaasService implements BankGateway {
         request,
       );
 
-    return new CreateBankPaymentPlanOutputModel({
+    return CreateBankPaymentPlanOutputModel.build({
       id: response.data.id,
       customer: response.data.customer,
       paymentMethod: props.paymentMethod,

@@ -9,10 +9,10 @@ import { RequestDtoNumberProperty } from '@shared/api/decorator/property/dto-pro
 import { RequestDtoObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
-import { BaseBuildableBlankDto } from '@shared/api/dto/blank/base-buildable.blank.dto';
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @RequestDto()
-export class SignUpCustomerDataRequestDto extends BaseBuildableBlankDto {
+export class SignUpCustomerDataRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public name: string;
 
@@ -32,7 +32,7 @@ export class SignUpCustomerDataRequestDto extends BaseBuildableBlankDto {
 }
 
 @RequestDto()
-export class SignUpCustomerDataAddressRequestDto extends BaseBuildableBlankDto {
+export class SignUpCustomerDataAddressRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -52,7 +52,7 @@ export class SignUpCustomerDataAddressRequestDto extends BaseBuildableBlankDto {
 }
 
 @RequestDto()
-export class SignUpRequestDto extends BaseBuildableBlankDto {
+export class SignUpRequestDto extends BaseBuildableObject {
   @RequestDtoObjectProperty(() => SignUpCustomerDataRequestDto)
   public customer: SignUpCustomerDataRequestDto;
 

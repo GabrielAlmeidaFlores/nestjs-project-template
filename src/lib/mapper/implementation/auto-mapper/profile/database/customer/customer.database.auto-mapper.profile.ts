@@ -8,7 +8,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -65,7 +65,7 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
       const federalDocument = source.federalDocument.toString();
       const password = source.password.toString();
 
-      return new CustomerTypeormEntity({
+      return CustomerTypeormEntity.build({
         ...source,
         id,
         email,

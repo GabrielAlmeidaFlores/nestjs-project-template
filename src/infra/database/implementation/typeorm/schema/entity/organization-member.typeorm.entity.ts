@@ -1,8 +1,8 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
-import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization/organization.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 
 @Entity({ name: 'organization_member' })
 export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
@@ -17,5 +17,5 @@ export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'customer_id' })
   public customer: CustomerTypeormEntity;
 
-  protected readonly _type = OrganizationMemberTypeormEntity.name;
+  protected override readonly _type = OrganizationMemberTypeormEntity.name;
 }
