@@ -3,10 +3,11 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { BaseAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base-auditable.typeorm.entity';
+import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 
 @Entity({ name: 'bank_payment' })
-export class BankPaymentTypeormEntity extends BaseTypeormEntity {
+export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
@@ -45,6 +46,14 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
 
   @OneToMany(() => BankTransferTypeormEntity, (entity) => entity.bankPayment)
   public bankTransfer: BankTransferTypeormEntity[] | undefined;
+
+  @OneToMany(
+    () => OrganizationCreditPurchaseTypeormEntity,
+    (entity) => entity.bankPayment,
+  )
+  public organizationCreditPurchase:
+    | OrganizationCreditPurchaseTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = BankPaymentTypeormEntity.name;
 }

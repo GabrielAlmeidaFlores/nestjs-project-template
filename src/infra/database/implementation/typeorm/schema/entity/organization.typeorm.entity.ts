@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-plan-purchase.typeorm.entity';
+import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 
 @Entity({ name: 'organization' })
@@ -24,6 +25,14 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
   )
   public organizationCreditPlanPurchase:
     | OrganizationCreditPlanPurchaseTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => OrganizationCreditPurchaseTypeormEntity,
+    (entity) => entity.organization,
+  )
+  public organizationCreditPurchase:
+    | OrganizationCreditPurchaseTypeormEntity[]
     | undefined;
 
   protected override readonly _type = OrganizationTypeormEntity.name;
