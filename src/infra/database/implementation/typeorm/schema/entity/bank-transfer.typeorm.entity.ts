@@ -2,9 +2,8 @@ import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 
 import { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
 import { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
-import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank/bank-payment/bank-payment.typeorm.entity';
-import { BankTransferTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/bank/bank-transfer/bank-transfer.typeorm.entity.props.interface';
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
+import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
 @Entity({ name: 'bank_transfer' })
 export class BankTransferTypeormEntity extends BaseTypeormEntity {
@@ -42,24 +41,5 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'bank_payment_id' })
   public bankPayment: BankPaymentTypeormEntity;
 
-  protected readonly _type = BankTransferTypeormEntity.name;
-
-  public constructor(props?: BankTransferTypeormEntityPropsInterface) {
-    super(props);
-    const isConstructedByOrm = props === undefined;
-    if (isConstructedByOrm) {
-      return;
-    }
-
-    this.bankExternalId = props.bankExternalId;
-    this.description = props.description;
-    this.transferMethod = props.transferMethod;
-    this.value = props.value;
-    this.netValue = props.netValue;
-    this.status = props.status;
-    this.effectiveDate = props.effectiveDate ?? null;
-    this.scheduleDate = props.scheduleDate ?? null;
-    this.failReason = props.failReason ?? null;
-    this.bankPayment = props.bankPayment;
-  }
+  protected override readonly _type = BankTransferTypeormEntity.name;
 }

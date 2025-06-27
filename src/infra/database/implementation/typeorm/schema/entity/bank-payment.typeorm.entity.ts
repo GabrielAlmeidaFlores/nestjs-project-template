@@ -2,9 +2,8 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
-import { BankPaymentTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/bank/bank-payment/bank-payment.typeorm.entity.props.interface';
-import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank/bank-transfer/bank-transfer.typeorm.entity';
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
+import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
 @Entity({ name: 'bank_payment' })
 export class BankPaymentTypeormEntity extends BaseTypeormEntity {
@@ -47,27 +46,5 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @OneToMany(() => BankTransferTypeormEntity, (entity) => entity.bankPayment)
   public bankTransfer: BankTransferTypeormEntity[] | undefined;
 
-  protected readonly _type = BankPaymentTypeormEntity.name;
-
-  public constructor(props?: BankPaymentTypeormEntityPropsInterface) {
-    super(props);
-
-    const isConstructedByOrm = props === undefined;
-    if (isConstructedByOrm) {
-      return;
-    }
-
-    this.bankExternalId = props.bankExternalId;
-    this.paymentMethod = props.paymentMethod;
-    this.value = props.value;
-    this.netValue = props.netValue;
-    this.discountPercentage = props.discountPercentage;
-    this.status = props.status;
-    this.dueDate = props.dueDate;
-    this.paymentDate = props.paymentDate ?? null;
-    this.installmentNumber = props.installmentNumber ?? null;
-    this.costumerConfirmDate = props.costumerConfirmDate ?? null;
-    this.pixQrCode = props.pixQrCode ?? null;
-    this.bankTransfer = props.bankTransfer;
-  }
+  protected override readonly _type = BankPaymentTypeormEntity.name;
 }

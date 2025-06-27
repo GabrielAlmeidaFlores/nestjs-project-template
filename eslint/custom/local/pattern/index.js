@@ -7,7 +7,7 @@ module.exports = {
         'require-valid-entity-relation': require('./require-valid-entity-relation.js'),
         'require-ddd-entity-nullable-properties-to-be-optional': require('./require-ddd-entity-nullable-properties-to-be-optional.js'),
         'require-matching-dto-property-decorators': require('./require-matching-dto-property-decorators.js'),
-        'require-dto-to-extend-base-buildable-blank-dto': require('./require-dto-to-extend-base-buildable-blank-dto.js')
+        'require-dto-to-extend-base-buildable-object': require('./require-dto-to-extend-base-buildable-object.js')
       },
     },
   },
@@ -18,6 +18,6 @@ module.exports = {
     'pattern-rule/require-ddd-entity-nullable-properties-to-be-optional':
       'error',
     'pattern-rule/require-matching-dto-property-decorators': 'error',
-    'pattern-rule/require-dto-to-extend-base-buildable-blank-dto': 'error'
+    'pattern-rule/require-dto-to-extend-base-buildable-object': 'error'
   },
 };

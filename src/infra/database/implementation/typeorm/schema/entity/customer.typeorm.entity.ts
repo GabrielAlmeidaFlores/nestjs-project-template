@@ -1,9 +1,8 @@
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
-import { CustomerTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity.props.interface';
-import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
 
@@ -64,25 +63,5 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer)
   public customerAddress: CustomerAddressTypeormEntity | undefined;
 
-  protected readonly _type = CustomerTypeormEntity.name;
-
-  public constructor(props?: CustomerTypeormEntityPropsInterface) {
-    super(props);
-
-    const isConstructedByOrm = props === undefined;
-    if (isConstructedByOrm) {
-      return;
-    }
-
-    this.name = props.name;
-    this.email = props.email;
-    this.federalDocument = props.federalDocument;
-    this.phoneNumber = props.phoneNumber;
-    this.password = props.password;
-    this.bankExternalId = props.bankExternalId;
-    this.profilePicture = props.profilePicture;
-    this.mfaSecret = props.mfaSecret;
-    this.customerAddress = props.customerAddress;
-    this.organizationMember = props.organizationMember;
-  }
+  protected override readonly _type = CustomerTypeormEntity.name;
 }

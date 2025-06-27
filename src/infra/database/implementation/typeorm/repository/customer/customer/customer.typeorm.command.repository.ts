@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CustomerCommandRepositoryGateway } from '@core/domain/repository/customer/customer/customer.command.repository.gateway';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 
 export class CustomerTypeormCommandRepository

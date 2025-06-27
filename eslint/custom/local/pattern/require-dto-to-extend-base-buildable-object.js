@@ -1,18 +1,18 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
-  name: 'require-dto-to-extend-base-buildable-blank-dto',
+  name: 'require-dto-to-extend-base-buildable-object',
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Classes decorated with @RequestDto or @ResponseDto must extend BaseBuildableBlankDto',
+        'Classes decorated with @RequestDto or @ResponseDto must extend BaseBuildableObject',
       recommended: 'error',
     },
     schema: [],
     messages: {
       mustExtend:
-        'Class decorated with @RequestDto or @ResponseDto must extend BaseBuildableBlankDto.',
+        'Class decorated with @RequestDto or @ResponseDto must extend BaseBuildableObject.',
     },
   },
   defaultOptions: [],
@@ -36,7 +36,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         const isExtendingCorrectBase =
           superClass &&
           superClass.type === 'Identifier' &&
-          superClass.name === 'BaseBuildableBlankDto';
+          superClass.name === 'BaseBuildableObject';
 
         if (!isExtendingCorrectBase) {
           context.report({
