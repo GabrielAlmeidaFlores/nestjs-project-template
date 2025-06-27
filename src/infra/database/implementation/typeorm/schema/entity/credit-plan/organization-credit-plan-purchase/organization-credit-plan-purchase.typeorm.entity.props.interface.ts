@@ -9,5 +9,4 @@ export interface OrganizationCreditPlanPurchaseTypeormEntityPropsInterface
   active: boolean;
   organization: OrganizationTypeormEntity;
   availableCreditPlan: AvailableCreditPlanTypeormEntity;
-    //TODO: add bank-payment relationship
 }
