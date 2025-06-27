@@ -7,8 +7,8 @@ import { CustomerAddressEntity } from '@core/domain/schema/entity/customer/custo
 import { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
-import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -76,7 +76,7 @@ export class CustomerAddressDatabaseAutoMapperProfile extends BaseAutoMapperProf
         CustomerTypeormEntity,
       );
 
-      return new CustomerAddressTypeormEntity({
+      return CustomerAddressTypeormEntity.build({
         ...source,
         id,
         postalCode,

@@ -102,7 +102,7 @@ describe('SignUpUseCase', () => {
 
     customerQueryRepository.findCustomerByEmail.mockResolvedValue(null);
 
-    const bankCustomer = new CreateBankCustomerOutputModel({
+    const bankCustomer = CreateBankCustomerOutputModel.build({
       id: 'bank-id-001',
       name: dto.customer.name,
       email: dto.customer.email,
@@ -161,7 +161,7 @@ describe('SignUpUseCase', () => {
     const dto = makeDto();
     customerQueryRepository.findCustomerByEmail.mockResolvedValue(null);
 
-    const bankCustomer = new CreateBankCustomerOutputModel({
+    const bankCustomer = CreateBankCustomerOutputModel.build({
       id: 'bank-id-002',
       name: dto.customer.name,
       email: dto.customer.email,

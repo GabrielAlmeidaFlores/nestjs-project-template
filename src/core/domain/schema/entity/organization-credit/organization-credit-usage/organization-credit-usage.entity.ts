@@ -1,4 +1,4 @@
-import { AuditableBaseEntity } from '@core/domain/schema/entity/base/auditable-base/auditable-base.entity';
+import { BaseAuditableEntity } from '@core/domain/schema/entity/base/base-auditable/base-auditable.entity';
 
 import type { ApplicationPaidResourceEntity } from '@core/domain/schema/entity/application-resource/application-paid-resource/application-paid-resource.entity';
 import type { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
@@ -6,7 +6,7 @@ import type { OrganizationEntity } from '@core/domain/schema/entity/organization
 import type { OrganizationCreditUsageEntityPropsInterface } from '@core/domain/schema/entity/organization-credit/organization-credit-usage/organization-credit-usage.entity.props.interface';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
-export class OrganizationCreditUsageEntity extends AuditableBaseEntity<CustomerEntity> {
+export class OrganizationCreditUsageEntity extends BaseAuditableEntity<CustomerEntity> {
   public readonly creditAmount: number;
   public readonly organization: RelationModel<OrganizationEntity>;
   public readonly applicationPaidResource: RelationModel<ApplicationPaidResourceEntity>;

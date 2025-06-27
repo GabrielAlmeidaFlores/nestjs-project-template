@@ -1,18 +1,11 @@
-import { AsaasCreditCardHolderInfoInputModel } from '@infra/bank/implementation/asaas/model/input/asaas-credit-card-holder-info.input.model';
-import { AsaasCreditCardInfoInputModel } from '@infra/bank/implementation/asaas/model/input/asaas-credit-card-info.input.model';
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { PublicPropertyType } from '@shared/system/type/public-property.type';
+import type { AsaasCreditCardHolderInfoInputModel } from '@infra/bank/implementation/asaas/model/input/asaas-credit-card-holder-info.input.model';
+import type { AsaasCreditCardInfoInputModel } from '@infra/bank/implementation/asaas/model/input/asaas-credit-card-info.input.model';
 
-export class PayAsaasChargeInputModel {
+export class PayAsaasChargeInputModel extends BaseBuildableObject {
   public creditCard: AsaasCreditCardInfoInputModel;
   public creditCardHolderInfo: AsaasCreditCardHolderInfoInputModel;
 
-  protected readonly _type = PayAsaasChargeInputModel.name;
-
-  public constructor(props: PublicPropertyType<PayAsaasChargeInputModel>) {
-    this.creditCard = new AsaasCreditCardInfoInputModel(props.creditCard);
-    this.creditCardHolderInfo = new AsaasCreditCardHolderInfoInputModel(
-      props.creditCardHolderInfo,
-    );
-  }
+  protected override readonly _type = PayAsaasChargeInputModel.name;
 }

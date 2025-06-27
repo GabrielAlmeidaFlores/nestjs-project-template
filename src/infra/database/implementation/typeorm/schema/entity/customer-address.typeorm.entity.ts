@@ -1,8 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base/base.typeorm.entity';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
-import { CustomerAddressTypeormEntityPropsInterface } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity.props.interface';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
 @Entity({ name: 'customer_address' })
@@ -53,21 +52,5 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   })
   public customer: CustomerTypeormEntity;
 
-  protected readonly _type = CustomerAddressTypeormEntity.name;
-
-  public constructor(props?: CustomerAddressTypeormEntityPropsInterface) {
-    super(props);
-
-    const isConstructedByOrm = props === undefined;
-    if (isConstructedByOrm) {
-      return;
-    }
-
-    this.postalCode = props.postalCode;
-    this.stateCode = props.stateCode;
-    this.city = props.city;
-    this.neighborhood = props.neighborhood;
-    this.addressNumber = props.addressNumber;
-    this.customer = props.customer;
-  }
+  protected override readonly _type = CustomerAddressTypeormEntity.name;
 }
