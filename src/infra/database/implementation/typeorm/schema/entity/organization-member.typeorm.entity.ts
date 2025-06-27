@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -6,6 +6,9 @@ import { OrganizationTypeormEntity } from '@infra/database/implementation/typeor
 
 @Entity({ name: 'organization_member' })
 export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
+  @Column({ name: 'owner', type: 'boolean' })
+  public owner: boolean;
+
   @ManyToOne(
     () => OrganizationTypeormEntity,
     (entity) => entity.organizationMember,
