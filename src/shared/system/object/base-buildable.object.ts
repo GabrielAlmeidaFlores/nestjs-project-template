@@ -1,7 +1,7 @@
 import type { PublicPropertyType } from '@shared/system/type/public-property.type';
 
-export abstract class BaseBuildableBlankDto {
-  protected readonly _type = BaseBuildableBlankDto.name;
+export abstract class BaseBuildableObject {
+  protected readonly _type = BaseBuildableObject.name;
 
   public static build<T extends object>(
     this: new () => T,

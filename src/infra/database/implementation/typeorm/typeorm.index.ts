@@ -2,13 +2,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.query.repository';
-import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-resource/application-paid-resource/application-paid-resource.typeorm.entity';
-import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan/available-payment-plan/available-payment-plan.typeorm.entity';
-import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan/available-payment-plan-enabled-paid-resource/available-payment-plan-enabled-paid-resource.typeorm.entity';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer/customer.typeorm.entity';
-import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer-address/customer-address.typeorm.entity';
-import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization/organization.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization/organization-member/organization-member.typeorm.entity';
+import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan.typeorm.entity';
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
 
 import type { Provider } from '@nestjs/common';

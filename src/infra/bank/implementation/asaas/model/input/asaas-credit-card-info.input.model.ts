@@ -1,19 +1,11 @@
-import type { PublicPropertyType } from '@shared/system/type/public-property.type';
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-export class AsaasCreditCardInfoInputModel {
+export class AsaasCreditCardInfoInputModel extends BaseBuildableObject {
   public holderName: string;
   public number: string;
   public expiryMonth: string;
   public expiryYear: string;
   public ccv: string;
 
-  protected readonly _type = AsaasCreditCardInfoInputModel.name;
-
-  public constructor(props: PublicPropertyType<AsaasCreditCardInfoInputModel>) {
-    this.holderName = props.holderName;
-    this.number = props.number;
-    this.expiryMonth = props.expiryMonth;
-    this.expiryYear = props.expiryYear;
-    this.ccv = props.ccv;
-  }
+  protected override readonly _type = AsaasCreditCardInfoInputModel.name;
 }

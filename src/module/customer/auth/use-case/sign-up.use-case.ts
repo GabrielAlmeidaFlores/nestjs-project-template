@@ -64,7 +64,7 @@ export class SignUpUseCase {
   private async createCustomerOnBank(
     customerData: SignUpCustomerDataRequestDto,
   ): Promise<CreateBankCustomerOutputModel> {
-    const createCustomerInputModel = new CreateBankCustomerInputModel({
+    const createCustomerInputModel = CreateBankCustomerInputModel.build({
       name: customerData.name,
       email: customerData.email,
       phoneNumber: customerData.phoneNumber,
