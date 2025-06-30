@@ -4,7 +4,6 @@ import { AffiliateCustomerEnabledPaymentPlanTypeormEntity } from '@infra/databas
 import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-
 @Entity({ name: 'affiliate_customer' })
 export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
