@@ -10,6 +10,7 @@ export class OrganizationCreditUsageEntity extends BaseAuditableEntity<CustomerE
   public readonly creditAmount: number;
   public readonly organization: RelationModel<OrganizationEntity>;
   public readonly applicationPaidResource: RelationModel<ApplicationPaidResourceEntity>;
+  public readonly customer: RelationModel<CustomerEntity>;
 
   protected readonly _type = OrganizationCreditUsageEntity.name;
 
@@ -19,5 +20,6 @@ export class OrganizationCreditUsageEntity extends BaseAuditableEntity<CustomerE
     this.organization = props.organization;
     this.applicationPaidResource = props.applicationPaidResource;
     this.creditAmount = props.creditAmount;
+    this.customer = props.customer;
   }
 }
