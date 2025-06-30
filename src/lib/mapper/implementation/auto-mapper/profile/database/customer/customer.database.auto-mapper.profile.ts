@@ -74,6 +74,7 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
         password,
         customerAddress: undefined,
         organizationMember: undefined,
+        affiliateCustomer: undefined,
       });
     };
 
