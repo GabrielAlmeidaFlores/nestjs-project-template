@@ -30,7 +30,7 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
       return new OrganizationEntity({
         ...source,
         id,
-        organizationLogo: source.organizationLogo ?? null,
+        organizationLogo: source.organizationLogo,
       });
     };
 
