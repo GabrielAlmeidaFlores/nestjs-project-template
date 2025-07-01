@@ -53,7 +53,7 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
       return OrganizationTypeormEntity.build({
         ...source,
         id,
-        organizationLogo: source.organizationLogo ?? '',
+        organizationLogo: source.organizationLogo ?? null,
         organizationMember: undefined,
         organizationCreditPlanPurchase: undefined,
         organizationCreditPurchase: undefined,
