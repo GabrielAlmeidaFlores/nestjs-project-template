@@ -43,7 +43,7 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   public pixQrCode: string | null;
 
   @OneToMany(() => BankTransferTypeormEntity, (entity) => entity.bankPayment)
-  public bankTransfer: BankTransferTypeormEntity[] | undefined;
+  public bankTransfer: BankTransferTypeormEntity | undefined;
 
   @OneToMany(
     () => OrganizationCreditPurchaseTypeormEntity,

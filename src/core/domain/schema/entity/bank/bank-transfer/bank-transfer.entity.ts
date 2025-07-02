@@ -1,22 +1,22 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
+import type { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import type { BankTransferEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity.props.interface';
-import type { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
-import type { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { Status } from '@core/domain/schema/value-object/status/status.value-object';
+import type { TransferMethod } from '@core/domain/schema/value-object/transfer-method/transfer-method.value-object';
 
 export class BankTransferEntity extends BaseEntity {
   public readonly bankExternalId: string;
   public readonly description: string;
-  public readonly transferMethod: TransferMethodEnum;
+  public readonly transferMethod: TransferMethod;
   public readonly value: DecimalValue;
   public readonly netValue: DecimalValue;
-  public readonly status: TransferStatusEnum;
+  public readonly status: Status;
   public readonly effectiveDate: Date | null;
   public readonly scheduleDate: Date | null;
   public readonly failReason: string | null;
-  public readonly bankPayment: Guid;
+  public readonly bankPayment: BankPaymentEntity;
 
   protected readonly _type = BankTransferEntity.name;
 
