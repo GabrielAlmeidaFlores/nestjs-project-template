@@ -57,6 +57,7 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
         organizationMember: undefined,
         organizationCreditPlanPurchase: undefined,
         organizationCreditPurchase: undefined,
+        availablePaymentPlan: undefined,
       });
     };
 
