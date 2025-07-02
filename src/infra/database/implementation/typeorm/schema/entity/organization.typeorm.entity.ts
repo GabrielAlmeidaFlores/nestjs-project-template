@@ -1,6 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
-import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-plan-purchase.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
@@ -35,12 +34,6 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
   public organizationCreditPurchase:
     | OrganizationCreditPurchaseTypeormEntity[]
     | undefined;
-
-  @OneToMany(
-    () => AvailablePaymentPlanTypeormEntity,
-    (entity) => entity.organization,
-  )
-  public availablePaymentPlan: AvailablePaymentPlanTypeormEntity[] | undefined;
 
   protected override readonly _type = OrganizationTypeormEntity.name;
 }
