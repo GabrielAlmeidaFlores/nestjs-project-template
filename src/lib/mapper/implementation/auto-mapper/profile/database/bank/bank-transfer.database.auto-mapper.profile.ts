@@ -85,6 +85,7 @@ export class BankTransferDatabaseAutoMapperProfile extends BaseAutoMapperProfile
         value,
         netValue,
         bankPayment,
+        bankTransfer: undefined,
       });
     };
 
