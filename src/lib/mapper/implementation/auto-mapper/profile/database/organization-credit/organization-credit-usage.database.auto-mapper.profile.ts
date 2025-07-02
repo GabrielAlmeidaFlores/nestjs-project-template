@@ -34,16 +34,13 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
       source: OrganizationCreditUsageTypeormEntity,
     ): OrganizationCreditUsageEntity => {
       const id = new Guid(source.id);
-      const organization = this.mapper.map(
-        source.organization,
-        OrganizationTypeormEntity,
-        RelationModel<OrganizationEntity>,
-      );
-      const applicationPaidResource = this.mapper.map(
-        source.applicationPaidResource,
-        ApplicationPaidResourceTypeormEntity,
-        RelationModel<ApplicationPaidResourceEntity>,
-      );
+      const organization = new RelationModel<OrganizationEntity>({
+        id: new Guid(source.id),
+      });
+      const applicationPaidResource =
+        new RelationModel<ApplicationPaidResourceEntity>({
+          id: new Guid(source.id),
+        });
       return new OrganizationCreditUsageEntity({
         ...source,
         id,
@@ -73,22 +70,12 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
       source: OrganizationCreditUsageEntity,
     ): OrganizationCreditUsageTypeormEntity => {
       const id = source.id.toString();
-      const organization = this.mapper.map(
-        source.organization,
-        RelationModel<OrganizationEntity>,
-        OrganizationTypeormEntity,
-      );
-      const applicationPaidResource = this.mapper.map(
-        source.applicationPaidResource,
-        RelationModel<ApplicationPaidResourceEntity>,
-        ApplicationPaidResourceTypeormEntity,
-      );
 
       return OrganizationCreditUsageTypeormEntity.build({
         ...source,
         id,
-        organization,
-        applicationPaidResource,
+        organization: { id } as OrganizationTypeormEntity,
+        applicationPaidResource: { id } as ApplicationPaidResourceTypeormEntity,
         createdBy: new CustomerTypeormEntity(),
         updatedBy: new CustomerTypeormEntity(),
       });
