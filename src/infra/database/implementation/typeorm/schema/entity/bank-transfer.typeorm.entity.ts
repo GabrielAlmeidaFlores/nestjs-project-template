@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
+import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
@@ -38,6 +39,12 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => BankPaymentTypeormEntity, (entity) => entity.bankTransfer)
   @JoinColumn({ name: 'bank_payment_id' })
   public bankPayment: BankPaymentTypeormEntity;
+
+  @OneToMany(
+    () => AffiliateCustomerPaymentTypeormEntity,
+    (entity) => entity.bankTransfer,
+  )
+  public bankTransfer: AffiliateCustomerPaymentTypeormEntity[] | undefined;
 
   protected override readonly _type = BankTransferTypeormEntity.name;
 }
