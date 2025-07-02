@@ -44,17 +44,11 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
         ApplicationPaidResourceTypeormEntity,
         RelationModel<ApplicationPaidResourceEntity>,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        CustomerTypeormEntity,
-        RelationModel<CustomerEntity>,
-      );
       return new OrganizationCreditUsageEntity({
         ...source,
         id,
         organization,
         applicationPaidResource,
-        customer,
         createdBy: new RelationModel<CustomerEntity>({
           id: new Guid(source.createdBy.id),
         }),
@@ -89,18 +83,12 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
         RelationModel<ApplicationPaidResourceEntity>,
         ApplicationPaidResourceTypeormEntity,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        RelationModel<CustomerEntity>,
-        CustomerTypeormEntity,
-      );
 
       return OrganizationCreditUsageTypeormEntity.build({
         ...source,
         id,
         organization,
         applicationPaidResource,
-        customer,
         createdBy: new CustomerTypeormEntity(),
         updatedBy: new CustomerTypeormEntity(),
       });
