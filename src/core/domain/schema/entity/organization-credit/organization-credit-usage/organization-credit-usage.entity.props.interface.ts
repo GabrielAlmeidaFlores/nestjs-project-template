@@ -9,5 +9,4 @@ export interface OrganizationCreditUsageEntityPropsInterface
   creditAmount: number;
   organization: RelationModel<OrganizationEntity>;
   applicationPaidResource: RelationModel<ApplicationPaidResourceEntity>;
-  customer: RelationModel<CustomerEntity>;
 }

@@ -3,7 +3,6 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
-import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { HashTransformer } from '@infra/database/implementation/typeorm/schema/transformer/hash.transformer';
@@ -67,14 +66,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
 
   @OneToMany(() => AffiliateCustomerTypeormEntity, (entity) => entity.customer)
   public affiliateCustomer: AffiliateCustomerTypeormEntity[] | undefined;
-
-  @OneToMany(
-    () => OrganizationCreditUsageTypeormEntity,
-    (entity) => entity.customer,
-  )
-  public organizationCreditUsage:
-    | OrganizationCreditUsageTypeormEntity[]
-    | undefined;
 
   protected override readonly _type = CustomerTypeormEntity.name;
 }
