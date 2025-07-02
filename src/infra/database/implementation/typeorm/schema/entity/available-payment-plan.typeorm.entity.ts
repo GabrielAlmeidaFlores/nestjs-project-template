@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan/payment-plan-cycle.enum';
+import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
 import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
@@ -34,6 +35,13 @@ export class AvailablePaymentPlanTypeormEntity extends BaseTypeormEntity {
   public availablePaymentPlanEnabledPaidResource:
     | AvailablePaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
+
+  @ManyToOne(
+    () => AffiliateCustomerTypeormEntity,
+    (entity) => entity.availablePaymentPlan,
+  )
+  @JoinColumn({ name: 'customer_id' })
+  public affiliateCustomer: AffiliateCustomerTypeormEntity[] | undefined;
 
   protected override readonly _type = AvailablePaymentPlanTypeormEntity.name;
 }
