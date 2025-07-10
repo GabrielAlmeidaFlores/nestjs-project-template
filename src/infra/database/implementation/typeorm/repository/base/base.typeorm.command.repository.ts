@@ -1,5 +1,6 @@
+import type { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
 import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import type { DeepPartial, Repository } from 'typeorm';
+import type { DeepPartial, EntityManager, Repository } from 'typeorm';
 import type { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class BaseTypeormCommandRepository<
@@ -7,19 +8,31 @@ export abstract class BaseTypeormCommandRepository<
 > {
   protected constructor(private readonly repository: Repository<T>) {}
 
-  protected async create(data: DeepPartial<T>): Promise<void> {
-    const newData = this.repository.create(data);
-    await this.repository.save(newData);
+  protected create(data: DeepPartial<T>): TransactionEventType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+      const newData = repo.create(data);
+      await repo.save(newData);
+    };
   }
 
-  protected async update(
+  protected update(
     id: string,
     data: QueryDeepPartialEntity<T>,
-  ): Promise<void> {
-    await this.repository.update(id, data);
+  ): TransactionEventType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+      await repo.update(id, data);
+    };
   }
 
-  protected async delete(id: string): Promise<void> {
-    await this.repository.softDelete(id);
+  protected delete(id: string): TransactionEventType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+      await repo.softDelete(id);
+    };
   }
 }

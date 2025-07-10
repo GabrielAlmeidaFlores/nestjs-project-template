@@ -6,7 +6,7 @@ import { OrganizationTypeormEntity } from '@infra/database/implementation/typeor
 
 @Entity({ name: 'organization_credit_purchase' })
 export class OrganizationCreditPurchaseTypeormEntity extends BaseAuditableTypeormEntity {
-  @Column({ name: 'credit_amount', type: 'number' })
+  @Column({ name: 'credit_amount', type: 'int' })
   public creditAmount: number;
 
   @ManyToOne(
