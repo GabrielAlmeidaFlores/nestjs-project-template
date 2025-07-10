@@ -30,7 +30,10 @@ export class OrganizationCreditPlanPurchaseTypeormEntity extends BaseTypeormEnti
   @JoinColumn({ name: 'available_credit_plan_id' })
   public availableCreditPlan: AvailableCreditPlanTypeormEntity;
 
-  @ManyToOne(() => BankPaymentTypeormEntity, (entity) => entity.bankPayment)
+  @ManyToOne(
+    () => BankPaymentTypeormEntity,
+    (entity) => entity.organizationCreditPlanPurchase,
+  )
   @JoinColumn({ name: 'bank_payment_id' })
   public bankPayment: BankPaymentTypeormEntity;
 

@@ -35,11 +35,11 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
     ): OrganizationCreditUsageEntity => {
       const id = new Guid(source.id);
       const organization = new RelationModel<OrganizationEntity>({
-        id: new Guid(source.id),
+        id: new Guid(source.organization.id),
       });
       const applicationPaidResource =
         new RelationModel<ApplicationPaidResourceEntity>({
-          id: new Guid(source.id),
+          id: new Guid(source.applicationPaidResource.id),
         });
       return new OrganizationCreditUsageEntity({
         ...source,
