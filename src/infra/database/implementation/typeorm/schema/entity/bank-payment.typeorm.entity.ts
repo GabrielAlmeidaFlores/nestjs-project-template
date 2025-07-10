@@ -60,7 +60,9 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
     () => OrganizationCreditPlanPurchaseTypeormEntity,
     (entity) => entity.bankPayment,
   )
-  public bankPayment: OrganizationCreditPlanPurchaseTypeormEntity[] | undefined;
+  public organizationCreditPlanPurchase:
+    | OrganizationCreditPlanPurchaseTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = BankPaymentTypeormEntity.name;
 }
