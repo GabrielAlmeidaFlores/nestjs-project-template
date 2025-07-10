@@ -4,6 +4,8 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/r
 import { CustomerCommandRepositoryGateway } from '@core/domain/repository/customer/customer/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@core/domain/repository/customer/customer-address/customer-address.command.repository.gateway';
+import { OrganizationCommandRepositoryGateway } from '@core/domain/repository/organization/organization/organization.command.repository.gateway';
+import { OrganizationMemberCommandRepositoryGateway } from '@core/domain/repository/organization/organization-member/organization-member.command.repository.gateway';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { StateCodeEnum } from '@core/domain/schema/entity/customer/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -27,14 +29,11 @@ describe('SignUpUseCase', () => {
   let customerQueryRepository: jest.Mocked<CustomerQueryRepositoryGateway>;
   let customerCommandRepository: jest.Mocked<CustomerCommandRepositoryGateway>;
   let addressCommandRepository: jest.Mocked<CustomerAddressCommandRepositoryGateway>;
+  let organizationCommandRepository: jest.Mocked<OrganizationCommandRepositoryGateway>;
+  let organizationMemberCommandRepository: jest.Mocked<OrganizationMemberCommandRepositoryGateway>;
   let baseTransactionRepository: jest.Mocked<BaseTransactionRepositoryGateway>;
   let bankGateway: {
     createCustomer: jest.MockedFunction<BankGateway['createCustomer']>;
-    createBankPaymentPlan: jest.MockedFunction<
-      BankGateway['createBankPaymentPlan']
-    >;
-    createCharge: jest.MockedFunction<BankGateway['createCharge']>;
-    payCharge: jest.MockedFunction<BankGateway['payCharge']>;
   };
 
   const makeDto = (): SignUpRequestDto => {
@@ -72,15 +71,22 @@ describe('SignUpUseCase', () => {
       createCustomerAddress: jest.fn().mockReturnValue(dummyTransactionEvent),
     };
 
+    organizationCommandRepository = {
+      createOrganization: jest.fn().mockReturnValue(dummyTransactionEvent),
+    };
+
+    organizationMemberCommandRepository = {
+      createOrganizationMember: jest
+        .fn()
+        .mockReturnValue(dummyTransactionEvent),
+    };
+
     baseTransactionRepository = {
       commit: jest.fn().mockResolvedValue(undefined),
     };
 
     bankGateway = {
       createCustomer: jest.fn(),
-      createBankPaymentPlan: jest.fn(),
-      createCharge: jest.fn(),
-      payCharge: jest.fn(),
     };
 
     const module = await Test.createTestingModule({
@@ -97,6 +103,14 @@ describe('SignUpUseCase', () => {
         {
           provide: CustomerAddressCommandRepositoryGateway,
           useValue: addressCommandRepository,
+        },
+        {
+          provide: OrganizationCommandRepositoryGateway,
+          useValue: organizationCommandRepository,
+        },
+        {
+          provide: OrganizationMemberCommandRepositoryGateway,
+          useValue: organizationMemberCommandRepository,
         },
         {
           provide: BaseTransactionRepositoryGateway,
@@ -138,6 +152,11 @@ describe('SignUpUseCase', () => {
     expect(bankGateway.createCustomer).toHaveBeenCalled();
     expect(customerCommandRepository.createCustomer).toHaveBeenCalled();
     expect(addressCommandRepository.createCustomerAddress).toHaveBeenCalled();
+    expect(organizationCommandRepository.createOrganization).toHaveBeenCalled();
+    expect(
+      organizationMemberCommandRepository.createOrganizationMember,
+    ).toHaveBeenCalled();
+
     expect(baseTransactionRepository.commit).toHaveBeenCalledWith(
       expect.arrayContaining([
         expect.any(Function),
@@ -175,6 +194,12 @@ describe('SignUpUseCase', () => {
     expect(customerCommandRepository.createCustomer).not.toHaveBeenCalled();
     expect(
       addressCommandRepository.createCustomerAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      organizationCommandRepository.createOrganization,
+    ).not.toHaveBeenCalled();
+    expect(
+      organizationMemberCommandRepository.createOrganizationMember,
     ).not.toHaveBeenCalled();
     expect(baseTransactionRepository.commit).not.toHaveBeenCalled();
   });
