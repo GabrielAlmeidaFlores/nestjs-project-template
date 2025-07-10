@@ -1,6 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
 import { CustomerAddressCommandRepositoryGateway } from '@core/domain/repository/customer/customer-address/customer-address.command.repository.gateway';
 import { CustomerAddressEntity } from '@core/domain/schema/entity/customer/customer-address/customer-address.entity';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
@@ -21,15 +22,15 @@ export class CustomerAddressTypeormCommandRepository
     super(repository);
   }
 
-  public async createCustomerAddress(
+  public createCustomerAddress(
     props: CustomerAddressEntity,
-  ): Promise<void> {
+  ): TransactionEventType {
     const mappedData = this.mapperGateway.map(
       props,
       CustomerAddressEntity,
       CustomerAddressTypeormEntity,
     );
 
-    await this.create(mappedData);
+    return this.create(mappedData);
   }
 }

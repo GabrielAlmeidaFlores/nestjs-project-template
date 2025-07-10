@@ -1,1 +1,7 @@
-export enum TransferStatusEnum {}
+export enum TransferStatusEnum {
+  PENDING = 'PENDING',
+  BANK_PROCESSING = 'BANK_PROCESSING',
+  DONE = 'DONE',
+  CANCELLED = 'CANCELLED',
+  FAILED = 'FAILED',
+}
