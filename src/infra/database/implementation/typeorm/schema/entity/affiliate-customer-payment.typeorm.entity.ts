@@ -14,13 +14,16 @@ export class AffiliateCustomerPaymentTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'affiliate_customer_id' })
   public affiliateCustomer: AffiliateCustomerTypeormEntity;
 
-  @ManyToOne(() => BankTransferTypeormEntity, (entity) => entity.bankTransfer)
+  @ManyToOne(
+    () => BankTransferTypeormEntity,
+    (entity) => entity.affiliateCustomerPayment,
+  )
   @JoinColumn({ name: 'bank_transfer_id' })
   public bankTransfer: BankTransferTypeormEntity;
 
   @OneToMany(
     () => AffiliateCustomerEnabledPaymentPlanTypeormEntity,
-    (entity) => entity.affiliateCustomerEnabledPaymentPlan,
+    (entity) => entity.affiliateCustomerPayment,
   )
   public affiliateCustomerEnabledPaymentPlan:
     | AffiliateCustomerEnabledPaymentPlanTypeormEntity[]

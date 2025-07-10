@@ -44,7 +44,9 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
     () => AffiliateCustomerPaymentTypeormEntity,
     (entity) => entity.bankTransfer,
   )
-  public bankTransfer: AffiliateCustomerPaymentTypeormEntity[] | undefined;
+  public affiliateCustomerPayment:
+    | AffiliateCustomerPaymentTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = BankTransferTypeormEntity.name;
 }
