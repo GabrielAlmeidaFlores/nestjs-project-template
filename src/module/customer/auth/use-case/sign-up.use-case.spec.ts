@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/repository/base.transaction.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@core/domain/repository/customer/customer/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@core/domain/repository/customer/customer-address/customer-address.command.repository.gateway';
@@ -26,6 +27,7 @@ describe('SignUpUseCase', () => {
   let customerQueryRepository: jest.Mocked<CustomerQueryRepositoryGateway>;
   let customerCommandRepository: jest.Mocked<CustomerCommandRepositoryGateway>;
   let addressCommandRepository: jest.Mocked<CustomerAddressCommandRepositoryGateway>;
+  let baseTransactionRepository: jest.Mocked<BaseTransactionRepositoryGateway>;
   let bankGateway: {
     createCustomer: jest.MockedFunction<BankGateway['createCustomer']>;
     createBankPaymentPlan: jest.MockedFunction<
@@ -56,16 +58,22 @@ describe('SignUpUseCase', () => {
   };
 
   beforeEach(async () => {
+    const dummyTransactionEvent = jest.fn().mockResolvedValue(undefined);
+
     customerQueryRepository = {
       findCustomerByEmail: jest.fn(),
     };
 
     customerCommandRepository = {
-      createCustomer: jest.fn(),
+      createCustomer: jest.fn().mockReturnValue(dummyTransactionEvent),
     };
 
     addressCommandRepository = {
-      createCustomerAddress: jest.fn(),
+      createCustomerAddress: jest.fn().mockReturnValue(dummyTransactionEvent),
+    };
+
+    baseTransactionRepository = {
+      commit: jest.fn().mockResolvedValue(undefined),
     };
 
     bankGateway = {
@@ -90,7 +98,14 @@ describe('SignUpUseCase', () => {
           provide: CustomerAddressCommandRepositoryGateway,
           useValue: addressCommandRepository,
         },
-        { provide: BankGateway, useValue: bankGateway },
+        {
+          provide: BaseTransactionRepositoryGateway,
+          useValue: baseTransactionRepository,
+        },
+        {
+          provide: BankGateway,
+          useValue: bankGateway,
+        },
       ],
     }).compile();
 
@@ -111,8 +126,6 @@ describe('SignUpUseCase', () => {
     });
 
     bankGateway.createCustomer.mockResolvedValue(bankCustomer);
-    customerCommandRepository.createCustomer.mockResolvedValue(undefined);
-    addressCommandRepository.createCustomerAddress.mockResolvedValue(undefined);
 
     const response = await useCase.execute(dto);
 
@@ -125,6 +138,14 @@ describe('SignUpUseCase', () => {
     expect(bankGateway.createCustomer).toHaveBeenCalled();
     expect(customerCommandRepository.createCustomer).toHaveBeenCalled();
     expect(addressCommandRepository.createCustomerAddress).toHaveBeenCalled();
+    expect(baseTransactionRepository.commit).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+      ]),
+    );
   });
 
   it('should throw CustomerEmailAlreadyInUseError if email is taken', async () => {
@@ -155,6 +176,7 @@ describe('SignUpUseCase', () => {
     expect(
       addressCommandRepository.createCustomerAddress,
     ).not.toHaveBeenCalled();
+    expect(baseTransactionRepository.commit).not.toHaveBeenCalled();
   });
 
   it('should call BankGateway with correct input values', async () => {
@@ -170,8 +192,6 @@ describe('SignUpUseCase', () => {
     });
 
     bankGateway.createCustomer.mockResolvedValue(bankCustomer);
-    customerCommandRepository.createCustomer.mockResolvedValue(undefined);
-    addressCommandRepository.createCustomerAddress.mockResolvedValue(undefined);
 
     await useCase.execute(dto);
 

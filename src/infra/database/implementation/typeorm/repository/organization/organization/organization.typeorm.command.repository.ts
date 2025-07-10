@@ -1,6 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
 import { OrganizationCommandRepositoryGateway } from '@core/domain/repository/organization/organization/organization.command.repository.gateway';
 import { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
@@ -21,13 +22,13 @@ export class OrganizationTypeormCommandRepository
     super(repository);
   }
 
-  public async createOrganization(props: OrganizationEntity): Promise<void> {
+  public createOrganization(props: OrganizationEntity): TransactionEventType {
     const mappedData = this.mapperGateway.map(
       props,
       OrganizationEntity,
       OrganizationTypeormEntity,
     );
 
-    await this.create(mappedData);
+    return this.create(mappedData);
   }
 }

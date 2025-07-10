@@ -11,7 +11,11 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
-  @Column({ name: 'payment_method', type: 'simple-enum' })
+  @Column({
+    name: 'payment_method',
+    type: 'simple-enum',
+    enum: PaymentMethodEnum,
+  })
   public paymentMethod: PaymentMethodEnum;
 
   @Column({
@@ -26,7 +30,7 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'discount_percentage', type: 'int' })
   public discountPercentage: number;
 
-  @Column({ name: 'status', type: 'simple-enum' })
+  @Column({ name: 'status', type: 'simple-enum', enum: PaymentStatusEnum })
   public status: PaymentStatusEnum;
 
   @Column({ name: 'due_date', type: 'date' })

@@ -1,12 +1,26 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.query.repository';
+import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization/organization.typeorm.command.repository';
+import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization/organization.typeorm.query.repository';
+import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization-member/organization-member.typeorm.command.repository';
+import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization-member/organization-member.typeorm.query.repository';
+import { AffiliateCustomerEnabledPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-enabled-payment-plan.typeorm.entity';
+import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment.typeorm.entity';
+import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
 import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-paid-resource.typeorm.entity';
+import { AvailableCreditPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-credit-plan.typeorm.entity';
 import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
 import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan.typeorm.entity';
+import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
+import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-plan-purchase.typeorm.entity';
+import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
+import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
@@ -17,20 +31,34 @@ import type { DataSourceOptions } from 'typeorm';
 
 export class TypeormIndex {
   public static readonly entities: EntityClassOrSchema[] = [
+    AffiliateCustomerEnabledPaymentPlanTypeormEntity,
+    AffiliateCustomerPaymentTypeormEntity,
+    AffiliateCustomerTypeormEntity,
     ApplicationPaidResourceTypeormEntity,
-    CustomerTypeormEntity,
-    CustomerAddressTypeormEntity,
+    AvailableCreditPlanTypeormEntity,
     AvailablePaymentPlanTypeormEntity,
-    AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
-    OrganizationTypeormEntity,
+    BankPaymentTypeormEntity,
+    BankTransferTypeormEntity,
+    CustomerAddressTypeormEntity,
+    CustomerTypeormEntity,
+    OrganizationCreditPlanPurchaseTypeormEntity,
+    OrganizationCreditPurchaseTypeormEntity,
+    OrganizationCreditUsageTypeormEntity,
     OrganizationMemberTypeormEntity,
+    OrganizationTypeormEntity,
+    OrganizationCreditPlanPurchaseTypeormEntity,
+    OrganizationTypeormEntity,
+    AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
+    BaseTypeormTransactionRepository,
     CustomerTypeormQueryRepository,
     CustomerTypeormCommandRepository,
-    OrganizationTypeormEntity,
-    OrganizationMemberTypeormEntity,
+    OrganizationTypeormQueryRepository,
+    OrganizationTypeormCommandRepository,
+    OrganizationMemberTypeormQueryRepository,
+    OrganizationMemberTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

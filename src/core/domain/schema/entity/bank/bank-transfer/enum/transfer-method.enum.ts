@@ -1,1 +1,3 @@
-export enum TransferMethodEnum {}
+export enum TransferMethodEnum {
+  PIX = 'PIX',
+}

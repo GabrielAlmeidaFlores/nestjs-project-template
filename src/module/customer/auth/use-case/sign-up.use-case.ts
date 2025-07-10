@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/repository/base.transaction.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@core/domain/repository/customer/customer/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@core/domain/repository/customer/customer-address/customer-address.command.repository.gateway';
@@ -25,6 +26,7 @@ export class SignUpUseCase {
   protected readonly _type = SignUpUseCase.name;
 
   public constructor(
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
     private readonly customerCommandRepositoryGateway: CustomerCommandRepositoryGateway,
     private readonly customerAddressCommandRepositoryGateway: CustomerAddressCommandRepositoryGateway,
@@ -52,24 +54,14 @@ export class SignUpUseCase {
       bankExternalId: bankCustomer.id,
     });
 
-    await this.customerCommandRepositoryGateway.createCustomer(customer);
-
     const customerAddress = new CustomerAddressEntity({
       ...dto.customerAddress,
       customer,
     });
 
-    await this.customerAddressCommandRepositoryGateway.createCustomerAddress(
-      customerAddress,
-    );
-
     const organization = new OrganizationEntity({
       name: dto.customer.name,
     });
-
-    await this.organizationCommandRepositoryGateway.createOrganization(
-      organization,
-    );
 
     const organizationMember = new OrganizationMemberEntity({
       customer: new RelationModel(customer),
@@ -77,13 +69,45 @@ export class SignUpUseCase {
       owner: true,
     });
 
-    await this.organizationMemberCommandRepositoryGateway.createOrganizationMember(
+    await this.createCustomerOnDatabase(
+      customer,
+      customerAddress,
+      organization,
       organizationMember,
     );
 
     return SignUpResponseDto.build({
       id: customer.id,
     });
+  }
+
+  private async createCustomerOnDatabase(
+    customer: CustomerEntity,
+    customerAddress: CustomerAddressEntity,
+    organization: OrganizationEntity,
+    organizationMember: OrganizationMemberEntity,
+  ): Promise<void> {
+    const createCustomer =
+      this.customerCommandRepositoryGateway.createCustomer(customer);
+    const createCustomerAddress =
+      this.customerAddressCommandRepositoryGateway.createCustomerAddress(
+        customerAddress,
+      );
+    const createOrganization =
+      this.organizationCommandRepositoryGateway.createOrganization(
+        organization,
+      );
+    const createOrganizationMember =
+      this.organizationMemberCommandRepositoryGateway.createOrganizationMember(
+        organizationMember,
+      );
+
+    await this.baseTransactionRepositoryGateway.commit([
+      createCustomer,
+      createCustomerAddress,
+      createOrganization,
+      createOrganizationMember,
+    ]);
   }
 
   private async createCustomerOnBank(
