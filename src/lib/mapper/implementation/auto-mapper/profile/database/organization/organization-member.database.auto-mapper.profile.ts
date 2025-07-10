@@ -36,11 +36,9 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
         OrganizationTypeormEntity,
         OrganizationEntity,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        CustomerTypeormEntity,
-        RelationModel<CustomerEntity>,
-      );
+      const customer = new RelationModel<CustomerEntity>({
+        id: new Guid(source.customer.id),
+      });
 
       return new OrganizationMemberEntity({
         ...source,
@@ -70,11 +68,9 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
         OrganizationEntity,
         OrganizationTypeormEntity,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        RelationModel<CustomerEntity>,
-        CustomerTypeormEntity,
-      );
+      const customer = {
+        id: source.customer.id.toString(),
+      } as CustomerTypeormEntity;
 
       return OrganizationMemberTypeormEntity.build({
         ...source,

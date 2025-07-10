@@ -13,7 +13,11 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'description', type: 'varchar', length: 150 })
   public description: string;
 
-  @Column({ name: 'transfer_method', type: 'simple-enum' })
+  @Column({
+    name: 'transfer_method',
+    type: 'simple-enum',
+    enum: TransferMethodEnum,
+  })
   public transferMethod: TransferMethodEnum;
 
   @Column({
@@ -25,7 +29,7 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'net_value', type: 'decimal' })
   public netValue: string;
 
-  @Column({ name: 'status', type: 'simple-enum' })
+  @Column({ name: 'status', type: 'simple-enum', enum: TransferStatusEnum })
   public status: TransferStatusEnum;
 
   @Column({ name: 'effective_date', type: 'date', nullable: true })

@@ -8,7 +8,7 @@ export class AvailableCreditPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'price', type: 'decimal' })
   public price: string;
 
-  @Column({ name: 'credit_amount', type: 'number' })
+  @Column({ name: 'credit_amount', type: 'int' })
   public creditAmount: number;
 
   @Column({ name: 'active', type: 'boolean' })
