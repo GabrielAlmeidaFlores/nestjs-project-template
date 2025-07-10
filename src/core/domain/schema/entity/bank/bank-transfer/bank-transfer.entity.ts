@@ -3,8 +3,8 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 import type { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import type { BankTransferEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity.props.interface';
 import type { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
+import type { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import type { Status } from '@core/domain/schema/value-object/status/status.value-object';
 
 export class BankTransferEntity extends BaseEntity {
   public readonly bankExternalId: string;
@@ -12,7 +12,7 @@ export class BankTransferEntity extends BaseEntity {
   public readonly transferMethod: TransferMethodEnum;
   public readonly value: DecimalValue;
   public readonly netValue: DecimalValue;
-  public readonly status: Status;
+  public readonly status: TransferStatusEnum;
   public readonly effectiveDate: Date | null;
   public readonly scheduleDate: Date | null;
   public readonly failReason: string | null;

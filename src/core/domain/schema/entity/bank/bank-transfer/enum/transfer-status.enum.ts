@@ -1,1 +1,7 @@
-export enum TransferStatusEnum {}
+export enum TransferStatusEnum {
+  PENDING = 'PENDING',
+  RECEIVED = 'RECEIVED',
+  CONFIRMED = 'CONFIRMED',
+  OVERDUE = 'OVERDUE',
+  REFUNDED = 'REFUNDED',
+}
