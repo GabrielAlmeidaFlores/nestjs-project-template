@@ -102,12 +102,14 @@ export class SignUpUseCase {
         organizationMember,
       );
 
-    await this.baseTransactionRepositoryGateway.commit([
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
       createCustomer,
       createCustomerAddress,
       createOrganization,
       createOrganizationMember,
     ]);
+
+    await transaction.commit();
   }
 
   private async createCustomerOnBank(
