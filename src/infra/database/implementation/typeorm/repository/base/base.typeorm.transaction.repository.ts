@@ -22,20 +22,40 @@ export class BaseTypeormTransactionRepository
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-    const commit = async (): Promise<void> => {
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
+    let finalized = false;
+
+    const timeoutPromise = async (): Promise<void> => {
+      if (!finalized && queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+
+        await queryRunner.release();
+      }
     };
-    const rollback = async (): Promise<void> => {
-      if (queryRunner.isReleased) {
+    const timeoutInMilliseconds = 30_000;
+    const timeout = setTimeout(() => {
+      void timeoutPromise();
+    }, timeoutInMilliseconds);
+
+    const finalize = async (action: 'commit' | 'rollback'): Promise<void> => {
+      if (finalized) {
         return;
       }
+      finalized = true;
+      clearTimeout(timeout);
 
-      if (queryRunner.isTransactionActive) {
+      if (action === 'commit') {
+        await queryRunner.commitTransaction();
+      } else if (queryRunner.isTransactionActive) {
         await queryRunner.rollbackTransaction();
       }
-      await queryRunner.release();
+
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     };
+
+    const commit = async (): Promise<void> => finalize('commit');
+    const rollback = async (): Promise<void> => finalize('rollback');
 
     try {
       for (const event of events) {
