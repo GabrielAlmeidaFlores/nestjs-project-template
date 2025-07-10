@@ -4,10 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import { BankTransferEntity } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity';
+import { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Status } from '@core/domain/schema/value-object/status/status.value-object';
-import { TransferMethod } from '@core/domain/schema/value-object/transfer-method/transfer-method.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
@@ -31,7 +31,10 @@ export class BankTransferDatabaseAutoMapperProfile extends BaseAutoMapperProfile
       source: BankTransferTypeormEntity,
     ): BankTransferEntity => {
       const id = new Guid(source.id);
-      const transferMethod = new TransferMethod(source.transferMethod);
+      const transferMethod = this.convertStringToEnum(
+        TransferMethodEnum,
+        source.transferMethod,
+      );
       const status = new Status(source.status);
       const value = new DecimalValue(source.value);
       const netValue = new DecimalValue(source.netValue);
@@ -67,7 +70,7 @@ export class BankTransferDatabaseAutoMapperProfile extends BaseAutoMapperProfile
       source: BankTransferEntity,
     ): BankTransferTypeormEntity => {
       const id = source.id.toString();
-      const transferMethod = source.transferMethod.toString();
+      const transferMethod = source.transferMethod;
       const status = source.status.toString();
       const value = source.value.toString();
       const netValue = source.netValue.toString();
@@ -85,7 +88,7 @@ export class BankTransferDatabaseAutoMapperProfile extends BaseAutoMapperProfile
         value,
         netValue,
         bankPayment,
-        bankTransfer: undefined,
+        affiliateCustomerPayment: undefined,
       });
     };
 

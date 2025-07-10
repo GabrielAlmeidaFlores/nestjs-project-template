@@ -3,10 +3,10 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
+import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
+import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { PaymentMethod } from '@core/domain/schema/value-object/payment-method/payment-method.value-object';
-import { Status } from '@core/domain/schema/value-object/status/status.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
@@ -30,8 +30,11 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
       source: BankPaymentTypeormEntity,
     ): BankPaymentEntity => {
       const id = new Guid(source.id);
-      const paymentMethod = new PaymentMethod(source.paymentMethod);
-      const status = new Status(source.status);
+      const paymentMethod = this.convertStringToEnum(
+        PaymentMethodEnum,
+        source.paymentMethod,
+      );
+      const status = this.convertStringToEnum(PaymentStatusEnum, source.status);
       const value = new DecimalValue(source.value);
       const netValue = new DecimalValue(source.netValue);
 
@@ -60,8 +63,8 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
       source: BankPaymentEntity,
     ): BankPaymentTypeormEntity => {
       const id = source.id.toString();
-      const paymentMethod = source.paymentMethod.toString();
-      const status = source.status.toString();
+      const paymentMethod = source.paymentMethod;
+      const status = source.status;
       const value = source.value.toString();
       const netValue = source.netValue.toString();
 
