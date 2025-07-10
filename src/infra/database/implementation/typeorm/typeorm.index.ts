@@ -29,6 +29,8 @@ export class TypeormIndex {
   public static readonly repositories: Provider[] = [
     CustomerTypeormQueryRepository,
     CustomerTypeormCommandRepository,
+    OrganizationTypeormEntity,
+    OrganizationMemberTypeormEntity,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
