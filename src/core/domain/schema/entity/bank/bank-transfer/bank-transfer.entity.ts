@@ -2,14 +2,14 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
 import type { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import type { BankTransferEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity.props.interface';
+import type { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { Status } from '@core/domain/schema/value-object/status/status.value-object';
-import type { TransferMethod } from '@core/domain/schema/value-object/transfer-method/transfer-method.value-object';
 
 export class BankTransferEntity extends BaseEntity {
   public readonly bankExternalId: string;
   public readonly description: string;
-  public readonly transferMethod: TransferMethod;
+  public readonly transferMethod: TransferMethodEnum;
   public readonly value: DecimalValue;
   public readonly netValue: DecimalValue;
   public readonly status: Status;
