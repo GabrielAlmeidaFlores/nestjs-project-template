@@ -1,7 +1,11 @@
-import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, RequestMethod, Res } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 
+import { LoginRequestDto } from '@module/customer/auth/dto/request/login.request.dto';
 import { SignUpRequestDto } from '@module/customer/auth/dto/request/sign-up.request.dto';
+import { LoginResponseDto } from '@module/customer/auth/dto/response/login.response.dto';
 import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.response.dto';
+import { LoginUseCase } from '@module/customer/auth/use-case/login.use-case';
 import { SignUpUseCase } from '@module/customer/auth/use-case/sign-up.use-case';
 import { CustomerController } from '@shared/api/decorator/class/controller-routing/customer-controller.decorator';
 import { BuildEndpointSpecification } from '@shared/api/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -10,7 +14,10 @@ import { BuildEndpointSpecification } from '@shared/api/decorator/method/build-e
 export class AuthController {
   protected readonly _type = AuthController.name;
 
-  public constructor(private readonly signUpUseCase: SignUpUseCase) {}
+  public constructor(
+    private readonly signUpUseCase: SignUpUseCase,
+    private readonly loginUseCase: LoginUseCase,
+  ) {}
 
   @BuildEndpointSpecification({
     summary: 'Customer signup',
@@ -29,5 +36,25 @@ export class AuthController {
     @Body() dto: SignUpRequestDto,
   ): Promise<SignUpResponseDto> {
     return await this.signUpUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Customer login',
+    secure: false,
+    http: {
+      path: 'login',
+      method: RequestMethod.POST,
+    },
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Customer logged in successfully ',
+      type: LoginResponseDto,
+    },
+  })
+  public async login(
+    @Res({ passthrough: true }) reply: FastifyReply,
+    @Body() dto: LoginRequestDto,
+  ): Promise<void> {
+    return await this.loginUseCase.execute(reply, dto);
   }
 }

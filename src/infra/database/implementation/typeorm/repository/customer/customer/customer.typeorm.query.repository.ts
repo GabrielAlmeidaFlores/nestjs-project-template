@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CustomerQueryRepositoryGateway } from '@core/domain/repository/customer/customer/customer.query.repository.gateway';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -20,6 +21,37 @@ export class CustomerTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async findCustomerByEmailOrFederalDocument(
+    identifier: Email | FederalDocument,
+  ): Promise<CustomerEntity | null> {
+    const identifierAsString = identifier.toString();
+
+    const data = await this.findOne({
+      where: [
+        {
+          email: identifierAsString,
+        },
+        {
+          federalDocument: identifierAsString,
+        },
+      ],
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      CustomerEntity,
+    );
+
+    return mappedData;
   }
 
   public async findCustomerByEmail(
