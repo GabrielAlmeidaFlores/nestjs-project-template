@@ -74,8 +74,12 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
       return OrganizationCreditUsageTypeormEntity.build({
         ...source,
         id,
-        organization: { id } as OrganizationTypeormEntity,
-        applicationPaidResource: { id } as ApplicationPaidResourceTypeormEntity,
+        organization: {
+          id: source.organization.id.toString(),
+        } as OrganizationTypeormEntity,
+        applicationPaidResource: {
+          id: source.applicationPaidResource.id.toString(),
+        } as ApplicationPaidResourceTypeormEntity,
         createdBy: new CustomerTypeormEntity(),
         updatedBy: new CustomerTypeormEntity(),
       });
