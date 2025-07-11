@@ -14,7 +14,7 @@ import {
   Search,
   SetMetadata,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiSecurity } from '@nestjs/swagger';
 
 import { ErrorResponseDto } from '@shared/api/dto/response/error/error.response.dto';
 
@@ -43,7 +43,7 @@ function buildEndpointAuthSpecification(
   const decorators: (MethodDecorator & ClassDecorator)[] = [];
 
   if (secure) {
-    decorators.push(ApiBearerAuth());
+    decorators.push(ApiSecurity('cookieAuth'));
   }
 
   return decorators;

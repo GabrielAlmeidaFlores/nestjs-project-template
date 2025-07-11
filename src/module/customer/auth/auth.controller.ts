@@ -6,6 +6,7 @@ import { SignUpRequestDto } from '@module/customer/auth/dto/request/sign-up.requ
 import { LoginResponseDto } from '@module/customer/auth/dto/response/login.response.dto';
 import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.response.dto';
 import { LoginUseCase } from '@module/customer/auth/use-case/login.use-case';
+import { LogoutUseCase } from '@module/customer/auth/use-case/logout.use-case';
 import { SignUpUseCase } from '@module/customer/auth/use-case/sign-up.use-case';
 import { CustomerController } from '@shared/api/decorator/class/controller-routing/customer-controller.decorator';
 import { BuildEndpointSpecification } from '@shared/api/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -17,6 +18,7 @@ export class AuthController {
   public constructor(
     private readonly signUpUseCase: SignUpUseCase,
     private readonly loginUseCase: LoginUseCase,
+    private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -56,5 +58,21 @@ export class AuthController {
     @Body() dto: LoginRequestDto,
   ): Promise<LoginResponseDto> {
     return await this.loginUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Customer logout',
+    secure: true,
+    http: {
+      path: 'logout',
+      method: RequestMethod.POST,
+    },
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Customer logged out successfully ',
+    },
+  })
+  public logout(@Res({ passthrough: true }) reply: FastifyReply): void {
+    return this.logoutUseCase.execute(reply);
   }
 }
