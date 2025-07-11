@@ -12,7 +12,7 @@ import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/proper
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @RequestDto()
-export class SignUpCustomerDataRequestDto extends BaseBuildableObject {
+export class CustomerSignUpDataRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public name: string;
 
@@ -28,11 +28,11 @@ export class SignUpCustomerDataRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public password: string;
 
-  protected override readonly _type = SignUpCustomerDataRequestDto.name;
+  protected override readonly _type = CustomerSignUpDataRequestDto.name;
 }
 
 @RequestDto()
-export class SignUpCustomerDataAddressRequestDto extends BaseBuildableObject {
+export class CustomerSignUpDataAddressRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -48,16 +48,16 @@ export class SignUpCustomerDataAddressRequestDto extends BaseBuildableObject {
   @RequestDtoNumberProperty()
   public addressNumber: number;
 
-  protected override readonly _type = SignUpCustomerDataAddressRequestDto.name;
+  protected override readonly _type = CustomerSignUpDataAddressRequestDto.name;
 }
 
 @RequestDto()
-export class SignUpRequestDto extends BaseBuildableObject {
-  @RequestDtoObjectProperty(() => SignUpCustomerDataRequestDto)
-  public customer: SignUpCustomerDataRequestDto;
+export class CustomerSignUpRequestDto extends BaseBuildableObject {
+  @RequestDtoObjectProperty(() => CustomerSignUpDataRequestDto)
+  public customer: CustomerSignUpDataRequestDto;
 
-  @RequestDtoObjectProperty(() => SignUpCustomerDataAddressRequestDto)
-  public customerAddress: SignUpCustomerDataAddressRequestDto;
+  @RequestDtoObjectProperty(() => CustomerSignUpDataAddressRequestDto)
+  public customerAddress: CustomerSignUpDataAddressRequestDto;
 
-  protected override readonly _type = SignUpRequestDto.name;
+  protected override readonly _type = CustomerSignUpRequestDto.name;
 }

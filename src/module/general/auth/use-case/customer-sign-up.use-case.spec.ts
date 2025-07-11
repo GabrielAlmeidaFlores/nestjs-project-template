@@ -16,16 +16,16 @@ import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-
 import { BankGateway } from '@infra/bank/bank.gateway';
 import { CreateBankCustomerOutputModel } from '@infra/bank/model/output/create-bank-customer.output.model';
 import {
-  SignUpCustomerDataRequestDto,
-  SignUpCustomerDataAddressRequestDto,
-  SignUpRequestDto,
-} from '@module/customer/auth/dto/request/sign-up.request.dto';
-import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.response.dto';
-import { CustomerEmailAlreadyInUseError } from '@module/customer/auth/error/customer-email-already-in-use.error';
-import { SignUpUseCase } from '@module/customer/auth/use-case/sign-up.use-case';
+  CustomerSignUpDataRequestDto,
+  CustomerSignUpDataAddressRequestDto,
+  CustomerSignUpRequestDto,
+} from '@module/general/auth/dto/request/customer-sign-up.request.dto';
+import { CustomerSignUpResponseDto } from '@module/general/auth/dto/response/customer-sign-up.response.dto';
+import { CustomerEmailAlreadyInUseError } from '@module/general/auth/error/customer-email-already-in-use.error';
+import { CustomerSignUpUseCase } from '@module/general/auth/use-case/customer-sign-up.use-case';
 
-describe('SignUpUseCase', () => {
-  let useCase: SignUpUseCase;
+describe('CustomerSignUpUseCase', () => {
+  let useCase: CustomerSignUpUseCase;
 
   let customerQueryRepositoryGateway: {
     findCustomerByEmail: jest.MockedFunction<
@@ -73,8 +73,8 @@ describe('SignUpUseCase', () => {
     rollback: jest.fn(),
   };
 
-  const makeDto = (): SignUpRequestDto => {
-    const customer = SignUpCustomerDataRequestDto.build({
+  const makeDto = (): CustomerSignUpRequestDto => {
+    const customer = CustomerSignUpDataRequestDto.build({
       name: 'John Doe',
       email: new Email('john@example.com'),
       phoneNumber: new PhoneNumber('5511999999999'),
@@ -82,7 +82,7 @@ describe('SignUpUseCase', () => {
       password: 'strongPassword123',
     });
 
-    const customerAddress = SignUpCustomerDataAddressRequestDto.build({
+    const customerAddress = CustomerSignUpDataAddressRequestDto.build({
       city: 'São Paulo',
       neighborhood: 'Centro',
       stateCode: StateCodeEnum.SP,
@@ -90,7 +90,7 @@ describe('SignUpUseCase', () => {
       addressNumber: 123,
     });
 
-    return SignUpRequestDto.build({ customer, customerAddress });
+    return CustomerSignUpRequestDto.build({ customer, customerAddress });
   };
 
   beforeEach(async () => {
@@ -129,7 +129,7 @@ describe('SignUpUseCase', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SignUpUseCase,
+        CustomerSignUpUseCase,
         {
           provide: CustomerQueryRepositoryGateway,
           useValue: customerQueryRepositoryGateway,
@@ -161,7 +161,7 @@ describe('SignUpUseCase', () => {
       ],
     }).compile();
 
-    useCase = module.get(SignUpUseCase);
+    useCase = module.get(CustomerSignUpUseCase);
   });
 
   it('should create a new customer and return response DTO', async () => {
@@ -181,7 +181,7 @@ describe('SignUpUseCase', () => {
 
     const response = await useCase.execute(dto);
 
-    expect(response).toBeInstanceOf(SignUpResponseDto);
+    expect(response).toBeInstanceOf(CustomerSignUpResponseDto);
     expect(response.id).toBeInstanceOf(Guid);
 
     expect(

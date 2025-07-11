@@ -23,6 +23,28 @@ export class CustomerTypeormQueryRepository
     super(repository);
   }
 
+  public async findCustomerById(id: string): Promise<CustomerEntity | null> {
+    const data = await this.findOne({
+      where: {
+        id,
+      },
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      CustomerEntity,
+    );
+
+    return mappedData;
+  }
+
   public async findCustomerByEmailOrFederalDocument(
     identifier: Email | FederalDocument,
   ): Promise<CustomerEntity | null> {

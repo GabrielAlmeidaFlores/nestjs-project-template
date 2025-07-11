@@ -3,9 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
-import { CustomerSessionJwtInputModel } from '@lib/user-session/model/input/customer-session-jwt.input.model';
-import { CustomerSessionJwtOutputModel } from '@lib/user-session/model/output/customer-session-jwt.output.model';
+import { UserSessionJwtInputModel } from '@lib/user-session/model/input/user-session-jwt.input.model';
+import { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
 export class LocalCacheStorageService implements UserSessionGateway {
@@ -33,9 +34,10 @@ export class LocalCacheStorageService implements UserSessionGateway {
       sessionTtlInSeconds,
     );
 
-    const customerSessionJwt = CustomerSessionJwtInputModel.build({
+    const customerSessionJwt = UserSessionJwtInputModel.build({
       customerId: customerId.toString(),
       sessionId: sessionIdString,
+      userLevel: UserLevelEnum.CUSTOMER,
     });
 
     return this.jwtService.sign({ ...customerSessionJwt });
@@ -54,11 +56,9 @@ export class LocalCacheStorageService implements UserSessionGateway {
     return null;
   }
 
-  public verifyCustomerSession(
-    token: string,
-  ): CustomerSessionJwtOutputModel | null {
+  public verifySession(token: string): UserSessionJwtOutputModel | null {
     try {
-      return this.jwtService.verify<CustomerSessionJwtOutputModel>(token);
+      return this.jwtService.verify<UserSessionJwtOutputModel>(token);
     } catch {
       return null;
     }
