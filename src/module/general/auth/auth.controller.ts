@@ -44,7 +44,7 @@ export class AuthController {
       type: CustomerSignUpResponseDto,
     },
   })
-  public async signUp(
+  public async customerSignUp(
     @Body() dto: CustomerSignUpRequestDto,
   ): Promise<CustomerSignUpResponseDto> {
     return await this.customerSignUpUseCase.execute(dto);
