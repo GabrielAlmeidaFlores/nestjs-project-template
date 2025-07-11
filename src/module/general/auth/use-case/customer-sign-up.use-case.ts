@@ -15,15 +15,15 @@ import { BankGateway } from '@infra/bank/bank.gateway';
 import { CreateBankCustomerInputModel } from '@infra/bank/model/input/create-bank-customer.input.model';
 import { CreateBankCustomerOutputModel } from '@infra/bank/model/output/create-bank-customer.output.model';
 import {
-  SignUpCustomerDataRequestDto,
-  SignUpRequestDto,
-} from '@module/customer/auth/dto/request/sign-up.request.dto';
-import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.response.dto';
-import { CustomerEmailAlreadyInUseError } from '@module/customer/auth/error/customer-email-already-in-use.error';
+  CustomerSignUpDataRequestDto,
+  CustomerSignUpRequestDto,
+} from '@module/general/auth/dto/request/customer-sign-up.request.dto';
+import { CustomerSignUpResponseDto } from '@module/general/auth/dto/response/customer-sign-up.response.dto';
+import { CustomerEmailAlreadyInUseError } from '@module/general/auth/error/customer-email-already-in-use.error';
 
 @Injectable()
-export class SignUpUseCase {
-  protected readonly _type = SignUpUseCase.name;
+export class CustomerSignUpUseCase {
+  protected readonly _type = CustomerSignUpUseCase.name;
 
   public constructor(
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -35,7 +35,9 @@ export class SignUpUseCase {
     private readonly bankGateway: BankGateway,
   ) {}
 
-  public async execute(dto: SignUpRequestDto): Promise<SignUpResponseDto> {
+  public async execute(
+    dto: CustomerSignUpRequestDto,
+  ): Promise<CustomerSignUpResponseDto> {
     const findCustomerByEmail =
       await this.customerQueryRepositoryGateway.findCustomerByEmail(
         dto.customer.email,
@@ -76,7 +78,7 @@ export class SignUpUseCase {
       organizationMember,
     );
 
-    return SignUpResponseDto.build({
+    return CustomerSignUpResponseDto.build({
       id: customer.id,
     });
   }
@@ -113,7 +115,7 @@ export class SignUpUseCase {
   }
 
   private async createCustomerOnBank(
-    customerData: SignUpCustomerDataRequestDto,
+    customerData: CustomerSignUpDataRequestDto,
   ): Promise<CreateBankCustomerOutputModel> {
     const createCustomerInputModel = CreateBankCustomerInputModel.build({
       name: customerData.name,

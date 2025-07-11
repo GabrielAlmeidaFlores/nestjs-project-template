@@ -9,10 +9,10 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
-import { LoginRequestDto } from '@module/customer/auth/dto/request/login.request.dto';
-import { LoginResponseDto } from '@module/customer/auth/dto/response/login.response.dto';
-import { InvalidLoginCredentialsError } from '@module/customer/auth/error/invalid-login-credentials.error';
-import { LoginUseCase } from '@module/customer/auth/use-case/login.use-case';
+import { LoginRequestDto } from '@module/general/auth/dto/request/login.request.dto';
+import { LoginResponseDto } from '@module/general/auth/dto/response/login.response.dto';
+import { InvalidLoginCredentialsError } from '@module/general/auth/error/invalid-login-credentials.error';
+import { LoginUseCase } from '@module/general/auth/use-case/login.use-case';
 import { NodeApplicationVariable } from '@shared/system/constant/application-variable/node.application-variable';
 
 import type { FastifyReply } from 'fastify';

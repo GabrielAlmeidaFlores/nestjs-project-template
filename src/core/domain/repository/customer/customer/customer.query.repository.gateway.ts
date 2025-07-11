@@ -3,6 +3,8 @@ import type { Email } from '@core/domain/schema/value-object/email/email.value-o
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 
 export abstract class CustomerQueryRepositoryGateway {
+  public abstract findCustomerById(id: string): Promise<CustomerEntity | null>;
+
   public abstract findCustomerByEmail(
     email: Email,
   ): Promise<CustomerEntity | null>;
