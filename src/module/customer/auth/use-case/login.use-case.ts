@@ -63,13 +63,9 @@ export class LoginUseCase {
     const userSessionAsString = userSession.toString();
     const sevenDaysInSeconds = 604800;
 
-    const secure = NodeApplicationVariable.PRODUCTION_ENVIRONMENT
-      ? true
-      : false;
-
     reply.setCookie('auth_token', userSessionAsString, {
       httpOnly: true,
-      secure,
+      secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
       sameSite: 'lax',
       path: '/',
       maxAge: sevenDaysInSeconds,

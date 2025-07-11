@@ -130,7 +130,12 @@ export class AppConfig extends AppConfigUtils {
       .addBearerAuth()
       .setTitle(projectTitle)
       .setDescription(projectDescription)
-      .setVersion(projectVersion);
+      .setVersion(projectVersion)
+      .addSecurity('cookieAuth', {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'auth_token',
+      });
 
     const build = config.build();
 
