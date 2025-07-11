@@ -41,7 +41,7 @@ export class AppConfig extends AppConfigUtils {
   }
   public cors(): this {
     this.app.enableCors({
-      origin: FrameworkApplicationVariable.FRAMEWORK_CORS_ALLOWED_ORIGIN,
+      origin: FrameworkApplicationVariable.FRAMEWORK_ALLOWED_ORIGIN,
       credentials: true,
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
