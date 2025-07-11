@@ -66,6 +66,7 @@ describe('SignUpUseCase', () => {
 
     customerQueryRepositoryGateway = {
       findCustomerByEmail: jest.fn(),
+      findCustomerByEmailOrFederalDocument: jest.fn(),
     };
 
     customerCommandRepositoryGateway = {

@@ -26,9 +26,11 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
     return undefined;
   });
 
-  const decorators = [apiProperty, expose, transform];
+  const decorators = [apiProperty, expose];
 
-  if (!propertyIsRequired) {
+  if (props?.required === true) {
+    decorators.push(transform);
+  } else {
     decorators.push(IsOptional());
   }
 
