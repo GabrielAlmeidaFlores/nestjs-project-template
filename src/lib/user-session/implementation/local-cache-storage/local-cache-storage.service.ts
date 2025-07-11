@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
+import { CustomerSessionJwtInputModel } from '@lib/user-session/model/input/customer-session-jwt.input.model';
+import { CustomerSessionJwtOutputModel } from '@lib/user-session/model/output/customer-session-jwt.output.model';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
 
 @Injectable()
@@ -9,10 +12,11 @@ export class LocalCacheStorageService implements UserSessionGateway {
   protected readonly _type = LocalCacheStorageService.name;
 
   public constructor(
+    private readonly jwtService: JwtService,
     private readonly cacheStorageGateway: CacheStorageGateway,
   ) {}
 
-  public async createCustomerSession(customerId: Guid): Promise<Guid> {
+  public async createCustomerSession(customerId: Guid): Promise<string> {
     const sessionId = Guid.generate();
     const sessionIdString = sessionId.toString();
 
@@ -29,7 +33,12 @@ export class LocalCacheStorageService implements UserSessionGateway {
       sessionTtlInSeconds,
     );
 
-    return sessionId;
+    const customerSessionJwt = CustomerSessionJwtInputModel.build({
+      customerId: customerId.toString(),
+      sessionId: sessionIdString,
+    });
+
+    return this.jwtService.sign({ ...customerSessionJwt });
   }
 
   public async getCustomerSession(customerId: Guid): Promise<Guid | null> {
@@ -43,6 +52,16 @@ export class LocalCacheStorageService implements UserSessionGateway {
     }
 
     return null;
+  }
+
+  public verifyCustomerSession(
+    token: string,
+  ): CustomerSessionJwtOutputModel | null {
+    try {
+      return this.jwtService.verify<CustomerSessionJwtOutputModel>(token);
+    } catch {
+      return null;
+    }
   }
 
   private generateCustomerSessionKey(customerId: Guid): string {

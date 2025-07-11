@@ -1,4 +1,10 @@
-import { Body, HttpStatus, RequestMethod, Res } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  RequestMethod,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { LoginRequestDto } from '@module/customer/auth/dto/request/login.request.dto';
@@ -8,8 +14,9 @@ import { SignUpResponseDto } from '@module/customer/auth/dto/response/sign-up.re
 import { LoginUseCase } from '@module/customer/auth/use-case/login.use-case';
 import { LogoutUseCase } from '@module/customer/auth/use-case/logout.use-case';
 import { SignUpUseCase } from '@module/customer/auth/use-case/sign-up.use-case';
-import { CustomerController } from '@shared/api/decorator/class/controller-routing/customer-controller.decorator';
-import { BuildEndpointSpecification } from '@shared/api/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { CustomerAuthGuard } from '@shared/api/gateway/guard/customer-auth/customer-auth.guard';
+import { CustomerController } from '@shared/api/util/decorator/class/controller-routing/customer-controller.decorator';
+import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
 @CustomerController('auth')
 export class AuthController {
@@ -49,7 +56,7 @@ export class AuthController {
     },
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Customer logged in successfully ',
+      description: 'Customer logged in successfully',
       type: LoginResponseDto,
     },
   })
@@ -69,10 +76,28 @@ export class AuthController {
     },
     successResponse: {
       statusCode: HttpStatus.NO_CONTENT,
-      description: 'Customer logged out successfully ',
+      description: 'Customer logged out successfully',
     },
   })
+  @UseGuards(CustomerAuthGuard)
   public logout(@Res({ passthrough: true }) reply: FastifyReply): void {
     return this.logoutUseCase.execute(reply);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Customer authentication verification',
+    secure: true,
+    http: {
+      path: 'verify',
+      method: RequestMethod.HEAD,
+    },
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Customer authentication verified successfully ',
+    },
+  })
+  @UseGuards(CustomerAuthGuard)
+  public authenticationVerification(): void {
+    return;
   }
 }

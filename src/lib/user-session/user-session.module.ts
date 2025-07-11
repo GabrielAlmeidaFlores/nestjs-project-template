@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { CacheStorageModule } from '@infra/cache-storage/cache-storage.module';
 import { LocalCacheStorageModule } from '@lib/user-session/implementation/local-cache-storage/local-cache-storage.module';
 import { LocalCacheStorageService } from '@lib/user-session/implementation/local-cache-storage/local-cache-storage.service';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
 
 @Module({
-  imports: [LocalCacheStorageModule, CacheStorageModule],
+  imports: [LocalCacheStorageModule],
   providers: [
     {
       provide: UserSessionGateway,
