@@ -1,5 +1,5 @@
-import { ResponseDto } from '@shared/api/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoBooleanProperty } from '@shared/api/decorator/property/dto-property/response/response-dto-boolean-property.decorator';
+import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property.decorator';
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @ResponseDto()

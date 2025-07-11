@@ -3,12 +3,12 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { RequestDto } from '@shared/api/decorator/class/dto-specification/request-dto.decorator';
-import { RequestDtoEnumProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-enum-property.decorator';
-import { RequestDtoNumberProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-number-property.decorator';
-import { RequestDtoObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-object-property.decorator';
-import { RequestDtoStringProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-string-property.decorator';
-import { RequestDtoValueObjectProperty } from '@shared/api/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
+import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
+import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property.decorator';
+import { RequestDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-number-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property.decorator';
+import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property.decorator';
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @RequestDto()
