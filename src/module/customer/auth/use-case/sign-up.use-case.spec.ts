@@ -26,12 +26,44 @@ import { SignUpUseCase } from '@module/customer/auth/use-case/sign-up.use-case';
 
 describe('SignUpUseCase', () => {
   let useCase: SignUpUseCase;
-  let customerQueryRepositoryGateway: jest.Mocked<CustomerQueryRepositoryGateway>;
-  let customerCommandRepositoryGateway: jest.Mocked<CustomerCommandRepositoryGateway>;
-  let customerAddressCommandRepositoryGateway: jest.Mocked<CustomerAddressCommandRepositoryGateway>;
-  let organizationCommandRepositoryGateway: jest.Mocked<OrganizationCommandRepositoryGateway>;
-  let organizationMemberCommandRepositoryGateway: jest.Mocked<OrganizationMemberCommandRepositoryGateway>;
-  let baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway>;
+
+  let customerQueryRepositoryGateway: {
+    findCustomerByEmail: jest.MockedFunction<
+      CustomerQueryRepositoryGateway['findCustomerByEmail']
+    >;
+    findCustomerByEmailOrFederalDocument: jest.MockedFunction<
+      CustomerQueryRepositoryGateway['findCustomerByEmailOrFederalDocument']
+    >;
+  };
+
+  let customerCommandRepositoryGateway: {
+    createCustomer: jest.MockedFunction<
+      CustomerCommandRepositoryGateway['createCustomer']
+    >;
+  };
+
+  let customerAddressCommandRepositoryGateway: {
+    createCustomerAddress: jest.MockedFunction<
+      CustomerAddressCommandRepositoryGateway['createCustomerAddress']
+    >;
+  };
+
+  let organizationCommandRepositoryGateway: {
+    createOrganization: jest.MockedFunction<
+      OrganizationCommandRepositoryGateway['createOrganization']
+    >;
+  };
+
+  let organizationMemberCommandRepositoryGateway: {
+    createOrganizationMember: jest.MockedFunction<
+      OrganizationMemberCommandRepositoryGateway['createOrganizationMember']
+    >;
+  };
+
+  let baseTransactionRepositoryGateway: {
+    execute: jest.MockedFunction<BaseTransactionRepositoryGateway['execute']>;
+  };
+
   let bankGateway: {
     createCustomer: jest.MockedFunction<BankGateway['createCustomer']>;
   };
@@ -218,6 +250,7 @@ describe('SignUpUseCase', () => {
 
   it('should call BankGateway with correct input values', async () => {
     const dto = makeDto();
+
     customerQueryRepositoryGateway.findCustomerByEmail.mockResolvedValue(null);
 
     const bankCustomer = CreateBankCustomerOutputModel.build({
