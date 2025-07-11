@@ -34,9 +34,9 @@ export class FrameworkApplicationVariable {
       String,
     );
 
-  public static readonly FRAMEWORK_CORS_ALLOWED_ORIGIN =
+  public static readonly FRAMEWORK_ALLOWED_ORIGIN =
     FrameworkApplicationVariable.source.getArrayOrThrow<string>(
-      'FRAMEWORK_CORS_ALLOWED_ORIGIN',
+      'FRAMEWORK_ALLOWED_ORIGIN',
       String,
     );
 

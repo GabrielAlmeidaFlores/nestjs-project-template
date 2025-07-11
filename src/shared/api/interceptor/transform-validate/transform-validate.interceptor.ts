@@ -37,6 +37,10 @@ export class TransformValidateInterceptor implements NestInterceptor {
     }
 
     const transformAndValidate = async (data: unknown): Promise<unknown> => {
+      if (data === null || typeof data !== 'object') {
+        return data;
+      }
+
       const dtoClass = responseDto as Type<object>;
 
       const plain = instanceToPlain(data);

@@ -54,7 +54,7 @@ export class AuthController {
   public async login(
     @Res({ passthrough: true }) reply: FastifyReply,
     @Body() dto: LoginRequestDto,
-  ): Promise<void> {
+  ): Promise<LoginResponseDto> {
     return await this.loginUseCase.execute(reply, dto);
   }
 }
