@@ -21,7 +21,7 @@ export function BaseDtoNumberProperty(
     {},
     {
       message: (args: ValidationArguments) =>
-        `'${args.property}' não é uma número válida`,
+        `'${args.property}' deve ser do tipo Number`,
     },
   );
 

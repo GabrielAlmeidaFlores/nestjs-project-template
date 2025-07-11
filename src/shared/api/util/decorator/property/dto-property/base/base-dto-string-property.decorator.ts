@@ -17,7 +17,7 @@ export function BaseDtoStringProperty(
   const expose = Expose();
   const validation = IsString({
     message: (args: ValidationArguments) => {
-      return `'${args.property}' não é uma string válida`;
+      return `'${args.property}' deve ser do tipo String`;
     },
   });
 
