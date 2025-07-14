@@ -14,14 +14,14 @@ export class OrganizationCreditPurchaseTypeormEntity extends BaseAuditableTypeor
     (entity) => entity.organizationCreditPurchase,
   )
   @JoinColumn({ name: 'organization_id' })
-  public organization: OrganizationTypeormEntity;
+  public organization: OrganizationTypeormEntity | undefined;
 
   @ManyToOne(
     () => BankPaymentTypeormEntity,
     (entity) => entity.organizationCreditPurchase,
   )
   @JoinColumn({ name: 'bank_payment_id' })
-  public bankPayment: BankPaymentTypeormEntity;
+  public bankPayment: BankPaymentTypeormEntity | undefined;
 
   protected override readonly _type =
     OrganizationCreditPurchaseTypeormEntity.name;

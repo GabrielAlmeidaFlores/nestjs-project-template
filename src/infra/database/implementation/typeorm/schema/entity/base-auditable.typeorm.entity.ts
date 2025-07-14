@@ -8,11 +8,11 @@ export abstract class BaseAuditableTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({
     name: 'created_by',
   })
-  public createdBy: CustomerTypeormEntity;
+  public createdBy: CustomerTypeormEntity | undefined;
 
   @ManyToOne(() => CustomerTypeormEntity)
   @JoinColumn({
     name: 'updated_by',
   })
-  public updatedBy: CustomerTypeormEntity;
+  public updatedBy: CustomerTypeormEntity | undefined;
 }
