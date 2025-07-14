@@ -3,7 +3,6 @@ import * as crypto from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/cache-storage.application-variable';
 
@@ -24,46 +23,12 @@ export class RedisService implements CacheStorageGateway {
       CacheStorageApplicationVariable.CACHE_STORAGE_CRYPTOGRAPHY_METHOD;
   }
 
-  public async createCustomerSession(customerId: Guid): Promise<Guid> {
-    const sessionId = Guid.generate();
-    const sessionIdString = sessionId.toString();
-
-    const secondsPerHour = 3600;
-    const hoursPerDay = 24;
-    const SecondsPerDay = secondsPerHour * hoursPerDay;
-    const sessionTtlInSeconds = SecondsPerDay;
-
-    const key = this.generateCustomerSessionKey(customerId);
-
-    await this.setData(key, sessionIdString, sessionTtlInSeconds);
-
-    return sessionId;
-  }
-
-  public async getCustomerSession(customerId: Guid): Promise<Guid | null> {
-    const key = this.generateCustomerSessionKey(customerId);
-    const customerSession = await this.getData(key);
-
-    const customerSessionExists = customerSession !== null;
-
-    if (customerSessionExists) {
-      return new Guid(customerSession);
-    }
-
-    return null;
-  }
-
-  private generateCustomerSessionKey(customerId: Guid): string {
-    const customerIdString = customerId.toString();
-    return `customer-session:${customerIdString}`;
-  }
-
-  private async setData(key: string, value: string, ttl = 3600): Promise<void> {
+  public async setData(key: string, value: string, ttl = 3600): Promise<void> {
     const encryptedValue = this.encryptData(value);
     await this.redis.set(key, encryptedValue, 'EX', ttl);
   }
 
-  private async getData(key: string): Promise<string | null> {
+  public async getData(key: string): Promise<string | null> {
     const encryptedValue = await this.redis.get(key);
 
     const dataIsAvailable = encryptedValue !== null;
@@ -74,7 +39,7 @@ export class RedisService implements CacheStorageGateway {
     return null;
   }
 
-  private encryptData(value: string): string {
+  public encryptData(value: string): string {
     const cipher = crypto.createCipheriv(
       this.cryptographyMethod,
       this.cryptographySecret,

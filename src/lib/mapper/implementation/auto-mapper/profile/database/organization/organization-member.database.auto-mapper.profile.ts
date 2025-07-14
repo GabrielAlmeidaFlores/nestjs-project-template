@@ -10,6 +10,7 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { MissingRelationTypeError } from '@lib/mapper/implementation/auto-mapper/error/missing-relation-type.error';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -30,17 +31,25 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
     const convertOrmEntityToDomainEntity = (
       source: OrganizationMemberTypeormEntity,
     ): OrganizationMemberEntity => {
+      const sourceClassName = source.constructor.name;
+      const targetClassName = OrganizationMemberEntity.name;
+
+      if (!source.customer) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'customer',
+        });
+      }
       const id = new Guid(source.id);
       const organization = this.mapper.map(
         source.organization,
         OrganizationTypeormEntity,
         OrganizationEntity,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        CustomerTypeormEntity,
-        RelationModel<CustomerEntity>,
-      );
+      const customer = new RelationModel<CustomerEntity>({
+        id: new Guid(source.customer.id),
+      });
 
       return new OrganizationMemberEntity({
         ...source,
@@ -70,11 +79,9 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
         OrganizationEntity,
         OrganizationTypeormEntity,
       );
-      const customer = this.mapper.map(
-        source.customer,
-        RelationModel<CustomerEntity>,
-        CustomerTypeormEntity,
-      );
+      const customer = {
+        id: source.customer.id.toString(),
+      } as CustomerTypeormEntity;
 
       return OrganizationMemberTypeormEntity.build({
         ...source,
