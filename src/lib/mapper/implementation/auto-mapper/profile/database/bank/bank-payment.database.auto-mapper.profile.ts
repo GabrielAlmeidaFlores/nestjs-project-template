@@ -85,6 +85,7 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
         netValue,
         bankTransfer: undefined,
         organizationCreditPurchase: undefined,
+        organizationCreditPlanPurchase: undefined,
         createdBy: {
           id: source.createdBy.id.toString(),
         } as CustomerTypeormEntity,
