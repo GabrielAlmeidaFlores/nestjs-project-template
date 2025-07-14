@@ -7,14 +7,14 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import { CustomerSignUpRequestDto } from '@module/general/auth/dto/request/customer-sign-up.request.dto';
-import { LoginRequestDto } from '@module/general/auth/dto/request/login.request.dto';
-import { AuthVerificationResponseDto } from '@module/general/auth/dto/response/auth-verification.response.dto';
-import { CustomerSignUpResponseDto } from '@module/general/auth/dto/response/customer-sign-up.response.dto';
-import { LoginResponseDto } from '@module/general/auth/dto/response/login.response.dto';
-import { CustomerSignUpUseCase } from '@module/general/auth/use-case/customer-sign-up.use-case';
-import { LoginUseCase } from '@module/general/auth/use-case/login.use-case';
-import { LogoutUseCase } from '@module/general/auth/use-case/logout.use-case';
+import { CustomerSignUpRequestDto } from '@module/generic/auth/dto/request/customer-sign-up.request.dto';
+import { LoginRequestDto } from '@module/generic/auth/dto/request/login.request.dto';
+import { AuthVerificationResponseDto } from '@module/generic/auth/dto/response/auth-verification.response.dto';
+import { CustomerSignUpResponseDto } from '@module/generic/auth/dto/response/customer-sign-up.response.dto';
+import { LoginResponseDto } from '@module/generic/auth/dto/response/login.response.dto';
+import { CustomerSignUpUseCase } from '@module/generic/auth/use-case/customer-sign-up.use-case';
+import { LoginUseCase } from '@module/generic/auth/use-case/login.use-case';
+import { LogoutUseCase } from '@module/generic/auth/use-case/logout.use-case';
 import { UserAuthGuard } from '@shared/api/gateway/guard/user-auth/user-auth.guard';
 import { GenericController } from '@shared/api/util/decorator/class/controller-routing/generic-controller.decorator copy';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';

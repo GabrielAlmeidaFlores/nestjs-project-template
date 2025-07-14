@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { AuthModule } from '@module/general/auth/auth.module';
+import { AuthModule } from '@module/generic/auth/auth.module';
 import { UserAuthModule } from '@shared/api/gateway/guard/user-auth/user-auth.module';
 
 @Module({
@@ -8,6 +8,6 @@ import { UserAuthModule } from '@shared/api/gateway/guard/user-auth/user-auth.mo
   controllers: [],
   providers: [],
 })
-export class GeneralModule {
-  protected readonly _type = GeneralModule.name;
+export class GenericModule {
+  protected readonly _type = GenericModule.name;
 }

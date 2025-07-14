@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 
-import { LogoutUseCase } from '@module/general/auth/use-case/logout.use-case';
+import { LogoutUseCase } from '@module/generic/auth/use-case/logout.use-case';
 import { NodeApplicationVariable } from '@shared/system/constant/application-variable/node.application-variable';
 
 import type { FastifyReply } from 'fastify';
