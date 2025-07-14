@@ -18,7 +18,7 @@ export function BaseDtoBooleanProperty(
   const expose = Expose();
   const validation = IsBoolean({
     message: (args: ValidationArguments) =>
-      `'${args.property}' deve ser do tipo Boolean`,
+      `o campo '${args.property}' deve ser do tipo 'boolean'`,
   });
 
   const decorators = [apiProperty, expose, validation];
