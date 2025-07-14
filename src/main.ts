@@ -23,9 +23,7 @@ async function bootstrap(): Promise<void> {
     .globalPipes()
     .globalFilters();
 
-  const isProductionEnvironment =
-    NodeApplicationVariable.PRODUCTION_ENVIRONMENT;
-  if (!isProductionEnvironment) {
+  if (!NodeApplicationVariable.PRODUCTION_ENVIRONMENT) {
     appConfig.swagger();
   }
 

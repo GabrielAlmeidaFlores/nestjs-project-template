@@ -22,7 +22,7 @@ const redisProvider = {
 };
 @Module({
   providers: [redisProvider, RedisService],
-  exports: [RedisService],
+  exports: [redisProvider, RedisService],
 })
 export class RedisModule {
   protected readonly _type = RedisModule.name;
