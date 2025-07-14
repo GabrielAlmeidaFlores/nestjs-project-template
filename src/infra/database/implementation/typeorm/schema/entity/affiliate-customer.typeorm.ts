@@ -64,7 +64,7 @@ export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
 
   @ManyToOne(() => CustomerTypeormEntity, (entity) => entity.affiliateCustomer)
   @JoinColumn({ name: 'customer_id' })
-  public customer: CustomerTypeormEntity[] | undefined;
+  public customer: CustomerTypeormEntity | undefined;
 
   protected override readonly _type = AffiliateCustomerTypeormEntity.name;
 }

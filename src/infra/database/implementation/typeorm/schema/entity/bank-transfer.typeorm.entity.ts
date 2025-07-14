@@ -44,7 +44,7 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
 
   @ManyToOne(() => BankPaymentTypeormEntity, (entity) => entity.bankTransfer)
   @JoinColumn({ name: 'bank_payment_id' })
-  public bankPayment: BankPaymentTypeormEntity;
+  public bankPayment: BankPaymentTypeormEntity | undefined;
 
   @OneToMany(
     () => AffiliateCustomerPaymentTypeormEntity,
