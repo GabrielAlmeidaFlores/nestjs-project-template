@@ -42,7 +42,7 @@ export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
   public paymentPlanDiscountValidUntil: Date;
 
   @Column({
-    name: 'payment_discount_redemption_limit',
+    name: 'payment_plan_discount_redemption_limit',
     type: 'int',
   })
   public paymentPlanDiscountRedemptionLimit: number;
