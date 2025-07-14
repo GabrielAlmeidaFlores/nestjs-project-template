@@ -12,7 +12,7 @@ export class AvailablePaymentPlanEnabledPaidResourceTypeormEntity extends BaseTy
   )
   @JoinColumn({ name: 'application_paid_resource_id' })
   public applicationPaidResource:
-    | ApplicationPaidResourceTypeormEntity[]
+    | ApplicationPaidResourceTypeormEntity
     | undefined;
 
   @ManyToOne(
@@ -20,7 +20,7 @@ export class AvailablePaymentPlanEnabledPaidResourceTypeormEntity extends BaseTy
     (entity) => entity.availablePaymentPlanEnabledPaidResource,
   )
   @JoinColumn({ name: 'available_payment_plan_id' })
-  public availablePaymentPlan: AvailablePaymentPlanTypeormEntity[] | undefined;
+  public availablePaymentPlan: AvailablePaymentPlanTypeormEntity | undefined;
 
   protected override readonly _type =
     AvailablePaymentPlanEnabledPaidResourceTypeormEntity.name;

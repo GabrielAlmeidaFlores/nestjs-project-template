@@ -12,6 +12,7 @@ import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementa
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { MissingRelationTypeError } from '@lib/mapper/implementation/auto-mapper/error/missing-relation-type.error';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -33,6 +34,41 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
     const convertOrmEntityToDomainEntity = (
       source: OrganizationCreditUsageTypeormEntity,
     ): OrganizationCreditUsageEntity => {
+      const sourceClassName = source.constructor.name;
+      const targetClassName = OrganizationCreditUsageEntity.name;
+
+      if (!source.organization) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'organization',
+        });
+      }
+
+      if (!source.applicationPaidResource) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'applicationPaidResource',
+        });
+      }
+
+      if (!source.createdBy) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'createdBy',
+        });
+      }
+
+      if (!source.updatedBy) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'updatedBy',
+        });
+      }
+
       return new OrganizationCreditUsageEntity({
         ...source,
         id: new Guid(source.id),

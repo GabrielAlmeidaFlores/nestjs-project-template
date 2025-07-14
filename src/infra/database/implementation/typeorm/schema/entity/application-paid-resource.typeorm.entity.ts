@@ -24,13 +24,17 @@ export class ApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
     () => AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
     (entity) => entity.applicationPaidResource,
   )
-  public applicationPaidResource: AvailablePaymentPlanEnabledPaidResourceTypeormEntity;
+  public applicationPaidResource:
+    | AvailablePaymentPlanEnabledPaidResourceTypeormEntity[]
+    | undefined;
 
   @OneToMany(
     () => OrganizationCreditUsageTypeormEntity,
     (entity) => entity.applicationPaidResource,
   )
-  public organizationCreditUsage: OrganizationCreditUsageTypeormEntity;
+  public organizationCreditUsage:
+    | OrganizationCreditUsageTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = ApplicationPaidResourceTypeormEntity.name;
 }

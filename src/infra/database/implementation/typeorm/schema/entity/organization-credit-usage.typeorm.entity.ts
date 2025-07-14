@@ -13,14 +13,16 @@ export class OrganizationCreditUsageTypeormEntity extends BaseAuditableTypeormEn
     (entity) => entity.organizationCreditPurchase,
   )
   @JoinColumn({ name: 'organization_id' })
-  public organization: OrganizationTypeormEntity;
+  public organization: OrganizationTypeormEntity | undefined;
 
   @ManyToOne(
     () => ApplicationPaidResourceTypeormEntity,
     (entity) => entity.applicationPaidResource,
   )
   @JoinColumn({ name: 'paid_resource_id' })
-  public applicationPaidResource: ApplicationPaidResourceTypeormEntity;
+  public applicationPaidResource:
+    | ApplicationPaidResourceTypeormEntity
+    | undefined;
 
   protected override readonly _type = OrganizationCreditUsageTypeormEntity.name;
 }
