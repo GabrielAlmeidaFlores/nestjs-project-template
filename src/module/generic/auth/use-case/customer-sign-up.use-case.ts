@@ -17,9 +17,9 @@ import { CreateBankCustomerOutputModel } from '@infra/bank/model/output/create-b
 import {
   CustomerSignUpDataRequestDto,
   CustomerSignUpRequestDto,
-} from '@module/general/auth/dto/request/customer-sign-up.request.dto';
-import { CustomerSignUpResponseDto } from '@module/general/auth/dto/response/customer-sign-up.response.dto';
-import { CustomerEmailAlreadyInUseError } from '@module/general/auth/error/customer-email-already-in-use.error';
+} from '@module/generic/auth/dto/request/customer-sign-up.request.dto';
+import { CustomerSignUpResponseDto } from '@module/generic/auth/dto/response/customer-sign-up.response.dto';
+import { CustomerEmailAlreadyInUseError } from '@module/generic/auth/error/customer-email-already-in-use.error';
 
 @Injectable()
 export class CustomerSignUpUseCase {

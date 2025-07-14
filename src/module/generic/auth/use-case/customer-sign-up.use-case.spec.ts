@@ -19,10 +19,10 @@ import {
   CustomerSignUpDataRequestDto,
   CustomerSignUpDataAddressRequestDto,
   CustomerSignUpRequestDto,
-} from '@module/general/auth/dto/request/customer-sign-up.request.dto';
-import { CustomerSignUpResponseDto } from '@module/general/auth/dto/response/customer-sign-up.response.dto';
-import { CustomerEmailAlreadyInUseError } from '@module/general/auth/error/customer-email-already-in-use.error';
-import { CustomerSignUpUseCase } from '@module/general/auth/use-case/customer-sign-up.use-case';
+} from '@module/generic/auth/dto/request/customer-sign-up.request.dto';
+import { CustomerSignUpResponseDto } from '@module/generic/auth/dto/response/customer-sign-up.response.dto';
+import { CustomerEmailAlreadyInUseError } from '@module/generic/auth/error/customer-email-already-in-use.error';
+import { CustomerSignUpUseCase } from '@module/generic/auth/use-case/customer-sign-up.use-case';
 
 describe('CustomerSignUpUseCase', () => {
   let useCase: CustomerSignUpUseCase;
