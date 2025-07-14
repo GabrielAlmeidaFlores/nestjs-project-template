@@ -78,7 +78,7 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
 
   const decorators = [apiProperty, expose, transform];
 
-  if (props?.required === true) {
+  if (propertyIsRequired) {
     decorators.push(validation);
   } else {
     decorators.push(IsOptional());
