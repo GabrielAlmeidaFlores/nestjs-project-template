@@ -16,12 +16,12 @@ import { CustomerSignUpUseCase } from '@module/general/auth/use-case/customer-si
 import { LoginUseCase } from '@module/general/auth/use-case/login.use-case';
 import { LogoutUseCase } from '@module/general/auth/use-case/logout.use-case';
 import { UserAuthGuard } from '@shared/api/gateway/guard/user-auth/user-auth.guard';
-import { GeneralController } from '@shared/api/util/decorator/class/controller-routing/general-controller.decorator copy';
+import { GenericController } from '@shared/api/util/decorator/class/controller-routing/generic-controller.decorator copy';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetUserData } from '@shared/api/util/decorator/method/get-user-data/get-user-data.decorator';
 import { UserDataInputModel } from '@shared/api/util/decorator/method/get-user-data/model/input/user-data.input.model';
 
-@GeneralController('auth')
+@GenericController('auth')
 export class AuthController {
   protected readonly _type = AuthController.name;
 
