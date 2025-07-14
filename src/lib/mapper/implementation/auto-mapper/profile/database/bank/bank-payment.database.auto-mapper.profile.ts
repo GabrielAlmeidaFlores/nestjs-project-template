@@ -51,7 +51,7 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
           id: new Guid(source.createdBy.id),
         }),
         updatedBy: new RelationModel<CustomerEntity>({
-          id: new Guid(source.createdBy.id),
+          id: new Guid(source.updatedBy.id),
         }),
       });
     };
