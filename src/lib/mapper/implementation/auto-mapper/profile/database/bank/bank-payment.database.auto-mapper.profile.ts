@@ -5,6 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
+import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
+import { RelationModel } from '@core/domain/schema/model/relation.model';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
@@ -45,6 +47,12 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
         status,
         value,
         netValue,
+        createdBy: new RelationModel<CustomerEntity>({
+          id: new Guid(source.createdBy.id),
+        }),
+        updatedBy: new RelationModel<CustomerEntity>({
+          id: new Guid(source.createdBy.id),
+        }),
       });
     };
 
@@ -77,8 +85,12 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
         netValue,
         bankTransfer: undefined,
         organizationCreditPurchase: undefined,
-        createdBy: new CustomerTypeormEntity(),
-        updatedBy: new CustomerTypeormEntity(),
+        createdBy: {
+          id: source.createdBy.id.toString(),
+        } as CustomerTypeormEntity,
+        updatedBy: {
+          id: source.updatedBy.id.toString(),
+        } as CustomerTypeormEntity,
       });
     };
 
