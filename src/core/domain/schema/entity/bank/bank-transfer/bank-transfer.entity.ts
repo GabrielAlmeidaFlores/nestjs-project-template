@@ -1,10 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base/base.entity';
 
+import type { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import type { BankTransferEntityPropsInterface } from '@core/domain/schema/entity/bank/bank-transfer/bank-transfer.entity.props.interface';
 import type { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
 import type { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class BankTransferEntity extends BaseEntity {
   public readonly bankExternalId: string;
@@ -16,7 +16,7 @@ export class BankTransferEntity extends BaseEntity {
   public readonly effectiveDate: Date | null;
   public readonly scheduleDate: Date | null;
   public readonly failReason: string | null;
-  public readonly bankPayment: Guid;
+  public readonly bankPayment: BankPaymentEntity;
 
   protected readonly _type = BankTransferEntity.name;
 

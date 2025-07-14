@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 import { TransferMethodEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-method.enum';
 import { TransferStatusEnum } from '@core/domain/schema/entity/bank/bank-transfer/enum/transfer-status.enum';
+import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
@@ -44,6 +45,14 @@ export class BankTransferTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => BankPaymentTypeormEntity, (entity) => entity.bankTransfer)
   @JoinColumn({ name: 'bank_payment_id' })
   public bankPayment: BankPaymentTypeormEntity | undefined;
+
+  @OneToMany(
+    () => AffiliateCustomerPaymentTypeormEntity,
+    (entity) => entity.bankTransfer,
+  )
+  public affiliateCustomerPayment:
+    | AffiliateCustomerPaymentTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = BankTransferTypeormEntity.name;
 }
