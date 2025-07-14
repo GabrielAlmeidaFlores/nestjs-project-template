@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
-import { IsOptional } from 'class-validator';
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsOptional, ValidateNested } from 'class-validator';
 
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
@@ -12,24 +12,20 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 
-  const apiProperty = ApiProperty({
-    required: propertyIsRequired,
-    type: String,
-  });
-  const expose = Expose();
-  const transform = Transform(({ value }) => {
-    const isInstanceOfValueObject = value instanceof valueObjectClass;
-    if (isInstanceOfValueObject) {
-      return value.toString();
-    }
+  const decorators = [
+    ApiProperty({ required: propertyIsRequired, type: String }),
+    Expose(),
+    Type(() => valueObjectClass),
+    ValidateNested(),
+  ];
 
-    return undefined;
-  });
-
-  const decorators = [apiProperty, expose];
-
-  if (props?.required === true) {
-    decorators.push(transform);
+  if (propertyIsRequired) {
+    decorators.push(
+      Transform(({ value }) => {
+        const isInstanceOfValueObject = value instanceof valueObjectClass;
+        return isInstanceOfValueObject ? value.toString() : undefined;
+      }),
+    );
   } else {
     decorators.push(IsOptional());
   }
