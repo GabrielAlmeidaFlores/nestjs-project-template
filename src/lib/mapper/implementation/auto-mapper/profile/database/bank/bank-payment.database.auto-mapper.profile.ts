@@ -11,6 +11,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { MissingRelationTypeError } from '@lib/mapper/implementation/auto-mapper/error/missing-relation-type.error';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -31,6 +32,25 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: BankPaymentTypeormEntity,
     ): BankPaymentEntity => {
+      const sourceClassName = source.constructor.name;
+      const targetClassName = BankPaymentEntity.name;
+
+      if (!source.createdBy) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'createdBy',
+        });
+      }
+
+      if (!source.updatedBy) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'updatedBy',
+        });
+      }
+
       const id = new Guid(source.id);
       const paymentMethod = this.convertStringToEnum(
         PaymentMethodEnum,
