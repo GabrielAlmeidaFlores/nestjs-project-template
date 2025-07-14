@@ -65,7 +65,16 @@ export class LocalCacheStorageService implements UserSessionGateway {
   }
 
   private generateCustomerSessionKey(customerId: Guid): string {
-    const customerIdString = customerId.toString();
-    return `customer-session:${customerIdString}`;
+    return this.generateUserSessionKey(customerId, UserLevelEnum.CUSTOMER);
+  }
+
+  private generateUserSessionKey(
+    userId: Guid,
+    userLevel: UserLevelEnum,
+  ): string {
+    const id = userId.toString();
+    const level = userLevel;
+
+    return `user:session:level:${level}:id:${id}`;
   }
 }
