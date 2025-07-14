@@ -7,4 +7,5 @@ export interface OrganizationMemberEntityPropsInterface
   extends BaseEntityPropsInterface {
   organization: OrganizationEntity;
   customer: RelationModel<CustomerEntity>;
+  owner: boolean;
 }

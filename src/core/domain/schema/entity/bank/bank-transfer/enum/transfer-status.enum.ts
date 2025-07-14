@@ -1,4 +1,5 @@
 export enum TransferStatusEnum {
+  PENDING = 'PENDING',
   BANK_PROCESSING = 'BANK_PROCESSING',
   DONE = 'DONE',
   CANCELLED = 'CANCELLED',

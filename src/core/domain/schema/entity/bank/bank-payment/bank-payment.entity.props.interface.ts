@@ -5,7 +5,7 @@ import type { CustomerEntity } from '@core/domain/schema/entity/customer/custome
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 
 export interface BankPaymentEntityPropsInterface
-  extends BaseAuditableEntity<CustomerEntity> {
+  extends BaseAuditableEntityPropsInterface<CustomerEntity> {
   bankExternalId: string;
   paymentMethod: PaymentMethodEnum;
   value: DecimalValue;

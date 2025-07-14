@@ -8,6 +8,7 @@ import type { RelationModel } from '@core/domain/schema/model/relation.model';
 export class OrganizationMemberEntity extends BaseEntity {
   public readonly organization: OrganizationEntity;
   public readonly customer: RelationModel<CustomerEntity>;
+  public readonly owner: boolean;
 
   protected readonly _type = OrganizationMemberEntity.name;
 
@@ -16,5 +17,6 @@ export class OrganizationMemberEntity extends BaseEntity {
 
     this.organization = props.organization;
     this.customer = props.customer;
+    this.owner = props.owner;
   }
 }
