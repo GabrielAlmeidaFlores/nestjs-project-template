@@ -4,6 +4,7 @@ import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/
 import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { BaseAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base-auditable.typeorm.entity';
+import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-plan-purchase.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 
 @Entity({ name: 'bank_payment' })
@@ -11,7 +12,11 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
-  @Column({ name: 'payment_method', type: 'simple-enum' })
+  @Column({
+    name: 'payment_method',
+    type: 'simple-enum',
+    enum: PaymentMethodEnum,
+  })
   public paymentMethod: PaymentMethodEnum;
 
   @Column({
@@ -26,7 +31,7 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'discount_percentage', type: 'int' })
   public discountPercentage: number;
 
-  @Column({ name: 'status', type: 'simple-enum' })
+  @Column({ name: 'status', type: 'simple-enum', enum: PaymentStatusEnum })
   public status: PaymentStatusEnum;
 
   @Column({ name: 'due_date', type: 'date' })
@@ -53,6 +58,14 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   )
   public organizationCreditPurchase:
     | OrganizationCreditPurchaseTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => OrganizationCreditPlanPurchaseTypeormEntity,
+    (entity) => entity.bankPayment,
+  )
+  public organizationCreditPlanPurchase:
+    | OrganizationCreditPlanPurchaseTypeormEntity[]
     | undefined;
 
   protected override readonly _type = BankPaymentTypeormEntity.name;

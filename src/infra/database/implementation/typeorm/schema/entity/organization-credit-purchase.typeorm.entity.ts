@@ -6,7 +6,7 @@ import { OrganizationTypeormEntity } from '@infra/database/implementation/typeor
 
 @Entity({ name: 'organization_credit_purchase' })
 export class OrganizationCreditPurchaseTypeormEntity extends BaseAuditableTypeormEntity {
-  @Column({ name: 'credit_amount', type: 'number' })
+  @Column({ name: 'credit_amount', type: 'int' })
   public creditAmount: number;
 
   @ManyToOne(
@@ -14,14 +14,14 @@ export class OrganizationCreditPurchaseTypeormEntity extends BaseAuditableTypeor
     (entity) => entity.organizationCreditPurchase,
   )
   @JoinColumn({ name: 'organization_id' })
-  public organization: OrganizationTypeormEntity;
+  public organization: OrganizationTypeormEntity | undefined;
 
   @ManyToOne(
     () => BankPaymentTypeormEntity,
     (entity) => entity.organizationCreditPurchase,
   )
   @JoinColumn({ name: 'bank_payment_id' })
-  public bankPayment: BankPaymentTypeormEntity;
+  public bankPayment: BankPaymentTypeormEntity | undefined;
 
   protected override readonly _type =
     OrganizationCreditPurchaseTypeormEntity.name;
