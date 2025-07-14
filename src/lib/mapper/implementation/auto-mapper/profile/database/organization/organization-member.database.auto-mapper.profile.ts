@@ -10,6 +10,7 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { MissingRelationTypeError } from '@lib/mapper/implementation/auto-mapper/error/missing-relation-type.error';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
@@ -30,6 +31,16 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
     const convertOrmEntityToDomainEntity = (
       source: OrganizationMemberTypeormEntity,
     ): OrganizationMemberEntity => {
+      const sourceClassName = source.constructor.name;
+      const targetClassName = OrganizationMemberEntity.name;
+
+      if (!source.customer) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'customer',
+        });
+      }
       const id = new Guid(source.id);
       const organization = this.mapper.map(
         source.organization,

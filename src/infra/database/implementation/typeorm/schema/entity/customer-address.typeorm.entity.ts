@@ -50,7 +50,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({
     name: 'customer_id',
   })
-  public customer: CustomerTypeormEntity;
+  public customer: CustomerTypeormEntity | undefined;
 
   protected override readonly _type = CustomerAddressTypeormEntity.name;
 }
