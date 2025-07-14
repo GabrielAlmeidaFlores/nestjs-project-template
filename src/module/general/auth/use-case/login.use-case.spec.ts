@@ -148,7 +148,7 @@ describe('LoginUseCase', () => {
     );
     jest.spyOn(bcrypt, 'compare').mockImplementation(() => true);
 
-    const session = Guid.generate();
+    const session = Guid.generate().toString();
     userSessionGateway.createCustomerSession.mockResolvedValue(session);
 
     const result = await useCase.execute(reply as unknown as FastifyReply, dto);
@@ -156,16 +156,12 @@ describe('LoginUseCase', () => {
     expect(result).toBeInstanceOf(LoginResponseDto);
     expect(result.authenticated).toBe(true);
 
-    expect(reply.setCookie).toHaveBeenCalledWith(
-      'auth_token',
-      session.toString(),
-      {
-        httpOnly: true,
-        secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 604800,
-      },
-    );
+    expect(reply.setCookie).toHaveBeenCalledWith('auth_token', session, {
+      httpOnly: true,
+      secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 604800,
+    });
   });
 });
