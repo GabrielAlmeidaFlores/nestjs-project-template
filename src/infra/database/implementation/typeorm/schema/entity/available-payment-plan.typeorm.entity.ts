@@ -40,8 +40,8 @@ export class AvailablePaymentPlanTypeormEntity extends BaseTypeormEntity {
     () => AffiliateCustomerTypeormEntity,
     (entity) => entity.availablePaymentPlan,
   )
-  @JoinColumn({ name: 'customer_id' })
-  public affiliateCustomer: AffiliateCustomerTypeormEntity[] | undefined;
+  @JoinColumn({ name: 'affiliate_customer_id' })
+  public affiliateCustomer: AffiliateCustomerTypeormEntity | undefined;
 
   protected override readonly _type = AvailablePaymentPlanTypeormEntity.name;
 }
