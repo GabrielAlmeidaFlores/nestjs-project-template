@@ -19,7 +19,7 @@ export class OrganizationCreditUsageTypeormEntity extends BaseAuditableTypeormEn
     () => ApplicationPaidResourceTypeormEntity,
     (entity) => entity.applicationPaidResource,
   )
-  @JoinColumn({ name: 'paid_resource_id' })
+  @JoinColumn({ name: 'application_paid_resource_id' })
   public applicationPaidResource:
     | ApplicationPaidResourceTypeormEntity
     | undefined;

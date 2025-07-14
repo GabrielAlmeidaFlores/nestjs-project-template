@@ -6,13 +6,13 @@ import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/sc
 export abstract class BaseAuditableTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => CustomerTypeormEntity)
   @JoinColumn({
-    name: 'created_by',
+    name: 'created_by_id',
   })
   public createdBy: CustomerTypeormEntity | undefined;
 
   @ManyToOne(() => CustomerTypeormEntity)
   @JoinColumn({
-    name: 'updated_by',
+    name: 'updated_by_id',
   })
   public updatedBy: CustomerTypeormEntity | undefined;
 }
