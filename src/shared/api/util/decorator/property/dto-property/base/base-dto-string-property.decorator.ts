@@ -17,7 +17,7 @@ export function BaseDtoStringProperty(
   const expose = Expose();
   const validation = IsString({
     message: (args: ValidationArguments) => {
-      return `'${args.property}' deve ser do tipo String`;
+      return `o campo '${args.property}' deve ser do tipo 'string'`;
     },
   });
 

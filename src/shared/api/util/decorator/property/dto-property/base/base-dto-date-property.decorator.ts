@@ -19,7 +19,7 @@ export function BaseDtoDateProperty(
   const type = Type(() => Date);
   const validation = IsDate({
     message: (args: ValidationArguments) =>
-      `'${args.property}' deve ser do tipo Date`,
+      `o campo '${args.property}' deve ser do tipo 'date'`,
   });
 
   const decorators = [apiProperty, expose, type, validation];
