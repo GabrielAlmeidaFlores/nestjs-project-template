@@ -10,7 +10,7 @@ export class AffiliateCustomerPaymentTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.affiliateCustomerPayment,
   )
   @JoinColumn({ name: 'affiliate_customer_id' })
-  public affiliateCustomer: AffiliateCustomerTypeormEntity;
+  public affiliateCustomer: AffiliateCustomerTypeormEntity | undefined;
 
   protected override readonly _type =
     AffiliateCustomerPaymentTypeormEntity.name;

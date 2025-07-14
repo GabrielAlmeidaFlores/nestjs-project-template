@@ -21,21 +21,21 @@ export class OrganizationCreditPlanPurchaseTypeormEntity extends BaseTypeormEnti
     (entity) => entity.organizationCreditPlanPurchase,
   )
   @JoinColumn({ name: 'organization_id' })
-  public organization: OrganizationTypeormEntity;
+  public organization: OrganizationTypeormEntity | undefined;
 
   @ManyToOne(
     () => AvailableCreditPlanTypeormEntity,
     (entity) => entity.organizationCreditPlan,
   )
   @JoinColumn({ name: 'available_credit_plan_id' })
-  public availableCreditPlan: AvailableCreditPlanTypeormEntity;
+  public availableCreditPlan: AvailableCreditPlanTypeormEntity | undefined;
 
   @ManyToOne(
     () => BankPaymentTypeormEntity,
     (entity) => entity.organizationCreditPlanPurchase,
   )
   @JoinColumn({ name: 'bank_payment_id' })
-  public bankPayment: BankPaymentTypeormEntity;
+  public bankPayment: BankPaymentTypeormEntity | undefined;
 
   protected override readonly _type =
     OrganizationCreditPlanPurchaseTypeormEntity.name;
