@@ -6,6 +6,7 @@ export class FrameworkApplicationVariable {
   public static readonly defaultFrameworkBasePath = '';
   public static readonly defaultFrameworkHost = '127.0.0.1';
   public static readonly defaultFrameworkPort = 3000;
+  public static readonly defaultFrameworkJwtExpiration = '7d';
 
   public static readonly FRAMEWORK_BASE_PATH =
     FrameworkApplicationVariable.source.getValueOrDefault(
@@ -26,6 +27,19 @@ export class FrameworkApplicationVariable {
       'FRAMEWORK_PORT',
       Number,
       FrameworkApplicationVariable.defaultFrameworkPort,
+    );
+
+  public static readonly FRAMEWORK_JWT_SECRET =
+    FrameworkApplicationVariable.source.getValueOrThrow<string>(
+      'FRAMEWORK_JWT_SECRET',
+      String,
+    );
+
+  public static readonly FRAMEWORK_JWT_EXPIRATION =
+    FrameworkApplicationVariable.source.getValueOrDefault<string>(
+      'FRAMEWORK_JWT_EXPIRATION',
+      String,
+      FrameworkApplicationVariable.defaultFrameworkJwtExpiration,
     );
 
   public static readonly FRAMEWORK_COOKIES_SECRET =

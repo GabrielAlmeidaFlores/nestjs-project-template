@@ -10,12 +10,12 @@ import {
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { ForbiddenErrorExceptionFilter } from '@shared/api/exception-filter/forbidden.error.exception-filter';
-import { InvalidInputErrorExceptionFilter } from '@shared/api/exception-filter/invalid-input.error.exception-filter';
-import { NotFoundErrorExceptionFilter } from '@shared/api/exception-filter/not-found.error.exception-filter';
-import { UnauthorizedErrorExceptionFilter } from '@shared/api/exception-filter/unauthorized.error.exception-filter';
-import { UnexpectedErrorExceptionFilter } from '@shared/api/exception-filter/unexpected.error.exception-filter';
-import { TransformValidateInterceptor } from '@shared/api/interceptor/transform-validate/transform-validate.interceptor';
+import { ForbiddenErrorExceptionFilter } from '@shared/api/gateway/exception-filter/forbidden.error.exception-filter';
+import { InvalidInputErrorExceptionFilter } from '@shared/api/gateway/exception-filter/invalid-input.error.exception-filter';
+import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filter/not-found.error.exception-filter';
+import { UnauthorizedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unauthorized.error.exception-filter';
+import { UnexpectedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unexpected.error.exception-filter';
+import { TransformValidateInterceptor } from '@shared/api/gateway/interceptor/transform-validate/transform-validate.interceptor';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -130,7 +130,12 @@ export class AppConfig extends AppConfigUtils {
       .addBearerAuth()
       .setTitle(projectTitle)
       .setDescription(projectDescription)
-      .setVersion(projectVersion);
+      .setVersion(projectVersion)
+      .addSecurity('cookieAuth', {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'auth_token',
+      });
 
     const build = config.build();
 

@@ -1,6 +1,8 @@
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-
 export abstract class CacheStorageGateway {
-  public abstract createCustomerSession(customerId: Guid): Promise<Guid>;
-  public abstract getCustomerSession(customerId: Guid): Promise<Guid | null>;
+  public abstract getData(key: string): Promise<string | null>;
+  public abstract setData(
+    key: string,
+    value: string,
+    ttl: number,
+  ): Promise<void>;
 }
