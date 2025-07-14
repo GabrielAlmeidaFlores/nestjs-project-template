@@ -1,5 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
+import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
+import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
 import { BaseAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base-auditable.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
@@ -9,8 +11,12 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
-  @Column({ name: 'payment_method', type: 'varchar', length: 50 })
-  public paymentMethod: string;
+  @Column({
+    name: 'payment_method',
+    type: 'simple-enum',
+    enum: PaymentMethodEnum,
+  })
+  public paymentMethod: PaymentMethodEnum;
 
   @Column({
     name: 'value',
@@ -24,8 +30,8 @@ export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
   @Column({ name: 'discount_percentage', type: 'int' })
   public discountPercentage: number;
 
-  @Column({ name: 'status', type: 'varchar', length: 50 })
-  public status: string;
+  @Column({ name: 'status', type: 'simple-enum', enum: PaymentStatusEnum })
+  public status: PaymentStatusEnum;
 
   @Column({ name: 'due_date', type: 'date' })
   public dueDate: Date;
