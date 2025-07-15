@@ -1,11 +1,12 @@
-import { Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-paid-resource.typeorm.entity';
-import { BaseAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base-auditable.typeorm.entity';
+import { BaseCustomerAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base-customer-auditable.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 
-export class OrganizationCreditUsageTypeormEntity extends BaseAuditableTypeormEntity {
-  @Column({ name: 'credit_amount', type: 'number' })
+@Entity({ name: 'organization_credit_usage' })
+export class OrganizationCreditUsageTypeormEntity extends BaseCustomerAuditableTypeormEntity {
+  @Column({ name: 'credit_amount', type: 'int' })
   public creditAmount: number;
 
   @ManyToOne(
@@ -17,7 +18,7 @@ export class OrganizationCreditUsageTypeormEntity extends BaseAuditableTypeormEn
 
   @ManyToOne(
     () => ApplicationPaidResourceTypeormEntity,
-    (entity) => entity.applicationPaidResource,
+    (entity) => entity.organizationCreditUsage,
   )
   @JoinColumn({ name: 'application_paid_resource_id' })
   public applicationPaidResource:

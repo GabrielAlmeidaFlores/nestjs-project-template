@@ -3,12 +3,12 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { PaymentMethodEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@core/domain/schema/entity/bank/bank-payment/enum/payment-status.enum';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
-import { BaseAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base-auditable.typeorm.entity';
+import { BaseCustomerAuditableTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base-customer-auditable.typeorm.entity';
 import { OrganizationCreditPlanPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-plan-purchase.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 
 @Entity({ name: 'bank_payment' })
-export class BankPaymentTypeormEntity extends BaseAuditableTypeormEntity {
+export class BankPaymentTypeormEntity extends BaseCustomerAuditableTypeormEntity {
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
