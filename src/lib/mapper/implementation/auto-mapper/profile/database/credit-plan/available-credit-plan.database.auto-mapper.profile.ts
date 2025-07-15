@@ -2,14 +2,15 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
+import { AvailableCreditPlanEntity } from '@core/domain/schema/entity/credit-plan/available-credit-plan/available-credit-plan.entity';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { AvailableCreditPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-credit-plan.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
-export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
-  protected readonly _type = OrganizationDatabaseAutoMapperProfile.name;
+export class AvailableCreditPlanDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
+  protected readonly _type = AvailableCreditPlanDatabaseAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     super();
@@ -23,12 +24,12 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
 
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
-      source: OrganizationTypeormEntity,
-    ): OrganizationEntity => {
-      return new OrganizationEntity({
+      source: AvailableCreditPlanTypeormEntity,
+    ): AvailableCreditPlanEntity => {
+      return new AvailableCreditPlanEntity({
         ...source,
         id: new Guid(source.id),
-        organizationLogo: source.organizationLogo,
+        price: new DecimalValue(source.price),
       });
     };
 
@@ -36,23 +37,21 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
 
     createMap(
       this.mapper,
-      OrganizationTypeormEntity,
-      OrganizationEntity,
+      AvailableCreditPlanTypeormEntity,
+      AvailableCreditPlanEntity,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: OrganizationEntity,
-    ): OrganizationTypeormEntity => {
-      return OrganizationTypeormEntity.build({
+      source: AvailableCreditPlanEntity,
+    ): AvailableCreditPlanTypeormEntity => {
+      return AvailableCreditPlanTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        organizationLogo: source.organizationLogo,
-        organizationMember: undefined,
-        organizationCreditPlanPurchase: undefined,
-        organizationCreditPurchase: undefined,
+        price: source.price.toString(),
+        organizationCreditPlan: undefined,
       });
     };
 
@@ -60,8 +59,8 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
 
     createMap(
       this.mapper,
-      OrganizationEntity,
-      OrganizationTypeormEntity,
+      AvailableCreditPlanEntity,
+      AvailableCreditPlanTypeormEntity,
       mappingFunction,
     );
   }

@@ -2,7 +2,7 @@ import { Entity, ManyToOne, JoinColumn } from 'typeorm';
 
 import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment.typeorm.entity';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
 
 @Entity({ name: 'affiliate_customer_enabled_payment_plan' })
 export class AffiliateCustomerEnabledPaymentPlanTypeormEntity extends BaseTypeormEntity {
