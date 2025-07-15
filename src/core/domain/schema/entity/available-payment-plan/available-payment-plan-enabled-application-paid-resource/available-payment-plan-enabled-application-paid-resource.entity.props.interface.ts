@@ -3,7 +3,7 @@ import type { AvailablePaymentPlanEntity } from '@core/domain/schema/entity/avai
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base/base.entity.props.interface';
 import type { RelationModel } from '@core/domain/schema/model/relation.model';
 
-export interface AvailablePaymentPlanEnabledPaidResourceEntityPropsInterface
+export interface AvailablePaymentPlanEnabledApplicationPaidResourceEntityPropsInterface
   extends BaseEntityPropsInterface {
   applicationPaidResource: RelationModel<ApplicationPaidResourceEntity>;
   availablePaymentPlan: AvailablePaymentPlanEntity;

@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { PaymentPlanCycleEnum } from '@core/domain/schema/enum/payment-plan/payment-plan-cycle.enum';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
-import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-application-paid-resource.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
 
 @Entity({ name: 'available_payment_plan' })
@@ -29,11 +29,11 @@ export class AvailablePaymentPlanTypeormEntity extends BaseTypeormEntity {
   public cycle: PaymentPlanCycleEnum;
 
   @OneToMany(
-    () => AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
+    () => AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
     (entity) => entity.availablePaymentPlan,
   )
-  public availablePaymentPlanEnabledPaidResource:
-    | AvailablePaymentPlanEnabledPaidResourceTypeormEntity[]
+  public availablePaymentPlanEnabledApplicationPaidResource:
+    | AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity[]
     | undefined;
 
   @ManyToOne(

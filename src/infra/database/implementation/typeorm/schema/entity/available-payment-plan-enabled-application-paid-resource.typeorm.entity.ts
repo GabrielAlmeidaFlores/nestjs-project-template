@@ -5,10 +5,10 @@ import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementatio
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
 
 @Entity({ name: 'available_payment_plan_enable_paid_resource' })
-export class AvailablePaymentPlanEnabledPaidResourceTypeormEntity extends BaseTypeormEntity {
+export class AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(
     () => ApplicationPaidResourceTypeormEntity,
-    (entity) => entity.availablePaymentPlanEnabledPaidResource,
+    (entity) => entity.availablePaymentPlanEnabledApplicationPaidResource,
   )
   @JoinColumn({ name: 'application_paid_resource_id' })
   public applicationPaidResource:
@@ -17,11 +17,11 @@ export class AvailablePaymentPlanEnabledPaidResourceTypeormEntity extends BaseTy
 
   @ManyToOne(
     () => AvailablePaymentPlanTypeormEntity,
-    (entity) => entity.availablePaymentPlanEnabledPaidResource,
+    (entity) => entity.availablePaymentPlanEnabledApplicationPaidResource,
   )
   @JoinColumn({ name: 'available_payment_plan_id' })
   public availablePaymentPlan: AvailablePaymentPlanTypeormEntity | undefined;
 
   protected override readonly _type =
-    AvailablePaymentPlanEnabledPaidResourceTypeormEntity.name;
+    AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity.name;
 }

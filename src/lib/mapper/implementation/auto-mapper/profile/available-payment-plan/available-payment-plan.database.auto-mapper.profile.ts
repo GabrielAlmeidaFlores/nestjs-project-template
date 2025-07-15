@@ -51,7 +51,7 @@ export class AvailablePaymentPlanDatabaseAutoMapperProfile extends BaseAutoMappe
         ...source,
         id: source.id.toString(),
         price: source.price.toString(),
-        availablePaymentPlanEnabledPaidResource: undefined,
+        availablePaymentPlanEnabledApplicationPaidResource: undefined,
         affiliateCustomer: undefined,
       });
     };
