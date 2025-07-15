@@ -12,7 +12,7 @@ import { AffiliateCustomerPaymentTypeormEntity } from '@infra/database/implement
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm';
 import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-paid-resource.typeorm.entity';
 import { AvailableCreditPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-credit-plan.typeorm.entity';
-import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-application-paid-resource.typeorm.entity';
 import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan.typeorm.entity';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
@@ -48,7 +48,7 @@ export class TypeormIndex {
     OrganizationTypeormEntity,
     OrganizationCreditPlanPurchaseTypeormEntity,
     OrganizationTypeormEntity,
-    AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
+    AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

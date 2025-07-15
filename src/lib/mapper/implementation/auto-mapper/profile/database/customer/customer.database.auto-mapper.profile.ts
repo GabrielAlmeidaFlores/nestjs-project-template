@@ -29,19 +29,13 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: CustomerTypeormEntity,
     ): CustomerEntity => {
-      const id = new Guid(source.id);
-      const email = new Email(source.email);
-      const phoneNumber = new PhoneNumber(source.phoneNumber);
-      const federalDocument = new FederalDocument(source.federalDocument);
-      const password = new Hash(source.password);
-
       return new CustomerEntity({
         ...source,
-        id,
-        email,
-        phoneNumber,
-        federalDocument,
-        password,
+        id: new Guid(source.id),
+        email: new Email(source.email),
+        phoneNumber: new PhoneNumber(source.phoneNumber),
+        federalDocument: new FederalDocument(source.federalDocument),
+        password: new Hash(source.password),
       });
     };
 
@@ -59,19 +53,13 @@ export class CustomerDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: CustomerEntity,
     ): CustomerTypeormEntity => {
-      const id = source.id.toString();
-      const email = source.email.toString();
-      const phoneNumber = source.phoneNumber.toString();
-      const federalDocument = source.federalDocument.toString();
-      const password = source.password.toString();
-
       return CustomerTypeormEntity.build({
         ...source,
-        id,
-        email,
-        phoneNumber,
-        federalDocument,
-        password,
+        id: source.id.toString(),
+        email: source.email.toString(),
+        phoneNumber: source.phoneNumber.toString(),
+        federalDocument: source.federalDocument.toString(),
+        password: source.password.toString(),
         customerAddress: undefined,
         organizationMember: undefined,
         affiliateCustomer: undefined,

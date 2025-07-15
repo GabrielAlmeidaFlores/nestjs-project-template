@@ -29,26 +29,17 @@ export class CustomerAddressDatabaseAutoMapperProfile extends BaseAutoMapperProf
     const convertOrmEntityToDomainEntity = (
       source: CustomerAddressTypeormEntity,
     ): CustomerAddressEntity => {
-      const id = new Guid(source.id);
-      const postalCode = new PostalCode(source.postalCode);
-      const stateCode = this.convertStringToEnum(
-        StateCodeEnum,
-        source.stateCode,
-      );
-      const addressNumber = Number(source.addressNumber);
-      const customer = this.mapper.map(
-        source.customer,
-        CustomerTypeormEntity,
-        CustomerEntity,
-      );
-
       return new CustomerAddressEntity({
         ...source,
-        id,
-        postalCode,
-        stateCode,
-        addressNumber,
-        customer,
+        id: new Guid(source.id),
+        postalCode: new PostalCode(source.postalCode),
+        stateCode: this.convertStringToEnum(StateCodeEnum, source.stateCode),
+        addressNumber: Number(source.addressNumber),
+        customer: this.mapper.map(
+          source.customer,
+          CustomerTypeormEntity,
+          CustomerEntity,
+        ),
       });
     };
 
@@ -66,23 +57,17 @@ export class CustomerAddressDatabaseAutoMapperProfile extends BaseAutoMapperProf
     const convertDomainEntityToOrmEntity = (
       source: CustomerAddressEntity,
     ): CustomerAddressTypeormEntity => {
-      const id = source.id.toString();
-      const postalCode = source.postalCode.toString();
-      const stateCode = source.stateCode;
-      const addressNumber = String(source.addressNumber);
-      const customer = this.mapper.map(
-        source.customer,
-        CustomerEntity,
-        CustomerTypeormEntity,
-      );
-
       return CustomerAddressTypeormEntity.build({
         ...source,
-        id,
-        postalCode,
-        stateCode,
-        addressNumber,
-        customer,
+        id: source.id.toString(),
+        postalCode: source.postalCode.toString(),
+        stateCode: source.stateCode,
+        addressNumber: String(source.addressNumber),
+        customer: this.mapper.map(
+          source.customer,
+          CustomerEntity,
+          CustomerTypeormEntity,
+        ),
       });
     };
 

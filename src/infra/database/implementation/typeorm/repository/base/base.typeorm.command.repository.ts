@@ -1,5 +1,5 @@
 import type { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
-import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
 import type { DeepPartial, EntityManager, Repository } from 'typeorm';
 import type { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
