@@ -41,21 +41,18 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
           relationName: 'customer',
         });
       }
-      const id = new Guid(source.id);
-      const organization = this.mapper.map(
-        source.organization,
-        OrganizationTypeormEntity,
-        OrganizationEntity,
-      );
-      const customer = new RelationModel<CustomerEntity>({
-        id: new Guid(source.customer.id),
-      });
 
       return new OrganizationMemberEntity({
         ...source,
-        id,
-        organization,
-        customer,
+        id: new Guid(source.id),
+        organization: this.mapper.map(
+          source.organization,
+          OrganizationTypeormEntity,
+          OrganizationEntity,
+        ),
+        customer: new RelationModel<CustomerEntity>({
+          id: new Guid(source.customer.id),
+        }),
       });
     };
 
@@ -73,21 +70,17 @@ export class OrganizationMemberDatabaseAutoMapperProfile extends BaseAutoMapperP
     const convertDomainEntityToOrmEntity = (
       source: OrganizationMemberEntity,
     ): OrganizationMemberTypeormEntity => {
-      const id = source.id.toString();
-      const organization = this.mapper.map(
-        source.organization,
-        OrganizationEntity,
-        OrganizationTypeormEntity,
-      );
-      const customer = {
-        id: source.customer.id.toString(),
-      } as CustomerTypeormEntity;
-
       return OrganizationMemberTypeormEntity.build({
         ...source,
-        id,
-        organization,
-        customer,
+        id: source.id.toString(),
+        organization: this.mapper.map(
+          source.organization,
+          OrganizationEntity,
+          OrganizationTypeormEntity,
+        ),
+        customer: {
+          id: source.customer.id.toString(),
+        } as CustomerTypeormEntity,
       });
     };
 

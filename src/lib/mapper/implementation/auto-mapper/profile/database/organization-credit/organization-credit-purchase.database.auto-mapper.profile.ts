@@ -4,17 +4,21 @@ import { Injectable } from '@nestjs/common';
 
 import { BankPaymentEntity } from '@core/domain/schema/entity/bank/bank-payment/bank-payment.entity';
 import { CustomerEntity } from '@core/domain/schema/entity/customer/customer/customer.entity';
+import { OrganizationEntity } from '@core/domain/schema/entity/organization/organization/organization.entity';
+import { OrganizationCreditPurchaseEntity } from '@core/domain/schema/entity/organization-credit/organization-credit-purchase/organization-credit-purchase.entity';
 import { RelationModel } from '@core/domain/schema/model/relation.model';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { MissingRelationTypeError } from '@lib/mapper/implementation/auto-mapper/error/missing-relation-type.error';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
-export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
-  protected readonly _type = BankPaymentDatabaseAutoMapperProfile.name;
+export class OrganizationCreditPurchaseDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
+  protected readonly _type =
+    OrganizationCreditPurchaseDatabaseAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     super();
@@ -28,10 +32,26 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
 
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
-      source: BankPaymentTypeormEntity,
-    ): BankPaymentEntity => {
+      source: OrganizationCreditPurchaseTypeormEntity,
+    ): OrganizationCreditPurchaseEntity => {
       const sourceClassName = source.constructor.name;
-      const targetClassName = BankPaymentEntity.name;
+      const targetClassName = OrganizationCreditPurchaseEntity.name;
+
+      if (!source.bankPayment) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'bankPayment',
+        });
+      }
+
+      if (!source.organization) {
+        throw new MissingRelationTypeError({
+          targetClassName,
+          sourceClassName,
+          relationName: 'organization',
+        });
+      }
 
       if (!source.createdBy) {
         throw new MissingRelationTypeError({
@@ -49,11 +69,15 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
         });
       }
 
-      return new BankPaymentEntity({
+      return new OrganizationCreditPurchaseEntity({
         ...source,
         id: new Guid(source.id),
-        value: new DecimalValue(source.value),
-        netValue: new DecimalValue(source.netValue),
+        organization: new RelationModel<OrganizationEntity>({
+          id: new Guid(source.organization.id),
+        }),
+        bankPayment: new RelationModel<BankPaymentEntity>({
+          id: new Guid(source.bankPayment.id),
+        }),
         createdBy: new RelationModel<CustomerEntity>({
           id: new Guid(source.createdBy.id),
         }),
@@ -67,24 +91,27 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
 
     createMap(
       this.mapper,
-      BankPaymentTypeormEntity,
-      BankPaymentEntity,
+      OrganizationCreditPurchaseTypeormEntity,
+      OrganizationCreditPurchaseEntity,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: BankPaymentEntity,
-    ): BankPaymentTypeormEntity => {
-      return BankPaymentTypeormEntity.build({
+      source: OrganizationCreditPurchaseEntity,
+    ): OrganizationCreditPurchaseTypeormEntity => {
+      const id = source.id.toString();
+
+      return OrganizationCreditPurchaseTypeormEntity.build({
         ...source,
-        id: source.id.toString(),
-        value: source.value.toString(),
-        netValue: source.netValue.toString(),
-        bankTransfer: undefined,
-        organizationCreditPurchase: undefined,
-        organizationCreditPlanPurchase: undefined,
+        id,
+        organization: {
+          id: source.organization.id.toString(),
+        } as OrganizationTypeormEntity,
+        bankPayment: {
+          id: source.bankPayment.id.toString(),
+        } as BankPaymentTypeormEntity,
         createdBy: {
           id: source.createdBy.id.toString(),
         } as CustomerTypeormEntity,
@@ -98,8 +125,8 @@ export class BankPaymentDatabaseAutoMapperProfile extends BaseAutoMapperProfile 
 
     createMap(
       this.mapper,
-      BankPaymentEntity,
-      BankPaymentTypeormEntity,
+      OrganizationCreditPurchaseEntity,
+      OrganizationCreditPurchaseTypeormEntity,
       mappingFunction,
     );
   }
