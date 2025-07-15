@@ -4,18 +4,18 @@ import { Injectable } from '@nestjs/common';
 
 import { ApplicationPaidResourceEntity } from '@core/domain/schema/entity/application-resource/application-paid-resource/application-paid-resource.entity';
 import { AvailablePaymentPlanEntity } from '@core/domain/schema/entity/available-payment-plan/available-payment-plan/available-payment-plan.entity';
-import { AvailablePaymentPlanEnabledPaidResourceEntity } from '@core/domain/schema/entity/available-payment-plan/available-payment-plan-enabled-paid-resource/available-payment-plan-enabled-paid-resource.entity';
+import { AvailablePaymentPlanEnabledApplicationPaidResourceEntity } from '@core/domain/schema/entity/available-payment-plan/available-payment-plan-enabled-application-paid-resource/available-payment-plan-enabled-application-paid-resource.entity';
 import { RelationModel } from '@core/domain/schema/model/relation.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { ApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/application-paid-resource.typeorm.entity';
-import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-application-paid-resource.typeorm.entity';
 import { AvailablePaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan.typeorm.entity';
 import { BaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/base/base.auto-mapper.profile';
 
 @Injectable()
-export class AvailablePaymentPlanEnabledPaidResourceDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
+export class AvailablePaymentPlanEnabledApplicationPaidResourceDatabaseAutoMapperProfile extends BaseAutoMapperProfile {
   protected readonly _type =
-    AvailablePaymentPlanEnabledPaidResourceDatabaseAutoMapperProfile.name;
+    AvailablePaymentPlanEnabledApplicationPaidResourceDatabaseAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     super();
@@ -29,9 +29,9 @@ export class AvailablePaymentPlanEnabledPaidResourceDatabaseAutoMapperProfile ex
 
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
-      source: AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
-    ): AvailablePaymentPlanEnabledPaidResourceEntity => {
-      return new AvailablePaymentPlanEnabledPaidResourceEntity({
+      source: AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
+    ): AvailablePaymentPlanEnabledApplicationPaidResourceEntity => {
+      return new AvailablePaymentPlanEnabledApplicationPaidResourceEntity({
         ...source,
         id: new Guid(source.id),
         applicationPaidResource:
@@ -50,36 +50,38 @@ export class AvailablePaymentPlanEnabledPaidResourceDatabaseAutoMapperProfile ex
 
     createMap(
       this.mapper,
-      AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
-      AvailablePaymentPlanEnabledPaidResourceEntity,
+      AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
+      AvailablePaymentPlanEnabledApplicationPaidResourceEntity,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: AvailablePaymentPlanEnabledPaidResourceEntity,
-    ): AvailablePaymentPlanEnabledPaidResourceTypeormEntity => {
-      return AvailablePaymentPlanEnabledPaidResourceTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        applicationPaidResource: {
-          id: source.applicationPaidResource.id.toString(),
-        } as ApplicationPaidResourceTypeormEntity,
-        availablePaymentPlan: this.mapper.map(
-          source.availablePaymentPlan,
-          AvailablePaymentPlanEntity,
-          AvailablePaymentPlanTypeormEntity,
-        ),
-      });
+      source: AvailablePaymentPlanEnabledApplicationPaidResourceEntity,
+    ): AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity => {
+      return AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          applicationPaidResource: {
+            id: source.applicationPaidResource.id.toString(),
+          } as ApplicationPaidResourceTypeormEntity,
+          availablePaymentPlan: this.mapper.map(
+            source.availablePaymentPlan,
+            AvailablePaymentPlanEntity,
+            AvailablePaymentPlanTypeormEntity,
+          ),
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
 
     createMap(
       this.mapper,
-      AvailablePaymentPlanEnabledPaidResourceEntity,
-      AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
+      AvailablePaymentPlanEnabledApplicationPaidResourceEntity,
+      AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
       mappingFunction,
     );
   }

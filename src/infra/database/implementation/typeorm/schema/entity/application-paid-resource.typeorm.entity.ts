@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { ApplicationPaidResourceEnum } from '@core/domain/schema/entity/application-resource/application-paid-resource/enum/application-paid-resource.enum';
-import { AvailablePaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-paid-resource.typeorm.entity';
+import { AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/available-payment-plan-enabled-application-paid-resource.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 
@@ -21,11 +21,11 @@ export class ApplicationPaidResourceTypeormEntity extends BaseTypeormEntity {
   public description: string;
 
   @OneToMany(
-    () => AvailablePaymentPlanEnabledPaidResourceTypeormEntity,
+    () => AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity,
     (entity) => entity.applicationPaidResource,
   )
-  public availablePaymentPlanEnabledPaidResource:
-    | AvailablePaymentPlanEnabledPaidResourceTypeormEntity[]
+  public availablePaymentPlanEnabledApplicationPaidResource:
+    | AvailablePaymentPlanEnabledApplicationPaidResourceTypeormEntity[]
     | undefined;
 
   @OneToMany(
