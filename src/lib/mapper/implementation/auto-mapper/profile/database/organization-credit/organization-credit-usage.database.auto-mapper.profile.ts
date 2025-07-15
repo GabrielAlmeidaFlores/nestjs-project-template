@@ -102,11 +102,9 @@ export class OrganizationCreditUsageDatabaseAutoMapperProfile extends BaseAutoMa
     const convertDomainEntityToOrmEntity = (
       source: OrganizationCreditUsageEntity,
     ): OrganizationCreditUsageTypeormEntity => {
-      const id = source.id.toString();
-
       return OrganizationCreditUsageTypeormEntity.build({
         ...source,
-        id,
+        id: source.id.toString(),
         organization: {
           id: source.organization.id.toString(),
         } as OrganizationTypeormEntity,

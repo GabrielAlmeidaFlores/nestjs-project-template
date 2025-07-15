@@ -25,11 +25,9 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
     const convertOrmEntityToDomainEntity = (
       source: OrganizationTypeormEntity,
     ): OrganizationEntity => {
-      const id = new Guid(source.id);
-
       return new OrganizationEntity({
         ...source,
-        id,
+        id: new Guid(source.id),
         organizationLogo: source.organizationLogo,
       });
     };
@@ -48,12 +46,10 @@ export class OrganizationDatabaseAutoMapperProfile extends BaseAutoMapperProfile
     const convertDomainEntityToOrmEntity = (
       source: OrganizationEntity,
     ): OrganizationTypeormEntity => {
-      const id = source.id.toString();
-
       return OrganizationTypeormEntity.build({
         ...source,
-        id,
-        organizationLogo: source.organizationLogo ?? null,
+        id: source.id.toString(),
+        organizationLogo: source.organizationLogo,
         organizationMember: undefined,
         organizationCreditPlanPurchase: undefined,
         organizationCreditPurchase: undefined,
