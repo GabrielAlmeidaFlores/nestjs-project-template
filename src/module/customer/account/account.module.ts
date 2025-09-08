@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 
+import { AccountController } from '@module/customer/account/account.controller';
+
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [AccountController],
   providers: [],
 })
 export class AccountModule {
