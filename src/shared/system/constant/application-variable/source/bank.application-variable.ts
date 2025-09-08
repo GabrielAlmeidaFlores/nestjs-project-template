@@ -1,7 +1,7 @@
-import { EnvironmentVariable } from '@shared/system/constant/application-variable/utils/environment-variable.object';
+import { EnvironmentVariableService } from '@shared/system/constant/application-variable/implementation/environment-variable/environment-variable.service';
 
 export class BankApplicationVariable {
-  public static readonly source = new EnvironmentVariable();
+  public static readonly source = new EnvironmentVariableService();
 
   public static readonly BANK_URL =
     BankApplicationVariable.source.getValueOrThrow<string>('BANK_URL', String);

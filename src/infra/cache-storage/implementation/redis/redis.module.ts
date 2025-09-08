@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import Redis from 'ioredis';
 
 import { RedisService } from '@infra/cache-storage/implementation/redis/redis.service';
-import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/cache-storage.application-variable';
+import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 
 const redisProvider = {
   provide: 'REDIS_CLIENT',
