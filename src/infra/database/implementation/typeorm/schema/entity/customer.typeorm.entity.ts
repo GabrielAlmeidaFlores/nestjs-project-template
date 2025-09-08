@@ -50,7 +50,9 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   })
   public mfaSecret: string | null;
 
-  @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer)
+  @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer, {
+    nullable: false,
+  })
   @JoinColumn({
     name: 'customer_address_id',
   })
