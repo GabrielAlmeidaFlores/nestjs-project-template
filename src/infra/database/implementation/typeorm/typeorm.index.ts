@@ -1,5 +1,14 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
+import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
+import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
+import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
+import { CustomerAddressTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.query.repository';
+import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
+import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
+import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
+import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -16,9 +25,20 @@ export class TypeormIndex {
     CustomerTypeormEntity,
     OrganizationMemberTypeormEntity,
     OrganizationTypeormEntity,
+    OrganizationTypeormEntity,
   ];
 
-  public static readonly repositories: Provider[] = [];
+  public static readonly repositories: Provider[] = [
+    BaseTypeormTransactionRepository,
+    CustomerTypeormQueryRepository,
+    CustomerTypeormCommandRepository,
+    CustomerAddressTypeormCommandRepository,
+    CustomerAddressTypeormQueryRepository,
+    OrganizationTypeormQueryRepository,
+    OrganizationTypeormCommandRepository,
+    OrganizationMemberTypeormQueryRepository,
+    OrganizationMemberTypeormCommandRepository,
+  ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
     TypeormIndex.entities,
@@ -32,6 +52,7 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
+    migrations: ['src/infra/database/implementation/typeorm/migration/*.ts'],
     synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 

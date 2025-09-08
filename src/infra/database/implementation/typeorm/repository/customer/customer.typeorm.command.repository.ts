@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { TransactionType } from '@core/domain/repository/base/command/type/transaction.type';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -19,11 +19,9 @@ export class CustomerTypeormCommandRepository
   public constructor(
     @InjectRepository(CustomerTypeormEntity)
     repository: Repository<CustomerTypeormEntity>,
-    @InjectDataSource()
-    dataSource: DataSource,
     private readonly mapperGateway: MapperGateway,
   ) {
-    super(repository, dataSource);
+    super(repository);
   }
 
   public createCustomer(props: CustomerEntity): TransactionType {
