@@ -23,7 +23,6 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
-    migrations: ['src/infra/database/implementation/typeorm/migration/*.ts'],
     synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 
