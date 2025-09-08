@@ -1,5 +1,5 @@
-import { BaseValueObject } from '@core/domain/schema/entity/assets/value-object/base/base.value-object';
-import { InvalidGuidError } from '@core/domain/schema/entity/assets/value-object/guid/error/invalid-guid.error';
+import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
+import { InvalidGuidError } from '@core/domain/schema/value-object/guid/error/invalid-guid.error';
 
 export class Guid extends BaseValueObject<Guid> {
   protected readonly _type = Guid.name;

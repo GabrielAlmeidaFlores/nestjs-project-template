@@ -1,4 +1,4 @@
-import type { Guid } from '@core/domain/schema/assets/value-object/guid/guid.value-object';
+import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export interface BaseEntityPropsInterface {
   id?: Guid;

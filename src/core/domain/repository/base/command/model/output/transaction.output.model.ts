@@ -1,5 +1,5 @@
-export class TransactionEventOutputModel {
-  protected readonly _type = TransactionEventOutputModel.name;
+export class TransactionOutputModel {
+  protected readonly _type = TransactionOutputModel.name;
 
   public constructor(
     public readonly commit: () => Promise<void>,
