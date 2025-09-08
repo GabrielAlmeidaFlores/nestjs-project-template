@@ -1,5 +1,9 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -7,7 +11,12 @@ import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity
 import type { DataSourceOptions } from 'typeorm';
 
 export class TypeormIndex {
-  public static readonly entities: EntityClassOrSchema[] = [];
+  public static readonly entities: EntityClassOrSchema[] = [
+    CustomerAddressTypeormEntity,
+    CustomerTypeormEntity,
+    OrganizationMemberTypeormEntity,
+    OrganizationTypeormEntity,
+  ];
 
   public static readonly repositories: Provider[] = [];
 

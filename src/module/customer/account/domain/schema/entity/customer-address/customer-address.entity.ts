@@ -1,6 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { InvalidCityError } from '@module/customer/account/domain/schema/entity/customer-address/error/invalid-customer-adress-city.error';
-import { InvalidNeighborhoodError } from '@module/customer/account/domain/schema/entity/customer-address/error/invalid-customer-adress-neighborhood.error';
+import { InvalidCityError } from '@module/customer/account/domain/schema/entity/customer-address/error/invalid-customer-address-city.error';
+import { InvalidNeighborhoodError } from '@module/customer/account/domain/schema/entity/customer-address/error/invalid-customer-address-neighborhood.error';
 
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import type { CustomerAddressEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity.props.interface';
