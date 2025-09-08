@@ -4,8 +4,7 @@ module.exports = {
       rules: {
         'require-dto-decorator': require('./require-dto-decorator.js'),
         'require-valid-error-constructor': require('./require-valid-error-constructor.js'),
-        'require-valid-entity-relation': require('./require-valid-entity-relation.js'),
-        'require-ddd-entity-nullable-properties-to-be-optional': require('./require-ddd-entity-nullable-properties-to-be-optional.js'),
+        'ddd-consistent-nullable-properties': require('./ddd-consistent-nullable-properties.js'),
         'require-matching-dto-property-decorators': require('./require-matching-dto-property-decorators.js'),
         'require-dto-to-extend-base-buildable-object': require('./require-dto-to-extend-base-buildable-object.js')
       },
@@ -14,8 +13,7 @@ module.exports = {
   rules: {
     'pattern-rule/require-dto-decorator': 'error',
     'pattern-rule/require-valid-error-constructor': 'error',
-    'pattern-rule/require-valid-entity-relation': 'error',
-    'pattern-rule/require-ddd-entity-nullable-properties-to-be-optional':
+    'pattern-rule/ddd-consistent-nullable-properties':
       'error',
     'pattern-rule/require-matching-dto-property-decorators': 'error',
     'pattern-rule/require-dto-to-extend-base-buildable-object': 'error'
