@@ -1,8 +1,8 @@
 import { Like } from 'typeorm';
 
-import { ListedDataOutputModel } from '@core/domain/repository/assets/model/output/listed-data.output.model';
+import { ListedDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 
-import type { ListDataInputModel } from '@core/domain/repository/assets/model/input/list-data.input.model';
+import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 import type { NotFoundError } from 'rxjs';

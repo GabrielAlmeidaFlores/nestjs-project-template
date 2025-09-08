@@ -1,6 +1,6 @@
-import { TransactionEventOutputModel } from '@core/domain/repository/assets/model/output/transaction-event.output.model';
+import { TransactionOutputModel } from '@core/domain/repository/base/command/model/output/transaction.output.model';
 
-import type { TransactionType } from '@core/domain/repository/assets/type/transaction.type';
+import type { TransactionType } from '@core/domain/repository/base/command/type/transaction.type';
 import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import type {
   DataSource,
@@ -20,7 +20,7 @@ export abstract class BaseTypeormCommandRepository<
 
   public async save(
     events: TransactionType | TransactionType[],
-  ): Promise<TransactionEventOutputModel> {
+  ): Promise<TransactionOutputModel> {
     if (!Array.isArray(events)) {
       events = [events];
     }
@@ -69,7 +69,7 @@ export abstract class BaseTypeormCommandRepository<
         await event(queryRunner.manager);
       }
 
-      return new TransactionEventOutputModel(commit, rollback);
+      return new TransactionOutputModel(commit, rollback);
     } catch (error) {
       await rollback();
       throw error;

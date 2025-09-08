@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsOptional, ValidateNested } from 'class-validator';
 
-import type { BaseValueObject } from '@core/domain/schema/entity/assets/value-object/base/base.value-object';
+import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
 
 export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(

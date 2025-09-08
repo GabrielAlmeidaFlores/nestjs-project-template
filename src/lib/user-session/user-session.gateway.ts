@@ -1,4 +1,4 @@
-import type { Guid } from '@core/domain/schema/entity/assets/value-object/guid/guid.value-object';
+import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import type { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
 
 export abstract class UserSessionGateway {
