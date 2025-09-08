@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { Guid } from '@core/domain/schema/entity/assets/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { UserSessionJwtInputModel } from '@lib/user-session/model/input/user-session-jwt.input.model';
 import { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
