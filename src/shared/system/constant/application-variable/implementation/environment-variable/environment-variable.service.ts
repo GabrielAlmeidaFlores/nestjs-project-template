@@ -1,9 +1,11 @@
 import 'dotenv/config';
-import { InvalidApplicationVariableTypeError } from '@shared/system/constant/application-variable/utils/error/invalid-application-variable.error';
-import { MissingApplicationVariableError } from '@shared/system/constant/application-variable/utils/error/missing-application-variable.error';
+import { InvalidApplicationVariableTypeError } from '@shared/system/constant/application-variable/implementation/environment-variable/error/invalid-application-variable.error';
+import { MissingApplicationVariableError } from '@shared/system/constant/application-variable/implementation/environment-variable/error/missing-application-variable.error';
 
-export class EnvironmentVariable {
-  protected readonly _type = EnvironmentVariable.name;
+import type { ApplicationVariableGateway } from '@shared/system/constant/application-variable/application-variable.gateway';
+
+export class EnvironmentVariableService implements ApplicationVariableGateway {
+  protected readonly _type = EnvironmentVariableService.name;
 
   public getArrayOrThrow<T>(
     key: string,

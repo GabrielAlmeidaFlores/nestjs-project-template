@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
-import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/cache-storage.application-variable';
+import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 
 @Injectable()
 export class RedisService implements CacheStorageGateway {

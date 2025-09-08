@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { CacheStorageModule } from '@infra/cache-storage/cache-storage.module';
 import { LocalCacheStorageService } from '@lib/user-session/implementation/local-cache-storage/local-cache-storage.service';
-import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
+import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
 @Module({
   imports: [
