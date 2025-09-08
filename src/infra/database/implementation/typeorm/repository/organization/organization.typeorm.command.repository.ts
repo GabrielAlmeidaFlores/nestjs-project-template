@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { TransactionType } from '@core/domain/repository/base/command/type/transaction.type';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -19,11 +19,9 @@ export class OrganizationTypeormCommandRepository
   public constructor(
     @InjectRepository(OrganizationTypeormEntity)
     repository: Repository<OrganizationTypeormEntity>,
-    @InjectDataSource()
-    dataSource: DataSource,
     private readonly mapperGateway: MapperGateway,
   ) {
-    super(repository, dataSource);
+    super(repository);
   }
 
   public createOrganization(props: OrganizationEntity): TransactionType {
