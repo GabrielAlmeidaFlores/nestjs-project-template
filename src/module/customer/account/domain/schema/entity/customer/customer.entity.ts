@@ -31,7 +31,7 @@ export class CustomerEntity extends BaseEntity {
     this.federalDocument = props.federalDocument;
     this.phoneNumber = props.phoneNumber;
     this.password = props.password;
-    this.customerAddress = this.customerAddress;
+    this.customerAddress = props.customerAddress;
     this.profilePicture = props.profilePicture ?? null;
     this.mfaSecret = props.mfaSecret ?? null;
   }
