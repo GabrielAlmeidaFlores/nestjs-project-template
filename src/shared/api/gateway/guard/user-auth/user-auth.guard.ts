@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { Guid } from '@core/domain/schema/entity/assets/value-object/guid/guid.value-object';
 import { UserSessionJwtInputModel } from '@lib/user-session/model/input/user-session-jwt.input.model';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
 import { UserDataInputModel } from '@shared/api/util/decorator/method/get-user-data/model/input/user-data.input.model';
