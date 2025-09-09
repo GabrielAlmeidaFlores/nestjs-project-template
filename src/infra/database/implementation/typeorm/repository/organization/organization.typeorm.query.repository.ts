@@ -6,8 +6,8 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
-import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/auth/domain/repository/organization/query/organization.query.repository.gateway';
+import { GetOrganizationQueryResult } from '@module/customer/auth/domain/repository/organization/query/result/get-organization.query.result';
 
 @Injectable()
 export class OrganizationTypeormQueryRepository

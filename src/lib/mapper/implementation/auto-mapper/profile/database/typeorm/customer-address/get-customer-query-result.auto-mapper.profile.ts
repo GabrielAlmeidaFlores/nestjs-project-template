@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
-import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
-import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
-import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id.value-object';
+import { GetCustomerAddressQueryResult } from '@module/customer/auth/domain/repository/customer-address/query/result/get-customer-address.query.result';
+import { StateCodeEnum } from '@module/customer/auth/domain/schema/entity/customer-address/enum/state-code.enum';
+import { CustomerAddressId } from '@module/customer/auth/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 
 @Injectable()
 export class GetCustomerAddressQueryResultAutoMapperProfile {

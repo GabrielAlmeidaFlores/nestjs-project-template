@@ -6,7 +6,7 @@ import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway'
 import { UserSessionJwtInputModel } from '@lib/user-temp-data/model/input/user-session-jwt.input.model';
 import { UserSessionJwtOutputModel } from '@lib/user-temp-data/model/output/user-session-jwt.output.model';
 import { UserTempDataGateway } from '@lib/user-temp-data/user-temp-data.gateway';
-import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
+import { CustomerId } from '@module/customer/auth/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
