@@ -6,8 +6,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerCommandRepositoryGateway } from '@module/customer/auth/domain/repository/customer/command/customer.command.repository.gateway';
+import { CustomerEntity } from '@module/customer/auth/domain/schema/entity/customer/customer.entity';
 
 @Injectable()
 export class CustomerTypeormCommandRepository

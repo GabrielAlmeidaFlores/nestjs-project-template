@@ -12,14 +12,14 @@ import { OrganizationMemberTypeormCommandRepository } from '@infra/database/impl
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
-import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
-import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
-import { CustomerAddressQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/query/customer-address.query.repository.gateway';
-import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
-import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
-import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerCommandRepositoryGateway } from '@module/customer/auth/domain/repository/customer/command/customer.command.repository.gateway';
+import { CustomerQueryRepositoryGateway } from '@module/customer/auth/domain/repository/customer/query/customer.query.repository.gateway';
+import { CustomerAddressCommandRepositoryGateway } from '@module/customer/auth/domain/repository/customer-address/command/customer-address.command.repository.gateway';
+import { CustomerAddressQueryRepositoryGateway } from '@module/customer/auth/domain/repository/customer-address/query/customer-address.query.repository.gateway';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/auth/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/auth/domain/repository/organization/query/organization.query.repository.gateway';
+import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/auth/domain/repository/organization-member/command/organization-member.command.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/auth/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 
 const classProvider: ClassProvider[] = [
   {
