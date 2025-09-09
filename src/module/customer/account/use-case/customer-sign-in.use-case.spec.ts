@@ -5,7 +5,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
+import { UserTempDataGateway } from '@lib/user-temp-data/user-temp-data.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
@@ -16,7 +16,7 @@ import { WrongSignInCredentialsError } from '@module/customer/account/error/wron
 import { CustomerSignInUseCase } from '@module/customer/account/use-case/customer-sign-in.use-case';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-import type { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
+import type { UserSessionJwtOutputModel } from '@lib/user-temp-data/model/output/user-session-jwt.output.model';
 import type { FastifyReply } from 'fastify';
 
 jest.mock('bcrypt');
@@ -35,7 +35,7 @@ const createQueryGatewayMock =
     >(),
   });
 
-const createUserSessionGatewayMock = (): jest.Mocked<UserSessionGateway> => ({
+const createUserSessionGatewayMock = (): jest.Mocked<UserTempDataGateway> => ({
   createCustomerSession: jest.fn<Promise<string>, [CustomerId]>(),
   getCustomerSession: jest.fn<Promise<CustomerId | null>, [CustomerId]>(),
   verifySession: jest.fn<UserSessionJwtOutputModel | null, [string]>(),
@@ -86,7 +86,7 @@ describe('CustomerSignInUseCase', () => {
   let useCase: CustomerSignInUseCase;
 
   let mockCustomerQueryRepository: jest.Mocked<CustomerQueryRepositoryGateway>;
-  let mockUserSessionGateway: jest.Mocked<UserSessionGateway>;
+  let mockUserSessionGateway: jest.Mocked<UserTempDataGateway>;
   let reply: FastifyReply;
 
   beforeEach(async () => {
@@ -98,7 +98,7 @@ describe('CustomerSignInUseCase', () => {
           useValue: createQueryGatewayMock(),
         },
         {
-          provide: UserSessionGateway,
+          provide: UserTempDataGateway,
           useValue: createUserSessionGatewayMock(),
         },
       ],
@@ -106,7 +106,7 @@ describe('CustomerSignInUseCase', () => {
 
     useCase = module.get(CustomerSignInUseCase);
     mockCustomerQueryRepository = module.get(CustomerQueryRepositoryGateway);
-    mockUserSessionGateway = module.get(UserSessionGateway);
+    mockUserSessionGateway = module.get(UserTempDataGateway);
 
     reply = { setCookie: jest.fn() } as unknown as FastifyReply;
 

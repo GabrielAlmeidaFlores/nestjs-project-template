@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { FastifyReply } from 'fastify';
 
-import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
+import { UserTempDataGateway } from '@lib/user-temp-data/user-temp-data.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 import { CustomerSignInRequestDto } from '@module/customer/account/dto/request/customer-sign-in.request.dto';
@@ -18,7 +18,7 @@ export class CustomerSignInUseCase {
 
   public constructor(
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
-    private readonly userSessionGateway: UserSessionGateway,
+    private readonly userSessionGateway: UserTempDataGateway,
   ) {}
 
   public async execute(

@@ -3,14 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
-import { UserSessionJwtInputModel } from '@lib/user-session/model/input/user-session-jwt.input.model';
-import { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
-import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
+import { UserSessionJwtInputModel } from '@lib/user-temp-data/model/input/user-session-jwt.input.model';
+import { UserSessionJwtOutputModel } from '@lib/user-temp-data/model/output/user-session-jwt.output.model';
+import { UserTempDataGateway } from '@lib/user-temp-data/user-temp-data.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
-export class LocalCacheStorageService implements UserSessionGateway {
+export class LocalCacheStorageService implements UserTempDataGateway {
   protected readonly _type = LocalCacheStorageService.name;
 
   public constructor(
