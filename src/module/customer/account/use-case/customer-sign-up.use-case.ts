@@ -92,7 +92,7 @@ export class CustomerSignUpUseCase {
         organizationMember,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.save([
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
       createCustomerAddress,
       createCustomer,
       createOrganization,

@@ -12,7 +12,7 @@ import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/proper
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @RequestDto()
-export class CustomerSignUpDataAddressRequestDto extends BaseBuildableObject {
+export class CustomerAddressSignUpRequestDto extends BaseBuildableObject {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -28,7 +28,7 @@ export class CustomerSignUpDataAddressRequestDto extends BaseBuildableObject {
   @RequestDtoNumberProperty()
   public addressNumber: number;
 
-  protected override readonly _type = CustomerSignUpDataAddressRequestDto.name;
+  protected override readonly _type = CustomerAddressSignUpRequestDto.name;
 }
 
 @RequestDto()
@@ -47,8 +47,8 @@ export class CustomerSignUpRequestDto extends BaseBuildableObject {
 
   @RequestDtoStringProperty()
   public password: string;
-  @RequestDtoObjectProperty(() => CustomerSignUpDataAddressRequestDto)
-  public customerAddress: CustomerSignUpDataAddressRequestDto;
+  @RequestDtoObjectProperty(() => CustomerAddressSignUpRequestDto)
+  public customerAddress: CustomerAddressSignUpRequestDto;
 
   protected override readonly _type = CustomerSignUpRequestDto.name;
 }

@@ -18,7 +18,7 @@ export class LocalCacheStorageService implements UserSessionGateway {
   ) {}
 
   public async createCustomerSession(customerId: Guid): Promise<string> {
-    const sessionId = Guid.generate();
+    const sessionId = new Guid();
     const sessionIdString = sessionId.toString();
 
     const secondsPerHour = 3600;

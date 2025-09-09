@@ -5,6 +5,8 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
   protected readonly _type = PhoneNumber.name;
 
   public constructor(value: string) {
+    value = value.replace(/\D/g, '');
+
     super(value);
 
     const isValidPhoneNumber = PhoneNumber.isValid(value);
