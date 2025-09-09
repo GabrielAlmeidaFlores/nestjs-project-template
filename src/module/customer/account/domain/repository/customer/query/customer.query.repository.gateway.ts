@@ -8,9 +8,9 @@ export abstract class CustomerQueryRepositoryGateway {
     id: Guid,
   ): Promise<GetCustomerQueryResult | null>;
 
-  public abstract findCustomerByEmailOrFederalDocument(
+  public abstract findCustomersByEmailOrFederalDocument(
     identifier: Email | FederalDocument,
-  ): Promise<GetCustomerQueryResult | null>;
+  ): Promise<GetCustomerQueryResult[]>;
 
   public abstract findCustomerByEmail(
     email: Email,

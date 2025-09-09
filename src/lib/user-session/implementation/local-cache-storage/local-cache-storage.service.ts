@@ -6,6 +6,7 @@ import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway'
 import { UserSessionJwtInputModel } from '@lib/user-session/model/input/user-session-jwt.input.model';
 import { UserSessionJwtOutputModel } from '@lib/user-session/model/output/user-session-jwt.output.model';
 import { UserSessionGateway } from '@lib/user-session/user-session.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
@@ -17,8 +18,8 @@ export class LocalCacheStorageService implements UserSessionGateway {
     private readonly cacheStorageGateway: CacheStorageGateway,
   ) {}
 
-  public async createCustomerSession(customerId: Guid): Promise<string> {
-    const sessionId = new Guid();
+  public async createCustomerSession(customerId: CustomerId): Promise<string> {
+    const sessionId = new CustomerId();
     const sessionIdString = sessionId.toString();
 
     const secondsPerHour = 3600;
@@ -43,14 +44,16 @@ export class LocalCacheStorageService implements UserSessionGateway {
     return this.jwtService.sign({ ...customerSessionJwt });
   }
 
-  public async getCustomerSession(customerId: Guid): Promise<Guid | null> {
+  public async getCustomerSession(
+    customerId: CustomerId,
+  ): Promise<CustomerId | null> {
     const key = this.generateCustomerSessionKey(customerId);
     const customerSession = await this.cacheStorageGateway.getData(key);
 
     const customerSessionExists = customerSession !== null;
 
     if (customerSessionExists) {
-      return new Guid(customerSession);
+      return new CustomerId(customerSession);
     }
 
     return null;
@@ -64,12 +67,12 @@ export class LocalCacheStorageService implements UserSessionGateway {
     }
   }
 
-  private generateCustomerSessionKey(customerId: Guid): string {
+  private generateCustomerSessionKey(customerId: CustomerId): string {
     return this.generateUserSessionKey(customerId, UserLevelEnum.CUSTOMER);
   }
 
-  private generateUserSessionKey(
-    userId: Guid,
+  private generateUserSessionKey<Id extends Guid>(
+    userId: Id,
     userLevel: UserLevelEnum,
   ): string {
     const id = userId.toString();

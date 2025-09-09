@@ -47,6 +47,7 @@ export class CustomerSignUpRequestDto extends BaseBuildableObject {
 
   @RequestDtoStringProperty()
   public password: string;
+
   @RequestDtoObjectProperty(() => CustomerAddressSignUpRequestDto)
   public customerAddress: CustomerAddressSignUpRequestDto;
 
