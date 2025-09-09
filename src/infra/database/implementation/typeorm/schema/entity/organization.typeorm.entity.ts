@@ -20,7 +20,7 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
     () => OrganizationMemberTypeormEntity,
     (entity) => entity.organization,
   )
-  public organizationMember?: OrganizationMemberTypeormEntity[];
+  public organizationMember?: OrganizationMemberTypeormEntity[] | undefined;
 
   protected override readonly _type = OrganizationTypeormEntity.name;
 }
