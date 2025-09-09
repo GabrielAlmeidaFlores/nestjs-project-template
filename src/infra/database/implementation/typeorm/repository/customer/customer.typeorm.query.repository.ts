@@ -50,12 +50,12 @@ export class CustomerTypeormQueryRepository
     return mappedData;
   }
 
-  public async findCustomerByEmailOrFederalDocument(
+  public async findCustomersByEmailOrFederalDocument(
     identifier: Email | FederalDocument,
-  ): Promise<GetCustomerQueryResult | null> {
+  ): Promise<GetCustomerQueryResult[]> {
     const identifierAsString = identifier.toString();
 
-    const data = await this.findOne({
+    const data = await this.find({
       where: [
         {
           email: identifierAsString,
@@ -66,13 +66,7 @@ export class CustomerTypeormQueryRepository
       ],
     });
 
-    const dataDoesNotExists = data === null;
-
-    if (dataDoesNotExists) {
-      return null;
-    }
-
-    const mappedData = this.mapperGateway.map(
+    const mappedData = this.mapperGateway.mapArray(
       data,
       CustomerTypeormEntity,
       GetCustomerQueryResult,
