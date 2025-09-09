@@ -13,7 +13,7 @@ export class BaseTypeormTransactionRepository
 
   public constructor(private readonly dataSource: DataSource) {}
 
-  public async save(
+  public async execute(
     events: TransactionType | TransactionType[],
   ): Promise<TransactionOutputModel> {
     if (!Array.isArray(events)) {

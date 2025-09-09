@@ -2,7 +2,7 @@ import type { TransactionOutputModel } from '@core/domain/repository/base/transa
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 export abstract class BaseTransactionRepositoryGateway {
-  public abstract save(
+  public abstract execute(
     event: TransactionType | TransactionType[],
   ): Promise<TransactionOutputModel>;
 }
