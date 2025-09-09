@@ -7,7 +7,6 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 import { CustomerSignInRequestDto } from '@module/customer/account/dto/request/customer-sign-in.request.dto';
 import { CustomerSignInResponseDto } from '@module/customer/account/dto/response/customer-sign-in.response.dto';
-import { MissingCustomerIdentifierError } from '@module/customer/account/error/missing-customer-identifier.error';
 import { WrongSignInCredentialsError } from '@module/customer/account/error/wrong-sign-in-credentials.error';
 import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
@@ -28,7 +27,7 @@ export class CustomerSignInUseCase {
     const identifier = dto.federalDocument ?? dto.email;
 
     if (!identifier) {
-      throw new MissingCustomerIdentifierError();
+      throw new WrongSignInCredentialsError();
     }
 
     const customers =
