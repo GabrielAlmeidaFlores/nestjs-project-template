@@ -37,13 +37,13 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({
     name: 'customer_address_id',
   })
-  public customerAddress?: CustomerAddressTypeormEntity;
+  public customerAddress?: CustomerAddressTypeormEntity | undefined;
 
   @OneToOne(() => AuthIdentityTypeormEntity, (entity) => entity.customer)
-  public authIdentity?: AuthIdentityTypeormEntity;
+  public authIdentity?: AuthIdentityTypeormEntity | undefined;
 
   @OneToMany(() => OrganizationMemberTypeormEntity, (entity) => entity.customer)
-  public organizationMember?: OrganizationMemberTypeormEntity[];
+  public organizationMember?: OrganizationMemberTypeormEntity[] | undefined;
 
   protected override readonly _type = CustomerTypeormEntity.name;
 }
