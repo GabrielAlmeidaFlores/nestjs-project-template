@@ -1,13 +1,13 @@
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 
-export class Hash extends BaseValueObject<Hash> {
-  protected readonly _type = Hash.name;
+export class HashedPassword extends BaseValueObject<HashedPassword> {
+  protected readonly _type = HashedPassword.name;
 
   public constructor(value: string) {
     super(value);
   }
 
-  public equals(other: Hash): boolean {
+  public equals(other: HashedPassword): boolean {
     return this.value === other.value;
   }
 

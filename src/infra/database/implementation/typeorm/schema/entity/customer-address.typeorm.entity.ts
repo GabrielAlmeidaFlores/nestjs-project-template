@@ -47,7 +47,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   public addressNumber: string;
 
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.customerAddress)
-  public customer?: CustomerTypeormEntity;
+  public customer?: CustomerTypeormEntity | undefined;
 
   protected override readonly _type = CustomerAddressTypeormEntity.name;
 }
