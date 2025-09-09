@@ -2,13 +2,13 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
 import { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id.value-object';
 
 @Injectable()
 export class GetOrganizationMemberQueryResultAutoMapperProfile {
@@ -42,7 +42,7 @@ export class GetOrganizationMemberQueryResultAutoMapperProfile {
 
       return GetOrganizationMemberQueryResult.build({
         ...source,
-        id: new Guid(source.id),
+        id: new OrganizationMemberId(source.id),
         customer,
         organization,
       });

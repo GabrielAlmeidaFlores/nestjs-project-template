@@ -2,9 +2,9 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id.value-object';
 
 @Injectable()
 export class GetOrganizationQueryResultAutoMapperProfile {
@@ -25,7 +25,7 @@ export class GetOrganizationQueryResultAutoMapperProfile {
     ): GetOrganizationQueryResult => {
       return GetOrganizationQueryResult.build({
         ...source,
-        id: new Guid(source.id),
+        id: new OrganizationId(source.id),
       });
     };
 

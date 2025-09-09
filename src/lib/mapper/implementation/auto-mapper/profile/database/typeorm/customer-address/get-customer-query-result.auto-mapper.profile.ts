@@ -2,11 +2,11 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
+import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id.value-object';
 
 @Injectable()
 export class GetCustomerAddressQueryResultAutoMapperProfile {
@@ -28,7 +28,7 @@ export class GetCustomerAddressQueryResultAutoMapperProfile {
     ): GetCustomerAddressQueryResult => {
       return GetCustomerAddressQueryResult.build({
         ...source,
-        id: new Guid(source.id),
+        id: new CustomerAddressId(source.id),
         postalCode: new PostalCode(source.postalCode),
         stateCode: source.stateCode as StateCodeEnum,
         addressNumber: Number(source.addressNumber),

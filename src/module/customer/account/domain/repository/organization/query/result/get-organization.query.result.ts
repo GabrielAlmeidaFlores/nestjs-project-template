@@ -1,9 +1,9 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id.value-object';
 
 export class GetOrganizationQueryResult extends BaseBuildableObject {
-  public readonly id: Guid;
+  public readonly id: OrganizationId;
   public readonly name: string;
   public readonly organizationLogo: string | null;
   public readonly createdAt: Date;

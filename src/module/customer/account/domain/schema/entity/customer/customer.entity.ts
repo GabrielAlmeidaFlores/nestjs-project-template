@@ -2,6 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { InvalidCustomerNameError } from '@module/customer/account/domain/schema/entity/customer/error/invalid-customer-name.error';
 import { InvalidCustomerPasswordError } from '@module/customer/account/domain/schema/entity/customer/error/invalid-customer-password.error';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
@@ -9,7 +10,7 @@ import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/
 import type { CustomerEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer/customer.entity.props.interface';
 import type { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 
-export class CustomerEntity extends BaseEntity {
+export class CustomerEntity extends BaseEntity<CustomerId> {
   public readonly name: string;
   public readonly email: Email;
   public readonly federalDocument: FederalDocument;
@@ -25,7 +26,8 @@ export class CustomerEntity extends BaseEntity {
     CustomerEntity.validateName(props.name);
     CustomerEntity.validatePassword(props.password);
 
-    super(props);
+    super(CustomerId, props);
+
     this.name = props.name;
     this.email = props.email;
     this.federalDocument = props.federalDocument;
