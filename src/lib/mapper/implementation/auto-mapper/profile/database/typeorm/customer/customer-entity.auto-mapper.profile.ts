@@ -4,12 +4,12 @@ import { Injectable } from '@nestjs/common';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { Hash } from '@core/domain/schema/value-object/hash/hash.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id.value-object';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class CustomerEntityAutoMapperProfile {
 
       return new CustomerEntity({
         ...source,
-        id: new Guid(source.id),
+        id: new CustomerId(source.id),
         email: new Email(source.email),
         phoneNumber: new PhoneNumber(source.phoneNumber),
         federalDocument: new FederalDocument(source.federalDocument),

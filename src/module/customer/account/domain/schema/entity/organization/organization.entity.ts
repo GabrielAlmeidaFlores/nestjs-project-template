@@ -1,9 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidOrganizationNameError } from '@module/customer/account/domain/schema/entity/organization/error/invalid-organization-name.error';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id.value-object';
 
 import type { OrganizationEntityPropsInterface } from '@module/customer/account/domain/schema/entity/organization/organization.entity.props.interface';
 
-export class OrganizationEntity extends BaseEntity {
+export class OrganizationEntity extends BaseEntity<OrganizationId> {
   public readonly name: string;
   public readonly organizationLogo: string | null;
 
@@ -12,7 +13,7 @@ export class OrganizationEntity extends BaseEntity {
   public constructor(props: OrganizationEntityPropsInterface) {
     OrganizationEntity.validateName(props.name);
 
-    super(props);
+    super(OrganizationId, props);
 
     this.name = props.name;
     this.organizationLogo = props.organizationLogo ?? null;

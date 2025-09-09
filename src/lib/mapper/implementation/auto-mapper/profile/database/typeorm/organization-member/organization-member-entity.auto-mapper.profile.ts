@@ -2,13 +2,13 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id.value-object';
 
 @Injectable()
 export class OrganizationMemberEntityAutoMapperProfile {
@@ -41,7 +41,7 @@ export class OrganizationMemberEntityAutoMapperProfile {
 
       return new OrganizationMemberEntity({
         ...source,
-        id: new Guid(source.id),
+        id: new OrganizationMemberId(source.id),
         customer,
         organization,
       });
