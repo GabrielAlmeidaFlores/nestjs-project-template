@@ -8,7 +8,6 @@ export class GetCustomerQueryResult extends BaseBuildableObject {
   public readonly name: string;
   public readonly phoneNumber: PhoneNumber;
   public readonly profilePicture: string | null;
-  public readonly mfaSecret: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

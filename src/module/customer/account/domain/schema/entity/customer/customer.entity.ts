@@ -10,7 +10,6 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
   public readonly name: string;
   public readonly phoneNumber: PhoneNumber;
   public readonly profilePicture: string | null;
-  public readonly mfaSecret: string | null;
   public readonly customerAddress: CustomerAddressEntity;
 
   protected readonly _type = CustomerEntity.name;
@@ -24,7 +23,6 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
     this.phoneNumber = props.phoneNumber;
     this.customerAddress = props.customerAddress;
     this.profilePicture = props.profilePicture ?? null;
-    this.mfaSecret = props.mfaSecret ?? null;
   }
 
   public static validateName(name: string): void {
