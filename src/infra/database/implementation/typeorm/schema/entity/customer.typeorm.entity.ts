@@ -4,7 +4,6 @@ import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeor
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
 @Entity({ name: 'customer' })
 export class CustomerTypeormEntity extends BaseTypeormEntity {
@@ -21,15 +20,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
     nullable: true,
   })
   public profilePicture: string | null;
-
-  @Column({
-    name: 'mfa_secret',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-    transformer: CryptographyTransformer,
-  })
-  public mfaSecret: string | null;
 
   @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer, {
     nullable: false,

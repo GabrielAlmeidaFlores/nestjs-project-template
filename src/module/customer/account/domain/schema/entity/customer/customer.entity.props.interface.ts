@@ -9,5 +9,4 @@ export interface CustomerEntityPropsInterface
   phoneNumber: PhoneNumber;
   customerAddress: CustomerAddressEntity;
   profilePicture?: string | null;
-  mfaSecret?: string | null;
 }

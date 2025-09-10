@@ -27,6 +27,15 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
   })
   public password: string;
 
+  @Column({
+    name: 'mfa_secret',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+    transformer: CryptographyTransformer,
+  })
+  public mfaSecret: string | null;
+
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.authIdentity, {
     nullable: true,
   })
