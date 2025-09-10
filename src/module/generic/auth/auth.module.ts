@@ -5,6 +5,6 @@ import { Module } from '@nestjs/common';
   controllers: [],
   providers: [],
 })
-export class GenericModule {
-  protected readonly _type = GenericModule.name;
+export class AuthModule {
+  protected readonly _type = AuthModule.name;
 }

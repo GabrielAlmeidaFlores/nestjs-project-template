@@ -7,7 +7,7 @@ import { HashTransformer } from '@infra/database/implementation/typeorm/schema/t
 
 @Entity({ name: 'auth_identity' })
 export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'email', type: 'varchar', length: 100 })
+  @Column({ name: 'email', type: 'varchar', length: 100, unique: true })
   public email: string;
 
   @Column({
@@ -15,6 +15,7 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     type: 'varchar',
     length: 50,
     transformer: CryptographyTransformer,
+    unique: true,
   })
   public federalDocument: string;
 
