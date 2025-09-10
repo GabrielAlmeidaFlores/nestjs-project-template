@@ -9,6 +9,6 @@ export interface AuthIdentityEntityPropsInterface
   extends BaseEntityPropsInterface<AuthIdentityId> {
   email: Email;
   federalDocument: FederalDocument;
-  password: HashedPassword;
+  password: string | HashedPassword;
   customer?: CustomerId | null;
 }

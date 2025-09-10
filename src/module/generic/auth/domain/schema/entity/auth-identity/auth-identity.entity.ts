@@ -11,7 +11,7 @@ import type { AuthIdentityEntityPropsInterface } from '@module/generic/auth/doma
 export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   public readonly email: Email;
   public readonly federalDocument: FederalDocument;
-  public readonly password: HashedPassword;
+  public readonly password: string | HashedPassword;
   public readonly customer: CustomerId | null;
 
   protected readonly _type = AuthIdentityEntity.name;

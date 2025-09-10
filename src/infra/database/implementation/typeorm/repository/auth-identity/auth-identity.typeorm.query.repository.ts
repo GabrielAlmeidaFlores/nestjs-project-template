@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
@@ -22,6 +24,34 @@ export class AuthIdentityTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+  public async findAuthIdentityByEmailOrFederalDocument(
+    value: FederalDocument | Email,
+  ): Promise<GetAuthIdentityQueryResult | null> {
+    const data = await this.findOne({
+      where: [
+        {
+          federalDocument: value.toString(),
+        },
+        {
+          email: value.toString(),
+        },
+      ],
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AuthIdentityTypeormEntity,
+      GetAuthIdentityQueryResult,
+    );
+
+    return mappedData;
   }
 
   public async findAuthIdentityById(
