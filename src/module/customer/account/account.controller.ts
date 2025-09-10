@@ -6,7 +6,7 @@ import { CustomerSignUpUseCase } from '@module/customer/account/use-case/custome
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
-@CustomerControllerRoute('auth')
+@CustomerControllerRoute('account')
 export class AccountController {
   protected readonly _type = AccountController.name;
 
