@@ -6,8 +6,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
-import { AuthIdentityEntity } from '@module/generic/auth/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
+import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 
 @Injectable()
 export class AuthIdentityTypeormCommandRepository

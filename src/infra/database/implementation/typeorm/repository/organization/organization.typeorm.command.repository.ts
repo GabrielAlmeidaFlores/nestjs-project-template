@@ -6,8 +6,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { OrganizationCommandRepositoryGateway } from '@module/customer/auth/domain/repository/organization/command/organization.command.repository.gateway';
-import { OrganizationEntity } from '@module/customer/auth/domain/schema/entity/organization/organization.entity';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 
 @Injectable()
 export class OrganizationTypeormCommandRepository

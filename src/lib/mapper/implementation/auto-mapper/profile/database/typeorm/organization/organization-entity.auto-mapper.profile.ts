@@ -3,8 +3,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
-import { OrganizationEntity } from '@module/customer/auth/domain/schema/entity/organization/organization.entity';
-import { OrganizationId } from '@module/customer/auth/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 
 @Injectable()
 export class OrganizationEntityAutoMapperProfile {

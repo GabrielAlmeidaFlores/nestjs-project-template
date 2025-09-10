@@ -1,6 +1,8 @@
 import { ClassProvider, Module } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
+import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
@@ -12,19 +14,29 @@ import { OrganizationMemberTypeormCommandRepository } from '@infra/database/impl
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
-import { CustomerCommandRepositoryGateway } from '@module/customer/auth/domain/repository/customer/command/customer.command.repository.gateway';
-import { CustomerQueryRepositoryGateway } from '@module/customer/auth/domain/repository/customer/query/customer.query.repository.gateway';
-import { CustomerAddressCommandRepositoryGateway } from '@module/customer/auth/domain/repository/customer-address/command/customer-address.command.repository.gateway';
-import { CustomerAddressQueryRepositoryGateway } from '@module/customer/auth/domain/repository/customer-address/query/customer-address.query.repository.gateway';
-import { OrganizationCommandRepositoryGateway } from '@module/customer/auth/domain/repository/organization/command/organization.command.repository.gateway';
-import { OrganizationQueryRepositoryGateway } from '@module/customer/auth/domain/repository/organization/query/organization.query.repository.gateway';
-import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/auth/domain/repository/organization-member/command/organization-member.command.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/auth/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
+import { CustomerAddressQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/query/customer-address.query.repository.gateway';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
+import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
+import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 
 const classProvider: ClassProvider[] = [
   {
     provide: BaseTransactionRepositoryGateway,
     useClass: BaseTypeormTransactionRepository,
+  },
+  {
+    provide: AuthIdentityCommandRepositoryGateway,
+    useClass: AuthIdentityTypeormCommandRepository,
+  },
+  {
+    provide: AuthIdentityQueryRepositoryGateway,
+    useClass: AuthIdentityTypeormQueryRepository,
   },
   {
     provide: CustomerCommandRepositoryGateway,

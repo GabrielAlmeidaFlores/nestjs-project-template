@@ -8,8 +8,8 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 
 @Injectable()
 export class AuthIdentityTypeormQueryRepository
