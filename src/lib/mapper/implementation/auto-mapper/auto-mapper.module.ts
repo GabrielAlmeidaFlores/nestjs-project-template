@@ -3,6 +3,8 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
+import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
+import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
 import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
@@ -20,6 +22,8 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
   ],
   providers: [
     AutoMapperService,
+    AuthIdentityEntityAutoMapperProfile,
+    GetAuthIdentityQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
     GetCustomerQueryResultAutoMapperProfile,
     CustomerAddressEntityAutoMapperProfile,

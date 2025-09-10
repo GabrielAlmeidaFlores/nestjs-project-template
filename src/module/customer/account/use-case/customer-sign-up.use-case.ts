@@ -1,27 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
+import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
 import { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
+import { AuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/auth-identity-sign-up.use-case-port';
+import { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
 
-import type { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import type { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
-import type { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
 import type { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
-import type { AuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/auth-identity-sign-up.use-case-port';
-import type { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
 
 @Injectable()
 export class CustomerSignUpUseCase {
   protected readonly _type = CustomerSignUpUseCase.name;
 
   public constructor(
+    @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(CustomerCommandRepositoryGateway)
     private readonly customerCommandRepositoryGateway: CustomerCommandRepositoryGateway,
+    @Inject(CustomerAddressCommandRepositoryGateway)
     private readonly customerAddressCommandRepositoryGateway: CustomerAddressCommandRepositoryGateway,
+    @Inject(ValidateAuthIdentitySignUpUseCasePort)
     private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCasePort,
+    @Inject(AuthIdentitySignUpUseCasePort)
     private readonly authIdentitySignUpUseCasePort: AuthIdentitySignUpUseCasePort,
   ) {}
 
@@ -54,8 +59,8 @@ export class CustomerSignUpUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      customerTransaction,
       customerAddressTransaction,
+      customerTransaction,
     ]);
 
     await transaction.commit();

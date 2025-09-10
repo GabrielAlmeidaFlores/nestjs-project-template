@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
+import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { EmailAlreadyInUseError } from '@module/generic/auth-identity/error/email-already-in-use.error';
 import { FederalDocumentAlreadyInUseError } from '@module/generic/auth-identity/error/federal-document-already-in-use.error';
 
-import type { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import type { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
 import type { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
 
@@ -14,6 +14,7 @@ export class ValidateAuthIdentitySignUpUseCase
   protected readonly _type = ValidateAuthIdentitySignUpUseCase.name;
 
   public constructor(
+    @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepositoryGateway: AuthIdentityQueryRepositoryGateway,
   ) {}
 
