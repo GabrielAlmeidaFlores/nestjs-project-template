@@ -6,8 +6,8 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { CustomerAddressQueryRepositoryGateway } from '@module/customer/auth/domain/repository/customer-address/query/customer-address.query.repository.gateway';
-import { GetCustomerAddressQueryResult } from '@module/customer/auth/domain/repository/customer-address/query/result/get-customer-address.query.result';
+import { CustomerAddressQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/query/customer-address.query.repository.gateway';
+import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 
 @Injectable()
 export class CustomerAddressTypeormQueryRepository
