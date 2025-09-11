@@ -25,12 +25,12 @@ export class AuthIdentityTypeormCommandRepository
     super(repository);
   }
 
-  public updateMfaSecret(
+  public updateAuthenticatorAppSecret(
     authIdentityId: AuthIdentityId,
-    mfaSecret: string,
+    authenticatorAppSecret: string,
   ): TransactionType {
     return this.update(authIdentityId.toString(), {
-      mfaSecret,
+      authenticatorAppSecret,
     });
   }
 

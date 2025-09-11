@@ -10,6 +10,6 @@ export interface AuthIdentityEntityPropsInterface
   email: Email;
   federalDocument: FederalDocument;
   password: string | HashedPassword;
-  mfaSecret?: string | null;
+  authenticatorAppSecret?: string | null;
   customer?: CustomerId | null;
 }

@@ -12,7 +12,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   public readonly email: Email;
   public readonly federalDocument: FederalDocument;
   public readonly password: string | HashedPassword;
-  public readonly mfaSecret: string | null;
+  public readonly authenticatorAppSecret: string | null;
   public readonly customer: CustomerId | null;
 
   protected readonly _type = AuthIdentityEntity.name;
@@ -26,7 +26,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     this.federalDocument = props.federalDocument;
     this.password = props.password;
     this.customer = props.customer ?? null;
-    this.mfaSecret = props.mfaSecret ?? null;
+    this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
   }
 
   public static validatePassword(password: string | HashedPassword): void {
