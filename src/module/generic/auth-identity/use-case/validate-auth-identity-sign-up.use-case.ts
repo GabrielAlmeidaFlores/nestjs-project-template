@@ -5,11 +5,11 @@ import { EmailAlreadyInUseError } from '@module/generic/auth-identity/error/emai
 import { FederalDocumentAlreadyInUseError } from '@module/generic/auth-identity/error/federal-document-already-in-use.error';
 
 import type { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
-import type { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
+import type { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 @Injectable()
 export class ValidateAuthIdentitySignUpUseCase
-  implements ValidateAuthIdentitySignUpUseCasePort
+  implements ValidateAuthIdentitySignUpUseCaseGateway
 {
   protected readonly _type = ValidateAuthIdentitySignUpUseCase.name;
 

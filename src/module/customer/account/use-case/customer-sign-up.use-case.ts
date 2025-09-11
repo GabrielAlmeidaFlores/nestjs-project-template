@@ -8,8 +8,8 @@ import { CustomerAddressEntity } from '@module/customer/account/domain/schema/en
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
 import { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
-import { AuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/auth-identity-sign-up.use-case-port';
-import { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
+import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
+import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 import type { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 
@@ -24,10 +24,10 @@ export class CustomerSignUpUseCase {
     private readonly customerCommandRepositoryGateway: CustomerCommandRepositoryGateway,
     @Inject(CustomerAddressCommandRepositoryGateway)
     private readonly customerAddressCommandRepositoryGateway: CustomerAddressCommandRepositoryGateway,
-    @Inject(ValidateAuthIdentitySignUpUseCasePort)
-    private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCasePort,
-    @Inject(AuthIdentitySignUpUseCasePort)
-    private readonly authIdentitySignUpUseCasePort: AuthIdentitySignUpUseCasePort,
+    @Inject(ValidateAuthIdentitySignUpUseCaseGateway)
+    private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCaseGateway,
+    @Inject(AuthIdentitySignUpUseCaseGateway)
+    private readonly authIdentitySignUpUseCasePort: AuthIdentitySignUpUseCaseGateway,
   ) {}
 
   public async execute(
