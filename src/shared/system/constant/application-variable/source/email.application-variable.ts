@@ -3,9 +3,9 @@ import { EnvironmentVariableService } from '@shared/system/constant/application-
 export class EmailApplicationVariable {
   public static readonly source = new EnvironmentVariableService();
 
-  public static readonly EMAIL_TEMPLATE_RELATIVE_PATH =
+  public static readonly EMAIL_TEMPLATE_DIR_RELATIVE_PATH =
     EmailApplicationVariable.source.getValueOrThrow<string>(
-      'EMAIL_TEMPLATE_RELATIVE_PATH',
+      'EMAIL_TEMPLATE_DIR_RELATIVE_PATH',
       String,
     );
 
@@ -13,6 +13,20 @@ export class EmailApplicationVariable {
     EmailApplicationVariable.source.getValueOrThrow<string>(
       'EMAIL_SENDER',
       String,
+    );
+
+  public static readonly EMAIL_SIGN_IN_VERIFICATION_CODE_TEMPLATE =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_SIGN_IN_VERIFICATION_CODE_TEMPLATE',
+      String,
+      'sign-in-verification-code.html',
+    );
+
+  public static readonly EMAIL_SIGN_IN_VERIFICATION_CODE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_SIGN_IN_VERIFICATION_CODE_SUBJECT',
+      String,
+      'Agiliza Previ - Código de verificação',
     );
 
   public static readonly EMAIL_SEND_GRID_KEY =

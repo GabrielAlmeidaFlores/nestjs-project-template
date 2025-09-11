@@ -19,10 +19,14 @@ export class SendGridService implements EmailGateway {
   public async sendHTMLEmail(props: SendHTMLEmailInputModel): Promise<void> {
     let emailTemplate = this.getEmailTemplate(props.emailTemplateName);
 
-    for (const [key, value] of props.emailTemplateParameters.entries()) {
+    Object.keys(props.emailTemplateParameters).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, 'g');
-      emailTemplate = emailTemplate.replace(regex, value);
-    }
+      const value = props.emailTemplateParameters[key];
+
+      if (value !== undefined) {
+        emailTemplate = emailTemplate.replace(regex, value);
+      }
+    });
 
     await sgMail.send({
       to: props.to,
@@ -37,7 +41,7 @@ export class SendGridService implements EmailGateway {
 
     const emailTemplateAbsolutePath = join(
       currentWorkingDir,
-      EmailApplicationVariable.EMAIL_TEMPLATE_RELATIVE_PATH,
+      EmailApplicationVariable.EMAIL_TEMPLATE_DIR_RELATIVE_PATH,
       emailTemplateName,
     );
 
