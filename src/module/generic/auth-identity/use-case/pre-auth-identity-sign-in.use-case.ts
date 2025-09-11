@@ -23,7 +23,7 @@ export class PreAuthIdentitySignInUseCase {
   public constructor(
     @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepositoryGateway: AuthIdentityQueryRepositoryGateway,
-    @Inject(AuthIdentityQueryRepositoryGateway)
+    @Inject(AuthIdentityCommandRepositoryGateway)
     private readonly authIdentityCommandRepositoryGateway: AuthIdentityCommandRepositoryGateway,
     @Inject(AuthenticatorGateway)
     private readonly authenticatorGateway: AuthenticatorGateway,
@@ -60,7 +60,7 @@ export class PreAuthIdentitySignInUseCase {
 
     if (
       dto.mfaOption === SignInMFAOptionEnum.AUTHENTICATOR_APP &&
-      authIdentity.mfaSecret === null
+      authIdentity.authenticatorAppSecret === null
     ) {
       const authenticatorCredentials =
         await this.generateAuthenticatorSecret(authIdentity);
@@ -86,14 +86,14 @@ export class PreAuthIdentitySignInUseCase {
         authIdentity.email.toString(),
       );
 
-    const updateAuthIdentityMfaSecret =
-      this.authIdentityCommandRepositoryGateway.updateMfaSecret(
+    const updateAuthIdentityAuthenticatorAppSecret =
+      this.authIdentityCommandRepositoryGateway.updateAuthenticatorAppSecret(
         authIdentity.id,
         authenticatorCredentials.secret,
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
-      updateAuthIdentityMfaSecret,
+      updateAuthIdentityAuthenticatorAppSecret,
     );
     await transaction.commit();
 

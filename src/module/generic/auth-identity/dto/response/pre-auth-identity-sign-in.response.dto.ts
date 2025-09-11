@@ -8,9 +8,6 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 @ResponseDto()
 export class PreAuthIdentityAuthenticatorDataSignInResponseDto extends BaseBuildableObject {
   @ResponseDtoStringProperty()
-  public secret: string;
-
-  @ResponseDtoStringProperty()
   public base32: string;
 
   @ResponseDtoStringProperty()
