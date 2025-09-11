@@ -15,16 +15,21 @@ export class AuthIdentityController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'User sign-in',
+    summary: 'Pre-authenticate user',
     secure: false,
     http: {
-      path: 'sign-in',
+      path: 'pre-sign-in',
       method: RequestMethod.POST,
     },
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'User signed in successfully',
+      description:
+        'User credentials were validated successfully and pre-authentication completed',
       type: PreAuthIdentitySignInResponseDto,
+    },
+    throttle: {
+      limit: 10,
+      ttlInMinutes: 2,
     },
   })
   public async preAuthIdentitySignIn(
