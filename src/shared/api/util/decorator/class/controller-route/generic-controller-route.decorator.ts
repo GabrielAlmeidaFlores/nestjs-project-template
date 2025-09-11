@@ -1,7 +1,7 @@
 import { applyDecorators, Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-export function AdminControllerRoute(path: string): ClassDecorator {
+export function GenericControllerRoute(path: string): ClassDecorator {
   const controller = Controller(`${path}`);
   const apiTags = ApiTags(`${path}`);
 

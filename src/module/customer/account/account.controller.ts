@@ -15,7 +15,7 @@ export class AccountController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Customer signup',
+    summary: 'Customer sign-up',
     secure: false,
     http: {
       path: 'sign-up',

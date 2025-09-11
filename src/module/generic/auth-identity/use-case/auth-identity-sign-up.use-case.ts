@@ -17,6 +17,7 @@ export class AuthIdentitySignUpUseCase
   protected readonly _type = AuthIdentitySignUpUseCase.name;
 
   public constructor(
+    @Inject(ValidateAuthIdentitySignUpUseCasePort)
     private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCasePort,
     @Inject(AuthIdentityCommandRepositoryGateway)
     private readonly authIdentityCommandRepositoryGateway: AuthIdentityCommandRepositoryGateway,

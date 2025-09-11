@@ -25,7 +25,7 @@ export class AuthIdentityTypeormQueryRepository
   ) {
     super(repository);
   }
-  public async findAuthIdentityByEmailOrFederalDocument(
+  public async findOneAuthIdentityByEmailOrFederalDocument(
     value: FederalDocument | Email,
   ): Promise<GetAuthIdentityQueryResult | null> {
     const data = await this.findOne({
@@ -54,7 +54,7 @@ export class AuthIdentityTypeormQueryRepository
     return mappedData;
   }
 
-  public async findAuthIdentityById(
+  public async findOneAuthIdentityById(
     id: Guid,
   ): Promise<GetAuthIdentityQueryResult | null> {
     const data = await this.findOne({

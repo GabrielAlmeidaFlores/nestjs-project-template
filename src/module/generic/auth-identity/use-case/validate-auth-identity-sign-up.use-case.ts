@@ -22,7 +22,7 @@ export class ValidateAuthIdentitySignUpUseCase
     dto: ValidateAuthIdentitySignUpRequestDto,
   ): Promise<void> {
     const verifyAuthIdentityEmail =
-      await this.authIdentityQueryRepositoryGateway.findAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
         dto.email,
       );
 
@@ -31,7 +31,7 @@ export class ValidateAuthIdentitySignUpUseCase
     }
 
     const verifyAuthIdentityFederalDocument =
-      await this.authIdentityQueryRepositoryGateway.findAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
         dto.federalDocument,
       );
 

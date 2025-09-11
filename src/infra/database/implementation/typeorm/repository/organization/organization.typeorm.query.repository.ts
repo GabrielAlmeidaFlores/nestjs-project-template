@@ -24,7 +24,7 @@ export class OrganizationTypeormQueryRepository
     super(repository);
   }
 
-  public async findOrganizationById(
+  public async findOneOrganizationById(
     id: Guid,
   ): Promise<GetOrganizationQueryResult | null> {
     const data = await this.findOne({

@@ -24,7 +24,7 @@ export class CustomerAddressTypeormQueryRepository
     super(repository);
   }
 
-  public async findCustomerAddressById(
+  public async findOneCustomerAddressById(
     id: Guid,
   ): Promise<GetCustomerAddressQueryResult | null> {
     const data = await this.findOne({
