@@ -14,6 +14,7 @@ import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { AuthenticatorCredentialsOutputModel } from '@module/generic/auth-identity/lib/authenticator/model/output/authenticator-credentials.output.model';
+import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
@@ -29,6 +30,8 @@ export class PreAuthIdentitySignInUseCase {
     private readonly authenticatorGateway: AuthenticatorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(EmailMFAGateway)
+    private readonly emailMFAGateway: EmailMFAGateway,
   ) {}
 
   public async execute(
@@ -71,6 +74,13 @@ export class PreAuthIdentitySignInUseCase {
             ...authenticatorCredentials,
           }),
       });
+    }
+
+    if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
+      await this.emailMFAGateway.generatePersistAndSendSignInCode(
+        authIdentity.id,
+        authIdentity.email,
+      );
     }
 
     return PreAuthIdentitySignInResponseDto.build({
