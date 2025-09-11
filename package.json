@@ -36,6 +36,7 @@
     "@nestjs/platform-fastify": "^10.0.0",
     "@nestjs/swagger": "7.4.2",
     "@nestjs/typeorm": "^11.0.0",
+    "@sendgrid/mail": "^8.1.5",
     "@types/bcrypt": "^5.0.2",
     "@types/qrcode": "^1.5.5",
     "axios": "^1.10.0",
