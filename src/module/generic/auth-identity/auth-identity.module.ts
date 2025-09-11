@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { AuthIdentityController } from '@module/generic/auth-identity/auth-identity.controller';
+import { AuthIdentitySessionModule } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.module';
 import { AuthenticatorModule } from '@module/generic/auth-identity/lib/authenticator/authenticator.module';
 import { EmailMFAModule } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.module';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
@@ -12,7 +13,12 @@ import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 @Module({
-  imports: [DatabaseModule, AuthenticatorModule, EmailMFAModule],
+  imports: [
+    DatabaseModule,
+    AuthenticatorModule,
+    EmailMFAModule,
+    AuthIdentitySessionModule,
+  ],
   controllers: [AuthIdentityController],
   providers: [
     AuthIdentitySignUpUseCase,

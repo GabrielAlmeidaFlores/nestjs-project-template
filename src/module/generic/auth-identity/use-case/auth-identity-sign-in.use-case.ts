@@ -8,8 +8,10 @@ import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
 import { AuthenticatorAppNotConfiguredError } from '@module/generic/auth-identity/error/authenticator-app-not-configured.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
+import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
+import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
@@ -23,10 +25,12 @@ export class AuthIdentitySignInUseCase {
     private readonly authenticatorGateway: AuthenticatorGateway,
     @Inject(EmailMFAGateway)
     private readonly emailMFAGateway: EmailMFAGateway,
+    @Inject(AuthIdentitySessionGateway)
+    private readonly authIdentitySessionGateway: AuthIdentitySessionGateway,
   ) {}
 
   public async execute(
-    _: FastifyReply,
+    reply: FastifyReply,
     dto: AuthIdentitySignInRequestDto,
   ): Promise<AuthIdentitySignInResponseDto> {
     const identifier = dto.federalDocument ?? dto.email;
@@ -85,8 +89,25 @@ export class AuthIdentitySignInUseCase {
       }
     }
 
+    const userLevel = UserLevelEnum.CUSTOMER;
+
+    const jwtSession = await this.authIdentitySessionGateway.createSession(
+      authIdentity.id,
+      userLevel,
+    );
+
+    const sevenDaysInSeconds = 604800;
+
+    reply.setCookie('auth_token', jwtSession, {
+      httpOnly: true,
+      secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: sevenDaysInSeconds,
+    });
+
     return AuthIdentitySignInResponseDto.build({
-      userLevel: UserLevelEnum.CUSTOMER,
+      userLevel,
     });
   }
 }

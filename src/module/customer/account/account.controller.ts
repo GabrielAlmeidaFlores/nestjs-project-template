@@ -26,6 +26,10 @@ export class AccountController {
       description: 'Customer signed up successfully',
       type: CustomerSignUpResponseDto,
     },
+    throttle: {
+      limit: 100,
+      ttlInMinutes: 5,
+    },
   })
   public async customerSignUp(
     @Body() dto: CustomerSignUpRequestDto,
