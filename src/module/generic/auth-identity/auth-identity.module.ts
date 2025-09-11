@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AuthIdentityController } from '@module/generic/auth-identity/auth-identity.controller';
 import { AuthenticatorModule } from '@module/generic/auth-identity/lib/authenticator/authenticator.module';
 import { EmailMFAModule } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.module';
+import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-up.use-case';
@@ -25,6 +26,7 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
       useClass: ValidateAuthIdentitySignUpUseCase,
     },
     PreAuthIdentitySignInUseCase,
+    AuthIdentitySignInUseCase,
   ],
   exports: [
     AuthIdentitySignUpUseCaseGateway,
