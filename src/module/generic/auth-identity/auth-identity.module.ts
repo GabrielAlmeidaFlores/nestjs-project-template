@@ -6,8 +6,8 @@ import { AuthenticatorModule } from '@module/generic/auth-identity/lib/authentic
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-up.use-case';
-import { AuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/auth-identity-sign-up.use-case-port';
-import { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
+import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
+import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 @Module({
   imports: [DatabaseModule, AuthenticatorModule],
@@ -15,19 +15,19 @@ import { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-iden
   providers: [
     AuthIdentitySignUpUseCase,
     {
-      provide: AuthIdentitySignUpUseCasePort,
+      provide: AuthIdentitySignUpUseCaseGateway,
       useClass: AuthIdentitySignUpUseCase,
     },
     ValidateAuthIdentitySignUpUseCase,
     {
-      provide: ValidateAuthIdentitySignUpUseCasePort,
+      provide: ValidateAuthIdentitySignUpUseCaseGateway,
       useClass: ValidateAuthIdentitySignUpUseCase,
     },
     PreAuthIdentitySignInUseCase,
   ],
   exports: [
-    AuthIdentitySignUpUseCasePort,
-    ValidateAuthIdentitySignUpUseCasePort,
+    AuthIdentitySignUpUseCaseGateway,
+    ValidateAuthIdentitySignUpUseCaseGateway,
   ],
 })
 export class AuthIdentityModule {

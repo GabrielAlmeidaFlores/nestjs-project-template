@@ -5,20 +5,20 @@ import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-ident
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 import { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
 import { AuthIdentitySignUpResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-up.response.dto';
-import { ValidateAuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/validate-auth-identity-sign-up.use-case-port';
+import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 import type { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
-import type { AuthIdentitySignUpUseCasePort } from '@module/generic/auth-identity/use-case-port/auth-identity-sign-up.use-case-port';
+import type { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
 
 @Injectable()
 export class AuthIdentitySignUpUseCase
-  implements AuthIdentitySignUpUseCasePort
+  implements AuthIdentitySignUpUseCaseGateway
 {
   protected readonly _type = AuthIdentitySignUpUseCase.name;
 
   public constructor(
-    @Inject(ValidateAuthIdentitySignUpUseCasePort)
-    private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCasePort,
+    @Inject(ValidateAuthIdentitySignUpUseCaseGateway)
+    private readonly validateAuthIdentitySignUpUseCasePort: ValidateAuthIdentitySignUpUseCaseGateway,
     @Inject(AuthIdentityCommandRepositoryGateway)
     private readonly authIdentityCommandRepositoryGateway: AuthIdentityCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
