@@ -4,11 +4,11 @@ import type { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/d
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 export abstract class AuthIdentityQueryRepositoryGateway {
-  public abstract findAuthIdentityById(
+  public abstract findOneAuthIdentityById(
     id: AuthIdentityId,
   ): Promise<GetAuthIdentityQueryResult | null>;
 
-  public abstract findAuthIdentityByEmailOrFederalDocument(
+  public abstract findOneAuthIdentityByEmailOrFederalDocument(
     value: FederalDocument | Email,
   ): Promise<GetAuthIdentityQueryResult | null>;
 }

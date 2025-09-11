@@ -25,7 +25,7 @@ module.exports = {
     'convention-rule/restrict-name-suffix': 'error',
     'convention-rule/restrict-error-name-suffix': 'error',
     'convention-rule/restrict-constructor-parameter-order': 'error',
-    'convention-rule/restrict-if-block-size': 'error',
     'convention-rule/restrict-chained-bracket-notation': 'error',
+    'convention-rule/restrict-if-block-size': 'warn',
   },
 };

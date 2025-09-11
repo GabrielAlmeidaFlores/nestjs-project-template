@@ -8,6 +8,7 @@ import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeor
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class AuthIdentityTypeormCommandRepository
@@ -22,6 +23,15 @@ export class AuthIdentityTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public updateMfaSecret(
+    authIdentityId: AuthIdentityId,
+    mfaSecret: string,
+  ): TransactionType {
+    return this.update(authIdentityId.toString(), {
+      mfaSecret,
+    });
   }
 
   public createAuthIdentity(props: AuthIdentityEntity): TransactionType {
