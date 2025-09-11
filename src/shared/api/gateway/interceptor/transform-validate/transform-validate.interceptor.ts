@@ -57,10 +57,6 @@ export class TransformValidateInterceptor implements NestInterceptor {
         this.exceptionFactory(validationErrors);
       }
 
-      if (typeof data === 'object' && data !== null && '_type' in data) {
-        plain['_type'] = data['_type'];
-      }
-
       return plain;
     };
 
