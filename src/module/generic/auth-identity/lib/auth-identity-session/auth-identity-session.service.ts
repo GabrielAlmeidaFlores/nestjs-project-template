@@ -59,7 +59,7 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
 
     const jwtWithParsedContent =
       AuthIdentitySessionJwtWithParsedContentOutputModel.build({
-        authIdentity: new AuthIdentityId(jwtContent.authIdentity),
+        authIdentity: new AuthIdentityId(jwtContent.authIdentityId),
         sessionId: new Guid(jwtContent.sessionId),
         userLevel: jwtContent.userLevel,
       });

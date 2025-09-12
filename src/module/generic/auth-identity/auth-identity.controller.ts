@@ -7,8 +7,11 @@ import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto
 import { PreAuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
+import { AuthGuard } from '@shared/api/gateway/guard/auth-guard.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
+import { SessionDataOutputModel } from '@shared/api/util/decorator/property/get-session-data/model/output/session-data.output.model';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -66,5 +69,26 @@ export class AuthIdentityController {
     @Body() dto: AuthIdentitySignInRequestDto,
   ): Promise<AuthIdentitySignInResponseDto> {
     return await this.authIdentitySignInUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Validate authenticated user',
+    http: {
+      path: 'validate-sign-in',
+      method: RequestMethod.GET,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'User credentials were validated successfully and authentication is valid',
+      type: AuthIdentitySignInResponseDto,
+    },
+    secure: true,
+    guard: [AuthGuard],
+  })
+  public validateAuthIdentitySignIn(
+    @GetSessionData() sessionData: SessionDataOutputModel,
+  ): AuthIdentitySignInResponseDto {
+    return AuthIdentitySignInResponseDto.build(sessionData);
   }
 }
