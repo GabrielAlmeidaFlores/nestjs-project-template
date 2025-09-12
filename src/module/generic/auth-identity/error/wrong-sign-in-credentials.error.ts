@@ -1,6 +1,6 @@
-import { InvalidInputError } from '@core/error/invalid-input.error';
+import { ForbiddenError } from '@core/error/forbidden.error';
 
-export class WrongSignInCredentialsError extends InvalidInputError {
+export class WrongSignInCredentialsError extends ForbiddenError {
   protected override readonly _type = WrongSignInCredentialsError.name;
 
   public constructor() {

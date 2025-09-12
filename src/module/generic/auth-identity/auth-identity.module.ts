@@ -8,8 +8,10 @@ import { EmailMFAModule } from '@module/generic/auth-identity/lib/email-mfa/emai
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
+import { ValidateAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-up.use-case';
 import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
+import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
 @Module({
@@ -21,6 +23,11 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
   ],
   controllers: [AuthIdentityController],
   providers: [
+    ValidateAuthIdentitySignInUseCase,
+    {
+      provide: ValidateAuthIdentitySignInUseCaseGateway,
+      useClass: ValidateAuthIdentitySignInUseCase,
+    },
     AuthIdentitySignUpUseCase,
     {
       provide: AuthIdentitySignUpUseCaseGateway,
