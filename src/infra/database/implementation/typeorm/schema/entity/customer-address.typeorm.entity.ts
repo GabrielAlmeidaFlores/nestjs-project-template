@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
@@ -47,10 +47,7 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   public addressNumber: string;
 
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.customerAddress)
-  @JoinColumn({
-    name: 'customer_id',
-  })
-  public customer: CustomerTypeormEntity | undefined;
+  public customer?: CustomerTypeormEntity | undefined;
 
   protected override readonly _type = CustomerAddressTypeormEntity.name;
 }

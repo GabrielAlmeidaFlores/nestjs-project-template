@@ -1,9 +1,46 @@
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { minutes, ThrottlerModule } from '@nestjs/throttler';
 
+import { CustomerModule } from '@module/customer/customer.module';
 import { GenericModule } from '@module/generic/generic.module';
+import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
+import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
 @Module({
-  imports: [GenericModule],
+  imports: [
+    GenericModule,
+    CustomerModule,
+    JwtModule.register({
+      global: true,
+      secret: FrameworkApplicationVariable.FRAMEWORK_JWT_SECRET,
+      signOptions: {
+        expiresIn: FrameworkApplicationVariable.FRAMEWORK_JWT_EXPIRATION,
+      },
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [],
+      inject: [],
+      useFactory: () => {
+        const fiveMinutes = 5;
+
+        return {
+          throttlers: [
+            {
+              ttl: minutes(fiveMinutes),
+              limit: 10,
+            },
+          ],
+          storage: new ThrottlerStorageRedisService({
+            host: CacheStorageApplicationVariable.CACHE_STORAGE_HOST,
+            password: CacheStorageApplicationVariable.CACHE_STORAGE_PASSWORD,
+            port: CacheStorageApplicationVariable.CACHE_STORAGE_PORT,
+          }),
+        };
+      },
+    }),
+  ],
   controllers: [],
   providers: [],
 })

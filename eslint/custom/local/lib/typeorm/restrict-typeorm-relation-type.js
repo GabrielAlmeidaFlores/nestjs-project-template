@@ -20,7 +20,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
   defaultOptions: [],
   create(context) {
     function extractEffectiveType(typeNode) {
-      // Handles cases like: Type | undefined
       if (typeNode.type === 'TSUnionType') {
         const nonUndefined = typeNode.types.find(
           (t) => t.type !== 'TSUndefinedKeyword' && t.type !== 'TSNullKeyword',

@@ -5,6 +5,8 @@ export class PostalCode extends BaseValueObject<PostalCode> {
   protected readonly _type = PostalCode.name;
 
   public constructor(value: string) {
+    value = value.replace(/\D/g, '');
+
     super(value);
 
     const isValidPostalCode = PostalCode.isValid(value);

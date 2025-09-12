@@ -16,7 +16,7 @@ import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filt
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unexpected.error.exception-filter';
 import { TransformValidateInterceptor } from '@shared/api/gateway/interceptor/transform-validate/transform-validate.interceptor';
-import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
+import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { RawServerDefault } from 'fastify';

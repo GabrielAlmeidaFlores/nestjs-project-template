@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
+import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 class CryptographyTransformerUtil {
   private static readonly secret =

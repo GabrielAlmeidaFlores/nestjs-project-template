@@ -3,10 +3,16 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
-import { CustomerAddressDatabaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/customer/customer-address.database.auto-mapper.profile';
-import { CustomerDatabaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/customer/customer.database.auto-mapper.profile';
-import { OrganizationMemberDatabaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/organization/organization-member.database.auto-mapper.profile';
-import { OrganizationDatabaseAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/organization/organization.database.auto-mapper.profile';
+import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
+import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
+import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
+import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
+import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
+import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/get-customer-query-result.auto-mapper.profile';
+import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
+import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
+import { GetOrganizationMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-query-result.auto-mapper.profile';
+import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -16,10 +22,16 @@ import { OrganizationDatabaseAutoMapperProfile } from '@lib/mapper/implementatio
   ],
   providers: [
     AutoMapperService,
-    CustomerDatabaseAutoMapperProfile,
-    CustomerAddressDatabaseAutoMapperProfile,
-    OrganizationDatabaseAutoMapperProfile,
-    OrganizationMemberDatabaseAutoMapperProfile,
+    AuthIdentityEntityAutoMapperProfile,
+    GetAuthIdentityQueryResultAutoMapperProfile,
+    CustomerEntityAutoMapperProfile,
+    GetCustomerQueryResultAutoMapperProfile,
+    CustomerAddressEntityAutoMapperProfile,
+    GetCustomerAddressQueryResultAutoMapperProfile,
+    GetOrganizationQueryResultAutoMapperProfile,
+    OrganizationEntityAutoMapperProfile,
+    GetOrganizationMemberQueryResultAutoMapperProfile,
+    OrganizationMemberEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

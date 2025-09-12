@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 
@@ -14,11 +14,11 @@ export class OrganizationMemberTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.organizationMember,
   )
   @JoinColumn({ name: 'organization_id' })
-  public organization: OrganizationTypeormEntity | undefined;
+  public organization?: OrganizationTypeormEntity | undefined;
 
   @ManyToOne(() => CustomerTypeormEntity, (entity) => entity.organizationMember)
   @JoinColumn({ name: 'customer_id' })
-  public customer: CustomerTypeormEntity | undefined;
+  public customer?: CustomerTypeormEntity | undefined;
 
   protected override readonly _type = OrganizationMemberTypeormEntity.name;
 }

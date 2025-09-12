@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 
-import { AuthModule } from '@module/generic/auth/auth.module';
-import { UserAuthModule } from '@shared/api/gateway/guard/user-auth/user-auth.module';
+import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
 
 @Module({
-  imports: [UserAuthModule, AuthModule],
+  imports: [AuthIdentityModule],
   controllers: [],
   providers: [],
 })
