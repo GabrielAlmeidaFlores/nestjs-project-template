@@ -1,12 +1,12 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
-  name: 'enforce-constructor-param-order',
+  name: 'restrict-constructor-parameter-order',
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Enforce constructor parameter order: super params first, then no modifier → public → protected → private',
+        'Enforce constructor parameter order: super params first (only pass-through), then no modifier → public → protected → private',
       category: 'Best Practices',
       recommended: true,
       suggestion: false,
@@ -34,9 +34,11 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           case 'private':
             return 3;
           default:
-            return 0;
+            return 0; 
         }
-      } else if (param.modifiers && param.modifiers.length > 0) {
+      }
+
+      if (param.modifiers && param.modifiers.length > 0) {
         for (const mod of param.modifiers) {
           if (mod.type === 'Modifier') {
             switch (mod.kind) {
@@ -46,25 +48,43 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
                 return 2;
               case 'private':
                 return 3;
+              default:
+                break;
             }
           }
         }
       }
-      return 0;
+
+      return 0; 
     }
 
     function getParamName(param) {
-      if (param.type === 'Identifier') {
-        return param.name;
-      } else if (param.type === 'TSParameterProperty') {
-        if (param.parameter.type === 'Identifier') {
-          return param.parameter.name;
+      if (param.type === 'Identifier') return param.name;
+
+      if (param.type === 'TSParameterProperty') {
+        const p = param.parameter;
+        if (p.type === 'Identifier') return p.name;
+        if (p.type === 'AssignmentPattern' && p.left.type === 'Identifier') {
+          return p.left.name;
         }
       }
+
+      if (param.type === 'AssignmentPattern' && param.left.type === 'Identifier') {
+        return param.left.name;
+      }
+
+      if (param.type === 'RestElement' && param.argument.type === 'Identifier') {
+        return param.argument.name;
+      }
+
       return '';
     }
 
-    function getSuperArguments(node) {
+    function getParamNameSet(params) {
+      return new Set(params.map(getParamName).filter(Boolean));
+    }
+
+    function getSuperPassThroughArgs(node, paramNameSet) {
       if (!node.value.body || !node.value.body.body) return [];
 
       const superCall = node.value.body.body.find(
@@ -77,13 +97,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       if (!superCall) return [];
 
       return superCall.expression.arguments
-        .map((arg) => {
-          if (arg.type === 'Identifier') {
-            return arg.name;
-          }
-          return null;
-        })
-        .filter(Boolean);
+        .map((arg) => (arg.type === 'Identifier' ? arg.name : null))
+        .filter((name) => !!name && paramNameSet.has(name));
     }
 
     return {
@@ -91,13 +106,13 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         if (node.kind !== 'constructor') return;
 
         const params = node.value.params || [];
-        const superArgs = getSuperArguments(node);
-
         const paramInfos = params.map((param) => ({
           node: param,
           name: getParamName(param),
           rank: getModifierRank(param),
         }));
+        const paramNameSet = getParamNameSet(params);
+        const superArgs = getSuperPassThroughArgs(node, paramNameSet);
 
         for (let i = 0; i < superArgs.length; i++) {
           if (!paramInfos[i] || paramInfos[i].name !== superArgs[i]) {

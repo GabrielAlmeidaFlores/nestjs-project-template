@@ -65,8 +65,9 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
   const validation = IsValidValueObject(valueObjectClass);
   const transform = Transform(({ value }) => {
     const isInvalidInput = typeof value !== 'string';
+
     if (isInvalidInput) {
-      return String(value);
+      return undefined;
     }
 
     try {

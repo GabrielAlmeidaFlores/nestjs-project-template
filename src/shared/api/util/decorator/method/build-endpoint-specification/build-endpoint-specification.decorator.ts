@@ -13,14 +13,18 @@ import {
   RequestMethod,
   Search,
   SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import { minutes, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
 
+import type { CanActivate, Type } from '@nestjs/common';
 import type { ApiResponseOptions } from '@nestjs/swagger';
 import type { BuildEndpointSpecificationDecoratorPropsInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator.props.interface';
 import type { BuildEndpointHttpSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-http-specification.interface';
+import type { BuildEndpointThrottleSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-throttle-specification.interface';
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
 
 function buildEndpointOperationSpecification(
@@ -114,6 +118,33 @@ function buildEndpointHttpSpecification(
   return decorators;
 }
 
+function buildEndpointThrottleSpecification(
+  props?: BuildEndpointThrottleSpecificationInterface,
+): MethodDecorator[] {
+  const decorator: MethodDecorator[] = [];
+
+  if (props) {
+    decorator.push(UseGuards(ThrottlerGuard));
+    decorator.push(
+      Throttle({
+        default: { limit: props.limit, ttl: minutes(props.ttlInMinutes) },
+      }),
+    );
+  }
+
+  return decorator;
+}
+
+function buildEndpointGuardSpecificationInterface(
+  props?: Array<Type<CanActivate> | CanActivate>,
+): MethodDecorator[] {
+  if (!props || props.length === 0) {
+    return [];
+  }
+
+  return [UseGuards(...props)];
+}
+
 export function BuildEndpointSpecification(
   props: BuildEndpointSpecificationDecoratorPropsInterface,
 ): MethodDecorator {
@@ -130,12 +161,20 @@ export function BuildEndpointSpecification(
     props.secure,
   );
   const endpointHttpSpecification = buildEndpointHttpSpecification(props.http);
+  const endpointThrottleSpecification = buildEndpointThrottleSpecification(
+    props.throttle,
+  );
+  const endpointGuardSpecification = buildEndpointGuardSpecificationInterface(
+    props.guard,
+  );
 
   const decorators = [
     ...endpointOperationSpecification,
     ...endpointResponseSpecification,
     ...endpointAuthSpecification,
+    ...endpointThrottleSpecification,
     ...endpointHttpSpecification,
+    ...endpointGuardSpecification,
   ];
 
   return applyDecorators(...decorators);

@@ -1,11 +1,9 @@
-// src/infra/database/implementation/typeorm/transaction/typeorm.transaction-manager.repository.ts
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { TransactionEventOutputModel } from '@core/domain/repository/base/model/output/transaction-event.output.model';
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/repository/base.transaction.repository.gateway';
-
-import type { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 @Injectable()
 export class BaseTypeormTransactionRepository
@@ -16,8 +14,12 @@ export class BaseTypeormTransactionRepository
   public constructor(private readonly dataSource: DataSource) {}
 
   public async execute(
-    events: TransactionEventType[],
-  ): Promise<TransactionEventOutputModel> {
+    events: TransactionType | TransactionType[],
+  ): Promise<TransactionOutputModel> {
+    if (!Array.isArray(events)) {
+      events = [events];
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -62,7 +64,7 @@ export class BaseTypeormTransactionRepository
         await event(queryRunner.manager);
       }
 
-      return new TransactionEventOutputModel(commit, rollback);
+      return new TransactionOutputModel(commit, rollback);
     } catch (error) {
       await rollback();
       throw error;

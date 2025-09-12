@@ -1,5 +1,5 @@
-import type { TransactionEventType } from '@core/domain/repository/base/type/transaction-event.interface';
-import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import type { DeepPartial, EntityManager, Repository } from 'typeorm';
 import type { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -8,7 +8,7 @@ export abstract class BaseTypeormCommandRepository<
 > {
   protected constructor(private readonly repository: Repository<T>) {}
 
-  protected create(data: DeepPartial<T>): TransactionEventType {
+  protected create(data: DeepPartial<T>): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       const repo = manager.getRepository<T>(this.repository.target);
@@ -20,7 +20,7 @@ export abstract class BaseTypeormCommandRepository<
   protected update(
     id: string,
     data: QueryDeepPartialEntity<T>,
-  ): TransactionEventType {
+  ): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       const repo = manager.getRepository<T>(this.repository.target);
@@ -28,7 +28,7 @@ export abstract class BaseTypeormCommandRepository<
     };
   }
 
-  protected delete(id: string): TransactionEventType {
+  protected delete(id: string): TransactionType {
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       const repo = manager.getRepository<T>(this.repository.target);
