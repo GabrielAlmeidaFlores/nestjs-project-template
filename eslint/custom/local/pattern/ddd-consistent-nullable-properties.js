@@ -31,7 +31,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
       );
 
     return {
-      // 1) Interfaces de props (criação/atualização)
       TSInterfaceDeclaration(node) {
         if (!isExtending(node, 'BaseEntityPropsInterface')) return;
 
@@ -51,7 +50,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
           const isUndefinable = isOptional || includesUndefined;
 
-          // Undefinable => must include null
           if (isUndefinable && !includesNull) {
             context.report({
               node: member,
@@ -60,7 +58,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
             });
           }
 
-          // Nullable => must be undefinable
           if (includesNull && !isUndefinable) {
             context.report({
               node: member,
@@ -71,7 +68,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         }
       },
 
-      // 2) Entidades (estado de domínio)
       ClassDeclaration(node) {
         if (
           !node.superClass ||
@@ -87,7 +83,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
           const propName = member.key.name;
 
-          // Não pode ser opcional (proibido "?")
           if (member.optional) {
             context.report({
               node: member,
@@ -97,7 +92,6 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
             continue;
           }
 
-          // Não pode ter "| undefined" no tipo
           const typeNode = member.typeAnnotation?.typeAnnotation;
           const includesUndefined =
             typeNode &&
