@@ -7,7 +7,6 @@ import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto
 import { PreAuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
-import { AuthGuard } from '@shared/api/gateway/guard/auth-guard.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
@@ -24,7 +23,6 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Pre-authenticate user',
-    secure: false,
     http: {
       path: 'pre-sign-in',
       method: RequestMethod.POST,
@@ -48,7 +46,6 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Authenticate user',
-    secure: false,
     http: {
       path: 'sign-in',
       method: RequestMethod.POST,
@@ -83,8 +80,6 @@ export class AuthIdentityController {
         'User credentials were validated successfully and authentication is valid',
       type: AuthIdentitySignInResponseDto,
     },
-    secure: true,
-    guard: [AuthGuard],
   })
   public validateAuthIdentitySignIn(
     @GetSessionData() sessionData: SessionDataOutputModel,

@@ -158,7 +158,7 @@ export function BuildEndpointSpecification(
     props.successResponse,
   );
   const endpointAuthSpecification = buildEndpointAuthSpecification(
-    props.secure,
+    props.guard && props.guard.length > 0 ? true : false,
   );
   const endpointHttpSpecification = buildEndpointHttpSpecification(props.http);
   const endpointThrottleSpecification = buildEndpointThrottleSpecification(

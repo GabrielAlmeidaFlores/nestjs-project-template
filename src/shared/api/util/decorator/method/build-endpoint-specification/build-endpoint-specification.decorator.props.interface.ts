@@ -5,7 +5,6 @@ import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/
 
 export interface BuildEndpointSpecificationDecoratorPropsInterface {
   summary: string;
-  secure: boolean;
   deprecated?: boolean;
   successResponse: BuildEndpointSuccessResponseSpecificationType;
   http: BuildEndpointHttpSpecificationInterface;
