@@ -29,14 +29,14 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
     this.addressNumber = props.addressNumber;
   }
 
-  public static validateCity(name: string): void {
+  public static validateCity(city: string): void {
     const minNameLength = 1;
     const maxNameLength = 100;
     const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
 
-    const hasMinimumLength = name.length > minNameLength;
-    const hasMaximumLength = name.length < maxNameLength;
-    const matchesAllowedCharacters = nameRegex.test(name);
+    const hasMinimumLength = city.length > minNameLength;
+    const hasMaximumLength = city.length < maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(city);
 
     this.validateAllOrThrow(
       [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
@@ -48,14 +48,14 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
     );
   }
 
-  public static validateNeighborhood(name: string): void {
+  public static validateNeighborhood(neighborhood: string): void {
     const minNameLength = 3;
     const maxNameLength = 100;
     const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
 
-    const hasMinimumLength = name.length > minNameLength;
-    const hasMaximumLength = name.length < maxNameLength;
-    const matchesAllowedCharacters = nameRegex.test(name);
+    const hasMinimumLength = neighborhood.length > minNameLength;
+    const hasMaximumLength = neighborhood.length < maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(neighborhood);
 
     this.validateAllOrThrow(
       [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
