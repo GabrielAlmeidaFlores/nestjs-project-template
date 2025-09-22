@@ -23,10 +23,10 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   }
 
   protected async findOneOrFail(
-    id: string,
+    options: FindOneOptions<T>,
     err: ConstructorType<NotFoundError>,
   ): Promise<T> {
-    const find = await this.findOne({ where: { id } as FindOptionsWhere<T> });
+    const find = await this.findOne(options);
 
     if (!find) {
       throw new err();

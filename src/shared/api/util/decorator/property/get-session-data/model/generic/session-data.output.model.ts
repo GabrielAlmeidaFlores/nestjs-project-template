@@ -5,7 +5,7 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 import type { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 export class SessionDataModel extends BaseBuildableObject {
-  public authIdentity: AuthIdentityId;
+  public authIdentityId: AuthIdentityId;
   public sessionId: Guid;
   public userLevel: UserLevelEnum;
 

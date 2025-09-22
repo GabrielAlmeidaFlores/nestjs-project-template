@@ -1,5 +1,5 @@
-import { FileSystemStoredFile } from 'nestjs-form-data';
+import { MemoryStoredFile } from 'nestjs-form-data';
 
-export class FileModel extends FileSystemStoredFile {
+export class FileModel extends MemoryStoredFile {
   protected readonly _type = FileModel.name;
 }
