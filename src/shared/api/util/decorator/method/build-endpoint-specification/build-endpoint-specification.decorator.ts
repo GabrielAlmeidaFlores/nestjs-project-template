@@ -116,7 +116,10 @@ function buildEndpointHttpSpecification(
   if ('type' in http) {
     const type = http['type'];
     const raw: unknown = Reflect.getMetadata(DTO_PROPS, type);
-    () => raw;
+
+    ((): unknown => {
+      return raw;
+    })();
   }
 
   const httpMethod = httpMethodMap[http.method]();
