@@ -1,9 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
 import { IsBoolean, IsOptional } from 'class-validator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
+
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoBooleanProperty(
@@ -11,17 +11,13 @@ export function BaseDtoBooleanProperty(
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 
-  const apiProperty = ApiProperty({
-    required: propertyIsRequired,
-    type: Boolean,
-  });
-  const expose = Expose();
+  const baseDtoProperty = BaseDtoProperty(Boolean, props);
   const validation = IsBoolean({
     message: (args: ValidationArguments) =>
       `o campo '${args.property}' deve ser do tipo 'boolean'`,
   });
 
-  const decorators = [apiProperty, expose, validation];
+  const decorators = [baseDtoProperty, validation];
 
   if (!propertyIsRequired) {
     decorators.push(IsOptional());

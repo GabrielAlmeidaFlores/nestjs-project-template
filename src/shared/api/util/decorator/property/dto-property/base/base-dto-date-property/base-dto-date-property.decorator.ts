@@ -1,9 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
+
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoDateProperty(
@@ -11,18 +12,14 @@ export function BaseDtoDateProperty(
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 
-  const apiProperty = ApiProperty({
-    required: propertyIsRequired,
-    type: Date,
-  });
-  const expose = Expose();
+  const baseDtoProperty = BaseDtoProperty(Date, props);
   const type = Type(() => Date);
   const validation = IsDate({
     message: (args: ValidationArguments) =>
       `o campo '${args.property}' deve ser do tipo 'date'`,
   });
 
-  const decorators = [apiProperty, expose, type, validation];
+  const decorators = [baseDtoProperty, type, validation];
 
   if (!propertyIsRequired) {
     decorators.push(IsOptional());

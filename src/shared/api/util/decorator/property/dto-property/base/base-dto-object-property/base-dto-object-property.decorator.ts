@@ -1,9 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsOptional, ValidateNested } from 'class-validator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
+
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 import type { TypeHelpOptions } from 'class-transformer';
 
 export function BaseDtoObjectProperty(
@@ -12,14 +13,11 @@ export function BaseDtoObjectProperty(
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
 
-  const apiProperty = ApiProperty({
-    required: propertyIsRequired,
-  });
-  const expose = Expose();
+  const baseDtoProperty = BaseDtoProperty(typeFunction(), props);
   const objectType = Type(typeFunction);
   const validateNested = ValidateNested();
 
-  const decorators = [apiProperty, expose, objectType, validateNested];
+  const decorators = [baseDtoProperty, objectType, validateNested];
 
   if (!propertyIsRequired) {
     decorators.push(IsOptional());

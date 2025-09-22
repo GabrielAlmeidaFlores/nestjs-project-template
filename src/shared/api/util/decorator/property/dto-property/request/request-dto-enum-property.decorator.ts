@@ -1,8 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 
-import { BaseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-enum-property.decorator';
+import { BaseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-enum-property/base-dto-enum-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/interface/base-dto-propery.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 
 export function RequestDtoEnumProperty(
   enumType: object,
