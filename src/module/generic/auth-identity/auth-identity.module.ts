@@ -42,8 +42,9 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     AuthIdentitySignInUseCase,
   ],
   exports: [
-    AuthIdentitySignUpUseCaseGateway,
+    ValidateAuthIdentitySignInUseCaseGateway,
     ValidateAuthIdentitySignUpUseCaseGateway,
+    AuthIdentitySignUpUseCaseGateway,
   ],
 })
 export class AuthIdentityModule {

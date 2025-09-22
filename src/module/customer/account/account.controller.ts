@@ -3,7 +3,6 @@ import { RequestMethod, HttpStatus, Body } from '@nestjs/common';
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
-import { AuthGuard } from '@shared/api/gateway/guard/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
@@ -30,7 +29,6 @@ export class AccountController {
       limit: 100,
       ttlInMinutes: 5,
     },
-    guard: [AuthGuard],
   })
   public async customerSignUp(
     @Body() dto: CustomerSignUpRequestDto,
