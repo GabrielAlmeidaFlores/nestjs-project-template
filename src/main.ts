@@ -16,15 +16,17 @@ async function bootstrap(): Promise<void> {
 
   const appConfig = new AppConfig(app);
   appConfig
-    .cors()
-    .cookies()
-    .globalInterceptor()
-    .globalPrefix()
-    .globalPipes()
-    .globalFilters();
+    .applyMultipart()
+    .applyHook()
+    .applyCors()
+    .applyCookies()
+    .applyGlobalInterceptor()
+    .applyGlobalPrefix()
+    .applyGlobalPipes()
+    .applyGlobalFilters();
 
   if (!NodeApplicationVariable.PRODUCTION_ENVIRONMENT) {
-    appConfig.swagger();
+    appConfig.applySwagger();
   }
 
   await app.listen(

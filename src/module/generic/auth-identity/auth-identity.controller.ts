@@ -10,7 +10,7 @@ import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
-import { SessionDataOutputModel } from '@shared/api/util/decorator/property/get-session-data/model/output/session-data.output.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.output.model';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -84,7 +84,7 @@ export class AuthIdentityController {
     },
   })
   public validateAuthIdentitySignIn(
-    @GetSessionData() sessionData: SessionDataOutputModel,
+    @GetSessionData() sessionData: SessionDataModel,
   ): AuthIdentitySignInResponseDto {
     return AuthIdentitySignInResponseDto.build(sessionData);
   }
