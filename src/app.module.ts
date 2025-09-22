@@ -2,6 +2,7 @@ import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
+import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
 import { CustomerModule } from '@module/customer/customer.module';
 import { GenericModule } from '@module/generic/generic.module';
@@ -12,6 +13,10 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
   imports: [
     GenericModule,
     CustomerModule,
+    NestjsFormDataModule.config({
+      isGlobal: true,
+      storage: MemoryStoredFile,
+    }),
     JwtModule.register({
       global: true,
       secret: FrameworkApplicationVariable.FRAMEWORK_JWT_SECRET,
