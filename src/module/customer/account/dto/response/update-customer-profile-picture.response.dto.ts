@@ -1,12 +1,11 @@
-import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @ResponseDto()
 export class UpdateCustomerProfilePictureResponseDto extends BaseBuildableObject {
-  @ResponseDtoValueObjectProperty(CustomerId)
-  public customerId: CustomerId;
+  @ResponseDtoStringProperty()
+  public profilePicture: string;
 
   protected override readonly _type =
     UpdateCustomerProfilePictureResponseDto.name;
