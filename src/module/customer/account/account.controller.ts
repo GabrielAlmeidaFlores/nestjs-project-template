@@ -19,6 +19,7 @@ export class AccountController {
     http: {
       path: 'sign-up',
       method: RequestMethod.POST,
+      type: CustomerSignUpRequestDto,
     },
     successResponse: {
       statusCode: HttpStatus.CREATED,

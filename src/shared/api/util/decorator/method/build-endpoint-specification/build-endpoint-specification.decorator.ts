@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   All,
   applyDecorators,
@@ -18,14 +19,15 @@ import {
 import { ApiOperation, ApiResponse, ApiSecurity } from '@nestjs/swagger';
 import { minutes, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
+import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
 
 import type { CanActivate, Type } from '@nestjs/common';
 import type { ApiResponseOptions } from '@nestjs/swagger';
 import type { BuildEndpointSpecificationDecoratorPropsInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator.props.interface';
-import type { BuildEndpointHttpSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-http-specification.interface';
-import type { BuildEndpointThrottleSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-throttle-specification.interface';
+import type { BuildEndpointHttpSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-http-specification.type';
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
+import type { BuildEndpointThrottleSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-throttle-specification.type';
 
 function buildEndpointOperationSpecification(
   summary: string,
@@ -97,7 +99,7 @@ function buildEndpointResponseSpecification(
 }
 
 function buildEndpointHttpSpecification(
-  http: BuildEndpointHttpSpecificationInterface,
+  http: BuildEndpointHttpSpecificationType,
 ): MethodDecorator[] {
   const httpMethodMap: Record<RequestMethod, () => MethodDecorator> = {
     [RequestMethod.GET]: (): MethodDecorator => Get(http.path),
@@ -111,6 +113,12 @@ function buildEndpointHttpSpecification(
     [RequestMethod.ALL]: (): MethodDecorator => All(http.path),
   };
 
+  if ('type' in http) {
+    const type = http['type'];
+    const raw: unknown = Reflect.getMetadata(DTO_PROPS, type);
+    () => raw;
+  }
+
   const httpMethod = httpMethodMap[http.method]();
 
   const decorators = [httpMethod];
@@ -119,7 +127,7 @@ function buildEndpointHttpSpecification(
 }
 
 function buildEndpointThrottleSpecification(
-  props?: BuildEndpointThrottleSpecificationInterface,
+  props?: BuildEndpointThrottleSpecificationType,
 ): MethodDecorator[] {
   const decorator: MethodDecorator[] = [];
 

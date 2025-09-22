@@ -26,6 +26,7 @@ export class AuthIdentityController {
     http: {
       path: 'pre-sign-in',
       method: RequestMethod.POST,
+      type: PreAuthIdentitySignInRequestDto,
     },
     successResponse: {
       statusCode: HttpStatus.CREATED,
@@ -49,6 +50,7 @@ export class AuthIdentityController {
     http: {
       path: 'sign-in',
       method: RequestMethod.POST,
+      type: AuthIdentitySignInRequestDto,
     },
     successResponse: {
       statusCode: HttpStatus.CREATED,
