@@ -24,16 +24,16 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
 
   const decorators = [baseDtoProperty, apiProperty, type, validateNested];
 
-  if (propertyIsRequired) {
-    decorators.push(
-      Transform(({ value }) => {
-        const isInstanceOfValueObject = value instanceof valueObjectClass;
-        return isInstanceOfValueObject ? value.toString() : undefined;
-      }),
-    );
-  } else {
+  if (!propertyIsRequired) {
     decorators.push(IsOptional());
   }
+
+  decorators.push(
+    Transform(({ value }) => {
+      const isInstanceOfValueObject = value instanceof valueObjectClass;
+      return isInstanceOfValueObject ? value.toString() : undefined;
+    }),
+  );
 
   return applyDecorators(...decorators);
 }
