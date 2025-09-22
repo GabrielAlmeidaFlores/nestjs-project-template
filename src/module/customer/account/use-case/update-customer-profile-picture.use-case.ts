@@ -55,8 +55,10 @@ export class UpdateCustomerProfilePictureUseCase {
 
     await transaction.commit();
 
+    const profilePicture = await this.bucketGateway.get(uploadFile);
+
     return UpdateCustomerProfilePictureResponseDto.build({
-      customerId: customer.id,
+      profilePicture: profilePicture.toString(),
     });
   }
 }

@@ -24,6 +24,11 @@ export abstract class BaseTypeormCommandRepository<
     return async (executor: unknown) => {
       const manager = executor as EntityManager;
       const repo = manager.getRepository<T>(this.repository.target);
+
+      if ('_type' in data) {
+        delete data._type;
+      }
+
       await repo.update(id, data);
     };
   }
