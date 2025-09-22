@@ -5,6 +5,7 @@ import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
+import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -17,6 +18,7 @@ export class AccountController {
 
   public constructor(
     private readonly customerSignUpUseCase: CustomerSignUpUseCase,
+    private readonly updateCustomerProfilePictureUseCase: UpdateCustomerProfilePictureUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -60,13 +62,9 @@ export class AccountController {
     @GetSessionData() sessionData: SessionDataModel,
     @Body() dto: UpdateCustomerProfilePictureRequestDto,
   ): Promise<UpdateCustomerProfilePictureResponseDto> {
-    console.warn(dto);
-    console.warn(sessionData);
-
-    await new Promise((res) => {
-      res(true);
-    });
-
-    return {} as UpdateCustomerProfilePictureResponseDto;
+    return await this.updateCustomerProfilePictureUseCase.execute(
+      sessionData,
+      dto,
+    );
   }
 }

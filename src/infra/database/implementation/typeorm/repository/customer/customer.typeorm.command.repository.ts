@@ -8,6 +8,7 @@ import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()
 export class CustomerTypeormCommandRepository
@@ -22,6 +23,19 @@ export class CustomerTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public updateCustomer(
+    customerId: CustomerId,
+    props: CustomerEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      CustomerEntity,
+      CustomerTypeormEntity,
+    );
+
+    return this.update(customerId.toString(), mappedData);
   }
 
   public createCustomer(props: CustomerEntity): TransactionType {

@@ -9,7 +9,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 @ResponseDto()
 export class ValidateAuthIdentitySignInResponseDto extends BaseBuildableObject {
   @ResponseDtoValueObjectProperty(AuthIdentityId)
-  public authIdentity: AuthIdentityId;
+  public authIdentityId: AuthIdentityId;
 
   @ResponseDtoValueObjectProperty(Guid)
   public sessionId: Guid;

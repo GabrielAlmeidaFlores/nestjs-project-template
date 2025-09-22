@@ -6,7 +6,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 @ResponseDto()
 export class UpdateCustomerProfilePictureResponseDto extends BaseBuildableObject {
   @ResponseDtoValueObjectProperty(CustomerId)
-  public customer: CustomerId;
+  public customerId: CustomerId;
 
   protected override readonly _type =
     UpdateCustomerProfilePictureResponseDto.name;
