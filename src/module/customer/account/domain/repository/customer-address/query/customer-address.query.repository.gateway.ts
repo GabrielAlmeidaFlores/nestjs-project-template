@@ -2,7 +2,7 @@ import type { GetCustomerAddressQueryResult } from '@module/customer/account/dom
 import type { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 
 export abstract class CustomerAddressQueryRepositoryGateway {
-  public abstract findOneCustomerAddressById(
-    id: CustomerAddressId,
+  public abstract findOneByCustomerAddressId(
+    customerAddressId: CustomerAddressId,
   ): Promise<GetCustomerAddressQueryResult | null>;
 }

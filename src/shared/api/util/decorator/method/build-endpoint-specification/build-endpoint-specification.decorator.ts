@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   All,
   applyDecorators,
@@ -15,17 +16,27 @@ import {
   SetMetadata,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiSecurity,
+} from '@nestjs/swagger';
 import { minutes, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
 
+import { InvalidFormDataStructureError } from '@shared/api/util/decorator/method/build-endpoint-specification/error/invalid-form-data-structure.error';
+import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 import type { CanActivate, Type } from '@nestjs/common';
 import type { ApiResponseOptions } from '@nestjs/swagger';
 import type { BuildEndpointSpecificationDecoratorPropsInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator.props.interface';
-import type { BuildEndpointHttpSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-http-specification.interface';
-import type { BuildEndpointThrottleSpecificationInterface } from '@shared/api/util/decorator/method/build-endpoint-specification/interface/build-endpoint-throttle-specification.interface';
+import type { BuildEndpointHttpSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-http-specification.type';
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
+import type { BuildEndpointThrottleSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-throttle-specification.type';
+import type { DtoPropMetaType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/type/dto-props-metadata.type';
 
 function buildEndpointOperationSpecification(
   summary: string,
@@ -97,7 +108,7 @@ function buildEndpointResponseSpecification(
 }
 
 function buildEndpointHttpSpecification(
-  http: BuildEndpointHttpSpecificationInterface,
+  http: BuildEndpointHttpSpecificationType,
 ): MethodDecorator[] {
   const httpMethodMap: Record<RequestMethod, () => MethodDecorator> = {
     [RequestMethod.GET]: (): MethodDecorator => Get(http.path),
@@ -115,11 +126,38 @@ function buildEndpointHttpSpecification(
 
   const decorators = [httpMethod];
 
+  if (!('type' in http)) {
+    return decorators;
+  }
+
+  const type = http['type'];
+  const raw = Reflect.getMetadata(DTO_PROPS, type) as DtoPropMetaType[];
+
+  const dtoFileField = raw.find((dtoProp) => {
+    return dtoProp.type === FileModel;
+  });
+
+  const findNonFileFields = raw.filter((dtoProp) => {
+    return !(dtoProp.type === FileModel);
+  });
+
+  if (dtoFileField) {
+    decorators.push(ApiConsumes('multipart/form-data'));
+    decorators.push(FormDataRequest({ storage: MemoryStoredFile }));
+
+    if (findNonFileFields.length > 1) {
+      throw new InvalidFormDataStructureError();
+    }
+
+    if (findNonFileFields.length >= 1 && findNonFileFields[0]?.key !== 'json') {
+      throw new InvalidFormDataStructureError();
+    }
+  }
   return decorators;
 }
 
 function buildEndpointThrottleSpecification(
-  props?: BuildEndpointThrottleSpecificationInterface,
+  props?: BuildEndpointThrottleSpecificationType,
 ): MethodDecorator[] {
   const decorator: MethodDecorator[] = [];
 

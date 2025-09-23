@@ -16,7 +16,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'profile_picture',
     type: 'varchar',
-    length: 50,
+    length: 255,
     nullable: true,
   })
   public profilePicture: string | null;

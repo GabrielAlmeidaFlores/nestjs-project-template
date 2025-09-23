@@ -23,7 +23,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
 
   const buildSession = (): AuthIdentitySessionJwtWithParsedContentOutputModel =>
     AuthIdentitySessionJwtWithParsedContentOutputModel.build({
-      authIdentity: new AuthIdentityId(),
+      authIdentityId: new AuthIdentityId(),
       sessionId: new Guid(),
       userLevel: UserLevelEnum.CUSTOMER,
     });
@@ -57,7 +57,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
     expect(sessionGateway.getSession).toHaveBeenCalledWith(dto.jwt);
 
     expect(result).toBeInstanceOf(ValidateAuthIdentitySignInResponseDto);
-    expect(result.authIdentity).toEqual(session.authIdentity);
+    expect(result.authIdentityId).toEqual(session.authIdentityId);
     expect(result.sessionId).toEqual(session.sessionId);
     expect(result.userLevel).toEqual(session.userLevel);
   });
