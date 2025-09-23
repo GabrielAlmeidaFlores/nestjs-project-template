@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
+import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
 export class CustomerTypeormQueryRepository
@@ -24,12 +28,39 @@ export class CustomerTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneCustomerById(
-    id: Guid,
+  public async findOneByAuthIdentityIdOrFail(
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<CustomerEntity> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
+        relations: {
+          customerAddress: true,
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      CustomerEntity,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByCustomerId(
+    customerId: CustomerId,
   ): Promise<GetCustomerQueryResult | null> {
     const data = await this.findOne({
       where: {
-        id: id.toString(),
+        id: customerId.toString(),
       },
     });
 

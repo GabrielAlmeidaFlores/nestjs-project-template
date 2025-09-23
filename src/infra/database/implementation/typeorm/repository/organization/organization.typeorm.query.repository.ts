@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 
 @Injectable()
 export class OrganizationTypeormQueryRepository
@@ -24,12 +24,12 @@ export class OrganizationTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneOrganizationById(
-    id: Guid,
+  public async findOneByOrganizationId(
+    organizationId: OrganizationId,
   ): Promise<GetOrganizationQueryResult | null> {
     const data = await this.findOne({
       where: {
-        id: id.toString(),
+        id: organizationId.toString(),
       },
     });
 

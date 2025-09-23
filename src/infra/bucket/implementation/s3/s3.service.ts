@@ -34,9 +34,39 @@ export class S3Service implements BucketGateway {
     this.s3BucketName = BucketApplicationVariable.BUCKET_S3_BUCKET_NAME;
   }
 
-  public async create(fileBuffer: Buffer): Promise<string> {
+  public async update(
+    fileBuffer: Buffer,
+    fileLocation: string,
+  ): Promise<string> {
     const fileMetadata = await fileType.fileTypeFromBuffer(fileBuffer);
-    const fileName = `${new Guid().toString()}.${fileMetadata?.ext ?? 'bin'}`;
+    const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
+
+    await this.s3Client.send(
+      new PutObjectCommand({
+        Bucket: this.s3BucketName,
+        Key: fileLocation,
+        Body: fileBuffer,
+        ContentType: fileMimeType,
+      }),
+    );
+
+    return fileLocation;
+  }
+
+  public async create(fileBuffer: Buffer, dir?: string): Promise<string> {
+    if (dir !== undefined) {
+      if (dir.startsWith('/')) {
+        const secondStringIndex = 1;
+        dir = dir.slice(secondStringIndex, dir.length);
+      }
+
+      if (!dir.endsWith('/')) {
+        dir = `${dir}/`;
+      }
+    }
+
+    const fileMetadata = await fileType.fileTypeFromBuffer(fileBuffer);
+    const fileName = `${dir ?? ''}${new Guid().toString()}`;
     const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
     await this.s3Client.send(
@@ -47,6 +77,7 @@ export class S3Service implements BucketGateway {
         ContentType: fileMimeType,
       }),
     );
+
     return fileName;
   }
 
