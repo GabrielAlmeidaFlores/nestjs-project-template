@@ -9,7 +9,7 @@ import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
 import { NotFoundError } from '@core/error/not-found.error';
-import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
+import { ErrorResponseDto } from '@shared/api/util/dto/response/error.response.dto';
 
 @Catch(NotFoundError)
 export class NotFoundErrorExceptionFilter implements ExceptionFilter {

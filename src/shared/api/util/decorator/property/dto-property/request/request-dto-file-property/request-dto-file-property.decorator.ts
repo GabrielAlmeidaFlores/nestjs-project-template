@@ -18,6 +18,7 @@ export function RequestDtoFileProperty(
     required: propertyIsRequired,
     type: 'string',
     format: 'binary',
+    example: props.example,
   });
   const isFile = props.singleFile ? IsFile() : IsFiles();
   const hasMimeType = HasMimeType(props.allowedMimeType, {

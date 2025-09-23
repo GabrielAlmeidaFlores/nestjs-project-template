@@ -1,4 +1,4 @@
-export class ListedDataOutputModel<T> {
+export class ListDataOutputModel<T> {
   public page: number;
   public limit: number;
   public totalItems: number;
@@ -6,7 +6,7 @@ export class ListedDataOutputModel<T> {
   public amountItemsCurrentPage: number;
   public resource: T[];
 
-  protected readonly _type = ListedDataOutputModel.name;
+  protected readonly _type = ListDataOutputModel.name;
 
   public constructor(props: {
     page: number;
@@ -23,6 +23,6 @@ export class ListedDataOutputModel<T> {
     this.totalPages = Math.ceil(totalPagesEstimate);
     this.totalPages = this.totalPages ? this.totalPages : defaultMinTotalPages;
     this.amountItemsCurrentPage = props.resource.length;
-    this.resource = this.resource;
+    this.resource = props.resource;
   }
 }

@@ -1,6 +1,6 @@
 import { Like } from 'typeorm';
 
-import { ListedDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
@@ -42,7 +42,20 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   protected async list(
     listBaseDto: ListDataInputModel,
     options?: FindManyOptions<T>,
-  ): Promise<ListedDataOutputModel<T>> {
+  ): Promise<ListDataOutputModel<T>> {
+    const maxItemsPerQuery = 100;
+    if (listBaseDto.limit > maxItemsPerQuery) {
+      listBaseDto.limit = maxItemsPerQuery;
+    }
+
+    if (listBaseDto.limit < 1) {
+      listBaseDto.limit = 1;
+    }
+
+    if (listBaseDto.page < 0) {
+      listBaseDto.page = 0;
+    }
+
     const sortField = listBaseDto.sortField;
     const order = this.generateSortOrder(sortField);
 
@@ -74,7 +87,7 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     const [data, count] =
       await this.repository.findAndCount(findAndCountOptions);
 
-    return new ListedDataOutputModel({
+    return new ListDataOutputModel({
       page: currentPage,
       limit: itemsPerPage,
       totalItems: count,
@@ -249,6 +262,11 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
       ? additionalConditions
       : [additionalConditions];
 
-    return [...normalizedBaseConditions, ...normalizedAdditionalConditions];
+    return [
+      ...normalizedBaseConditions,
+      ...normalizedAdditionalConditions,
+    ].filter((object) => {
+      return Object.keys(object).length > 0;
+    });
   }
 }

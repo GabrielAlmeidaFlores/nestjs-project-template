@@ -18,6 +18,7 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     type: String,
+    example: props?.example,
   });
   const type = Type(() => valueObjectClass);
   const validateNested = ValidateNested();

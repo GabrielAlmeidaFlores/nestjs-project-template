@@ -9,7 +9,7 @@ import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
 import { ForbiddenError } from '@core/error/forbidden.error';
-import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
+import { ErrorResponseDto } from '@shared/api/util/dto/response/error.response.dto';
 
 @Catch(ForbiddenError)
 export class ForbiddenErrorExceptionFilter implements ExceptionFilter {
