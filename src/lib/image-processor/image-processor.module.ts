@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
-import { JimpModule } from '@lib/image-processor/implementation/jimp/jimp.module';
-import { JimpService } from '@lib/image-processor/implementation/jimp/jimp.service';
+import { SharpModule } from '@lib/image-processor/implementation/sharp/sharp.module';
+import { SharpService } from '@lib/image-processor/implementation/sharp/sharp.service';
 
 @Module({
-  imports: [JimpModule],
+  imports: [SharpModule],
   providers: [
     {
       provide: ImageProcessorGateway,
-      useClass: JimpService,
+      useClass: SharpService,
     },
-    JimpService,
+    SharpService,
   ],
   exports: [ImageProcessorGateway],
 })
