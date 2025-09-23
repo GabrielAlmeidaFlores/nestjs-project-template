@@ -7,6 +7,10 @@ export abstract class BaseBuildableObject {
     this: new () => T,
     props: PublicPropertyType<T>,
   ): T {
+    if ('_type' in props) {
+      delete props._type;
+    }
+
     return Object.assign(new this(), props);
   }
 }
