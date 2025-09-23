@@ -5,7 +5,6 @@ import { TransactionOutputModel } from '@core/domain/repository/base/transaction
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
@@ -16,6 +15,7 @@ import { CustomerAddressId } from '@module/customer/account/domain/schema/entity
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
@@ -40,11 +40,10 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     findOneByAuthIdentityIdOrFail: jest.fn(),
   } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
-  const bucket: jest.Mocked<BucketGateway> = {
-    create: jest.fn(),
-    get: jest.fn(),
-    delete: jest.fn(),
-  } as unknown as jest.Mocked<BucketGateway>;
+  const fileProcessor: jest.Mocked<FileProcessorGateway> = {
+    processAndUploadProfilePicture: jest.fn(),
+    getProfilePicture: jest.fn(),
+  } as unknown as jest.Mocked<FileProcessorGateway>;
 
   const sessionData = SessionDataModel.build({
     authIdentityId: new AuthIdentityId(),
@@ -80,7 +79,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     addressNumber: 123,
   });
 
-  const existingCustomer = new CustomerEntity({
+  const baseCustomer = new CustomerEntity({
     id: new CustomerId(),
     name: 'Maria Silva',
     phoneNumber: new PhoneNumber('5511999999999'),
@@ -101,7 +100,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
           provide: CustomerQueryRepositoryGateway,
           useValue: customerQueryRepo,
         },
-        { provide: BucketGateway, useValue: bucket },
+        { provide: FileProcessorGateway, useValue: fileProcessor },
       ],
     }).compile();
 
@@ -109,14 +108,17 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('should upload file, update customer, commit transaction and return final URL', async () => {
+  it('should process, upload, update when changed, commit transaction and return final URL', async () => {
     const uploadedKey = 'bucket/uploads/cust-1/profile.png';
     const finalUrl = new URL(`https://cdn.example.com/${uploadedKey}`);
 
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      existingCustomer,
+      baseCustomer,
     );
-    bucket.create.mockResolvedValueOnce(uploadedKey);
+
+    fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
+      uploadedKey,
+    );
 
     const updateWork: TransactionType = async () => Promise.resolve();
     customerCmdRepo.updateCustomer.mockReturnValueOnce(updateWork);
@@ -127,36 +129,70 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
       new TransactionOutputModel(commit, rollback),
     );
 
-    bucket.get.mockResolvedValueOnce(finalUrl);
+    fileProcessor.getProfilePicture.mockResolvedValueOnce(finalUrl);
 
     const result = await useCase.execute(sessionData, dto);
 
     expect(
       customerQueryRepo.findOneByAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(sessionData.authIdentityId, CustomerNotFoundError);
-    expect(bucket.create).toHaveBeenCalledWith(fileBuffer);
+
+    expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
+      fileBuffer,
+      undefined,
+    );
 
     expect(customerCmdRepo.updateCustomer).toHaveBeenCalledTimes(1);
-    const firstCall = customerCmdRepo.updateCustomer.mock.calls[0];
-    expect(firstCall).toBeDefined();
+    const [calledId, calledEntity] = customerCmdRepo.updateCustomer.mock
+      .calls[0] as unknown as [CustomerId, CustomerEntity];
 
-    if (firstCall) {
-      const [calledId, calledEntity] = firstCall;
-      expect(calledId).toBeInstanceOf(CustomerId);
-      expect(calledEntity).toBeInstanceOf(CustomerEntity);
-      expect(calledEntity.profilePicture).toBe(uploadedKey);
-    }
+    expect(calledId).toBeInstanceOf(CustomerId);
+    expect(calledEntity).toBeInstanceOf(CustomerEntity);
+    expect(calledEntity.profilePicture).toBe(uploadedKey);
 
     expect(txRepo.execute).toHaveBeenCalledWith(updateWork);
     expect(commit).toHaveBeenCalledTimes(1);
 
-    expect(bucket.get).toHaveBeenCalledWith(uploadedKey);
+    expect(fileProcessor.getProfilePicture).toHaveBeenCalledWith(uploadedKey);
 
     expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
     expect(result.profilePicture).toBe(finalUrl.toString());
   });
 
-  it('should propagate CustomerNotFoundError and not call bucket or repos', async () => {
+  it('should not update database when processor returns same location; still return final URL', async () => {
+    const existingKey = 'bucket/uploads/cust-1/existing.png';
+    const customerWithPic = new CustomerEntity({
+      ...baseCustomer,
+      profilePicture: existingKey,
+    });
+    const finalUrl = new URL(`https://cdn.example.com/${existingKey}`);
+
+    customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
+      customerWithPic,
+    );
+
+    fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
+      existingKey,
+    );
+
+    fileProcessor.getProfilePicture.mockResolvedValueOnce(finalUrl);
+
+    const result = await useCase.execute(sessionData, dto);
+
+    expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
+      fileBuffer,
+      existingKey,
+    );
+
+    expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();
+    expect(txRepo.execute).not.toHaveBeenCalled();
+
+    expect(fileProcessor.getProfilePicture).toHaveBeenCalledWith(existingKey);
+    expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
+    expect(result.profilePicture).toBe(finalUrl.toString());
+  });
+
+  it('should propagate CustomerNotFoundError and not call processor or repos', async () => {
     const error = new CustomerNotFoundError();
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockRejectedValueOnce(
       error,
@@ -164,9 +200,9 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
     await expect(useCase.execute(sessionData, dto)).rejects.toBe(error);
 
-    expect(bucket.create).not.toHaveBeenCalled();
+    expect(fileProcessor.processAndUploadProfilePicture).not.toHaveBeenCalled();
     expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();
     expect(txRepo.execute).not.toHaveBeenCalled();
-    expect(bucket.get).not.toHaveBeenCalled();
+    expect(fileProcessor.getProfilePicture).not.toHaveBeenCalled();
   });
 });
