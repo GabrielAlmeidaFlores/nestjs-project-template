@@ -19,7 +19,7 @@ import { FileProcessorGateway } from '@module/customer/account/lib/file-processo
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
-import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.output.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
