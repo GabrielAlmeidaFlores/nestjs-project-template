@@ -9,7 +9,7 @@ import { FastifyReply } from 'fastify';
 import { getReasonPhrase } from 'http-status-codes';
 
 import { InvalidInputError } from '@core/error/invalid-input.error';
-import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
+import { ErrorResponseDto } from '@shared/api/util/dto/response/error.response.dto';
 
 @Catch(InvalidInputError)
 export class InvalidInputErrorExceptionFilter implements ExceptionFilter {

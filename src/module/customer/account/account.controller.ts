@@ -1,16 +1,19 @@
-import { RequestMethod, HttpStatus, Body } from '@nestjs/common';
+import { RequestMethod, HttpStatus, Body, Query } from '@nestjs/common';
 
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
+import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
+import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @CustomerControllerRoute('account')
 export class AccountController {
@@ -19,6 +22,7 @@ export class AccountController {
   public constructor(
     private readonly customerSignUpUseCase: CustomerSignUpUseCase,
     private readonly updateCustomerProfilePictureUseCase: UpdateCustomerProfilePictureUseCase,
+    private readonly listCustomerOrganizationsUseCase: ListCustomerOrganizationsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -63,6 +67,29 @@ export class AccountController {
     @Body() dto: UpdateCustomerProfilePictureRequestDto,
   ): Promise<UpdateCustomerProfilePictureResponseDto> {
     return await this.updateCustomerProfilePictureUseCase.execute(
+      sessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'List customer organizations',
+    http: {
+      path: 'available/organization',
+      method: RequestMethod.GET,
+    },
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Customer organizations listed successfully',
+      type: ListCustomerOrganizationsResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listCustomerOrganizations(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListCustomerOrganizationsResponseDto> {
+    return await this.listCustomerOrganizationsUseCase.execute(
       sessionData,
       dto,
     );

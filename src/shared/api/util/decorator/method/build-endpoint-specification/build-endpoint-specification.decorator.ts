@@ -27,7 +27,7 @@ import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
 
 import { InvalidFormDataStructureError } from '@shared/api/util/decorator/method/build-endpoint-specification/error/invalid-form-data-structure.error';
 import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
-import { ErrorResponseDto } from '@shared/api/util/dto/response/error/error.response.dto';
+import { ErrorResponseDto } from '@shared/api/util/dto/response/error.response.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 import type { CanActivate, Type } from '@nestjs/common';

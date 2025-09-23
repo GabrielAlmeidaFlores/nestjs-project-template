@@ -8,9 +8,13 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
+import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
 import {
   CustomerSignUpRequestDto,
   CustomerAddressSignUpRequestDto,
@@ -40,6 +44,16 @@ describe(CustomerSignUpUseCase.name, () => {
   const addressCmdRepo: jest.Mocked<CustomerAddressCommandRepositoryGateway> = {
     createCustomerAddress: jest.fn(),
   } as unknown as jest.Mocked<CustomerAddressCommandRepositoryGateway>;
+
+  const organizationCmdRepo: jest.Mocked<OrganizationCommandRepositoryGateway> =
+    {
+      createOrganization: jest.fn(),
+    } as unknown as jest.Mocked<OrganizationCommandRepositoryGateway>;
+
+  const organizationMemberCmdRepo: jest.Mocked<OrganizationMemberCommandRepositoryGateway> =
+    {
+      createOrganizationMember: jest.fn(),
+    } as unknown as jest.Mocked<OrganizationMemberCommandRepositoryGateway>;
 
   const validateSignUp: jest.Mocked<ValidateAuthIdentitySignUpUseCaseGateway> =
     {
@@ -80,6 +94,14 @@ describe(CustomerSignUpUseCase.name, () => {
           useValue: addressCmdRepo,
         },
         {
+          provide: OrganizationCommandRepositoryGateway,
+          useValue: organizationCmdRepo,
+        },
+        {
+          provide: OrganizationMemberCommandRepositoryGateway,
+          useValue: organizationMemberCmdRepo,
+        },
+        {
           provide: ValidateAuthIdentitySignUpUseCaseGateway,
           useValue: validateSignUp,
         },
@@ -94,15 +116,24 @@ describe(CustomerSignUpUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('should validate, persist address and customer in a transaction, create auth identity and return response', async () => {
+  it('should validate, create entities, persist all with transaction, create auth identity and return response', async () => {
     const dto = makeDto();
 
     validateSignUp.execute.mockResolvedValueOnce();
 
     const addressTx: TransactionType = jest.fn().mockResolvedValue(undefined);
     const customerTx: TransactionType = jest.fn().mockResolvedValue(undefined);
+    const organizationTx: TransactionType = jest
+      .fn()
+      .mockResolvedValue(undefined);
+    const orgMemberTx: TransactionType = jest.fn().mockResolvedValue(undefined);
+
     addressCmdRepo.createCustomerAddress.mockReturnValueOnce(addressTx);
     customerCmdRepo.createCustomer.mockReturnValueOnce(customerTx);
+    organizationCmdRepo.createOrganization.mockReturnValueOnce(organizationTx);
+    organizationMemberCmdRepo.createOrganizationMember.mockReturnValueOnce(
+      orgMemberTx,
+    );
 
     const commit = jest.fn().mockResolvedValue(undefined);
     const rollback = jest.fn().mockResolvedValue(undefined);
@@ -135,7 +166,28 @@ describe(CustomerSignUpUseCase.name, () => {
     ];
     expect(customerEntityArg).toBeInstanceOf(CustomerEntity);
 
-    expect(txRepo.execute).toHaveBeenCalledWith([addressTx, customerTx]);
+    expect(organizationCmdRepo.createOrganization).toHaveBeenCalledTimes(1);
+    const [[organizationEntityArg]] = organizationCmdRepo.createOrganization
+      .mock.calls as [[OrganizationEntity]];
+    expect(organizationEntityArg).toBeInstanceOf(OrganizationEntity);
+
+    expect(
+      organizationMemberCmdRepo.createOrganizationMember,
+    ).toHaveBeenCalledTimes(1);
+    const [[orgMemberEntityArg]] = organizationMemberCmdRepo
+      .createOrganizationMember.mock.calls as [[OrganizationMemberEntity]];
+    expect(orgMemberEntityArg).toBeInstanceOf(OrganizationMemberEntity);
+    expect(orgMemberEntityArg.customer).toBe(customerEntityArg);
+    expect(orgMemberEntityArg.organization).toBe(organizationEntityArg);
+    expect(orgMemberEntityArg.owner).toBe(true);
+
+    expect(txRepo.execute).toHaveBeenCalledTimes(1);
+    expect(txRepo.execute).toHaveBeenCalledWith([
+      addressTx,
+      customerTx,
+      organizationTx,
+      orgMemberTx,
+    ]);
     expect(commit).toHaveBeenCalledTimes(1);
 
     expect(authIdentitySignUp.execute).toHaveBeenCalledTimes(1);
@@ -157,6 +209,10 @@ describe(CustomerSignUpUseCase.name, () => {
 
     expect(addressCmdRepo.createCustomerAddress).not.toHaveBeenCalled();
     expect(customerCmdRepo.createCustomer).not.toHaveBeenCalled();
+    expect(organizationCmdRepo.createOrganization).not.toHaveBeenCalled();
+    expect(
+      organizationMemberCmdRepo.createOrganizationMember,
+    ).not.toHaveBeenCalled();
     expect(txRepo.execute).not.toHaveBeenCalled();
     expect(authIdentitySignUp.execute).not.toHaveBeenCalled();
   });

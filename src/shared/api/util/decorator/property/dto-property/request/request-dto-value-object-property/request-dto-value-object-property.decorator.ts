@@ -63,6 +63,7 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     type: String,
+    example: props?.example,
   });
   const validation = IsValidValueObject(valueObjectClass);
   const transform = Transform(({ value }) => {

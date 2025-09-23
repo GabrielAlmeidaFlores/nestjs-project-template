@@ -18,6 +18,12 @@ export class FileProcessorService implements FileProcessorGateway {
     return await this.bucketGateway.get(profilePictureLocation);
   }
 
+  public async getOrganizationLogo(
+    organizationLogoLocation: string,
+  ): Promise<URL> {
+    return await this.bucketGateway.get(organizationLogoLocation);
+  }
+
   public async processAndUploadProfilePicture(
     profilePicture: Buffer,
     profilePictureLocation?: string,
