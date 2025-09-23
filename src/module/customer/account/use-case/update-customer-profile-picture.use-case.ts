@@ -9,7 +9,7 @@ import { CustomerNotFoundError } from '@module/customer/account/error/customer-n
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 
 import type { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
-import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.output.model';
+import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 export class UpdateCustomerProfilePictureUseCase {
   protected readonly _type = UpdateCustomerProfilePictureUseCase.name;
