@@ -27,6 +27,19 @@ services:
     volumes:
       - redis_data:/data
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs
+    restart: always
+    env_file: .env
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - mysql
+      - redis
+
 volumes:
   mysql_data:
   redis_data:
