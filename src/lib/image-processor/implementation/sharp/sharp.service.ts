@@ -3,13 +3,17 @@ import * as sharp from 'sharp';
 
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
 
-type OutputFormatType = 'jpeg' | 'png' | 'webp' | 'avif' | 'tiff' | 'gif';
-
 @Injectable()
 export class SharpService implements ImageProcessorGateway {
   protected readonly _type = SharpService.name;
 
-  private readonly defaultFormat: OutputFormatType = 'webp';
+  private readonly defaultFormat:
+    | 'jpeg'
+    | 'png'
+    | 'webp'
+    | 'avif'
+    | 'tiff'
+    | 'gif' = 'webp';
   private readonly defaultQuality = 85;
 
   public async convertToDefaultMimeType(input: Buffer): Promise<Buffer> {
