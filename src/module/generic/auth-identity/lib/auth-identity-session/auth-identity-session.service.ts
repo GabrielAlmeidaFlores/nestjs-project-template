@@ -5,8 +5,7 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
-import { AuthIdentitySessionJwtInputModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/input/auth-identity-session-jwt.input.model';
-import { AuthIdentitySessionJwtWithParsedContentOutputModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/output/auth-identity-session-jwt-with-parsed-content.output.model';
+import { AuthIdentitySessionJwtModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/generic/auth-identity-session-jwt.model';
 import { AuthIdentitySessionJwtOutputModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/output/auth-identity-session-jwt.output.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -43,7 +42,7 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
       userLevel,
       authIdentityId: authIdentityId.toString(),
       sessionId: sessionId.toString(),
-    } as AuthIdentitySessionJwtInputModel;
+    } as AuthIdentitySessionJwtModel;
 
     return this.jwtService.sign(jwtContent);
   }
@@ -70,19 +69,18 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
 
   public async getSessionDataFromJwt(
     jwt: string,
-  ): Promise<AuthIdentitySessionJwtWithParsedContentOutputModel | null> {
+  ): Promise<AuthIdentitySessionJwtOutputModel | null> {
     const jwtContent = this.extractDataFromJWT(jwt);
 
     if (jwtContent === null) {
       return null;
     }
 
-    const jwtWithParsedContent =
-      AuthIdentitySessionJwtWithParsedContentOutputModel.build({
-        authIdentityId: new AuthIdentityId(jwtContent.authIdentityId),
-        sessionId: new Guid(jwtContent.sessionId),
-        userLevel: jwtContent.userLevel,
-      });
+    const jwtWithParsedContent = AuthIdentitySessionJwtOutputModel.build({
+      authIdentityId: new AuthIdentityId(jwtContent.authIdentityId),
+      sessionId: new Guid(jwtContent.sessionId),
+      userLevel: jwtContent.userLevel,
+    });
 
     const key = this.generateAuthIdentitySessionKey(
       jwtWithParsedContent.authIdentityId,
@@ -98,9 +96,9 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
 
   private extractDataFromJWT(
     token: string,
-  ): AuthIdentitySessionJwtOutputModel | null {
+  ): AuthIdentitySessionJwtModel | null {
     try {
-      return this.jwtService.verify<AuthIdentitySessionJwtOutputModel>(token);
+      return this.jwtService.verify<AuthIdentitySessionJwtModel>(token);
     } catch {
       return null;
     }
