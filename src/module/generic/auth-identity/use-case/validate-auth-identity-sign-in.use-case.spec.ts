@@ -30,8 +30,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
 
   beforeEach(async () => {
     sessionGateway = {
-      createSession: jest.fn(),
-      getSession: jest.fn(),
+      getSessionDataFromJwt: jest.fn(),
     } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
 
     const moduleRef = await Test.createTestingModule({
@@ -49,12 +48,14 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
     const dto = buildRequestDto();
     const session = buildSession();
 
-    sessionGateway.getSession.mockResolvedValueOnce(session);
+    sessionGateway.getSessionDataFromJwt.mockResolvedValueOnce(session);
 
     const result = await useCase.execute(dto);
 
-    expect(sessionGateway.getSession).toHaveBeenCalledTimes(CALL_ONCE);
-    expect(sessionGateway.getSession).toHaveBeenCalledWith(dto.jwt);
+    expect(sessionGateway.getSessionDataFromJwt).toHaveBeenCalledTimes(
+      CALL_ONCE,
+    );
+    expect(sessionGateway.getSessionDataFromJwt).toHaveBeenCalledWith(dto.jwt);
 
     expect(result).toBeInstanceOf(ValidateAuthIdentitySignInResponseDto);
     expect(result.authIdentityId).toEqual(session.authIdentityId);
@@ -65,13 +66,15 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
   it('lança InvalidAuthIdentitySessionError quando a sessão é null', async () => {
     const dto = buildRequestDto('invalid.jwt');
 
-    sessionGateway.getSession.mockResolvedValueOnce(null);
+    sessionGateway.getSessionDataFromJwt.mockResolvedValueOnce(null);
 
     await expect(useCase.execute(dto)).rejects.toThrow(
       InvalidAuthIdentitySessionError,
     );
 
-    expect(sessionGateway.getSession).toHaveBeenCalledTimes(CALL_ONCE);
-    expect(sessionGateway.getSession).toHaveBeenCalledWith(dto.jwt);
+    expect(sessionGateway.getSessionDataFromJwt).toHaveBeenCalledTimes(
+      CALL_ONCE,
+    );
+    expect(sessionGateway.getSessionDataFromJwt).toHaveBeenCalledWith(dto.jwt);
   });
 });

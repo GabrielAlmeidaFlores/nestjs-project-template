@@ -20,7 +20,9 @@ export class ValidateAuthIdentitySignInUseCase
   public async execute(
     dto: ValidateAuthIdentitySignInRequestDto,
   ): Promise<ValidateAuthIdentitySignInResponseDto> {
-    const session = await this.authIdentitySessionGateway.getSession(dto.jwt);
+    const session = await this.authIdentitySessionGateway.getSessionDataFromJwt(
+      dto.jwt,
+    );
 
     if (session === null) {
       throw new InvalidAuthIdentitySessionError();
