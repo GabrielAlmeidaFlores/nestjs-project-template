@@ -29,7 +29,6 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
     });
 
   beforeEach(async () => {
-    // Mock MINIMALISTA: apenas o método usado pela use-case
     sessionGateway = {
       getSessionDataFromJwt: jest.fn(),
     } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
