@@ -48,13 +48,27 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
     return this.jwtService.sign(jwtContent);
   }
 
+  public async getSession(
+    authIdentityId: AuthIdentityId,
+  ): Promise<Guid | null> {
+    const sessionKey = this.generateAuthIdentitySessionKey(authIdentityId);
+
+    const sessionData = await this.cacheStorageGateway.getData(sessionKey);
+
+    if (sessionData === null) {
+      return sessionData;
+    }
+
+    return new Guid(sessionData);
+  }
+
   public async deleteSession(authIdentityId: AuthIdentityId): Promise<void> {
     const sessionKey = this.generateAuthIdentitySessionKey(authIdentityId);
 
     await this.cacheStorageGateway.deleteData(sessionKey);
   }
 
-  public async getSession(
+  public async getSessionDataFromJwt(
     jwt: string,
   ): Promise<AuthIdentitySessionJwtWithParsedContentOutputModel | null> {
     const jwtContent = this.extractDataFromJWT(jwt);

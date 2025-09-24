@@ -11,7 +11,9 @@ import {
   PreAuthIdentitySignInResponseDto,
 } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
+import { AuthIdentitySessionConflictError } from '@module/generic/auth-identity/error/auth-identity-session-conflict.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
+import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { AuthenticatorCredentialsOutputModel } from '@module/generic/auth-identity/lib/authenticator/model/output/authenticator-credentials.output.model';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
@@ -32,6 +34,8 @@ export class PreAuthIdentitySignInUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(EmailMFAGateway)
     private readonly emailMFAGateway: EmailMFAGateway,
+    @Inject(AuthIdentitySessionGateway)
+    private readonly authIdentitySessionGateway: AuthIdentitySessionGateway,
   ) {}
 
   public async execute(
@@ -59,6 +63,14 @@ export class PreAuthIdentitySignInUseCase {
 
     if (!isPasswordRight) {
       throw new WrongSignInCredentialsError();
+    }
+
+    const activeSession = await this.authIdentitySessionGateway.getSession(
+      authIdentity.id,
+    );
+
+    if (activeSession !== null && dto.forceNewSession !== true) {
+      throw new AuthIdentitySessionConflictError();
     }
 
     if (

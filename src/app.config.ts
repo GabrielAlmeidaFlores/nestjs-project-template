@@ -12,6 +12,7 @@ import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
+import { ConflictErrorExceptionFilter } from '@shared/api/gateway/exception-filter/conflict.error.exception-filter';
 import { ForbiddenErrorExceptionFilter } from '@shared/api/gateway/exception-filter/forbidden.error.exception-filter';
 import { InvalidInputErrorExceptionFilter } from '@shared/api/gateway/exception-filter/invalid-input.error.exception-filter';
 import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filter/not-found.error.exception-filter';
@@ -183,6 +184,7 @@ export class AppConfig extends AppConfigUtils {
   }
 
   public applyGlobalFilters(): this {
+    this.app.useGlobalFilters(new ConflictErrorExceptionFilter());
     this.app.useGlobalFilters(new ForbiddenErrorExceptionFilter());
     this.app.useGlobalFilters(new InvalidInputErrorExceptionFilter());
     this.app.useGlobalFilters(new NotFoundErrorExceptionFilter());
