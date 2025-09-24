@@ -11,4 +11,6 @@ export abstract class AuthIdentitySessionGateway {
   public abstract getSession(
     jwt: string,
   ): Promise<AuthIdentitySessionJwtWithParsedContentOutputModel | null>;
+
+  public abstract deleteSession(authIdentityId: AuthIdentityId): Promise<void>;
 }

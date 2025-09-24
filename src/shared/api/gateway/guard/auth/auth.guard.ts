@@ -8,6 +8,7 @@ import { FastifyRequest } from 'fastify';
 
 import { ValidateAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-in.request.dto';
 import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,7 +22,7 @@ export class AuthGuard implements CanActivate {
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
 
-    const jwt = request.cookies['auth_token'];
+    const jwt = request.cookies[ApiCookieEnum.AUTH_TOKEN];
 
     if (typeof jwt !== 'string' || jwt.trim() === '') {
       return false;
