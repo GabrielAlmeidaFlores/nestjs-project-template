@@ -48,6 +48,12 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
     return this.jwtService.sign(jwtContent);
   }
 
+  public async deleteSession(authIdentityId: AuthIdentityId): Promise<void> {
+    const sessionKey = this.generateAuthIdentitySessionKey(authIdentityId);
+
+    await this.cacheStorageGateway.deleteData(sessionKey);
+  }
+
   public async getSession(
     jwt: string,
   ): Promise<AuthIdentitySessionJwtWithParsedContentOutputModel | null> {

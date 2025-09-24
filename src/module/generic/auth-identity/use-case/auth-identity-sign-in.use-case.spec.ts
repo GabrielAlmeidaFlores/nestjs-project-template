@@ -16,6 +16,7 @@ import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/au
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { FastifyReply } from 'fastify';
@@ -117,7 +118,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
     expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
     expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
     expect(reply.setCookie).toHaveBeenCalledWith(
-      'auth_token',
+      ApiCookieEnum.AUTH_TOKEN,
       'mock-jwt-token',
       expect.objectContaining({
         httpOnly: true,
@@ -230,7 +231,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
     expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
     expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
     expect(reply.setCookie).toHaveBeenCalledWith(
-      'auth_token',
+      ApiCookieEnum.AUTH_TOKEN,
       'jwt-app',
       expect.objectContaining({
         httpOnly: true,
