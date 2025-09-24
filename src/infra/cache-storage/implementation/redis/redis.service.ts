@@ -23,6 +23,10 @@ export class RedisService implements CacheStorageGateway {
       CacheStorageApplicationVariable.CACHE_STORAGE_CRYPTOGRAPHY_METHOD;
   }
 
+  public async deleteData(key: string): Promise<void> {
+    await this.redis.del(key);
+  }
+
   public async setData(key: string, value: string, ttl = 3600): Promise<void> {
     const encryptedValue = this.encryptData(value);
     await this.redis.set(key, encryptedValue, 'EX', ttl);

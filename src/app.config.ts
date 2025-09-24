@@ -23,6 +23,7 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { ValidationError } from 'class-validator';
 import type { FastifyReply, FastifyRequest, RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 
 class FastifyHooks {
   protected readonly _type = FastifyHooks.name;
@@ -338,14 +339,13 @@ export class AppConfig extends AppConfigUtils {
     const projectVersion = packageJson.version ?? '';
 
     config
-      .addBearerAuth()
       .setTitle(projectTitle)
       .setDescription(projectDescription)
       .setVersion(projectVersion)
       .addSecurity('cookieAuth', {
         type: 'apiKey',
         in: 'cookie',
-        name: 'auth_token',
+        name: ApiCookieEnum.AUTH_TOKEN,
       });
 
     const build = config.build();

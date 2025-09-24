@@ -6,6 +6,7 @@ import { AuthIdentitySessionModule } from '@module/generic/auth-identity/lib/aut
 import { AuthenticatorModule } from '@module/generic/auth-identity/lib/authenticator/authenticator.module';
 import { EmailMFAModule } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.module';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
+import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-in.use-case';
@@ -40,6 +41,7 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     },
     PreAuthIdentitySignInUseCase,
     AuthIdentitySignInUseCase,
+    AuthIdentitySignOutUseCase,
   ],
   exports: [
     ValidateAuthIdentitySignInUseCaseGateway,

@@ -5,4 +5,5 @@ export abstract class CacheStorageGateway {
     value: string,
     ttl: number,
   ): Promise<void>;
+  public abstract deleteData(key: string): Promise<void>;
 }
