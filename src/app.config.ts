@@ -339,7 +339,6 @@ export class AppConfig extends AppConfigUtils {
     const projectVersion = packageJson.version ?? '';
 
     config
-      .addBearerAuth()
       .setTitle(projectTitle)
       .setDescription(projectDescription)
       .setVersion(projectVersion)
