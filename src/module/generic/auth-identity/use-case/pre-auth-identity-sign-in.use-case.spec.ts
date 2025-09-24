@@ -5,6 +5,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
@@ -16,7 +17,9 @@ import {
   PreAuthIdentitySignInResponseDto,
 } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
+import { AuthIdentitySessionConflictError } from '@module/generic/auth-identity/error/auth-identity-session-conflict.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
+import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { AuthenticatorCredentialsOutputModel } from '@module/generic/auth-identity/lib/authenticator/model/output/authenticator-credentials.output.model';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
@@ -58,6 +61,13 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     generatePersistAndSendSignInCode: jest.fn(),
   } as unknown as jest.Mocked<EmailMFAGateway>;
 
+  const sessionGateway: jest.Mocked<AuthIdentitySessionGateway> = {
+    createSession: jest.fn(),
+    getSessionDataFromJwt: jest.fn(),
+    deleteSession: jest.fn(),
+    getSession: jest.fn(),
+  } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
@@ -70,6 +80,7 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
         { provide: BaseTransactionRepositoryGateway, useValue: txRepo },
         { provide: AuthenticatorGateway, useValue: authenticatorGateway },
         { provide: EmailMFAGateway, useValue: emailMFAGateway },
+        { provide: AuthIdentitySessionGateway, useValue: sessionGateway },
       ],
     }).compile();
 
@@ -110,17 +121,19 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
       ...overrides,
     });
 
-  it('EMAIL: should send code and return customer userLevel', async () => {
+  it('EMAIL: should send code and return customer userLevel (no active session)', async () => {
     const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
     const authIdentity = createAuthIdentity();
 
     queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
       authIdentity,
     );
+    sessionGateway.getSession.mockResolvedValueOnce(null);
     emailMFAGateway.generatePersistAndSendSignInCode.mockResolvedValueOnce();
 
     const result = await useCase.execute(dto);
 
+    expect(sessionGateway.getSession).toHaveBeenCalledWith(authIdentity.id);
     expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
     expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
     expect(
@@ -128,7 +141,43 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     ).toHaveBeenCalledWith(authIdentity.id, authIdentity.email);
   });
 
-  it('AUTH APP with missing secret: should generate, persist and return authenticator data', async () => {
+  it('should throw AuthIdentitySessionConflictError when there is an active session and forceNewSession is not true', async () => {
+    const dto = createValidDto();
+    const authIdentity = createAuthIdentity();
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+      authIdentity,
+    );
+    sessionGateway.getSession.mockResolvedValueOnce(new Guid());
+
+    await expect(useCase.execute(dto)).rejects.toThrow(
+      AuthIdentitySessionConflictError,
+    );
+
+    expect(
+      emailMFAGateway.generatePersistAndSendSignInCode,
+    ).not.toHaveBeenCalled();
+    expect(authenticatorGateway.generateCredentials).not.toHaveBeenCalled();
+  });
+
+  it('should proceed when there is an active session but forceNewSession === true', async () => {
+    const dto = createValidDto({ forceNewSession: true });
+    const authIdentity = createAuthIdentity();
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+      authIdentity,
+    );
+    sessionGateway.getSession.mockResolvedValueOnce(new Guid());
+    emailMFAGateway.generatePersistAndSendSignInCode.mockResolvedValueOnce();
+
+    const result = await useCase.execute(dto);
+
+    expect(sessionGateway.getSession).toHaveBeenCalledWith(authIdentity.id);
+    expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
+  });
+
+  it('AUTH APP with missing secret: should generate, persist and return authenticator data (no active session)', async () => {
     const dto = createValidDto({
       mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
     });
@@ -144,6 +193,7 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
       authIdentity,
     );
+    sessionGateway.getSession.mockResolvedValueOnce(null);
     authenticatorGateway.generateCredentials.mockResolvedValueOnce(credentials);
 
     const txCallback: TransactionType = jest.fn().mockResolvedValue(undefined);
@@ -175,7 +225,7 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     expect(result.authenticatorData?.base32).toBe(credentials.base32);
   });
 
-  it('AUTH APP with present secret: should not generate credentials and should return user level', async () => {
+  it('AUTH APP with present secret: should not generate credentials and should return user level (no active session)', async () => {
     const dto = createValidDto({
       mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
     });
@@ -186,6 +236,7 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
       authIdentity,
     );
+    sessionGateway.getSession.mockResolvedValueOnce(null);
 
     const result = await useCase.execute(dto);
 
