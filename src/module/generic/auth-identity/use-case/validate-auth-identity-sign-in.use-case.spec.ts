@@ -6,7 +6,7 @@ import { ValidateAuthIdentitySignInRequestDto } from '@module/generic/auth-ident
 import { ValidateAuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/validate-auth-identity-sign-in.response.dto';
 import { InvalidAuthIdentitySessionError } from '@module/generic/auth-identity/error/invalid-auth-identity-session.error';
 import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
-import { AuthIdentitySessionJwtWithParsedContentOutputModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/output/auth-identity-session-jwt-with-parsed-content.output.model';
+import { AuthIdentitySessionJwtOutputModel } from '@module/generic/auth-identity/lib/auth-identity-session/model/output/auth-identity-session-jwt.output.model';
 import { ValidateAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-in.use-case';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -21,8 +21,8 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
   ): ValidateAuthIdentitySignInRequestDto =>
     ValidateAuthIdentitySignInRequestDto.build({ jwt });
 
-  const buildSession = (): AuthIdentitySessionJwtWithParsedContentOutputModel =>
-    AuthIdentitySessionJwtWithParsedContentOutputModel.build({
+  const buildSession = (): AuthIdentitySessionJwtOutputModel =>
+    AuthIdentitySessionJwtOutputModel.build({
       authIdentityId: new AuthIdentityId(),
       sessionId: new Guid(),
       userLevel: UserLevelEnum.CUSTOMER,
