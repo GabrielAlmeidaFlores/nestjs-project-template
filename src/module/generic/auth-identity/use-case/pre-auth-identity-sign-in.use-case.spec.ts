@@ -62,9 +62,6 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
   } as unknown as jest.Mocked<EmailMFAGateway>;
 
   const sessionGateway: jest.Mocked<AuthIdentitySessionGateway> = {
-    createSession: jest.fn(),
-    getSessionDataFromJwt: jest.fn(),
-    deleteSession: jest.fn(),
     getSession: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
 
