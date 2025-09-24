@@ -11,6 +11,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { ForbiddenErrorExceptionFilter } from '@shared/api/gateway/exception-filter/forbidden.error.exception-filter';
 import { InvalidInputErrorExceptionFilter } from '@shared/api/gateway/exception-filter/invalid-input.error.exception-filter';
 import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filter/not-found.error.exception-filter';
@@ -23,7 +24,6 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { ValidationError } from 'class-validator';
 import type { FastifyReply, FastifyRequest, RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
-import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 
 class FastifyHooks {
   protected readonly _type = FastifyHooks.name;
