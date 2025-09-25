@@ -7,6 +7,8 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
+import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
@@ -70,22 +72,31 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     profilePicture: fileModel,
   });
 
-  const customerAddress = new CustomerAddressEntity({
+  const now = new Date();
+
+  const addressQueryResult = GetCustomerAddressQueryResult.build({
     id: new CustomerAddressId(),
     postalCode: new PostalCode('01001000'),
     stateCode: StateCodeEnum.SP,
     city: 'São Paulo',
     neighborhood: 'Centro',
     addressNumber: 123,
+    createdAt: now,
+    updatedAt: now,
+    deletedAt: null,
   });
 
-  const baseCustomer = new CustomerEntity({
-    id: new CustomerId(),
-    name: 'Maria Silva',
-    phoneNumber: new PhoneNumber('5511999999999'),
-    customerAddress,
-    profilePicture: null,
-  });
+  const baseCustomerQueryResult =
+    GetCustomerWithAddressRelationQueryResult.build({
+      id: new CustomerId(),
+      name: 'Maria Silva',
+      phoneNumber: new PhoneNumber('5511999999999'),
+      profilePicture: null,
+      createdAt: now,
+      updatedAt: now,
+      deletedAt: null,
+      customerAddress: addressQueryResult,
+    });
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -113,7 +124,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     const finalUrl = new URL(`https://cdn.example.com/${uploadedKey}`);
 
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      baseCustomer,
+      baseCustomerQueryResult,
     );
 
     fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
@@ -149,6 +160,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(calledId).toBeInstanceOf(CustomerId);
     expect(calledEntity).toBeInstanceOf(CustomerEntity);
     expect(calledEntity.profilePicture).toBe(uploadedKey);
+    expect(calledEntity.customerAddress).toBeInstanceOf(CustomerAddressEntity);
 
     expect(txRepo.execute).toHaveBeenCalledWith(updateWork);
     expect(commit).toHaveBeenCalledTimes(1);
@@ -161,14 +173,17 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   it('should not update database when processor returns same location; still return final URL', async () => {
     const existingKey = 'bucket/uploads/cust-1/existing.png';
-    const customerWithPic = new CustomerEntity({
-      ...baseCustomer,
-      profilePicture: existingKey,
-    });
+
+    const customerWithPicQuery =
+      GetCustomerWithAddressRelationQueryResult.build({
+        ...baseCustomerQueryResult,
+        profilePicture: existingKey,
+      });
+
     const finalUrl = new URL(`https://cdn.example.com/${existingKey}`);
 
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customerWithPic,
+      customerWithPicQuery,
     );
 
     fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
