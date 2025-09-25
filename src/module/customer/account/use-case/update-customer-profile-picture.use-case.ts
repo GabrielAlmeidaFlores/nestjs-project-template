@@ -3,7 +3,9 @@ import { Inject } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
@@ -58,12 +60,15 @@ export class UpdateCustomerProfilePictureUseCase {
   }
 
   private async updateCustomerProfilePictureOnDatabase(
-    customer: CustomerEntity,
+    customer: GetCustomerWithAddressRelationQueryResult,
     profilePicture: string,
   ): Promise<void> {
     const updatedCustomer = new CustomerEntity({
       ...customer,
       profilePicture,
+      customerAddress: new CustomerAddressEntity({
+        ...customer.customerAddress,
+      }),
     });
 
     const saveUpdatedCustomer =
