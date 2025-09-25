@@ -18,7 +18,6 @@ import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/bu
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
-
 @CustomerControllerRoute('account')
 export class AccountController {
   protected readonly _type = AccountController.name;

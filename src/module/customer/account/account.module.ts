@@ -9,6 +9,8 @@ import { CustomerSignUpUseCase } from '@module/customer/account/use-case/custome
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
+import { ValidateOrganizationSessionUseCase } from '@module/customer/account/use-case/validate-organization-session.use-case';
+import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
 @Module({
@@ -25,7 +27,13 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     UpdateCustomerProfilePictureUseCase,
     ListCustomerOrganizationsUseCase,
     SetOrganizationForCustomerUseCase,
+    ValidateOrganizationSessionUseCase,
+    {
+      useClass: ValidateOrganizationSessionUseCase,
+      provide: ValidateOrganizationSessionUseCaseGateway,
+    },
   ],
+  exports: [ValidateOrganizationSessionUseCaseGateway],
 })
 export class AccountModule {
   protected readonly _type = AccountModule.name;
