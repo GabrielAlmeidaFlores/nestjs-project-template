@@ -44,7 +44,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   const fileProcessor: jest.Mocked<FileProcessorGateway> = {
     processAndUploadProfilePicture: jest.fn(),
-    getProfilePicture: jest.fn(),
+    getCustomerProfilePicture: jest.fn(),
   } as unknown as jest.Mocked<FileProcessorGateway>;
 
   const sessionData = SessionDataModel.build({
@@ -54,7 +54,6 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   });
 
   const fileBuffer = Buffer.from('fake-image');
-
   const fileModel: FileModel = {
     fieldname: 'profilePicture',
     originalName: 'avatar.png',
@@ -147,7 +146,6 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(
       customerQueryRepo.findOneByAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(sessionData.authIdentityId, CustomerNotFoundError);
-
     expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
       fileBuffer,
       undefined,
@@ -165,7 +163,9 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(txRepo.execute).toHaveBeenCalledWith(updateWork);
     expect(commit).toHaveBeenCalledTimes(1);
 
-    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(uploadedKey);
+    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(
+      uploadedKey,
+    );
 
     expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
     expect(result.profilePicture).toBe(finalUrl.toString());
@@ -173,23 +173,19 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   it('should not update database when processor returns same location; still return final URL', async () => {
     const existingKey = 'bucket/uploads/cust-1/existing.png';
-
     const customerWithPicQuery =
       GetCustomerWithAddressRelationQueryResult.build({
         ...baseCustomerQueryResult,
         profilePicture: existingKey,
       });
-
     const finalUrl = new URL(`https://cdn.example.com/${existingKey}`);
 
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
       customerWithPicQuery,
     );
-
     fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
       existingKey,
     );
-
     fileProcessor.getCustomerProfilePicture.mockResolvedValueOnce(finalUrl);
 
     const result = await useCase.execute(sessionData, dto);
@@ -198,11 +194,12 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
       fileBuffer,
       existingKey,
     );
-
     expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();
     expect(txRepo.execute).not.toHaveBeenCalled();
+    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(
+      existingKey,
+    );
 
-    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(existingKey);
     expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
     expect(result.profilePicture).toBe(finalUrl.toString());
   });

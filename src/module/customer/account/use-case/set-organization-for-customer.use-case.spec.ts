@@ -32,8 +32,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByOrganizationMemberId: jest.fn(),
-      findOneOrganizationByCustomerAndOrganizationId: jest.fn(),
+      findOneByCustomerAndOrganizationId: jest.fn(),
     } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
 
   const reply: Partial<FastifyReply> = {
@@ -89,7 +88,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('success path: seta cookie e retorna owner corretamente', async () => {
+  it('success path: sets cookie and returns owner=true', async () => {
     const sessionData = createSessionData();
     const dto = createDto();
     const orgMember = createOrganizationMember({ owner: true });
@@ -140,7 +139,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     ).toHaveBeenCalledWith(mockCustomerId, dto.organizationId);
   });
 
-  it('customer inexistente: lança CustomerNotFoundError', async () => {
+  it('throws CustomerNotFoundError when customer does not exist', async () => {
     const sessionData = createSessionData();
     const dto = createDto();
 
@@ -158,7 +157,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     expect(reply.setCookie).not.toHaveBeenCalled();
   });
 
-  it('organização não vinculada ao customer: lança OrganizationNotAvailableForCustomerError', async () => {
+  it('throws OrganizationNotAvailableForCustomerError when organization is not linked to customer', async () => {
     const sessionData = createSessionData();
     const dto = createDto();
 
@@ -169,6 +168,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
         >
       >,
     );
+
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
       null,
     );
@@ -181,7 +181,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     expect(organizationSessionGateway.createSession).not.toHaveBeenCalled();
   });
 
-  it('retorna owner=false quando o membro não é owner', async () => {
+  it('returns owner=false when the member is not owner', async () => {
     const sessionData = createSessionData();
     const dto = createDto();
     const orgMember = createOrganizationMember({ owner: false });
@@ -193,9 +193,11 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
         >
       >,
     );
+
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
       orgMember,
     );
+
     organizationSessionGateway.createSession.mockReturnValueOnce('jwt-org');
 
     const result = await useCase.execute(

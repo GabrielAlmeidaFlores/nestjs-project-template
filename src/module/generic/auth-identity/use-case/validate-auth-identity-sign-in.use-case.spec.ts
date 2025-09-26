@@ -28,7 +28,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
       userLevel: UserLevelEnum.CUSTOMER,
     });
 
-  beforeEach(async () => {
+  beforeEach(async (): Promise<void> => {
     sessionGateway = {
       getSessionDataFromJwt: jest.fn(),
     } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
@@ -44,7 +44,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('retorna ValidateAuthIdentitySignInResponseDto quando a sessão existe', async () => {
+  it('should return ValidateAuthIdentitySignInResponseDto when session exists', async (): Promise<void> => {
     const dto = buildRequestDto();
     const session = buildSession();
 
@@ -63,7 +63,7 @@ describe(ValidateAuthIdentitySignInUseCase.name, () => {
     expect(result.userLevel).toEqual(session.userLevel);
   });
 
-  it('lança InvalidAuthIdentitySessionError quando a sessão é null', async () => {
+  it('should throw InvalidAuthIdentitySessionError when session is null', async (): Promise<void> => {
     const dto = buildRequestDto('invalid.jwt');
 
     sessionGateway.getSessionDataFromJwt.mockResolvedValueOnce(null);

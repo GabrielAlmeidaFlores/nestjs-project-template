@@ -50,9 +50,10 @@ export class UpdateCustomerProfilePictureUseCase {
       );
     }
 
-    const profilePicture = await this.fileProcessorGateway.getCustomerProfilePicture(
-      newProfilePictureLocation,
-    );
+    const profilePicture =
+      await this.fileProcessorGateway.getCustomerProfilePicture(
+        newProfilePictureLocation,
+      );
 
     return UpdateCustomerProfilePictureResponseDto.build({
       profilePicture: profilePicture.toString(),
