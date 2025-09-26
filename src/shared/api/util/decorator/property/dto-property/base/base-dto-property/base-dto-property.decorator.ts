@@ -69,7 +69,7 @@ export function BaseDtoProperty(
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     example: props?.example,
-    isArray
+    isArray,
   });
   const expose = Expose();
 
