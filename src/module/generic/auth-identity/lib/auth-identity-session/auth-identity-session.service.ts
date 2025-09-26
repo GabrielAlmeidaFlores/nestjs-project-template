@@ -29,7 +29,8 @@ export class AuthIdentitySessionService implements AuthIdentitySessionGateway {
 
     const secondsPerHour = 3600;
     const hoursPerDay = 24;
-    const SecondsPerDay = secondsPerHour * hoursPerDay;
+    const days = 7;
+    const SecondsPerDay = secondsPerHour * hoursPerDay * days;
     const sessionTtlInSeconds = SecondsPerDay;
 
     await this.cacheStorageGateway.setData(
