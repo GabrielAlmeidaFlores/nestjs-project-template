@@ -7,10 +7,11 @@ import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-propert
 
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
-import type { ValidationArguments } from 'class-validator';
+import type { ValidationArguments, ValidationOptions } from 'class-validator';
 
 function IsValidValueObject<T extends BaseValueObject<T>>(
   valueObjectClass: new (value: string) => T,
+  options?: ValidationOptions,
 ): PropertyDecorator {
   return function (object: object, propertyName: string | symbol): void {
     const validatorName = 'IsValidValueObject';
@@ -20,13 +21,13 @@ function IsValidValueObject<T extends BaseValueObject<T>>(
       name: validatorName,
       target: object.constructor,
       propertyName: propertyKey,
+      ...(options ? { options } : {}),
       validator: {
-        validate(value: unknown, _args: ValidationArguments): boolean {
+        validate(value: unknown): boolean {
           const isDirectInstance = value instanceof valueObjectClass;
           if (isDirectInstance) {
             return true;
           }
-
           return false;
         },
         defaultMessage(args: ValidationArguments): string {
@@ -58,35 +59,54 @@ export function RequestDtoValueObjectProperty<T extends BaseValueObject<T>>(
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
+  const isArray = props?.isArray === true;
 
   const baseDtoProperty = BaseDtoProperty(valueObjectClass, props);
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     type: String,
+    isArray,
     example: props?.example,
   });
-  const validation = IsValidValueObject(valueObjectClass);
-  const transform = Transform(({ value }) => {
-    const isInvalidInput = typeof value !== 'string';
 
-    if (isInvalidInput) {
+  const transform = Transform(({ value }) => {
+    if (!isArray) {
+      const isInvalidInput = typeof value !== 'string';
+      if (isInvalidInput) {
+        return undefined;
+      }
+
+      try {
+        return new valueObjectClass(value);
+      } catch {
+        return value;
+      }
+    }
+
+    if (!Array.isArray(value)) {
       return undefined;
     }
 
-    try {
-      return new valueObjectClass(value);
-    } catch {
-      return value;
-    }
+    return value.map((v) => {
+      const isInvalidItem = typeof v !== 'string';
+      if (isInvalidItem) {
+        return undefined;
+      }
+      try {
+        return new valueObjectClass(v);
+      } catch {
+        return v;
+      }
+    });
   });
 
-  const decorators = [baseDtoProperty, apiProperty, transform];
+  const validation = IsValidValueObject(valueObjectClass, { each: isArray });
+
+  const decorators = [baseDtoProperty, apiProperty, transform, validation];
 
   if (!propertyIsRequired) {
-    decorators.push(IsOptional());
+    decorators.unshift(IsOptional());
   }
-
-  decorators.push(validation);
 
   return applyDecorators(...decorators);
 }

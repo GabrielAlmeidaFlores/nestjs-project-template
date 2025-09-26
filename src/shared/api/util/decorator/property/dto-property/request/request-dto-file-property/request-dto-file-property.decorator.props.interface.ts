@@ -3,6 +3,5 @@ import type { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-prope
 
 export interface RequestDtoFilePropertyDecoratorPropsInterface
   extends BaseDtoPropertyDecoratorPropsInterface {
-  singleFile: boolean;
   allowedMimeType: Array<MimeTypeEnum>;
 }

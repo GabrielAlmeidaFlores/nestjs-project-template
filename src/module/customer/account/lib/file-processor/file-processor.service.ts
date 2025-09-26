@@ -14,7 +14,9 @@ export class FileProcessorService implements FileProcessorGateway {
     private readonly imageProcessorGateway: ImageProcessorGateway,
   ) {}
 
-  public async getCustomerProfilePicture(profilePictureLocation: string): Promise<URL> {
+  public async getCustomerProfilePicture(
+    profilePictureLocation: string,
+  ): Promise<URL> {
     return await this.bucketGateway.get(profilePictureLocation);
   }
 

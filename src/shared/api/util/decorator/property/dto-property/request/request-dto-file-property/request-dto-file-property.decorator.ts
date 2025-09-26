@@ -20,9 +20,10 @@ export function RequestDtoFileProperty(
     format: 'binary',
     example: props.example,
   });
-  const isFile = props.singleFile ? IsFile() : IsFiles();
+  const isArray = props.isArray === true;
+  const isFile = isArray ? IsFiles() : IsFile();
   const hasMimeType = HasMimeType(props.allowedMimeType, {
-    each: !props.singleFile,
+    each: isArray,
     message: (args: ValidationArguments) => {
       const allowedValue = props.allowedMimeType.join(', ');
       return `o campo '${args.property}' não é compatível com os valores esperados: ${allowedValue}`;
@@ -32,7 +33,7 @@ export function RequestDtoFileProperty(
   const decorators = [baseDtoProperty, apiProperty, isFile, hasMimeType];
 
   if (!propertyIsRequired) {
-    decorators.push(IsOptional());
+    decorators.unshift(IsOptional());
   }
 
   return applyDecorators(...decorators);

@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsArray, IsNumber, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
@@ -11,6 +11,7 @@ export function BaseDtoNumberProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
+  const isArray = props?.isArray === true;
 
   const baseDtoProperty = BaseDtoProperty(Number, props);
   const type = Type(() => Number);
@@ -25,7 +26,11 @@ export function BaseDtoNumberProperty(
   const decorators = [baseDtoProperty, type, validation];
 
   if (!propertyIsRequired) {
-    decorators.push(IsOptional());
+    decorators.unshift(IsOptional());
+  }
+
+  if (isArray) {
+    decorators.push(IsArray());
   }
 
   return applyDecorators(...decorators);
