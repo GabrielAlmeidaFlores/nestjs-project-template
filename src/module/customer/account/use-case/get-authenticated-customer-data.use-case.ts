@@ -75,7 +75,7 @@ export class GetAuthenticatedCustomerDataUseCase {
           organizationMember.organization.organizationLogo,
         );
 
-      response.customer.profilePicture = organizationLogo.toString();
+      response.organization.organizationLogo = organizationLogo.toString();
     }
 
     return response;

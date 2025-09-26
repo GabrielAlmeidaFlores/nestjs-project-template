@@ -50,8 +50,8 @@ describe(AuthIdentitySignOutUseCase.name, () => {
       sessionData.authIdentityId,
     );
 
-    expect(reply.clearCookie).toHaveBeenCalledTimes(1);
     expect(reply.clearCookie).toHaveBeenCalledWith(ApiCookieEnum.AUTH_TOKEN);
+    expect(reply.clearCookie).toHaveBeenCalledWith(ApiCookieEnum.ORGANIZATION);
   });
 
   it('propagates errors from deleteSession and does NOT clear cookie', async () => {

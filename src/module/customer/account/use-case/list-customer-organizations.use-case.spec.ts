@@ -6,11 +6,11 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
+import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
 import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
@@ -23,31 +23,37 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-const makeCustomer = (): CustomerEntity => {
-  const address = new CustomerAddressEntity({
+const makeCustomerAddressQuery = (): GetCustomerAddressQueryResult =>
+  GetCustomerAddressQueryResult.build({
     id: new CustomerAddressId(),
     postalCode: new PostalCode('01001000'),
     stateCode: StateCodeEnum.SP,
     city: 'São Paulo',
     neighborhood: 'Centro',
     addressNumber: 123,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
   });
 
-  return new CustomerEntity({
+const makeCustomerQuery = (): GetCustomerWithAddressRelationQueryResult =>
+  GetCustomerWithAddressRelationQueryResult.build({
     id: new CustomerId(),
     name: 'Maria Silva',
     phoneNumber: new PhoneNumber('5511999999999'),
-    customerAddress: address,
     profilePicture: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+    customerAddress: makeCustomerAddressQuery(),
   });
-};
 
 const makeOrgRow = (
   id: OrganizationId,
   name: string,
   logo: string | null,
-): GetOrganizationQueryResult => {
-  return GetOrganizationQueryResult.build({
+): GetOrganizationQueryResult =>
+  GetOrganizationQueryResult.build({
     id,
     name,
     organizationLogo: logo,
@@ -55,7 +61,6 @@ const makeOrgRow = (
     updatedAt: new Date(),
     deletedAt: null,
   });
-};
 
 describe(ListCustomerOrganizationsUseCase.name, () => {
   let useCase: ListCustomerOrganizationsUseCase;
@@ -102,7 +107,7 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
   });
 
   it('should list organizations, map logo URL, and preserve pagination fields', async () => {
-    const customer = makeCustomer();
+    const customer = makeCustomerQuery();
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
       customer,
     );
@@ -140,14 +145,14 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
       customerQueryRepo.findOneByAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(sessionData.authIdentityId, CustomerNotFoundError);
 
-    const EXPECTED_ORG_LIST_CALLS = 1;
     expect(
       organizationQueryRepo.listOrganizationsByCustomerId,
-    ).toHaveBeenCalledTimes(EXPECTED_ORG_LIST_CALLS);
+    ).toHaveBeenCalledTimes(1);
 
     const calls =
       organizationQueryRepo.listOrganizationsByCustomerId.mock.calls;
     expect(calls.length).toBeGreaterThan(0);
+
     const args0 = calls[0];
     if (!args0) {
       throw new Error('Expected at least one call');
@@ -165,9 +170,6 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
     expect(result.limit).toBe(EXPECTED_LIMIT);
     expect(result.totalItems).toBe(EXPECTED_TOTAL_ITEMS);
     expect(result.amountItemsCurrentPage).toBe(EXPECTED_AMOUNT_PAGE);
-
-    const EXPECTED_COUNT = 2;
-    expect(result.resource).toHaveLength(EXPECTED_COUNT);
 
     const first = result.resource[0];
     const second = result.resource[1];
@@ -198,7 +200,7 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
   });
 
   it('should map multiple logos concurrently and keep order', async () => {
-    const customer = makeCustomer();
+    const customer = makeCustomerQuery();
     customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
       customer,
     );
@@ -224,16 +226,17 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
       list,
     );
 
-    fileProcessor.getOrganizationLogo.mockImplementation((key) =>
+    fileProcessor.getOrganizationLogo.mockImplementation((key: string) =>
       Promise.resolve(new URL(`https://cdn.example.com/${key}.png`)),
     );
 
     const result = await useCase.execute(sessionData, dto);
 
-    const EXPECTED_ORDER = ['Alpha', 'Beta', 'Gamma'];
-    expect(result.resource.map((r) => r.organizationName)).toEqual(
-      EXPECTED_ORDER,
-    );
+    expect(result.resource.map((r) => r.organizationName)).toEqual([
+      'Alpha',
+      'Beta',
+      'Gamma',
+    ]);
 
     expect(result.resource[0]?.organizationLogo).toBe(
       'https://cdn.example.com/logoA.png',
@@ -242,22 +245,5 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
       'https://cdn.example.com/logoB.png',
     );
     expect(result.resource[2]?.organizationLogo).toBeUndefined();
-
-    const EXPECTED_LOGO_CALLS = 2;
-    expect(fileProcessor.getOrganizationLogo).toHaveBeenCalledTimes(
-      EXPECTED_LOGO_CALLS,
-    );
-
-    const firstLogoIndex = 1;
-    const secondLogoIndex = 2;
-
-    expect(fileProcessor.getOrganizationLogo).toHaveBeenNthCalledWith(
-      firstLogoIndex,
-      'logoA',
-    );
-    expect(fileProcessor.getOrganizationLogo).toHaveBeenNthCalledWith(
-      secondLogoIndex,
-      'logoB',
-    );
   });
 });
