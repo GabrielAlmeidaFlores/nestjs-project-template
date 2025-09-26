@@ -7,7 +7,7 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
+import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
@@ -86,7 +86,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   });
 
   const baseCustomerQueryResult =
-    GetCustomerWithAddressRelationQueryResult.build({
+    GetCustomerWithCustomerAddressRelationQueryResult.build({
       id: new CustomerId(),
       name: 'Maria Silva',
       phoneNumber: new PhoneNumber('5511999999999'),
@@ -122,7 +122,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     const uploadedKey = 'bucket/uploads/cust-1/profile.png';
     const finalUrl = new URL(`https://cdn.example.com/${uploadedKey}`);
 
-    customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
+    customerQueryRepo.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
       baseCustomerQueryResult,
     );
 
@@ -174,13 +174,13 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   it('should not update database when processor returns same location; still return final URL', async () => {
     const existingKey = 'bucket/uploads/cust-1/existing.png';
     const customerWithPicQuery =
-      GetCustomerWithAddressRelationQueryResult.build({
+      GetCustomerWithCustomerAddressRelationQueryResult.build({
         ...baseCustomerQueryResult,
         profilePicture: existingKey,
       });
     const finalUrl = new URL(`https://cdn.example.com/${existingKey}`);
 
-    customerQueryRepo.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
+    customerQueryRepo.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
       customerWithPicQuery,
     );
     fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
