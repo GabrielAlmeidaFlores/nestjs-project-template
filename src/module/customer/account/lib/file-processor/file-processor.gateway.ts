@@ -3,7 +3,7 @@ export abstract class FileProcessorGateway {
     profilePicture: Buffer,
     profilePictureLocation?: string,
   ): Promise<string>;
-  public abstract getProfilePicture(
+  public abstract getCustomerProfilePicture(
     profilePictureLocation: string,
   ): Promise<URL>;
   public abstract getOrganizationLogo(

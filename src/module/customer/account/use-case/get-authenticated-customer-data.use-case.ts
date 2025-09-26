@@ -62,7 +62,7 @@ export class GetAuthenticatedCustomerDataUseCase {
 
     if (organizationMember.customer.profilePicture !== null) {
       const customerProfilePicture =
-        await this.fileProcessorGateway.getProfilePicture(
+        await this.fileProcessorGateway.getCustomerProfilePicture(
           organizationMember.customer.profilePicture,
         );
 
