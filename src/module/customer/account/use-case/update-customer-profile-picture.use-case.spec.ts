@@ -39,7 +39,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   } as unknown as jest.Mocked<CustomerCommandRepositoryGateway>;
 
   const customerQueryRepo: jest.Mocked<CustomerQueryRepositoryGateway> = {
-    findOneByAuthIdentityIdOrFail: jest.fn(),
+    findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
   } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
   const fileProcessor: jest.Mocked<FileProcessorGateway> = {
@@ -144,8 +144,9 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     const result = await useCase.execute(sessionData, dto);
 
     expect(
-      customerQueryRepo.findOneByAuthIdentityIdOrFail,
+      customerQueryRepo.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail,
     ).toHaveBeenCalledWith(sessionData.authIdentityId, CustomerNotFoundError);
+
     expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
       fileBuffer,
       undefined,
@@ -178,11 +179,13 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
         ...baseCustomerQueryResult,
         profilePicture: existingKey,
       });
+
     const finalUrl = new URL(`https://cdn.example.com/${existingKey}`);
 
     customerQueryRepo.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
       customerWithPicQuery,
     );
+
     fileProcessor.processAndUploadProfilePicture.mockResolvedValueOnce(
       existingKey,
     );
@@ -206,7 +209,8 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   it('should propagate CustomerNotFoundError and not call processor or repos', async () => {
     const error = new CustomerNotFoundError();
-    customerQueryRepo.findOneByAuthIdentityIdOrFail.mockRejectedValueOnce(
+
+    customerQueryRepo.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockRejectedValueOnce(
       error,
     );
 
