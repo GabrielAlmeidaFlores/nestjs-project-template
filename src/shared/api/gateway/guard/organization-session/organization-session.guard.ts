@@ -22,7 +22,7 @@ export class OrganizationSessionGuard implements CanActivate {
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
 
-    const jwt = request.cookies[ApiCookieEnum.AUTH_TOKEN];
+    const jwt = request.cookies[ApiCookieEnum.ORGANIZATION];
 
     if (typeof jwt !== 'string' || jwt.trim() === '') {
       return false;

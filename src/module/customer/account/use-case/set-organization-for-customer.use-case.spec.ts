@@ -102,7 +102,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       >,
     );
 
-    organizationMemberQueryRepositoryGateway.findOneOrganizationByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
       orgMember,
     );
 
@@ -136,7 +136,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     );
 
     expect(
-      organizationMemberQueryRepositoryGateway.findOneOrganizationByCustomerAndOrganizationId,
+      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId,
     ).toHaveBeenCalledWith(mockCustomerId, dto.organizationId);
   });
 
@@ -153,7 +153,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     ).rejects.toBeInstanceOf(CustomerNotFoundError);
 
     expect(
-      organizationMemberQueryRepositoryGateway.findOneOrganizationByCustomerAndOrganizationId,
+      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId,
     ).not.toHaveBeenCalled();
     expect(reply.setCookie).not.toHaveBeenCalled();
   });
@@ -169,7 +169,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
         >
       >,
     );
-    organizationMemberQueryRepositoryGateway.findOneOrganizationByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
       null,
     );
 
@@ -193,7 +193,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
         >
       >,
     );
-    organizationMemberQueryRepositoryGateway.findOneOrganizationByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
       orgMember,
     );
     organizationSessionGateway.createSession.mockReturnValueOnce('jwt-org');

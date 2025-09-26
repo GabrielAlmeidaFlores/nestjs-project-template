@@ -4,7 +4,6 @@ import { OrganizationQueryRepositoryGateway } from '@module/customer/account/dom
 import { ValidateOrganizationSessionRequestDto } from '@module/customer/account/dto/request/validate-organization-session.request.dto';
 import { GetOrganizationResponseDto } from '@module/customer/account/dto/response/get-organization.response.dto';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
-import { OrganizationNotFoundError } from '@module/customer/account/error/organization-not-found.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionGateway } from '@module/customer/account/lib/organization-session/organization-session.gateway';
 import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
@@ -41,7 +40,7 @@ export class ValidateOrganizationSessionUseCase
       );
 
     if (organization === null) {
-      throw new OrganizationNotFoundError();
+      throw new InvalidOrganizationSessionError();
     }
 
     const response = GetOrganizationResponseDto.build({
