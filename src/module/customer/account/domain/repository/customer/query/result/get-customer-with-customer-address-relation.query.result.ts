@@ -4,7 +4,7 @@ import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/
 import type { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
-export class GetCustomerWithAddressRelationQueryResult extends BaseBuildableObject {
+export class GetCustomerWithCustomerAddressRelationQueryResult extends BaseBuildableObject {
   public readonly id: CustomerId;
   public readonly name: string;
   public readonly phoneNumber: PhoneNumber;
@@ -15,5 +15,5 @@ export class GetCustomerWithAddressRelationQueryResult extends BaseBuildableObje
   public readonly customerAddress: GetCustomerAddressQueryResult;
 
   protected override readonly _type =
-    GetCustomerWithAddressRelationQueryResult.name;
+    GetCustomerWithCustomerAddressRelationQueryResult.name;
 }

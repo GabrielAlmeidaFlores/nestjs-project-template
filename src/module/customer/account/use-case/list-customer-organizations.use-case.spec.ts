@@ -6,7 +6,7 @@ import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
+import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
@@ -36,8 +36,8 @@ const makeCustomerAddressQuery = (): GetCustomerAddressQueryResult =>
     deletedAt: null,
   });
 
-const makeCustomerQuery = (): GetCustomerWithAddressRelationQueryResult =>
-  GetCustomerWithAddressRelationQueryResult.build({
+const makeCustomerQuery = (): GetCustomerWithCustomerAddressRelationQueryResult =>
+  GetCustomerWithCustomerAddressRelationQueryResult.build({
     id: new CustomerId(),
     name: 'Maria Silva',
     phoneNumber: new PhoneNumber('5511999999999'),
