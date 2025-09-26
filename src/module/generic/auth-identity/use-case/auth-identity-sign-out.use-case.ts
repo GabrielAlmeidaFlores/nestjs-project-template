@@ -23,5 +23,6 @@ export class AuthIdentitySignOutUseCase {
     );
 
     reply.clearCookie(ApiCookieEnum.AUTH_TOKEN);
+    reply.clearCookie(ApiCookieEnum.ORGANIZATION);
   }
 }

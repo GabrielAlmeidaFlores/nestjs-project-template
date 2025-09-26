@@ -3,7 +3,9 @@ import { Inject } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
@@ -30,7 +32,7 @@ export class UpdateCustomerProfilePictureUseCase {
     dto: UpdateCustomerProfilePictureRequestDto,
   ): Promise<UpdateCustomerProfilePictureResponseDto> {
     const customer =
-      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
         sessionData.authIdentityId,
         CustomerNotFoundError,
       );
@@ -48,9 +50,10 @@ export class UpdateCustomerProfilePictureUseCase {
       );
     }
 
-    const profilePicture = await this.fileProcessorGateway.getProfilePicture(
-      newProfilePictureLocation,
-    );
+    const profilePicture =
+      await this.fileProcessorGateway.getCustomerProfilePicture(
+        newProfilePictureLocation,
+      );
 
     return UpdateCustomerProfilePictureResponseDto.build({
       profilePicture: profilePicture.toString(),
@@ -58,12 +61,15 @@ export class UpdateCustomerProfilePictureUseCase {
   }
 
   private async updateCustomerProfilePictureOnDatabase(
-    customer: CustomerEntity,
+    customer: GetCustomerWithCustomerAddressRelationQueryResult,
     profilePicture: string,
   ): Promise<void> {
     const updatedCustomer = new CustomerEntity({
       ...customer,
       profilePicture,
+      customerAddress: new CustomerAddressEntity({
+        ...customer.customerAddress,
+      }),
     });
 
     const saveUpdatedCustomer =

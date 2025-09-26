@@ -76,7 +76,7 @@ export class AuthIdentityController {
   @BuildEndpointSpecification({
     summary: 'Validate authenticated user',
     http: {
-      path: 'validate-sign-in',
+      path: 'sign-in/validate',
       method: RequestMethod.GET,
     },
     successResponse: {

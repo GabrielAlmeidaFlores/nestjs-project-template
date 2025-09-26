@@ -7,8 +7,8 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
@@ -28,10 +28,10 @@ export class CustomerTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneByAuthIdentityIdOrFail(
+  public async findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
-  ): Promise<CustomerEntity> {
+  ): Promise<GetCustomerWithCustomerAddressRelationQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
@@ -49,7 +49,31 @@ export class CustomerTypeormQueryRepository
     const mappedData = this.mapperGateway.map(
       data,
       CustomerTypeormEntity,
-      CustomerEntity,
+      GetCustomerWithCustomerAddressRelationQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByAuthIdentityIdOrFail(
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetCustomerQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      GetCustomerQueryResult,
     );
 
     return mappedData;
