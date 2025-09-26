@@ -7,7 +7,6 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 @RequestDto()
 export class UpdateCustomerProfilePictureRequestDto extends BaseBuildableObject {
   @RequestDtoFileProperty({
-    singleFile: true,
     allowedMimeType: [MimeTypeEnum.IMAGE_JPEG, MimeTypeEnum.IMAGE_PNG],
   })
   public profilePicture: FileModel;

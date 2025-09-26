@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsDate, IsOptional } from 'class-validator';
+import { IsArray, IsDate, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
@@ -11,10 +11,12 @@ export function BaseDtoDateProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
+  const isArray = props?.isArray === true;
 
   const baseDtoProperty = BaseDtoProperty(Date, props);
   const type = Type(() => Date);
   const validation = IsDate({
+    each: isArray,
     message: (args: ValidationArguments) =>
       `o campo '${args.property}' deve ser do tipo 'date'`,
   });
@@ -22,7 +24,11 @@ export function BaseDtoDateProperty(
   const decorators = [baseDtoProperty, type, validation];
 
   if (!propertyIsRequired) {
-    decorators.push(IsOptional());
+    decorators.unshift(IsOptional());
+  }
+
+  if (isArray) {
+    decorators.push(IsArray());
   }
 
   return applyDecorators(...decorators);

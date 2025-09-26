@@ -36,17 +36,18 @@ const makeCustomerAddressQuery = (): GetCustomerAddressQueryResult =>
     deletedAt: null,
   });
 
-const makeCustomerQuery = (): GetCustomerWithCustomerAddressRelationQueryResult =>
-  GetCustomerWithCustomerAddressRelationQueryResult.build({
-    id: new CustomerId(),
-    name: 'Maria Silva',
-    phoneNumber: new PhoneNumber('5511999999999'),
-    profilePicture: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    deletedAt: null,
-    customerAddress: makeCustomerAddressQuery(),
-  });
+const makeCustomerQuery =
+  (): GetCustomerWithCustomerAddressRelationQueryResult =>
+    GetCustomerWithCustomerAddressRelationQueryResult.build({
+      id: new CustomerId(),
+      name: 'Maria Silva',
+      phoneNumber: new PhoneNumber('5511999999999'),
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+      customerAddress: makeCustomerAddressQuery(),
+    });
 
 const makeOrgRow = (
   id: OrganizationId,

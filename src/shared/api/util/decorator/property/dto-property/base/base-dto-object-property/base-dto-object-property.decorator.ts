@@ -5,30 +5,30 @@ import { IsOptional, ValidateNested } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoObjectPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-object-property/base-dto-object-property.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 import type { TypeHelpOptions } from 'class-transformer';
 
 export function BaseDtoObjectProperty(
   typeFunction: (type?: TypeHelpOptions) => Function,
-  props?: BaseDtoObjectPropertyDecoratorPropsInterface,
+  props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
-  const propertyIsArray = props?.isArray ?? false;
+  const isArray = props?.isArray === true;
 
   const baseDtoProperty = BaseDtoProperty(typeFunction(), props);
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     type: typeFunction(),
-    isArray: propertyIsArray,
+    isArray: isArray,
     example: props?.example,
   });
   const objectType = Type(typeFunction);
-  const validateNested = ValidateNested();
+  const validateNested = ValidateNested({ each: isArray });
 
   const decorators = [baseDtoProperty, apiProperty, objectType, validateNested];
 
   if (!propertyIsRequired) {
-    decorators.push(IsOptional());
+    decorators.unshift(IsOptional());
   }
 
   return applyDecorators(...decorators);

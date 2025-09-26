@@ -13,28 +13,42 @@ export function ResponseDtoValueObjectProperty<T extends BaseValueObject<T>>(
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
+  const isArray = props?.isArray === true;
 
   const baseDtoProperty = BaseDtoProperty(valueObjectClass, props);
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     type: String,
+    isArray,
     example: props?.example,
   });
   const type = Type(() => valueObjectClass);
-  const validateNested = ValidateNested();
-
-  const decorators = [baseDtoProperty, apiProperty, type, validateNested];
-
-  if (!propertyIsRequired) {
-    decorators.push(IsOptional());
-  }
-
-  decorators.push(
-    Transform(({ value }) => {
+  const validateNested = ValidateNested({ each: isArray });
+  const transform = Transform(({ value }) => {
+    if (!isArray) {
       const isInstanceOfValueObject = value instanceof valueObjectClass;
       return isInstanceOfValueObject ? value.toString() : undefined;
-    }),
-  );
+    }
+
+    if (!Array.isArray(value)) {
+      return undefined;
+    }
+    return value.map((v) =>
+      v instanceof valueObjectClass ? v.toString() : undefined,
+    );
+  });
+
+  const decorators = [
+    baseDtoProperty,
+    apiProperty,
+    type,
+    validateNested,
+    transform,
+  ];
+
+  if (!propertyIsRequired) {
+    decorators.unshift(IsOptional());
+  }
 
   return applyDecorators(...decorators);
 }
