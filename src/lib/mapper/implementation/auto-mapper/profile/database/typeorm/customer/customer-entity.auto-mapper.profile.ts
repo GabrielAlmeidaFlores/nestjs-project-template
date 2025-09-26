@@ -1,39 +1,38 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { GetCustomerWithAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-address-relation.query.result';
-import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
+import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 
 @Injectable()
-export class GetCustomerWithAddressRelationQueryResultAutoMapperProfile {
-  protected readonly _type =
-    GetCustomerWithAddressRelationQueryResultAutoMapperProfile.name;
+export class CustomerEntityAutoMapperProfile {
+  protected readonly _type = CustomerEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
   }
 
   private createMappings(): void {
-    this.mapOrmEntityToQueryResult();
-    this.mapQueryResultToOrmEntity();
+    this.mapOrmEntityToDomainEntity();
+    this.mapDomainEntityToOrmEntity();
   }
 
-  private mapOrmEntityToQueryResult(): void {
+  private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: CustomerTypeormEntity,
-    ): GetCustomerWithAddressRelationQueryResult => {
+    ): CustomerEntity => {
       const customerAddress = this.mapper.map(
         source.customerAddress,
         CustomerAddressTypeormEntity,
-        GetCustomerAddressQueryResult,
+        CustomerAddressEntity,
       );
 
-      return GetCustomerWithAddressRelationQueryResult.build({
+      return new CustomerEntity({
         ...source,
         id: new CustomerId(source.id),
         phoneNumber: new PhoneNumber(source.phoneNumber),
@@ -46,18 +45,18 @@ export class GetCustomerWithAddressRelationQueryResultAutoMapperProfile {
     createMap(
       this.mapper,
       CustomerTypeormEntity,
-      GetCustomerWithAddressRelationQueryResult,
+      CustomerEntity,
       mappingFunction,
     );
   }
 
-  private mapQueryResultToOrmEntity(): void {
+  private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: GetCustomerWithAddressRelationQueryResult,
+      source: CustomerEntity,
     ): CustomerTypeormEntity => {
       const customerAddress = this.mapper.map(
         source.customerAddress,
-        GetCustomerAddressQueryResult,
+        CustomerAddressEntity,
         CustomerAddressTypeormEntity,
       );
 
@@ -73,7 +72,7 @@ export class GetCustomerWithAddressRelationQueryResultAutoMapperProfile {
 
     createMap(
       this.mapper,
-      GetCustomerWithAddressRelationQueryResult,
+      CustomerEntity,
       CustomerTypeormEntity,
       mappingFunction,
     );

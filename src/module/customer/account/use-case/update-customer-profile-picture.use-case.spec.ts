@@ -140,7 +140,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
       new TransactionOutputModel(commit, rollback),
     );
 
-    fileProcessor.getProfilePicture.mockResolvedValueOnce(finalUrl);
+    fileProcessor.getCustomerProfilePicture.mockResolvedValueOnce(finalUrl);
 
     const result = await useCase.execute(sessionData, dto);
 
@@ -165,7 +165,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(txRepo.execute).toHaveBeenCalledWith(updateWork);
     expect(commit).toHaveBeenCalledTimes(1);
 
-    expect(fileProcessor.getProfilePicture).toHaveBeenCalledWith(uploadedKey);
+    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(uploadedKey);
 
     expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
     expect(result.profilePicture).toBe(finalUrl.toString());
@@ -190,7 +190,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
       existingKey,
     );
 
-    fileProcessor.getProfilePicture.mockResolvedValueOnce(finalUrl);
+    fileProcessor.getCustomerProfilePicture.mockResolvedValueOnce(finalUrl);
 
     const result = await useCase.execute(sessionData, dto);
 
@@ -202,7 +202,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();
     expect(txRepo.execute).not.toHaveBeenCalled();
 
-    expect(fileProcessor.getProfilePicture).toHaveBeenCalledWith(existingKey);
+    expect(fileProcessor.getCustomerProfilePicture).toHaveBeenCalledWith(existingKey);
     expect(result).toBeInstanceOf(UpdateCustomerProfilePictureResponseDto);
     expect(result.profilePicture).toBe(finalUrl.toString());
   });
@@ -218,6 +218,6 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     expect(fileProcessor.processAndUploadProfilePicture).not.toHaveBeenCalled();
     expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();
     expect(txRepo.execute).not.toHaveBeenCalled();
-    expect(fileProcessor.getProfilePicture).not.toHaveBeenCalled();
+    expect(fileProcessor.getCustomerProfilePicture).not.toHaveBeenCalled();
   });
 });
