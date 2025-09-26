@@ -59,6 +59,7 @@ export function BaseDtoProperty(
   props?: BaseDtoPropertyDecoratorPropsInterface,
 ): PropertyDecorator {
   const propertyIsRequired = props?.required ?? true;
+  const isArray = props?.isArray === true;
 
   const storeMetadata = createStoreMetadataDecorator(
     designType,
@@ -68,6 +69,7 @@ export function BaseDtoProperty(
   const apiProperty = ApiProperty({
     required: propertyIsRequired,
     example: props?.example,
+    isArray
   });
   const expose = Expose();
 
