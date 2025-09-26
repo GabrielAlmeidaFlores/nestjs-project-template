@@ -108,7 +108,7 @@ export class AccountController {
   @BuildEndpointSpecification({
     summary: 'Set customer organization',
     http: {
-      path: 'set/organization',
+      path: 'session/organization',
       method: RequestMethod.POST,
       type: SetOrganizationForCustomerRequestDto,
     },
@@ -134,7 +134,7 @@ export class AccountController {
   @BuildEndpointSpecification({
     summary: 'Get authenticated customer data',
     http: {
-      path: 'authenticated',
+      path: '',
       method: RequestMethod.GET,
     },
     successResponse: {
