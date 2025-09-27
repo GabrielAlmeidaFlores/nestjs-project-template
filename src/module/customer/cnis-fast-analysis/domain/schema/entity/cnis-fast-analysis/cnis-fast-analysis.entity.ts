@@ -10,8 +10,8 @@ import type { CnisFastAnalysisResultEntity } from '@module/customer/cnis-fast-an
 export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
   public readonly status: CnisFastAnalysisStatusEnum;
   public readonly cnisDocument: string | null;
-  public readonly client: CnisFastAnalysisClientEntity;
-  public readonly result: CnisFastAnalysisResultEntity | null;
+  public readonly cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
+  public readonly cnisFastAnalysisResult: CnisFastAnalysisResultEntity | null;
   public readonly createdBy: OrganizationMemberId;
   public readonly updatedBy: OrganizationMemberId;
 
@@ -21,12 +21,12 @@ export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
     super(CnisFastAnalysisId, props);
 
     this.status =
-      props.result === null
+      props.cnisFastAnalysisResult === null
         ? CnisFastAnalysisStatusEnum.IN_PROGRESS
         : CnisFastAnalysisStatusEnum.COMPLETED;
     this.cnisDocument = props.cnisDocument ?? null;
-    this.result = props.result ?? null;
-    this.client = props.client;
+    this.cnisFastAnalysisResult = props.cnisFastAnalysisResult ?? null;
+    this.cnisFastAnalysisClient = props.cnisFastAnalysisClient;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }

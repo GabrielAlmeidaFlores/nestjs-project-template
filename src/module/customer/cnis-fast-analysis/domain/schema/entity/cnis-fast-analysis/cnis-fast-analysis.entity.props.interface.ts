@@ -7,8 +7,8 @@ import type { CnisFastAnalysisResultEntity } from '@module/customer/cnis-fast-an
 export interface CnisFastAnalysisEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisId> {
   cnisDocument?: string | null;
-  client: CnisFastAnalysisClientEntity;
-  result?: CnisFastAnalysisResultEntity | null;
+  cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
+  cnisFastAnalysisResult?: CnisFastAnalysisResultEntity | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }

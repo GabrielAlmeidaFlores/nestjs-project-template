@@ -7,7 +7,7 @@ import type { CnisFastAnalysisResultEntityPropsInterface } from '@module/custome
 export class CnisFastAnalysisResultEntity extends BaseEntity<CnisFastAnalysisResultId> {
   public readonly clientName: string;
   public readonly clientFederalDocument: FederalDocument;
-  public readonly clientBirthDate: string;
+  public readonly clientBirthDate: Date;
   public readonly clientLastAffiliationDate: Date;
   public readonly cnisAiAnalysis: string;
 
