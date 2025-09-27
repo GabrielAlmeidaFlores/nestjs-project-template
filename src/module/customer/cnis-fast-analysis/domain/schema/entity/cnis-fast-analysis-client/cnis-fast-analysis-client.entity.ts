@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidCnisFastAnalysisClientNameError } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/error/invalid-cnis-fast-analysis-client-name.error';
 import { CnisFastAnalysisClientId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/value-object/cnis-fast-analysis-client-id/cnis-fast-analysis-client-id.value-object';
 
 import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
@@ -22,6 +23,8 @@ export class CnisFastAnalysisClientEntity extends BaseEntity<CnisFastAnalysisCli
   public constructor(props: CnisFastAnalysisClientEntityPropsInterface) {
     super(CnisFastAnalysisClientId, props);
 
+    CnisFastAnalysisClientEntity.validateName(props.name);
+
     this.name = props.name ?? null;
     this.federalDocument = props.federalDocument ?? null;
     this.email = props.email ?? null;
@@ -29,5 +32,28 @@ export class CnisFastAnalysisClientEntity extends BaseEntity<CnisFastAnalysisCli
     this.birthDate = props.birthDate ?? null;
     this.gender = props.gender ?? null;
     this.clientType = props.clientType ?? null;
+  }
+
+  public static validateName(name?: string | null): void {
+    if (name === undefined || name === null) {
+      return;
+    }
+
+    const minNameLength = 3;
+    const maxNameLength = 50;
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+    const hasMinimumLength = name.length >= minNameLength;
+    const hasMaximumLength = name.length <= maxNameLength;
+    const matchesAllowedCharacters = nameRegex.test(name);
+
+    this.validateAllOrThrow(
+      [hasMinimumLength, hasMaximumLength, matchesAllowedCharacters],
+      () =>
+        new InvalidCnisFastAnalysisClientNameError({
+          maxLength: maxNameLength,
+          minLength: minNameLength,
+        }),
+    );
   }
 }
