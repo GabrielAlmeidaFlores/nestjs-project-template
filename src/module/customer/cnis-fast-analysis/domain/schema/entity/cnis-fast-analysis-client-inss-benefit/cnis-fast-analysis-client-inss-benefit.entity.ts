@@ -6,7 +6,7 @@ import type { CnisFastAnalysisClientInssBenefitEntityPropsInterface } from '@mod
 
 export class CnisFastAnalysisClientInssBenefitEntity extends BaseEntity<CnisFastAnalysisClientInssBenefitId> {
   public readonly inssBenefitNumber: number;
-  public readonly client: CnisFastAnalysisClientEntity;
+  public readonly cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
 
   protected readonly _type = CnisFastAnalysisClientInssBenefitEntity.name;
 
@@ -16,6 +16,6 @@ export class CnisFastAnalysisClientInssBenefitEntity extends BaseEntity<CnisFast
     super(CnisFastAnalysisClientInssBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
-    this.client = props.client;
+    this.cnisFastAnalysisClient = props.cnisFastAnalysisClient;
   }
 }

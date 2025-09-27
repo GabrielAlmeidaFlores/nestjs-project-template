@@ -5,5 +5,5 @@ import type { CnisFastAnalysisClientInssBenefitId } from '@module/customer/cnis-
 export interface CnisFastAnalysisClientInssBenefitEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisClientInssBenefitId> {
   inssBenefitNumber: number;
-  client: CnisFastAnalysisClientEntity;
+  cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
 }
