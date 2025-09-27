@@ -6,7 +6,7 @@ export interface CnisFastAnalysisResultEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisResultId> {
   clientName: string;
   clientFederalDocument: FederalDocument;
-  clientBirthDate: string;
+  clientBirthDate: Date;
   clientLastAffiliationDate: Date;
   cnisAiAnalysis: string;
 }
