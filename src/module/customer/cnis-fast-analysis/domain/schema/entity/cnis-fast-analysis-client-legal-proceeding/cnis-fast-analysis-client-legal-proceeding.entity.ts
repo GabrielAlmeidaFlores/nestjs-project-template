@@ -6,7 +6,7 @@ import type { CnisFastAnalysisClientLegalProceedingEntityPropsInterface } from '
 
 export class CnisFastAnalysisClientLegalProceedingEntity extends BaseEntity<CnisFastAnalysisClientLegalProceedingId> {
   public readonly legalProceedingNumber: number;
-  public readonly client: CnisFastAnalysisClientEntity;
+  public readonly cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
 
   protected readonly _type = CnisFastAnalysisClientLegalProceedingEntity.name;
 
@@ -16,6 +16,6 @@ export class CnisFastAnalysisClientLegalProceedingEntity extends BaseEntity<Cnis
     super(CnisFastAnalysisClientLegalProceedingId, props);
 
     this.legalProceedingNumber = props.legalProceedingNumber;
-    this.client = props.client;
+    this.cnisFastAnalysisClient = props.cnisFastAnalysisClient;
   }
 }
