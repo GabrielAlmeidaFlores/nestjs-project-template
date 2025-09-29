@@ -23,114 +23,8 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { ValidationError } from 'class-validator';
-import type { FastifyReply, FastifyRequest, RawServerDefault } from 'fastify';
+import type { RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
-
-class FastifyHooks {
-  protected readonly _type = FastifyHooks.name;
-
-  public constructor(private readonly app: INestApplication) {}
-
-  public multipartJsonParserHook(): this {
-    const app = this.app as NestFastifyApplication<RawServerDefault>;
-    const fastify = app.getHttpAdapter().getInstance();
-
-    fastify.addHook(
-      'preValidation',
-      (req: FastifyRequest, _res: FastifyReply, done: () => void) => {
-        const jsonFields: ReadonlyArray<string> = ['json'];
-
-        const isMultipart = String(req.headers['content-type'] ?? '').includes(
-          'multipart/form-data',
-        );
-
-        const hasUnknownBody = (
-          r: FastifyRequest,
-        ): r is FastifyRequest & { body: unknown } =>
-          Object.prototype.hasOwnProperty.call(r, 'body');
-
-        const isRecord = (v: unknown): v is Record<string, unknown> =>
-          typeof v === 'object' && v !== null && !Array.isArray(v);
-
-        const isFileLike = (v: unknown): boolean =>
-          isRecord(v) &&
-          (typeof v['mimetype'] === 'string' ||
-            typeof v['filename'] === 'string' ||
-            typeof v['file'] === 'object');
-
-        const unwrap = (v: unknown): unknown => {
-          if (Array.isArray(v)) {
-            return v.map(unwrap);
-          }
-          if (isRecord(v) && 'value' in v && !('mimetype' in v)) {
-            return unwrap(v['value']);
-          }
-          return v;
-        };
-
-        const looksJson = (s: string): boolean => {
-          const t = s.trim();
-          return (
-            (t.startsWith('{') && t.endsWith('}')) ||
-            (t.startsWith('[') && t.endsWith(']'))
-          );
-        };
-
-        const parseIfJson = (v: unknown): unknown => {
-          if (typeof v !== 'string' || !looksJson(v)) {
-            return v;
-          }
-          try {
-            return JSON.parse(v) as unknown;
-          } catch {
-            return v;
-          }
-        };
-
-        const deep = (v: unknown): unknown => {
-          if (isFileLike(v)) {
-            return v;
-          }
-          if (typeof v === 'string') {
-            const p = parseIfJson(v);
-            return p !== v ? deep(p) : v;
-          }
-          if (Array.isArray(v)) {
-            return v.map(deep);
-          }
-          if (isRecord(v)) {
-            const out: Record<string, unknown> = {};
-            for (const [k, val] of Object.entries(v)) {
-              out[k] = deep(val);
-            }
-            return out;
-          }
-          return v;
-        };
-
-        if (isMultipart && hasUnknownBody(req) && isRecord(req.body)) {
-          const body = req.body;
-          for (const field of jsonFields) {
-            if (!(field in body)) {
-              continue;
-            }
-            const unwrapped = unwrap(body[field]);
-            const parsed = deep(unwrapped);
-
-            if (!(Array.isArray(parsed) || isRecord(parsed))) {
-            }
-
-            body[field] = parsed;
-          }
-        }
-
-        done();
-      },
-    );
-
-    return this;
-  }
-}
 
 class AppConfigUtils {
   protected readonly _type = AppConfigUtils.name;
@@ -153,11 +47,6 @@ export class AppConfig extends AppConfigUtils {
   public applyMultipart(): this {
     const app = this.app as NestFastifyApplication<RawServerDefault>;
     void app.register(multipart);
-    return this;
-  }
-
-  public applyHook(): this {
-    new FastifyHooks(this.app).multipartJsonParserHook();
     return this;
   }
 
@@ -213,7 +102,7 @@ export class AppConfig extends AppConfigUtils {
         whitelist: true,
         transform: true,
         forbidNonWhitelisted: false,
-        forbidUnknownValues: true,
+        forbidUnknownValues: false,
         transformOptions: {
           enableImplicitConversion: true,
         },

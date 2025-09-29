@@ -17,7 +17,6 @@ async function bootstrap(): Promise<void> {
   const appConfig = new AppConfig(app);
   appConfig
     .applyMultipart()
-    .applyHook()
     .applyCors()
     .applyCookies()
     .applyGlobalInterceptor()
