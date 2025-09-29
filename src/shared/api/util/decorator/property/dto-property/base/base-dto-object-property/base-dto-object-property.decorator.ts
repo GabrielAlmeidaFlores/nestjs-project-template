@@ -7,6 +7,7 @@ import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-propert
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
 import type { TypeHelpOptions } from 'class-transformer';
+import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoObjectProperty(
   typeFunction: (type?: TypeHelpOptions) => Function,
@@ -23,7 +24,14 @@ export function BaseDtoObjectProperty(
     example: props?.example,
   });
   const objectType = Type(typeFunction);
-  const validateNested = ValidateNested({ each: isArray });
+  const validateNested = ValidateNested({
+    each: isArray,
+    message: (args: ValidationArguments) => {
+      const functionName = typeFunction().name;
+      const functionType = isArray ? `Array<${functionName}>` : functionName;
+      return `o campo '${args.property}' não é compatível com o tipo ${functionType}`;
+    },
+  });
 
   const decorators = [baseDtoProperty, apiProperty, objectType, validateNested];
 
