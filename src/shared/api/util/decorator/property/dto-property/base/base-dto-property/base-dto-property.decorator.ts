@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 
 import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
 import type { DtoPropMetaType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/type/dto-props-metadata.type';
 
 import 'reflect-metadata';
