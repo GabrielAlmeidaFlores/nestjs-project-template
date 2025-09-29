@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
 @Entity({ name: 'cnis_fast_analysis_result' })
@@ -37,6 +38,12 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
     type: 'text',
   })
   public cnisAiAnalysis: string;
+
+  @OneToOne(
+    () => CnisFastAnalysisTypeormEntity,
+    (entity) => entity.cnisFastAnalysisResult,
+  )
+  public cnisFastAnalysis?: CnisFastAnalysisTypeormEntity | undefined;
 
   protected override readonly _type = CnisFastAnalysisResultTypeormEntity.name;
 }
