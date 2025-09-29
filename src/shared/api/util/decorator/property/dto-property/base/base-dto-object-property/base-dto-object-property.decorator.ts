@@ -92,6 +92,10 @@ function buildJsonToObjectTransform(
 ): PropertyDecorator {
   return Transform(
     ({ value }): unknown => {
+      if (typeof value === 'object') {
+        return value;
+      }
+
       const raw = unwrapValue(value);
 
       if (isFileLike(raw)) {
