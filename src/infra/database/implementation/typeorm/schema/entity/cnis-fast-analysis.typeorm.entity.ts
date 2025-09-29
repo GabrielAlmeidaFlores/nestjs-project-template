@@ -11,8 +11,9 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
     name: 'cnis_document',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public cnisDocument: string;
+  public cnisDocument: string | null;
 
   @OneToOne(
     () => CnisFastAnalysisResultTypeormEntity,

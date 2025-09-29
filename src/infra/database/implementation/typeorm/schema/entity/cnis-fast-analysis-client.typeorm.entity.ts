@@ -32,8 +32,9 @@ export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {
     type: 'varchar',
     length: 100,
     transformer: CryptographyTransformer,
+    nullable: true,
   })
-  public email: string;
+  public email: string | null;
 
   @Column({
     name: 'phone_number',
