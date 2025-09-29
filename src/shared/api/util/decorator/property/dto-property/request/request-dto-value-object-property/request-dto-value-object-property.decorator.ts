@@ -6,7 +6,7 @@ import { IsOptional, registerDecorator } from 'class-validator';
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
 import type { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
 import type { ValidationArguments, ValidationOptions } from 'class-validator';
 
 function IsValidValueObject<T extends BaseValueObject<T>>(
