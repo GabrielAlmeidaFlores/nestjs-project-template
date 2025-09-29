@@ -3,6 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
+import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
+import { CnisFastAnalysisClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client/cnis-fast-analysis-client.typeorm.command.repository';
+import { CnisFastAnalysisClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.typeorm.command.repository';
+import { CnisFastAnalysisClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.typeorm.command.repository';
+import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
 import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
@@ -54,6 +59,11 @@ export class TypeormIndex {
     OrganizationTypeormCommandRepository,
     OrganizationMemberTypeormQueryRepository,
     OrganizationMemberTypeormCommandRepository,
+    CnisFastAnalysisTypeormCommandRepository,
+    CnisFastAnalysisClientTypeormCommandRepository,
+    CnisFastAnalysisResultTypeormCommandRepository,
+    CnisFastAnalysisClientInssBenefitTypeormCommandRepository,
+    CnisFastAnalysisClientLegalProceedingTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

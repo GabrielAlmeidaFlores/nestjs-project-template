@@ -21,13 +21,13 @@ export class CreateCnisFastAnalysisClientRequestDto extends BaseBuildableObject 
   public name?: string;
 
   @RequestDtoValueObjectProperty(FederalDocument, { required: false })
-  public federalDocument?: string;
+  public federalDocument?: FederalDocument;
 
   @RequestDtoValueObjectProperty(Email, { required: false })
-  public email?: string;
+  public email?: Email;
 
   @RequestDtoValueObjectProperty(PhoneNumber, { required: false })
-  public phoneNumber?: string;
+  public phoneNumber?: PhoneNumber;
 
   @RequestDtoDateProperty({ required: false })
   public birthDate?: Date;
