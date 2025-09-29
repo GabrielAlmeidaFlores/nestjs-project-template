@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { BucketModule } from '@infra/bucket/bucket.module';
 import { DatabaseModule } from '@infra/database/database.module';
 import { CnisFastAnalysisController } from '@module/customer/cnis-fast-analysis/cnis-fast-analysis.controller';
+import { FileProcessorModule } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.module';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -11,8 +11,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AuthModule,
     DatabaseModule,
-    BucketModule,
     OrganizationSessionModule,
+    FileProcessorModule,
   ],
   controllers: [CnisFastAnalysisController],
   providers: [CreateCnisFastAnalysisUseCase],

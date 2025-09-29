@@ -1,10 +1,14 @@
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import { InvalidPostalCodeError } from '@core/domain/schema/value-object/postal-code/error/invalid-postal-code.error';
+import { InvalidDecimalValueError } from '@core/domain/schema/value-object/decimal/error/invalid-decimal-value.error';
 
 export class DecimalValue extends BaseValueObject<DecimalValue> {
   protected readonly _type = DecimalValue.name;
 
   public constructor(value: string | number) {
+    if (typeof value === 'undefined') {
+      throw new InvalidDecimalValueError();
+    }
+
     value = value.toString();
 
     value = DecimalValue.normalize(value);
@@ -14,7 +18,7 @@ export class DecimalValue extends BaseValueObject<DecimalValue> {
     const isValidPostalCode = DecimalValue.isValid(value);
 
     if (!isValidPostalCode) {
-      throw new InvalidPostalCodeError();
+      throw new InvalidDecimalValueError();
     }
   }
 
