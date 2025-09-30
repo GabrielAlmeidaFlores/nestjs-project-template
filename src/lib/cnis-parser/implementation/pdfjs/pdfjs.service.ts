@@ -179,18 +179,33 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
 
     const transformMap: Array<AnyTransformMapItemType> = [
       {
-        sourceKey: 'Competência.',
+        sourceKey: 'Competência',
         destinyKey: 'competencia',
         transformMethod: (v) => moment(v, 'MM/YYYY').toDate(),
       },
       {
-        sourceKey: 'Remuneração.',
+        sourceKey: 'Remuneração',
         destinyKey: 'remuneracao',
         transformMethod: (v) => String(v),
       },
       {
-        sourceKey: 'Indicadores.',
+        sourceKey: 'Indicadores',
         destinyKey: 'indicadores',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Data Pgto.',
+        destinyKey: 'dataPgto',
+        transformMethod: (v) => moment(v, 'DD/MM/YYYY').toDate(),
+      },
+      {
+        sourceKey: 'Contribuição',
+        destinyKey: 'contribuicao',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Salário Contribuição',
+        destinyKey: 'salarioContribuicao',
         transformMethod: (v) => String(v),
       },
     ];
@@ -253,7 +268,7 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
         transformMethod: (v) => Number(v),
       },
       {
-        sourceKey: 'NIT.',
+        sourceKey: 'NIT',
         destinyKey: 'nit',
         transformMethod: (v) => String(v),
       },
@@ -291,6 +306,26 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
         sourceKey: 'Últ. Remun.',
         destinyKey: 'ultRemun',
         transformMethod: (v) => moment(v, 'MM/YYYY').toDate(),
+      },
+      {
+        sourceKey: 'Indicadores',
+        destinyKey: 'indicadores',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'NB',
+        destinyKey: 'nb',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Espécie',
+        destinyKey: 'especie',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Situação',
+        destinyKey: 'situacao',
+        transformMethod: (v) => String(v),
       },
     ];
 
