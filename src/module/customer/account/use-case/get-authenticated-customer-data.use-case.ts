@@ -50,8 +50,10 @@ export class GetAuthenticatedCustomerDataUseCase {
       organization: GetOrganizationDataResponseDto.build({
         organizationId: organizationMember.organization.id,
         organizationName: organizationMember.organization.name,
+        organizationOwner: organizationMember.owner,
       }),
       customer: GetCustomerDataResponseDto.build({
+        customerId: organizationMember.customer.id,
         email: organizationMember.customer.authIdentity.email,
         federalDocument:
           organizationMember.customer.authIdentity.federalDocument,
