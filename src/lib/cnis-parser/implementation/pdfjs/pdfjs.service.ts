@@ -12,11 +12,11 @@ import { PdfItemInterface } from '@lib/cnis-parser/implementation/pdfjs/interfac
 import { PdfRawItemInterface } from '@lib/cnis-parser/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
 import { RawPdfJsonType } from '@lib/cnis-parser/implementation/pdfjs/type/raw-pdf-json.type';
 import {
-  CnisModel,
-  CnisSessionModel,
-  CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
-  CnisSessionSocialSecurityAffiliationInfoModel,
-} from '@lib/cnis-parser/model/generic/cnis.model';
+  CnisOutputModel,
+  CnisSessionOutputModel,
+  CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel,
+  CnisSessionSocialSecurityAffiliationInfoOutputModel,
+} from '@lib/cnis-parser/model/output/cnis.output.model';
 
 export class PdfUtil {
   protected readonly _type = PdfUtil.name;
@@ -136,7 +136,7 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
     return verify;
   }
 
-  public async parseCnisDocument(pdf: Buffer): Promise<CnisModel> {
+  public async parseCnisDocument(pdf: Buffer): Promise<CnisOutputModel> {
     const rawCnisSessions = await this.parsePdfToCnis(pdf);
 
     const cnisSessionData = rawCnisSessions.map((rawCnisSession) => {
@@ -150,31 +150,32 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
           return this.parseCnisSocialSecurityAffiliationEarningsHistory(value);
         });
 
-      return CnisSessionModel.build({
+      return CnisSessionOutputModel.build({
         socialSecurityAffiliationEarningsHistory,
         socialSecurityAffiliationInfo,
       });
     });
 
-    return CnisModel.build({ data: cnisSessionData });
+    return CnisOutputModel.build({ data: cnisSessionData });
   }
 
   private parseCnisSocialSecurityAffiliationEarningsHistory(
     data: RawCnisSessionSocialSecurityAffiliationEarningsHistoryInterface,
-  ): CnisSessionSocialSecurityAffiliationEarningsHistoryModel {
+  ): CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel {
     type TransformMapItemType<
-      K extends keyof CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
+      K extends
+        keyof CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel,
     > = {
       sourceKey: string;
       destinyKey: K;
       transformMethod: (
         value: string,
-      ) => CnisSessionSocialSecurityAffiliationEarningsHistoryModel[K];
+      ) => CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel[K];
     };
 
     type AnyTransformMapItemType = {
-      [K in keyof CnisSessionSocialSecurityAffiliationEarningsHistoryModel]: TransformMapItemType<K>;
-    }[keyof CnisSessionSocialSecurityAffiliationEarningsHistoryModel];
+      [K in keyof CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel]: TransformMapItemType<K>;
+    }[keyof CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel];
 
     const transformMap: Array<AnyTransformMapItemType> = [
       {
@@ -221,27 +222,29 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
         return acc;
       }, {});
 
-    return CnisSessionSocialSecurityAffiliationEarningsHistoryModel.build({
-      ...parsedContent,
-    });
+    return CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel.build(
+      {
+        ...parsedContent,
+      },
+    );
   }
 
   private parseCnisSocialSecurityAffiliationInfo(
     data: RawCnisSessionSocialSecurityAffiliationInfoInterface,
-  ): CnisSessionSocialSecurityAffiliationInfoModel {
+  ): CnisSessionSocialSecurityAffiliationInfoOutputModel {
     type TransformMapItemType<
-      K extends keyof CnisSessionSocialSecurityAffiliationInfoModel,
+      K extends keyof CnisSessionSocialSecurityAffiliationInfoOutputModel,
     > = {
       sourceKey: string;
       destinyKey: K;
       transformMethod: (
         value: string,
-      ) => CnisSessionSocialSecurityAffiliationInfoModel[K];
+      ) => CnisSessionSocialSecurityAffiliationInfoOutputModel[K];
     };
 
     type AnyTransformMapItemType = {
-      [K in keyof CnisSessionSocialSecurityAffiliationInfoModel]: TransformMapItemType<K>;
-    }[keyof CnisSessionSocialSecurityAffiliationInfoModel];
+      [K in keyof CnisSessionSocialSecurityAffiliationInfoOutputModel]: TransformMapItemType<K>;
+    }[keyof CnisSessionSocialSecurityAffiliationInfoOutputModel];
 
     const transformMap: Array<AnyTransformMapItemType> = [
       {
@@ -318,7 +321,7 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
         return acc;
       }, {});
 
-    return CnisSessionSocialSecurityAffiliationInfoModel.build({
+    return CnisSessionSocialSecurityAffiliationInfoOutputModel.build({
       ...parsedContent,
     });
   }
