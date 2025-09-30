@@ -15,6 +15,7 @@ export function BaseDtoEnumProperty(
 
   const baseDtoProperty = BaseDtoProperty(enumType, props);
   const validation = IsEnum(enumType, {
+    each: isArray,
     message: (args: ValidationArguments) => {
       const enumValues = Object.values(enumType);
       const allowedValue = enumValues.join(', ');

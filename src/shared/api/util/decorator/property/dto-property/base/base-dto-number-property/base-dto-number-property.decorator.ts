@@ -18,6 +18,7 @@ export function BaseDtoNumberProperty(
   const validation = IsNumber(
     {},
     {
+      each: isArray,
       message: (args: ValidationArguments) =>
         `o campo '${args.property}' deve ser do tipo 'number'`,
     },

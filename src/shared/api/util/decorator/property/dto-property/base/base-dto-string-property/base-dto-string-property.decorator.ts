@@ -15,6 +15,7 @@ export function BaseDtoStringProperty(
   const baseDtoProperty = BaseDtoProperty(String, props);
 
   const validation = IsString({
+    each: isArray,
     message: (args: ValidationArguments) => {
       return `o campo '${args.property}' deve ser do tipo 'string'`;
     },
