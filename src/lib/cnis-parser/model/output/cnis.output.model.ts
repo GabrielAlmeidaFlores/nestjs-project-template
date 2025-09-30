@@ -10,6 +10,10 @@ export class CnisSessionSocialSecurityAffiliationInfoOutputModel extends BaseBui
   public dataFim?: Date;
   public dataInicio?: Date;
   public ultRemun?: Date;
+  public indicadores?: string;
+  public nb?: string;
+  public especie?: string;
+  public situacao?: string;
 
   protected override readonly _type =
     CnisSessionSocialSecurityAffiliationInfoOutputModel.name;
@@ -19,6 +23,9 @@ export class CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel exte
   public competencia?: Date;
   public remuneracao?: string;
   public indicadores?: string;
+  public dataPgto?: Date;
+  public contribuicao?: string;
+  public salarioContribuicao?: string;
 
   protected override readonly _type =
     CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel.name;
