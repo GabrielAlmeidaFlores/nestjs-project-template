@@ -12,6 +12,7 @@ import { CnisFastAnalysisClientInssBenefitEntity } from '@module/customer/cnis-f
 import { CnisFastAnalysisClientLegalProceedingEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.entity';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/cnis-fast-analysis/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/create-cnis-fast-analysis.response.dto';
+import { CnisDocumentIsNotValidError } from '@module/customer/cnis-fast-analysis/error/cnis-document-is-not-valid.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/cnis-fast-analysis/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -51,6 +52,17 @@ export class CreateCnisFastAnalysisUseCase {
 
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
+    }
+
+    if (dto.cnisDocument) {
+      const validateCnisDocument =
+        await this.fileProcessorGateway.validateCnisDocument(
+          dto.cnisDocument.buffer,
+        );
+
+      if (validateCnisDocument === false) {
+        throw new CnisDocumentIsNotValidError();
+      }
     }
 
     const cnisDocument =

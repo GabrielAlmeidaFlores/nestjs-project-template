@@ -3,4 +3,6 @@ export abstract class FileProcessorGateway {
     cnisDocument: Buffer,
     cnisDocumentLocation?: string,
   ): Promise<string>;
+
+  public abstract validateCnisDocument(cnisDocument: Buffer): Promise<boolean>;
 }

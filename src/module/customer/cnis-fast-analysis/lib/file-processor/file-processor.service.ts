@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
+import { CnisParserGateway } from '@lib/cnis-parser/cnis-parser.gateway';
 import { FileProcessorGateway } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.gateway';
 import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
 
@@ -8,7 +9,16 @@ import { BucketApplicationVariable } from '@shared/system/constant/application-v
 export class FileProcessorService implements FileProcessorGateway {
   protected readonly _type = FileProcessorService.name;
 
-  public constructor(private readonly bucketGateway: BucketGateway) {}
+  public constructor(
+    @Inject(BucketGateway)
+    private readonly bucketGateway: BucketGateway,
+    @Inject(CnisParserGateway)
+    private readonly cnisParserGateway: CnisParserGateway,
+  ) {}
+
+  public async validateCnisDocument(cnisDocument: Buffer): Promise<boolean> {
+    return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
+  }
 
   public async processAndUploadCnisDocument(
     cnisDocument: Buffer,
