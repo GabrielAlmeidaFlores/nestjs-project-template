@@ -15,6 +15,6 @@ import { PdfJSService } from '@lib/cnis-parser/implementation/pdfjs/pdfjs.servic
   ],
   exports: [CnisParserGateway],
 })
-export class ImageProcessorModule {
-  protected readonly _type = ImageProcessorModule.name;
+export class CnisParserModule {
+  protected readonly _type = CnisParserModule.name;
 }
