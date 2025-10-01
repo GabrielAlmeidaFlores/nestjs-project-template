@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
@@ -11,7 +11,7 @@ export class CnisFastAnalysisClientInssBenefitTypeormEntity extends BaseTypeormE
   })
   public inssBenefitNumber: number;
 
-  @OneToOne(
+  @ManyToOne(
     () => CnisFastAnalysisClientTypeormEntity,
     (entity) => entity.cnisFastAnalysisClientInssBenefit,
   )
