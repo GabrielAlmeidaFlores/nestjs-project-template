@@ -4,6 +4,7 @@ import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementa
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
+import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
 import { CnisFastAnalysisClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client/cnis-fast-analysis-client.typeorm.command.repository';
 import { CnisFastAnalysisClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.typeorm.command.repository';
@@ -64,6 +65,7 @@ export class TypeormIndex {
     CnisFastAnalysisResultTypeormCommandRepository,
     CnisFastAnalysisClientInssBenefitTypeormCommandRepository,
     CnisFastAnalysisClientLegalProceedingTypeormCommandRepository,
+    CnisFastAnalysisTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

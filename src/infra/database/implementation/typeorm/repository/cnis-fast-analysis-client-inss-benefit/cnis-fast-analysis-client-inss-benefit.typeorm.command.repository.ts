@@ -8,6 +8,7 @@ import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CnisFastAnalysisClientInssBenefitCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-inss-benefit/command/cnis-fast-analysis-client-inss-benefit.command.repository.gateway';
 import { CnisFastAnalysisClientInssBenefitEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.entity';
+import { CnisFastAnalysisClientInssBenefitId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/value-object/cnis-fast-analysis-client-inss-benefit-id/cnis-fast-analysis-client-inss-benefit-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisClientInssBenefitTypeormCommandRepository
@@ -23,6 +24,12 @@ export class CnisFastAnalysisClientInssBenefitTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public deleteCnisFastAnalysisClientInssBenefit(
+    id: CnisFastAnalysisClientInssBenefitId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 
   public createCnisFastAnalysisClientInssBenefit(
