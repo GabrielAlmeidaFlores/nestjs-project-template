@@ -8,6 +8,7 @@ import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/datab
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
 import { CnisFastAnalysisClientLegalProceedingEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.entity';
+import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisClientLegalProceedingTypeormCommandRepository
@@ -23,6 +24,12 @@ export class CnisFastAnalysisClientLegalProceedingTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public deleteCnisFastAnalysisClientLegalProceeding(
+    id: CnisFastAnalysisClientLegalProceedingId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 
   public createCnisFastAnalysisClientLegalProceeding(

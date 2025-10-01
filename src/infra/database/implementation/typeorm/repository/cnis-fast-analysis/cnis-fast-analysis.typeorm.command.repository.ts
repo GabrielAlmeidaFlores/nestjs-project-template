@@ -8,6 +8,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { CnisFastAnalysisId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisTypeormCommandRepository
@@ -22,6 +23,19 @@ export class CnisFastAnalysisTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public updateCnisFastAnalysis(
+    id: CnisFastAnalysisId,
+    props: CnisFastAnalysisEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      CnisFastAnalysisEntity,
+      CnisFastAnalysisTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 
   public createCnisFastAnalysis(
