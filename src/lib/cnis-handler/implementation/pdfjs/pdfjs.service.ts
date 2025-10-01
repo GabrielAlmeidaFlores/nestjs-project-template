@@ -2,21 +2,24 @@ import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
-import { CnisParserGateway } from '@lib/cnis-parser/cnis-parser.gateway';
+import { CnisHandlerGateway } from '@lib/cnis-handler/cnis-handler.gateway';
 import {
-  RawCnisSessionInterface,
+  RawCnisInterface,
+  RawCnisSessionAffiliateIdentificationInterface,
+  RawCnisSocialSecurityRelationInterface,
   RawCnisSessionSocialSecurityAffiliationEarningsHistoryInterface,
   RawCnisSessionSocialSecurityAffiliationInfoInterface,
-} from '@lib/cnis-parser/implementation/pdfjs/interface/cnis/raw-cnis.interface';
-import { PdfItemInterface } from '@lib/cnis-parser/implementation/pdfjs/interface/pdf-item/pdf-item.interface';
-import { PdfRawItemInterface } from '@lib/cnis-parser/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
-import { RawPdfJsonType } from '@lib/cnis-parser/implementation/pdfjs/type/raw-pdf-json.type';
+} from '@lib/cnis-handler/implementation/pdfjs/interface/cnis/raw-cnis.interface';
+import { PdfItemInterface } from '@lib/cnis-handler/implementation/pdfjs/interface/pdf-item/pdf-item.interface';
+import { PdfRawItemInterface } from '@lib/cnis-handler/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
+import { RawPdfJsonType } from '@lib/cnis-handler/implementation/pdfjs/type/raw-pdf-json.type';
 import {
   CnisOutputModel,
-  CnisSessionOutputModel,
+  CnisAffiliateIdentificationOutputModel,
+  CnisSocialSecurityRelationOutputModel,
   CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel,
   CnisSessionSocialSecurityAffiliationInfoOutputModel,
-} from '@lib/cnis-parser/model/output/cnis.output.model';
+} from '@lib/cnis-handler/model/output/cnis.output.model';
 
 export class PdfUtil {
   protected readonly _type = PdfUtil.name;
@@ -125,38 +128,141 @@ export class PdfUtil {
 }
 
 @Injectable()
-export class PdfJSService extends PdfUtil implements CnisParserGateway {
+export class PdfJSService extends PdfUtil implements CnisHandlerGateway {
   protected override readonly _type = PdfJSService.name;
 
   public async validateCnisDocument(pdf: Buffer): Promise<boolean> {
     const parsedCnis = await this.parseCnisDocument(pdf);
 
-    const verify = parsedCnis.data.length > 0;
+    if (
+      parsedCnis.affiliateIdentification === undefined ||
+      parsedCnis.socialSecurityRelations === undefined
+    ) {
+      return false;
+    }
+
+    const verify = parsedCnis.socialSecurityRelations.length > 0;
 
     return verify;
   }
 
   public async parseCnisDocument(pdf: Buffer): Promise<CnisOutputModel> {
-    const rawCnisSessions = await this.parsePdfToCnis(pdf);
+    const rawCnis = await this.parsePdfToCnis(pdf);
 
-    const cnisSessionData = rawCnisSessions.map((rawCnisSession) => {
-      const socialSecurityAffiliationInfo =
-        this.parseCnisSocialSecurityAffiliationInfo(
-          rawCnisSession.socialSecurityAffiliationInfo,
-        );
+    const socialSecurityRelations = rawCnis.socialSecurityRelations?.map(
+      (rawCnisSession) => {
+        const socialSecurityAffiliationInfo =
+          this.parseCnisSocialSecurityAffiliationInfo(
+            rawCnisSession.socialSecurityAffiliationInfo,
+          );
 
-      const socialSecurityAffiliationEarningsHistory =
-        rawCnisSession.socialSecurityAffiliationEarningsHistory.map((value) => {
-          return this.parseCnisSocialSecurityAffiliationEarningsHistory(value);
+        const socialSecurityAffiliationEarningsHistory =
+          rawCnisSession.socialSecurityAffiliationEarningsHistory.map(
+            (value) => {
+              return this.parseCnisSocialSecurityAffiliationEarningsHistory(
+                value,
+              );
+            },
+          );
+
+        return CnisSocialSecurityRelationOutputModel.build({
+          socialSecurityAffiliationEarningsHistory,
+          socialSecurityAffiliationInfo,
         });
+      },
+    );
 
-      return CnisSessionOutputModel.build({
-        socialSecurityAffiliationEarningsHistory,
-        socialSecurityAffiliationInfo,
-      });
+    const cnis = CnisOutputModel.build({});
+
+    if (rawCnis.affiliateIdentification) {
+      cnis.affiliateIdentification =
+        this.parseCnisSessionAffiliateIdentification(
+          rawCnis.affiliateIdentification,
+        );
+    }
+
+    if (socialSecurityRelations) {
+      cnis.socialSecurityRelations = socialSecurityRelations;
+    }
+
+    return cnis;
+  }
+
+  private parseCnisSessionAffiliateIdentification(
+    data: RawCnisSessionAffiliateIdentificationInterface,
+  ): CnisAffiliateIdentificationOutputModel {
+    type TransformMapItemType<
+      K extends keyof CnisAffiliateIdentificationOutputModel,
+    > = {
+      sourceKey: string;
+      destinyKey: K;
+      transformMethod: (
+        value: string,
+      ) => CnisAffiliateIdentificationOutputModel[K];
+    };
+
+    type AnyTransformMapItemType = {
+      [K in keyof CnisAffiliateIdentificationOutputModel]: TransformMapItemType<K>;
+    }[keyof CnisAffiliateIdentificationOutputModel];
+
+    const transformMap: Array<AnyTransformMapItemType> = [
+      {
+        sourceKey: 'NIT',
+        destinyKey: 'nit',
+        transformMethod: (v) => v.toString(),
+      },
+      {
+        sourceKey: 'Data de nascimento',
+        destinyKey: 'dataDeNascimento',
+        transformMethod: (v) => moment(v, 'DD/MM/YYYY').toDate(),
+      },
+      {
+        sourceKey: 'CPF',
+        destinyKey: 'cpf',
+        transformMethod: (v) => v.toString(),
+      },
+      {
+        sourceKey: 'Nome',
+        destinyKey: 'nome',
+        transformMethod: (v) => v.toString(),
+      },
+      {
+        sourceKey: 'Nome da mãe',
+        destinyKey: 'nomeDaMae',
+        transformMethod: (v) => v.toString(),
+      },
+    ];
+
+    const parsedContent = transformMap
+      .map((transformMapStrategy) => {
+        if (transformMapStrategy?.sourceKey === undefined) {
+          return {};
+        }
+
+        const sourceValue = data[transformMapStrategy.sourceKey];
+
+        if (sourceValue === undefined) {
+          return {};
+        }
+
+        const destinyKey = transformMapStrategy.destinyKey;
+
+        const destinyValue = transformMapStrategy.transformMethod(sourceValue);
+
+        return { [destinyKey]: destinyValue };
+      })
+      .reduce<Record<string, unknown>>((acc, obj) => {
+        for (const [key, value] of Object.entries(obj)) {
+          if (value !== undefined) {
+            acc[key] = value;
+          }
+        }
+        return acc;
+      }, {});
+
+    return CnisAffiliateIdentificationOutputModel.build({
+      ...parsedContent,
     });
-
-    return CnisOutputModel.build({ data: cnisSessionData });
   }
 
   private parseCnisSocialSecurityAffiliationEarningsHistory(
@@ -361,16 +467,87 @@ export class PdfJSService extends PdfUtil implements CnisParserGateway {
     });
   }
 
-  private async parsePdfToCnis(
-    pdf: Buffer,
-  ): Promise<Array<RawCnisSessionInterface>> {
+  private async parsePdfToCnis(pdf: Buffer): Promise<RawCnisInterface> {
     const rawPdfJsonData: RawPdfJsonType = await this.parsePdfToJson(pdf);
-    return this.extractSocialSecurityRelations(rawPdfJsonData);
+
+    const affiliateIdentification =
+      this.extractCnisAffiliateIdentificationFromPdfData(rawPdfJsonData);
+    const socialSecurityRelations =
+      this.extractCnisSocialSecurityRelationFromPdfData(rawPdfJsonData);
+
+    return {
+      affiliateIdentification,
+      socialSecurityRelations,
+    } as RawCnisInterface;
   }
 
-  private extractSocialSecurityRelations(
+  private extractCnisAffiliateIdentificationFromPdfData(
     rawPdfJsonData: RawPdfJsonType,
-  ): Array<RawCnisSessionInterface> {
+  ): RawCnisSessionAffiliateIdentificationInterface {
+    const firstPage = rawPdfJsonData[0];
+
+    if (firstPage === undefined) {
+      return {};
+    }
+
+    const affiliateIdentificationPlaceHolders = [
+      'NIT:',
+      'Data de nascimento:',
+      'Nome:',
+      'Nome da mãe:',
+      'CPF:',
+    ];
+
+    return affiliateIdentificationPlaceHolders
+      .map((placeHolder) => {
+        const placeHolderPdfItem = this.findOneByWord(firstPage, placeHolder);
+
+        if (!placeHolderPdfItem) {
+          return {};
+        }
+
+        const possibleValues = firstPage.filter((possibleValue) => {
+          const verticalOffSet = Math.abs(
+            possibleValue.polygon.topLeft.y -
+              placeHolderPdfItem.polygon.topLeft.y,
+          );
+
+          const maxAllowedOffSet = 3;
+
+          if (verticalOffSet > maxAllowedOffSet) {
+            return false;
+          }
+
+          if (
+            placeHolderPdfItem.polygon.topLeft.x >=
+            possibleValue.polygon.topLeft.x
+          ) {
+            return false;
+          }
+
+          return true;
+        });
+
+        if (possibleValues.length === 0) {
+          return {};
+        }
+
+        const value = possibleValues.reduce((smallest, current) => {
+          if (current.polygon.topLeft.x < smallest.polygon.topLeft.x) {
+            return current;
+          } else {
+            return smallest;
+          }
+        });
+
+        return { [placeHolder.replace(':', '')]: value.text };
+      })
+      .reduce((acc, obj) => ({ ...acc, ...obj }), {});
+  }
+
+  private extractCnisSocialSecurityRelationFromPdfData(
+    rawPdfJsonData: RawPdfJsonType,
+  ): Array<RawCnisSocialSecurityRelationInterface> {
     const perPageFilteredRelationItems: PdfItemInterface[][] =
       rawPdfJsonData.map((pageItems) => {
         const titleItem = this.findOneByWord(
