@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
@@ -10,7 +10,9 @@ export class FileProcessorService implements FileProcessorGateway {
   protected readonly _type = FileProcessorService.name;
 
   public constructor(
+    @Inject(BucketGateway)
     private readonly bucketGateway: BucketGateway,
+    @Inject(ImageProcessorGateway)
     private readonly imageProcessorGateway: ImageProcessorGateway,
   ) {}
 

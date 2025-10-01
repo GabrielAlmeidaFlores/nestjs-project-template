@@ -5,6 +5,10 @@ export class FederalDocument extends BaseValueObject<FederalDocument> {
   protected readonly _type = FederalDocument.name;
 
   public constructor(value: string) {
+    if (typeof value === 'undefined') {
+      throw new InvalidFederalDocumentError();
+    }
+
     value = value.replace(/\D/g, '');
 
     super(value);
