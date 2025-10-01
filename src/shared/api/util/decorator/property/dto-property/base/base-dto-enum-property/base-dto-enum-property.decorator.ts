@@ -3,7 +3,7 @@ import { IsArray, IsEnum, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
-import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-propery.decorator.props.interface';
+import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
 import type { ValidationArguments } from 'class-validator';
 
 export function BaseDtoEnumProperty(
@@ -15,6 +15,7 @@ export function BaseDtoEnumProperty(
 
   const baseDtoProperty = BaseDtoProperty(enumType, props);
   const validation = IsEnum(enumType, {
+    each: isArray,
     message: (args: ValidationArguments) => {
       const enumValues = Object.values(enumType);
       const allowedValue = enumValues.join(', ');
