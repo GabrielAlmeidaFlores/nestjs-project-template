@@ -31,14 +31,28 @@ export class CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel exte
     CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel.name;
 }
 
-export class CnisSessionOutputModel extends BaseBuildableObject {
+export class CnisAffiliateIdentificationOutputModel extends BaseBuildableObject {
+  public nit?: string;
+  public dataDeNascimento?: Date;
+  public cpf?: string;
+  public nome?: string;
+  public nomeDaMae?: string;
+
+  protected override readonly _type =
+    CnisAffiliateIdentificationOutputModel.name;
+}
+
+export class CnisSocialSecurityRelationOutputModel extends BaseBuildableObject {
   public socialSecurityAffiliationInfo: CnisSessionSocialSecurityAffiliationInfoOutputModel;
   public socialSecurityAffiliationEarningsHistory: Array<CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel>;
-  protected override readonly _type = CnisSessionOutputModel.name;
+
+  protected override readonly _type =
+    CnisSocialSecurityRelationOutputModel.name;
 }
 
 export class CnisOutputModel extends BaseBuildableObject {
-  public data: Array<CnisSessionOutputModel>;
+  public affiliateIdentification?: CnisAffiliateIdentificationOutputModel;
+  public socialSecurityRelations?: Array<CnisSocialSecurityRelationOutputModel>;
 
   protected override readonly _type = CnisOutputModel.name;
 }
