@@ -41,6 +41,8 @@ export class CnisFastAnalysisTypeormQueryRepository
             cnisFastAnalysisClientLegalProceeding: true,
           },
           cnisFastAnalysisResult: true,
+          createdBy: true,
+          updatedBy: true,
         },
       },
       err,
