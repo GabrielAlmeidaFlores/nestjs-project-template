@@ -25,11 +25,20 @@ export abstract class BaseTypeormCommandRepository<
       const manager = executor as EntityManager;
       const repo = manager.getRepository<T>(this.repository.target);
 
-      if ('_type' in data) {
-        delete data._type;
+      const entityMetadata = repo.metadata;
+
+      const validPropertyNames = entityMetadata.columns.map(
+        (column) => column.propertyName,
+      );
+
+      const sanitizedData: QueryDeepPartialEntity<T> = {};
+      for (const key in data) {
+        if (validPropertyNames.includes(key)) {
+          sanitizedData[key] = data[key];
+        }
       }
 
-      await repo.update(id, data);
+      await repo.update(id, sanitizedData);
     };
   }
 
