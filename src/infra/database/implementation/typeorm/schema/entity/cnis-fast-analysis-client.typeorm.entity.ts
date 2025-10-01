@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
@@ -74,20 +74,20 @@ export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {
   )
   public cnisFastAnalysis?: CnisFastAnalysisTypeormEntity | undefined;
 
-  @OneToOne(
+  @OneToMany(
     () => CnisFastAnalysisClientInssBenefitTypeormEntity,
     (entity) => entity.cnisFastAnalysisClient,
   )
   public cnisFastAnalysisClientInssBenefit?:
-    | CnisFastAnalysisClientInssBenefitTypeormEntity
+    | CnisFastAnalysisClientInssBenefitTypeormEntity[]
     | undefined;
 
-  @OneToOne(
+  @OneToMany(
     () => CnisFastAnalysisClientLegalProceedingTypeormEntity,
     (entity) => entity.cnisFastAnalysisClient,
   )
   public cnisFastAnalysisClientLegalProceeding?:
-    | CnisFastAnalysisClientLegalProceedingTypeormEntity
+    | CnisFastAnalysisClientLegalProceedingTypeormEntity[]
     | undefined;
 
   protected override readonly _type = CnisFastAnalysisClientTypeormEntity.name;

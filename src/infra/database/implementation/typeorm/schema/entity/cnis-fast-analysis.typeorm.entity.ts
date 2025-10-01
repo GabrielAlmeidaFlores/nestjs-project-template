@@ -4,7 +4,6 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { CnisFastAnalysisStatusEnum } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/enum/cnis-fast-analysis-status.enum';
 
 @Entity({ name: 'cnis_fast_analysis' })
 export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -15,13 +14,6 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
     nullable: true,
   })
   public cnisDocument: string | null;
-
-  @Column({
-    name: 'status',
-    type: 'simple-enum',
-    enum: CnisFastAnalysisStatusEnum,
-  })
-  public status: CnisFastAnalysisStatusEnum;
 
   @OneToOne(
     () => CnisFastAnalysisResultTypeormEntity,
