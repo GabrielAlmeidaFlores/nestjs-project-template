@@ -2,24 +2,24 @@ import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
-import { CnisHandlerGateway } from '@lib/cnis-handler/cnis-handler.gateway';
+import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import {
   RawCnisInterface,
   RawCnisSessionAffiliateIdentificationInterface,
   RawCnisSocialSecurityRelationInterface,
   RawCnisSessionSocialSecurityAffiliationEarningsHistoryInterface,
   RawCnisSessionSocialSecurityAffiliationInfoInterface,
-} from '@lib/cnis-handler/implementation/pdfjs/interface/cnis/raw-cnis.interface';
-import { PdfItemInterface } from '@lib/cnis-handler/implementation/pdfjs/interface/pdf-item/pdf-item.interface';
-import { PdfRawItemInterface } from '@lib/cnis-handler/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
-import { RawPdfJsonType } from '@lib/cnis-handler/implementation/pdfjs/type/raw-pdf-json.type';
+} from '@lib/cnis-processor/implementation/pdfjs/interface/cnis/raw-cnis.interface';
+import { PdfItemInterface } from '@lib/cnis-processor/implementation/pdfjs/interface/pdf-item/pdf-item.interface';
+import { PdfRawItemInterface } from '@lib/cnis-processor/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
+import { RawPdfJsonType } from '@lib/cnis-processor/implementation/pdfjs/type/raw-pdf-json.type';
 import {
   CnisOutputModel,
   CnisAffiliateIdentificationOutputModel,
   CnisSocialSecurityRelationOutputModel,
   CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel,
   CnisSessionSocialSecurityAffiliationInfoOutputModel,
-} from '@lib/cnis-handler/model/output/cnis.output.model';
+} from '@lib/cnis-processor/model/output/cnis.output.model';
 
 export class PdfUtil {
   protected readonly _type = PdfUtil.name;
@@ -128,7 +128,7 @@ export class PdfUtil {
 }
 
 @Injectable()
-export class PdfJSService extends PdfUtil implements CnisHandlerGateway {
+export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
   protected override readonly _type = PdfJSService.name;
 
   public async validateCnisDocument(pdf: Buffer): Promise<boolean> {

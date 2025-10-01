@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { PdfJSService } from '@lib/cnis-handler/implementation/pdfjs/pdfjs.service';
+import { PdfJSService } from '@lib/cnis-processor/implementation/pdfjs/pdfjs.service';
 
 @Module({
   providers: [PdfJSService],
