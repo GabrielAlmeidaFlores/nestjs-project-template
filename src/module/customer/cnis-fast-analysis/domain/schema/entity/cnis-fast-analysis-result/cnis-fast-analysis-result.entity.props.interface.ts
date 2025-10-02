@@ -4,9 +4,9 @@ import type { CnisFastAnalysisResultId } from '@module/customer/cnis-fast-analys
 
 export interface CnisFastAnalysisResultEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisResultId> {
-  clientName: string;
-  clientFederalDocument: FederalDocument;
-  clientBirthDate: Date;
-  clientLastAffiliationDate: Date;
-  cnisAiAnalysis: string;
+  clientName?: string | null;
+  clientFederalDocument?: FederalDocument | null;
+  clientBirthDate?: Date | null;
+  clientLastAffiliationDate?: Date | null;
+  cnisAiAnalysis?: string | null;
 }

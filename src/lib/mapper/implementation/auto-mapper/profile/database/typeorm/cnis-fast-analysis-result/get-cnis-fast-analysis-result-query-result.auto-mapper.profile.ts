@@ -28,9 +28,10 @@ export class GetCnisFastAnalysisResultQueryResultAutoMapperProfile {
       return GetCnisFastAnalysisResultQueryResult.build({
         ...source,
         id: new CnisFastAnalysisResultId(source.id),
-        clientFederalDocument: new FederalDocument(
-          source.clientFederalDocument,
-        ),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
       });
     };
 
@@ -51,7 +52,10 @@ export class GetCnisFastAnalysisResultQueryResultAutoMapperProfile {
       return CnisFastAnalysisResultTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        clientFederalDocument: source.clientFederalDocument.toString(),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? source.clientFederalDocument.toString()
+            : null,
       });
     };
 

@@ -37,7 +37,7 @@ function getClassInstanceType(tsNode, checker) {
   return checker.getTypeAtLocation(tsNode);
 }
 
-function typeOrBasesIncludeBaseBuildableObject(type, checker) {
+function typeOrBasesIncludeBaseBuildableDtoObject(type, checker) {
   const seen = new Set();
 
   function dfs(t) {
@@ -46,7 +46,7 @@ function typeOrBasesIncludeBaseBuildableObject(type, checker) {
 
     const sym = t.getSymbol?.();
     const name = getSimpleNameFromSymbol(sym, checker);
-    if (name === 'BaseBuildableObject') return true;
+    if (name === 'BaseBuildableDtoObject') return true;
 
     if (t.isClassOrInterface && t.isClassOrInterface()) {
       const bases = checker.getBaseTypes(t) ?? [];
@@ -83,18 +83,18 @@ function typeOrBasesIncludeBaseBuildableObject(type, checker) {
 }
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
-  name: 'require-dto-to-extend-base-buildable-object',
+  name: 'require-dto-to-extend-base-buildable-dto-object',
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Classes decorated with @RequestDto or @ResponseDto must extend BaseBuildableObject (directly or indirectly).',
+        'Classes decorated with @RequestDto or @ResponseDto must extend BaseBuildableDtoObject (directly or indirectly).',
       recommended: 'error',
     },
     schema: [],
     messages: {
       mustExtend:
-        'Class decorated with @RequestDto or @ResponseDto must extend BaseBuildableObject (directly or indirectly).',
+        'Class decorated with @RequestDto or @ResponseDto must extend BaseBuildableDtoObject (directly or indirectly).',
       noTypeInfo:
         'Type information is required. Configure @typescript-eslint/parser with "parserOptions.project".',
     },
@@ -124,7 +124,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
         const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
         const instanceType = getClassInstanceType(tsNode, checker);
 
-        const ok = typeOrBasesIncludeBaseBuildableObject(instanceType, checker);
+        const ok = typeOrBasesIncludeBaseBuildableDtoObject(instanceType, checker);
         if (!ok) {
           context.report({ node, messageId: 'mustExtend' });
         }

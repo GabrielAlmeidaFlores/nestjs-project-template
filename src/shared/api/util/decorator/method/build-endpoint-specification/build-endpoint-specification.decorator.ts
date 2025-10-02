@@ -19,6 +19,7 @@ import {
 import {
   ApiConsumes,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiSecurity,
 } from '@nestjs/swagger';
@@ -125,6 +126,22 @@ function buildEndpointHttpSpecification(
   const httpMethod = httpMethodMap[http.method]();
 
   const decorators = [httpMethod];
+
+  const pathParamsRegex = /:([^/]+)/g;
+  const paramMatches = http.path.match(pathParamsRegex);
+
+  if (paramMatches) {
+    for (const param of paramMatches) {
+      const paramName = param.substring(1);
+
+      decorators.push(
+        ApiParam({
+          name: paramName,
+          type: String,
+        }),
+      );
+    }
+  }
 
   if (!('type' in http)) {
     return decorators;

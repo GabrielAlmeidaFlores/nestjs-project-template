@@ -5,11 +5,11 @@ import type { CnisFastAnalysisResultId } from '@module/customer/cnis-fast-analys
 
 export class GetCnisFastAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: CnisFastAnalysisResultId;
-  public readonly clientName: string;
-  public readonly clientFederalDocument: FederalDocument;
-  public readonly clientBirthDate: Date;
-  public readonly clientLastAffiliationDate: Date;
-  public readonly cnisAiAnalysis: string;
+  public readonly clientName: string | null;
+  public readonly clientFederalDocument: FederalDocument | null;
+  public readonly clientBirthDate: Date | null;
+  public readonly clientLastAffiliationDate: Date | null;
+  public readonly cnisAiAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

@@ -3,11 +3,11 @@ import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/enti
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @ResponseDto()
-export class ValidateAuthIdentitySignInResponseDto extends BaseBuildableObject {
+export class ValidateAuthIdentitySignInResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AuthIdentityId)
   public authIdentityId: AuthIdentityId;
 

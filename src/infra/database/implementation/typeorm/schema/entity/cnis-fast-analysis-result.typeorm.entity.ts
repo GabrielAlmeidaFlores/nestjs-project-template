@@ -10,34 +10,39 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
     name: 'client_name',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public clientName: string;
+  public clientName: string | null;
 
   @Column({
     name: 'client_federal_document',
     type: 'varchar',
     length: 50,
     transformer: CryptographyTransformer,
+    nullable: true,
   })
-  public clientFederalDocument: string;
+  public clientFederalDocument: string | null;
 
   @Column({
     name: 'client_birth_date',
     type: 'date',
+    nullable: true,
   })
-  public clientBirthDate: Date;
+  public clientBirthDate: Date | null;
 
   @Column({
     name: 'client_last_affiliation_date',
     type: 'date',
+    nullable: true,
   })
-  public clientLastAffiliationDate: Date;
+  public clientLastAffiliationDate: Date | null;
 
   @Column({
     name: 'cnis_ai_analysis',
     type: 'text',
+    nullable: true,
   })
-  public cnisAiAnalysis: string;
+  public cnisAiAnalysis: string | null;
 
   @OneToOne(
     () => CnisFastAnalysisTypeormEntity,
