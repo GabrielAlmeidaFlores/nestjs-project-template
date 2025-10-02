@@ -4,6 +4,7 @@ export abstract class BucketGateway {
     fileBuffer: Buffer,
     fileLocation: string,
   ): Promise<string>;
-  public abstract get(fileName: string): Promise<URL>;
   public abstract delete(fileName: string): Promise<void>;
+  public abstract getSignedUrl(fileName: string): Promise<URL>;
+  public abstract getBuffer(fileName: string): Promise<Buffer>;
 }

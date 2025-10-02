@@ -81,7 +81,7 @@ export class S3Service implements BucketGateway {
     return fileName;
   }
 
-  public async get(fileName: string): Promise<URL> {
+  public async getSignedUrl(fileName: string): Promise<URL> {
     const command = new GetObjectCommand({
       Bucket: this.s3BucketName,
       Key: fileName,
@@ -92,6 +92,18 @@ export class S3Service implements BucketGateway {
     });
 
     return new URL(signedUrl);
+  }
+
+  public async getBuffer(fileName: string): Promise<Buffer> {
+    const command = new GetObjectCommand({
+      Bucket: this.s3BucketName,
+      Key: fileName,
+    });
+
+    const response = await this.s3Client.send(command);
+
+    const byteArray = await response.Body?.transformToByteArray();
+    return Buffer.from(byteArray as Uint8Array<ArrayBufferLike>);
   }
 
   public async delete(fileName: string): Promise<void> {
