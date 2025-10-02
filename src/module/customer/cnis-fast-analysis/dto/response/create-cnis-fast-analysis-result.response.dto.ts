@@ -3,10 +3,10 @@ import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class CreateCnisFastAnalysisResultResponseDto extends BaseBuildableObject {
+export class CreateCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public clientName?: string;
 
