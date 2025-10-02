@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 
-import { S3Module } from '@infra/bucket/implementation/s3/s3.module';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GeminiModule } from '@infra/generative-ia/implementation/geminini/gemini.module';
+import { GeminiService } from '@infra/generative-ia/implementation/geminini/gemini.service';
 
 @Module({
-  imports: [S3Module],
+  imports: [GeminiModule],
   providers: [
     {
       provide: GenerativeIaGateway,
-      useClass: GeminiModule,
+      useClass: GeminiService,
     },
-    GeminiModule,
+    GeminiService,
   ],
   exports: [GenerativeIaGateway],
 })

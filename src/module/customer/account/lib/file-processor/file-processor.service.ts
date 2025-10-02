@@ -19,13 +19,13 @@ export class FileProcessorService implements FileProcessorGateway {
   public async getCustomerProfilePicture(
     profilePictureLocation: string,
   ): Promise<URL> {
-    return await this.bucketGateway.get(profilePictureLocation);
+    return await this.bucketGateway.getSignedUrl(profilePictureLocation);
   }
 
   public async getOrganizationLogo(
     organizationLogoLocation: string,
   ): Promise<URL> {
-    return await this.bucketGateway.get(organizationLogoLocation);
+    return await this.bucketGateway.getSignedUrl(organizationLogoLocation);
   }
 
   public async processAndUploadProfilePicture(

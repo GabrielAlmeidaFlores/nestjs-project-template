@@ -3,8 +3,10 @@ import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 import { CnisFastAnalysisId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/cnis-fast-analysis/dto/request/create-cnis-fast-analysis.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/cnis-fast-analysis/dto/request/update-cnis-fast-analysis.request.dto';
+import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/create-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/update-cnis-fast-analysis.response.dto';
+import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -24,6 +26,7 @@ export class CnisFastAnalysisController {
   public constructor(
     private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
+    private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -81,6 +84,33 @@ export class CnisFastAnalysisController {
       organizationSessionData,
       cnisFastAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Create cnis fast analysis result',
+    http: {
+      path: ':cnisFastAnalysisId/result',
+      method: RequestMethod.POST,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Cnis fast analysis result created successfully',
+      type: CreateCnisFastAnalysisResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createCnisFastAnalysisResult(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+  ): Promise<CreateCnisFastAnalysisResultResponseDto> {
+    return await this.createCnisFastAnalysisResultUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
     );
   }
 }

@@ -42,14 +42,23 @@ export class GeminiService implements GenerativeIaGateway {
       });
     }
 
-    const result = await this.googleGenerativeAI.models.generateContent({
+    const result = await this.googleGenerativeAI.models.generateContentStream({
       model: 'gemini-2.5-pro',
       contents: {
         role: 'user',
         parts: promptPart,
       },
+      config: {
+        temperature: 0.3,
+      },
     });
 
-    return result.text ?? null;
+    let fullResponse = '';
+
+    for await (const chunk of result) {
+      fullResponse += chunk.text;
+    }
+
+    return fullResponse.length > 0 ? fullResponse : null;
   }
 }
