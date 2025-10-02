@@ -4,15 +4,11 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
-import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
-import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
@@ -23,31 +19,16 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-const makeCustomerAddressQuery = (): GetCustomerAddressQueryResult =>
-  GetCustomerAddressQueryResult.build({
-    id: new CustomerAddressId(),
-    postalCode: new PostalCode('01001000'),
-    stateCode: StateCodeEnum.SP,
-    city: 'São Paulo',
-    neighborhood: 'Centro',
-    addressNumber: 123,
+const makeCustomerQuery = (): GetCustomerQueryResult =>
+  GetCustomerQueryResult.build({
+    id: new CustomerId(),
+    name: 'Maria Silva',
+    phoneNumber: new PhoneNumber('5511999999999'),
+    profilePicture: null,
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
   });
-
-const makeCustomerQuery =
-  (): GetCustomerWithCustomerAddressRelationQueryResult =>
-    GetCustomerWithCustomerAddressRelationQueryResult.build({
-      id: new CustomerId(),
-      name: 'Maria Silva',
-      phoneNumber: new PhoneNumber('5511999999999'),
-      profilePicture: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      customerAddress: makeCustomerAddressQuery(),
-    });
 
 const makeOrgRow = (
   id: OrganizationId,
@@ -150,15 +131,11 @@ describe(ListCustomerOrganizationsUseCase.name, () => {
       organizationQueryRepo.listOrganizationsByCustomerId,
     ).toHaveBeenCalledTimes(1);
 
-    const calls =
-      organizationQueryRepo.listOrganizationsByCustomerId.mock.calls;
-    expect(calls.length).toBeGreaterThan(0);
-
-    const args0 = calls[0];
-    if (!args0) {
-      throw new Error('Expected at least one call');
-    }
-    const passedListData = args0[1];
+    const [[passedCustomerId, passedListData]] = organizationQueryRepo
+      .listOrganizationsByCustomerId.mock.calls as [
+      [CustomerId, ListDataInputModel],
+    ];
+    expect(passedCustomerId).toBe(customer.id);
     expect(passedListData).toBeInstanceOf(ListDataInputModel);
     expect(passedListData).toEqual(new ListDataInputModel(dto));
 
