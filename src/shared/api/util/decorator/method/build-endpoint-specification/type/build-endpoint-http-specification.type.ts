@@ -16,15 +16,15 @@ export type BuildEndpointHttpSpecificationType =
   | {
       method: RequestMethod.POST;
       path: string;
-      type: Type<unknown>;
+      type?: Type<unknown>;
     }
   | {
       method: RequestMethod.PATCH;
       path: string;
-      type: Type<unknown>;
+      type?: Type<unknown>;
     }
   | {
       method: RequestMethod.PUT;
       path: string;
-      type: Type<unknown>;
+      type?: Type<unknown>;
     };

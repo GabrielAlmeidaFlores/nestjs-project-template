@@ -6,8 +6,8 @@ import type { CustomerId } from '@module/customer/account/domain/schema/entity/c
 export class GetCustomerQueryResult extends BaseBuildableObject {
   public readonly id: CustomerId;
   public readonly name: string;
-  public readonly phoneNumber: PhoneNumber;
   public readonly profilePicture: string | null;
+  public readonly phoneNumber: PhoneNumber;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

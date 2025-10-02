@@ -9,10 +9,10 @@ import { RequestDtoNumberProperty } from '@shared/api/util/decorator/property/dt
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class CustomerAddressSignUpRequestDto extends BaseBuildableObject {
+export class CustomerAddressSignUpRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public city: string;
 
@@ -32,7 +32,7 @@ export class CustomerAddressSignUpRequestDto extends BaseBuildableObject {
 }
 
 @RequestDto()
-export class CustomerSignUpRequestDto extends BaseBuildableObject {
+export class CustomerSignUpRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public name: string;
 

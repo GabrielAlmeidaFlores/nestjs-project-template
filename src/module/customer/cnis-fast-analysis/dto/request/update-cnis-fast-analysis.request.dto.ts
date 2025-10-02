@@ -12,11 +12,11 @@ import { RequestDtoNumberProperty } from '@shared/api/util/decorator/property/dt
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 import { FileModel } from '@shared/system/model/generic/file.model';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @RequestDto()
-export class UpdateCnisFastAnalysisClientRequestDto extends BaseBuildableObject {
+export class UpdateCnisFastAnalysisClientRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public name?: string;
 
@@ -49,7 +49,7 @@ export class UpdateCnisFastAnalysisClientRequestDto extends BaseBuildableObject 
 }
 
 @RequestDto()
-export class UpdateCnisFastAnalysisJsonRequestDto extends BaseBuildableObject {
+export class UpdateCnisFastAnalysisJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(() => UpdateCnisFastAnalysisClientRequestDto, {
     required: false,
   })
@@ -59,7 +59,7 @@ export class UpdateCnisFastAnalysisJsonRequestDto extends BaseBuildableObject {
 }
 
 @RequestDto()
-export class UpdateCnisFastAnalysisRequestDto extends BaseBuildableObject {
+export class UpdateCnisFastAnalysisRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
     required: false,

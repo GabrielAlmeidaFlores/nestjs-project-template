@@ -8,10 +8,10 @@ import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetCustomerDataResponseDto extends BaseBuildableObject {
+export class GetCustomerDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(CustomerId)
   public customerId: CustomerId;
 
@@ -34,7 +34,7 @@ export class GetCustomerDataResponseDto extends BaseBuildableObject {
 }
 
 @ResponseDto()
-export class GetOrganizationDataResponseDto extends BaseBuildableObject {
+export class GetOrganizationDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(OrganizationId)
   public organizationId: OrganizationId;
 
@@ -51,7 +51,7 @@ export class GetOrganizationDataResponseDto extends BaseBuildableObject {
 }
 
 @ResponseDto()
-export class GetAuthenticatedCustomerDataResponseDto extends BaseBuildableObject {
+export class GetAuthenticatedCustomerDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(() => GetCustomerDataResponseDto)
   public customer: GetCustomerDataResponseDto;
 
