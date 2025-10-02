@@ -6,7 +6,7 @@ import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementat
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
+import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
 import { GetCnisFastAnalysisClientWithRelationsQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client/query/result/get-cnis-fast-analysis-client-with-relations.query.result';
 import { GetCnisFastAnalysisResultQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-result/query/result/get-cnis-fast-analysis-result.query.result';
@@ -45,13 +45,13 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
       const updatedBy = this.mapper.map(
         source.updatedBy,
         OrganizationMemberTypeormEntity,
-        GetOrganizationMemberQueryResult,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
       const createdBy = this.mapper.map(
         source.updatedBy,
         OrganizationMemberTypeormEntity,
-        GetOrganizationMemberQueryResult,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
       return GetCnisFastAnalysisWithRelationsQueryResult.build({
@@ -92,13 +92,13 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
 
       const updatedBy = this.mapper.map(
         source.updatedBy,
-        GetOrganizationMemberQueryResult,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
         OrganizationMemberTypeormEntity,
       );
 
       const createdBy = this.mapper.map(
         source.updatedBy,
-        GetOrganizationMemberQueryResult,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
         OrganizationMemberTypeormEntity,
       );
 

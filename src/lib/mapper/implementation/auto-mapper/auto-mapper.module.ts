@@ -24,7 +24,8 @@ import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/impl
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-query-result.auto-mapper.profile';
-import { GetOrganizationMemberWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-relations-query-result.auto-mapper.profile';
+import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-and-organization-relations-query-result.auto-mapper.profile';
+import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-relation-query-result.auto-mapper.profile';
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 
 @Module({
@@ -41,7 +42,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetOrganizationQueryResultAutoMapperProfile,
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
-    GetOrganizationMemberWithRelationsQueryResultAutoMapperProfile,
+    GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile,
     GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
     CustomerAddressEntityAutoMapperProfile,
@@ -58,6 +59,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetCnisFastAnalysisClientWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisClientInssBenefitQueryResultAutoMapperProfile,
     GetCnisFastAnalysisClientLegalProceedingQueryResultAutoMapperProfile,
+    GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

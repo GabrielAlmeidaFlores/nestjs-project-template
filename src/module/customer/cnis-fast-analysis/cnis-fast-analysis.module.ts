@@ -6,6 +6,7 @@ import { CnisFastAnalysisController } from '@module/customer/cnis-fast-analysis/
 import { FileProcessorModule } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.module';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
+import { GetCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/get-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -23,6 +24,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateCnisFastAnalysisUseCase,
     UpdateCnisFastAnalysisUseCase,
     CreateCnisFastAnalysisResultUseCase,
+    GetCnisFastAnalysisUseCase,
   ],
 })
 export class CnisFastAnalysisModule {
