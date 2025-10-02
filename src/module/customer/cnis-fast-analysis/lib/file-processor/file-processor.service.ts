@@ -27,6 +27,10 @@ export class FileProcessorService implements FileProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
+  public async getFileSignedUrl(fileName: string): Promise<URL> {
+    return await this.bucketGateway.getSignedUrl(fileName);
+  }
+
   public async getCnisDocumentBuffer(fileName: string): Promise<Buffer> {
     return await this.bucketGateway.getBuffer(fileName);
   }

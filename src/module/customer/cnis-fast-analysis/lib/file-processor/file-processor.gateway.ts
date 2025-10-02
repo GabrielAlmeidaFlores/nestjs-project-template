@@ -13,4 +13,6 @@ export abstract class FileProcessorGateway {
   ): Promise<CnisOutputModel>;
 
   public abstract getCnisDocumentBuffer(fileName: string): Promise<Buffer>;
+
+  public abstract getFileSignedUrl(fileName: string): Promise<URL>;
 }

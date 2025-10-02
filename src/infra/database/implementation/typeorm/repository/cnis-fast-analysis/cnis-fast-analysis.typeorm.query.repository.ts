@@ -3,10 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
 import { Repository } from 'typeorm';
 
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
 import { CnisFastAnalysisId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -26,6 +29,52 @@ export class CnisFastAnalysisTypeormQueryRepository
     super(repository);
   }
 
+  public async listByOrganizationId(
+    organizationId: OrganizationId,
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetCnisFastAnalysisWithRelationsQueryResult>> {
+    const data = await this.list(listData, {
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: {
+        cnisFastAnalysisClient: {
+          cnisFastAnalysisClientInssBenefit: true,
+          cnisFastAnalysisClientLegalProceeding: true,
+        },
+        cnisFastAnalysisResult: true,
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      CnisFastAnalysisTypeormEntity,
+      GetCnisFastAnalysisWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetCnisFastAnalysisWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
+  }
+
   public async findOneByIdWithRelationsOrFail(
     id: CnisFastAnalysisId,
     err: Constructor<NotFoundError>,
@@ -41,8 +90,12 @@ export class CnisFastAnalysisTypeormQueryRepository
             cnisFastAnalysisClientLegalProceeding: true,
           },
           cnisFastAnalysisResult: true,
-          createdBy: true,
-          updatedBy: true,
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
         },
       },
       err,

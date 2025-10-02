@@ -11,9 +11,9 @@ import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult } 
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 
 @Injectable()
-export class GetOrganizationMemberWithRelationsQueryResultAutoMapperProfile {
+export class GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetOrganizationMemberWithRelationsQueryResultAutoMapperProfile.name;
+    GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

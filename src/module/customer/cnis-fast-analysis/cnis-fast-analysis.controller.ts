@@ -5,9 +5,11 @@ import { CreateCnisFastAnalysisRequestDto } from '@module/customer/cnis-fast-ana
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/cnis-fast-analysis/dto/request/update-cnis-fast-analysis.request.dto';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/create-cnis-fast-analysis.response.dto';
+import { GetCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/get-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/cnis-fast-analysis/dto/response/update-cnis-fast-analysis.response.dto';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
+import { GetCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/get-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -27,6 +29,7 @@ export class CnisFastAnalysisController {
     private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
+    private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -57,7 +60,7 @@ export class CnisFastAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Update a cnis fast analysis',
+    summary: 'Update cnis fast analysis',
     http: {
       path: ':cnisFastAnalysisId',
       method: RequestMethod.PATCH,
@@ -84,6 +87,33 @@ export class CnisFastAnalysisController {
       organizationSessionData,
       cnisFastAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Get cnis fast analysis',
+    http: {
+      path: ':cnisFastAnalysisId',
+      method: RequestMethod.GET,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Cnis fast analysis data',
+      type: GetCnisFastAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getCnisFastAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+  ): Promise<GetCnisFastAnalysisResponseDto> {
+    return await this.getCnisFastAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
     );
   }
 
