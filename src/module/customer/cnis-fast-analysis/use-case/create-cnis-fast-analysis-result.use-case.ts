@@ -226,30 +226,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     ]);
     await transaction.commit();
 
-    const response = CreateCnisFastAnalysisResultResponseDto.build({});
-
-    if (cnisFastAnalysisResult.clientName !== null) {
-      response.clientName = cnisFastAnalysisResult.clientName;
-    }
-
-    if (cnisFastAnalysisResult.clientFederalDocument !== null) {
-      response.clientFederalDocument =
-        cnisFastAnalysisResult.clientFederalDocument;
-    }
-
-    if (cnisFastAnalysisResult.clientBirthDate !== null) {
-      response.clientBirthDate = cnisFastAnalysisResult.clientBirthDate;
-    }
-
-    if (cnisFastAnalysisResult.clientLastAffiliationDate !== null) {
-      response.clientLastAffiliationDate =
-        cnisFastAnalysisResult.clientLastAffiliationDate;
-    }
-
-    if (cnisFastAnalysisResult.cnisAiAnalysis !== null) {
-      response.cnisAiAnalysis = cnisFastAnalysisResult.cnisAiAnalysis;
-    }
-
-    return response;
+    return CreateCnisFastAnalysisResultResponseDto.build({
+      ...cnisFastAnalysisResult,
+    });
   }
 }

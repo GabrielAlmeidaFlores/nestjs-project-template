@@ -2,11 +2,11 @@ import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 @ResponseDto()
-export class PreAuthIdentityAuthenticatorDataSignInResponseDto extends BaseBuildableObject {
+export class PreAuthIdentityAuthenticatorDataSignInResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public base32: string;
 
@@ -21,7 +21,7 @@ export class PreAuthIdentityAuthenticatorDataSignInResponseDto extends BaseBuild
 }
 
 @ResponseDto()
-export class PreAuthIdentitySignInResponseDto extends BaseBuildableObject {
+export class PreAuthIdentitySignInResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(UserLevelEnum, { required: false })
   public userLevel?: UserLevelEnum;
 
