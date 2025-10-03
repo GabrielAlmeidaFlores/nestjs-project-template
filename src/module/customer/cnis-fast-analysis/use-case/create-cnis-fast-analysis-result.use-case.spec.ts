@@ -31,7 +31,7 @@ import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/cnis-f
 import { CnisDocumentRequiredError } from '@module/customer/cnis-fast-analysis/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/cnis-fast-analysis/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/cnis-fast-analysis/error/organization-member-not-found-error.error';
-import { CnisIaAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-ia-analysis/cnis-ia-analysis.gateway';
+import { CnisAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-analysis/cnis-analysis.gateway';
 import { FileProcessorGateway } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.gateway';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -69,9 +69,9 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       findOneByIdWithRelationsOrFail: jest.fn(),
     } as unknown as jest.Mocked<CnisFastAnalysisQueryRepositoryGateway>;
 
-  const cnisIaAnalysisGateway: jest.Mocked<CnisIaAnalysisGateway> = {
+  const cnisIaAnalysisGateway: jest.Mocked<CnisAnalysisGateway> = {
     analyzeCnis: jest.fn(),
-  } as unknown as jest.Mocked<CnisIaAnalysisGateway>;
+  } as unknown as jest.Mocked<CnisAnalysisGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
@@ -199,7 +199,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
           provide: CnisFastAnalysisQueryRepositoryGateway,
           useValue: cnisFastAnalysisQueryRepositoryGateway,
         },
-        { provide: CnisIaAnalysisGateway, useValue: cnisIaAnalysisGateway },
+        { provide: CnisAnalysisGateway, useValue: cnisIaAnalysisGateway },
         {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,

@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { CnisIaAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-ia-analysis/cnis-ia-analysis.gateway';
+import { CnisAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-analysis/cnis-analysis.gateway';
 
 @Injectable()
-export class CnisIaAnalysisService implements CnisIaAnalysisGateway {
-  protected readonly _type = CnisIaAnalysisService.name;
+export class CnisAnalysisService implements CnisAnalysisGateway {
+  protected readonly _type = CnisAnalysisService.name;
 
   public constructor(
     @Inject(GenerativeIaGateway)

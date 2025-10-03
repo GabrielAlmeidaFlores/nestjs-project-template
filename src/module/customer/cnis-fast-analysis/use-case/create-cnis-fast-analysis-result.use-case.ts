@@ -14,7 +14,7 @@ import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/cnis-f
 import { CnisDocumentRequiredError } from '@module/customer/cnis-fast-analysis/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/cnis-fast-analysis/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/cnis-fast-analysis/error/organization-member-not-found-error.error';
-import { CnisIaAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-ia-analysis/cnis-ia-analysis.gateway';
+import { CnisAnalysisGateway } from '@module/customer/cnis-fast-analysis/lib/cnis-analysis/cnis-analysis.gateway';
 import { FileProcessorGateway } from '@module/customer/cnis-fast-analysis/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -34,8 +34,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly cnisFastAnalysisResultCommandRepositoryGateway: CnisFastAnalysisResultCommandRepositoryGateway,
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
-    @Inject(CnisIaAnalysisGateway)
-    private readonly cnisIaAnalysisGateway: CnisIaAnalysisGateway,
+    @Inject(CnisAnalysisGateway)
+    private readonly cnisIaAnalysisGateway: CnisAnalysisGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
