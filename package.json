@@ -33,6 +33,7 @@
     "@fastify/multipart": "7",
     "@fastify/static": "7.0.0",
     "@google/genai": "^1.21.0",
+    "@huggingface/transformers": "^3.7.5",
     "@nest-lab/throttler-storage-redis": "^1.1.0",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^10.0.0",
@@ -53,6 +54,7 @@
     "dotenv": "^16.5.0",
     "fastify": "4.28.1",
     "fastify-secure-session": "^3.2.0",
+    "ffmpeg-static": "^5.2.0",
     "file-type": "^21.0.0",
     "http-status-codes": "^2.3.0",
     "ioredis": "^5.6.1",
@@ -69,6 +71,7 @@
     "ts-mixer": "^6.0.4",
     "type-fest": "^4.41.0",
     "typeorm": "^0.3.24",
+    "wav": "^1.0.2",
     "yarn": "^1.22.22"
   },
   "devDependencies": {
@@ -80,6 +83,7 @@
     "@types/node": "^20.3.1",
     "@types/speakeasy": "^2.0.10",
     "@types/supertest": "^6.0.0",
+    "@types/wav": "^1.0.4",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "eslint": "^9.26.0",
