@@ -19,7 +19,7 @@ export class TranscribeAudioUseCase {
   ): Promise<TranscribeAudioResponseDto> {
     const transcribeAudio = await this.transcriberGateway.transcribe(
       dto.audio.buffer,
-      dto.language as unknown as TranscribeFromLanguageEnum,
+      dto.json.language as unknown as TranscribeFromLanguageEnum,
     );
 
     return TranscribeAudioResponseDto.build({
