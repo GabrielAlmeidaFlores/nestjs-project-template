@@ -6,7 +6,7 @@ import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
-import { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
+import { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
 
 @Entity({ name: 'cnis_fast_analysis_client' })
 export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {

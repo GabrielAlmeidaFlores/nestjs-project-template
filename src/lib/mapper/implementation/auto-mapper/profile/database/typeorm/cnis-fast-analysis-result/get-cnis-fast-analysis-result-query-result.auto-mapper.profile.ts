@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
-import { GetCnisFastAnalysisResultQueryResult } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-result/query/result/get-cnis-fast-analysis-result.query.result';
-import { CnisFastAnalysisResultId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-result/value-object/cnis-fast-analysis-result-id/cnis-fast-analysis-result-id.value-object';
+import { GetCnisFastAnalysisResultQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/query/result/get-cnis-fast-analysis-result.query.result';
+import { CnisFastAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/value-object/cnis-fast-analysis-result-id/cnis-fast-analysis-result-id.value-object';
 
 @Injectable()
 export class GetCnisFastAnalysisResultQueryResultAutoMapperProfile {
