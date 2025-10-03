@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';

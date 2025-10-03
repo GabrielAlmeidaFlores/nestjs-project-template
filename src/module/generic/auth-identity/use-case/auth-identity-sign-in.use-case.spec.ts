@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
