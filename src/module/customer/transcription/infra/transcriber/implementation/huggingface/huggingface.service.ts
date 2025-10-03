@@ -1,4 +1,8 @@
+import { Readable, PassThrough } from 'stream';
+
+import ffmpegPath from '@ffmpeg-installer/ffmpeg';
 import { pipeline } from '@huggingface/transformers';
+import ffmpeg from 'fluent-ffmpeg';
 import { Reader } from 'wav';
 
 import { UnsupportedBitDepthError } from '@module/customer/transcription/infra/transcriber/implementation/huggingface/error/unsupported-bit-depth.error';
@@ -7,11 +11,14 @@ import type { TranscribeFromLanguageEnum } from '@module/customer/transcription/
 import type { TranscriberGateway } from '@module/customer/transcription/infra/transcriber/transcriber.gateway';
 import type { Format } from 'wav';
 
+ffmpeg.setFfmpegPath(ffmpegPath.path);
+
 export class HuggingFaceService implements TranscriberGateway {
   protected readonly _type = HuggingFaceService.name;
 
   private readonly bitsInByte = 8;
   private readonly wavAudioFormatFloat = 3;
+  private readonly whisperSampleRate = 16000;
 
   private readonly bitDepth = {
     eight: 8,
@@ -27,7 +34,9 @@ export class HuggingFaceService implements TranscriberGateway {
     audioBuffer: Buffer,
     language: TranscribeFromLanguageEnum,
   ): Promise<string> {
-    const audio = await this.decodeAudioBufferToFloat32(audioBuffer);
+    const wavBuffer = await this.decodeMp3ToWavBuffer(audioBuffer);
+
+    const audio = await this.decodeAudioBufferToFloat32(wavBuffer);
 
     const asr = await pipeline(
       'automatic-speech-recognition',
@@ -52,6 +61,28 @@ export class HuggingFaceService implements TranscriberGateway {
         return resultPart.text;
       })
       .join(' ');
+  }
+
+  private async decodeMp3ToWavBuffer(mp3Buffer: Buffer): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      const readableStream = Readable.from(mp3Buffer);
+      const passThrough = new PassThrough();
+
+      const command = ffmpeg(readableStream)
+        .format('wav')
+        .audioCodec('pcm_s16le')
+        .audioFrequency(this.whisperSampleRate)
+        .audioChannels(1)
+        .on('error', (err) =>
+          reject(new Error(`FFmpeg error: ${err.message}`)),
+        );
+
+      command.pipe(passThrough, { end: true });
+
+      passThrough.on('data', (chunk: Buffer) => chunks.push(chunk));
+      passThrough.on('end', () => resolve(Buffer.concat(chunks)));
+    });
   }
 
   private async decodeAudioBufferToFloat32(
