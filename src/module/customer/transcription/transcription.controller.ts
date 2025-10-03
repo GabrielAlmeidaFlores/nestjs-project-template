@@ -8,7 +8,7 @@ import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
-@CustomerControllerRoute('transcription')
+@CustomerControllerRoute('audio')
 export class TranscriptionController {
   protected readonly _type = TranscriptionController.name;
 
@@ -19,7 +19,7 @@ export class TranscriptionController {
   @BuildEndpointSpecification({
     summary: 'Transcribe audio',
     http: {
-      path: '',
+      path: 'transcription',
       method: RequestMethod.POST,
       type: TranscribeAudioRequestDto,
     },
