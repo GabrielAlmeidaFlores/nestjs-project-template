@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
