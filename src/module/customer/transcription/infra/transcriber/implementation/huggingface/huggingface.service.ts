@@ -5,6 +5,7 @@ import { pipeline } from '@huggingface/transformers';
 import ffmpeg from 'fluent-ffmpeg';
 import { Reader } from 'wav';
 
+import { InvalidWavFormatError } from '@module/customer/transcription/infra/transcriber/implementation/huggingface/error/invalid-wav-format.error';
 import { UnsupportedBitDepthError } from '@module/customer/transcription/infra/transcriber/implementation/huggingface/error/unsupported-bit-depth.error';
 
 import type { TranscribeFromLanguageEnum } from '@module/customer/transcription/infra/transcriber/enum/transcribe-from-language.enum';
@@ -74,9 +75,7 @@ export class HuggingFaceService implements TranscriberGateway {
         .audioCodec('pcm_s16le')
         .audioFrequency(this.whisperSampleRate)
         .audioChannels(1)
-        .on('error', (err) =>
-          reject(new Error(`FFmpeg error: ${err.message}`)),
-        );
+        .on('error', (err) => reject(err));
 
       command.pipe(passThrough, { end: true });
 
@@ -108,9 +107,7 @@ export class HuggingFaceService implements TranscriberGateway {
 
       reader.on('end', () => {
         if (!format) {
-          return reject(
-            new Error('Não foi possível ler o formato do arquivo WAV.'),
-          );
+          return reject(new InvalidWavFormatError());
         }
 
         const data = Buffer.concat(chunks);
