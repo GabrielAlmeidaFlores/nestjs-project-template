@@ -28,12 +28,12 @@ import { OrganizationCommandRepositoryGateway } from '@module/customer/account/d
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
-import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
-import { CnisFastAnalysisClientCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client/command/cnis-fast-analysis-client.command.repository.gateway';
-import { CnisFastAnalysisClientInssBenefitCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-inss-benefit/command/cnis-fast-analysis-client-inss-benefit.command.repository.gateway';
-import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
-import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
+import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
+import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
+import { CnisFastAnalysisClientCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client/command/cnis-fast-analysis-client.command.repository.gateway';
+import { CnisFastAnalysisClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-inss-benefit/command/cnis-fast-analysis-client-inss-benefit.command.repository.gateway';
+import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
+import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 

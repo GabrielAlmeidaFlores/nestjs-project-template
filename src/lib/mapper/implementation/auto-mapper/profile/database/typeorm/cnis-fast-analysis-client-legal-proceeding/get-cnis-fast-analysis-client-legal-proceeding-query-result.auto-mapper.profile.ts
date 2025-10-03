@@ -2,8 +2,8 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
-import { GetCnisFastAnalysisClientLegalProceedingQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-legal-proceeding/query/result/get-cnis-fast-analysis-client-legal-proceeding.query.result';
-import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
+import { GetCnisFastAnalysisClientLegalProceedingQueryResult } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-legal-proceeding/query/result/get-cnis-fast-analysis-client-legal-proceeding.query.result';
+import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
 
 export class GetCnisFastAnalysisClientLegalProceedingQueryResultAutoMapperProfile {
   protected readonly _type =

@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
-import { CnisFastAnalysisClientEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
-import { CnisFastAnalysisClientInssBenefitEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.entity';
-import { CnisFastAnalysisClientInssBenefitId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/value-object/cnis-fast-analysis-client-inss-benefit-id/cnis-fast-analysis-client-inss-benefit-id.value-object';
+import { CnisFastAnalysisClientEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
+import { CnisFastAnalysisClientInssBenefitEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.entity';
+import { CnisFastAnalysisClientInssBenefitId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/value-object/cnis-fast-analysis-client-inss-benefit-id/cnis-fast-analysis-client-inss-benefit-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisClientInssBenefitEntityAutoMapperProfile {

@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
-import { CnisFastAnalysisClientLegalProceedingEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.entity';
-import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
+import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
+import { CnisFastAnalysisClientLegalProceedingEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.entity';
+import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisClientLegalProceedingTypeormCommandRepository

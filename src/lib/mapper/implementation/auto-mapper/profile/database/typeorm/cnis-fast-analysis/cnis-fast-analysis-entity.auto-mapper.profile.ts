@@ -7,10 +7,10 @@ import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementat
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { CnisFastAnalysisEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
-import { CnisFastAnalysisId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { CnisFastAnalysisClientEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
-import { CnisFastAnalysisResultEntity } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
+import { CnisFastAnalysisEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { CnisFastAnalysisClientEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
+import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 
 @Injectable()
 export class CnisFastAnalysisEntityAutoMapperProfile {

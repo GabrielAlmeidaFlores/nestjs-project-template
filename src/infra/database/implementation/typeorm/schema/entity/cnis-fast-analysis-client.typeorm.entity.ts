@@ -6,7 +6,7 @@ import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
-import { QuickCnisAnalysisClientTypeEnum } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/enum/quick-cnis-analysis-client-type.enum';
+import { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
 
 @Entity({ name: 'cnis_fast_analysis_client' })
 export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {
@@ -63,10 +63,10 @@ export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'client_type',
     type: 'simple-enum',
-    enum: QuickCnisAnalysisClientTypeEnum,
+    enum: CnisFastAnalysisClientTypeEnum,
     nullable: true,
   })
-  public clientType: QuickCnisAnalysisClientTypeEnum | null;
+  public clientType: CnisFastAnalysisClientTypeEnum | null;
 
   @OneToOne(
     () => CnisFastAnalysisTypeormEntity,
