@@ -9,10 +9,10 @@ import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetCnisFastAnalysisClientWithRelationsQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client/query/result/get-cnis-fast-analysis-client-with-relations.query.result';
-import { GetCnisFastAnalysisClientInssBenefitQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-inss-benefit/query/result/get-cnis-fast-analysis-client-inss-benefit.query.result';
-import { GetCnisFastAnalysisClientLegalProceedingQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis-client-legal-proceeding/query/result/get-cnis-fast-analysis-client-legal-proceeding.query.result';
-import { CnisFastAnalysisClientId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis-client/value-object/cnis-fast-analysis-client-id/cnis-fast-analysis-client-id.value-object';
+import { GetCnisFastAnalysisClientWithRelationsQueryResult } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client/query/result/get-cnis-fast-analysis-client-with-relations.query.result';
+import { GetCnisFastAnalysisClientInssBenefitQueryResult } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-inss-benefit/query/result/get-cnis-fast-analysis-client-inss-benefit.query.result';
+import { GetCnisFastAnalysisClientLegalProceedingQueryResult } from '@module/customer/analysis-tools/domain/repository/cnis-fast-analysis-client-legal-proceeding/query/result/get-cnis-fast-analysis-client-legal-proceeding.query.result';
+import { CnisFastAnalysisClientId } from '@module/customer/analysis-tools/domain/schema/entity/cnis-fast-analysis-client/value-object/cnis-fast-analysis-client-id/cnis-fast-analysis-client-id.value-object';
 
 @Injectable()
 export class GetCnisFastAnalysisClientWithRelationsQueryResultAutoMapperProfile {
