@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { Injectable } from '@nestjs/common';
-import * as sgMail from '@sendgrid/mail';
+import sgMail from '@sendgrid/mail';
 
 import { EmailGateway } from '@infra/email/email.gateway';
 import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
