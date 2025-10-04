@@ -15,6 +15,7 @@ import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -38,6 +39,8 @@ export class CreateCnisFastAnalysisUseCase {
     private readonly cnisFastAnalysisLegalProceedingCommandRepositoryGateway: CnisFastAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(DocumentAnalysisGateway)
+    private readonly documentAnalysisGateway: DocumentAnalysisGateway,
   ) {}
 
   public async execute(
@@ -57,7 +60,7 @@ export class CreateCnisFastAnalysisUseCase {
 
     if (dto.cnisDocument) {
       const validateCnisDocument =
-        await this.fileProcessorGateway.validateCnisDocument(
+        await this.documentAnalysisGateway.validateCnisDocument(
           dto.cnisDocument.buffer,
         );
 
