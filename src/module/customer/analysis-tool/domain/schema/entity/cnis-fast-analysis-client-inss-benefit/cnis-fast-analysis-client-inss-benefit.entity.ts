@@ -1,12 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { CnisFastAnalysisClientInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/value-object/cnis-fast-analysis-client-inss-benefit-id/cnis-fast-analysis-client-inss-benefit-id.value-object';
 
-import type { CnisFastAnalysisClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
+import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { CnisFastAnalysisClientInssBenefitEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.entity.props.interface';
 
 export class CnisFastAnalysisClientInssBenefitEntity extends BaseEntity<CnisFastAnalysisClientInssBenefitId> {
   public readonly inssBenefitNumber: number;
-  public readonly cnisFastAnalysisClient: CnisFastAnalysisClientEntity;
+  public readonly cnisFastAnalysis: CnisFastAnalysisEntity;
 
   protected readonly _type = CnisFastAnalysisClientInssBenefitEntity.name;
 
@@ -16,6 +16,6 @@ export class CnisFastAnalysisClientInssBenefitEntity extends BaseEntity<CnisFast
     super(CnisFastAnalysisClientInssBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
-    this.cnisFastAnalysisClient = props.cnisFastAnalysisClient;
+    this.cnisFastAnalysis = props.cnisFastAnalysis;
   }
 }

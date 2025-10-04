@@ -1,9 +1,7 @@
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-inss-benefit.typeorm.entity';
-import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
@@ -73,22 +71,6 @@ export class CnisFastAnalysisClientTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.cnisFastAnalysisClient,
   )
   public cnisFastAnalysis?: CnisFastAnalysisTypeormEntity | undefined;
-
-  @OneToMany(
-    () => CnisFastAnalysisClientInssBenefitTypeormEntity,
-    (entity) => entity.cnisFastAnalysisClient,
-  )
-  public cnisFastAnalysisClientInssBenefit?:
-    | CnisFastAnalysisClientInssBenefitTypeormEntity[]
-    | undefined;
-
-  @OneToMany(
-    () => CnisFastAnalysisClientLegalProceedingTypeormEntity,
-    (entity) => entity.cnisFastAnalysisClient,
-  )
-  public cnisFastAnalysisClientLegalProceeding?:
-    | CnisFastAnalysisClientLegalProceedingTypeormEntity[]
-    | undefined;
 
   protected override readonly _type = CnisFastAnalysisClientTypeormEntity.name;
 }

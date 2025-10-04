@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
+import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 
 @Entity({ name: 'cnis_fast_analysis_client_legal_proceeding' })
 export class CnisFastAnalysisClientLegalProceedingTypeormEntity extends BaseTypeormEntity {
@@ -12,13 +12,11 @@ export class CnisFastAnalysisClientLegalProceedingTypeormEntity extends BaseType
   public legalProceedingNumber: number;
 
   @ManyToOne(
-    () => CnisFastAnalysisClientTypeormEntity,
-    (entity) => entity.cnisFastAnalysisClientLegalProceeding,
+    () => CnisFastAnalysisTypeormEntity,
+    (entity) => entity.cnisFastAnalysisClientInssBenefit,
   )
-  @JoinColumn({ name: 'cnis_fast_analysis_client_id' })
-  public cnisFastAnalysisClient?:
-    | CnisFastAnalysisClientTypeormEntity
-    | undefined;
+  @JoinColumn({ name: 'cnis_fast_analysis_id' })
+  public cnisFastAnalysis: CnisFastAnalysisTypeormEntity | undefined;
 
   protected override readonly _type =
     CnisFastAnalysisClientLegalProceedingTypeormEntity.name;

@@ -35,12 +35,6 @@ export class CreateCnisFastAnalysisClientRequestDto extends BaseBuildableDtoObje
   @RequestDtoEnumProperty(GenderEnum, { required: false })
   public gender?: GenderEnum;
 
-  @RequestDtoNumberProperty({ required: false, isArray: true })
-  public legalProceedingNumber?: number[];
-
-  @RequestDtoNumberProperty({ required: false, isArray: true })
-  public inssBenefitNumber?: number[];
-
   @RequestDtoEnumProperty(CnisFastAnalysisClientTypeEnum, { required: false })
   public clientType?: CnisFastAnalysisClientTypeEnum;
 
@@ -52,6 +46,12 @@ export class CreateCnisFastAnalysisClientRequestDto extends BaseBuildableDtoObje
 export class CreateCnisFastAnalysisJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(() => CreateCnisFastAnalysisClientRequestDto)
   public cnisFastAnalysisClient: CreateCnisFastAnalysisClientRequestDto;
+
+  @RequestDtoNumberProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: number[];
+
+  @RequestDtoNumberProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: number[];
 
   protected override readonly _type = CreateCnisFastAnalysisJsonRequestDto.name;
 }

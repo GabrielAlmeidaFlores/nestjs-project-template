@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
+import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 
 @Entity({ name: 'cnis_fast_analysis_client_inss_benefit' })
 export class CnisFastAnalysisClientInssBenefitTypeormEntity extends BaseTypeormEntity {
@@ -12,13 +12,11 @@ export class CnisFastAnalysisClientInssBenefitTypeormEntity extends BaseTypeormE
   public inssBenefitNumber: number;
 
   @ManyToOne(
-    () => CnisFastAnalysisClientTypeormEntity,
+    () => CnisFastAnalysisTypeormEntity,
     (entity) => entity.cnisFastAnalysisClientInssBenefit,
   )
-  @JoinColumn({ name: 'cnis_fast_analysis_client_id' })
-  public cnisFastAnalysisClient?:
-    | CnisFastAnalysisClientTypeormEntity
-    | undefined;
+  @JoinColumn({ name: 'cnis_fast_analysis_id' })
+  public cnisFastAnalysis: CnisFastAnalysisTypeormEntity | undefined;
 
   protected override readonly _type =
     CnisFastAnalysisClientInssBenefitTypeormEntity.name;

@@ -47,6 +47,7 @@ export class GetCnisFastAnalysisClientInssBenefitQueryResultAutoMapperProfile {
       return CnisFastAnalysisClientInssBenefitTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        cnisFastAnalysis: undefined,
       });
     };
 

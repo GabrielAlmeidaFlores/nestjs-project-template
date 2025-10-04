@@ -104,25 +104,23 @@ export class UpdateCnisFastAnalysisUseCase {
 
     const transactions: TransactionType[] = [];
 
-    if (dto.json?.cnisFastAnalysisClient?.inssBenefitNumber !== undefined) {
+    if (dto.json?.inssBenefitNumber !== undefined) {
       const inssBenefitNumberTransactions =
         this.updateInssBenefitNumberOnDatabase(
-          cnisFastAnalysisClient,
-          cnisFastAnalysisQueryResult.cnisFastAnalysisClient
-            .cnisFastAnalysisClientInssBenefit,
-          dto.json.cnisFastAnalysisClient.inssBenefitNumber,
+          cnisFastAnalysis,
+          cnisFastAnalysisQueryResult.cnisFastAnalysisClientInssBenefit,
+          dto.json.inssBenefitNumber,
         );
 
       transactions.push(...inssBenefitNumberTransactions);
     }
 
-    if (dto.json?.cnisFastAnalysisClient?.legalProceedingNumber !== undefined) {
+    if (dto.json?.legalProceedingNumber !== undefined) {
       const legalProceedingNumberTransactions =
         this.updateLegalProceedingNumberOnDatabase(
-          cnisFastAnalysisClient,
-          cnisFastAnalysisQueryResult.cnisFastAnalysisClient
-            .cnisFastAnalysisClientLegalProceeding,
-          dto.json.cnisFastAnalysisClient.legalProceedingNumber,
+          cnisFastAnalysis,
+          cnisFastAnalysisQueryResult.cnisFastAnalysisClientLegalProceeding,
+          dto.json.legalProceedingNumber,
         );
 
       transactions.push(...legalProceedingNumberTransactions);
@@ -152,7 +150,7 @@ export class UpdateCnisFastAnalysisUseCase {
   }
 
   private updateInssBenefitNumberOnDatabase(
-    cnisFastAnalysisClient: CnisFastAnalysisClientEntity,
+    cnisFastAnalysis: CnisFastAnalysisEntity,
     currentInssBenefitNumber: GetCnisFastAnalysisClientInssBenefitQueryResult[],
     newInssBenefitNumber: number[],
   ): TransactionType[] {
@@ -165,7 +163,7 @@ export class UpdateCnisFastAnalysisUseCase {
     const createNew = newInssBenefitNumber.map((value) => {
       const entity = new CnisFastAnalysisClientInssBenefitEntity({
         inssBenefitNumber: value,
-        cnisFastAnalysisClient,
+        cnisFastAnalysis,
       });
 
       return this.cnisFastAnalysisClientInssBenefitCommandRepositoryGateway.createCnisFastAnalysisClientInssBenefit(
@@ -177,7 +175,7 @@ export class UpdateCnisFastAnalysisUseCase {
   }
 
   private updateLegalProceedingNumberOnDatabase(
-    cnisFastAnalysisClient: CnisFastAnalysisClientEntity,
+    cnisFastAnalysis: CnisFastAnalysisEntity,
     currentLegalProceedingNumber: GetCnisFastAnalysisClientLegalProceedingQueryResult[],
     newLegalProceeding: number[],
   ): TransactionType[] {
@@ -190,7 +188,7 @@ export class UpdateCnisFastAnalysisUseCase {
     const createNew = newLegalProceeding.map((value) => {
       const entity = new CnisFastAnalysisClientLegalProceedingEntity({
         legalProceedingNumber: value,
-        cnisFastAnalysisClient,
+        cnisFastAnalysis,
       });
 
       return this.cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway.createCnisFastAnalysisClientLegalProceeding(

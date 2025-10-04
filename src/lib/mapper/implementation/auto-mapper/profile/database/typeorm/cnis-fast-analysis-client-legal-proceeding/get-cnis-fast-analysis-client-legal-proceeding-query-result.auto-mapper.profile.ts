@@ -45,6 +45,7 @@ export class GetCnisFastAnalysisClientLegalProceedingQueryResultAutoMapperProfil
       return CnisFastAnalysisClientLegalProceedingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        cnisFastAnalysis: undefined,
       });
     };
 

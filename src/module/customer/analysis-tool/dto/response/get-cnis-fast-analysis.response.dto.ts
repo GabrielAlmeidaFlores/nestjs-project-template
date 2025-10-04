@@ -33,12 +33,6 @@ export class GetCnisFastAnalysisClientResponseDto extends BaseBuildableDtoObject
   @ResponseDtoEnumProperty(GenderEnum, { required: false })
   public gender?: GenderEnum;
 
-  @ResponseDtoNumberProperty({ required: false, isArray: true })
-  public legalProceedingNumber?: number[];
-
-  @ResponseDtoNumberProperty({ required: false, isArray: true })
-  public inssBenefitNumber?: number[];
-
   @ResponseDtoEnumProperty(CnisFastAnalysisClientTypeEnum, { required: false })
   public clientType?: CnisFastAnalysisClientTypeEnum;
 
@@ -90,6 +84,12 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
   public cnisFastAnalysisClient: GetCnisFastAnalysisClientResponseDto;
+
+  @ResponseDtoNumberProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: number[];
+
+  @ResponseDtoNumberProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: number[];
 
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisResultResponseDto, {
     required: false,
