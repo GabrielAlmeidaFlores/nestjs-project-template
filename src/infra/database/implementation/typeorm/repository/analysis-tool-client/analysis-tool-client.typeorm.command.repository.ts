@@ -15,8 +15,7 @@ export class AnalysisToolClientTypeormCommandRepository
   extends BaseTypeormCommandRepository<AnalysisToolClientTypeormEntity>
   implements AnalysisToolClientCommandRepositoryGateway
 {
-  protected readonly _type =
-    AnalysisToolClientTypeormCommandRepository.name;
+  protected readonly _type = AnalysisToolClientTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(AnalysisToolClientTypeormEntity)
