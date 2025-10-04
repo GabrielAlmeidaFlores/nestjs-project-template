@@ -12,7 +12,7 @@ import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplet
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
-import { GetAnalysisToolClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/query/result/get-cnis-fast-analysis-inss-benefit.query.result';
+import { GetCnisFastAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/query/result/get-cnis-fast-analysis-inss-benefit.query.result';
 import { GetCnisFastAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/query/result/get-cnis-fast-analysis-legal-proceeding.query.result';
 import { GetCnisFastAnalysisResultQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/query/result/get-cnis-fast-analysis-result.query.result';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -60,7 +60,7 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
       const cnisFastAnalysisInssBenefit = this.mapper.mapArray(
         source.cnisFastAnalysisInssBenefit,
         CnisFastAnalysisInssBenefitTypeormEntity,
-        GetAnalysisToolClientInssBenefitQueryResult,
+        GetCnisFastAnalysisInssBenefitQueryResult,
       );
 
       const cnisFastAnalysisLegalProceeding = this.mapper.mapArray(
@@ -121,7 +121,7 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
 
       const cnisFastAnalysisInssBenefit = this.mapper.mapArray(
         source.cnisFastAnalysisInssBenefit,
-        GetAnalysisToolClientInssBenefitQueryResult,
+        GetCnisFastAnalysisInssBenefitQueryResult,
         CnisFastAnalysisInssBenefitTypeormEntity,
       );
 
