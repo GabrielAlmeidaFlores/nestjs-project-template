@@ -2,14 +2,14 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
+import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { CnisFastAnalysisClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 
 @Injectable()
@@ -31,8 +31,8 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
     ): CnisFastAnalysisEntity => {
       const cnisFastAnalysisClient = this.mapper.map(
         source.cnisFastAnalysisClient,
-        CnisFastAnalysisClientTypeormEntity,
-        CnisFastAnalysisClientEntity,
+        AnalysisToolClientTypeormEntity,
+        AnalysisToolClientEntity,
       );
 
       const cnisFastAnalysisResult = this.mapper.map(
@@ -67,8 +67,8 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
     ): CnisFastAnalysisTypeormEntity => {
       const cnisFastAnalysisClient = this.mapper.map(
         source.cnisFastAnalysisClient,
-        CnisFastAnalysisClientEntity,
-        CnisFastAnalysisClientTypeormEntity,
+        AnalysisToolClientEntity,
+        AnalysisToolClientTypeormEntity,
       );
 
       const cnisFastAnalysisResult = this.mapper.map(

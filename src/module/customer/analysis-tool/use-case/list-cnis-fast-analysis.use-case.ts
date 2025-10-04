@@ -4,7 +4,7 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import {
-  GetCnisFastAnalysisClientResponseDto,
+  GetAnalysisToolClientResponseDto,
   GetCnisFastAnalysisResponseDto,
   GetCnisFastAnalysisResponsibleResponseDto,
   GetCnisFastAnalysisResultResponseDto,
@@ -54,7 +54,7 @@ export class ListCnisFastAnalysisUseCase {
       async (item) => {
         const response = GetCnisFastAnalysisResponseDto.build({
           ...item,
-          cnisFastAnalysisClient: GetCnisFastAnalysisClientResponseDto.build({
+          cnisFastAnalysisClient: GetAnalysisToolClientResponseDto.build({
             ...item.cnisFastAnalysisClient,
           }),
           cnisFastAnalysisResult:
