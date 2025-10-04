@@ -34,18 +34,18 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
     | CnisFastAnalysisResultTypeormEntity
     | undefined;
 
-  @OneToOne(
+  @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
     (entity) => entity.cnisFastAnalysis,
   )
-  @JoinColumn({ name: 'cnis_fast_analysis_client_id' })
-  public cnisFastAnalysisClient?: AnalysisToolClientTypeormEntity | undefined;
+  @JoinColumn({ name: 'analysis_tool_client_id' })
+  public analysisToolClient?: AnalysisToolClientTypeormEntity | undefined;
 
   @OneToMany(
     () => AnalysisToolClientInssBenefitTypeormEntity,
     (entity) => entity.cnisFastAnalysis,
   )
-  public cnisFastAnalysisClientInssBenefit?:
+  public analysisToolClientInssBenefit?:
     | AnalysisToolClientInssBenefitTypeormEntity[]
     | undefined;
 
@@ -53,7 +53,7 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
     () => AnalysisToolClientLegalProceedingTypeormEntity,
     (entity) => entity.cnisFastAnalysis,
   )
-  public cnisFastAnalysisClientLegalProceeding?:
+  public analysisToolClientLegalProceeding?:
     | AnalysisToolClientLegalProceedingTypeormEntity[]
     | undefined;
 

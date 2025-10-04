@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
 import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
@@ -12,6 +12,7 @@ import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analys
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -29,12 +30,12 @@ export class CreateCnisFastAnalysisUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(CnisFastAnalysisCommandRepositoryGateway)
     private readonly cnisFastAnalysisCommandRepositoryGateway: CnisFastAnalysisCommandRepositoryGateway,
-    @Inject(AnalysisToolClientCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
     @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -72,17 +73,20 @@ export class CreateCnisFastAnalysisUseCase {
           )
         : null;
 
-    const cnisFastAnalysisClient = new AnalysisToolClientEntity({
-      birthDate: dto.json.cnisFastAnalysisClient.birthDate ?? null,
-      clientType: dto.json.cnisFastAnalysisClient.clientType ?? null,
-      email: dto.json.cnisFastAnalysisClient.email ?? null,
-      gender: dto.json.cnisFastAnalysisClient.gender ?? null,
-      phoneNumber: dto.json.cnisFastAnalysisClient.phoneNumber ?? null,
-      name: dto.json.cnisFastAnalysisClient.name ?? null,
-      federalDocument: dto.json.cnisFastAnalysisClient.federalDocument ?? null,
+    const analysisToolClientQueryResult =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+        dto.json.analysisToolClientId,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolClientQueryResult,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
+      updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
-    const cnisFastAnalysisClientInssBenefit =
+    const analysisToolClientInssBenefit =
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
             return new AnalysisToolClientInssBenefitEntity({
@@ -92,7 +96,7 @@ export class CreateCnisFastAnalysisUseCase {
           })
         : [];
 
-    const cnisFastAnalysisClientLegalProceeding =
+    const analysisToolClientLegalProceeding =
       dto.json.legalProceedingNumber !== undefined
         ? dto.json.legalProceedingNumber.map((value) => {
             return new AnalysisToolClientLegalProceedingEntity({
@@ -104,16 +108,15 @@ export class CreateCnisFastAnalysisUseCase {
 
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       cnisDocument,
-      cnisFastAnalysisClient,
+      analysisToolClient,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
 
     await this.createOnDatabase(
       cnisFastAnalysis,
-      cnisFastAnalysisClient,
-      cnisFastAnalysisClientInssBenefit,
-      cnisFastAnalysisClientLegalProceeding,
+      analysisToolClientInssBenefit,
+      analysisToolClientLegalProceeding,
     );
 
     return CreateCnisFastAnalysisResponseDto.build({
@@ -123,25 +126,19 @@ export class CreateCnisFastAnalysisUseCase {
 
   private async createOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
-    cnisFastAnalysisClient: AnalysisToolClientEntity,
-    cnisFastAnalysisClientInssBenefit: AnalysisToolClientInssBenefitEntity[],
-    cnisFastAnalysisClientLegalProceeding: AnalysisToolClientLegalProceedingEntity[],
+    analysisToolClientInssBenefit: AnalysisToolClientInssBenefitEntity[],
+    analysisToolClientLegalProceeding: AnalysisToolClientLegalProceedingEntity[],
   ): Promise<void> {
-    const cnisFastAnalysisClientTransaction =
-      this.cnisFastAnalysisClientCommandRepositoryGateway.createAnalysisToolClient(
-        cnisFastAnalysisClient,
-      );
-
-    const cnisFastAnalysisClientInssBenefitTransaction =
-      cnisFastAnalysisClientInssBenefit.map((value) => {
-        return this.cnisFastAnalysisClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+    const analysisToolClientInssBenefitTransaction =
+      analysisToolClientInssBenefit.map((value) => {
+        return this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
           value,
         );
       });
 
-    const cnisFastAnalysisClientLegalProceedingTransaction =
-      cnisFastAnalysisClientLegalProceeding.map((value) => {
-        return this.cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+    const analysisToolClientLegalProceedingTransaction =
+      analysisToolClientLegalProceeding.map((value) => {
+        return this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
           value,
         );
       });
@@ -152,9 +149,8 @@ export class CreateCnisFastAnalysisUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      cnisFastAnalysisClientTransaction,
-      ...cnisFastAnalysisClientInssBenefitTransaction,
-      ...cnisFastAnalysisClientLegalProceedingTransaction,
+      ...analysisToolClientInssBenefitTransaction,
+      ...analysisToolClientLegalProceedingTransaction,
       cnisFastAnalysisTransaction,
     ]);
 

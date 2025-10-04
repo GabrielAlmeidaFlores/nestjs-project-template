@@ -83,7 +83,7 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   public cnisDocument?: string;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
-  public cnisFastAnalysisClient: GetAnalysisToolClientResponseDto;
+  public analysisToolClient: GetAnalysisToolClientResponseDto;
 
   @ResponseDtoNumberProperty({ required: false, isArray: true })
   public legalProceedingNumber?: number[];

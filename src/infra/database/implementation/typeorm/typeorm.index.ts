@@ -1,6 +1,7 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
+import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
 import { AnalysisToolClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.command.repository';
 import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
@@ -62,6 +63,7 @@ export class TypeormIndex {
     OrganizationMemberTypeormCommandRepository,
     CnisFastAnalysisTypeormCommandRepository,
     AnalysisToolClientTypeormCommandRepository,
+    AnalysisToolClientTypeormQueryRepository,
     CnisFastAnalysisResultTypeormCommandRepository,
     AnalysisToolClientInssBenefitTypeormCommandRepository,
     AnalysisToolClientLegalProceedingTypeormCommandRepository,

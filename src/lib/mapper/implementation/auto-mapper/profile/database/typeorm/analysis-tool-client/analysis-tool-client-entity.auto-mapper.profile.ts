@@ -6,6 +6,8 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
@@ -42,6 +44,8 @@ export class AnalysisToolClientEntityAutoMapperProfile {
         federalDocument,
         email,
         phoneNumber,
+        createdBy: new OrganizationMemberId(source.createdBy?.id),
+        updatedBy: new OrganizationMemberId(source.updatedBy?.id),
       });
     };
 
@@ -67,12 +71,22 @@ export class AnalysisToolClientEntityAutoMapperProfile {
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
 
+      const createdBy = {
+        id: source.createdBy.toString(),
+      } as OrganizationMemberTypeormEntity;
+
+      const updatedBy = {
+        id: source.updatedBy.toString(),
+      } as OrganizationMemberTypeormEntity;
+
       return AnalysisToolClientTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         federalDocument,
         email,
         phoneNumber,
+        createdBy,
+        updatedBy,
       });
     };
 

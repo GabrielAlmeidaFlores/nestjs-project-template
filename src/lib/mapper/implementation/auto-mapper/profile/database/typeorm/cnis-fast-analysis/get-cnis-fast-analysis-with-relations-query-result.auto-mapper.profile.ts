@@ -36,8 +36,8 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
       source: CnisFastAnalysisTypeormEntity,
     ): GetCnisFastAnalysisWithRelationsQueryResult => {
       if (
-        !source.cnisFastAnalysisClientInssBenefit ||
-        !source.cnisFastAnalysisClientLegalProceeding
+        !source.analysisToolClientInssBenefit ||
+        !source.analysisToolClientLegalProceeding
       ) {
         throw new IncompleteSourceDataForMappingError({
           destinyClass: GetCnisFastAnalysisWithRelationsQueryResult.name,
@@ -45,8 +45,8 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         });
       }
 
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
+      const analysisToolClient = this.mapper.map(
+        source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
         GetAnalysisToolClientWithRelationsQueryResult,
       );
@@ -57,14 +57,14 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         GetCnisFastAnalysisResultQueryResult,
       );
 
-      const cnisFastAnalysisClientInssBenefit = this.mapper.mapArray(
-        source.cnisFastAnalysisClientInssBenefit,
+      const analysisToolClientInssBenefit = this.mapper.mapArray(
+        source.analysisToolClientInssBenefit,
         AnalysisToolClientInssBenefitTypeormEntity,
         GetAnalysisToolClientInssBenefitQueryResult,
       );
 
-      const cnisFastAnalysisClientLegalProceeding = this.mapper.mapArray(
-        source.cnisFastAnalysisClientLegalProceeding,
+      const analysisToolClientLegalProceeding = this.mapper.mapArray(
+        source.analysisToolClientLegalProceeding,
         AnalysisToolClientLegalProceedingTypeormEntity,
         GetAnalysisToolClientLegalProceedingQueryResult,
       );
@@ -84,10 +84,10 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
       return GetCnisFastAnalysisWithRelationsQueryResult.build({
         ...source,
         id: new CnisFastAnalysisId(source.id),
-        cnisFastAnalysisClient,
+        analysisToolClient,
         cnisFastAnalysisResult,
-        cnisFastAnalysisClientInssBenefit,
-        cnisFastAnalysisClientLegalProceeding,
+        analysisToolClientInssBenefit,
+        analysisToolClientLegalProceeding,
         createdBy,
         updatedBy,
       });
@@ -107,8 +107,8 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: GetCnisFastAnalysisWithRelationsQueryResult,
     ): CnisFastAnalysisTypeormEntity => {
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
+      const analysisToolClient = this.mapper.map(
+        source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
         AnalysisToolClientTypeormEntity,
       );
@@ -119,14 +119,14 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         CnisFastAnalysisResultTypeormEntity,
       );
 
-      const cnisFastAnalysisClientInssBenefit = this.mapper.mapArray(
-        source.cnisFastAnalysisClientInssBenefit,
+      const analysisToolClientInssBenefit = this.mapper.mapArray(
+        source.analysisToolClientInssBenefit,
         GetAnalysisToolClientInssBenefitQueryResult,
         AnalysisToolClientInssBenefitTypeormEntity,
       );
 
-      const cnisFastAnalysisClientLegalProceeding = this.mapper.mapArray(
-        source.cnisFastAnalysisClientLegalProceeding,
+      const analysisToolClientLegalProceeding = this.mapper.mapArray(
+        source.analysisToolClientLegalProceeding,
         GetAnalysisToolClientLegalProceedingQueryResult,
         AnalysisToolClientLegalProceedingTypeormEntity,
       );
@@ -146,10 +146,10 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
       return CnisFastAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        cnisFastAnalysisClient,
+        analysisToolClient,
         cnisFastAnalysisResult,
-        cnisFastAnalysisClientInssBenefit,
-        cnisFastAnalysisClientLegalProceeding,
+        analysisToolClientInssBenefit,
+        analysisToolClientLegalProceeding,
         createdBy,
         updatedBy,
       });

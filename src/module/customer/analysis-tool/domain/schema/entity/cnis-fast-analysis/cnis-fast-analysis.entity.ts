@@ -10,7 +10,7 @@ import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-too
 export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
   public readonly status: CnisFastAnalysisStatusEnum;
   public readonly cnisDocument: string | null;
-  public readonly cnisFastAnalysisClient: AnalysisToolClientEntity;
+  public readonly analysisToolClient: AnalysisToolClientEntity;
   public readonly cnisFastAnalysisResult: CnisFastAnalysisResultEntity | null;
   public readonly createdBy: OrganizationMemberId;
   public readonly updatedBy: OrganizationMemberId;
@@ -26,7 +26,7 @@ export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
         : CnisFastAnalysisStatusEnum.COMPLETED;
     this.cnisDocument = props.cnisDocument ?? null;
     this.cnisFastAnalysisResult = props.cnisFastAnalysisResult ?? null;
-    this.cnisFastAnalysisClient = props.cnisFastAnalysisClient;
+    this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }

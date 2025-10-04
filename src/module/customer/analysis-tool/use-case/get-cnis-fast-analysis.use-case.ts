@@ -51,8 +51,8 @@ export class GetCnisFastAnalysisUseCase {
 
     const response = GetCnisFastAnalysisResponseDto.build({
       ...cnisFastAnalysisQueryResult,
-      cnisFastAnalysisClient: GetAnalysisToolClientResponseDto.build({
-        ...cnisFastAnalysisQueryResult.cnisFastAnalysisClient,
+      analysisToolClient: GetAnalysisToolClientResponseDto.build({
+        ...cnisFastAnalysisQueryResult.analysisToolClient,
       }),
       cnisFastAnalysisResult:
         cnisFastAnalysisQueryResult.cnisFastAnalysisResult !== null
