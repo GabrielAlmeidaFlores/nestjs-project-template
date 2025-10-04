@@ -47,8 +47,8 @@ export class CnisFastAnalysisTypeormQueryRepository
         },
       },
       relations: {
-        analysisToolClientInssBenefit: true,
-        analysisToolClientLegalProceeding: true,
+        cnisFastAnalysisInssBenefit: true,
+        cnisFastAnalysisLegalProceeding: true,
         analysisToolClient: true,
         cnisFastAnalysisResult: true,
         createdBy: {
@@ -84,8 +84,8 @@ export class CnisFastAnalysisTypeormQueryRepository
           id: id.toString(),
         },
         relations: {
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
+          cnisFastAnalysisInssBenefit: true,
+          cnisFastAnalysisLegalProceeding: true,
           analysisToolClient: true,
           cnisFastAnalysisResult: true,
           createdBy: {
