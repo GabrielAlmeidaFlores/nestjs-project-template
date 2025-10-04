@@ -86,6 +86,13 @@ export class CreateCnisFastAnalysisUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
+    const cnisFastAnalysis = new CnisFastAnalysisEntity({
+      cnisDocument,
+      analysisToolClient,
+      createdBy: organizationMember.id,
+      updatedBy: organizationMember.id,
+    });
+
     const cnisFastAnalysisInssBenefit =
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
@@ -105,13 +112,6 @@ export class CreateCnisFastAnalysisUseCase {
             });
           })
         : [];
-
-    const cnisFastAnalysis = new CnisFastAnalysisEntity({
-      cnisDocument,
-      analysisToolClient,
-      createdBy: organizationMember.id,
-      updatedBy: organizationMember.id,
-    });
 
     await this.createOnDatabase(
       cnisFastAnalysis,
@@ -149,9 +149,9 @@ export class CreateCnisFastAnalysisUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
+      cnisFastAnalysisTransaction,
       ...cnisFastAnalysisInssBenefitTransaction,
       ...cnisFastAnalysisLegalProceedingTransaction,
-      cnisFastAnalysisTransaction,
     ]);
 
     await transaction.commit();

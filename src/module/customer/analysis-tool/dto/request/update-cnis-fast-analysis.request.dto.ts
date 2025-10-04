@@ -10,8 +10,8 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 
 @RequestDto()
 export class UpdateCnisFastAnalysisJsonRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(AnalysisToolClientId)
-  public analysisToolClientId: AnalysisToolClientId;
+  @RequestDtoValueObjectProperty(AnalysisToolClientId, { required: false })
+  public analysisToolClientId?: AnalysisToolClientId;
 
   @RequestDtoNumberProperty({ required: false, isArray: true })
   public legalProceedingNumber?: number[];
