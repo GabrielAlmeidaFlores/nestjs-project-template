@@ -7,10 +7,10 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
-import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
+import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 
@@ -42,19 +42,19 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
   public analysisToolClient?: AnalysisToolClientTypeormEntity | undefined;
 
   @OneToMany(
-    () => AnalysisToolClientInssBenefitTypeormEntity,
+    () => CnisFastAnalysisInssBenefitTypeormEntity,
     (entity) => entity.cnisFastAnalysis,
   )
-  public analysisToolClientInssBenefit?:
-    | AnalysisToolClientInssBenefitTypeormEntity[]
+  public cnisFastAnalysisInssBenefit?:
+    | CnisFastAnalysisInssBenefitTypeormEntity[]
     | undefined;
 
   @OneToMany(
-    () => AnalysisToolClientLegalProceedingTypeormEntity,
+    () => CnisFastAnalysisLegalProceedingTypeormEntity,
     (entity) => entity.cnisFastAnalysis,
   )
-  public analysisToolClientLegalProceeding?:
-    | AnalysisToolClientLegalProceedingTypeormEntity[]
+  public cnisFastAnalysisLegalProceeding?:
+    | CnisFastAnalysisLegalProceedingTypeormEntity[]
     | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)

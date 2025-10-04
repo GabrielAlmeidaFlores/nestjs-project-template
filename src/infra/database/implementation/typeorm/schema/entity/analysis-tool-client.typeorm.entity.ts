@@ -7,7 +7,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 
-@Entity({ name: 'cnis_fast_analysis_client' })
+@Entity({ name: 'analysis_tool_client' })
 export class AnalysisToolClientTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'client_name',
