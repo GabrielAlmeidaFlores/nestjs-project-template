@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { BucketModule } from '@infra/bucket/bucket.module';
-import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { FileProcessorService } from '@module/customer/analysis-tool/lib/file-processor/file-processor.service';
 
 @Module({
-  imports: [BucketModule, CnisProcessorModule],
+  imports: [BucketModule],
   providers: [
     {
       useClass: FileProcessorService,

@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
+import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
 
 @Injectable()
@@ -10,7 +12,19 @@ export class DocumentAnalysisService implements DocumentAnalysisGateway {
   public constructor(
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
+    @Inject(CnisProcessorGateway)
+    private readonly cnisParserGateway: CnisProcessorGateway,
   ) {}
+
+  public async parseCnisDocument(
+    cnisDocument: Buffer,
+  ): Promise<CnisOutputModel> {
+    return await this.cnisParserGateway.parseCnisDocument(cnisDocument);
+  }
+
+  public async validateCnisDocument(cnisDocument: Buffer): Promise<boolean> {
+    return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
+  }
 
   public async analyzeCnis(files: Buffer[]): Promise<string | null> {
     const generativeIaPrompt = `

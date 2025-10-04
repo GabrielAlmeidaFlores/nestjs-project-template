@@ -36,6 +36,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
     @Inject(DocumentAnalysisGateway)
     private readonly cnisDocumentGateway: DocumentAnalysisGateway,
+    @Inject(DocumentAnalysisGateway)
+    private readonly documentAnalysisGateway: DocumentAnalysisGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -74,7 +76,7 @@ export class CreateCnisFastAnalysisResultUseCase {
         cnisFastAnalysisQueryResult.cnisDocument,
       );
     const cnisDocumentData =
-      await this.fileProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
+      await this.documentAnalysisGateway.parseCnisDocument(cnisDocumentBuffer);
 
     const cnisAiAnalysis = await this.cnisDocumentGateway.analyzeCnis([
       clientDataBuffer,
