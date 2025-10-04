@@ -13,7 +13,7 @@ export class AnalysisToolClientInssBenefitTypeormEntity extends BaseTypeormEntit
 
   @ManyToOne(
     () => CnisFastAnalysisTypeormEntity,
-    (entity) => entity.cnisFastAnalysisClientInssBenefit,
+    (entity) => entity.analysisToolClientInssBenefit,
   )
   @JoinColumn({ name: 'cnis_fast_analysis_id' })
   public cnisFastAnalysis: CnisFastAnalysisTypeormEntity | undefined;

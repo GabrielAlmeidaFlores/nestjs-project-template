@@ -54,8 +54,8 @@ export class ListCnisFastAnalysisUseCase {
       async (item) => {
         const response = GetCnisFastAnalysisResponseDto.build({
           ...item,
-          cnisFastAnalysisClient: GetAnalysisToolClientResponseDto.build({
-            ...item.cnisFastAnalysisClient,
+          analysisToolClient: GetAnalysisToolClientResponseDto.build({
+            ...item.analysisToolClient,
           }),
           cnisFastAnalysisResult:
             item.cnisFastAnalysisResult !== null

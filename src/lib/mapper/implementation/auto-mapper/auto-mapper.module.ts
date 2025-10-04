@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
 import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
-import { GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-relations-query-result.auto-mapper.profile';
+import { GetAnalysisToolClientQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-relations-query-result.auto-mapper.profile';
 import { AnalysisToolClientInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit-entity.auto-mapper.profile';
 import { GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-inss-benefit/get-analysis-tool-client-inss-benefit-query-result.auto-mapper.profile';
 import { AnalysisToolClientLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding-entity.auto-mapper.profile';
@@ -56,7 +56,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     CnisFastAnalysisResultEntityAutoMapperProfile,
     GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisResultQueryResultAutoMapperProfile,
-    GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile,
+    GetAnalysisToolClientQueryResultAutoMapperProfile,
     GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile,
     GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile,

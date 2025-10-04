@@ -66,7 +66,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     }
 
     const clientDataBuffer = Buffer.from(
-      JSON.stringify(cnisFastAnalysisQueryResult.cnisFastAnalysisClient),
+      JSON.stringify(cnisFastAnalysisQueryResult.analysisToolClient),
       'utf-8',
     );
     const cnisDocumentBuffer =
@@ -121,13 +121,15 @@ export class CreateCnisFastAnalysisResultUseCase {
           : null,
     });
 
-    const cnisFastAnalysisClient = new AnalysisToolClientEntity({
-      ...cnisFastAnalysisQueryResult.cnisFastAnalysisClient,
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...cnisFastAnalysisQueryResult.analysisToolClient,
+      createdBy: cnisFastAnalysisQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: cnisFastAnalysisQueryResult.analysisToolClient.updatedBy.id,
     });
 
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       ...cnisFastAnalysisQueryResult,
-      cnisFastAnalysisClient,
+      analysisToolClient,
       cnisFastAnalysisResult,
       cnisDocument: cnisFastAnalysisQueryResult.cnisDocument,
       createdBy: cnisFastAnalysisQueryResult.createdBy.id,

@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
 import { GetAnalysisToolClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/query/result/get-analysis-tool-client-inss-benefit.query.result';
 import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
@@ -17,6 +17,7 @@ import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/sc
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -35,16 +36,16 @@ export class UpdateCnisFastAnalysisUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(CnisFastAnalysisCommandRepositoryGateway)
     private readonly cnisFastAnalysisCommandRepositoryGateway: CnisFastAnalysisCommandRepositoryGateway,
-    @Inject(AnalysisToolClientCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
     @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
     @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
-    private readonly cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -88,14 +89,23 @@ export class UpdateCnisFastAnalysisUseCase {
           )
         : cnisFastAnalysisQueryResult.cnisDocument;
 
-    const cnisFastAnalysisClient = new AnalysisToolClientEntity({
-      ...cnisFastAnalysisQueryResult.cnisFastAnalysisClient,
-      ...dto.json?.cnisFastAnalysisClient,
+    const analysisToolClientQueryResult =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+        dto.json?.analysisToolClientId ??
+          cnisFastAnalysisQueryResult.analysisToolClient.id,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolClientQueryResult,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
+      updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       ...cnisFastAnalysisQueryResult,
-      cnisFastAnalysisClient,
+      analysisToolClient,
       cnisDocument,
       cnisFastAnalysisResult: null,
       createdBy: cnisFastAnalysisQueryResult.createdBy.id,
@@ -108,7 +118,7 @@ export class UpdateCnisFastAnalysisUseCase {
       const inssBenefitNumberTransactions =
         this.updateInssBenefitNumberOnDatabase(
           cnisFastAnalysis,
-          cnisFastAnalysisQueryResult.cnisFastAnalysisClientInssBenefit,
+          cnisFastAnalysisQueryResult.analysisToolClientInssBenefit,
           dto.json.inssBenefitNumber,
         );
 
@@ -119,7 +129,7 @@ export class UpdateCnisFastAnalysisUseCase {
       const legalProceedingNumberTransactions =
         this.updateLegalProceedingNumberOnDatabase(
           cnisFastAnalysis,
-          cnisFastAnalysisQueryResult.cnisFastAnalysisClientLegalProceeding,
+          cnisFastAnalysisQueryResult.analysisToolClientLegalProceeding,
           dto.json.legalProceedingNumber,
         );
 
@@ -132,13 +142,6 @@ export class UpdateCnisFastAnalysisUseCase {
         cnisFastAnalysis,
       );
     transactions.push(cnisFastAnalysisTransaction);
-
-    const cnisFastAnalysisClientTransaction =
-      this.cnisFastAnalysisClientCommandRepositoryGateway.updateAnalysisToolClient(
-        cnisFastAnalysis.cnisFastAnalysisClient.id,
-        cnisFastAnalysis.cnisFastAnalysisClient,
-      );
-    transactions.push(cnisFastAnalysisClientTransaction);
 
     const executeTransactions =
       await this.baseTransactionRepositoryGateway.execute(transactions);
@@ -155,7 +158,7 @@ export class UpdateCnisFastAnalysisUseCase {
     newInssBenefitNumber: number[],
   ): TransactionType[] {
     const deleteCurrent = currentInssBenefitNumber.map((value) => {
-      return this.cnisFastAnalysisClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
+      return this.analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
         value.id,
       );
     });
@@ -166,7 +169,7 @@ export class UpdateCnisFastAnalysisUseCase {
         cnisFastAnalysis,
       });
 
-      return this.cnisFastAnalysisClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+      return this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
         entity,
       );
     });
@@ -180,7 +183,7 @@ export class UpdateCnisFastAnalysisUseCase {
     newLegalProceeding: number[],
   ): TransactionType[] {
     const deleteCurrent = currentLegalProceedingNumber.map((value) => {
-      return this.cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(
+      return this.analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(
         value.id,
       );
     });
@@ -191,7 +194,7 @@ export class UpdateCnisFastAnalysisUseCase {
         cnisFastAnalysis,
       });
 
-      return this.cnisFastAnalysisClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+      return this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
         entity,
       );
     });

@@ -10,10 +10,10 @@ import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/s
 export class GetCnisFastAnalysisWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: CnisFastAnalysisId;
   public readonly cnisDocument: string | null;
-  public readonly cnisFastAnalysisClient: GetAnalysisToolClientWithRelationsQueryResult;
+  public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
   public readonly cnisFastAnalysisResult: GetCnisFastAnalysisResultQueryResult | null;
-  public readonly cnisFastAnalysisClientInssBenefit: GetAnalysisToolClientInssBenefitQueryResult[];
-  public readonly cnisFastAnalysisClientLegalProceeding: GetAnalysisToolClientLegalProceedingQueryResult[];
+  public readonly analysisToolClientInssBenefit: GetAnalysisToolClientInssBenefitQueryResult[];
+  public readonly analysisToolClientLegalProceeding: GetAnalysisToolClientLegalProceedingQueryResult[];
   public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly createdAt: Date;

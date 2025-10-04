@@ -6,6 +6,7 @@ import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { AnalysisToolClientEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity.props.interface';
 import type { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 
@@ -17,6 +18,8 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
   public readonly birthDate: Date | null;
   public readonly gender: GenderEnum | null;
   public readonly clientType: AnalysisToolClientTypeEnum | null;
+  public readonly createdBy: OrganizationMemberId;
+  public readonly updatedBy: OrganizationMemberId;
 
   protected readonly _type = AnalysisToolClientEntity.name;
 
@@ -32,6 +35,8 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
     this.birthDate = props.birthDate ?? null;
     this.gender = props.gender ?? null;
     this.clientType = props.clientType ?? null;
+    this.createdBy = props.createdBy;
+    this.updatedBy = props.updatedBy;
   }
 
   public static validateName(name?: string | null): void {

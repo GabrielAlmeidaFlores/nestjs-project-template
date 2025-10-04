@@ -29,8 +29,8 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: CnisFastAnalysisTypeormEntity,
     ): CnisFastAnalysisEntity => {
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
+      const analysisToolClient = this.mapper.map(
+        source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
         AnalysisToolClientEntity,
       );
@@ -44,7 +44,7 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
       return new CnisFastAnalysisEntity({
         ...source,
         id: new CnisFastAnalysisId(source.id),
-        cnisFastAnalysisClient,
+        analysisToolClient,
         cnisFastAnalysisResult,
         createdBy: new OrganizationMemberId(source.createdBy?.id),
         updatedBy: new OrganizationMemberId(source.updatedBy?.id),
@@ -65,8 +65,8 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: CnisFastAnalysisEntity,
     ): CnisFastAnalysisTypeormEntity => {
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
+      const analysisToolClient = this.mapper.map(
+        source.analysisToolClient,
         AnalysisToolClientEntity,
         AnalysisToolClientTypeormEntity,
       );
@@ -88,7 +88,7 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
       return CnisFastAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        cnisFastAnalysisClient,
+        analysisToolClient,
         cnisFastAnalysisResult,
         createdBy,
         updatedBy,
