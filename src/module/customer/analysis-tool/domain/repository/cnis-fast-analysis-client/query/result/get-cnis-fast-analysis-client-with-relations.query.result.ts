@@ -4,8 +4,6 @@ import type { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import type { GetCnisFastAnalysisClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-client-inss-benefit/query/result/get-cnis-fast-analysis-client-inss-benefit.query.result';
-import type { GetCnisFastAnalysisClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-client-legal-proceeding/query/result/get-cnis-fast-analysis-client-legal-proceeding.query.result';
 import type { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
 import type { CnisFastAnalysisClientId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/value-object/cnis-fast-analysis-client-id/cnis-fast-analysis-client-id.value-object';
 
@@ -18,8 +16,6 @@ export class GetCnisFastAnalysisClientWithRelationsQueryResult extends BaseBuild
   public readonly birthDate: Date | null;
   public readonly gender: GenderEnum | null;
   public readonly clientType: CnisFastAnalysisClientTypeEnum | null;
-  public readonly cnisFastAnalysisClientInssBenefit: GetCnisFastAnalysisClientInssBenefitQueryResult[];
-  public readonly cnisFastAnalysisClientLegalProceeding: GetCnisFastAnalysisClientLegalProceedingQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

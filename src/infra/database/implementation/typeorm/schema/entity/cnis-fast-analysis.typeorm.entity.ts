@@ -1,6 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-inss-benefit.typeorm.entity';
+import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -32,6 +41,22 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'cnis_fast_analysis_client_id' })
   public cnisFastAnalysisClient?:
     | CnisFastAnalysisClientTypeormEntity
+    | undefined;
+
+  @OneToMany(
+    () => CnisFastAnalysisClientInssBenefitTypeormEntity,
+    (entity) => entity.cnisFastAnalysis,
+  )
+  public cnisFastAnalysisClientInssBenefit?:
+    | CnisFastAnalysisClientInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => CnisFastAnalysisClientLegalProceedingTypeormEntity,
+    (entity) => entity.cnisFastAnalysis,
+  )
+  public cnisFastAnalysisClientLegalProceeding?:
+    | CnisFastAnalysisClientLegalProceedingTypeormEntity[]
     | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)

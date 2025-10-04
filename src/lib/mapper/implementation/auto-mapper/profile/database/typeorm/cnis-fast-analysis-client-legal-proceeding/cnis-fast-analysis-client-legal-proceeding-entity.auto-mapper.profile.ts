@@ -2,8 +2,8 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 
 import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
-import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
-import { CnisFastAnalysisClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/cnis-fast-analysis-client.entity';
+import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.entity';
 import { CnisFastAnalysisClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client-legal-proceeding/value-object/cnis-fast-analysis-client-legal-proceeding-id/cnis-fast-analysis-client-legal-proceeding-id.value-object';
 
@@ -24,16 +24,16 @@ export class CnisFastAnalysisClientLegalProceedingEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: CnisFastAnalysisClientLegalProceedingTypeormEntity,
     ): CnisFastAnalysisClientLegalProceedingEntity => {
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
-        CnisFastAnalysisClientTypeormEntity,
-        CnisFastAnalysisClientEntity,
+      const cnisFastAnalysis = this.mapper.map(
+        source.cnisFastAnalysis,
+        CnisFastAnalysisTypeormEntity,
+        CnisFastAnalysisEntity,
       );
 
       return new CnisFastAnalysisClientLegalProceedingEntity({
         ...source,
         id: new CnisFastAnalysisClientLegalProceedingId(source.id),
-        cnisFastAnalysisClient,
+        cnisFastAnalysis,
       });
     };
 
@@ -51,16 +51,16 @@ export class CnisFastAnalysisClientLegalProceedingEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: CnisFastAnalysisClientLegalProceedingEntity,
     ): CnisFastAnalysisClientLegalProceedingTypeormEntity => {
-      const cnisFastAnalysisClient = this.mapper.map(
-        source.cnisFastAnalysisClient,
-        CnisFastAnalysisClientEntity,
-        CnisFastAnalysisClientTypeormEntity,
+      const cnisFastAnalysis = this.mapper.map(
+        source.cnisFastAnalysis,
+        CnisFastAnalysisEntity,
+        CnisFastAnalysisTypeormEntity,
       );
 
       return CnisFastAnalysisClientLegalProceedingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        cnisFastAnalysisClient,
+        cnisFastAnalysis,
       });
     };
 

@@ -83,21 +83,21 @@ export class CreateCnisFastAnalysisUseCase {
     });
 
     const cnisFastAnalysisClientInssBenefit =
-      dto.json.cnisFastAnalysisClient.inssBenefitNumber !== undefined
-        ? dto.json.cnisFastAnalysisClient.inssBenefitNumber.map((value) => {
+      dto.json.inssBenefitNumber !== undefined
+        ? dto.json.inssBenefitNumber.map((value) => {
             return new CnisFastAnalysisClientInssBenefitEntity({
               inssBenefitNumber: value,
-              cnisFastAnalysisClient,
+              cnisFastAnalysis,
             });
           })
         : [];
 
     const cnisFastAnalysisClientLegalProceeding =
-      dto.json.cnisFastAnalysisClient.legalProceedingNumber !== undefined
-        ? dto.json.cnisFastAnalysisClient.legalProceedingNumber.map((value) => {
+      dto.json.legalProceedingNumber !== undefined
+        ? dto.json.legalProceedingNumber.map((value) => {
             return new CnisFastAnalysisClientLegalProceedingEntity({
               legalProceedingNumber: value,
-              cnisFastAnalysisClient,
+              cnisFastAnalysis,
             });
           })
         : [];
