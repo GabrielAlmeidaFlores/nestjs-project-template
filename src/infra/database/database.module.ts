@@ -6,9 +6,9 @@ import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementati
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
 import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
-import { CnisFastAnalysisClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client/cnis-fast-analysis-client.typeorm.command.repository';
-import { CnisFastAnalysisClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.typeorm.command.repository';
-import { CnisFastAnalysisClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.typeorm.command.repository';
+import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
+import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
+import { AnalysisToolClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
@@ -30,9 +30,9 @@ import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/acc
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
-import { CnisFastAnalysisClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-client/command/cnis-fast-analysis-client.command.repository.gateway';
-import { CnisFastAnalysisClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-client-inss-benefit/command/cnis-fast-analysis-client-inss-benefit.command.repository.gateway';
-import { CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-client-legal-proceeding/command/cnis-fast-analysis-client-legal-proceeding.command.repository.gateway';
+import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
+import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
@@ -87,16 +87,16 @@ const classProvider: ClassProvider[] = [
     useClass: CnisFastAnalysisTypeormCommandRepository,
   },
   {
-    provide: CnisFastAnalysisClientCommandRepositoryGateway,
-    useClass: CnisFastAnalysisClientTypeormCommandRepository,
+    provide: AnalysisToolClientCommandRepositoryGateway,
+    useClass: AnalysisToolClientTypeormCommandRepository,
   },
   {
-    provide: CnisFastAnalysisClientInssBenefitCommandRepositoryGateway,
-    useClass: CnisFastAnalysisClientInssBenefitTypeormCommandRepository,
+    provide: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    useClass: AnalysisToolClientInssBenefitTypeormCommandRepository,
   },
   {
-    provide: CnisFastAnalysisClientLegalProceedingCommandRepositoryGateway,
-    useClass: CnisFastAnalysisClientLegalProceedingTypeormCommandRepository,
+    provide: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+    useClass: AnalysisToolClientLegalProceedingTypeormCommandRepository,
   },
   {
     provide: CnisFastAnalysisResultCommandRepositoryGateway,

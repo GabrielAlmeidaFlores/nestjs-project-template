@@ -3,7 +3,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { CnisFastAnalysisClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-client/enum/cnis-fast-analysis-client-type.enum';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -14,7 +14,7 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetCnisFastAnalysisClientResponseDto extends BaseBuildableDtoObject {
+export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
@@ -33,10 +33,10 @@ export class GetCnisFastAnalysisClientResponseDto extends BaseBuildableDtoObject
   @ResponseDtoEnumProperty(GenderEnum, { required: false })
   public gender?: GenderEnum;
 
-  @ResponseDtoEnumProperty(CnisFastAnalysisClientTypeEnum, { required: false })
-  public clientType?: CnisFastAnalysisClientTypeEnum;
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
 
-  protected override readonly _type = GetCnisFastAnalysisClientResponseDto.name;
+  protected override readonly _type = GetAnalysisToolClientResponseDto.name;
 }
 
 @ResponseDto()
@@ -82,8 +82,8 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   })
   public cnisDocument?: string;
 
-  @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
-  public cnisFastAnalysisClient: GetCnisFastAnalysisClientResponseDto;
+  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
+  public cnisFastAnalysisClient: GetAnalysisToolClientResponseDto;
 
   @ResponseDtoNumberProperty({ required: false, isArray: true })
   public legalProceedingNumber?: number[];
