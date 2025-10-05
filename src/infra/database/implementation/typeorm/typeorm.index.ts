@@ -1,13 +1,14 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
+import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
 import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
-import { CnisFastAnalysisClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client/cnis-fast-analysis-client.typeorm.command.repository';
-import { CnisFastAnalysisClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit.typeorm.command.repository';
-import { CnisFastAnalysisClientLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding.typeorm.command.repository';
+import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
+import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
@@ -17,10 +18,10 @@ import { OrganizationTypeormCommandRepository } from '@infra/database/implementa
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
+import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
-import { CnisFastAnalysisClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-inss-benefit.typeorm.entity';
-import { CnisFastAnalysisClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client-legal-proceeding.typeorm.entity';
-import { CnisFastAnalysisClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-client.typeorm.entity';
+import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
+import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
@@ -41,9 +42,9 @@ export class TypeormIndex {
     OrganizationMemberTypeormEntity,
     OrganizationTypeormEntity,
     OrganizationTypeormEntity,
-    CnisFastAnalysisClientInssBenefitTypeormEntity,
-    CnisFastAnalysisClientLegalProceedingTypeormEntity,
-    CnisFastAnalysisClientTypeormEntity,
+    CnisFastAnalysisInssBenefitTypeormEntity,
+    CnisFastAnalysisLegalProceedingTypeormEntity,
+    AnalysisToolClientTypeormEntity,
     CnisFastAnalysisResultTypeormEntity,
     CnisFastAnalysisTypeormEntity,
   ];
@@ -61,10 +62,11 @@ export class TypeormIndex {
     OrganizationMemberTypeormQueryRepository,
     OrganizationMemberTypeormCommandRepository,
     CnisFastAnalysisTypeormCommandRepository,
-    CnisFastAnalysisClientTypeormCommandRepository,
+    AnalysisToolClientTypeormCommandRepository,
+    AnalysisToolClientTypeormQueryRepository,
     CnisFastAnalysisResultTypeormCommandRepository,
-    CnisFastAnalysisClientInssBenefitTypeormCommandRepository,
-    CnisFastAnalysisClientLegalProceedingTypeormCommandRepository,
+    AnalysisToolClientInssBenefitTypeormCommandRepository,
+    CnisFastAnalysisLegalProceedingTypeormCommandRepository,
     CnisFastAnalysisTypeormQueryRepository,
   ];
 

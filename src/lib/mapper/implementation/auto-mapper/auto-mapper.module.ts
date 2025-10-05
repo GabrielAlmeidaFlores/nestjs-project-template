@@ -3,16 +3,16 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
+import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
+import { GetAnalysisToolClientQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-relations-query-result.auto-mapper.profile';
 import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
 import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
-import { CnisFastAnalysisClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client/cnis-fast-analysis-client-entity.auto-mapper.profile';
-import { GetCnisFastAnalysisClientWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client/get-cnis-fast-analysis-client-with-relations-query-result.auto-mapper.profile';
-import { CnisFastAnalysisClientInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client-inss-benefit/cnis-fast-analysis-client-inss-benefit-entity.auto-mapper.profile';
-import { GetCnisFastAnalysisClientInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client-inss-benefit/get-cnis-fast-analysis-client-inss-benefit-query-result.auto-mapper.profile';
-import { CnisFastAnalysisClientLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client-legal-proceeding/cnis-fast-analysis-client-legal-proceeding-entity.auto-mapper.profile';
-import { GetCnisFastAnalysisClientLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-client-legal-proceeding/get-cnis-fast-analysis-client-legal-proceeding-query-result.auto-mapper.profile';
+import { AnalysisToolClientInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit-entity.auto-mapper.profile';
+import { GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-inss-benefit/get-cnis-fast-analysis-inss-benefit-query-result.auto-mapper.profile';
+import { CnisFastAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-legal-proceeding/get-cnis-fast-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { CnisFastAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/cnis-fast-analysis-result-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/get-cnis-fast-analysis-result-query-result.auto-mapper.profile';
 import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
@@ -50,15 +50,15 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     OrganizationMemberEntityAutoMapperProfile,
     AuthIdentityEntityAutoMapperProfile,
     CnisFastAnalysisEntityAutoMapperProfile,
-    CnisFastAnalysisClientEntityAutoMapperProfile,
-    CnisFastAnalysisClientInssBenefitEntityAutoMapperProfile,
-    CnisFastAnalysisClientLegalProceedingEntityAutoMapperProfile,
+    AnalysisToolClientEntityAutoMapperProfile,
+    AnalysisToolClientInssBenefitEntityAutoMapperProfile,
+    CnisFastAnalysisLegalProceedingEntityAutoMapperProfile,
     CnisFastAnalysisResultEntityAutoMapperProfile,
     GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisResultQueryResultAutoMapperProfile,
-    GetCnisFastAnalysisClientWithRelationsQueryResultAutoMapperProfile,
-    GetCnisFastAnalysisClientInssBenefitQueryResultAutoMapperProfile,
-    GetCnisFastAnalysisClientLegalProceedingQueryResultAutoMapperProfile,
+    GetAnalysisToolClientQueryResultAutoMapperProfile,
+    GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile,
+    GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],

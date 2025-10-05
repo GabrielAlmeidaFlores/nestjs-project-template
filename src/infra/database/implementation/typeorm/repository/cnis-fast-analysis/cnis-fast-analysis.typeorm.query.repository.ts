@@ -10,9 +10,9 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
-import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
-import { CnisFastAnalysisId } from '@module/customer/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
+import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 
 @Injectable()
 export class CnisFastAnalysisTypeormQueryRepository
@@ -47,10 +47,9 @@ export class CnisFastAnalysisTypeormQueryRepository
         },
       },
       relations: {
-        cnisFastAnalysisClient: {
-          cnisFastAnalysisClientInssBenefit: true,
-          cnisFastAnalysisClientLegalProceeding: true,
-        },
+        cnisFastAnalysisInssBenefit: true,
+        cnisFastAnalysisLegalProceeding: true,
+        analysisToolClient: true,
         cnisFastAnalysisResult: true,
         createdBy: {
           customer: true,
@@ -85,10 +84,9 @@ export class CnisFastAnalysisTypeormQueryRepository
           id: id.toString(),
         },
         relations: {
-          cnisFastAnalysisClient: {
-            cnisFastAnalysisClientInssBenefit: true,
-            cnisFastAnalysisClientLegalProceeding: true,
-          },
+          cnisFastAnalysisInssBenefit: true,
+          cnisFastAnalysisLegalProceeding: true,
+          analysisToolClient: true,
           cnisFastAnalysisResult: true,
           createdBy: {
             customer: true,

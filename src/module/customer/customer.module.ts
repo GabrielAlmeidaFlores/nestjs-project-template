@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { AccountModule } from '@module/customer/account/account.module';
-import { CnisFastAnalysisModule } from '@module/customer/cnis-fast-analysis/cnis-fast-analysis.module';
+import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
 import { TranscriptionModule } from '@module/customer/transcription/transcription.module';
 
 @Module({
-  imports: [AccountModule, CnisFastAnalysisModule, TranscriptionModule],
+  imports: [AccountModule, AnalysisToolModule, TranscriptionModule],
   controllers: [],
   providers: [],
 })
