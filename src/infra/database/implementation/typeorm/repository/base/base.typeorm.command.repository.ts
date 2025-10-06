@@ -38,7 +38,11 @@ export abstract class BaseTypeormCommandRepository<
         }
       }
 
-      await repo.update(id, sanitizedData);
+      const entity = await repo.preload({ ...(sanitizedData as T), id });
+
+      if (entity) {
+        await repo.save(entity);
+      }
     };
   }
 

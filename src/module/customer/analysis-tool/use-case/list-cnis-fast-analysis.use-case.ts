@@ -54,6 +54,12 @@ export class ListCnisFastAnalysisUseCase {
       async (item) => {
         const response = GetCnisFastAnalysisResponseDto.build({
           ...item,
+          legalProceedingNumber: item.cnisFastAnalysisLegalProceeding.map(
+            (t) => t.legalProceedingNumber,
+          ),
+          inssBenefitNumber: item.cnisFastAnalysisInssBenefit.map(
+            (t) => t.inssBenefitNumber,
+          ),
           analysisToolClient: GetAnalysisToolClientResponseDto.build({
             ...item.analysisToolClient,
           }),
