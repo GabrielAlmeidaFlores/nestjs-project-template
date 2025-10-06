@@ -54,6 +54,14 @@ export class GetCnisFastAnalysisUseCase {
       analysisToolClient: GetAnalysisToolClientResponseDto.build({
         ...cnisFastAnalysisQueryResult.analysisToolClient,
       }),
+      legalProceedingNumber:
+        cnisFastAnalysisQueryResult.cnisFastAnalysisLegalProceeding.map(
+          (t) => t.legalProceedingNumber,
+        ),
+      inssBenefitNumber:
+        cnisFastAnalysisQueryResult.cnisFastAnalysisInssBenefit.map(
+          (t) => t.inssBenefitNumber,
+        ),
       cnisFastAnalysisResult:
         cnisFastAnalysisQueryResult.cnisFastAnalysisResult !== null
           ? GetCnisFastAnalysisResultResponseDto.build({
