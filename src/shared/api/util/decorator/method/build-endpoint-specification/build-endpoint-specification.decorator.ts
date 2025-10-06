@@ -22,6 +22,7 @@ import {
   ApiParam,
   ApiResponse,
   ApiSecurity,
+  ApiTags,
 } from '@nestjs/swagger';
 import { minutes, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
@@ -200,6 +201,16 @@ function buildEndpointGuardSpecificationInterface(
   return [UseGuards(...props)];
 }
 
+function buildEndpointTagSpecification(
+  tags?: Array<string>,
+): MethodDecorator[] {
+  if (!tags) {
+    return [];
+  }
+
+  return [ApiTags(...tags)];
+}
+
 export function BuildEndpointSpecification(
   props: BuildEndpointSpecificationDecoratorPropsInterface,
 ): MethodDecorator {
@@ -222,6 +233,7 @@ export function BuildEndpointSpecification(
   const endpointGuardSpecification = buildEndpointGuardSpecificationInterface(
     props.guard,
   );
+  const endpointTagSpecification = buildEndpointTagSpecification(props.tag);
 
   const decorators = [
     ...endpointOperationSpecification,
@@ -230,6 +242,7 @@ export function BuildEndpointSpecification(
     ...endpointThrottleSpecification,
     ...endpointHttpSpecification,
     ...endpointGuardSpecification,
+    ...endpointTagSpecification,
   ];
 
   return applyDecorators(...decorators);
