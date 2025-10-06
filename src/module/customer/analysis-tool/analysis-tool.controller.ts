@@ -6,11 +6,13 @@ import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
+import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
+import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -34,7 +36,32 @@ export class AnalysisToolController {
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
     private readonly listCnisFastAnalysisUseCase: ListCnisFastAnalysisUseCase,
+    private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
   ) {}
+
+  @BuildEndpointSpecification({
+    summary: 'List analysis tool clients',
+    http: {
+      path: 'analysis-tool-client',
+      method: RequestMethod.GET,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Analysis tool client list',
+      type: ListAnalysisToolClientResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listAnalysisToolClient(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListAnalysisToolClientResponseDto> {
+    return await this.listAnalysisToolClientUseCase.execute(
+      organizationSessionData,
+      dto,
+    );
+  }
 
   @BuildEndpointSpecification({
     summary: 'Create a cnis fast analysis',

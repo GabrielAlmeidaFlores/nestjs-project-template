@@ -1,0 +1,74 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import {
+  GetAnalysisToolClientResponseDto,
+  GetAnalysisToolClientResponsibleResponseDto,
+} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
+import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+
+@Injectable()
+export class ListAnalysisToolClientUseCase {
+  protected readonly _type = ListAnalysisToolClientUseCase.name;
+
+  public constructor(
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+  ) {}
+
+  public async execute(
+    organizationSessionData: OrganizationSessionDataModel,
+    dto: ListDataRequestDto,
+  ): Promise<ListAnalysisToolClientResponseDto> {
+    const listData =
+      await this.analysisToolClientQueryRepositoryGateway.listByOrganizationId(
+        organizationSessionData.organizationId,
+        new ListDataInputModel(dto),
+      );
+
+    const resource = await Promise.all(
+      listData.resource.map(async (listItem) => {
+        const mappedData = GetAnalysisToolClientResponseDto.build({
+          ...listItem,
+          createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
+            ...listItem.createdBy.customer,
+          }),
+          updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
+            ...listItem.updatedBy.customer,
+          }),
+        });
+
+        if (mappedData.createdBy.profilePicture !== undefined) {
+          const profilePicture =
+            await this.fileProcessorGateway.getFileSignedUrl(
+              mappedData.createdBy.profilePicture,
+            );
+
+          mappedData.createdBy.profilePicture = profilePicture.toString();
+        }
+
+        if (mappedData.updatedBy.profilePicture !== undefined) {
+          const profilePicture =
+            await this.fileProcessorGateway.getFileSignedUrl(
+              mappedData.updatedBy.profilePicture,
+            );
+
+          mappedData.updatedBy.profilePicture = profilePicture.toString();
+        }
+
+        return mappedData;
+      }),
+    );
+
+    return ListAnalysisToolClientResponseDto.build({
+      ...listData,
+      resource,
+    });
+  }
+}
