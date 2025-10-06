@@ -31,6 +31,8 @@ export abstract class BaseTypeormCommandRepository<
         (column) => column.propertyName,
       );
 
+      (data as T)['updatedAt'] = new Date();
+
       const sanitizedData: QueryDeepPartialEntity<T> = {};
       for (const key in data) {
         if (validPropertyNames.includes(key)) {
@@ -38,11 +40,7 @@ export abstract class BaseTypeormCommandRepository<
         }
       }
 
-      const entity = await repo.preload({ ...(sanitizedData as T), id });
-
-      if (entity) {
-        await repo.save(entity);
-      }
+      await repo.update(id, sanitizedData);
     };
   }
 
