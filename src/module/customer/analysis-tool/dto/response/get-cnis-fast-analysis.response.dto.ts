@@ -15,7 +15,7 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
+export class GetCnisFastAnalysisClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
@@ -37,7 +37,7 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
-  protected override readonly _type = GetAnalysisToolClientResponseDto.name;
+  protected override readonly _type = GetCnisFastAnalysisClientResponseDto.name;
 }
 
 @ResponseDto()
@@ -85,8 +85,8 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   })
   public cnisDocument?: string;
 
-  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
-  public analysisToolClient: GetAnalysisToolClientResponseDto;
+  @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
+  public analysisToolClient: GetCnisFastAnalysisClientResponseDto;
 
   @ResponseDtoNumberProperty({ required: false, isArray: true })
   public legalProceedingNumber?: number[];

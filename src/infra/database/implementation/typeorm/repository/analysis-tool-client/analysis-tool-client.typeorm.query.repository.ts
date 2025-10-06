@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
 import { Repository } from 'typeorm';
 
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
@@ -25,6 +27,49 @@ export class AnalysisToolClientTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async listByOrganizationId(
+    organizationId: OrganizationId,
+    listData: ListDataInputModel,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolClientWithRelationsQueryResult>
+  > {
+    const data = await this.list(listData, {
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: {
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetAnalysisToolClientWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
   }
 
   public async findOneByAnalysisToolClientAndOrganizationIdOrFail(
