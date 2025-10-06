@@ -3,9 +3,9 @@ import { InvalidCityError } from '@module/customer/account/domain/schema/entity/
 import { InvalidNeighborhoodError } from '@module/customer/account/domain/schema/entity/customer-address/error/invalid-customer-address-neighborhood.error';
 import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 
+import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import type { CustomerAddressEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity.props.interface';
-import type { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
 
 export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
   public readonly postalCode: PostalCode;
