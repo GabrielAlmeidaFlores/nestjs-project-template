@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
 import { DocumentAnalysisModule } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
@@ -29,6 +30,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetCnisFastAnalysisUseCase,
     ListCnisFastAnalysisUseCase,
     ListAnalysisToolClientUseCase,
+    CreateAnalysisToolClientUseCase,
   ],
 })
 export class AnalysisToolModule {
