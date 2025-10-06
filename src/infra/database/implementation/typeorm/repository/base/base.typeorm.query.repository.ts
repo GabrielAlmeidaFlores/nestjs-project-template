@@ -168,7 +168,7 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
       return this.generateNestedSearchWhere(field, search);
     }
 
-    const databaseSearchOperation = Like(`%${search}%`);
+    const databaseSearchOperation = Like(search);
     const likeCondition = { [field]: databaseSearchOperation };
     return likeCondition as FindOptionsWhere<T>;
   }
@@ -251,22 +251,25 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     baseConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
     additionalConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
   ): FindOptionsWhere<T>[] {
-    const isBaseArray = Array.isArray(baseConditions);
-    const isAdditionalArray = Array.isArray(additionalConditions);
+    if (!Array.isArray(baseConditions)) {
+      baseConditions = [baseConditions];
+    }
 
-    const normalizedBaseConditions = isBaseArray
-      ? baseConditions
-      : [baseConditions];
+    if (!Array.isArray(additionalConditions)) {
+      additionalConditions = [additionalConditions];
+    }
 
-    const normalizedAdditionalConditions = isAdditionalArray
-      ? additionalConditions
-      : [additionalConditions];
+    const where: FindOptionsWhere<T>[] = [];
 
-    return [
-      ...normalizedBaseConditions,
-      ...normalizedAdditionalConditions,
-    ].filter((object) => {
-      return Object.keys(object).length > 0;
+    baseConditions.forEach((baseCondition) => {
+      additionalConditions.forEach((additionalCondition) => {
+        where.push({
+          ...baseCondition,
+          ...additionalCondition,
+        });
+      });
     });
+
+    return where;
   }
 }
