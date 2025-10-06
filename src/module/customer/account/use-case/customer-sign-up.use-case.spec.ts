@@ -12,7 +12,7 @@ import { OrganizationCommandRepositoryGateway } from '@module/customer/account/d
 import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
-import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
 import {
