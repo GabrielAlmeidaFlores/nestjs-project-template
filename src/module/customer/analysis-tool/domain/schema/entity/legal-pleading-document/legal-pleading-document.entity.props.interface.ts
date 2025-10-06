@@ -6,5 +6,6 @@ import type { LegalPleadingDocumentId } from '@module/customer/analysis-tool/dom
 export interface LegalPleadingDocumentEntityPropsInterface
   extends BaseEntityPropsInterface<LegalPleadingDocumentId> {
   type: LegalPleadingDocumentTypeEnum;
+  document: string;
   legalPleading: LegalPleadingEntity;
 }
