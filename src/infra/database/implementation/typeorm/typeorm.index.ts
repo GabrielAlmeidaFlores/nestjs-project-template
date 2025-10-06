@@ -26,8 +26,11 @@ import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementat
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -47,6 +50,9 @@ export class TypeormIndex {
     AnalysisToolClientTypeormEntity,
     CnisFastAnalysisResultTypeormEntity,
     CnisFastAnalysisTypeormEntity,
+    LegalPleadingTypeormEntity,
+    LegalPleadingAddressEntity,
+    LegalPleadingDocumentEntity,
   ];
 
   public static readonly repositories: Provider[] = [
