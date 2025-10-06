@@ -56,6 +56,7 @@ export class GetCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObject
 
   @ResponseDtoStringProperty({ required: false })
   public cnisAiAnalysis?: string;
+
   protected override readonly _type = GetCnisFastAnalysisResultResponseDto.name;
 }
 
@@ -70,8 +71,6 @@ export class GetCnisFastAnalysisResponsibleResponseDto extends BaseBuildableDtoO
   @ResponseDtoStringProperty({ required: false })
   public profilePicture?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public cnisAiAnalysis?: string;
   protected override readonly _type =
     GetCnisFastAnalysisResponsibleResponseDto.name;
 }
