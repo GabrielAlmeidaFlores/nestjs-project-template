@@ -4,7 +4,7 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import {
-  GetAnalysisToolClientResponseDto,
+  GetCnisFastAnalysisClientResponseDto,
   GetCnisFastAnalysisResponseDto,
   GetCnisFastAnalysisResponsibleResponseDto,
   GetCnisFastAnalysisResultResponseDto,
@@ -60,7 +60,7 @@ export class ListCnisFastAnalysisUseCase {
           inssBenefitNumber: item.cnisFastAnalysisInssBenefit.map(
             (t) => t.inssBenefitNumber,
           ),
-          analysisToolClient: GetAnalysisToolClientResponseDto.build({
+          analysisToolClient: GetCnisFastAnalysisClientResponseDto.build({
             ...item.analysisToolClient,
           }),
           cnisFastAnalysisResult:

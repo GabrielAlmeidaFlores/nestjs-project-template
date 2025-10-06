@@ -4,7 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import {
-  GetAnalysisToolClientResponseDto,
+  GetCnisFastAnalysisClientResponseDto,
   GetCnisFastAnalysisResponseDto,
   GetCnisFastAnalysisResponsibleResponseDto,
   GetCnisFastAnalysisResultResponseDto,
@@ -51,7 +51,7 @@ export class GetCnisFastAnalysisUseCase {
 
     const response = GetCnisFastAnalysisResponseDto.build({
       ...cnisFastAnalysisQueryResult,
-      analysisToolClient: GetAnalysisToolClientResponseDto.build({
+      analysisToolClient: GetCnisFastAnalysisClientResponseDto.build({
         ...cnisFastAnalysisQueryResult.analysisToolClient,
       }),
       legalProceedingNumber:
