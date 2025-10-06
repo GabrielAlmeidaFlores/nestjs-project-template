@@ -21,6 +21,26 @@ import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analy
 @Entity({ name: 'legal_pleading' })
 export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'statement_of_facts',
+    type: 'text',
+  })
+  public statementOfFacts: string;
+
+  @Column({
+    name: 'additional_comments',
+    type: 'text',
+    nullable: true,
+  })
+  public additionalComments: string | null;
+
+  @Column({
+    name: 'legal_pleading_ai_analysis',
+    type: 'text',
+    nullable: true,
+  })
+  public legalPleadingAiAnalysis: string | null;
+
+  @Column({
     name: 'security_system',
     type: 'simple-enum',
     enum: LegalPleadingSocialSecuritySystemEnum,

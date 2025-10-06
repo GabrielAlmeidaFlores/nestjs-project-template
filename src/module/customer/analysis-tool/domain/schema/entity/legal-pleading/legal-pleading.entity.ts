@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { LegalPleadingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-status.enum';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
 
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
@@ -14,6 +15,10 @@ import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema
 import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 
 export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
+  public readonly statementOfFacts: string;
+  public readonly additionalComments: string | null;
+  public readonly legalPleadingAiAnalysis: string | null;
+  public readonly status: LegalPleadingStatusEnum;
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
   public readonly benefitType: LegalPleadingBenefitTypeEnum;
   public readonly petitionType: LegalPleadingPetitionTypeEnum;
@@ -34,6 +39,13 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public constructor(props: LegalPleadingEntityPropsInterface) {
     super(LegalPleadingId, props);
 
+    this.legalPleadingAiAnalysis = props.legalPleadingAiAnalysis ?? null;
+    this.status =
+      props.legalPleadingAiAnalysis === null
+        ? LegalPleadingStatusEnum.IN_PROGRESS
+        : LegalPleadingStatusEnum.COMPLETED;
+    this.statementOfFacts = props.statementOfFacts;
+    this.additionalComments = props.additionalComments ?? null;
     this.securitySystem = props.securitySystem;
     this.benefitType = props.benefitType;
     this.petitionType = props.petitionType;

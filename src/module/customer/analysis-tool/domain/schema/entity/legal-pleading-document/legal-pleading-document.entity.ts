@@ -8,6 +8,7 @@ import type { LegalPleadingDocumentEntityPropsInterface } from '@module/customer
 export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumentId> {
   public readonly type: LegalPleadingDocumentTypeEnum;
   public readonly document: string;
+  public readonly documentAiAnalysis: string | null;
   public readonly legalPleading: LegalPleadingEntity;
 
   protected readonly _type = LegalPleadingDocumentEntity.name;
@@ -17,6 +18,7 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
 
     this.type = props.type;
     this.document = props.document;
+    this.documentAiAnalysis = props.documentAiAnalysis ?? null;
     this.legalPleading = props.legalPleading;
   }
 }
