@@ -49,6 +49,7 @@ export class AnalysisToolController {
       path: 'analysis-tool-client',
       method: RequestMethod.GET,
     },
+    tag: ['analysis-tool-client'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Analysis tool client list',
@@ -74,6 +75,7 @@ export class AnalysisToolController {
       method: RequestMethod.POST,
       type: CreateAnalysisToolClientRequestDto,
     },
+    tag: ['analysis-tool-client'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Analysis tool client created successfully',
@@ -101,6 +103,7 @@ export class AnalysisToolController {
       method: RequestMethod.POST,
       type: CreateCnisFastAnalysisRequestDto,
     },
+    tag: ['cnis-fast-analysis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cnis fast analysis created successfully',
@@ -128,6 +131,7 @@ export class AnalysisToolController {
       method: RequestMethod.PATCH,
       type: UpdateCnisFastAnalysisRequestDto,
     },
+    tag: ['cnis-fast-analysis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cnis fast analysis updated successfully',
@@ -158,6 +162,7 @@ export class AnalysisToolController {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.GET,
     },
+    tag: ['cnis-fast-analysis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cnis fast analysis data',
@@ -185,6 +190,7 @@ export class AnalysisToolController {
       path: 'cnis-fast-analysis',
       method: RequestMethod.GET,
     },
+    tag: ['cnis-fast-analysis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cnis fast analysis list',
@@ -211,6 +217,7 @@ export class AnalysisToolController {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId/result',
       method: RequestMethod.POST,
     },
+    tag: ['cnis-fast-analysis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cnis fast analysis result created successfully',

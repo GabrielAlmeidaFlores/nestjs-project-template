@@ -10,4 +10,5 @@ export interface BuildEndpointSpecificationDecoratorPropsInterface {
   http: BuildEndpointHttpSpecificationType;
   throttle?: BuildEndpointThrottleSpecificationType;
   guard?: Array<Type<CanActivate> | CanActivate>;
+  tag?: Array<string>;
 }
