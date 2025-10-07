@@ -29,7 +29,7 @@ export class FileProcessorService implements FileProcessorGateway {
       cnisDocumentLocation === undefined
         ? await this.bucketGateway.create(
             cnisDocument,
-            BucketApplicationVariable.BUCKET_FILE_LOCATION_CUSTOMER_CNIS_DOCUMENT,
+            BucketApplicationVariable.BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT,
           )
         : await this.bucketGateway.update(cnisDocument, cnisDocumentLocation);
 

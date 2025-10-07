@@ -28,6 +28,9 @@ export class CreateLegalPleadingAddressDataRequestDto extends BaseBuildableDtoOb
   @RequestDtoStringProperty()
   public neighborhood: string;
 
+  @RequestDtoStringProperty()
+  public street: string;
+
   @RequestDtoEnumProperty(StateCodeEnum)
   public stateCode: StateCodeEnum;
 
@@ -100,29 +103,30 @@ export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
 export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
+    required: false,
   })
-  public cnisDocument: FileModel;
+  public cnisDocument?: FileModel;
 
-  @RequestDtoFileProperty()
-  public ctps: FileModel;
+  @RequestDtoFileProperty({ required: false })
+  public ctps?: FileModel;
 
-  @RequestDtoFileProperty({ isArray: true })
-  public ruralDocument: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public ruralDocument?: FileModel[];
 
-  @RequestDtoFileProperty({ isArray: true })
-  public specialWorkPeriodRecognitionDocument: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public specialWorkPeriodRecognitionDocument?: FileModel[];
 
-  @RequestDtoFileProperty({ isArray: true })
-  public personalDocument: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public personalDocument?: FileModel[];
 
-  @RequestDtoFileProperty({ isArray: true })
-  public relevantPriorAdministrativeProceeding: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public relevantPriorAdministrativeProceeding?: FileModel[];
 
-  @RequestDtoFileProperty({ isArray: true })
-  public relatedCourtCase: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public relatedCourtCase?: FileModel[];
 
-  @RequestDtoFileProperty({ isArray: true })
-  public supportingDocument: FileModel[];
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public supportingDocument?: FileModel[];
 
   @RequestDtoObjectProperty(() => CreateLegalPleadingDataRequestDto)
   public json: CreateLegalPleadingDataRequestDto;
