@@ -16,10 +16,32 @@ export class GeminiService implements GenerativeIaGateway {
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
   }
+  public async generateFlashResponseFromPromptAndFiles(
+    prompt: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generateResponseFromPromptAndFiles(
+      prompt,
+      files,
+      'gemini-1.5-pro',
+    );
+  }
 
   public async generateHighQualityResponseFromPromptAndFiles(
     prompt: string,
     files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generateResponseFromPromptAndFiles(
+      prompt,
+      files,
+      'gemini-2.5-pro',
+    );
+  }
+
+  private async generateResponseFromPromptAndFiles(
+    prompt: string,
+    files: Buffer[],
+    model: string,
   ): Promise<string | null> {
     const promptPart: Part[] = [
       {
@@ -43,7 +65,7 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     const result = await this.googleGenerativeAI.models.generateContentStream({
-      model: 'gemini-2.5-pro',
+      model,
       contents: {
         role: 'user',
         parts: promptPart,

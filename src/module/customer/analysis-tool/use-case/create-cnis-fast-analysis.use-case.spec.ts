@@ -20,7 +20,7 @@ import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -78,9 +78,9 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
       execute: jest.fn(),
     } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<DocumentAnalysisGateway> = {
+  const documentAnalysisGateway: jest.Mocked<AnalysisProcessorGateway> = {
     validateCnisDocument: jest.fn(),
-  } as unknown as jest.Mocked<DocumentAnalysisGateway>;
+  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -186,7 +186,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
         },
-        { provide: DocumentAnalysisGateway, useValue: documentAnalysisGateway },
+        { provide: AnalysisProcessorGateway, useValue: documentAnalysisGateway },
       ],
     }).compile();
 
