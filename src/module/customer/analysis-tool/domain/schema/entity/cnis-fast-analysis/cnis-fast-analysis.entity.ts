@@ -1,5 +1,4 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { CnisFastAnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/enum/cnis-fast-analysis-status.enum';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -9,9 +8,6 @@ import type { CnisFastAnalysisEntityPropsInterface } from '@module/customer/anal
 import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 
 export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
-  @Description('Status da análise CNIS rápida.')
-  public readonly status: CnisFastAnalysisStatusEnum;
-
   @Description('Documento CNIS utilizado na análise rápida.')
   public readonly cnisDocument: string | null;
 
@@ -34,10 +30,6 @@ export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
   public constructor(props: CnisFastAnalysisEntityPropsInterface) {
     super(CnisFastAnalysisId, props);
 
-    this.status =
-      props.cnisFastAnalysisResult === null
-        ? CnisFastAnalysisStatusEnum.IN_PROGRESS
-        : CnisFastAnalysisStatusEnum.COMPLETED;
     this.cnisDocument = props.cnisDocument ?? null;
     this.cnisFastAnalysisResult = props.cnisFastAnalysisResult ?? null;
     this.analysisToolClient = props.analysisToolClient;
