@@ -2,10 +2,10 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
-import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 
 @Injectable()

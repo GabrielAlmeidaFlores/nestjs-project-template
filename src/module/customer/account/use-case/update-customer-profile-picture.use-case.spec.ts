@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
@@ -12,7 +13,6 @@ import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/r
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
-import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
