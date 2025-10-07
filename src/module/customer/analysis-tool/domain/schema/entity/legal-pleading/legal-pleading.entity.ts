@@ -1,5 +1,4 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { LegalPleadingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-status.enum';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -24,9 +23,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
 
   @Description('Análise gerada por IA para a peça processual.')
   public readonly legalPleadingAiAnalysis: string | null;
-
-  @Description('Status atual da peça processual.')
-  public readonly status: LegalPleadingStatusEnum;
 
   @Description('Sistema de seguridade social relacionado à peça processual.')
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
@@ -84,10 +80,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     super(LegalPleadingId, props);
 
     this.legalPleadingAiAnalysis = props.legalPleadingAiAnalysis ?? null;
-    this.status =
-      props.legalPleadingAiAnalysis === null
-        ? LegalPleadingStatusEnum.IN_PROGRESS
-        : LegalPleadingStatusEnum.COMPLETED;
     this.statementOfFacts = props.statementOfFacts;
     this.additionalComments = props.additionalComments ?? null;
     this.securitySystem = props.securitySystem;
