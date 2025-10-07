@@ -69,11 +69,10 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create analysis tool client',
+    summary: 'Delete analysis tool client',
     http: {
-      path: 'analysis-tool-client',
-      method: RequestMethod.POST,
-      type: CreateAnalysisToolClientRequestDto,
+      path: 'analysis-tool-client/:id',
+      method: RequestMethod.DELETE,
     },
     tag: ['analysis-tool-client'],
     successResponse: {
