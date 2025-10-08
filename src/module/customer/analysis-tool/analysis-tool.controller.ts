@@ -1,5 +1,6 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
@@ -7,6 +8,7 @@ import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
+import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/delete-cnis-fast-analysis.response';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
@@ -15,6 +17,7 @@ import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import DeleteCnisFastAnalysisUseCase from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -43,6 +46,7 @@ export class AnalysisToolController {
     private readonly listCnisFastAnalysisUseCase: ListCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
+    private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
   ) {}
 
@@ -156,6 +160,37 @@ export class AnalysisToolController {
       organizationSessionData,
       cnisFastAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Delete analysis tool clients',
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analysis-tool-client'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Analysis tool client deleted successfully',
+      type: DeleteAnalysisToolClientResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async removeAnalysisToolClient(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<DeleteAnalysisToolClientResponseDto> {
+    return await this.deleteAnalysisToolClientUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      analysisToolClientId,
     );
   }
 
