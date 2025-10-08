@@ -2,7 +2,6 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
@@ -35,7 +34,6 @@ export class CustomerEntityAutoMapperProfile {
       return new CustomerEntity({
         ...source,
         id: new CustomerId(source.id),
-        phoneNumber: new PhoneNumber(source.phoneNumber),
         customerAddress,
       });
     };
@@ -63,7 +61,6 @@ export class CustomerEntityAutoMapperProfile {
       return CustomerTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        phoneNumber: source.phoneNumber.toString(),
         customerAddress,
       });
     };
