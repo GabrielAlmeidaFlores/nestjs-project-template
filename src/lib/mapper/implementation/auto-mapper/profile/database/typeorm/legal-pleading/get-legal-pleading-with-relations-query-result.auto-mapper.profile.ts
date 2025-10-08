@@ -13,7 +13,7 @@ import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/cu
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/query/result/get-legal-pleading-address.query.result';
-import { GetLegalPleadingDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document.query.result';
+import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
 
@@ -60,7 +60,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
       const legalPleadingDocument = this.mapper.mapArray(
         source.legalPleadingDocument,
         LegalPleadingDocumentTypeormEntity,
-        GetLegalPleadingDocumentQueryResult,
+        GetLegalPleadingDocumentWithRelationsQueryResult,
       );
 
       const updatedBy = this.mapper.map(
@@ -129,7 +129,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
 
       const legalPleadingDocument = this.mapper.mapArray(
         source.legalPleadingDocument,
-        GetLegalPleadingDocumentQueryResult,
+        GetLegalPleadingDocumentWithRelationsQueryResult,
         LegalPleadingDocumentTypeormEntity,
       );
 

@@ -1,5 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { LegalPleadingDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/value-object/legal-pleading-document/legal-pleading-document-id.value-object';
+import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
@@ -16,6 +17,9 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
   @Description('Petição legal à qual o documento está anexado.')
   public readonly legalPleading: LegalPleadingEntity;
 
+  @Description('Análise do documento legal anexado à petição.')
+  public readonly legalPleadingDocumentAnalysis: LegalPleadingDocumentAnalysisEntity | null;
+
   protected readonly _type = LegalPleadingDocumentEntity.name;
 
   public constructor(props: LegalPleadingDocumentEntityPropsInterface) {
@@ -24,5 +28,7 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
     this.type = props.type;
     this.document = props.document;
     this.legalPleading = props.legalPleading;
+    this.legalPleadingDocumentAnalysis =
+      props.legalPleadingDocumentAnalysis ?? null;
   }
 }
