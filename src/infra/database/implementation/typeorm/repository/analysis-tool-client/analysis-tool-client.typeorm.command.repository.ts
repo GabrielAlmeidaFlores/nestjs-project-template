@@ -49,4 +49,8 @@ export class AnalysisToolClientTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public deleteAnalysisToolClient(id: AnalysisToolClientId): TransactionType {
+    return this.delete(id.toString());
+  }
 }
