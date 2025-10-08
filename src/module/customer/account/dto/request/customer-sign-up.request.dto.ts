@@ -18,6 +18,9 @@ export class CustomerAddressSignUpRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public neighborhood: string;
 
+  @RequestDtoStringProperty()
+  public street: string;
+
   @RequestDtoEnumProperty(StateCodeEnum)
   public stateCode: StateCodeEnum;
 
