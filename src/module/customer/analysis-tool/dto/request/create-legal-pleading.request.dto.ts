@@ -52,13 +52,13 @@ export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public additionalComments?: string;
 
-  @RequestDtoEnumProperty({ enum: LegalPleadingSocialSecuritySystemEnum })
+  @RequestDtoEnumProperty(LegalPleadingSocialSecuritySystemEnum)
   public securitySystem: LegalPleadingSocialSecuritySystemEnum;
 
-  @RequestDtoEnumProperty({ enum: LegalPleadingBenefitTypeEnum })
+  @RequestDtoEnumProperty(LegalPleadingBenefitTypeEnum)
   public benefitType: LegalPleadingBenefitTypeEnum;
 
-  @RequestDtoEnumProperty({ enum: LegalPleadingPetitionTypeEnum })
+  @RequestDtoEnumProperty(LegalPleadingPetitionTypeEnum)
   public petitionType: LegalPleadingPetitionTypeEnum;
 
   @RequestDtoValueObjectProperty(BenefitNumber, { required: false })
