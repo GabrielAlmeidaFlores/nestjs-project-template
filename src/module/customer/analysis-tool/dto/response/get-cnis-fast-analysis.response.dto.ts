@@ -5,6 +5,7 @@ import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -84,6 +85,9 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
     required: false,
   })
   public cnisDocument?: string;
+
+  @ResponseDtoEnumProperty(AnalysisSolicitationStatusEnum)
+  public status: AnalysisSolicitationStatusEnum;
 
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
   public analysisToolClient: GetCnisFastAnalysisClientResponseDto;
