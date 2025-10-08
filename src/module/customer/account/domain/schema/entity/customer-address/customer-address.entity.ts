@@ -12,6 +12,7 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
   public readonly stateCode: StateCodeEnum;
   public readonly city: string;
   public readonly neighborhood: string;
+  public readonly street: string;
   public readonly addressNumber: number;
 
   protected readonly _type = CustomerAddressEntity.name;
@@ -26,6 +27,7 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
     this.stateCode = props.stateCode;
     this.city = props.city;
     this.neighborhood = props.neighborhood;
+    this.street = props.street;
     this.addressNumber = props.addressNumber;
   }
 
