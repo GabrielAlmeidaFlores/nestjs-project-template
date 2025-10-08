@@ -20,13 +20,6 @@ export class LegalPleadingDocumentTypeormEntity extends BaseTypeormEntity {
   })
   public document: string;
 
-  @Column({
-    name: 'document_ai_analysis',
-    type: 'text',
-    nullable: true,
-  })
-  public documentAiAnalysis: string | null;
-
   @ManyToOne(
     () => LegalPleadingTypeormEntity,
     (entity) => entity.legalPleadingDocument,

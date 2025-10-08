@@ -7,7 +7,6 @@ export class GetLegalPleadingDocumentQueryResult extends BaseBuildableObject {
   public readonly id: LegalPleadingDocumentId;
   public readonly type: LegalPleadingDocumentTypeEnum;
   public readonly document: string;
-  public readonly documentAiAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

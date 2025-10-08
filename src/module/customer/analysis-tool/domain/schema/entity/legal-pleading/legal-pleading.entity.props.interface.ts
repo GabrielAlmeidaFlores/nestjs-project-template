@@ -15,7 +15,6 @@ export interface LegalPleadingEntityPropsInterface
   extends BaseEntityPropsInterface<LegalPleadingId> {
   statementOfFacts: string;
   additionalComments?: string | null;
-  legalPleadingAiAnalysis?: string | null;
   securitySystem: LegalPleadingSocialSecuritySystemEnum;
   benefitType: LegalPleadingBenefitTypeEnum;
   petitionType: LegalPleadingPetitionTypeEnum;
