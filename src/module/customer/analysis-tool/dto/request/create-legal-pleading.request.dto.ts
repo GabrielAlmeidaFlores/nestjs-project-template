@@ -105,7 +105,7 @@ export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
     required: false,
   })
-  public cnisDocument?: FileModel;
+  public cnis?: FileModel;
 
   @RequestDtoFileProperty({ required: false })
   public ctps?: FileModel;

@@ -92,7 +92,7 @@ describe(UpdateCnisFastAnalysisUseCase.name, () => {
       findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
     } as unknown as jest.Mocked<AnalysisToolClientQueryRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<AnalysisProcessorGateway> = {
+  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     validateCnisDocument: jest.fn(),
   } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
@@ -224,7 +224,7 @@ describe(UpdateCnisFastAnalysisUseCase.name, () => {
           provide: AnalysisToolClientQueryRepositoryGateway,
           useValue: analysisToolClientQueryRepositoryGateway,
         },
-        { provide: AnalysisProcessorGateway, useValue: documentAnalysisGateway },
+        { provide: AnalysisProcessorGateway, useValue: analysisProcessorGateway },
       ],
     }).compile();
 
@@ -249,7 +249,7 @@ describe(UpdateCnisFastAnalysisUseCase.name, () => {
     cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
       initialAnalysis,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(true);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(true);
     fileProcessorGateway.uploadDocument.mockResolvedValueOnce('new/path.pdf');
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       newClient,
@@ -402,7 +402,7 @@ describe(UpdateCnisFastAnalysisUseCase.name, () => {
     cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
       initialAnalysis,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(false);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(false);
 
     await expect(
       useCase.execute(sessionData, orgSessionData, cnisId, dto),

@@ -40,7 +40,7 @@ export class CreateCnisFastAnalysisUseCase {
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
-    private readonly documentAnalysisGateway: AnalysisProcessorGateway,
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
   ) {}
 
   public async execute(
@@ -60,7 +60,7 @@ export class CreateCnisFastAnalysisUseCase {
 
     if (dto.cnisDocument) {
       const validateCnisDocument =
-        await this.documentAnalysisGateway.validateCnisDocument(
+        await this.analysisProcessorGateway.validateCnisDocument(
           dto.cnisDocument.buffer,
         );
 
