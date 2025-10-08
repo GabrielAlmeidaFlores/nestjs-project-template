@@ -76,14 +76,12 @@ export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(DecimalValue, { required: false })
   public benefitCurrentMonthlyIncome?: DecimalValue;
 
-  @RequestDtoEnumProperty({
-    enum: LegalPleadingSocialSecurityObjectiveEnum,
+  @RequestDtoEnumProperty(LegalPleadingSocialSecurityObjectiveEnum, {
     required: false,
   })
   public socialSecurityObjective?: LegalPleadingSocialSecurityObjectiveEnum;
 
-  @RequestDtoEnumProperty({
-    enum: LegalPleadingWritOfMandamusObjectiveEnum,
+  @RequestDtoEnumProperty(LegalPleadingWritOfMandamusObjectiveEnum, {
     required: false,
   })
   public legalPleadingWritOfMandamusObjective?: LegalPleadingWritOfMandamusObjectiveEnum;
