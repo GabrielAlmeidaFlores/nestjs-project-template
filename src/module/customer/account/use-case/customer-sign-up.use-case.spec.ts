@@ -4,7 +4,6 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -68,12 +67,12 @@ describe(CustomerSignUpUseCase.name, () => {
     CustomerSignUpRequestDto.build({
       name: 'Maria Silva',
       email: new Email('maria.silva@example.com'),
-      phoneNumber: new PhoneNumber('5511999999999'),
       federalDocument: new FederalDocument('12345678900'),
       password: 'StrongPassword123',
       customerAddress: CustomerAddressSignUpRequestDto.build({
         city: 'São Paulo',
         neighborhood: 'Centro',
+        street: 'Praça da Sé',
         stateCode: StateCodeEnum.SP,
         postalCode: new PostalCode('01001000'),
         addressNumber: 123,
