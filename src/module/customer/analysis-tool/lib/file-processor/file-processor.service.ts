@@ -22,16 +22,16 @@ export class FileProcessorService implements FileProcessorGateway {
   }
 
   public async uploadDocument(
-    cnisDocument: Buffer,
-    cnisDocumentLocation?: string,
+    documentBuffer: Buffer,
+    documentLocation?: string,
   ): Promise<string> {
     const uploadCnisDocument =
-      cnisDocumentLocation === undefined
+      documentLocation === undefined
         ? await this.bucketGateway.create(
-            cnisDocument,
+            documentBuffer,
             BucketApplicationVariable.BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT,
           )
-        : await this.bucketGateway.update(cnisDocument, cnisDocumentLocation);
+        : await this.bucketGateway.update(documentBuffer, documentLocation);
 
     return uploadCnisDocument;
   }

@@ -78,7 +78,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
       execute: jest.fn(),
     } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<AnalysisProcessorGateway> = {
+  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     validateCnisDocument: jest.fn(),
   } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
@@ -186,7 +186,10 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
         },
-        { provide: AnalysisProcessorGateway, useValue: documentAnalysisGateway },
+        {
+          provide: AnalysisProcessorGateway,
+          useValue: analysisProcessorGateway,
+        },
       ],
     }).compile();
 
@@ -210,7 +213,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember as unknown as GetOrganizationMemberQueryResult,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(true);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(true);
     fileProcessorGateway.uploadDocument.mockResolvedValueOnce(
       uploadedDocumentPath,
     );
@@ -239,7 +242,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     expect(result).toBeInstanceOf(CreateCnisFastAnalysisResponseDto);
     expect(result.cnisFastAnalysisId).toBeDefined();
 
-    expect(documentAnalysisGateway.validateCnisDocument).toHaveBeenCalledTimes(
+    expect(analysisProcessorGateway.validateCnisDocument).toHaveBeenCalledTimes(
       1,
     );
     expect(fileProcessorGateway.uploadDocument).toHaveBeenCalledTimes(1);
@@ -294,7 +297,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
 
     await useCase.execute(sessionData, organizationSessionData, dto);
 
-    expect(documentAnalysisGateway.validateCnisDocument).not.toHaveBeenCalled();
+    expect(analysisProcessorGateway.validateCnisDocument).not.toHaveBeenCalled();
     expect(fileProcessorGateway.uploadDocument).not.toHaveBeenCalled();
 
     expect(
@@ -328,7 +331,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember as unknown as GetOrganizationMemberQueryResult,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(false);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(false);
 
     await expect(
       useCase.execute(sessionData, organizationSessionData, dto),

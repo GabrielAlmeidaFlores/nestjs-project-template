@@ -67,7 +67,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       findOneByIdWithRelationsOrFail: jest.fn(),
     } as unknown as jest.Mocked<CnisFastAnalysisQueryRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<AnalysisProcessorGateway> = {
+  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     parseCnisDocument: jest.fn(),
     analyzeCnis: jest.fn(),
   } as unknown as jest.Mocked<AnalysisProcessorGateway>;
@@ -189,7 +189,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
           provide: CnisFastAnalysisQueryRepositoryGateway,
           useValue: cnisFastAnalysisQueryRepositoryGateway,
         },
-        { provide: AnalysisProcessorGateway, useValue: documentAnalysisGateway },
+        { provide: AnalysisProcessorGateway, useValue: analysisProcessorGateway },
         {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
@@ -221,10 +221,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     fileProcessorGateway.getDocumentBuffer.mockResolvedValueOnce(
       mockDocumentBuffer,
     );
-    documentAnalysisGateway.parseCnisDocument.mockResolvedValueOnce(
+    analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    documentAnalysisGateway.createCnisFastAnalysis.mockResolvedValueOnce(mockAiAnalysis);
+    analysisProcessorGateway.createCnisFastAnalysis.mockResolvedValueOnce(mockAiAnalysis);
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
       mockTransaction,
     );
@@ -263,12 +263,12 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       cnisFastAnalysisQueryResult.cnisDocument,
     );
 
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledWith(
+    expect(analysisProcessorGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
+    expect(analysisProcessorGateway.parseCnisDocument).toHaveBeenCalledWith(
       mockDocumentBuffer,
     );
 
-    expect(documentAnalysisGateway.createCnisFastAnalysis).toHaveBeenCalledTimes(1);
+    expect(analysisProcessorGateway.createCnisFastAnalysis).toHaveBeenCalledTimes(1);
 
     expect(
       cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult,
