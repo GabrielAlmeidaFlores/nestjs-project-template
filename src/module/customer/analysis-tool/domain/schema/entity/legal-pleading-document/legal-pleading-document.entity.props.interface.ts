@@ -7,6 +7,5 @@ export interface LegalPleadingDocumentEntityPropsInterface
   extends BaseEntityPropsInterface<LegalPleadingDocumentId> {
   type: LegalPleadingDocumentTypeEnum;
   document: string;
-  documentAiAnalysis?: string | null;
   legalPleading: LegalPleadingEntity;
 }

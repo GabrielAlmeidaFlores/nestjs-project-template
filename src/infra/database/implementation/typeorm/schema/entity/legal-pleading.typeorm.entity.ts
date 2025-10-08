@@ -34,13 +34,6 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   public additionalComments: string | null;
 
   @Column({
-    name: 'legal_pleading_ai_analysis',
-    type: 'text',
-    nullable: true,
-  })
-  public legalPleadingAiAnalysis: string | null;
-
-  @Column({
     name: 'security_system',
     type: 'simple-enum',
     enum: LegalPleadingSocialSecuritySystemEnum,

@@ -17,7 +17,6 @@ export class GetLegalPleadingWithRelationsQueryResult extends BaseBuildableObjec
   public readonly id: LegalPleadingId;
   public readonly statementOfFacts: string;
   public readonly additionalComments: string | null;
-  public readonly legalPleadingAiAnalysis: string | null;
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
   public readonly benefitType: LegalPleadingBenefitTypeEnum;
   public readonly petitionType: LegalPleadingPetitionTypeEnum;

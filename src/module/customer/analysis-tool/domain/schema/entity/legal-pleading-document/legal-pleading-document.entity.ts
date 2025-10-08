@@ -13,9 +13,6 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
   @Description('Nome do documento legal anexado à petição.')
   public readonly document: string;
 
-  @Description('Análise de IA do documento legal anexado à petição.')
-  public readonly documentAiAnalysis: string | null;
-
   @Description('Petição legal à qual o documento está anexado.')
   public readonly legalPleading: LegalPleadingEntity;
 
@@ -26,7 +23,6 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
 
     this.type = props.type;
     this.document = props.document;
-    this.documentAiAnalysis = props.documentAiAnalysis ?? null;
     this.legalPleading = props.legalPleading;
   }
 }

@@ -21,9 +21,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   @Description('Comentários adicionais sobre a peça processual.')
   public readonly additionalComments: string | null;
 
-  @Description('Análise gerada por IA para a peça processual.')
-  public readonly legalPleadingAiAnalysis: string | null;
-
   @Description('Sistema de seguridade social relacionado à peça processual.')
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
 
@@ -79,7 +76,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public constructor(props: LegalPleadingEntityPropsInterface) {
     super(LegalPleadingId, props);
 
-    this.legalPleadingAiAnalysis = props.legalPleadingAiAnalysis ?? null;
     this.statementOfFacts = props.statementOfFacts;
     this.additionalComments = props.additionalComments ?? null;
     this.securitySystem = props.securitySystem;
