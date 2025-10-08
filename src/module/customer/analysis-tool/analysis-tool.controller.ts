@@ -7,6 +7,7 @@ import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
+import { DeleteCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/delete-cnis-fast-analysis.response';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
@@ -14,6 +15,7 @@ import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import DeleteCnisFastAnalysisUseCase from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
@@ -41,6 +43,7 @@ export class AnalysisToolController {
     private readonly listCnisFastAnalysisUseCase: ListCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
+    private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -153,6 +156,34 @@ export class AnalysisToolController {
       organizationSessionData,
       cnisFastAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Delete cnis fast analysis',
+    http: {
+      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['cnis-fast-analysis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Cnis fast analysis deleted successfully',
+      type: DeleteCnisFastAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async removeCnisFastAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+  ): Promise<DeleteCnisFastAnalysisResponseDto> {
+    return await this.deleteCnisFastAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
     );
   }
 

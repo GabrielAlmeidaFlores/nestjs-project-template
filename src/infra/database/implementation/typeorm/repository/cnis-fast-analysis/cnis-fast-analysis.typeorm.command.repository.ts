@@ -49,4 +49,8 @@ export class CnisFastAnalysisTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public deleteCnisFastAnalysis(id: CnisFastAnalysisId): TransactionType {
+    return this.delete(id.toString());
+  }
 }

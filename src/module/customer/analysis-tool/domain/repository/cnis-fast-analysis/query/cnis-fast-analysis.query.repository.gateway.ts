@@ -16,4 +16,10 @@ export abstract class CnisFastAnalysisQueryRepositoryGateway {
     organizationId: OrganizationId,
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetCnisFastAnalysisWithRelationsQueryResult>>;
+
+  public abstract findOneByCnisFastAnalysisAndOrganizationIdOrFail(
+    cnisFastAnalysisId: CnisFastAnalysisId,
+    organizationId: OrganizationId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetCnisFastAnalysisWithRelationsQueryResult>;
 }
