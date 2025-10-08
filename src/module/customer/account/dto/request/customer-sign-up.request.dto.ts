@@ -1,6 +1,5 @@
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
@@ -38,9 +37,6 @@ export class CustomerSignUpRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoValueObjectProperty(Email)
   public email: Email;
-
-  @RequestDtoValueObjectProperty(PhoneNumber)
-  public phoneNumber: PhoneNumber;
 
   @RequestDtoValueObjectProperty(FederalDocument)
   public federalDocument: FederalDocument;
