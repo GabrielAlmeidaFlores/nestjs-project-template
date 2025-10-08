@@ -62,6 +62,9 @@ export class GetCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObject
   @ResponseDtoStringProperty({ required: false })
   public cnisAiAnalysis?: string;
 
+  @ResponseDtoDateProperty()
+  public createdAt: Date;
+
   protected override readonly _type = GetCnisFastAnalysisResultResponseDto.name;
 }
 
