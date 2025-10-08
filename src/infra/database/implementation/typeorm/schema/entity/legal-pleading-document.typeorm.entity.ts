@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { LegalPleadingDocumentAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document-analysis.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 
@@ -26,6 +27,18 @@ export class LegalPleadingDocumentTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'legal_pleading_id' })
   public legalPleading?: LegalPleadingTypeormEntity | undefined;
+
+  @ManyToOne(
+    () => LegalPleadingDocumentAnalysisTypeormEntity,
+    (entity) => entity.legalPleadingDocument,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'legal_pleading_document_analysis_id' })
+  public legalPleadingDocumentAnalysis?:
+    | LegalPleadingDocumentAnalysisTypeormEntity
+    | undefined;
 
   protected override readonly _type = LegalPleadingDocumentTypeormEntity.name;
 }

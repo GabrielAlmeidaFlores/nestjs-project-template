@@ -2,14 +2,16 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { LegalPleadingDocumentAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document-analysis.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
-import { GetLegalPleadingDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document.query.result';
+import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
 import { LegalPleadingDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/value-object/legal-pleading-document/legal-pleading-document-id.value-object';
+import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 
 @Injectable()
-export class GetLegalPleadingDocumentQueryResultAutoMapperProfile {
+export class GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetLegalPleadingDocumentQueryResultAutoMapperProfile.name;
+    GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -23,10 +25,17 @@ export class GetLegalPleadingDocumentQueryResultAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: LegalPleadingDocumentTypeormEntity,
-    ): GetLegalPleadingDocumentQueryResult => {
-      return GetLegalPleadingDocumentQueryResult.build({
+    ): GetLegalPleadingDocumentWithRelationsQueryResult => {
+      const legalPleadingDocumentAnalysis = this.mapper.map(
+        source.legalPleadingDocumentAnalysis,
+        LegalPleadingDocumentAnalysisTypeormEntity,
+        LegalPleadingDocumentAnalysisEntity,
+      );
+
+      return GetLegalPleadingDocumentWithRelationsQueryResult.build({
         ...source,
         id: new LegalPleadingDocumentId(source.id),
+        legalPleadingDocumentAnalysis,
       });
     };
 
@@ -35,18 +44,25 @@ export class GetLegalPleadingDocumentQueryResultAutoMapperProfile {
     createMap(
       this.mapper,
       LegalPleadingDocumentTypeormEntity,
-      GetLegalPleadingDocumentQueryResult,
+      GetLegalPleadingDocumentWithRelationsQueryResult,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: GetLegalPleadingDocumentQueryResult,
+      source: GetLegalPleadingDocumentWithRelationsQueryResult,
     ): LegalPleadingDocumentTypeormEntity => {
+      const legalPleadingDocumentAnalysis = this.mapper.map(
+        source.legalPleadingDocumentAnalysis,
+        LegalPleadingDocumentAnalysisEntity,
+        LegalPleadingDocumentAnalysisTypeormEntity,
+      );
+
       return LegalPleadingDocumentTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        legalPleadingDocumentAnalysis,
       });
     };
 
@@ -54,7 +70,7 @@ export class GetLegalPleadingDocumentQueryResultAutoMapperProfile {
 
     createMap(
       this.mapper,
-      GetLegalPleadingDocumentQueryResult,
+      GetLegalPleadingDocumentWithRelationsQueryResult,
       LegalPleadingDocumentTypeormEntity,
       mappingFunction,
     );

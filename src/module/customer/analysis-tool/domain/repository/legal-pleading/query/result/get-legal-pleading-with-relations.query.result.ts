@@ -4,7 +4,7 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import type { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/query/result/get-legal-pleading-address.query.result';
-import type { GetLegalPleadingDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document.query.result';
+import type { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
 import type { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
 import type { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import type { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
@@ -28,7 +28,7 @@ export class GetLegalPleadingWithRelationsQueryResult extends BaseBuildableObjec
   public readonly socialSecurityObjective: LegalPleadingSocialSecurityObjectiveEnum | null;
   public readonly legalPleadingWritOfMandamusObjective: LegalPleadingWritOfMandamusObjectiveEnum | null;
   public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
-  public readonly legalPleadingDocument: GetLegalPleadingDocumentQueryResult[];
+  public readonly legalPleadingDocument: GetLegalPleadingDocumentWithRelationsQueryResult[];
   public readonly legalPleadingAddress: GetLegalPleadingAddressQueryResult | null;
   public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;

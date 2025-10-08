@@ -8,7 +8,7 @@ import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementati
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { LegalPleadingDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/legal-pleading-document.query.repository.gateway';
-import { GetLegalPleadingDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document.query.result';
+import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
 import { LegalPleadingDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/value-object/legal-pleading-document/legal-pleading-document-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -30,7 +30,7 @@ export class LegalPleadingDocumentTypeormQueryRepository
     id: LegalPleadingDocumentId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
-  ): Promise<GetLegalPleadingDocumentQueryResult> {
+  ): Promise<GetLegalPleadingDocumentWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
@@ -53,7 +53,7 @@ export class LegalPleadingDocumentTypeormQueryRepository
     const mappedData = this.mapperGateway.map(
       data,
       LegalPleadingDocumentTypeormEntity,
-      GetLegalPleadingDocumentQueryResult,
+      GetLegalPleadingDocumentWithRelationsQueryResult,
     );
 
     return mappedData;
