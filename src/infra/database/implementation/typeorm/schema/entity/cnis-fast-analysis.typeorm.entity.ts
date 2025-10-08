@@ -13,6 +13,7 @@ import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implem
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 
 @Entity({ name: 'cnis_fast_analysis' })
 export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -23,6 +24,14 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
     nullable: true,
   })
   public cnisDocument: string | null;
+
+  @Column({
+    name: 'status',
+    type: 'simple-enum',
+    enum: AnalysisSolicitationStatusEnum,
+    default: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+  })
+  public status: AnalysisSolicitationStatusEnum;
 
   @OneToOne(
     () => CnisFastAnalysisResultTypeormEntity,

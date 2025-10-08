@@ -3,18 +3,12 @@ import { InvalidCustomerNameError } from '@module/customer/account/domain/schema
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import type { CustomerEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer/customer.entity.props.interface';
 import type { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 
 export class CustomerEntity extends BaseEntity<CustomerId> {
   @Description('Nome do cliente.')
   public readonly name: string;
-
-  @Description('Número de telefone do cliente.')
-  public readonly phoneNumber: PhoneNumber;
-
-  @Description('Nome da foto de perfil do cliente.')
   public readonly profilePicture: string | null;
 
   @Description('Endereço do cliente.')
@@ -28,7 +22,6 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
     super(CustomerId, props);
 
     this.name = props.name;
-    this.phoneNumber = props.phoneNumber;
     this.customerAddress = props.customerAddress;
     this.profilePicture = props.profilePicture ?? null;
   }

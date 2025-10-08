@@ -2,7 +2,6 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
@@ -36,7 +35,6 @@ export class GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile {
       return GetCustomerWithAuthIdentityRelationQueryResult.build({
         ...source,
         id: new CustomerId(source.id),
-        phoneNumber: new PhoneNumber(source.phoneNumber),
         authIdentity,
       });
     };
@@ -64,7 +62,6 @@ export class GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile {
       return CustomerTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        phoneNumber: source.phoneNumber.toString(),
         authIdentity,
       });
     };

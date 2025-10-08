@@ -15,6 +15,7 @@ import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/sc
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
+import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -110,6 +111,7 @@ export class UpdateCnisFastAnalysisUseCase {
       ...cnisFastAnalysisQueryResult,
       analysisToolClient,
       cnisDocument,
+      status: AnalysisSolicitationStatusEnum.IN_PROGRESS,
       cnisFastAnalysisResult: null,
       createdBy: cnisFastAnalysisQueryResult.createdBy.id,
       updatedBy: organizationMember.id,

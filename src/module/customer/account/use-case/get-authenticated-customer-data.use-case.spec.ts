@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
@@ -79,7 +78,6 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     GetCustomerWithAuthIdentityRelationQueryResult.build({
       id: new CustomerId(),
       name: 'Maria Silva',
-      phoneNumber: new PhoneNumber('5511999999999'),
       profilePicture: null,
       createdAt: now,
       updatedAt: now,
@@ -155,7 +153,6 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
       `https://cdn.test/${organization.organizationLogo}`,
     );
 
-    // Cast to match the gateway return type (address variant not required by the use case)
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
       customer as unknown as Awaited<
         ReturnType<
@@ -176,16 +173,13 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
 
     expect(result).toBeInstanceOf(GetAuthenticatedCustomerDataResponseDto);
 
-    // Customer assertions
     expect(result.customer.name).toBe(customer.name);
     expect(result.customer.email).toEqual(customer.authIdentity.email);
     expect(result.customer.federalDocument).toEqual(
       customer.authIdentity.federalDocument,
     );
-    expect(result.customer.phoneNumber).toEqual(customer.phoneNumber);
     expect(result.customer.profilePicture).toBe(profileUrl.toString());
 
-    // Organization assertions
     expect(result.organization.organizationId).toEqual(organization.id);
     expect(result.organization.organizationName).toBe(organization.name);
     expect(result.organization.organizationLogo).toBe(logoUrl.toString());
