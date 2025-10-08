@@ -8,8 +8,9 @@ export class LegalPleadingDocumentAnalysisTypeormEntity extends BaseTypeormEntit
   @Column({
     name: 'document',
     type: 'text',
+    nullable: true,
   })
-  public analysis: string;
+  public analysis: string | null;
 
   @OneToMany(
     () => LegalPleadingDocumentTypeormEntity,

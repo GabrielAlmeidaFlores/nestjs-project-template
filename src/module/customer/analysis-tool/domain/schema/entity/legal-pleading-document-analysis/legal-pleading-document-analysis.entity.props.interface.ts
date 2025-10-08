@@ -3,5 +3,5 @@ import type { LegalPleadingDocumentAnalysisId } from '@module/customer/analysis-
 
 export interface LegalPleadingDocumentAnalysisEntityPropsInterface
   extends BaseEntityPropsInterface<LegalPleadingDocumentAnalysisId> {
-  analysis: string;
+  analysis?: string | null;
 }
