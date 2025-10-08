@@ -58,7 +58,6 @@ export class GetAuthenticatedCustomerDataUseCase {
         federalDocument:
           organizationMember.customer.authIdentity.federalDocument,
         name: organizationMember.customer.name,
-        phoneNumber: organizationMember.customer.phoneNumber,
       }),
     });
 

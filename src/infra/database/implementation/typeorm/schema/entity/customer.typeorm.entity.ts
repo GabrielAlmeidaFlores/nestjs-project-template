@@ -10,9 +10,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({ name: 'phone_number', type: 'varchar', length: 20 })
-  public phoneNumber: string;
-
   @Column({
     name: 'profile_picture',
     type: 'varchar',
