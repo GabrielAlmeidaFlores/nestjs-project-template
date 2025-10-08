@@ -11,4 +11,8 @@ export abstract class AnalysisToolClientCommandRepositoryGateway {
     id: AnalysisToolClientId,
     props: AnalysisToolClientEntity,
   ): TransactionType;
+
+  public abstract deleteAnalysisToolClient(
+    id: AnalysisToolClientId,
+  ): TransactionType;
 }

@@ -7,6 +7,7 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
@@ -31,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListCnisFastAnalysisUseCase,
     ListAnalysisToolClientUseCase,
     CreateAnalysisToolClientUseCase,
+    DeleteAnalysisToolClientUseCase,
   ],
 })
 export class AnalysisToolModule {
