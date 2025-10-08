@@ -72,6 +72,7 @@ describe(CustomerSignUpUseCase.name, () => {
       customerAddress: CustomerAddressSignUpRequestDto.build({
         city: 'São Paulo',
         neighborhood: 'Centro',
+        street: 'Praça da Sé',
         stateCode: StateCodeEnum.SP,
         postalCode: new PostalCode('01001000'),
         addressNumber: 123,
