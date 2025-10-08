@@ -20,8 +20,7 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
 
   @Description('Bairro do endereço do cliente.')
   public readonly neighborhood: string;
-
-  @Description('Número do endereço do cliente.')
+  public readonly street: string;
   public readonly addressNumber: number;
 
   protected readonly _type = CustomerAddressEntity.name;
@@ -36,6 +35,7 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
     this.stateCode = props.stateCode;
     this.city = props.city;
     this.neighborhood = props.neighborhood;
+    this.street = props.street;
     this.addressNumber = props.addressNumber;
   }
 

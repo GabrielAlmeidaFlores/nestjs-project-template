@@ -47,7 +47,6 @@ export class CustomerSignUpUseCase {
 
     const customer = new CustomerEntity({
       name: dto.name,
-      phoneNumber: dto.phoneNumber,
       customerAddress,
     });
 

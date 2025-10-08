@@ -33,10 +33,18 @@ export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'neighborhood',
     type: 'varchar',
-    length: 50,
+    length: 255,
     transformer: CryptographyTransformer,
   })
   public neighborhood: string;
+
+  @Column({
+    name: 'street',
+    type: 'varchar',
+    length: 255,
+    transformer: CryptographyTransformer,
+  })
+  public street: string;
 
   @Column({
     name: 'address_number',

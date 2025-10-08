@@ -8,6 +8,7 @@ export interface CustomerAddressEntityPropsInterface
   postalCode: PostalCode;
   stateCode: StateCodeEnum;
   city: string;
+  street: string;
   neighborhood: string;
   addressNumber: number;
 }

@@ -1,7 +1,6 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
@@ -18,6 +17,9 @@ export class CustomerAddressSignUpRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoStringProperty()
   public neighborhood: string;
+
+  @RequestDtoStringProperty()
+  public street: string;
 
   @RequestDtoEnumProperty(StateCodeEnum)
   public stateCode: StateCodeEnum;
@@ -38,9 +40,6 @@ export class CustomerSignUpRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoValueObjectProperty(Email)
   public email: Email;
-
-  @RequestDtoValueObjectProperty(PhoneNumber)
-  public phoneNumber: PhoneNumber;
 
   @RequestDtoValueObjectProperty(FederalDocument)
   public federalDocument: FederalDocument;

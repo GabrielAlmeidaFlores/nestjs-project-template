@@ -86,7 +86,14 @@ export class CnisFastAnalysisTypeormQueryRepository
         relations: {
           cnisFastAnalysisInssBenefit: true,
           cnisFastAnalysisLegalProceeding: true,
-          analysisToolClient: true,
+          analysisToolClient: {
+            createdBy: {
+              customer: true,
+            },
+            updatedBy: {
+              customer: true,
+            },
+          },
           cnisFastAnalysisResult: true,
           createdBy: {
             customer: true,
@@ -94,6 +101,49 @@ export class CnisFastAnalysisTypeormQueryRepository
           updatedBy: {
             customer: true,
           },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CnisFastAnalysisTypeormEntity,
+      GetCnisFastAnalysisWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByCnisFastAnalysisAndOrganizationIdOrFail(
+    cnisFastAnalysisId: CnisFastAnalysisId,
+    organizationId: OrganizationId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetCnisFastAnalysisWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: cnisFastAnalysisId.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+        relations: {
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
+          analysisToolClient: {
+            createdBy: true,
+            updatedBy: true,
+          },
+          cnisFastAnalysisResult: true,
+          cnisFastAnalysisInssBenefit: true,
+          cnisFastAnalysisLegalProceeding: true,
         },
       },
       err,

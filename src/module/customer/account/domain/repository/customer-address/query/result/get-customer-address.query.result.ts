@@ -10,6 +10,7 @@ export class GetCustomerAddressQueryResult extends BaseBuildableObject {
   public readonly stateCode: StateCodeEnum;
   public readonly city: string;
   public readonly neighborhood: string;
+  public readonly street: string;
   public readonly addressNumber: number;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

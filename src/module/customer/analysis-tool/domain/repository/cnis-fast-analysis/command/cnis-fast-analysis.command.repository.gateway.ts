@@ -11,4 +11,8 @@ export abstract class CnisFastAnalysisCommandRepositoryGateway {
     id: CnisFastAnalysisId,
     props: CnisFastAnalysisEntity,
   ): TransactionType;
+
+  public abstract deleteCnisFastAnalysis(
+    id: CnisFastAnalysisId,
+  ): TransactionType;
 }
