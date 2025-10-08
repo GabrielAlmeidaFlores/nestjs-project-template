@@ -4,6 +4,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -29,6 +30,9 @@ export class GetAnalysisToolClientResponsibleResponseDto extends BaseBuildableDt
 
 @ResponseDto()
 export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisToolClientId)
+  public id: AnalysisToolClientId;
+
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
