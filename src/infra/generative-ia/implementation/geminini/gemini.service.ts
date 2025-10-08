@@ -23,7 +23,7 @@ export class GeminiService implements GenerativeIaGateway {
     return await this.generateResponseFromPromptAndFiles(
       prompt,
       files,
-      'gemini-1.5-pro',
+      'gemini-2.5-flash',
     );
   }
 

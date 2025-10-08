@@ -115,7 +115,7 @@ export class CreateLegalPleadingUseCase {
     ];
 
     if (legalPleadingAddressTransaction !== null) {
-      transactions.push(legalPleadingAddressTransaction);
+      transactions.unshift(legalPleadingAddressTransaction);
     }
 
     const transactionResult =
