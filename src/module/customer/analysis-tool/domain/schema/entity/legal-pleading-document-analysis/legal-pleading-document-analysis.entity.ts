@@ -6,13 +6,13 @@ import type { LegalPleadingDocumentAnalysisEntityPropsInterface } from '@module/
 
 export class LegalPleadingDocumentAnalysisEntity extends BaseEntity<LegalPleadingDocumentAnalysisId> {
   @Description('Análise do documento legal anexado à petição.')
-  public readonly analysis: string;
+  public readonly analysis: string | null;
 
   protected readonly _type = LegalPleadingDocumentAnalysisEntity.name;
 
   public constructor(props: LegalPleadingDocumentAnalysisEntityPropsInterface) {
     super(LegalPleadingDocumentAnalysisId, props);
 
-    this.analysis = props.analysis;
+    this.analysis = props.analysis ?? null;
   }
 }

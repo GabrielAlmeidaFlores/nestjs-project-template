@@ -4,7 +4,7 @@ import type { LegalPleadingDocumentAnalysisId } from '@module/customer/analysis-
 
 export class GetLegalPleadingDocumentAnalysisQueryResult extends BaseBuildableObject {
   public readonly id: LegalPleadingDocumentAnalysisId;
-  public analysis: string;
+  public analysis: string | null;
   public createdAt: Date;
   public updatedAt: Date;
   public deletedAt: Date | null;
