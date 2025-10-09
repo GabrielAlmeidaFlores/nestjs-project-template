@@ -9,7 +9,7 @@ import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
-import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-validate-code.use-case';
+import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password-validate-code.use-case';
 
 describe(AuthIdentityForgotPasswordValidateCodeUseCase.name, () => {
   let useCase: AuthIdentityForgotPasswordValidateCodeUseCase;
