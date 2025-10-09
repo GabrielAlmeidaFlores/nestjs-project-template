@@ -1,13 +1,15 @@
-import { ExportDocumentGateway } from "@module/customer/analysis-tool/lib/export-document/export-document.gateway";
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
+
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { ExportDocumentService } from '@module/customer/analysis-tool/lib/export-document/export-document.service';
 
 @Module({
   imports: [],
   providers: [
     {
-      useClass: ,
-      provide: ExportDocumentGateway
-    }
+      useClass: ExportDocumentService,
+      provide: ExportDocumentGateway,
+    },
   ],
   exports: [ExportDocumentGateway],
 })
