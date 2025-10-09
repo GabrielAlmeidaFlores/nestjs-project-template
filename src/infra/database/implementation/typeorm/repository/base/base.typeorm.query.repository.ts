@@ -1,10 +1,9 @@
 import { Like } from 'typeorm';
 
-import { ListedDataOutputModel } from '@core/domain/repository/base/model/output/listed-data.output.model';
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 
-import type { ListDataInputModel } from '@core/domain/repository/base/model/input/list-data.input.model';
-import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
-import type { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
+import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 import type { NotFoundError } from 'rxjs';
 import type {
@@ -24,10 +23,10 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   }
 
   protected async findOneOrFail(
-    id: string,
+    options: FindOneOptions<T>,
     err: ConstructorType<NotFoundError>,
   ): Promise<T> {
-    const find = await this.findOne({ where: { id } as FindOptionsWhere<T> });
+    const find = await this.findOne(options);
 
     if (!find) {
       throw new err();
@@ -43,7 +42,20 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   protected async list(
     listBaseDto: ListDataInputModel,
     options?: FindManyOptions<T>,
-  ): Promise<ListedDataOutputModel<T>> {
+  ): Promise<ListDataOutputModel<T>> {
+    const maxItemsPerQuery = 100;
+    if (listBaseDto.limit > maxItemsPerQuery) {
+      listBaseDto.limit = maxItemsPerQuery;
+    }
+
+    if (listBaseDto.limit < 1) {
+      listBaseDto.limit = 1;
+    }
+
+    if (listBaseDto.page < 0) {
+      listBaseDto.page = 0;
+    }
+
     const sortField = listBaseDto.sortField;
     const order = this.generateSortOrder(sortField);
 
@@ -75,7 +87,7 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     const [data, count] =
       await this.repository.findAndCount(findAndCountOptions);
 
-    return new ListedDataOutputModel({
+    return new ListDataOutputModel({
       page: currentPage,
       limit: itemsPerPage,
       totalItems: count,
@@ -156,7 +168,7 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
       return this.generateNestedSearchWhere(field, search);
     }
 
-    const databaseSearchOperation = Like(`%${search}%`);
+    const databaseSearchOperation = Like(search);
     const likeCondition = { [field]: databaseSearchOperation };
     return likeCondition as FindOptionsWhere<T>;
   }
@@ -164,14 +176,13 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
   private generateSearchWhereAcrossAllFields(
     search: string,
   ): FindOptionsWhere<T>[] {
-    type EntityKeysType = keyof BaseTypeormEntity | keyof CustomerTypeormEntity;
+    type EntityKeysType = keyof BaseTypeormEntity;
 
     const excludedFields: EntityKeysType[] = [
       'id',
       'createdAt',
       'updatedAt',
       'deletedAt',
-      'password',
     ];
 
     const entityMetadata: EntityMetadata = this.repository.metadata;
@@ -240,17 +251,25 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     baseConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
     additionalConditions: FindOptionsWhere<T>[] | FindOptionsWhere<T>,
   ): FindOptionsWhere<T>[] {
-    const isBaseArray = Array.isArray(baseConditions);
-    const isAdditionalArray = Array.isArray(additionalConditions);
+    if (!Array.isArray(baseConditions)) {
+      baseConditions = [baseConditions];
+    }
 
-    const normalizedBaseConditions = isBaseArray
-      ? baseConditions
-      : [baseConditions];
+    if (!Array.isArray(additionalConditions)) {
+      additionalConditions = [additionalConditions];
+    }
 
-    const normalizedAdditionalConditions = isAdditionalArray
-      ? additionalConditions
-      : [additionalConditions];
+    const where: FindOptionsWhere<T>[] = [];
 
-    return [...normalizedBaseConditions, ...normalizedAdditionalConditions];
+    baseConditions.forEach((baseCondition) => {
+      additionalConditions.forEach((additionalCondition) => {
+        where.push({
+          ...baseCondition,
+          ...additionalCondition,
+        });
+      });
+    });
+
+    return where;
   }
 }

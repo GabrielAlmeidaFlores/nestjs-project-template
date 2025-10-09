@@ -1,9 +1,34 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.command.repository';
-import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer/customer.typeorm.query.repository';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer/customer.typeorm.entity';
-import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
+import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
+import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
+import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
+import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
+import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
+import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
+import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
+import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
+import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
+import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
+import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
+import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
+import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
+import { CustomerAddressTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.query.repository';
+import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
+import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
+import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
+import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
+import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
+import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
+import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
+import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
+import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
 import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
@@ -11,12 +36,38 @@ import type { DataSourceOptions } from 'typeorm';
 
 export class TypeormIndex {
   public static readonly entities: EntityClassOrSchema[] = [
+    AuthIdentityTypeormEntity,
+    CustomerAddressTypeormEntity,
     CustomerTypeormEntity,
+    OrganizationMemberTypeormEntity,
+    OrganizationTypeormEntity,
+    OrganizationTypeormEntity,
+    CnisFastAnalysisInssBenefitTypeormEntity,
+    CnisFastAnalysisLegalProceedingTypeormEntity,
+    AnalysisToolClientTypeormEntity,
+    CnisFastAnalysisResultTypeormEntity,
+    CnisFastAnalysisTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
+    BaseTypeormTransactionRepository,
+    AuthIdentityTypeormQueryRepository,
+    AuthIdentityTypeormCommandRepository,
     CustomerTypeormQueryRepository,
     CustomerTypeormCommandRepository,
+    CustomerAddressTypeormCommandRepository,
+    CustomerAddressTypeormQueryRepository,
+    OrganizationTypeormQueryRepository,
+    OrganizationTypeormCommandRepository,
+    OrganizationMemberTypeormQueryRepository,
+    OrganizationMemberTypeormCommandRepository,
+    CnisFastAnalysisTypeormCommandRepository,
+    AnalysisToolClientTypeormCommandRepository,
+    AnalysisToolClientTypeormQueryRepository,
+    CnisFastAnalysisResultTypeormCommandRepository,
+    AnalysisToolClientInssBenefitTypeormCommandRepository,
+    CnisFastAnalysisLegalProceedingTypeormCommandRepository,
+    CnisFastAnalysisTypeormQueryRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
@@ -31,8 +82,8 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
-    migrations: ['src/infra/database/implementation/typeorm/migration/*.js'],
-    synchronize: false,
+    migrations: ['src/infra/database/implementation/typeorm/migration/*.ts'],
+    synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
   };
 
   protected readonly _type = TypeormIndex.name;

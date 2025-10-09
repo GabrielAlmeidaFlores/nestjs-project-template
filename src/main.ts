@@ -3,8 +3,8 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 
 import { AppConfig } from '@base/app.config';
 import { AppModule } from '@base/app.module';
-import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/framework.application-variable';
-import { NodeApplicationVariable } from '@shared/system/constant/application-variable/node.application-variable';
+import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
+import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
@@ -15,12 +15,17 @@ async function bootstrap(): Promise<void> {
   );
 
   const appConfig = new AppConfig(app);
-  appConfig.cors().globalPrefix().globalPipes();
+  appConfig
+    .applyMultipart()
+    .applyCors()
+    .applyCookies()
+    .applyGlobalInterceptor()
+    .applyGlobalPrefix()
+    .applyGlobalPipes()
+    .applyGlobalFilters();
 
-  const isProductionEnvironment =
-    NodeApplicationVariable.PRODUCTION_ENVIRONMENT;
-  if (!isProductionEnvironment) {
-    appConfig.swagger();
+  if (!NodeApplicationVariable.PRODUCTION_ENVIRONMENT) {
+    appConfig.applySwagger();
   }
 
   await app.listen(

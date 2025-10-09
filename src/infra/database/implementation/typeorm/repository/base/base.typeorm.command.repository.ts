@@ -1,5 +1,6 @@
-import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base/base.typeorm.entity';
-import type { DeepPartial, Repository } from 'typeorm';
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import type { DeepPartial, EntityManager, Repository } from 'typeorm';
 import type { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class BaseTypeormCommandRepository<
@@ -7,19 +8,47 @@ export abstract class BaseTypeormCommandRepository<
 > {
   protected constructor(private readonly repository: Repository<T>) {}
 
-  protected async create(data: DeepPartial<T>): Promise<void> {
-    const newData = this.repository.create(data);
-    await this.repository.save(newData);
+  protected create(data: DeepPartial<T>): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+      const newData = repo.create(data);
+      await repo.save(newData);
+    };
   }
 
-  protected async update(
+  protected update(
     id: string,
     data: QueryDeepPartialEntity<T>,
-  ): Promise<void> {
-    await this.repository.update(id, data);
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+
+      const entityMetadata = repo.metadata;
+
+      const validPropertyNames = entityMetadata.columns.map(
+        (column) => column.propertyName,
+      );
+
+      (data as T)['updatedAt'] = new Date();
+
+      const sanitizedData: QueryDeepPartialEntity<T> = {};
+      for (const key in data) {
+        if (validPropertyNames.includes(key)) {
+          sanitizedData[key] = data[key];
+        }
+      }
+
+      await repo.update(id, sanitizedData);
+    };
   }
 
-  protected async delete(id: string): Promise<void> {
-    await this.repository.softDelete(id);
+  protected delete(id: string): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo = manager.getRepository<T>(this.repository.target);
+      await repo.softDelete(id);
+    };
   }
 }
