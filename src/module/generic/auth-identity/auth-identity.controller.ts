@@ -137,7 +137,7 @@ export class AuthIdentityController {
     },
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Password reset successfully',
+      description: 'The password was successfully updated',
       type: AuthIdentityResetPasswordResponseDto,
     },
   })
