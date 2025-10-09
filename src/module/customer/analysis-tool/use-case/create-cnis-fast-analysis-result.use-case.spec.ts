@@ -224,7 +224,9 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     documentAnalysisGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    documentAnalysisGateway.analyzeCnis.mockResolvedValueOnce(mockAiAnalysis);
+    documentAnalysisGateway.getCompleteAnalyzeCnis.mockResolvedValueOnce(
+      mockAiAnalysis,
+    );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
       mockTransaction,
     );
@@ -268,7 +270,9 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       mockDocumentBuffer,
     );
 
-    expect(documentAnalysisGateway.analyzeCnis).toHaveBeenCalledTimes(1);
+    expect(
+      documentAnalysisGateway.getCompleteAnalyzeCnis,
+    ).toHaveBeenCalledTimes(1);
 
     expect(
       cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult,
@@ -289,7 +293,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     expect(capturedResult.clientLastAffiliationDate).toEqual(
       new Date('2022-08-20'),
     );
-    expect(capturedResult.cnisAiAnalysis).toBe(mockAiAnalysis);
+    expect(capturedResult.cnisCompleteAnalysis).toBe(mockAiAnalysis);
 
     expect(
       cnisFastAnalysisCommandRepositoryGateway.updateCnisFastAnalysis,
@@ -307,7 +311,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
     expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
     expect(result.clientName).toBe('John Doe');
-    expect(result.cnisAiAnalysis).toBe(mockAiAnalysis);
+    expect(result.cnisCompleteAnalysis).toBe(mockAiAnalysis);
     expect(result.clientLastAffiliationDate).toEqual(new Date('2022-08-20'));
   });
 
