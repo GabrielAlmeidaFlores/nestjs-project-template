@@ -1,14 +1,14 @@
 import { Test } from '@nestjs/testing';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password-code.request.dto';
 import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password-validate-code.use-case';
 
 describe(AuthIdentityForgotPasswordValidateCodeUseCase.name, () => {

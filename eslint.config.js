@@ -39,7 +39,6 @@ module.exports = [
     plugins,
     rules: {
       'prettier/prettier': 'error',
-      endOfLine: 'auto',
       ...coreConfig.rules,
       ...customConfig.rules,
     },

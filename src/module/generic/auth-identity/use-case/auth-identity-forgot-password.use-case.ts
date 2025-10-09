@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
-import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
-import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthIdentityForgotPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password.response.dto';
+import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
+import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 
 @Injectable()
 export class AuthIdentityForgotPasswordUseCase {
@@ -20,10 +21,6 @@ export class AuthIdentityForgotPasswordUseCase {
     dto: AuthIdentityForgotPasswordRequestDto,
   ): Promise<AuthIdentityForgotPasswordResponseDto> {
     const email = dto.email;
-
-    if (!email) {
-      throw new WrongSignInCredentialsError();
-    }
 
     const authIdentity =
       await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(

@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password-code.request.dto';
 import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
+import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 
 @Injectable()
 export class AuthIdentityForgotPasswordValidateCodeUseCase {
   protected readonly _type = AuthIdentityForgotPasswordValidateCodeUseCase.name;
 
-  constructor(
+  public constructor(
     @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepository: AuthIdentityQueryRepositoryGateway,
     @Inject(EmailForgotPasswordGateway)
