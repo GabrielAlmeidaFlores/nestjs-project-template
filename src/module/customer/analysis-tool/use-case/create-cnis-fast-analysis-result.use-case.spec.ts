@@ -226,7 +226,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    analysisProcessorGateway.createCnisFastAnalysis.mockResolvedValueOnce(
+    documentAnalysisGateway.getCompleteAnalyzeCnis.mockResolvedValueOnce(
       mockAiAnalysis,
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
@@ -253,10 +253,19 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
     ).toHaveBeenCalledTimes(1);
     expect(fileProcessorGateway.getDocumentBuffer).toHaveBeenCalledTimes(1);
-    expect(analysisProcessorGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
+    expect(fileProcessorGateway.getDocumentBuffer).toHaveBeenCalledWith(
+      cnisFastAnalysisQueryResult.cnisDocument,
+    );
+
+    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
+    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledWith(
+      mockDocumentBuffer,
+    );
+
     expect(
-      analysisProcessorGateway.createCnisFastAnalysis,
+      documentAnalysisGateway.getCompleteAnalyzeCnis,
     ).toHaveBeenCalledTimes(1);
+
     expect(
       cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult,
     ).toHaveBeenCalledTimes(1);
@@ -266,7 +275,17 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       [CnisFastAnalysisResultEntity],
     ];
     expect(capturedResult.clientName).toBe('John Doe');
-    expect(capturedResult.cnisAiAnalysis).toBe(mockAiAnalysis);
+    expect(capturedResult.clientBirthDate).toEqual(new Date('1990-01-15'));
+    expect(capturedResult.clientFederalDocument).toBeInstanceOf(
+      FederalDocument,
+    );
+    expect(capturedResult.clientFederalDocument?.toString()).toBe(
+      '12345678901',
+    );
+    expect(capturedResult.clientLastAffiliationDate).toEqual(
+      new Date('2022-08-20'),
+    );
+    expect(capturedResult.cnisCompleteAnalysis).toBe(mockAiAnalysis);
 
     expect(
       cnisFastAnalysisCommandRepositoryGateway.updateCnisFastAnalysis,
@@ -281,6 +300,11 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
     expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
     expect(mockTransaction.commit).toHaveBeenCalledTimes(1);
+
+    expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
+    expect(result.clientName).toBe('John Doe');
+    expect(result.cnisCompleteAnalysis).toBe(mockAiAnalysis);
+    expect(result.clientLastAffiliationDate).toEqual(new Date('2022-08-20'));
   });
 
   it('should throw OrganizationMemberNotFoundError when organization member is not found', async () => {

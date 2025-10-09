@@ -9,7 +9,8 @@ export class GetCnisFastAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly clientFederalDocument: FederalDocument | null;
   public readonly clientBirthDate: Date | null;
   public readonly clientLastAffiliationDate: Date | null;
-  public readonly cnisAiAnalysis: string | null;
+  public readonly cnisCompleteAnalysis: string | null;
+  public readonly cnisSimplifiedAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
