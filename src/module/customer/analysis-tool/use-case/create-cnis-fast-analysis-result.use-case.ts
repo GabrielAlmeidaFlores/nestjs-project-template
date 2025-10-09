@@ -79,10 +79,20 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisAiAnalysis =
-      await this.cnisDocumentGateway.createCnisFastAnalysis([
+    const cnisDocumentDataBuffer = Buffer.from(
+      JSON.stringify(cnisDocumentData),
+      'utf-8',
+    );
+    const cnisCompleteAnalysis =
+      await this.cnisDocumentGateway.getCompleteAnalyzeCnis([
         clientDataBuffer,
-        cnisDocumentBuffer,
+        cnisDocumentDataBuffer,
+      ]);
+
+    const cnisSimplifiedAnalysis =
+      await this.cnisDocumentGateway.getSimplifiedAnalyzeCnis([
+        clientDataBuffer,
+        cnisDocumentDataBuffer,
       ]);
 
     let clientLastAffiliationDate: Date | null = null;
@@ -115,7 +125,8 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const cnisFastAnalysisResult = new CnisFastAnalysisResultEntity({
       clientLastAffiliationDate,
-      cnisAiAnalysis,
+      cnisCompleteAnalysis,
+      cnisSimplifiedAnalysis,
       clientBirthDate:
         cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null,
       clientName: cnisDocumentData.affiliateIdentification?.nome ?? null,

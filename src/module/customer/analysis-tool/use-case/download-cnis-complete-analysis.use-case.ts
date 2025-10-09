@@ -10,8 +10,8 @@ import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-export default class DownloadCnisFastAnalysisUseCase {
-  protected readonly _type = DownloadCnisFastAnalysisUseCase.name;
+export default class DownloadCnisCompleteAnalysisUseCase {
+  protected readonly _type = DownloadCnisCompleteAnalysisUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -49,7 +49,7 @@ export default class DownloadCnisFastAnalysisUseCase {
     }
 
     const responseAi =
-      cnisFastAnalysisQueryResult.cnisFastAnalysisResult.cnisAiAnalysis;
+      cnisFastAnalysisQueryResult.cnisFastAnalysisResult.cnisCompleteAnalysis;
 
     if (responseAi === null) {
       throw new CnisFastAnalysisNotFoundError();
