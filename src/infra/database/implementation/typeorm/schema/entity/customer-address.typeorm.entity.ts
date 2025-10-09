@@ -1,0 +1,61 @@
+import { Column, Entity, OneToOne } from 'typeorm';
+
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
+
+@Entity({ name: 'customer_address' })
+export class CustomerAddressTypeormEntity extends BaseTypeormEntity {
+  @Column({
+    name: 'postal_code',
+    type: 'varchar',
+    length: 50,
+    transformer: CryptographyTransformer,
+  })
+  public postalCode: string;
+
+  @Column({
+    name: 'state_code',
+    type: 'varchar',
+    length: 50,
+    transformer: CryptographyTransformer,
+  })
+  public stateCode: string;
+
+  @Column({
+    name: 'city',
+    type: 'varchar',
+    length: 50,
+    transformer: CryptographyTransformer,
+  })
+  public city: string;
+
+  @Column({
+    name: 'neighborhood',
+    type: 'varchar',
+    length: 255,
+    transformer: CryptographyTransformer,
+  })
+  public neighborhood: string;
+
+  @Column({
+    name: 'street',
+    type: 'varchar',
+    length: 255,
+    transformer: CryptographyTransformer,
+  })
+  public street: string;
+
+  @Column({
+    name: 'address_number',
+    type: 'varchar',
+    length: 50,
+    transformer: CryptographyTransformer,
+  })
+  public addressNumber: string;
+
+  @OneToOne(() => CustomerTypeormEntity, (entity) => entity.customerAddress)
+  public customer?: CustomerTypeormEntity | undefined;
+
+  protected override readonly _type = CustomerAddressTypeormEntity.name;
+}

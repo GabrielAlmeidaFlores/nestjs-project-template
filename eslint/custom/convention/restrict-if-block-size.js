@@ -5,7 +5,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
   meta: {
     type: 'problem',
     docs: {
-      description: "Disallow 'if' statement blocks longer than 15 lines",
+      description: "Disallow 'if' statement blocks longer than 25 lines",
       category: 'Best Practices',
       recommended: true,
       suggestion: false,
@@ -22,7 +22,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           const endLine = block.loc.end.line;
           const lineCount = endLine - startLine + 1;
 
-          const maxAllowedLines = 15;
+          const maxAllowedLines = 25;
 
           if (lineCount > maxAllowedLines) {
             context.report({

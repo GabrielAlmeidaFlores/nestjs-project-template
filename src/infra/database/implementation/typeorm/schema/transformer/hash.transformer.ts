@@ -1,6 +1,6 @@
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
-import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/database.application-variable';
+import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 class HashTransformerUtil {
   private static readonly saltRounds =
