@@ -47,9 +47,9 @@ jobs:
       - name: 📥 SSH - Pull and Tag Docker Image
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.PRD_SSH_HOST }}
+          username: ${{ secrets.PRD_SSH_USER }}
+          key: ${{ secrets.PRD_SSH_PRIVATE_KEY }}
           script: |
             echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
             docker pull ${{ vars.REGISTRY_URL }}:${{ env.APP_VERSION }}
@@ -58,9 +58,9 @@ jobs:
       - name: 🛑 SSH - Stop Old Docker Container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.PRD_SSH_HOST }}
+          username: ${{ secrets.PRD_SSH_USER }}
+          key: ${{ secrets.PRD_SSH_PRIVATE_KEY }}
           script: |
             cd ${{ env.WORKING_DIRECTORY }}
             bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh
@@ -68,18 +68,18 @@ jobs:
       - name: ⚙️ SSH - Update Container Environment Variables
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.PRD_SSH_HOST }}
+          username: ${{ secrets.PRD_SSH_USER }}
+          key: ${{ secrets.PRD_SSH_PRIVATE_KEY }}
           script: |
-            echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+            echo -e '${{ vars.PRD_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
 
       - name: 🚀 SSH - Start New Docker Container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.PRD_SSH_HOST }}
+          username: ${{ secrets.PRD_SSH_USER }}
+          key: ${{ secrets.PRD_SSH_PRIVATE_KEY }}
           script: |
             cd ${{ env.WORKING_DIRECTORY }}
             bash ${{ env.WORKING_DIRECTORY }}/start.container.sh
