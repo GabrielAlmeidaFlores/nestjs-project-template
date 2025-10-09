@@ -28,7 +28,20 @@ export class EmailApplicationVariable {
       String,
       'Agiliza Previ - Código de verificação',
     );
+  
+  public static readonly EMAIL_FORGOT_PASSWORD_CODE_TEMPLATE = 
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_FORGOT_PASSWORD_TEMPLATE',
+      String,
+      'forgot-password.html',
+    )
 
+  public static readonly EMAIL_FORGOT_PASSWORD_CODE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_FORGOT_PASSWORD_SUBJECT',
+      String,
+      'Agiliza Previ - Esqueceu senha',
+    );
   public static readonly EMAIL_SEND_GRID_KEY =
     EmailApplicationVariable.source.getValueOrThrow<string>(
       'EMAIL_SEND_GRID_KEY',
