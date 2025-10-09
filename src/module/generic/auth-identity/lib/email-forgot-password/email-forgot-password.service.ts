@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
@@ -62,6 +63,15 @@ export class EmailForgotPasswordService implements EmailForgotPasswordGateway {
     return persistedCode === code;
   }
 
+  public async invalidateForgotPasswordCode(
+    authIdentity: AuthIdentityId,
+  ): Promise<void> {
+    const cacheStorageKey =
+      this.generateForgotPasswordCodeKeyForCacheStorage(authIdentity);
+
+    await this.cacheStorageGateway.deleteData(cacheStorageKey);
+  }
+
   private generateCode(): string {
     const LENGTH = 6;
     const BASE = 10;
@@ -75,14 +85,5 @@ export class EmailForgotPasswordService implements EmailForgotPasswordGateway {
     authIdentity: AuthIdentityId,
   ): string {
     return `forgot-password-code:${authIdentity.toString()}`;
-  }
-
-  public async invalidateForgotPasswordCode(
-    authIdentity: AuthIdentityId,
-  ): Promise<void> {
-    const cacheStorageKey =
-      this.generateForgotPasswordCodeKeyForCacheStorage(authIdentity);
-
-    await this.cacheStorageGateway.deleteData(cacheStorageKey);
   }
 }

@@ -1,15 +1,14 @@
-import { Test } from '@nestjs/testing';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
-import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
@@ -18,6 +17,8 @@ import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-ident
 import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/error/new-password-matches-current.error';
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
+
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 jest.mock('bcrypt');
 
