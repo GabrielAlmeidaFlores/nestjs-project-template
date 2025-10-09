@@ -191,7 +191,7 @@ export class CreateLegalPleadingUseCase {
         : [documentFile];
 
       const analysis =
-        await this.analysisProcessorGateway.createLegalPleadingQuickDocumentAnalysis(
+        await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
           parsedDocumentFile.map((file) => file.buffer),
         );
 

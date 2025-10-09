@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import {
   CnisAffiliateIdentificationOutputModel,
@@ -68,7 +69,8 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
   const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     parseCnisDocument: jest.fn(),
-    createCnisFastAnalysis: jest.fn(),
+    getCompleteCnisAnalysis: jest.fn(),
+    getSimplifiedCnisAnalysis: jest.fn(),
   } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
@@ -212,6 +214,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     const parsedCnisData = buildParsedCnisDocumentData();
     const mockDocumentBuffer = Buffer.from('pdf-content');
     const mockAiAnalysis = 'This is the AI analysis result.';
+    const mockSimplifiedAnalysis = 'This is the simplified analysis result.';
     const mockTransaction = buildTransaction();
 
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
@@ -223,12 +226,17 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     fileProcessorGateway.getDocumentBuffer.mockResolvedValueOnce(
       mockDocumentBuffer,
     );
+
     analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    documentAnalysisGateway.getCompleteAnalyzeCnis.mockResolvedValueOnce(
+    analysisProcessorGateway.getCompleteCnisAnalysis.mockResolvedValueOnce(
       mockAiAnalysis,
     );
+    analysisProcessorGateway.getSimplifiedCnisAnalysis.mockResolvedValueOnce(
+      mockSimplifiedAnalysis,
+    );
+
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
       mockTransaction,
     );
@@ -256,14 +264,11 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     expect(fileProcessorGateway.getDocumentBuffer).toHaveBeenCalledWith(
       cnisFastAnalysisQueryResult.cnisDocument,
     );
-
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledWith(
-      mockDocumentBuffer,
-    );
-
     expect(
-      documentAnalysisGateway.getCompleteAnalyzeCnis,
+      analysisProcessorGateway.getCompleteCnisAnalysis,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      analysisProcessorGateway.getSimplifiedCnisAnalysis,
     ).toHaveBeenCalledTimes(1);
 
     expect(
@@ -286,6 +291,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       new Date('2022-08-20'),
     );
     expect(capturedResult.cnisCompleteAnalysis).toBe(mockAiAnalysis);
+    expect(capturedResult.cnisSimplifiedAnalysis).toBe(mockSimplifiedAnalysis);
 
     expect(
       cnisFastAnalysisCommandRepositoryGateway.updateCnisFastAnalysis,
@@ -304,6 +310,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
     expect(result.clientName).toBe('John Doe');
     expect(result.cnisCompleteAnalysis).toBe(mockAiAnalysis);
+    expect(result.cnisSimplifiedAnalysis).toBe(mockSimplifiedAnalysis);
     expect(result.clientLastAffiliationDate).toEqual(new Date('2022-08-20'));
   });
 
