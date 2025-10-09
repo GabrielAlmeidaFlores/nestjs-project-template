@@ -3,4 +3,9 @@ export abstract class GenerativeIaGateway {
     prompt: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract generateFlashResponseFromPromptAndFiles(
+    prompt: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

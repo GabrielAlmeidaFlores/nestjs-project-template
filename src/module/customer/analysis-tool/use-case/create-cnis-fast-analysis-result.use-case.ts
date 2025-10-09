@@ -15,7 +15,7 @@ import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analys
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -35,10 +35,10 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly cnisFastAnalysisResultCommandRepositoryGateway: CnisFastAnalysisResultCommandRepositoryGateway,
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
-    @Inject(DocumentAnalysisGateway)
-    private readonly cnisDocumentGateway: DocumentAnalysisGateway,
-    @Inject(DocumentAnalysisGateway)
-    private readonly documentAnalysisGateway: DocumentAnalysisGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly cnisDocumentGateway: AnalysisProcessorGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -77,12 +77,13 @@ export class CreateCnisFastAnalysisResultUseCase {
         cnisFastAnalysisQueryResult.cnisDocument,
       );
     const cnisDocumentData =
-      await this.documentAnalysisGateway.parseCnisDocument(cnisDocumentBuffer);
+      await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisAiAnalysis = await this.cnisDocumentGateway.analyzeCnis([
-      clientDataBuffer,
-      cnisDocumentBuffer,
-    ]);
+    const cnisAiAnalysis =
+      await this.cnisDocumentGateway.createCnisFastAnalysis([
+        clientDataBuffer,
+        cnisDocumentBuffer,
+      ]);
 
     let clientLastAffiliationDate: Date | null = null;
 

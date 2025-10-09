@@ -12,10 +12,12 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
+import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
+import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/delete-cnis-fast-analysis.response';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
@@ -26,8 +28,9 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enu
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
-import DeleteCnisFastAnalysisUseCase from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
+import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import DownloadCnisFastAnalysisUseCase from '@module/customer/analysis-tool/use-case/download-cnis-fast-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -58,6 +61,7 @@ export class AnalysisToolController {
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
+    private readonly createLegalPleadingUseCase: CreateLegalPleadingUseCase,
     private readonly downloadCnisFastAnalysisUseCase: DownloadCnisFastAnalysisUseCase,
   ) {}
 
@@ -91,7 +95,6 @@ export class AnalysisToolController {
     http: {
       path: 'analysis-tool-client',
       method: RequestMethod.POST,
-      type: CreateAnalysisToolClientRequestDto,
     },
     tag: ['analysis-tool-client'],
     successResponse: {
@@ -115,7 +118,35 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create a cnis fast analysis',
+    summary: 'Create legal pleading',
+    http: {
+      path: 'legal-pleading',
+      method: RequestMethod.POST,
+      type: CreateLegalPleadingRequestDto,
+    },
+    tag: ['legal-pleading'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Legal pleading created successfully',
+      type: CreateLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createLegalPleading(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: CreateLegalPleadingRequestDto,
+  ): Promise<CreateLegalPleadingResponseDto> {
+    return await this.createLegalPleadingUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Create cnis fast analysis',
     http: {
       path: 'cnis-fast-analysis',
       method: RequestMethod.POST,
