@@ -8,5 +8,6 @@ export interface CnisFastAnalysisResultEntityPropsInterface
   clientFederalDocument?: FederalDocument | null;
   clientBirthDate?: Date | null;
   clientLastAffiliationDate?: Date | null;
-  cnisAiAnalysis?: string | null;
+  cnisCompleteAnalysis?: string | null;
+  cnisSimplifiedAnalysis?: string | null;
 }

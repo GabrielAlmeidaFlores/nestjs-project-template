@@ -1,4 +1,12 @@
-import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
 
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -16,12 +24,15 @@ import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/d
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
+import DownloadCnisCompleteAnalysisUseCase from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
+import DownloadCnisSimplifiedAnalysisUseCase from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
@@ -52,6 +63,8 @@ export class AnalysisToolController {
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
     private readonly createLegalPleadingUseCase: CreateLegalPleadingUseCase,
+    private readonly downloadCnisCompleteAnalysisUseCase: DownloadCnisCompleteAnalysisUseCase,
+    private readonly downloadCnisSimplifiedAnalysisUseCase: DownloadCnisSimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -278,6 +291,68 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       cnisFastAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Get document analysis by ai',
+    http: {
+      path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['cnis-fast-analysis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Get document analysis by ai',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadCnisSimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadCnisSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Get document analysis by ai',
+    http: {
+      path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['cnis-fast-analysis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Get document analysis by ai',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadCnisCompletedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadCnisCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
+      format,
     );
   }
 

@@ -26,7 +26,9 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async createCnisFastAnalysis(files: Buffer[]): Promise<string | null> {
+  public async getCompleteCnisAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
     const generativeIaPrompt = `
     # CONTEXTO
     Você atuará como um Perito em Direito Previdenciário, altamente especializado na análise de extratos do Cadastro Nacional de Informações Sociais (CNIS). Sua missão é gerar um relatório de análise detalhado e estratégico sobre o CNIS fornecido, formatado em Markdown (formato README). O público-alvo deste relatório é um advogado previdenciarista que precisa identificar rapidamente os pontos críticos e as oportunidades para discutir com seu cliente.
@@ -108,7 +110,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     );
   }
 
-  public async createLegalPleadingQuickDocumentAnalysis(
+  public async getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
     const generativeIaPrompt = `
@@ -145,6 +147,19 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     `;
 
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+      generativeIaPrompt,
+      files,
+    );
+  }
+
+  public async getSimplifiedCnisAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const generativeIaPrompt = `
+      FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR À CLIENTE HELOÍSA O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
+    `;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       generativeIaPrompt,
       files,
     );

@@ -36,9 +36,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
-    private readonly cnisDocumentGateway: AnalysisProcessorGateway,
-    @Inject(AnalysisProcessorGateway)
-    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway, // Consolidated Gateway
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -79,10 +77,22 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisAiAnalysis =
-      await this.cnisDocumentGateway.createCnisFastAnalysis([
+    const cnisDocumentDataBuffer = Buffer.from(
+      JSON.stringify(cnisDocumentData),
+      'utf-8',
+    );
+    const cnisCompleteAnalysis =
+      await this.analysisProcessorGateway.getCompleteCnisAnalysis([
+        // Changed here
         clientDataBuffer,
-        cnisDocumentBuffer,
+        cnisDocumentDataBuffer,
+      ]);
+
+    const cnisSimplifiedAnalysis =
+      await this.analysisProcessorGateway.getSimplifiedCnisAnalysis([
+        // Changed here
+        clientDataBuffer,
+        cnisDocumentDataBuffer,
       ]);
 
     let clientLastAffiliationDate: Date | null = null;
@@ -115,7 +125,8 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const cnisFastAnalysisResult = new CnisFastAnalysisResultEntity({
       clientLastAffiliationDate,
-      cnisAiAnalysis,
+      cnisCompleteAnalysis,
+      cnisSimplifiedAnalysis,
       clientBirthDate:
         cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null,
       clientName: cnisDocumentData.affiliateIdentification?.nome ?? null,

@@ -23,9 +23,8 @@ export class CnisFastAnalysisResultEntity extends BaseEntity<CnisFastAnalysisRes
     'Data da última filiação do cliente associado ao resultado da análise CNIS.',
   )
   public readonly clientLastAffiliationDate: Date | null;
-
-  @Description('Análise de IA do resultado da análise CNIS.')
-  public readonly cnisAiAnalysis: string | null;
+  public readonly cnisCompleteAnalysis: string | null;
+  public readonly cnisSimplifiedAnalysis: string | null;
 
   protected readonly _type = CnisFastAnalysisResultEntity.name;
 
@@ -36,6 +35,7 @@ export class CnisFastAnalysisResultEntity extends BaseEntity<CnisFastAnalysisRes
     this.clientFederalDocument = props.clientFederalDocument ?? null;
     this.clientBirthDate = props.clientBirthDate ?? null;
     this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
-    this.cnisAiAnalysis = props.cnisAiAnalysis ?? null;
+    this.cnisCompleteAnalysis = props.cnisCompleteAnalysis ?? null;
+    this.cnisSimplifiedAnalysis = props.cnisSimplifiedAnalysis ?? null;
   }
 }

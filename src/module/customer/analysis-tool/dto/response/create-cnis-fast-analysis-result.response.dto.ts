@@ -20,7 +20,10 @@ export class CreateCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObj
   public clientLastAffiliationDate?: Date;
 
   @ResponseDtoStringProperty({ required: false })
-  public cnisAiAnalysis?: string;
+  public cnisCompleteAnalysis?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public cnisSimplifiedAnalysis?: string;
 
   protected override readonly _type =
     CreateCnisFastAnalysisResultResponseDto.name;
