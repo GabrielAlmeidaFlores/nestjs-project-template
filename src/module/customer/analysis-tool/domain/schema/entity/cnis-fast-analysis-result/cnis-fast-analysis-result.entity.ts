@@ -1,14 +1,30 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { CnisFastAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/value-object/cnis-fast-analysis-result-id/cnis-fast-analysis-result-id.value-object';
+import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { CnisFastAnalysisResultEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity.props.interface';
 
 export class CnisFastAnalysisResultEntity extends BaseEntity<CnisFastAnalysisResultId> {
+  @Description('Nome do cliente associado ao resultado da análise CNIS.')
   public readonly clientName: string | null;
+
+  @Description(
+    'Documento federal do cliente associado ao resultado da análise CNIS.',
+  )
   public readonly clientFederalDocument: FederalDocument | null;
+
+  @Description(
+    'Data de nascimento do cliente associado ao resultado da análise CNIS.',
+  )
   public readonly clientBirthDate: Date | null;
+
+  @Description(
+    'Data da última filiação do cliente associado ao resultado da análise CNIS.',
+  )
   public readonly clientLastAffiliationDate: Date | null;
+
+  @Description('Análise de IA do resultado da análise CNIS.')
   public readonly cnisAiAnalysis: string | null;
 
   protected readonly _type = CnisFastAnalysisResultEntity.name;

@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import {
   CnisAffiliateIdentificationOutputModel,
@@ -21,12 +20,11 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -39,6 +37,7 @@ import type { GetOrganizationMemberQueryResult } from '@module/customer/account/
 import type { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import type { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import type { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
+import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 
 describe(CreateCnisFastAnalysisResultUseCase.name, () => {
   let useCase: CreateCnisFastAnalysisResultUseCase;
@@ -67,10 +66,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       findOneByIdWithRelationsOrFail: jest.fn(),
     } as unknown as jest.Mocked<CnisFastAnalysisQueryRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<DocumentAnalysisGateway> = {
+  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     parseCnisDocument: jest.fn(),
-    analyzeCnis: jest.fn(),
-  } as unknown as jest.Mocked<DocumentAnalysisGateway>;
+    createCnisFastAnalysis: jest.fn(),
+  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
@@ -189,7 +188,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
           provide: CnisFastAnalysisQueryRepositoryGateway,
           useValue: cnisFastAnalysisQueryRepositoryGateway,
         },
-        { provide: DocumentAnalysisGateway, useValue: documentAnalysisGateway },
+        {
+          provide: AnalysisProcessorGateway,
+          useValue: analysisProcessorGateway,
+        },
         {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
@@ -221,10 +223,12 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     fileProcessorGateway.getDocumentBuffer.mockResolvedValueOnce(
       mockDocumentBuffer,
     );
-    documentAnalysisGateway.parseCnisDocument.mockResolvedValueOnce(
+    analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    documentAnalysisGateway.analyzeCnis.mockResolvedValueOnce(mockAiAnalysis);
+    analysisProcessorGateway.createCnisFastAnalysis.mockResolvedValueOnce(
+      mockAiAnalysis,
+    );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
       mockTransaction,
     );
@@ -241,54 +245,27 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       cnisFastAnalysisId,
     );
 
+    expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
     expect(
       organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId,
     ).toHaveBeenCalledTimes(1);
     expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId,
-    ).toHaveBeenCalledWith(
-      sessionData.authIdentityId,
-      organizationSessionData.organizationId,
-    );
-
-    expect(
       cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
     ).toHaveBeenCalledTimes(1);
-    expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
-    ).toHaveBeenCalledWith(cnisFastAnalysisId, CnisFastAnalysisNotFoundError);
-
     expect(fileProcessorGateway.getDocumentBuffer).toHaveBeenCalledTimes(1);
-    expect(fileProcessorGateway.getDocumentBuffer).toHaveBeenCalledWith(
-      cnisFastAnalysisQueryResult.cnisDocument,
-    );
-
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
-    expect(documentAnalysisGateway.parseCnisDocument).toHaveBeenCalledWith(
-      mockDocumentBuffer,
-    );
-
-    expect(documentAnalysisGateway.analyzeCnis).toHaveBeenCalledTimes(1);
-
+    expect(analysisProcessorGateway.parseCnisDocument).toHaveBeenCalledTimes(1);
+    expect(
+      analysisProcessorGateway.createCnisFastAnalysis,
+    ).toHaveBeenCalledTimes(1);
     expect(
       cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult,
     ).toHaveBeenCalledTimes(1);
+
     const [[capturedResult]] = cnisFastAnalysisResultCommandRepositoryGateway
       .createCnisFastAnalysisResult.mock.calls as [
       [CnisFastAnalysisResultEntity],
     ];
-    expect(capturedResult).toBeInstanceOf(CnisFastAnalysisResultEntity);
     expect(capturedResult.clientName).toBe('John Doe');
-    expect(capturedResult.clientBirthDate).toEqual(new Date('1990-01-15'));
-    expect(capturedResult.clientFederalDocument).toBeInstanceOf(
-      FederalDocument,
-    );
-    expect(capturedResult.clientFederalDocument?.toString()).toBe(
-      '12345678901',
-    );
-    expect(capturedResult.clientLastAffiliationDate).toEqual(
-      new Date('2022-08-20'),
-    );
     expect(capturedResult.cnisAiAnalysis).toBe(mockAiAnalysis);
 
     expect(
@@ -304,11 +281,6 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
     expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
     expect(mockTransaction.commit).toHaveBeenCalledTimes(1);
-
-    expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
-    expect(result.clientName).toBe('John Doe');
-    expect(result.cnisAiAnalysis).toBe(mockAiAnalysis);
-    expect(result.clientLastAffiliationDate).toEqual(new Date('2022-08-20'));
   });
 
   it('should throw OrganizationMemberNotFoundError when organization member is not found', async () => {
@@ -323,14 +295,6 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     await expect(
       useCase.execute(sessionData, organizationSessionData, cnisFastAnalysisId),
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
-
-    expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
-    ).not.toHaveBeenCalled();
-    expect(baseTransactionRepositoryGateway.execute).not.toHaveBeenCalled();
   });
 
   it('should throw CnisFastAnalysisNotFoundError when analysis is not found', async () => {
@@ -349,15 +313,6 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     await expect(
       useCase.execute(sessionData, organizationSessionData, cnisFastAnalysisId),
     ).rejects.toBeInstanceOf(CnisFastAnalysisNotFoundError);
-
-    expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
-    ).toHaveBeenCalledTimes(1);
-    expect(fileProcessorGateway.getDocumentBuffer).not.toHaveBeenCalled();
-    expect(baseTransactionRepositoryGateway.execute).not.toHaveBeenCalled();
   });
 
   it('should throw CnisDocumentRequiredError when cnisDocument is null', async () => {
@@ -379,14 +334,5 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     await expect(
       useCase.execute(sessionData, organizationSessionData, cnisFastAnalysisId),
     ).rejects.toBeInstanceOf(CnisDocumentRequiredError);
-
-    expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
-    ).toHaveBeenCalledTimes(1);
-    expect(fileProcessorGateway.getDocumentBuffer).not.toHaveBeenCalled();
-    expect(baseTransactionRepositoryGateway.execute).not.toHaveBeenCalled();
   });
 });

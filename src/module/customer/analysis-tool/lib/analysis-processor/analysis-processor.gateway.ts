@@ -1,7 +1,13 @@
 import type { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 
-export abstract class DocumentAnalysisGateway {
-  public abstract analyzeCnis(files: Buffer[]): Promise<string | null>;
+export abstract class AnalysisProcessorGateway {
+  public abstract createCnisFastAnalysis(
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract createLegalPleadingQuickDocumentAnalysis(
+    files: Buffer[],
+  ): Promise<string | null>;
 
   public abstract validateCnisDocument(cnisDocument: Buffer): Promise<boolean>;
 

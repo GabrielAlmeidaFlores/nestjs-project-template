@@ -28,7 +28,7 @@ import { minutes, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
 
 import { InvalidFormDataStructureError } from '@shared/api/util/decorator/method/build-endpoint-specification/error/invalid-form-data-structure.error';
-import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
+import { DTO_PROPS_SYMBOL } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 import { ErrorResponseDto } from '@shared/api/util/dto/response/error.response.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
@@ -149,7 +149,7 @@ function buildEndpointHttpSpecification(
   }
 
   const type = http['type'];
-  const raw = Reflect.getMetadata(DTO_PROPS, type) as DtoPropMetaType[];
+  const raw = Reflect.getMetadata(DTO_PROPS_SYMBOL, type) as DtoPropMetaType[];
 
   const dtoFileField = raw.find((dtoProp) => {
     return dtoProp.type === FileModel;

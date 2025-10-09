@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-import { DTO_PROPS } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
+import { DTO_PROPS_SYMBOL } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/symbol/dto-props.symbol';
 
 import type { BaseDtoPropertyDecoratorPropsInterface } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/interface/base-dto-property.decorator.props.interface';
 import type { DtoPropMetaType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/type/dto-props-metadata.type';
@@ -35,7 +35,7 @@ function createStoreMetadataDecorator(
   return (target, propertyKey) => {
     const ctor = (target as object & { constructor: Function }).constructor;
 
-    const raw: unknown = Reflect.getMetadata(DTO_PROPS, ctor);
+    const raw: unknown = Reflect.getMetadata(DTO_PROPS_SYMBOL, ctor);
     const existing: DtoPropMetaType[] = isDtoPropMetaArray(raw) ? raw : [];
 
     const meta: DtoPropMetaType = {
@@ -49,8 +49,12 @@ function createStoreMetadataDecorator(
       meta,
     ];
 
-    Reflect.defineMetadata(DTO_PROPS, next, ctor);
-    Reflect.defineMetadata(`dto:prop:${String(propertyKey)}`, meta, ctor);
+    Reflect.defineMetadata(DTO_PROPS_SYMBOL, next, ctor);
+    Reflect.defineMetadata(
+      `${DTO_PROPS_SYMBOL.description}:${String(propertyKey)}`,
+      meta,
+      ctor,
+    );
   };
 }
 

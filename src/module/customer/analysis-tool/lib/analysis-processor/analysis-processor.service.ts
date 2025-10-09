@@ -3,11 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 
 @Injectable()
-export class DocumentAnalysisService implements DocumentAnalysisGateway {
-  protected readonly _type = DocumentAnalysisService.name;
+export class AnalysisProcessorService implements AnalysisProcessorGateway {
+  protected readonly _type = AnalysisProcessorService.name;
 
   public constructor(
     @Inject(GenerativeIaGateway)
@@ -26,7 +26,7 @@ export class DocumentAnalysisService implements DocumentAnalysisGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async analyzeCnis(files: Buffer[]): Promise<string | null> {
+  public async createCnisFastAnalysis(files: Buffer[]): Promise<string | null> {
     const generativeIaPrompt = `
     # CONTEXTO
     Você atuará como um Perito em Direito Previdenciário, altamente especializado na análise de extratos do Cadastro Nacional de Informações Sociais (CNIS). Sua missão é gerar um relatório de análise detalhado e estratégico sobre o CNIS fornecido, formatado em Markdown (formato README). O público-alvo deste relatório é um advogado previdenciarista que precisa identificar rapidamente os pontos críticos e as oportunidades para discutir com seu cliente.
@@ -103,6 +103,48 @@ export class DocumentAnalysisService implements DocumentAnalysisGateway {
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      generativeIaPrompt,
+      files,
+    );
+  }
+
+  public async createLegalPleadingQuickDocumentAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const generativeIaPrompt = `
+    **Atribuição de Papel (Persona):**
+    Você é um Analista Previdenciário Sênior, especialista na legislação do INSS. Sua função é analisar qualquer documento de natureza previdenciária — como Cadastro Nacional de Informações Sociais (CNIS), Carteiras de Trabalho (CTPS), Perfil Profissiográfico Previdenciário (PPP), Certidão de Tempo de Contribuição (CTC), etc. — para extrair, calcular e sintetizar as informações mais relevantes. Você é detalhista e proativo em identificar pendências e pontos de atenção.
+
+    **Tarefa:**
+    Você receberá o conteúdo de um ou mais documentos. Sua tarefa é consolidar as informações, calcular o tempo de contribuição e gerar um resumo técnico em formato Markdown (README), seguindo estritamente a estrutura definida abaixo.
+
+    **Instruções Detalhadas:**
+    1.  **Identifique as Fontes:** Analise o texto fornecido para identificar quais documentos estão presentes (ex: CNIS, CTPS).
+    2.  **Extraia e Consolide os Vínculos:** Analise todos os vínculos de trabalho e períodos de contribuição de todos os documentos. Para cada um, extraia o nome do empregador (ou tipo de contribuição), a data de início e a data de fim.
+    3.  **Calcule as Durações:** Calcule a duração exata de cada período em anos e meses.
+    4.  **Calcule o Total:** Some todos os períodos para obter o "Tempo Total de Contribuição" e especifique a natureza do tempo (ex: urbano, especial, rural), se a informação estiver disponível.
+    5.  **Análise Crítica (A parte mais importante):** Na seção "Observações", atue como um especialista. Aponte pendências, inconsistências (inclusive entre documentos diferentes), informações faltantes e os próximos passos recomendados.
+
+    **Formato de Saída OBRIGATÓRIO:**
+    Estruture sua resposta estritamente no seguinte formato Markdown.
+
+    # Análise de Tempo de Contribuição
+
+    ## Períodos de Contribuição:
+    - **[Nome do Empregador/Tipo]**: [DD/MM/AAAA] a [DD/MM/AAAA] ([X] anos e [Y] meses)
+    - **[Nome do Empregador/Tipo]**: [DD/MM/AAAA] a [DD/MM/AAAA] ([X] anos e [Y] meses)
+
+    ## Tempo Total de Contribuição:
+    - [X] anos e [Y] meses ([natureza do tempo, ex: urbano])
+
+    ## Observações:
+    - **Documento(s) Analisado(s):** [A IA preencherá com o nome do(s) documento(s) que identificou]
+    - [Liste aqui sua análise profissional, apontando pendências, inconsistências e próximos passos.]
+    - [Exemplo: Vínculo com a Empresa XYZ S.A. consta na CTPS mas não aparece no extrato do CNIS. Necessário solicitar a inclusão.]
+    - [Exemplo: Período trabalhado em condições especiais (ruído) de 01/2015 a 12/2020, conforme PPP apresentado, ainda não foi averbado no sistema do INSS.
+    `;
+
+    return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       generativeIaPrompt,
       files,
     );
