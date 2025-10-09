@@ -189,7 +189,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
           provide: CnisFastAnalysisQueryRepositoryGateway,
           useValue: cnisFastAnalysisQueryRepositoryGateway,
         },
-        { provide: AnalysisProcessorGateway, useValue: analysisProcessorGateway },
+        {
+          provide: AnalysisProcessorGateway,
+          useValue: analysisProcessorGateway,
+        },
         {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
@@ -224,7 +227,9 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    analysisProcessorGateway.createCnisFastAnalysis.mockResolvedValueOnce(mockAiAnalysis);
+    analysisProcessorGateway.createCnisFastAnalysis.mockResolvedValueOnce(
+      mockAiAnalysis,
+    );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(
       mockTransaction,
     );
@@ -268,7 +273,9 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       mockDocumentBuffer,
     );
 
-    expect(analysisProcessorGateway.createCnisFastAnalysis).toHaveBeenCalledTimes(1);
+    expect(
+      analysisProcessorGateway.createCnisFastAnalysis,
+    ).toHaveBeenCalledTimes(1);
 
     expect(
       cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult,

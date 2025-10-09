@@ -12,9 +12,11 @@ import type { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/ana
 import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
+import type { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 
 export class GetLegalPleadingWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: LegalPleadingId;
+  public readonly status: AnalysisSolicitationStatusEnum;
   public readonly statementOfFacts: string;
   public readonly additionalComments: string | null;
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;

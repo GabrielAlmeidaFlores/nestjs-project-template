@@ -9,7 +9,10 @@ import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-too
 import type { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 
 export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
+  @Description('Status da solicitação de análise CNIS rápida.')
   public readonly status: AnalysisSolicitationStatusEnum;
+
+  @Description('Documento CNIS utilizado na análise.')
   public readonly cnisDocument: string | null;
 
   @Description(
