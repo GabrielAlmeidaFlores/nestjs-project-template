@@ -2,8 +2,8 @@ import { Test } from '@nestjs/testing';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
@@ -12,7 +12,6 @@ import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/r
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
-import { StateCodeEnum } from '@module/customer/account/domain/schema/entity/customer-address/enum/state-code.enum';
 import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
@@ -32,20 +31,24 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   const txRepo: jest.Mocked<BaseTransactionRepositoryGateway> = {
     execute: jest.fn(),
-  } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
+  };
 
   const customerCmdRepo: jest.Mocked<CustomerCommandRepositoryGateway> = {
     updateCustomer: jest.fn(),
-  } as unknown as jest.Mocked<CustomerCommandRepositoryGateway>;
+    createCustomer: jest.fn(),
+  };
 
   const customerQueryRepo: jest.Mocked<CustomerQueryRepositoryGateway> = {
     findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
-  } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
+    findOneByCustomerId: jest.fn(),
+    findOneByAuthIdentityIdOrFail: jest.fn(),
+  };
 
   const fileProcessor: jest.Mocked<FileProcessorGateway> = {
     processAndUploadProfilePicture: jest.fn(),
     getCustomerProfilePicture: jest.fn(),
-  } as unknown as jest.Mocked<FileProcessorGateway>;
+    getOrganizationLogo: jest.fn(),
+  };
 
   const sessionData = SessionDataModel.build({
     authIdentityId: new AuthIdentityId(),
@@ -54,17 +57,13 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   });
 
   const fileBuffer = Buffer.from('fake-image');
-  const fileModel: FileModel = {
+  const fileModel = {
     fieldname: 'profilePicture',
     originalName: 'avatar.png',
     encoding: '7bit',
     mimetype: MimeTypeEnum.IMAGE_PNG,
     size: fileBuffer.length,
     buffer: fileBuffer,
-    stream: undefined,
-    destination: undefined,
-    filename: undefined,
-    path: undefined,
   } as unknown as FileModel;
 
   const dto = UpdateCustomerProfilePictureRequestDto.build({
@@ -79,6 +78,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     stateCode: StateCodeEnum.SP,
     city: 'São Paulo',
     neighborhood: 'Centro',
+    street: 'Praça da Sé',
     addressNumber: 123,
     createdAt: now,
     updatedAt: now,
@@ -89,7 +89,6 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     GetCustomerWithCustomerAddressRelationQueryResult.build({
       id: new CustomerId(),
       name: 'Maria Silva',
-      phoneNumber: new PhoneNumber('5511999999999'),
       profilePicture: null,
       createdAt: now,
       updatedAt: now,
@@ -154,7 +153,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
     expect(customerCmdRepo.updateCustomer).toHaveBeenCalledTimes(1);
     const [calledId, calledEntity] = customerCmdRepo.updateCustomer.mock
-      .calls[0] as unknown as [CustomerId, CustomerEntity];
+      .calls[0] as [CustomerId, CustomerEntity];
 
     expect(calledId).toBeInstanceOf(CustomerId);
     expect(calledEntity).toBeInstanceOf(CustomerEntity);

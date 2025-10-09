@@ -20,7 +20,7 @@ import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -78,9 +78,9 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
       execute: jest.fn(),
     } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
-  const documentAnalysisGateway: jest.Mocked<DocumentAnalysisGateway> = {
+  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     validateCnisDocument: jest.fn(),
-  } as unknown as jest.Mocked<DocumentAnalysisGateway>;
+  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -186,7 +186,10 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
         },
-        { provide: DocumentAnalysisGateway, useValue: documentAnalysisGateway },
+        {
+          provide: AnalysisProcessorGateway,
+          useValue: analysisProcessorGateway,
+        },
       ],
     }).compile();
 
@@ -210,7 +213,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember as unknown as GetOrganizationMemberQueryResult,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(true);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(true);
     fileProcessorGateway.uploadDocument.mockResolvedValueOnce(
       uploadedDocumentPath,
     );
@@ -239,7 +242,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     expect(result).toBeInstanceOf(CreateCnisFastAnalysisResponseDto);
     expect(result.cnisFastAnalysisId).toBeDefined();
 
-    expect(documentAnalysisGateway.validateCnisDocument).toHaveBeenCalledTimes(
+    expect(analysisProcessorGateway.validateCnisDocument).toHaveBeenCalledTimes(
       1,
     );
     expect(fileProcessorGateway.uploadDocument).toHaveBeenCalledTimes(1);
@@ -294,7 +297,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
 
     await useCase.execute(sessionData, organizationSessionData, dto);
 
-    expect(documentAnalysisGateway.validateCnisDocument).not.toHaveBeenCalled();
+    expect(analysisProcessorGateway.validateCnisDocument).not.toHaveBeenCalled();
     expect(fileProcessorGateway.uploadDocument).not.toHaveBeenCalled();
 
     expect(
@@ -328,7 +331,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember as unknown as GetOrganizationMemberQueryResult,
     );
-    documentAnalysisGateway.validateCnisDocument.mockResolvedValueOnce(false);
+    analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(false);
 
     await expect(
       useCase.execute(sessionData, organizationSessionData, dto),
