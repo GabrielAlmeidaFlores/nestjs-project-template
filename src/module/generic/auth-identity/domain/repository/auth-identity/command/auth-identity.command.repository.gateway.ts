@@ -7,6 +7,11 @@ export abstract class AuthIdentityCommandRepositoryGateway {
     props: AuthIdentityEntity,
   ): TransactionType;
 
+  public abstract updateAuthIdentity(
+    authIdentityId: AuthIdentityId,
+    props: AuthIdentityEntity,
+  ): TransactionType;
+
   public abstract updateAuthenticatorAppSecret(
     authIdentityId: AuthIdentityId,
     authenticatorAppSecret: string,
