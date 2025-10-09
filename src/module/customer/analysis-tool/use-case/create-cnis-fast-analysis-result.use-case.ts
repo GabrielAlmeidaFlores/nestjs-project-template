@@ -79,10 +79,11 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisAiAnalysis = await this.cnisDocumentGateway.createCnisFastAnalysis([
-      clientDataBuffer,
-      cnisDocumentBuffer,
-    ]);
+    const cnisAiAnalysis =
+      await this.cnisDocumentGateway.createCnisFastAnalysis([
+        clientDataBuffer,
+        cnisDocumentBuffer,
+      ]);
 
     let clientLastAffiliationDate: Date | null = null;
 
