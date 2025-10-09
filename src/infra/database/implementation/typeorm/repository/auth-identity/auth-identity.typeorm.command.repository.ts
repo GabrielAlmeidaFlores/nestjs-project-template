@@ -24,6 +24,18 @@ export class AuthIdentityTypeormCommandRepository
   ) {
     super(repository);
   }
+  public updateAuthIdentity(
+    authIdentityId: AuthIdentityId,
+    props: AuthIdentityEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      AuthIdentityEntity,
+      AuthIdentityTypeormEntity,
+    );
+
+    return this.update(authIdentityId.toString(), mappedData);
+  }
 
   public updateAuthenticatorAppSecret(
     authIdentityId: AuthIdentityId,
