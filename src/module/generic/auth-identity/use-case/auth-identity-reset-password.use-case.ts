@@ -10,7 +10,7 @@ import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identit
 import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-reset-password.request.dto';
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
-import { SamePasswordError } from '@module/generic/auth-identity/error/same-password-auth-identity.error';
+import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/error/new-password-matches-current.error';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
@@ -46,7 +46,7 @@ export class AuthIdentityResetPasswordUseCase {
       authIdentity.password.toString(),
     );
     if (isSamePassword) {
-      throw new SamePasswordError();
+      throw new NewPasswordMatchesCurrentError();
     }
 
     const isValidCode =
