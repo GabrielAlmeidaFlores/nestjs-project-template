@@ -22,12 +22,10 @@ export class AuthIdentityResetPasswordUseCase {
   public constructor(
     @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepositoryGateway: AuthIdentityQueryRepositoryGateway,
-
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(EmailForgotPasswordGateway)
     private readonly emailForgotPasswordGateway: EmailForgotPasswordGateway,
-
     @Inject(AuthIdentityCommandRepositoryGateway)
     private readonly authIdentityCommandRepositoryGateway: AuthIdentityCommandRepositoryGateway,
   ) {}
