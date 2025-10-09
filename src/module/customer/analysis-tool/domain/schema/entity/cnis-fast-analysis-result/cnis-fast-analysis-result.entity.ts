@@ -23,7 +23,11 @@ export class CnisFastAnalysisResultEntity extends BaseEntity<CnisFastAnalysisRes
     'Data da última filiação do cliente associado ao resultado da análise CNIS.',
   )
   public readonly clientLastAffiliationDate: Date | null;
+
+  @Description('Análise completa do CNIS.')
   public readonly cnisCompleteAnalysis: string | null;
+
+  @Description('Análise simplificada do CNIS.')
   public readonly cnisSimplifiedAnalysis: string | null;
 
   protected readonly _type = CnisFastAnalysisResultEntity.name;

@@ -9,6 +9,8 @@ import type { CustomerAddressEntity } from '@module/customer/account/domain/sche
 export class CustomerEntity extends BaseEntity<CustomerId> {
   @Description('Nome do cliente.')
   public readonly name: string;
+
+  @Description('Foto de perfil do cliente.')
   public readonly profilePicture: string | null;
 
   @Description('Endereço do cliente.')
