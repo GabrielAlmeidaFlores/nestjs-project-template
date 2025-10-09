@@ -124,6 +124,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     3.  **Calcule as Durações:** Calcule a duração exata de cada período em anos e meses.
     4.  **Calcule o Total:** Some todos os períodos para obter o "Tempo Total de Contribuição" e especifique a natureza do tempo (ex: urbano, especial, rural), se a informação estiver disponível.
     5.  **Análise Crítica (A parte mais importante):** Na seção "Observações", atue como um especialista. Aponte pendências, inconsistências (inclusive entre documentos diferentes), informações faltantes e os próximos passos recomendados.
+    6. **Número máximo de caracteres:** A resposta deve ser concisa, com no máximo 3000 caracteres.
 
     **Formato de Saída OBRIGATÓRIO:**
     Estruture sua resposta estritamente no seguinte formato Markdown.
