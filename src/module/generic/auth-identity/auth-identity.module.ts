@@ -14,6 +14,12 @@ import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity
 import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
 import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
+import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
+import { AuthIdentityForgotPasswordUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-forgot-password.use-case-gateway';
+import { EmailForgotPasswordModule } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.module';
+import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-validate-code.use-case';
+import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
+import { AuthIdentityResetPasswordUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-reset-password.use-case-gateway';
 
 @Module({
   imports: [
@@ -21,6 +27,7 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     AuthenticatorModule,
     EmailMFAModule,
     AuthIdentitySessionModule,
+    EmailForgotPasswordModule,
   ],
   controllers: [AuthIdentityController],
   providers: [
@@ -38,6 +45,21 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     {
       provide: ValidateAuthIdentitySignUpUseCaseGateway,
       useClass: ValidateAuthIdentitySignUpUseCase,
+    },
+    AuthIdentityForgotPasswordUseCase,
+    {
+      provide: AuthIdentityForgotPasswordUseCaseGateway,
+      useClass: AuthIdentityForgotPasswordUseCase,
+    },
+    AuthIdentityForgotPasswordValidateCodeUseCase,
+    {
+      provide: AuthIdentityForgotPasswordUseCaseGateway,
+      useClass: AuthIdentityForgotPasswordValidateCodeUseCase,
+    },
+    AuthIdentityResetPasswordUseCase,
+    {
+      provide: AuthIdentityResetPasswordUseCaseGateway,
+      useClass: ValidateAuthIdentitySignInUseCase,
     },
     PreAuthIdentitySignInUseCase,
     AuthIdentitySignInUseCase,

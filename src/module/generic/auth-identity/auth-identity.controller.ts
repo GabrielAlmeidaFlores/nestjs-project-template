@@ -13,6 +13,15 @@ import { GenericControllerRoute } from '@shared/api/util/decorator/class/control
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
+import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
+import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password-code.request.dto';
+import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-validate-code.use-case';
+import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
+import { AuthIdentityForgotPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password.response.dto';
+import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
+import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-reset-password.request.dto';
+import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -22,6 +31,9 @@ export class AuthIdentityController {
     private readonly preAuthIdentitySignInUseCase: PreAuthIdentitySignInUseCase,
     private readonly authIdentitySignInUseCase: AuthIdentitySignInUseCase,
     private readonly authIdentitySignOutUseCase: AuthIdentitySignOutUseCase,
+    private readonly authIdentityForgotPasswordUseCase: AuthIdentityForgotPasswordUseCase,
+    private readonly authIdentityForgotPasswordValidateCodeUseCase: AuthIdentityForgotPasswordValidateCodeUseCase,
+    private readonly authIdentityResetPasswordUseCase: AuthIdentityResetPasswordUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -71,6 +83,68 @@ export class AuthIdentityController {
     @Body() dto: AuthIdentitySignInRequestDto,
   ): Promise<AuthIdentitySignInResponseDto> {
     return await this.authIdentitySignInUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'User forgot password',
+    http: {
+      path: 'forgot-password',
+      method: RequestMethod.POST,
+    },
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Reset password email sent successfully',
+      type: AuthIdentityForgotPasswordResponseDto,
+    },
+    throttle: {
+      limit: 10,
+      ttlInMinutes: 2,
+    },
+  })
+  public async forgotPassword(
+    @Body() dto: AuthIdentityForgotPasswordRequestDto,
+  ): Promise<AuthIdentityForgotPasswordResponseDto> {
+    return await this.authIdentityForgotPasswordUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Validate code',
+    http: {
+      path: 'forgot-password/validate-code',
+      method: RequestMethod.POST,
+      type: AuthIdentityForgotPasswordValidateCodeRequestDto,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Reset password code validated successfully',
+      type: AuthIdentityForgotPasswordCodeResponseDto,
+    },
+  })
+  public async validateCode(
+    @Body() dto: AuthIdentityForgotPasswordValidateCodeRequestDto,
+  ): Promise<AuthIdentityForgotPasswordCodeResponseDto> {
+    return await this.authIdentityForgotPasswordValidateCodeUseCase.execute(
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Reset password',
+    http: {
+      path: 'reset-password',
+      method: RequestMethod.PATCH,
+      type: AuthIdentityResetPasswordRequestDto,
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Password reset successfully',
+      type: AuthIdentityResetPasswordResponseDto,
+    },
+  })
+  public async resetPassword(
+    @Body() dto: AuthIdentityResetPasswordRequestDto,
+  ): Promise<AuthIdentityResetPasswordResponseDto> {
+    return await this.authIdentityResetPasswordUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
