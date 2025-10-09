@@ -40,7 +40,7 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         !source.cnisFastAnalysisLegalProceeding
       ) {
         throw new IncompleteSourceDataForMappingError({
-          destinyClass: GetCnisFastAnalysisWithRelationsQueryResult.name,
+          destinationClass: GetCnisFastAnalysisWithRelationsQueryResult.name,
           sourceClass: CnisFastAnalysisTypeormEntity.name,
         });
       }
