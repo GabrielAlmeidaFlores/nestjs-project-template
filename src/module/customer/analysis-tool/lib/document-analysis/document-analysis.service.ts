@@ -26,7 +26,7 @@ export class DocumentAnalysisService implements DocumentAnalysisGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async analyzeCnis(files: Buffer[]): Promise<string | null> {
+  public async getCompleteAnalyzeCnis(files: Buffer[]): Promise<string | null> {
     const generativeIaPrompt = `
     # CONTEXTO
     Você atuará como um Perito em Direito Previdenciário, altamente especializado na análise de extratos do Cadastro Nacional de Informações Sociais (CNIS). Sua missão é gerar um relatório de análise detalhado e estratégico sobre o CNIS fornecido, formatado em Markdown (formato README). O público-alvo deste relatório é um advogado previdenciarista que precisa identificar rapidamente os pontos críticos e as oportunidades para discutir com seu cliente.
@@ -100,6 +100,19 @@ export class DocumentAnalysisService implements DocumentAnalysisGateway {
     - **Moeda**: Todos os valores monetários, como salários de contribuição, devem ser expressamente citados em Reais (BRL), utilizando o símbolo R$.
     - **Clareza**: Use **negrito** para destacar termos importantes e siglas. Utilize listas e tabelas para organizar as informações de forma clara.
     - **Objetividade**: Não inclua saudações, explicações sobre ser uma IA, ou qualquer texto que não seja o próprio relatório de análise. A resposta deve começar diretamente com o título '# Análise Estratégica do Extrato CNIS'.
+    `;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      generativeIaPrompt,
+      files,
+    );
+  }
+
+  public async getSimplifiedAnalyzeCnis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const generativeIaPrompt = `
+      FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR À CLIENTE HELOÍSA O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
