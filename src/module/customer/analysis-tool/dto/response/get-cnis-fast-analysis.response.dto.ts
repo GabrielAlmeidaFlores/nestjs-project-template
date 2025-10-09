@@ -60,7 +60,10 @@ export class GetCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObject
   public clientLastAffiliationDate?: Date;
 
   @ResponseDtoStringProperty({ required: false })
-  public cnisAiAnalysis?: string;
+  public cnisCompleteAnalysis?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public cnisSimplifiedAnalysis?: string;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
