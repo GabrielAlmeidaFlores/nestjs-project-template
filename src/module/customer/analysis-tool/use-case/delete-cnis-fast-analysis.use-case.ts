@@ -13,7 +13,7 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export default class DeleteCnisFastAnalysisUseCase {
+export class DeleteCnisFastAnalysisUseCase {
   protected readonly _type = DeleteCnisFastAnalysisUseCase.name;
 
   public constructor(
