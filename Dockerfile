@@ -2,7 +2,6 @@
 FROM node:22.15.0 AS builder
 WORKDIR /usr/src/app
 
-
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
@@ -18,8 +17,8 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production=true
 
 COPY --from=builder /usr/src/app/dist ./dist
+COPY ./assets ./assets
 
 USER node
-
 
 CMD ["node", "dist/main"]
