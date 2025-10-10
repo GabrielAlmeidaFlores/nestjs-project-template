@@ -7,7 +7,8 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 export class CnisFastAnalysisLegalProceedingTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'legal_proceeding_number',
-    type: 'bigint',
+    type: 'varchar',
+    length: 100,
   })
   public legalProceedingNumber: string;
 
