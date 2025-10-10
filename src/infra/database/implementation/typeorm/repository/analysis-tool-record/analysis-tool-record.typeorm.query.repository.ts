@@ -41,8 +41,23 @@ export class AnalysisToolRecordTypeormQueryRepository
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   > {
+    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
+      {};
+
+    for (const key of this.getEntityRelationsKey()) {
+      relationsClause[key] = {
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      } as never;
+    }
+
     const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
       where: [],
+      relations: relationsClause,
     };
 
     const relations = this.getEntityRelationsKey();
@@ -54,18 +69,18 @@ export class AnalysisToolRecordTypeormQueryRepository
 
       const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {};
 
-      if (listData.type !== null) {
+      if (typeof listData.type === 'string') {
         where.type = listData.type;
       }
 
-      if (listData.code !== null) {
+      if (typeof listData.code === 'string') {
         where.code = listData.code;
       }
 
-      if (listData.clientName !== null) {
+      if (typeof listData.clientName === 'string') {
         where[relation] = {
           analysisToolClient: {
-            name: Like(`%${listData.clientName}%`),
+            name: Like(`${listData.clientName}`),
           },
           createdBy: {
             organization: {
