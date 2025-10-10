@@ -4,7 +4,7 @@ import type { AnalysisToolClientInssBenefitId } from '@module/customer/analysis-
 
 export class GetCnisFastAnalysisInssBenefitQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolClientInssBenefitId;
-  public readonly inssBenefitNumber: number;
+  public readonly inssBenefitNumber: string;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
