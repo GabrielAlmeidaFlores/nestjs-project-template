@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
-import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOptionsRelations,
+  FindOptionsWhere,
+  Like,
+  Repository,
+} from 'typeorm';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record.query.result';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
@@ -25,6 +33,82 @@ export class AnalysisToolRecordTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+  public async listByOrganizationId(
+    organizationId: OrganizationId,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
+  > {
+    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
+      where: [],
+    };
+
+    const relations = this.getEntityRelationsKey();
+
+    relations.forEach((relation) => {
+      if (!Array.isArray(searchParams.where)) {
+        return;
+      }
+
+      const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {};
+
+      if (listData.type !== null) {
+        where.type = listData.type;
+      }
+
+      if (listData.code !== null) {
+        where.code = listData.code;
+      }
+
+      if (listData.clientName !== null) {
+        where[relation] = {
+          analysisToolClient: {
+            name: Like(`%${listData.clientName}%`),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        };
+      } else {
+        where[relation] = {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        };
+      }
+
+      searchParams.where.push(where);
+    });
+
+    const data = await this.list(listData, searchParams);
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
   }
 
   public async countByOrganizationId(
@@ -106,10 +190,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  private getEntityRelationsKey(): (keyof AnalysisToolRecordTypeormEntity)[] {
-    return this.repository.metadata.relations.map(
-      (relation) =>
-        relation.propertyName as keyof AnalysisToolRecordTypeormEntity,
-    );
+  private getEntityRelationsKey(): ('cnisFastAnalysis' | 'legalPleading')[] {
+    return ['cnisFastAnalysis', 'legalPleading'];
   }
 }
