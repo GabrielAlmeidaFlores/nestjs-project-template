@@ -34,6 +34,7 @@ export class AnalysisToolRecordTypeormQueryRepository
   ) {
     super(repository);
   }
+
   public async listByOrganizationId(
     organizationId: OrganizationId,
     listData: ListAnalysisToolRecordQueryParam,
