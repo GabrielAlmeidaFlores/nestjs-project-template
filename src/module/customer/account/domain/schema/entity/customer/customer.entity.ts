@@ -1,13 +1,19 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidCustomerNameError } from '@module/customer/account/domain/schema/entity/customer/error/invalid-customer-name.error';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { CustomerEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer/customer.entity.props.interface';
 import type { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 
 export class CustomerEntity extends BaseEntity<CustomerId> {
+  @Description('Nome do cliente.')
   public readonly name: string;
+
+  @Description('Foto de perfil do cliente.')
   public readonly profilePicture: string | null;
+
+  @Description('Endereço do cliente.')
   public readonly customerAddress: CustomerAddressEntity;
 
   protected readonly _type = CustomerEntity.name;

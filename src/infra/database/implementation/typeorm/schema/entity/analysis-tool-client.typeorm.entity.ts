@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
@@ -72,6 +73,12 @@ export class AnalysisToolClientTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.analysisToolClient,
   )
   public cnisFastAnalysis?: CnisFastAnalysisTypeormEntity[] | undefined;
+
+  @OneToMany(
+    () => LegalPleadingTypeormEntity,
+    (entity) => entity.analysisToolClient,
+  )
+  public legalPleading?: LegalPleadingTypeormEntity[] | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })

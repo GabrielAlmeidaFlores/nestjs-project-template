@@ -1,7 +1,7 @@
 export abstract class FileProcessorGateway {
   public abstract uploadDocument(
-    cnisDocument: Buffer,
-    cnisDocumentLocation?: string,
+    documentBuffer: Buffer,
+    documentLocation?: string,
   ): Promise<string>;
 
   public abstract getDocumentBuffer(fileName: string): Promise<Buffer>;
