@@ -8,4 +8,8 @@ export abstract class GenerativeIaGateway {
     prompt: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract generateHighQualityResponseFromFilesCnisFastAnalysis(
+    files: Buffer[],
+  ): Promise<string | null>;
 }
