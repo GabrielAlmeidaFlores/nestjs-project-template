@@ -4,7 +4,7 @@ import type { CnisFastAnalysisLegalProceedingId } from '@module/customer/analysi
 
 export class GetCnisFastAnalysisLegalProceedingQueryResult extends BaseBuildableObject {
   public readonly id: CnisFastAnalysisLegalProceedingId;
-  public readonly legalProceedingNumber: number;
+  public readonly legalProceedingNumber: string;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
