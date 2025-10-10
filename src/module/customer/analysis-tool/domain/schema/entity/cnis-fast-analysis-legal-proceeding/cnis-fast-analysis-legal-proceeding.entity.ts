@@ -7,7 +7,7 @@ import type { CnisFastAnalysisLegalProceedingEntityPropsInterface } from '@modul
 
 export class CnisFastAnalysisLegalProceedingEntity extends BaseEntity<CnisFastAnalysisLegalProceedingId> {
   @Description('Número do processo judicial relacionado à análise CNIS rápida.')
-  public readonly legalProceedingNumber: number;
+  public readonly legalProceedingNumber: string;
 
   @Description('Análise CNIS rápida associada ao processo judicial.')
   public readonly cnisFastAnalysis: CnisFastAnalysisEntity;

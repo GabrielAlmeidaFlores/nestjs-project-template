@@ -7,9 +7,10 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 export class CnisFastAnalysisInssBenefitTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'inss_benefit_number',
-    type: 'int',
+    type: 'varchar',
+    length: 100,
   })
-  public inssBenefitNumber: number;
+  public inssBenefitNumber: string;
 
   @ManyToOne(
     () => CnisFastAnalysisTypeormEntity,
