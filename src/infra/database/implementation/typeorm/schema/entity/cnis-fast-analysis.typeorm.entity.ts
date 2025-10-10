@@ -8,12 +8,13 @@ import {
 } from 'typeorm';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 
 @Entity({ name: 'cnis_fast_analysis' })
 export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -28,10 +29,10 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'status',
     type: 'simple-enum',
-    enum: AnalysisSolicitationStatusEnum,
-    default: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+    enum: AnalysisRecordStatusEnum,
+    default: AnalysisRecordStatusEnum.IN_PROGRESS,
   })
-  public status: AnalysisSolicitationStatusEnum;
+  public status: AnalysisRecordStatusEnum;
 
   @OneToOne(
     () => CnisFastAnalysisResultTypeormEntity,
@@ -65,6 +66,13 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
   public cnisFastAnalysisLegalProceeding?:
     | CnisFastAnalysisLegalProceedingTypeormEntity[]
     | undefined;
+
+  @OneToOne(
+    () => AnalysisToolRecordTypeormEntity,
+    (entity) => entity.legalPleading,
+    { nullable: true },
+  )
+  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })

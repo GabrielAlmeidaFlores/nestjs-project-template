@@ -10,7 +10,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -93,7 +93,7 @@ export class CreateCnisFastAnalysisUseCase {
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       cnisDocument,
       analysisToolClient,
-      status: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+      status: AnalysisRecordStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
