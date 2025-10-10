@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
 @Entity({ name: 'analysis_tool_record' })
 export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
@@ -12,6 +13,13 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
     length: 255,
   })
   public code: string;
+
+  @Column({
+    name: 'type',
+    type: 'simple-enum',
+    enum: AnalysisToolRecordTypeEnum,
+  })
+  public type: AnalysisToolRecordTypeEnum;
 
   @OneToOne(
     () => CnisFastAnalysisTypeormEntity,

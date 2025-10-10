@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
@@ -10,6 +11,9 @@ import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/doma
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   @Description('Código de identificação do registro da ferramenta de análise')
   public readonly code: AnalysisToolRecordCode;
+
+  @Description('Tipo do registro da ferramenta de análise')
+  public readonly type: AnalysisToolRecordTypeEnum;
 
   @Description(
     'Análise rápida do CNIS associada ao registro da ferramenta de análise',
@@ -27,6 +31,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     super(AnalysisToolRecordId, props);
 
     this.code = props.code;
+    this.type = props.type;
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
     this.legalPleading = props.legalPleading ?? null;
   }
