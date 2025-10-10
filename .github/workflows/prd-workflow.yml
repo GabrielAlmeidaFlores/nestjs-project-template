@@ -50,6 +50,7 @@ jobs:
           host: ${{ secrets.PRD_SSH_HOST }}
           username: ${{ secrets.PRD_SSH_USER }}
           key: ${{ secrets.PRD_SSH_PRIVATE_KEY }}
+          timeout: 36000s
           script: |
             echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
             docker pull ${{ vars.REGISTRY_URL }}:${{ env.APP_VERSION }}
