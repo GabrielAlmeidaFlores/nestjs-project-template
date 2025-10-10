@@ -6,6 +6,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
@@ -42,7 +43,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
       return new AnalysisToolRecordEntity({
         ...source,
         id: new AnalysisToolRecordId(source.id),
-        code: source.code,
+        code: new AnalysisToolRecordCode(source.code),
         cnisFastAnalysis,
         legalPleading,
       });
@@ -77,7 +78,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
       return AnalysisToolRecordTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        code: source.code,
+        code: source.code.toString(),
         cnisFastAnalysis,
         legalPleading,
       });

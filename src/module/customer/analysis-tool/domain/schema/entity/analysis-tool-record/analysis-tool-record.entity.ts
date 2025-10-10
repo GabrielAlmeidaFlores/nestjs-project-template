@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -8,7 +9,7 @@ import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/doma
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   @Description('Código de identificação do registro da ferramenta de análise')
-  public readonly code: string;
+  public readonly code: AnalysisToolRecordCode;
 
   @Description(
     'Análise rápida do CNIS associada ao registro da ferramenta de análise',
