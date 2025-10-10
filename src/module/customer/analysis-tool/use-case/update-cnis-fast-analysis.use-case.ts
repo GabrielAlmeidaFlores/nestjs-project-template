@@ -161,7 +161,7 @@ export class UpdateCnisFastAnalysisUseCase {
   private updateInssBenefitNumberOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
     currentInssBenefitNumber: GetCnisFastAnalysisInssBenefitQueryResult[],
-    newInssBenefitNumber: number[],
+    newInssBenefitNumber: string[],
   ): TransactionType[] {
     const deleteCurrent = currentInssBenefitNumber.map((value) => {
       return this.cnisFastAnalysisInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
@@ -186,7 +186,7 @@ export class UpdateCnisFastAnalysisUseCase {
   private updateLegalProceedingNumberOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
     currentLegalProceedingNumber: GetCnisFastAnalysisLegalProceedingQueryResult[],
-    newLegalProceeding: number[],
+    newLegalProceeding: string[],
   ): TransactionType[] {
     const deleteCurrent = currentLegalProceedingNumber.map((value) => {
       return this.cnisFastAnalysisLegalProceedingCommandRepositoryGateway.deleteCnisFastAnalysisLegalProceeding(
