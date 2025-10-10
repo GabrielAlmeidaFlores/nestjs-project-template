@@ -22,7 +22,7 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DocumentAnalysisGateway } from '@module/customer/analysis-tool/lib/document-analysis/document-analysis.gateway';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -48,8 +48,8 @@ export class UpdateCnisFastAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(DocumentAnalysisGateway)
-    private readonly documentAnalysisGateway: DocumentAnalysisGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
   ) {}
 
   public async execute(
@@ -71,12 +71,13 @@ export class UpdateCnisFastAnalysisUseCase {
     const cnisFastAnalysisQueryResult =
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
         cnisFastAnalysisId,
+        organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
       );
 
     if (dto.cnisDocument) {
       const validateCnisDocument =
-        await this.documentAnalysisGateway.validateCnisDocument(
+        await this.analysisProcessorGateway.validateCnisDocument(
           dto.cnisDocument.buffer,
         );
 

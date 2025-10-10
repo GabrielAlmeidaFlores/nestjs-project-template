@@ -12,11 +12,11 @@ export class BucketApplicationVariable {
       'customer/profile-picture',
     );
 
-  public static readonly BUCKET_FILE_LOCATION_CUSTOMER_CNIS_DOCUMENT =
+  public static readonly BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT =
     BucketApplicationVariable.source.getValueOrDefault<string>(
-      'BUCKET_FILE_LOCATION_CUSTOMER_CNIS_DOCUMENT',
+      'BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT',
       String,
-      'customer/cnis-document',
+      'organization/document',
     );
 
   public static readonly BUCKET_S3_REGION =

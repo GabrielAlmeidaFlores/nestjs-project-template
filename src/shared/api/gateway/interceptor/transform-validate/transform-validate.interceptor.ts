@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   CallHandler,
   Type,
+  StreamableFile,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
@@ -37,8 +38,11 @@ export class TransformValidateInterceptor implements NestInterceptor {
     }
 
     const transformAndValidate = async (data: unknown): Promise<unknown> => {
-      const dtoClass = responseDto as Type<object>;
+      if (data instanceof StreamableFile) {
+        return data;
+      }
 
+      const dtoClass = responseDto as Type<object>;
       const plain = instanceToPlain(data);
 
       const instance = plainToInstance(dtoClass, plain, {
