@@ -1,3 +1,4 @@
+import { GeminiModule } from '@infra/generative-ia/implementation/geminini/gemini.module';
 import { Module } from '@nestjs/common';
 
 import { TranscriberModule } from '@module/customer/transcription/infra/transcriber/transcriber.module';
@@ -7,7 +8,12 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
 @Module({
-  imports: [AuthModule, OrganizationSessionModule, TranscriberModule],
+  imports: [
+    AuthModule,
+    OrganizationSessionModule,
+    TranscriberModule,
+    GeminiModule,
+  ],
   controllers: [TranscriptionController],
   providers: [TranscribeAudioUseCase],
 })
