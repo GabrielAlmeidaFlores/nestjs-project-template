@@ -38,11 +38,18 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
   public clientLastAffiliationDate: Date | null;
 
   @Column({
-    name: 'cnis_ai_analysis',
+    name: 'cnis_complete_analysis',
     type: 'text',
     nullable: true,
   })
-  public cnisAiAnalysis: string | null;
+  public cnisCompleteAnalysis: string | null;
+
+  @Column({
+    name: 'cnis_simplified_analysis',
+    type: 'text',
+    nullable: true,
+  })
+  public cnisSimplifiedAnalysis: string | null;
 
   @OneToOne(
     () => CnisFastAnalysisTypeormEntity,

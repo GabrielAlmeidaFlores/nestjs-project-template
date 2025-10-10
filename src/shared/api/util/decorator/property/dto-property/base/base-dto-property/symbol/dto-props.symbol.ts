@@ -1,1 +1,1 @@
-export const DTO_PROPS = Symbol('dto:props');
+export const DTO_PROPS_SYMBOL = Symbol('dto:props');

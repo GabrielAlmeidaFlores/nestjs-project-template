@@ -9,6 +9,7 @@ import type { ConstructorType } from '@shared/system/type/constructor.type';
 export abstract class CnisFastAnalysisQueryRepositoryGateway {
   public abstract findOneByIdWithRelationsOrFail(
     id: CnisFastAnalysisId,
+    organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetCnisFastAnalysisWithRelationsQueryResult>;
 
