@@ -46,6 +46,7 @@ export class AnalysisToolRecordTypeormQueryRepository
 
     for (const key of this.getEntityRelationsKey()) {
       relationsClause[key] = {
+        analysisToolClient: true,
         createdBy: {
           customer: true,
         },
