@@ -8,6 +8,7 @@ import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeo
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record.query.result';
 import { GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-responsible-and-client-relations.query.result';
 import { GetLegalPleadingWithResponsibleAndClientRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-responsible-and-client-relations.query.result';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
 @Injectable()
@@ -43,7 +44,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       return GetAnalysisToolRecordWithRelationsQueryResult.build({
         ...source,
         id: new AnalysisToolRecordId(source.id),
-        code: source.code,
+        code: new AnalysisToolRecordCode(source.code),
         cnisFastAnalysis,
         legalPleading,
       });
@@ -78,7 +79,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       return AnalysisToolRecordTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        code: source.code,
+        code: source.code.toString(),
         cnisFastAnalysis,
         legalPleading,
       });
