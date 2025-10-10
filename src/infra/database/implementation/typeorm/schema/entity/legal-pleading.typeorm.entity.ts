@@ -11,6 +11,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
+import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
 import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
@@ -133,9 +134,18 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => LegalPleadingAddressTypeormEntity,
     (entity) => entity.legalPleading,
+    { nullable: true },
   )
   @JoinColumn({ name: 'legal_pleading_address_id' })
   public legalPleadingAddress?: LegalPleadingAddressTypeormEntity | undefined;
+
+  @OneToOne(
+    () => LegalPleadingResultTypeormEntity,
+    (entity) => entity.legalPleading,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'legal_pleading_result_id' })
+  public legalPleadingResult?: LegalPleadingResultTypeormEntity | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })
