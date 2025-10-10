@@ -12,9 +12,6 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record.query.result';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
-type fkType = 'cnisFastAnalysis' | 'legalPleading';
-const fkKeys: fkType[] = ['cnisFastAnalysis', 'legalPleading'];
-
 @Injectable()
 export class AnalysisToolRecordTypeormQueryRepository
   extends BaseTypeormQueryRepository<AnalysisToolRecordTypeormEntity>
@@ -34,7 +31,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     organizationId: OrganizationId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      fkKeys.map((key) => ({
+      this.getEntityRelationsKey().map((key) => ({
         [key]: {
           createdBy: {
             organization: {
@@ -62,7 +59,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     err: Constructor<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      fkKeys.map((key) => ({
+      this.getEntityRelationsKey().map((key) => ({
         id: id.toString(),
         [key]: {
           createdBy: {
@@ -81,7 +78,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {};
 
-    for (const key of fkKeys) {
+    for (const key of this.getEntityRelationsKey()) {
       relationsClause[key] = {
         createdBy: {
           customer: true,
@@ -89,7 +86,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
-      };
+      } as never;
     }
 
     const data = await this.findOneOrFail(
@@ -107,5 +104,12 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  private getEntityRelationsKey(): (keyof AnalysisToolRecordTypeormEntity)[] {
+    return this.repository.metadata.relations.map(
+      (relation) =>
+        relation.propertyName as keyof AnalysisToolRecordTypeormEntity,
+    );
   }
 }

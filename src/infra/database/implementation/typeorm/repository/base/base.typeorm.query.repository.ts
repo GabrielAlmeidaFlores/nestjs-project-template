@@ -16,7 +16,7 @@ import type {
 } from 'typeorm';
 
 export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
-  protected constructor(private readonly repository: Repository<T>) {}
+  protected constructor(protected readonly repository: Repository<T>) {}
 
   protected async count(options: FindOneOptions<T>): Promise<number> {
     return await this.repository.count(options);
