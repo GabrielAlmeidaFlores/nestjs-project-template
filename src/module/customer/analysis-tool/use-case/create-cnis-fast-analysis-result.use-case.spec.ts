@@ -230,10 +230,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     analysisProcessorGateway.parseCnisDocument.mockResolvedValueOnce(
       parsedCnisData,
     );
-    analysisProcessorGateway.getCompleteCnisAnalysis.mockResolvedValueOnce(
+    analysisProcessorGateway.getCnisCompleteAnalysis.mockResolvedValueOnce(
       mockAiAnalysis,
     );
-    analysisProcessorGateway.getSimplifiedCnisAnalysis.mockResolvedValueOnce(
+    analysisProcessorGateway.getCnisSimplifiedAnalysis.mockResolvedValueOnce(
       mockSimplifiedAnalysis,
     );
 
@@ -265,10 +265,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       cnisFastAnalysisQueryResult.cnisDocument,
     );
     expect(
-      analysisProcessorGateway.getCompleteCnisAnalysis,
+      analysisProcessorGateway.getCnisCompleteAnalysis,
     ).toHaveBeenCalledTimes(1);
     expect(
-      analysisProcessorGateway.getSimplifiedCnisAnalysis,
+      analysisProcessorGateway.getCnisSimplifiedAnalysis,
     ).toHaveBeenCalledTimes(1);
 
     expect(

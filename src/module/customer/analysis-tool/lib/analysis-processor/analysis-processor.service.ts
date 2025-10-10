@@ -26,7 +26,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async getCompleteCnisAnalysis(
+  public async getCnisCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
     const generativeIaPrompt = `
@@ -110,6 +110,19 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     );
   }
 
+  public async getCnisSimplifiedAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const generativeIaPrompt = `
+      FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR À CLIENTE HELOÍSA O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
+    `;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      generativeIaPrompt,
+      files,
+    );
+  }
+
   public async getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
@@ -152,11 +165,75 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     );
   }
 
-  public async getSimplifiedCnisAnalysis(
+  public async getLegalPleadingCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
     const generativeIaPrompt = `
-      FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR À CLIENTE HELOÍSA O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
+    # CONTEXTO
+    Você atuará como um Assistente Jurídico Sênior, especialista em Direito Previdenciário brasileiro. Sua missão é analisar todos os arquivos fornecidos para identificar os dados do caso e os documentos comprobatórios, a fim de gerar uma análise estratégica completa e a minuta de uma peça processual. O público-alvo é o advogado responsável pelo caso.
+
+    # INSTRUÇÕES
+    1.  **Análise de Arquivos**: Examine CUIDADOSAMENTE todos os arquivos anexados. Um deles conterá os dados estruturados do caso (informações do cliente, fatos, objetivos, etc.) e os demais serão documentos comprobatórios (CNIS, laudos, CTPS, etc.).
+    2.  **Extração de Dados**: Extraia todas as informações relevantes dos arquivos para construir a análise e a peça processual.
+    3.  **Estrutura da Resposta**: Siga RIGOROSAMENTE a estrutura definida abaixo, em formato Markdown.
+
+    # ESTRUTURA OBRIGATÓRIA DA RESPOSTA
+    Sua resposta deve seguir rigorosamente a estrutura abaixo, em formato Markdown. Elabore o conteúdo de cada seção de forma detalhada e completa.
+
+    ---
+
+    # Análise Estratégica e Minuta de Peça Processual
+
+    ## 1. Resumo Executivo para o Advogado
+    - Apresente em uma lista de tópicos (bullet points) os achados mais críticos da análise.
+    - Destaque os **pontos fortes** e **pontos fracos** da tese jurídica.
+    - Sugira a principal **linha de argumentação** a ser seguida.
+    - Liste eventuais **documentos faltantes** que sejam cruciais para o sucesso da demanda.
+    - Indique o **nome da ação** mais apropriada com base nos fatos e objetivos.
+
+    ## 2. Análise Detalhada dos Documentos Anexados
+    - Crie uma tabela analisando cada documento fornecido.
+    - **Colunas necessárias:** "Tipo do Documento", "Pontos de Destaque no Documento", e "Relevância Estratégica para o Caso".
+
+    ## 3. Minuta da Peça Processual
+    - Gere um rascunho completo e bem fundamentado da peça processual, incluindo Endereçamento, Qualificação, Nome da Ação, Fatos, Direito, Pedidos, Valor da Causa e Fechamento.
+
+    ## 4. Recomendações e Próximos Passos
+    - Forneça uma lista de ações práticas para o advogado. Exemplo: "1. Coletar procuração do cliente.", "2. Protocolar a ação no sistema eletrônico competente.".
+
+    # REGRAS DE FORMATAÇÃO E ESTILO
+    - **Formato**: Exclusivamente Markdown.
+    - **Linguagem**: Técnica-jurídica, formal e precisa.
+    - **Objetividade**: A resposta deve começar diretamente com o título '# Análise Estratégica e Minuta de Peça Processual'.
+    `;
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      generativeIaPrompt,
+      files,
+    );
+  }
+
+  public async getLegalPleadingSimplifiedAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const generativeIaPrompt = `
+    # INSTRUÇÃO
+    GERE UM TEXTO DIDÁTICO PARA EXPLICAR AO CLIENTE FINAL O RESULTADO DA ANÁLISE DO SEU CASO. COM BASE NOS ARQUIVOS FORNECIDOS, O TEXTO DEVE EXPLICAR OBRIGATORIAMENTE OS SEGUINTES PONTOS:
+
+    A) **O MOTIVO DO PROCESSO:** Explique de forma simples por que será iniciada uma ação judicial. Qual foi o problema com o INSS?
+
+    B) **A ESTRATÉGIA DO ADVOGADO:** Descreva como o advogado planeja resolver o problema na Justiça. Quais são os principais argumentos e provas?
+
+    C) **O DIREITO DO CLIENTE:** Resuma qual é o principal direito que está sendo buscado no processo (ex: direito a um benefício específico, revisão de um cálculo, etc.).
+
+    D) **PRÓXIMOS PASSOS E TEMPO ESTIMADO:** Informe o que acontecerá a seguir e dê uma estimativa geral de quanto tempo um processo como este costuma levar.
+
+    E) **O RESULTADO ESPERADO:** Explique o que o cliente pode ganhar caso o processo seja bem-sucedido, como o valor estimado do benefício e a possibilidade de receber valores atrasados.
+
+    # REGRAS E ESTILO
+    - **Linguagem**: Use uma linguagem extremamente simples e didática.
+    - **Tom**: Seja objetivo, claro e tranquilizador.
+    - **Formato**: Gere um texto corrido e bem estruturado, respondendo a cada ponto solicitado. Não inclua saudações, despedidas ou qualquer interação. Apenas o resultado da análise.
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
