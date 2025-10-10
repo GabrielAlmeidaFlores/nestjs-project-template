@@ -11,7 +11,7 @@ import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/en
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -128,7 +128,7 @@ export class CreateLegalPleadingResultUseCase {
       legalPleadingResult,
       analysisToolClient,
       legalPleadingAddress,
-      status: AnalysisSolicitationStatusEnum.COMPLETED,
+      status: AnalysisRecordStatusEnum.COMPLETED,
       createdBy: legalPleadingQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
