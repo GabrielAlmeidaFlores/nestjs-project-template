@@ -4,6 +4,6 @@ import type { CnisFastAnalysisLegalProceedingId } from '@module/customer/analysi
 
 export interface CnisFastAnalysisLegalProceedingEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisLegalProceedingId> {
-  legalProceedingNumber: number;
+  legalProceedingNumber: string;
   cnisFastAnalysis: CnisFastAnalysisEntity;
 }

@@ -10,7 +10,6 @@ import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/d
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
@@ -105,11 +104,11 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
   public analysisToolClient: GetCnisFastAnalysisClientResponseDto;
 
-  @ResponseDtoNumberProperty({ required: false, isArray: true })
-  public legalProceedingNumber?: number[];
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
 
-  @ResponseDtoNumberProperty({ required: false, isArray: true })
-  public inssBenefitNumber?: number[];
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
 
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisResultResponseDto, {
     required: false,
