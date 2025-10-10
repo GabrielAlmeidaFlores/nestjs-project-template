@@ -65,7 +65,10 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
 
     const field = listBaseDto.field;
     const search = listBaseDto.search;
-    const where = this.generateSearchWhere(field, search);
+    const where =
+      typeof field === 'string' && typeof search === 'string'
+        ? this.generateSearchWhere(field, search)
+        : {};
 
     const currentPage = listBaseDto.page;
     const itemsPerPage = listBaseDto.limit;
