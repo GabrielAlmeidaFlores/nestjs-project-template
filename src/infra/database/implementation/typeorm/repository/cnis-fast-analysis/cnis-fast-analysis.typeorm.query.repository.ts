@@ -76,12 +76,23 @@ export class CnisFastAnalysisTypeormQueryRepository
 
   public async findOneByIdWithRelationsOrFail(
     id: CnisFastAnalysisId,
+    organizationId: OrganizationId,
     err: Constructor<NotFoundError>,
   ): Promise<GetCnisFastAnalysisWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
           id: id.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
         },
         relations: {
           cnisFastAnalysisInssBenefit: true,

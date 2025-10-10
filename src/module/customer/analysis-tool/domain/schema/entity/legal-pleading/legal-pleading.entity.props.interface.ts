@@ -8,8 +8,9 @@ import type { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/
 import type { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
 import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
-import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
+import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import type { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity';
 import type { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 
 export interface LegalPleadingEntityPropsInterface
@@ -29,6 +30,7 @@ export interface LegalPleadingEntityPropsInterface
   legalPleadingWritOfMandamusObjective?: LegalPleadingWritOfMandamusObjectiveEnum | null;
   analysisToolClient: AnalysisToolClientEntity;
   legalPleadingAddress?: LegalPleadingAddressEntity | null;
+  legalPleadingResult?: LegalPleadingResultEntity | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }

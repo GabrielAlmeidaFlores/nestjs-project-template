@@ -45,7 +45,7 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
   public cnisCompleteAnalysis: string | null;
 
   @Column({
-    name: 'cnis_simplifed_analysis',
+    name: 'cnis_simplified_analysis',
     type: 'text',
     nullable: true,
   })
