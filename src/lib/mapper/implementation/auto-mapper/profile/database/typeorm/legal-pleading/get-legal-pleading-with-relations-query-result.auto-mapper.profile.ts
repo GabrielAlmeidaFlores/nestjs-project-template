@@ -6,6 +6,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
+import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -14,8 +15,9 @@ import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/query/result/get-legal-pleading-address.query.result';
 import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
+import { GetLegalPleadingResultQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/result/get-legal-pleading-result.query.result';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
-import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 
 @Injectable()
 export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
@@ -48,6 +50,15 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
               source.legalPleadingAddress,
               LegalPleadingAddressTypeormEntity,
               GetLegalPleadingAddressQueryResult,
+            )
+          : null;
+
+      const legalPleadingResult =
+        source.legalPleadingResult !== undefined
+          ? this.mapper.map(
+              source.legalPleadingResult,
+              LegalPleadingResultTypeormEntity,
+              GetLegalPleadingResultQueryResult,
             )
           : null;
 
@@ -93,6 +104,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
         createdBy,
         updatedBy,
         legalPleadingAddress,
+        legalPleadingResult,
         analysisToolClient,
         legalPleadingDocument,
       });
@@ -118,6 +130,15 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
               source.legalPleadingAddress,
               GetLegalPleadingAddressQueryResult,
               LegalPleadingAddressTypeormEntity,
+            )
+          : undefined;
+
+      const legalPleadingResult =
+        source.legalPleadingResult !== null
+          ? this.mapper.map(
+              source.legalPleadingResult,
+              GetLegalPleadingResultQueryResult,
+              LegalPleadingResultTypeormEntity,
             )
           : undefined;
 
@@ -163,6 +184,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
         createdBy,
         updatedBy,
         legalPleadingAddress,
+        legalPleadingResult,
         analysisToolClient,
         legalPleadingDocument,
       });

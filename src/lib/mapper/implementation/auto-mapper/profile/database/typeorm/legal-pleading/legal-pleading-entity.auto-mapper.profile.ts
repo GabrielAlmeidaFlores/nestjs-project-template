@@ -5,14 +5,16 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
+import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
-import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity';
 
 @Injectable()
 export class LegalPleadingEntityAutoMapperProfile {
@@ -35,6 +37,12 @@ export class LegalPleadingEntityAutoMapperProfile {
         source.legalPleadingAddress,
         LegalPleadingAddressTypeormEntity,
         LegalPleadingAddressEntity,
+      );
+
+      const legalPleadingResult = this.mapper.map(
+        source.legalPleadingResult,
+        LegalPleadingResultTypeormEntity,
+        LegalPleadingResultEntity,
       );
 
       const analysisToolClient = this.mapper.map(
@@ -61,6 +69,7 @@ export class LegalPleadingEntityAutoMapperProfile {
         createdBy: new OrganizationMemberId(source.createdBy?.id),
         updatedBy: new OrganizationMemberId(source.updatedBy?.id),
         legalPleadingAddress,
+        legalPleadingResult,
         analysisToolClient,
       });
     };
@@ -83,6 +92,12 @@ export class LegalPleadingEntityAutoMapperProfile {
         source.legalPleadingAddress,
         LegalPleadingAddressEntity,
         LegalPleadingAddressTypeormEntity,
+      );
+
+      const legalPleadingResult = this.mapper.map(
+        source.legalPleadingResult,
+        LegalPleadingResultEntity,
+        LegalPleadingResultTypeormEntity,
       );
 
       const analysisToolClient = this.mapper.map(
@@ -110,6 +125,7 @@ export class LegalPleadingEntityAutoMapperProfile {
         createdBy,
         updatedBy,
         legalPleadingAddress,
+        legalPleadingResult,
         analysisToolClient,
       });
     };
