@@ -10,7 +10,7 @@ import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-export default class DownloadCnisCompleteAnalysisUseCase {
+export class DownloadCnisCompleteAnalysisUseCase {
   protected readonly _type = DownloadCnisCompleteAnalysisUseCase.name;
 
   public constructor(
@@ -41,6 +41,7 @@ export default class DownloadCnisCompleteAnalysisUseCase {
     const cnisFastAnalysisQueryResult =
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
         cnisFastAnalysisId,
+        organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
       );
 

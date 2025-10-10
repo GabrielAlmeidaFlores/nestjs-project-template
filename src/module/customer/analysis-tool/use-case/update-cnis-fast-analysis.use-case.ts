@@ -71,6 +71,7 @@ export class UpdateCnisFastAnalysisUseCase {
     const cnisFastAnalysisQueryResult =
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
         cnisFastAnalysisId,
+        organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
       );
 

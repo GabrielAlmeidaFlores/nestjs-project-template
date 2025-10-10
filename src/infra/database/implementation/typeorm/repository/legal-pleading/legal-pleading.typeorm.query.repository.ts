@@ -41,12 +41,25 @@ export class LegalPleadingTypeormQueryRepository
             },
           },
           updatedBy: {
-            id: organizationId.toString(),
+            organization: {
+              id: organizationId.toString(),
+            },
           },
         },
         relations: {
+          analysisToolClient: {
+            createdBy: {
+              customer: true,
+            },
+            updatedBy: {
+              customer: true,
+            },
+          },
           legalPleadingAddress: true,
-          legalPleadingDocument: true,
+          legalPleadingDocument: {
+            legalPleadingDocumentAnalysis: true,
+          },
+          legalPleadingResult: true,
           createdBy: {
             customer: true,
           },

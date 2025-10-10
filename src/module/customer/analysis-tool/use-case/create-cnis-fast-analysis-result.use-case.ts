@@ -59,6 +59,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisFastAnalysisQueryResult =
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
         cnisFastAnalysisId,
+        organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
       );
 
