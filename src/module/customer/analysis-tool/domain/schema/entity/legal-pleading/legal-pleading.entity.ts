@@ -1,5 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading/legal-pleading-id.value-object';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity';
 import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -69,6 +70,9 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   @Description('Endereço relacionado à peça processual.')
   public readonly legalPleadingAddress: LegalPleadingAddressEntity | null;
 
+  @Description('Resultado da análise da peça processual.')
+  public readonly legalPleadingResult: LegalPleadingResultEntity | null;
+
   @Description('Membro da organização que criou a peça processual.')
   public readonly createdBy: OrganizationMemberId;
 
@@ -97,6 +101,7 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     this.legalPleadingWritOfMandamusObjective =
       props.legalPleadingWritOfMandamusObjective ?? null;
     this.legalPleadingAddress = props.legalPleadingAddress ?? null;
+    this.legalPleadingResult = props.legalPleadingResult ?? null;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
