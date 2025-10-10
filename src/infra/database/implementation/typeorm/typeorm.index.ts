@@ -37,6 +37,7 @@ import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document-analysis.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
+import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
@@ -63,6 +64,7 @@ export class TypeormIndex {
     LegalPleadingAddressTypeormEntity,
     LegalPleadingDocumentTypeormEntity,
     LegalPleadingDocumentAnalysisTypeormEntity,
+    LegalPleadingResultTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

@@ -8,6 +8,7 @@ import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeo
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 
 @Injectable()
 export class LegalPleadingTypeormCommandRepository
@@ -22,6 +23,18 @@ export class LegalPleadingTypeormCommandRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+  public updateLegalPleading(
+    id: LegalPleadingId,
+    props: LegalPleadingEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      LegalPleadingEntity,
+      LegalPleadingTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 
   public createLegalPleading(props: LegalPleadingEntity): TransactionType {
