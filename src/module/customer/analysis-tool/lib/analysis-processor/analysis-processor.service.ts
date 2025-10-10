@@ -26,7 +26,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async getCnisCompleteAnalysis(
+  public async getCnisCompleteAnalysisv2(
     files: Buffer[],
   ): Promise<string | null> {
     const generativeIaPrompt = `
@@ -238,6 +238,14 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       generativeIaPrompt,
+      files,
+    );
+  }
+
+  public async getCnisCompleteAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromFilesCnisFastAnalysis(
       files,
     );
   }

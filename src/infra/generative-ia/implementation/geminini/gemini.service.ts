@@ -1,3 +1,6 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
 import { GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
@@ -36,6 +39,62 @@ export class GeminiService implements GenerativeIaGateway {
       files,
       'gemini-2.5-pro',
     );
+  }
+
+  public async generateHighQualityResponseFromFilesCnisFastAnalysis(
+    files: Buffer[],
+  ): Promise<string | null> {
+    const currentWorkingDir = process.cwd();
+
+    const systemPromptFilesAbsolutePath = join(
+      currentWorkingDir,
+      GenerativeIaApplicationVariable.SYSTEM_PROMPT_CNIS_FAST_ANALYSIS,
+      'instructions.txt',
+    );
+
+    const systemPromptFiles = readFileSync(
+      systemPromptFilesAbsolutePath,
+      'utf-8',
+    );
+
+    const promptPart: Part[] = [];
+    for (const file of files) {
+      const fileData = await fileType.fileTypeFromBuffer(file);
+
+      // if (fileData === undefined) {
+      //   continue;
+      // }
+
+      promptPart.push({
+        inlineData: {
+          mimeType: fileData?.mime ?? 'application/json',
+          data: file.toString('base64'),
+        },
+      });
+    }
+    const texto = systemPromptFiles;
+
+    const result = await this.googleGenerativeAI.models.generateContentStream({
+      model: 'gemini-2.5-pro',
+      contents: {
+        role: 'user',
+        parts: promptPart,
+      },
+      config: {
+        temperature: 0.3,
+        systemInstruction: {
+          text: texto,
+        },
+      },
+    });
+
+    let fullResponse = '';
+
+    for await (const chunk of result) {
+      fullResponse += chunk.text;
+    }
+
+    return fullResponse.length > 0 ? fullResponse : null;
   }
 
   private async generateResponseFromPromptAndFiles(

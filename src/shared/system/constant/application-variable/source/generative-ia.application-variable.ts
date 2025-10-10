@@ -9,5 +9,11 @@ export class GenerativeIaApplicationVariable {
       String,
     );
 
+  public static readonly SYSTEM_PROMPT_CNIS_FAST_ANALYSIS =
+    GenerativeIaApplicationVariable.source.getValueOrThrow<string>(
+      'SYSTEM_PROMPT_CNIS_FAST_ANALYSIS',
+      String,
+    );
+
   protected readonly _type = GenerativeIaApplicationVariable.name;
 }
