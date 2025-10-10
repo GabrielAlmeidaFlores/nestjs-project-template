@@ -20,7 +20,11 @@ export class CustomerAddressEntity extends BaseEntity<CustomerAddressId> {
 
   @Description('Bairro do endereço do cliente.')
   public readonly neighborhood: string;
+
+  @Description('Rua do endereço do cliente.')
   public readonly street: string;
+
+  @Description('Número do endereço do cliente.')
   public readonly addressNumber: number;
 
   protected readonly _type = CustomerAddressEntity.name;

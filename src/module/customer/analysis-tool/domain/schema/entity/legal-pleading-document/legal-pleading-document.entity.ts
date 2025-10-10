@@ -14,7 +14,7 @@ export class LegalPleadingDocumentEntity extends BaseEntity<LegalPleadingDocumen
   @Description('Nome do documento legal anexado à petição.')
   public readonly document: string;
 
-  @Description('Petição legal à qual o documento está anexado.')
+  @Description('Peça processual à qual o documento está anexado.')
   public readonly legalPleading: LegalPleadingEntity;
 
   @Description('Análise do documento legal anexado à petição.')
