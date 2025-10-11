@@ -5,7 +5,6 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
 import { GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-responsible-and-client-relations.query.result';
@@ -29,17 +28,6 @@ export class GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResultAuto
     const convertOrmEntityToDomainEntity = (
       source: CnisFastAnalysisTypeormEntity,
     ): GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult => {
-      if (
-        !source.cnisFastAnalysisInssBenefit ||
-        !source.cnisFastAnalysisLegalProceeding
-      ) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass:
-            GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult.name,
-          sourceClass: CnisFastAnalysisTypeormEntity.name,
-        });
-      }
-
       const updatedBy = this.mapper.map(
         source.updatedBy,
         OrganizationMemberTypeormEntity,
