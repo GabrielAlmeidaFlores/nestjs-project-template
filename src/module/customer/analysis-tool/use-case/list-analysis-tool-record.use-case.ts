@@ -7,8 +7,8 @@ import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool
 import {
   GetAnalysisToolRecordResponseDto,
   GetAnalysisToolRecordResponsibleResponseDto,
-} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record.request.dto';
-import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.request.dto';
+} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record.response.dto';
+import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
