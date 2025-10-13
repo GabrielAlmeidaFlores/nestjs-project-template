@@ -39,7 +39,7 @@ export class UpdateCustomerProfilePictureUseCase {
 
     const newProfilePictureLocation =
       await this.fileProcessorGateway.processAndUploadProfilePicture(
-        dto.profilePicture.buffer,
+        dto.profilePicture,
         customer.profilePicture ?? undefined,
       );
 

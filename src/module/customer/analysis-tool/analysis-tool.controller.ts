@@ -24,6 +24,7 @@ import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/d
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/delete-cnis-fast-analysis.response';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
+import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
@@ -39,6 +40,7 @@ import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
+import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
@@ -73,6 +75,7 @@ export class AnalysisToolController {
     private readonly downloadCnisSimplifiedAnalysisUseCase: DownloadCnisSimplifiedAnalysisUseCase,
     private readonly createLegalPleadingResultUseCase: CreateLegalPleadingResultUseCase,
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
+    private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -205,6 +208,32 @@ export class AnalysisToolController {
   ): Promise<CreateLegalPleadingResultResponseDto> {
     return await this.createLegalPleadingResultUseCase.execute(
       sessionData,
+      organizationSessionData,
+      legalPleadingId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Get legal pleading',
+    http: {
+      path: 'legal-pleading/:legalPleadingId',
+      method: RequestMethod.GET,
+    },
+    tag: ['legal-pleading'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Legal pleading data',
+      type: GetLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getLegalPleading(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+  ): Promise<GetLegalPleadingResponseDto> {
+    return await this.getLegalPleadingUseCase.execute(
       organizationSessionData,
       legalPleadingId,
     );

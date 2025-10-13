@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
@@ -23,7 +22,6 @@ const makeCustomerQuery = (): GetCustomerQueryResult =>
   GetCustomerQueryResult.build({
     id: new CustomerId(),
     name: 'Maria Silva',
-    phoneNumber: new PhoneNumber('5511999999999'),
     profilePicture: null,
     createdAt: new Date(),
     updatedAt: new Date(),
