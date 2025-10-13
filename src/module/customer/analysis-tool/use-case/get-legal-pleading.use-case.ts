@@ -84,12 +84,23 @@ export class GetLegalPleadingUseCase {
               item.document,
             );
 
-            return url.toString();
+            const originalFileName =
+              await this.fileProcessorGateway.getOriginalFileName(
+                item.document,
+              );
+
+            return {
+              url,
+              originalFileName,
+            };
           }),
         );
 
-        const legalPleadingDocument = documentUrls.map((url) => {
-          return GetLegalPleadingDocumentResponseDto.build({ url });
+        const legalPleadingDocument = documentUrls.map((item) => {
+          return GetLegalPleadingDocumentResponseDto.build({
+            url: item.url.toString(),
+            originalFileName: item.originalFileName,
+          });
         });
 
         return GetLegalPleadingDocumentAnalysisResponseDto.build({

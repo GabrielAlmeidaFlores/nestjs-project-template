@@ -41,6 +41,9 @@ export class GetLegalPleadingDocumentResponseDto extends BaseBuildableDtoObject 
   @ResponseDtoStringProperty()
   public url: string;
 
+  @ResponseDtoStringProperty()
+  public originalFileName: string;
+
   protected override readonly _type = GetLegalPleadingDocumentResponseDto.name;
 }
 

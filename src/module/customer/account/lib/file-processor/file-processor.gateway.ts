@@ -1,6 +1,8 @@
+import type { FileModel } from '@shared/system/model/generic/file.model';
+
 export abstract class FileProcessorGateway {
   public abstract processAndUploadProfilePicture(
-    profilePicture: Buffer,
+    profilePicture: FileModel,
     profilePictureLocation?: string,
   ): Promise<string>;
   public abstract getCustomerProfilePicture(

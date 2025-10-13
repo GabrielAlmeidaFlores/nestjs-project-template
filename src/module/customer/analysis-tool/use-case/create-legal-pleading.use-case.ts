@@ -205,9 +205,8 @@ export class CreateLegalPleadingUseCase {
           return null;
         }
 
-        const uploadDocument = await this.fileProcessorGateway.uploadDocument(
-          document.buffer,
-        );
+        const uploadDocument =
+          await this.fileProcessorGateway.uploadDocument(document);
 
         const legalPleadingDocument = new LegalPleadingDocumentEntity({
           type: dtoDocumentMapItem.documentType,
