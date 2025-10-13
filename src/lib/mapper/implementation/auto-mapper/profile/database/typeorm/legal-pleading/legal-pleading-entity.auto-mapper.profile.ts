@@ -12,6 +12,7 @@ import { OrganizationMemberId } from '@module/customer/account/domain/schema/ent
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
@@ -54,6 +55,7 @@ export class LegalPleadingEntityAutoMapperProfile {
       return new LegalPleadingEntity({
         ...source,
         id: new LegalPleadingId(source.id),
+        code: new LegalPleadingCode(source.code),
         benefitInitialMonthlyIncome:
           source.benefitInitialMonthlyIncome !== null
             ? new DecimalValue(source.benefitInitialMonthlyIncome)
@@ -117,6 +119,7 @@ export class LegalPleadingEntityAutoMapperProfile {
       return LegalPleadingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        code: source.code.toString(),
         benefitInitialMonthlyIncome:
           source.benefitInitialMonthlyIncome?.toString() ?? null,
         benefitCurrentMonthlyIncome:

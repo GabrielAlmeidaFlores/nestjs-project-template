@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
-import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
@@ -19,17 +18,24 @@ import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/do
 import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
 import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
 import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 @Entity({ name: 'legal_pleading' })
 export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'code',
+    type: 'varchar',
+    length: 255,
+  })
+  public code: string;
+
+  @Column({
     name: 'status',
     type: 'simple-enum',
-    enum: AnalysisRecordStatusEnum,
-    default: AnalysisRecordStatusEnum.IN_PROGRESS,
+    enum: AnalysisStatusEnum,
+    default: AnalysisStatusEnum.IN_PROGRESS,
   })
-  public status: AnalysisRecordStatusEnum;
+  public status: AnalysisStatusEnum;
 
   @Column({
     name: 'statement_of_facts',
@@ -147,13 +153,6 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'legal_pleading_result_id' })
   public legalPleadingResult?: LegalPleadingResultTypeormEntity | undefined;
-
-  @OneToOne(
-    () => AnalysisToolRecordTypeormEntity,
-    (entity) => entity.legalPleading,
-    { nullable: true },
-  )
-  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })

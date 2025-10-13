@@ -3,12 +3,12 @@ import type { OrganizationMemberId } from '@module/customer/account/domain/schem
 import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
-import type { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 export interface CnisFastAnalysisEntityPropsInterface
   extends BaseEntityPropsInterface<CnisFastAnalysisId> {
   cnisDocument?: string | null;
-  status: AnalysisRecordStatusEnum;
+  status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   cnisFastAnalysisResult?: CnisFastAnalysisResultEntity | null;
   createdBy: OrganizationMemberId;
