@@ -25,7 +25,7 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
   private static generate(value: number): string {
     const padStart = 3;
     const numericPart = String(value).padStart(padStart, '0');
-    return `A${numericPart}`;
+    return `AN${numericPart}`;
   }
 
   private static isValidString(code: string): boolean {
