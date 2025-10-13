@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
-import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
@@ -147,13 +146,6 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'legal_pleading_result_id' })
   public legalPleadingResult?: LegalPleadingResultTypeormEntity | undefined;
-
-  @OneToOne(
-    () => AnalysisToolRecordTypeormEntity,
-    (entity) => entity.legalPleading,
-    { nullable: true },
-  )
-  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })
