@@ -53,9 +53,7 @@ export class ListAnalysisToolRecordUseCase {
 
     await Promise.all(
       analysisToolRecordList.resource.map(async (analysisToolRecord) => {
-        const analysis =
-          analysisToolRecord.cnisFastAnalysis ??
-          analysisToolRecord.legalPleading;
+        const analysis = analysisToolRecord.cnisFastAnalysis;
 
         if (!analysis) {
           return;

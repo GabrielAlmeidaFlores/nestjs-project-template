@@ -10,6 +10,7 @@ import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/cu
 import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
 import { GetLegalPleadingWithResponsibleAndClientRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-responsible-and-client-relations.query.result';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 
 @Injectable()
@@ -52,6 +53,7 @@ export class GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMap
         {
           ...source,
           id: new LegalPleadingId(source.id),
+          code: new LegalPleadingCode(source.code),
           benefitInitialMonthlyIncome:
             source.benefitInitialMonthlyIncome !== null
               ? new DecimalValue(source.benefitInitialMonthlyIncome)
@@ -106,6 +108,7 @@ export class GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMap
       return LegalPleadingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        code: source.code.toString(),
         benefitInitialMonthlyIncome:
           source.benefitInitialMonthlyIncome !== null
             ? source.benefitInitialMonthlyIncome.toString()
