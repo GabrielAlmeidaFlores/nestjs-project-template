@@ -18,7 +18,7 @@ import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/do
 import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
 import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
 import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 @Entity({ name: 'legal_pleading' })
 export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
@@ -32,10 +32,10 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'status',
     type: 'simple-enum',
-    enum: AnalysisRecordStatusEnum,
-    default: AnalysisRecordStatusEnum.IN_PROGRESS,
+    enum: AnalysisStatusEnum,
+    default: AnalysisStatusEnum.IN_PROGRESS,
   })
-  public status: AnalysisRecordStatusEnum;
+  public status: AnalysisStatusEnum;
 
   @Column({
     name: 'statement_of_facts',
