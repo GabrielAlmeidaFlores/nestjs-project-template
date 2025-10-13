@@ -134,7 +134,7 @@ export class CreateCnisFastAnalysisUseCase {
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.CNIS,
+      type: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
       cnisFastAnalysis,
     });
 
