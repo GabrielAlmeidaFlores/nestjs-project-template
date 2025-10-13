@@ -4,6 +4,11 @@ import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway'
 
 @Injectable()
 export class LoremIpsumService implements GenerativeIaGateway {
+  public generateHighQualityResponseFromFilesCnisFastAnalysis(
+    _files: Buffer[],
+  ): Promise<string | null> {
+    throw new Error('Method not implemented.');
+  }
   protected readonly _type = LoremIpsumService.name;
 
   public async generateFlashResponseFromPromptAndFiles(
