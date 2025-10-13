@@ -15,6 +15,7 @@ import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-to
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
+import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
@@ -28,6 +29,7 @@ import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
+import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -44,6 +46,7 @@ import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
+import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -76,6 +79,7 @@ export class AnalysisToolController {
     private readonly createLegalPleadingResultUseCase: CreateLegalPleadingResultUseCase,
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
+    private readonly listLegalPleadingUseCase: ListLegalPleadingUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -151,6 +155,33 @@ export class AnalysisToolController {
     @Body() dto: CreateAnalysisToolClientRequestDto,
   ): Promise<CreateAnalysisToolClientResponseDto> {
     return await this.createAnalysisToolClientUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'List legal pleadings',
+    http: {
+      path: 'legal-pleading',
+      method: RequestMethod.GET,
+    },
+    tag: ['legal-pleading'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Legal pleading list',
+      type: ListLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listLegalPleading(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListLegalPleadingRequestDto,
+  ): Promise<ListLegalPleadingResponseDto> {
+    return await this.listLegalPleadingUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,
