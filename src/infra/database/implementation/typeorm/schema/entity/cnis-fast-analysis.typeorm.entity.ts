@@ -14,7 +14,7 @@ import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implem
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 @Entity({ name: 'cnis_fast_analysis' })
 export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -29,10 +29,10 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'status',
     type: 'simple-enum',
-    enum: AnalysisRecordStatusEnum,
-    default: AnalysisRecordStatusEnum.IN_PROGRESS,
+    enum: AnalysisStatusEnum,
+    default: AnalysisStatusEnum.IN_PROGRESS,
   })
-  public status: AnalysisRecordStatusEnum;
+  public status: AnalysisStatusEnum;
 
   @OneToOne(
     () => CnisFastAnalysisResultTypeormEntity,
@@ -69,7 +69,7 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
 
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,
-    (entity) => entity.legalPleading,
+    (entity) => entity.cnisFastAnalysis,
     { nullable: true },
   )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;

@@ -17,6 +17,7 @@ import { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-to
 import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
 import { GetLegalPleadingResultQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/result/get-legal-pleading-result.query.result';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 
 @Injectable()
@@ -89,6 +90,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
       return GetLegalPleadingWithRelationsQueryResult.build({
         ...source,
         id: new LegalPleadingId(source.id),
+        code: new LegalPleadingCode(source.code),
         benefitInitialMonthlyIncome:
           source.benefitInitialMonthlyIncome !== null
             ? new DecimalValue(source.benefitInitialMonthlyIncome)
@@ -169,6 +171,7 @@ export class GetLegalPleadingWithRelationsQueryResultAutoMapperProfile {
       return LegalPleadingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        code: source.code.toString(),
         benefitInitialMonthlyIncome:
           source.benefitInitialMonthlyIncome !== null
             ? source.benefitInitialMonthlyIncome.toString()

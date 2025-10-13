@@ -15,6 +15,7 @@ import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-to
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
+import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
@@ -28,6 +29,7 @@ import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
+import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -44,6 +46,7 @@ import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
+import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -76,18 +79,19 @@ export class AnalysisToolController {
     private readonly createLegalPleadingResultUseCase: CreateLegalPleadingResultUseCase,
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
+    private readonly listLegalPleadingUseCase: ListLegalPleadingUseCase,
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'List analysis tool records',
+    summary: 'Listar registros de análises',
     http: {
       path: 'analysis-tool-record',
       method: RequestMethod.GET,
     },
-    tag: ['analysis-tool-record'],
+    tag: ['registro-de-analises'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Analysis tool record list',
+      statusCode: HttpStatus.OK,
+      description: 'Lista de registros de análises retornada com sucesso.',
       type: ListAnalysisToolRecordResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -106,15 +110,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'List analysis tool clients',
+    summary: 'Listar clientes da análise',
     http: {
       path: 'analysis-tool-client',
       method: RequestMethod.GET,
     },
-    tag: ['analysis-tool-client'],
+    tag: ['cliente-da-analise'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Analysis tool client list',
+      statusCode: HttpStatus.OK,
+      description: 'Lista de clientes da análise retornada com sucesso.',
       type: ListAnalysisToolClientResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -131,15 +135,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create analysis tool client',
+    summary: 'Criar cliente da análise',
     http: {
       path: 'analysis-tool-client',
       method: RequestMethod.POST,
     },
-    tag: ['analysis-tool-client'],
+    tag: ['cliente-da-analise'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Analysis tool client created successfully',
+      description: 'Cliente da análise criado com sucesso.',
       type: CreateAnalysisToolClientResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -158,16 +162,43 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create legal pleading',
+    summary: 'Listar peças processuais',
+    http: {
+      path: 'legal-pleading',
+      method: RequestMethod.GET,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de peças processuais retornada com sucesso.',
+      type: ListLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listLegalPleading(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListLegalPleadingRequestDto,
+  ): Promise<ListLegalPleadingResponseDto> {
+    return await this.listLegalPleadingUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar peça processual',
     http: {
       path: 'legal-pleading',
       method: RequestMethod.POST,
       type: CreateLegalPleadingRequestDto,
     },
-    tag: ['legal-pleading'],
+    tag: ['peca-processual'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Legal pleading created successfully',
+      description: 'Peça processual criada com sucesso.',
       type: CreateLegalPleadingResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -186,15 +217,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create legal pleading result',
+    summary: 'Criar resultado da peça processual',
     http: {
       path: 'legal-pleading/:legalPleadingId/result',
       method: RequestMethod.POST,
     },
-    tag: ['legal-pleading'],
+    tag: ['peca-processual'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Legal pleading result created successfully',
+      description: 'Resultado da peça processual criado com sucesso.',
       type: CreateLegalPleadingResultResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -214,15 +245,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Get legal pleading',
+    summary: 'Obter peça processual por ID',
     http: {
       path: 'legal-pleading/:legalPleadingId',
       method: RequestMethod.GET,
     },
-    tag: ['legal-pleading'],
+    tag: ['peca-processual'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Legal pleading data',
+      statusCode: HttpStatus.OK,
+      description: 'Dados da peça processual retornados com sucesso.',
       type: GetLegalPleadingResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -240,16 +271,16 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create cnis fast analysis',
+    summary: 'Criar análise rápida de CNIS',
     http: {
       path: 'cnis-fast-analysis',
       method: RequestMethod.POST,
       type: CreateCnisFastAnalysisRequestDto,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Cnis fast analysis created successfully',
+      description: 'Análise rápida de CNIS criada com sucesso.',
       type: CreateCnisFastAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -268,16 +299,16 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Update cnis fast analysis',
+    summary: 'Atualizar análise rápida de CNIS',
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.PATCH,
       type: UpdateCnisFastAnalysisRequestDto,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Cnis fast analysis updated successfully',
+      statusCode: HttpStatus.OK,
+      description: 'Análise rápida de CNIS atualizada com sucesso.',
       type: UpdateCnisFastAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -300,15 +331,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Delete analysis tool clients',
+    summary: 'Remover cliente da análise',
     http: {
       path: 'analysis-tool-client/:analysisToolClientId',
       method: RequestMethod.DELETE,
     },
-    tag: ['analysis-tool-client'],
+    tag: ['cliente-da-analise'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Analysis tool client deleted successfully',
+      description: 'Cliente da análise removido com sucesso.',
       type: DeleteAnalysisToolClientResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -331,15 +362,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Delete cnis fast analysis',
+    summary: 'Remover análise rápida de CNIS',
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.DELETE,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Cnis fast analysis deleted successfully',
+      description: 'Análise rápida de CNIS removida com sucesso.',
       type: DeleteCnisFastAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -359,15 +390,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Get cnis fast analysis',
+    summary: 'Obter análise rápida de CNIS por ID',
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.GET,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Cnis fast analysis data',
+      statusCode: HttpStatus.OK,
+      description: 'Dados da análise rápida de CNIS retornados com sucesso.',
       type: GetCnisFastAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -387,15 +418,16 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Get document analysis by ai',
+    summary: 'Baixar análise de CNIS simplificada',
     http: {
       path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/simplified-version',
       method: RequestMethod.GET,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Get document analysis by ai',
+      description:
+        'Arquivo da análise simplificada de CNIS retornado para download.',
       type: Buffer,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -418,15 +450,16 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Get document analysis by ai',
+    summary: 'Baixar análise de CNIS completa',
     http: {
       path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/complete-version',
       method: RequestMethod.GET,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Get document analysis by ai',
+      description:
+        'Arquivo da análise completa de CNIS retornado para download.',
       type: Buffer,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -449,15 +482,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'List cnis fast analysis',
+    summary: 'Listar análises rápidas de CNIS',
     http: {
       path: 'cnis-fast-analysis',
       method: RequestMethod.GET,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Cnis fast analysis list',
+      statusCode: HttpStatus.OK,
+      description: 'Lista de análises rápidas de CNIS retornada com sucesso.',
       type: ListCnisFastAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -476,15 +509,15 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Create cnis fast analysis result',
+    summary: 'Criar resultado da análise rápida de CNIS',
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId/result',
       method: RequestMethod.POST,
     },
-    tag: ['cnis-fast-analysis'],
+    tag: ['analise-rapida-cnis'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Cnis fast analysis result created successfully',
+      description: 'Resultado da análise rápida de CNIS criado com sucesso.',
       type: CreateCnisFastAnalysisResultResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
