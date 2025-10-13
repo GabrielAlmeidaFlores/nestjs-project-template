@@ -12,11 +12,13 @@ import type { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/
 import type { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
 import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import type { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import type { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 
 export class GetLegalPleadingWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: LegalPleadingId;
+  public readonly code: LegalPleadingCode;
   public readonly status: AnalysisRecordStatusEnum;
   public readonly statementOfFacts: string;
   public readonly additionalComments: string | null;

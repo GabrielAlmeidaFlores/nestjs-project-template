@@ -10,4 +10,8 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetLegalPleadingWithRelationsQueryResult>;
+
+  public abstract countByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<number>;
 }
