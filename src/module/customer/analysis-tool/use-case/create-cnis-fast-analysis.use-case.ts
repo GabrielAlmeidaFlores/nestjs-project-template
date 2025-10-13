@@ -3,14 +3,19 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
 import { CnisFastAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/command/cnis-fast-analysis-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -42,6 +47,10 @@ export class CreateCnisFastAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -72,9 +81,7 @@ export class CreateCnisFastAnalysisUseCase {
 
     const cnisDocument =
       dto.cnisDocument !== undefined
-        ? await this.fileProcessorGateway.uploadDocument(
-            dto.cnisDocument.buffer,
-          )
+        ? await this.fileProcessorGateway.uploadDocument(dto.cnisDocument)
         : null;
 
     const analysisToolClientQueryResult =
@@ -93,7 +100,7 @@ export class CreateCnisFastAnalysisUseCase {
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       cnisDocument,
       analysisToolClient,
-      status: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+      status: AnalysisRecordStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
@@ -118,10 +125,22 @@ export class CreateCnisFastAnalysisUseCase {
           })
         : [];
 
+    const countRecords =
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationId(
+        organizationSessionData.organizationId,
+      );
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      code: new AnalysisToolRecordCode(countRecords + 1),
+      type: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
+      cnisFastAnalysis,
+    });
+
     await this.createOnDatabase(
       cnisFastAnalysis,
       cnisFastAnalysisInssBenefit,
       cnisFastAnalysisLegalProceeding,
+      analysisToolRecord,
     );
 
     return CreateCnisFastAnalysisResponseDto.build({
@@ -133,6 +152,7 @@ export class CreateCnisFastAnalysisUseCase {
     cnisFastAnalysis: CnisFastAnalysisEntity,
     cnisFastAnalysisInssBenefit: AnalysisToolClientInssBenefitEntity[],
     cnisFastAnalysisLegalProceeding: CnisFastAnalysisLegalProceedingEntity[],
+    analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
     const cnisFastAnalysisInssBenefitTransaction =
       cnisFastAnalysisInssBenefit.map((value) => {
@@ -153,10 +173,16 @@ export class CreateCnisFastAnalysisUseCase {
         cnisFastAnalysis,
       );
 
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
+        analysisToolRecord,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       cnisFastAnalysisTransaction,
       ...cnisFastAnalysisInssBenefitTransaction,
       ...cnisFastAnalysisLegalProceedingTransaction,
+      analysisToolRecordTransaction,
     ]);
 
     await transaction.commit();

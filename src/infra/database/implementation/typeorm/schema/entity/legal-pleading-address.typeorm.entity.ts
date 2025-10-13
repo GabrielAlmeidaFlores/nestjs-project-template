@@ -9,7 +9,7 @@ export class LegalPleadingAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'postal_code',
     type: 'varchar',
-    length: 50,
+    length: 100,
     transformer: CryptographyTransformer,
   })
   public postalCode: string;
@@ -25,7 +25,7 @@ export class LegalPleadingAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'city',
     type: 'varchar',
-    length: 50,
+    length: 255,
     transformer: CryptographyTransformer,
   })
   public city: string;
@@ -33,7 +33,7 @@ export class LegalPleadingAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'neighborhood',
     type: 'varchar',
-    length: 50,
+    length: 255,
     transformer: CryptographyTransformer,
   })
   public neighborhood: string;
@@ -41,7 +41,7 @@ export class LegalPleadingAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'street',
     type: 'varchar',
-    length: 50,
+    length: 255,
     transformer: CryptographyTransformer,
   })
   public street: string;
@@ -49,7 +49,7 @@ export class LegalPleadingAddressTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'address_number',
     type: 'varchar',
-    length: 50,
+    length: 100,
     transformer: CryptographyTransformer,
   })
   public addressNumber: string;

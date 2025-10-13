@@ -12,9 +12,9 @@ import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
 @Injectable()
-export class GetAnalysisToolClientQueryResultAutoMapperProfile {
+export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetAnalysisToolClientQueryResultAutoMapperProfile.name;
+    GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

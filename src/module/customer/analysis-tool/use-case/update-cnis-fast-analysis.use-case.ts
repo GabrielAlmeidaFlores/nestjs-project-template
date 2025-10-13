@@ -15,7 +15,7 @@ import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/sc
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -89,7 +89,8 @@ export class UpdateCnisFastAnalysisUseCase {
     const cnisDocument =
       dto.cnisDocument !== undefined
         ? await this.fileProcessorGateway.uploadDocument(
-            dto.cnisDocument.buffer,
+            dto.cnisDocument,
+
             cnisFastAnalysisQueryResult.cnisDocument ?? undefined,
           )
         : cnisFastAnalysisQueryResult.cnisDocument;
@@ -112,7 +113,7 @@ export class UpdateCnisFastAnalysisUseCase {
       ...cnisFastAnalysisQueryResult,
       analysisToolClient,
       cnisDocument,
-      status: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+      status: AnalysisRecordStatusEnum.IN_PROGRESS,
       cnisFastAnalysisResult: null,
       createdBy: cnisFastAnalysisQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
@@ -161,7 +162,7 @@ export class UpdateCnisFastAnalysisUseCase {
   private updateInssBenefitNumberOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
     currentInssBenefitNumber: GetCnisFastAnalysisInssBenefitQueryResult[],
-    newInssBenefitNumber: number[],
+    newInssBenefitNumber: string[],
   ): TransactionType[] {
     const deleteCurrent = currentInssBenefitNumber.map((value) => {
       return this.cnisFastAnalysisInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
@@ -186,7 +187,7 @@ export class UpdateCnisFastAnalysisUseCase {
   private updateLegalProceedingNumberOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
     currentLegalProceedingNumber: GetCnisFastAnalysisLegalProceedingQueryResult[],
-    newLegalProceeding: number[],
+    newLegalProceeding: string[],
   ): TransactionType[] {
     const deleteCurrent = currentLegalProceedingNumber.map((value) => {
       return this.cnisFastAnalysisLegalProceedingCommandRepositoryGateway.deleteCnisFastAnalysisLegalProceeding(

@@ -59,7 +59,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
   const fileBuffer = Buffer.from('fake-image');
   const fileModel = {
     fieldname: 'profilePicture',
-    originalName: 'avatar.png',
+    originalname: 'avatar.png',
     encoding: '7bit',
     mimetype: MimeTypeEnum.IMAGE_PNG,
     size: fileBuffer.length,
@@ -147,7 +147,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     ).toHaveBeenCalledWith(sessionData.authIdentityId, CustomerNotFoundError);
 
     expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
-      fileBuffer,
+      dto.profilePicture,
       undefined,
     );
 
@@ -193,7 +193,7 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
     const result = await useCase.execute(sessionData, dto);
 
     expect(fileProcessor.processAndUploadProfilePicture).toHaveBeenCalledWith(
-      fileBuffer,
+      dto.profilePicture,
       existingKey,
     );
     expect(customerCmdRepo.updateCustomer).not.toHaveBeenCalled();

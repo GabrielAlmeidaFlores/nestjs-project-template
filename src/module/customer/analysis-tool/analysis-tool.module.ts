@@ -15,11 +15,14 @@ import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
+import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
+import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+
 @Module({
   imports: [
     AuthModule,
@@ -44,6 +47,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DownloadCnisCompleteAnalysisUseCase,
     DownloadCnisSimplifiedAnalysisUseCase,
     CreateLegalPleadingResultUseCase,
+    ListAnalysisToolRecordUseCase,
+    GetLegalPleadingUseCase,
   ],
 })
 export class AnalysisToolModule {
