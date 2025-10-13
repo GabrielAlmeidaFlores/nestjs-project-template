@@ -7,7 +7,7 @@ import type { AnalysisToolClientInssBenefitEntityPropsInterface } from '@module/
 
 export class AnalysisToolClientInssBenefitEntity extends BaseEntity<AnalysisToolClientInssBenefitId> {
   @Description('Número do benefício INSS associado à análise CNIS rápida.')
-  public readonly inssBenefitNumber: number;
+  public readonly inssBenefitNumber: string;
 
   @Description('Análise CNIS rápida associada ao benefício INSS.')
   public readonly cnisFastAnalysis: CnisFastAnalysisEntity;

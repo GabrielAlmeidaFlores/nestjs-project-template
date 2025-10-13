@@ -4,28 +4,28 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingAddressCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/command/legal-pleading-address.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
-import { LegalPleadingDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document-analysis/command/legal-pleading-document-analysis.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
-import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
-import { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
-import {
-  CreateLegalPleadingDataRequestDto,
-  CreateLegalPleadingRequestDto,
-} from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
+import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateLegalPleadingUseCase {
@@ -46,10 +46,10 @@ export class CreateLegalPleadingUseCase {
     private readonly legalPleadingAddressCommandRepositoryGateway: LegalPleadingAddressCommandRepositoryGateway,
     @Inject(LegalPleadingCommandRepositoryGateway)
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
-    @Inject(LegalPleadingDocumentAnalysisCommandRepositoryGateway)
-    private readonly legalPleadingDocumentAnalysisCommandRepositoryGateway: LegalPleadingDocumentAnalysisCommandRepositoryGateway,
-    @Inject(AnalysisProcessorGateway)
-    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -91,7 +91,7 @@ export class CreateLegalPleadingUseCase {
       ...dto.json,
       legalPleadingAddress,
       analysisToolClient,
-      status: AnalysisSolicitationStatusEnum.IN_PROGRESS,
+      status: AnalysisRecordStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
@@ -119,6 +119,24 @@ export class CreateLegalPleadingUseCase {
     if (legalPleadingAddressTransaction !== null) {
       transactions.unshift(legalPleadingAddressTransaction);
     }
+
+    const countRecords =
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationId(
+        organizationSessionData.organizationId,
+      );
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      code: new AnalysisToolRecordCode(countRecords + 1),
+      type: AnalysisToolRecordTypeEnum.LEGAL_PLEADING,
+      legalPleading,
+    });
+
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
+        analysisToolRecord,
+      );
+
+    transactions.push(analysisToolRecordTransaction);
 
     const transactionResult =
       await this.baseTransactionRepositoryGateway.execute(transactions);
@@ -182,33 +200,16 @@ export class CreateLegalPleadingUseCase {
         return;
       }
 
-      if (documentFile instanceof CreateLegalPleadingDataRequestDto) {
-        return;
-      }
-
       const parsedDocumentFile = Array.isArray(documentFile)
         ? documentFile
         : [documentFile];
 
-      const analysis =
-        await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
-          parsedDocumentFile.map((file) => file.buffer),
-        );
-
-      const legalPleadingDocumentAnalysis =
-        new LegalPleadingDocumentAnalysisEntity({
-          analysis,
-        });
-
-      const legalPleadingDocumentAnalysisTransaction =
-        this.legalPleadingDocumentAnalysisCommandRepositoryGateway.createLegalPleadingDocumentAnalysis(
-          legalPleadingDocumentAnalysis,
-        );
-
-      documentTransaction.push(legalPleadingDocumentAnalysisTransaction);
-
       await Promise.all(
         parsedDocumentFile.map(async (document) => {
+          if (document instanceof FileModel === false) {
+            return;
+          }
+
           const uploadDocument = await this.fileProcessorGateway.uploadDocument(
             document.buffer,
           );
@@ -217,7 +218,6 @@ export class CreateLegalPleadingUseCase {
             type: dtoDocumentMapItem.documentType,
             document: uploadDocument,
             legalPleading,
-            legalPleadingDocumentAnalysis,
           });
 
           const legalPleadingDocumentTransaction =

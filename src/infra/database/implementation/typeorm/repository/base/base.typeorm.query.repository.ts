@@ -16,7 +16,11 @@ import type {
 } from 'typeorm';
 
 export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
-  protected constructor(private readonly repository: Repository<T>) {}
+  protected constructor(protected readonly repository: Repository<T>) {}
+
+  protected async count(options: FindOneOptions<T>): Promise<number> {
+    return await this.repository.count(options);
+  }
 
   protected async findOne(options: FindOneOptions<T>): Promise<T | null> {
     return await this.repository.findOne(options);
@@ -61,7 +65,10 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
 
     const field = listBaseDto.field;
     const search = listBaseDto.search;
-    const where = this.generateSearchWhere(field, search);
+    const where =
+      typeof field === 'string' && typeof search === 'string'
+        ? this.generateSearchWhere(field, search)
+        : {};
 
     const currentPage = listBaseDto.page;
     const itemsPerPage = listBaseDto.limit;
