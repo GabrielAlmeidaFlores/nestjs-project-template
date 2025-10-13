@@ -69,7 +69,7 @@ export class CnisFastAnalysisTypeormEntity extends BaseTypeormEntity {
 
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,
-    (entity) => entity.legalPleading,
+    (entity) => entity.cnisFastAnalysis,
     { nullable: true },
   )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
