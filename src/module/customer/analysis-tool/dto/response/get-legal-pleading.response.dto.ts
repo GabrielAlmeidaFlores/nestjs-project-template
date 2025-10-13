@@ -27,11 +27,11 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class GetLegalPleadingResultResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public legalPleadingCompleteAnalysis: string;
+  @ResponseDtoStringProperty({ required: false })
+  public legalPleadingCompleteAnalysis?: string;
 
-  @ResponseDtoStringProperty()
-  public legalPleadingSimplifiedAnalysis: string;
+  @ResponseDtoStringProperty({ required: false })
+  public legalPleadingSimplifiedAnalysis?: string;
 
   protected override readonly _type = GetLegalPleadingResultResponseDto.name;
 }
@@ -46,8 +46,8 @@ export class GetLegalPleadingDocumentResponseDto extends BaseBuildableDtoObject 
 
 @ResponseDto()
 export class GetLegalPleadingDocumentAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public analysis: string;
+  @ResponseDtoStringProperty({ required: false })
+  public analysis?: string;
 
   @ResponseDtoEnumProperty(LegalPleadingDocumentTypeEnum)
   public type: LegalPleadingDocumentTypeEnum;
