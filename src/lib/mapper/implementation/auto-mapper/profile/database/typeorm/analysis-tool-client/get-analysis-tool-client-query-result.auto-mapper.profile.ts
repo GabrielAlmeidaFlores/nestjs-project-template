@@ -6,15 +6,13 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
 @Injectable()
-export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
+export class GetAnalysisToolClientQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile.name;
+    GetAnalysisToolClientQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -28,7 +26,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: AnalysisToolClientTypeormEntity,
-    ): GetAnalysisToolClientWithRelationsQueryResult => {
+    ): GetAnalysisToolClientQueryResult => {
       const federalDocument =
         source.federalDocument !== null
           ? new FederalDocument(source.federalDocument)
@@ -39,26 +37,12 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
           ? new PhoneNumber(source.phoneNumber)
           : null;
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
-      const createdBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
-      return GetAnalysisToolClientWithRelationsQueryResult.build({
+      return GetAnalysisToolClientQueryResult.build({
         ...source,
         id: new AnalysisToolClientId(source.id),
         federalDocument,
         email,
         phoneNumber,
-        createdBy,
-        updatedBy,
       });
     };
 
@@ -67,14 +51,14 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
     createMap(
       this.mapper,
       AnalysisToolClientTypeormEntity,
-      GetAnalysisToolClientWithRelationsQueryResult,
+      GetAnalysisToolClientQueryResult,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: GetAnalysisToolClientWithRelationsQueryResult,
+      source: GetAnalysisToolClientQueryResult,
     ): AnalysisToolClientTypeormEntity => {
       const federalDocument =
         source.federalDocument !== null
@@ -84,26 +68,12 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
-
-      const createdBy = this.mapper.map(
-        source.updatedBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
-
       return AnalysisToolClientTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         federalDocument,
         email,
         phoneNumber,
-        updatedBy,
-        createdBy,
       });
     };
 
@@ -111,7 +81,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
 
     createMap(
       this.mapper,
-      GetAnalysisToolClientWithRelationsQueryResult,
+      GetAnalysisToolClientQueryResult,
       AnalysisToolClientTypeormEntity,
       mappingFunction,
     );
