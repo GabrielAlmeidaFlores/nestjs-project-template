@@ -98,6 +98,11 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   })
   public cnisDocument?: string;
 
+  @ResponseDtoStringProperty({
+    required: false,
+  })
+  public cnisDocumentOriginalFileName?: string;
+
   @ResponseDtoEnumProperty(AnalysisRecordStatusEnum)
   public status: AnalysisRecordStatusEnum;
 

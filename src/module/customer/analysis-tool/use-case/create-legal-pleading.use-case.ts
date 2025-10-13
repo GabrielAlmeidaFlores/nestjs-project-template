@@ -25,7 +25,6 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateLegalPleadingUseCase {
@@ -108,13 +107,7 @@ export class CreateLegalPleadingUseCase {
         legalPleading,
       );
 
-    const legalPleadingDocumentTransaction =
-      await this.createLegalPleadingDocuments(legalPleading, dto);
-
-    const transactions: Array<TransactionType> = [
-      legalPleadingTransaction,
-      ...legalPleadingDocumentTransaction,
-    ];
+    const transactions: Array<TransactionType> = [legalPleadingTransaction];
 
     if (legalPleadingAddressTransaction !== null) {
       transactions.unshift(legalPleadingAddressTransaction);
@@ -137,6 +130,11 @@ export class CreateLegalPleadingUseCase {
       );
 
     transactions.push(analysisToolRecordTransaction);
+
+    const legalPleadingDocumentTransaction =
+      await this.createLegalPleadingDocuments(legalPleading, dto);
+
+    transactions.push(...legalPleadingDocumentTransaction);
 
     const transactionResult =
       await this.baseTransactionRepositoryGateway.execute(transactions);
@@ -191,47 +189,41 @@ export class CreateLegalPleadingUseCase {
       },
     ];
 
-    const documentTransaction: TransactionType[] = [];
+    const documentPromises = dtoDocumentMap.flatMap((dtoDocumentMapItem) => {
+      const documentFiles = dto[dtoDocumentMapItem.documentKey];
 
-    const documentPromises = dtoDocumentMap.map(async (dtoDocumentMapItem) => {
-      const documentFile = dto[dtoDocumentMapItem.documentKey];
-
-      if (documentFile === undefined) {
-        return;
+      if (documentFiles === undefined) {
+        return [];
       }
 
-      const parsedDocumentFile = Array.isArray(documentFile)
-        ? documentFile
-        : [documentFile];
+      const parsedDocumentFiles = Array.isArray(documentFiles)
+        ? documentFiles
+        : [documentFiles];
 
-      await Promise.all(
-        parsedDocumentFile.map(async (document) => {
-          if (document instanceof FileModel === false) {
-            return;
-          }
+      return parsedDocumentFiles.map(async (document) => {
+        if ('buffer' in document === false) {
+          return null;
+        }
 
-          const uploadDocument = await this.fileProcessorGateway.uploadDocument(
-            document.buffer,
-          );
+        const uploadDocument =
+          await this.fileProcessorGateway.uploadDocument(document);
 
-          const legalPleadingDocument = new LegalPleadingDocumentEntity({
-            type: dtoDocumentMapItem.documentType,
-            document: uploadDocument,
-            legalPleading,
-          });
+        const legalPleadingDocument = new LegalPleadingDocumentEntity({
+          type: dtoDocumentMapItem.documentType,
+          document: uploadDocument,
+          legalPleading,
+        });
 
-          const legalPleadingDocumentTransaction =
-            this.legalPleadingDocumentCommandRepositoryGateway.createLegalPleadingDocument(
-              legalPleadingDocument,
-            );
-
-          documentTransaction.push(legalPleadingDocumentTransaction);
-        }),
-      );
+        return this.legalPleadingDocumentCommandRepositoryGateway.createLegalPleadingDocument(
+          legalPleadingDocument,
+        );
+      });
     });
 
-    await Promise.all(documentPromises);
+    const documentTransactions = (await Promise.all(documentPromises)).filter(
+      (transaction): transaction is TransactionType => transaction !== null,
+    );
 
-    return documentTransaction;
+    return documentTransactions;
   }
 }
