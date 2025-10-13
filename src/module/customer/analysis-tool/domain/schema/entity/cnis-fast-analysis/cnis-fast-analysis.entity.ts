@@ -6,11 +6,11 @@ import type { OrganizationMemberId } from '@module/customer/account/domain/schem
 import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import type { CnisFastAnalysisEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity.props.interface';
 import type { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
-import type { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import type { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 
 export class CnisFastAnalysisEntity extends BaseEntity<CnisFastAnalysisId> {
   @Description('Status da solicitação de análise CNIS rápida.')
-  public readonly status: AnalysisSolicitationStatusEnum;
+  public readonly status: AnalysisRecordStatusEnum;
 
   @Description('Documento CNIS utilizado na análise.')
   public readonly cnisDocument: string | null;
