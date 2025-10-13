@@ -1,4 +1,4 @@
 export enum SignInMFAOptionEnum {
-  AUTHENTICATOR_APP = 'AUTHENTICATOR_APP',
-  EMAIL = 'EMAIL',
+  AUTHENTICATOR_APP = 'authenticator_app',
+  EMAIL = 'email',
 }
