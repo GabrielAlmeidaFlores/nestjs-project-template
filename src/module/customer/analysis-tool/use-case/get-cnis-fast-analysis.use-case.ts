@@ -82,7 +82,14 @@ export class GetCnisFastAnalysisUseCase {
         cnisFastAnalysisQueryResult.cnisDocument,
       );
 
+      const cnisDocumentOriginalFileName =
+        await this.fileProcessorGateway.getOriginalFileName(
+          cnisFastAnalysisQueryResult.cnisDocument,
+        );
+
       response.cnisDocument = cnisDocument.toString();
+      response.cnisDocumentOriginalFileName =
+        cnisDocumentOriginalFileName.toString();
     }
 
     if (

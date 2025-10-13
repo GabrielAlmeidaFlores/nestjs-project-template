@@ -10,12 +10,12 @@ import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
-import type { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity';
-import type { AnalysisSolicitationStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-solicitation-status.enum';
+import type { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
+import type { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
 
 export interface LegalPleadingEntityPropsInterface
   extends BaseEntityPropsInterface<LegalPleadingId> {
-  status: AnalysisSolicitationStatusEnum;
+  status: AnalysisRecordStatusEnum;
   statementOfFacts: string;
   additionalComments?: string | null;
   securitySystem: LegalPleadingSocialSecuritySystemEnum;
