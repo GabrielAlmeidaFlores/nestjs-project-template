@@ -6,7 +6,7 @@ import { CustomerId } from '@module/customer/account/domain/schema/entity/custom
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -103,8 +103,8 @@ export class GetCnisFastAnalysisResponseDto extends BaseBuildableDtoObject {
   })
   public cnisDocumentOriginalFileName?: string;
 
-  @ResponseDtoEnumProperty(AnalysisRecordStatusEnum)
-  public status: AnalysisRecordStatusEnum;
+  @ResponseDtoEnumProperty(AnalysisStatusEnum)
+  public status: AnalysisStatusEnum;
 
   @ResponseDtoObjectProperty(() => GetCnisFastAnalysisClientResponseDto)
   public analysisToolClient: GetCnisFastAnalysisClientResponseDto;

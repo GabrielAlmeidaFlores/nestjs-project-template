@@ -17,15 +17,16 @@ export class TranscriptionController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Transcribe audio',
+    summary: 'Transcrever áudio',
     http: {
       path: 'transcription',
       method: RequestMethod.POST,
       type: TranscribeAudioRequestDto,
     },
+    tag: ['transcricao-de-audio'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Audio was transcribed successfully',
+      description: 'Áudio transcrito com sucesso.',
       type: TranscribeAudioResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
