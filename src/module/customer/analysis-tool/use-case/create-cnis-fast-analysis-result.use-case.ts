@@ -10,7 +10,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
@@ -145,7 +145,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       ...cnisFastAnalysisQueryResult,
       analysisToolClient,
       cnisFastAnalysisResult,
-      status: AnalysisRecordStatusEnum.COMPLETED,
+      status: AnalysisStatusEnum.COMPLETED,
       cnisDocument: cnisFastAnalysisQueryResult.cnisDocument,
       createdBy: cnisFastAnalysisQueryResult.createdBy.id,
       updatedBy: organizationMember.id,

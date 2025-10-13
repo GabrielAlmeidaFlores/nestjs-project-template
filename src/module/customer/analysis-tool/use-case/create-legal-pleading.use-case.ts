@@ -14,7 +14,7 @@ import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
-import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -91,7 +91,7 @@ export class CreateLegalPleadingUseCase {
       code: new LegalPleadingCode(countLegalPleading + 1),
       legalPleadingAddress,
       analysisToolClient,
-      status: AnalysisRecordStatusEnum.IN_PROGRESS,
+      status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
