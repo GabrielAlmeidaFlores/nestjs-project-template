@@ -4,6 +4,7 @@ import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class FileProcessorService implements FileProcessorGateway {
@@ -29,14 +30,14 @@ export class FileProcessorService implements FileProcessorGateway {
   }
 
   public async processAndUploadProfilePicture(
-    profilePicture: Buffer,
+    profilePicture: FileModel,
     profilePictureLocation?: string,
   ): Promise<string> {
     const profilePictureWidth = 1080;
     const profilePictureHeight = 1080;
 
-    profilePicture = await this.imageProcessorGateway.coverCropCenter(
-      profilePicture,
+    profilePicture.buffer = await this.imageProcessorGateway.coverCropCenter(
+      profilePicture.buffer,
       profilePictureWidth,
       profilePictureHeight,
     );

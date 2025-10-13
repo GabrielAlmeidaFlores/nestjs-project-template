@@ -81,8 +81,14 @@ export class ListCnisFastAnalysisUseCase {
           const cnisDocument = await this.fileProcessorGateway.getFileSignedUrl(
             item.cnisDocument,
           );
+          const cnisDocumentOriginalFileName =
+            await this.fileProcessorGateway.getOriginalFileName(
+              item.cnisDocument,
+            );
 
           response.cnisDocument = cnisDocument.toString();
+          response.cnisDocumentOriginalFileName =
+            cnisDocumentOriginalFileName.toString();
         }
 
         if (item.createdBy.customer.profilePicture !== null) {

@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { LegalPleadingResultId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/value-object/legal-pleading-result-id/legal-pleading-result-id.value-object';
 
-import type { LegalPleadingResultEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading.entity.props.interface';
+import type { LegalPleadingResultEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity.props.interface';
 
 export class LegalPleadingResultEntity extends BaseEntity<LegalPleadingResultId> {
   public readonly legalPleadingCompleteAnalysis: string | null;

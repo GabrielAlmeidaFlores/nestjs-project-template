@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
   S3ClientConfig,
@@ -12,6 +13,7 @@ import * as fileType from 'file-type';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class S3Service implements BucketGateway {
@@ -34,26 +36,37 @@ export class S3Service implements BucketGateway {
     this.s3BucketName = BucketApplicationVariable.BUCKET_S3_BUCKET_NAME;
   }
 
-  public async update(
-    fileBuffer: Buffer,
-    fileLocation: string,
-  ): Promise<string> {
-    const fileMetadata = await fileType.fileTypeFromBuffer(fileBuffer);
+  public async getOriginalFileName(fileName: string): Promise<string> {
+    const head = await this.s3Client.send(
+      new HeadObjectCommand({ Bucket: this.s3BucketName, Key: fileName }),
+    );
+
+    const metaVal = head.Metadata?.['original-filename'];
+    return metaVal !== undefined
+      ? decodeURIComponent(metaVal)
+      : new Guid().toString();
+  }
+
+  public async update(file: FileModel, fileLocation: string): Promise<string> {
+    const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
     const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
     await this.s3Client.send(
       new PutObjectCommand({
         Bucket: this.s3BucketName,
         Key: fileLocation,
-        Body: fileBuffer,
+        Body: file.buffer,
         ContentType: fileMimeType,
+        Metadata: {
+          'original-filename': encodeURIComponent(file.originalName),
+        },
       }),
     );
 
     return fileLocation;
   }
 
-  public async create(fileBuffer: Buffer, dir?: string): Promise<string> {
+  public async create(file: FileModel, dir?: string): Promise<string> {
     if (dir !== undefined) {
       if (dir.startsWith('/')) {
         const secondStringIndex = 1;
@@ -65,7 +78,7 @@ export class S3Service implements BucketGateway {
       }
     }
 
-    const fileMetadata = await fileType.fileTypeFromBuffer(fileBuffer);
+    const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
     const fileName = `${dir ?? ''}${new Guid().toString()}`;
     const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
@@ -73,8 +86,11 @@ export class S3Service implements BucketGateway {
       new PutObjectCommand({
         Bucket: this.s3BucketName,
         Key: fileName,
-        Body: fileBuffer,
+        Body: file.buffer,
         ContentType: fileMimeType,
+        Metadata: {
+          'original-filename': encodeURIComponent(file.originalName),
+        },
       }),
     );
 
