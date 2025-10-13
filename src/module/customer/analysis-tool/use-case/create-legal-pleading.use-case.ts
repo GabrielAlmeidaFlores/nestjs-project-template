@@ -9,7 +9,6 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingAddressCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/command/legal-pleading-address.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
-import { LegalPleadingDocumentAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document-analysis/command/legal-pleading-document-analysis.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -18,19 +17,15 @@ import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schem
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
-import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
-import {
-  CreateLegalPleadingDataRequestDto,
-  CreateLegalPleadingRequestDto,
-} from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
+import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateLegalPleadingUseCase {
@@ -51,10 +46,6 @@ export class CreateLegalPleadingUseCase {
     private readonly legalPleadingAddressCommandRepositoryGateway: LegalPleadingAddressCommandRepositoryGateway,
     @Inject(LegalPleadingCommandRepositoryGateway)
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
-    @Inject(LegalPleadingDocumentAnalysisCommandRepositoryGateway)
-    private readonly legalPleadingDocumentAnalysisCommandRepositoryGateway: LegalPleadingDocumentAnalysisCommandRepositoryGateway,
-    @Inject(AnalysisProcessorGateway)
-    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
@@ -209,33 +200,16 @@ export class CreateLegalPleadingUseCase {
         return;
       }
 
-      if (documentFile instanceof CreateLegalPleadingDataRequestDto) {
-        return;
-      }
-
       const parsedDocumentFile = Array.isArray(documentFile)
         ? documentFile
         : [documentFile];
 
-      const analysis =
-        await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
-          parsedDocumentFile.map((file) => file.buffer),
-        );
-
-      const legalPleadingDocumentAnalysis =
-        new LegalPleadingDocumentAnalysisEntity({
-          analysis,
-        });
-
-      const legalPleadingDocumentAnalysisTransaction =
-        this.legalPleadingDocumentAnalysisCommandRepositoryGateway.createLegalPleadingDocumentAnalysis(
-          legalPleadingDocumentAnalysis,
-        );
-
-      documentTransaction.push(legalPleadingDocumentAnalysisTransaction);
-
       await Promise.all(
         parsedDocumentFile.map(async (document) => {
+          if (document instanceof FileModel === false) {
+            return;
+          }
+
           const uploadDocument = await this.fileProcessorGateway.uploadDocument(
             document.buffer,
           );
@@ -244,7 +218,6 @@ export class CreateLegalPleadingUseCase {
             type: dtoDocumentMapItem.documentType,
             document: uploadDocument,
             legalPleading,
-            legalPleadingDocumentAnalysis,
           });
 
           const legalPleadingDocumentTransaction =
