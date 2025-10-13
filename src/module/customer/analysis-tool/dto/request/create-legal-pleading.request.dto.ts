@@ -105,8 +105,8 @@ export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
   })
   public cnis?: FileModel;
 
-  @RequestDtoFileProperty({ required: false })
-  public ctps?: FileModel;
+  @RequestDtoFileProperty({ isArray: true, required: false })
+  public ctps?: FileModel[];
 
   @RequestDtoFileProperty({ isArray: true, required: false })
   public ruralDocument?: FileModel[];
