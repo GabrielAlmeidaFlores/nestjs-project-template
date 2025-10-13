@@ -14,6 +14,7 @@ import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analy
 import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
 import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -136,6 +137,9 @@ export class GetLegalPleadingAddressDataResponseDto extends BaseBuildableDtoObje
 export class GetLegalPleadingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(LegalPleadingId)
   public id: LegalPleadingId;
+
+  @ResponseDtoValueObjectProperty(LegalPleadingCode)
+  public code: LegalPleadingCode;
 
   @ResponseDtoStringProperty()
   public statementOfFacts: string;

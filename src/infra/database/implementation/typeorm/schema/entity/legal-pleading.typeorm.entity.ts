@@ -23,6 +23,13 @@ import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/
 @Entity({ name: 'legal_pleading' })
 export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'code',
+    type: 'varchar',
+    length: 255,
+  })
+  public code: string;
+
+  @Column({
     name: 'status',
     type: 'simple-enum',
     enum: AnalysisRecordStatusEnum,

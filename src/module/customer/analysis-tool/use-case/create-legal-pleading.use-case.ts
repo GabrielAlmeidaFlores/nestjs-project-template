@@ -5,10 +5,12 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
+import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingAddressCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/command/legal-pleading-address.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
@@ -40,6 +42,8 @@ export class CreateLegalPleadingUseCase {
     private readonly legalPleadingAddressCommandRepositoryGateway: LegalPleadingAddressCommandRepositoryGateway,
     @Inject(LegalPleadingCommandRepositoryGateway)
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
+    @Inject(LegalPleadingQueryRepositoryGateway)
+    private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -77,8 +81,14 @@ export class CreateLegalPleadingUseCase {
           })
         : null;
 
+    const countLegalPleading =
+      await this.legalPleadingQueryRepositoryGateway.countByOrganizationId(
+        organizationSessionData.organizationId,
+      );
+
     const legalPleading = new LegalPleadingEntity({
       ...dto.json,
+      code: new LegalPleadingCode(countLegalPleading + 1),
       legalPleadingAddress,
       analysisToolClient,
       status: AnalysisRecordStatusEnum.IN_PROGRESS,

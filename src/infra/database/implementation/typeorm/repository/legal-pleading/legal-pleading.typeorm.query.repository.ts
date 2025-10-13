@@ -79,4 +79,25 @@ export class LegalPleadingTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async countByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<number> {
+    const total = await this.count({
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+    });
+
+    return total;
+  }
 }

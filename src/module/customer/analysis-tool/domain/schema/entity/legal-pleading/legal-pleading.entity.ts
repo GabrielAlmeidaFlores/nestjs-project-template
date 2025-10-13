@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
 import { AnalysisRecordStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-record-status.enum';
@@ -19,6 +20,9 @@ import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/
 export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   @Description('Status da solicitação de análise CNIS rápida.')
   public readonly status: AnalysisRecordStatusEnum;
+
+  @Description('Código da peça processual.')
+  public readonly code: LegalPleadingCode;
 
   @Description('Texto descritivo dos fatos que embasam a peça processual.')
   public readonly statementOfFacts: string;
@@ -84,6 +88,7 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public constructor(props: LegalPleadingEntityPropsInterface) {
     super(LegalPleadingId, props);
 
+    this.code = props.code;
     this.status = props.status;
     this.statementOfFacts = props.statementOfFacts;
     this.additionalComments = props.additionalComments ?? null;
