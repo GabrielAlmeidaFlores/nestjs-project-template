@@ -1,5 +1,11 @@
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
@@ -27,6 +33,36 @@ export class GetAnalysisToolRecordResponsibleResponseDto extends BaseBuildableDt
 }
 
 @ResponseDto()
+export class GetAnalysisToolRecordClientResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisToolClientId)
+  public id: AnalysisToolClientId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public email?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public phoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public gender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
+
+  protected override readonly _type =
+    GetAnalysisToolRecordClientResponseDto.name;
+}
+
+@ResponseDto()
 export class GetAnalysisToolRecordResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AnalysisToolRecordId)
   public readonly id: AnalysisToolRecordId;
@@ -37,8 +73,11 @@ export class GetAnalysisToolRecordResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(AnalysisToolRecordTypeEnum)
   public readonly type: AnalysisToolRecordTypeEnum;
 
-  @ResponseDtoEnumProperty(Guid)
+  @ResponseDtoValueObjectProperty(Guid)
   public readonly analysisId: Guid;
+
+  @ResponseDtoObjectProperty(() => GetAnalysisToolRecordClientResponseDto)
+  public readonly client: GetAnalysisToolRecordClientResponseDto;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolRecordResponsibleResponseDto)
   public readonly createdBy: GetAnalysisToolRecordResponsibleResponseDto;

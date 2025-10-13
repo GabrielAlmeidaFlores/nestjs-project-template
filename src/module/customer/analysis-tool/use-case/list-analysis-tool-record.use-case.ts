@@ -5,6 +5,7 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import {
+  GetAnalysisToolRecordClientResponseDto,
   GetAnalysisToolRecordResponseDto,
   GetAnalysisToolRecordResponsibleResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record.response.dto';
@@ -86,9 +87,14 @@ export class ListAnalysisToolRecordUseCase {
           updatedBy.profilePicture = profilePicture.toString();
         }
 
+        const client = GetAnalysisToolRecordClientResponseDto.build({
+          ...analysis.analysisToolClient,
+        });
+
         const data = GetAnalysisToolRecordResponseDto.build({
           ...analysisToolRecord,
           analysisId: analysis.id,
+          client,
           createdBy,
           updatedBy,
         });
