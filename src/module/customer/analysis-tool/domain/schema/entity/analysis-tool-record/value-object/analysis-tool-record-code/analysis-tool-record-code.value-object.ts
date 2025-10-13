@@ -29,12 +29,12 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
   }
 
   private static isValidString(code: string): boolean {
-    const formatRegex = /^A\d+$/;
+    const formatRegex = /^AN\d+$/;
     if (!formatRegex.test(code)) {
       return false;
     }
 
-    const numericPart = code.substring(1);
+    const numericPart = code.substring(2);
     const numericValue = parseInt(numericPart, 10);
 
     return numericValue >= 1;
