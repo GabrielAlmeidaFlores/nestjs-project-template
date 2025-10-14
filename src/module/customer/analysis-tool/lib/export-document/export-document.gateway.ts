@@ -10,5 +10,6 @@ export abstract class ExportDocumentGateway {
   public abstract downloadFileAsStreamable(
     content: string,
     format: ExportDocumentFormatEnum,
+    name: string,
   ): Promise<StreamableFile>;
 }

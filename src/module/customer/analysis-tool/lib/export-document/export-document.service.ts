@@ -66,10 +66,11 @@ export class ExportDocumentService {
   public async downloadFileAsStreamable(
     content: string,
     format: ExportDocumentFormatEnum,
+    name: string,
   ): Promise<StreamableFile> {
     const fileBuffer = await this.downloadFile(content, format);
 
-    const filename = `analise-cnis.${format.toLowerCase()}`;
+    const filename = `${name}.${format.toLowerCase()}`;
     const contentType =
       format === ExportDocumentFormatEnum.PDF
         ? 'application/pdf'
@@ -82,7 +83,9 @@ export class ExportDocumentService {
   }
 
   private async generatedPdfForMarkdown(markdown: string): Promise<Buffer> {
-    const browser = await Puppeteer.launch();
+    const browser = await Puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
     await page.setContent(`
