@@ -17,7 +17,7 @@ export class GetLegalPleadingWithResponsibleAndClientRelationsQueryResult extend
   public readonly id: LegalPleadingId;
   public readonly code: LegalPleadingCode;
   public readonly status: AnalysisStatusEnum;
-  public readonly statementOfFacts: string;
+  public readonly statementOfFacts: string | null;
   public readonly additionalComments: string | null;
   public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
   public readonly benefitType: LegalPleadingBenefitTypeEnum;

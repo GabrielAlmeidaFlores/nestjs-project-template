@@ -141,8 +141,8 @@ export class GetLegalPleadingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(LegalPleadingCode)
   public code: LegalPleadingCode;
 
-  @ResponseDtoStringProperty()
-  public statementOfFacts: string;
+  @ResponseDtoStringProperty({ required: false })
+  public statementOfFacts?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public additionalComments?: string;
