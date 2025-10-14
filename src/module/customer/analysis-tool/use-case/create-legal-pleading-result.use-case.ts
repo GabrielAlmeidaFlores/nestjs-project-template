@@ -64,7 +64,7 @@ export class CreateLegalPleadingResultUseCase {
       );
 
     const documentsBuffer: (Buffer | string)[] = [
-      JSON.stringify(legalPleadingQueryResult),
+      JSON.stringify(legalPleadingQueryResult, null, 2),
     ];
 
     await Promise.all(
@@ -80,7 +80,7 @@ export class CreateLegalPleadingResultUseCase {
             const extractedCnisData =
               await this.analysisProcessorGateway.parseCnisDocument(document);
 
-            document = JSON.stringify(extractedCnisData);
+            document = JSON.stringify(extractedCnisData, null, 2);
           }
         }
 

@@ -69,6 +69,8 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const clientDataJson = JSON.stringify(
       cnisFastAnalysisQueryResult.analysisToolClient,
+      null,
+      2,
     );
 
     const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
@@ -77,7 +79,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisDocumentDataJson = JSON.stringify(cnisDocumentData);
+    const cnisDocumentDataJson = JSON.stringify(cnisDocumentData, null, 2);
 
     const [cnisCompleteAnalysis, cnisSimplifiedAnalysis] = await Promise.all([
       this.analysisProcessorGateway.getCnisCompleteAnalysis([
