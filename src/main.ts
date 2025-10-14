@@ -4,7 +4,6 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { AppConfig } from '@base/app.config';
 import { AppModule } from '@base/app.module';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
-import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
@@ -22,11 +21,8 @@ async function bootstrap(): Promise<void> {
     .applyGlobalInterceptor()
     .applyGlobalPrefix()
     .applyGlobalPipes()
-    .applyGlobalFilters();
-
-  if (!NodeApplicationVariable.PRODUCTION_ENVIRONMENT) {
-    appConfig.applySwagger();
-  }
+    .applyGlobalFilters()
+    .applySwagger();
 
   await app.listen(
     FrameworkApplicationVariable.FRAMEWORK_PORT,
