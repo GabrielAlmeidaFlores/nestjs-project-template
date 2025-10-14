@@ -71,6 +71,7 @@ export class GeminiService implements GenerativeIaGateway {
       },
       config: {
         temperature: 0.3,
+        maxOutputTokens: 8192,
       },
     };
 
