@@ -1,6 +1,10 @@
+// import fs from 'fs';
+// import path from 'path';
+
 import { GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
+import jsPDF from 'jspdf';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
@@ -46,8 +50,14 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     if (props.promptFiles !== undefined) {
-      for (const file of props.promptFiles) {
-        const fileData = await fileType.fileTypeFromBuffer(file);
+      for (let file of props.promptFiles) {
+        let fileData = await fileType.fileTypeFromBuffer(file);
+
+        if (fileData === undefined) {
+          const textContext = file.toString('utf-8');
+          file = this.generatePdfFromText(textContext);
+          fileData = await fileType.fileTypeFromBuffer(file);
+        }
 
         if (fileData === undefined) {
           continue;
@@ -80,5 +90,42 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     return fullResponse.length > 0 ? fullResponse : null;
+  }
+
+  private generatePdfFromText(text: string): Buffer {
+    const doc = new jsPDF();
+    const margin = 10;
+    const lineHeight = 7;
+    let y = margin;
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxWidth = pageWidth - margin * 2;
+    const textLines = doc.splitTextToSize(text, maxWidth) as string[];
+
+    for (const line of textLines) {
+      if (y + lineHeight > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+
+    const pdfArrayBuffer = doc.output('arraybuffer');
+    const pdfBuffer = Buffer.from(pdfArrayBuffer);
+
+    // const tmpDir = path.join(process.cwd(), '.bin');
+    // if (!fs.existsSync(tmpDir)) {
+    //   fs.mkdirSync(tmpDir, { recursive: true });
+    // }
+
+    // const fileName = `generated-doc-${Date.now()}.pdf`;
+    // const filePath = path.join(tmpDir, fileName);
+    // fs.writeFileSync(filePath, pdfBuffer);
+
+    // console.warn(`PDF document saved to: ${filePath}`);
+
+    return pdfBuffer;
   }
 }
