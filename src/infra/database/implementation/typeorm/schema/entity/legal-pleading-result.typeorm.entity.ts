@@ -7,7 +7,7 @@ import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeo
 export class LegalPleadingResultTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'legal_pleading_complete_analysis',
-    type: 'text',
+    type: 'longtext',
     nullable: true,
   })
   public legalPleadingCompleteAnalysis: string | null;

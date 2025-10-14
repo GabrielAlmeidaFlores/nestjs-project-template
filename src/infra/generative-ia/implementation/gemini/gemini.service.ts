@@ -1,7 +1,7 @@
 // import fs from 'fs';
 // import path from 'path';
 
-import { GoogleGenAI, Part } from '@google/genai';
+import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
 import jsPDF from 'jspdf';
@@ -64,17 +64,26 @@ export class GeminiService implements GenerativeIaGateway {
       systemInstructionPart.push(...systemInstructionFileParts);
     }
 
-    const result = await this.googleGenerativeAI.models.generateContentStream({
+    const contentConfig: GenerateContentParameters = {
       model,
       contents: {
         role: 'user',
-        parts: promptPart,
       },
       config: {
         temperature: 0.3,
-        systemInstruction: systemInstructionPart,
       },
-    });
+    };
+
+    if (promptPart.length > 0) {
+      (contentConfig.contents as { parts: Part[] }).parts = promptPart;
+    }
+
+    if (systemInstructionPart.length > 0) {
+      (contentConfig.config as { parts: Part[] }).parts = systemInstructionPart;
+    }
+
+    const result =
+      await this.googleGenerativeAI.models.generateContentStream(contentConfig);
 
     let fullResponse = '';
 
