@@ -45,20 +45,26 @@ export class GeminiService implements GenerativeIaGateway {
       promptPart.push({ text: props.prompt });
     }
 
-    if (props.files !== undefined) {
-      for (const file of props.files) {
-        const fileData = await fileType.fileTypeFromBuffer(file);
+    if (props.documents !== undefined) {
+      for (const document of props.documents) {
+        if (typeof document === 'string') {
+          promptPart.push({
+            text: document,
+          });
+        } else if (document instanceof Buffer) {
+          const fileData = await fileType.fileTypeFromBuffer(document);
 
-        if (fileData === undefined) {
-          continue;
+          if (fileData === undefined) {
+            continue;
+          }
+
+          promptPart.push({
+            inlineData: {
+              mimeType: fileData.mime,
+              data: document.toString('base64'),
+            },
+          });
         }
-
-        promptPart.push({
-          inlineData: {
-            mimeType: fileData.mime,
-            data: file.toString('base64'),
-          },
-        });
       }
     }
 

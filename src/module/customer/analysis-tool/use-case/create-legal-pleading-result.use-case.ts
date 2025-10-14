@@ -63,36 +63,28 @@ export class CreateLegalPleadingResultUseCase {
         LegalPleadingNotFoundError,
       );
 
-    const documentsBuffer: Buffer[] = [
-      Buffer.from(JSON.stringify(legalPleadingQueryResult), 'utf-8'),
+    const documentsBuffer: (Buffer | string)[] = [
+      JSON.stringify(legalPleadingQueryResult),
     ];
 
     await Promise.all(
       legalPleadingQueryResult.legalPleadingDocument.map(async (item) => {
-        let documentBuffer = await this.fileProcessorGateway.getFileBuffer(
-          item.document,
-        );
+        let document: Buffer | string =
+          await this.fileProcessorGateway.getFileBuffer(item.document);
 
         if (item.type === LegalPleadingDocumentTypeEnum.CNIS) {
           const isValidCnis =
-            await this.analysisProcessorGateway.validateCnisDocument(
-              documentBuffer,
-            );
+            await this.analysisProcessorGateway.validateCnisDocument(document);
 
           if (isValidCnis) {
             const extractedCnisData =
-              await this.analysisProcessorGateway.parseCnisDocument(
-                documentBuffer,
-              );
+              await this.analysisProcessorGateway.parseCnisDocument(document);
 
-            documentBuffer = Buffer.from(
-              JSON.stringify(extractedCnisData),
-              'utf-8',
-            );
+            document = JSON.stringify(extractedCnisData);
           }
         }
 
-        documentsBuffer.push(documentBuffer);
+        documentsBuffer.push(document);
       }),
     );
 

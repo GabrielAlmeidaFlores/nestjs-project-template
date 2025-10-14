@@ -2,19 +2,19 @@ import type { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.outp
 
 export abstract class AnalysisProcessorGateway {
   public abstract getCnisCompleteAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null>;
 
   public abstract getCnisSimplifiedAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null>;
 
   public abstract getLegalPleadingCompleteAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null>;
 
   public abstract getLegalPleadingSimplifiedAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null>;
 
   public abstract validateCnisDocument(cnisDocument: Buffer): Promise<boolean>;
@@ -24,6 +24,6 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<CnisOutputModel>;
 
   public abstract getLegalPleadingQuickDocumentAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null>;
 }
