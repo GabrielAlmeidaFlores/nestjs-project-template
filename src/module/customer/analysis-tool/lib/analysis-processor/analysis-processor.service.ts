@@ -457,9 +457,19 @@ Forneça apenas o relatório, sem incluir explicações adicionais, comentários
 
 Para a seção "6.2. Cálculo do Salário-de-Benefício (Regra Antiga)":
 
-Calcule o valor final do benefício. Para isso, identifique os 80% maiores salários de contribuição desde julho de 1994, some os valores corrigidos e divida o resultado pelo número de contribuições a serem utilizadas (conforme a tabela, neste caso 238).
+Calcule o valor final do benefício.
 
-Preencha os campos "Soma dos 80% Maiores Salários Corrigidos", "Cálculo da Média" e "Salário-de-Benefício (SB) Resultante (Regra Antiga)" com os valores exatos que você calcular.
+Primeiro, o cálculo se baseia nas regras que valiam antes da Reforma da Previdência de 2019.
+
+O processo começa juntando todos os seus salários de contribuição a partir de julho de 1994.
+
+Depois, cada um desses salários é corrigido monetariamente. Isso significa que o valor de cada salário antigo é atualizado para o valor de hoje, para compensar a inflação.
+
+A etapa mais importante vem agora: o sistema identifica quais são os 20% menores salários de toda essa lista e os descarta. Eles simplesmente não são usados na conta.
+
+Em seguida, calcula-se a média usando apenas os 80% maiores salários que restaram. A soma desses salários maiores é dividida pela quantidade de meses correspondente. O resultado dessa média é o "Salário-de-Benefício".
+
+Por fim, para chegar ao valor final do benefício, esse "Salário-de-Benefício" ainda é multiplicado pelo Fator Previdenciário, que é um índice que leva em conta a sua idade, tempo de contribuição e expectativa de vida.
         `,
         promptFiles: files,
         systemInstruction: systemInstructionFileBuffer,
