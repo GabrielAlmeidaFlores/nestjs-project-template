@@ -28,7 +28,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
   }
 
   public async getCnisCompleteAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null> {
     const prompt = `
     # CONTEXTO
@@ -108,13 +108,13 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        documents,
       }),
     );
   }
 
   public async getCnisSimplifiedAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null> {
     const prompt = `
       FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR AO CLIENTE O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
@@ -123,13 +123,13 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        documents,
       }),
     );
   }
 
   public async getLegalPleadingQuickDocumentAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null> {
     const prompt = `
     **Atribuição de Papel (Persona):**
@@ -167,13 +167,13 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        documents,
       }),
     );
   }
 
   public async getLegalPleadingCompleteAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null> {
     const prompt = `
     # CONTEXTO
@@ -217,13 +217,13 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        documents,
       }),
     );
   }
 
   public async getLegalPleadingSimplifiedAnalysis(
-    files: Buffer[],
+    documents: (Buffer | string)[],
   ): Promise<string | null> {
     const prompt = `
     # INSTRUÇÃO
@@ -248,7 +248,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        documents,
       }),
     );
   }

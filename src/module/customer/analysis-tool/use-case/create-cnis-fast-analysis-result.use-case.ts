@@ -67,29 +67,26 @@ export class CreateCnisFastAnalysisResultUseCase {
       throw new CnisDocumentRequiredError();
     }
 
-    const clientDataBuffer = Buffer.from(
-      JSON.stringify(cnisFastAnalysisQueryResult.analysisToolClient),
-      'utf-8',
+    const clientDataJson = JSON.stringify(
+      cnisFastAnalysisQueryResult.analysisToolClient,
     );
+
     const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
       cnisFastAnalysisQueryResult.cnisDocument,
     );
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisDocumentDataBuffer = Buffer.from(
-      JSON.stringify(cnisDocumentData),
-      'utf-8',
-    );
+    const cnisDocumentDataJson = JSON.stringify(cnisDocumentData);
 
     const [cnisCompleteAnalysis, cnisSimplifiedAnalysis] = await Promise.all([
       this.analysisProcessorGateway.getCnisCompleteAnalysis([
-        clientDataBuffer,
-        cnisDocumentDataBuffer,
+        clientDataJson,
+        cnisDocumentDataJson,
       ]),
       this.analysisProcessorGateway.getCnisSimplifiedAnalysis([
-        clientDataBuffer,
-        cnisDocumentDataBuffer,
+        clientDataJson,
+        cnisDocumentDataJson,
       ]),
     ]);
 
