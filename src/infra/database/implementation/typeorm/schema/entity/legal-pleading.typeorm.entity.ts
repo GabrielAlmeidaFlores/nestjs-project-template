@@ -40,8 +40,9 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'statement_of_facts',
     type: 'text',
+    nullable: true,
   })
-  public statementOfFacts: string;
+  public statementOfFacts: string | null;
 
   @Column({
     name: 'additional_comments',
