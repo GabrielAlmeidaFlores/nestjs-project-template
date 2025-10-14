@@ -554,10 +554,13 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
           pageItems,
           'Relações Previdenciárias',
         );
-        const footerItem = this.findOneByWord(
-          pageItems,
-          'O INSS poderá rever a qualquer tempo%',
-        );
+
+        const footerItem =
+          this.findOneByWord(pageItems, 'Legenda de Indicadores') ??
+          this.findOneByWord(
+            pageItems,
+            'O INSS poderá rever a qualquer tempo%',
+          );
 
         if (!titleItem || !footerItem) {
           return [];

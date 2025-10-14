@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -29,7 +30,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
   public async getCnisCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const generativeIaPrompt = `
+    const prompt = `
     # CONTEXTO
     Você atuará como um Perito em Direito Previdenciário, altamente especializado na análise de extratos do Cadastro Nacional de Informações Sociais (CNIS). Sua missão é gerar um relatório de análise detalhado e estratégico sobre o CNIS fornecido, formatado em Markdown (formato README). O público-alvo deste relatório é um advogado previdenciarista que precisa identificar rapidamente os pontos críticos e as oportunidades para discutir com seu cliente.
 
@@ -105,28 +106,32 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      generativeIaPrompt,
-      files,
+      GenerateResponseInputModel.build({
+        prompt,
+        files,
+      }),
     );
   }
 
   public async getCnisSimplifiedAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const generativeIaPrompt = `
+    const prompt = `
       FAÇA AGORA UMA MENSAGEM DIDÁTICA PARA EXPLICAR AO CLIENTE O RESULTADO DA ANÁLISE. DEVE SER EXPLICADO PRINCIPALMENTE: A) AS PENDENCIAS ENCONTRADAS NO CNIS E COMO EU COMO ADVOGADO DELA PODEREI RESOLVER; B) O TEMPO COM PENDENCIAS E SEM PENDENCIAS; C) A ANALISE DO DIREITO ÀS APOSENTADORIAS; D) A DATA MAIS PROXIMA PARA SE APOSENTAR SE AS PENDENCIAS FOREM RESOLVIDAS; E) O VALOR ESTIMADO DA APOSENTADORIA, CONSIDERANDO AS REGRAS DE CALCULO APLICAVEIS A RESPECTIVAS ESPECIE. FAÇA EM UM NOVO CANVAS.
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      generativeIaPrompt,
-      files,
+      GenerateResponseInputModel.build({
+        prompt,
+        files,
+      }),
     );
   }
 
   public async getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const generativeIaPrompt = `
+    const prompt = `
     **Atribuição de Papel (Persona):**
     Você é um Analista Previdenciário Sênior, especialista na legislação do INSS. Sua função é analisar qualquer documento de natureza previdenciária — como Cadastro Nacional de Informações Sociais (CNIS), Carteiras de Trabalho (CTPS), Perfil Profissiográfico Previdenciário (PPP), Certidão de Tempo de Contribuição (CTC), etc. — para extrair, calcular e sintetizar as informações mais relevantes. Você é detalhista e proativo em identificar pendências e pontos de atenção.
 
@@ -160,15 +165,17 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     `;
 
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
-      generativeIaPrompt,
-      files,
+      GenerateResponseInputModel.build({
+        prompt,
+        files,
+      }),
     );
   }
 
   public async getLegalPleadingCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const generativeIaPrompt = `
+    const prompt = `
     # CONTEXTO
     Você atuará como um Assistente Jurídico Sênior, especialista em Direito Previdenciário brasileiro. Sua missão é analisar todos os arquivos fornecidos para identificar os dados do caso e os documentos comprobatórios, a fim de gerar uma análise estratégica completa e a minuta de uma peça processual. O público-alvo é o advogado responsável pelo caso.
 
@@ -208,15 +215,17 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      generativeIaPrompt,
-      files,
+      GenerateResponseInputModel.build({
+        prompt,
+        files,
+      }),
     );
   }
 
   public async getLegalPleadingSimplifiedAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const generativeIaPrompt = `
+    const prompt = `
     # INSTRUÇÃO
     GERE UM TEXTO DIDÁTICO PARA EXPLICAR AO CLIENTE FINAL O RESULTADO DA ANÁLISE DO SEU CASO. COM BASE NOS ARQUIVOS FORNECIDOS, O TEXTO DEVE EXPLICAR OBRIGATORIAMENTE OS SEGUINTES PONTOS:
 
@@ -237,8 +246,10 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     `;
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      generativeIaPrompt,
-      files,
+      GenerateResponseInputModel.build({
+        prompt,
+        files,
+      }),
     );
   }
 }

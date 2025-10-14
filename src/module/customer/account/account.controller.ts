@@ -23,6 +23,7 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+
 @CustomerControllerRoute('account')
 export class AccountController {
   protected readonly _type = AccountController.name;
@@ -36,15 +37,16 @@ export class AccountController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Customer sign-up',
+    summary: 'Cadastro de usuário',
     http: {
       path: 'sign-up',
       method: RequestMethod.POST,
       type: CustomerSignUpRequestDto,
     },
+    tag: ['conta-do-usuario'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Customer signed up successfully',
+      description: 'Cliente cadastrado com sucesso.',
       type: CustomerSignUpResponseDto,
     },
     throttle: {
@@ -59,15 +61,16 @@ export class AccountController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Update customer profile picture',
+    summary: 'Atualizar foto de perfil do usuário',
     http: {
       path: 'profile/picture',
       method: RequestMethod.PATCH,
       type: UpdateCustomerProfilePictureRequestDto,
     },
+    tag: ['conta-do-usuario'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Customer profile picture updated successfully',
+      description: 'Foto de perfil do usuário atualizada com sucesso.',
       type: UpdateCustomerProfilePictureResponseDto,
     },
     guard: [AuthGuard],
@@ -83,14 +86,15 @@ export class AccountController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'List customer organizations',
+    summary: 'Listar organizações do usuário',
     http: {
       path: 'available/organization',
       method: RequestMethod.GET,
     },
+    tag: ['conta-do-usuario'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Customer organizations listed successfully',
+      description: 'Organizações do usuário listadas com sucesso.',
       type: ListCustomerOrganizationsResponseDto,
     },
     guard: [AuthGuard],
@@ -106,15 +110,16 @@ export class AccountController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Set customer organization',
+    summary: 'Definir organização para a sessão do usuário',
     http: {
       path: 'session/organization',
       method: RequestMethod.POST,
       type: SetOrganizationForCustomerRequestDto,
     },
+    tag: ['conta-do-usuario'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Customer organization set successfully',
+      description: 'Organização definida com sucesso para a sessão do usuário.',
       type: SetOrganizationForCustomerResponseDto,
     },
     guard: [AuthGuard],
@@ -132,14 +137,15 @@ export class AccountController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Get authenticated customer data',
+    summary: 'Obter dados do usuário autenticado',
     http: {
       path: '',
       method: RequestMethod.GET,
     },
+    tag: ['conta-do-usuario'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Get authenticated customer data',
+      description: 'Dados do usuário autenticado retornados com sucesso.',
       type: GetAuthenticatedCustomerDataResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],

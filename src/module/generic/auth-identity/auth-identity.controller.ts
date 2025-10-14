@@ -37,16 +37,17 @@ export class AuthIdentityController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'User pre-sign-in',
+    summary: 'Pré-autenticação de usuário',
     http: {
       path: 'pre-sign-in',
       method: RequestMethod.POST,
       type: PreAuthIdentitySignInRequestDto,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description:
-        'User credentials were validated successfully and pre-authentication completed',
+        'Credenciais do usuário validadas e pré-autenticação concluída com sucesso.',
       type: PreAuthIdentitySignInResponseDto,
     },
     throttle: {
@@ -61,16 +62,17 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'User sign-in',
+    summary: 'Autenticação de usuário',
     http: {
       path: 'sign-in',
       method: RequestMethod.POST,
       type: AuthIdentitySignInRequestDto,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description:
-        'User credentials were validated successfully and authentication completed',
+        'Credenciais do usuário validadas e autenticação concluída com sucesso.',
       type: AuthIdentitySignInResponseDto,
     },
     throttle: {
@@ -86,14 +88,15 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'User forgot password',
+    summary: 'Esqueci minha senha',
     http: {
       path: 'forgot-password',
       method: RequestMethod.POST,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Reset password email sent successfully',
+      description: 'E-mail para redefinição de senha enviado com sucesso.',
       type: AuthIdentityForgotPasswordResponseDto,
     },
     throttle: {
@@ -108,15 +111,16 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Validate code',
+    summary: 'Validar código de redefinição de senha',
     http: {
       path: 'forgot-password/validate-code',
       method: RequestMethod.POST,
       type: AuthIdentityForgotPasswordValidateCodeRequestDto,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Reset password code validated successfully',
+      description: 'Código de redefinição de senha validado com sucesso.',
       type: AuthIdentityForgotPasswordCodeResponseDto,
     },
   })
@@ -129,15 +133,16 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Reset password',
+    summary: 'Redefinir senha',
     http: {
       path: 'reset-password',
       method: RequestMethod.PATCH,
       type: AuthIdentityResetPasswordRequestDto,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'The password was successfully updated',
+      description: 'A senha foi atualizada com sucesso.',
       type: AuthIdentityResetPasswordResponseDto,
     },
   })
@@ -148,15 +153,15 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Validate authenticated user',
+    summary: 'Validar sessão do usuário autenticado',
     http: {
       path: 'sign-in/validate',
       method: RequestMethod.GET,
     },
+    tag: ['autenticacao'],
     successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description:
-        'User credentials were validated successfully and authentication is valid',
+      statusCode: HttpStatus.OK,
+      description: 'Sessão do usuário validada com sucesso.',
       type: AuthIdentitySignInResponseDto,
     },
     guard: [AuthGuard],
@@ -168,14 +173,16 @@ export class AuthIdentityController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'User sign-out',
+    summary: 'Logout de usuário',
     http: {
       path: 'sign-out',
       method: RequestMethod.HEAD,
     },
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.NO_CONTENT,
-      description: 'User session invalidated and signed out',
+      description:
+        'Sessão do usuário invalidada e logout realizado com sucesso.',
     },
     guard: [AuthGuard],
   })

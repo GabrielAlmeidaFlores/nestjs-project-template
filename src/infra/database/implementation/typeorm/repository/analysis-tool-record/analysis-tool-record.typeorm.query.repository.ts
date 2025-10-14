@@ -207,7 +207,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  private getEntityRelationsKey(): ('cnisFastAnalysis' | 'legalPleading')[] {
-    return ['cnisFastAnalysis', 'legalPleading'];
+  private getEntityRelationsKey(): 'cnisFastAnalysis'[] {
+    return ['cnisFastAnalysis'];
   }
 }
