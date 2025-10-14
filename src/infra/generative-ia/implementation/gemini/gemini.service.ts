@@ -71,7 +71,7 @@ export class GeminiService implements GenerativeIaGateway {
       },
       config: {
         temperature: 0.3,
-        maxOutputTokens: 8192,
+        maxOutputTokens: 500_000,
       },
     };
 
@@ -84,15 +84,9 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     const result =
-      await this.googleGenerativeAI.models.generateContentStream(contentConfig);
+      await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-    let fullResponse = '';
-
-    for await (const chunk of result) {
-      fullResponse += chunk.text;
-    }
-
-    return fullResponse.length > 0 ? fullResponse : null;
+    return result.text ?? null;
   }
 
   private async buildPartWithFileContent(
