@@ -66,10 +66,11 @@ export class ExportDocumentService {
   public async downloadFileAsStreamable(
     content: string,
     format: ExportDocumentFormatEnum,
+    name: string,
   ): Promise<StreamableFile> {
     const fileBuffer = await this.downloadFile(content, format);
 
-    const filename = `analise-cnis.${format.toLowerCase()}`;
+    const filename = `${name}.${format.toLowerCase()}`;
     const contentType =
       format === ExportDocumentFormatEnum.PDF
         ? 'application/pdf'
