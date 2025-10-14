@@ -452,6 +452,14 @@ Inclua todos os títulos, subtítulos, notas de rodapé e legendas exatamente co
 Todo o texto (cabeçalhos, observações, etc.) deve estar em português.
 
 Forneça apenas o relatório, sem incluir explicações adicionais, comentários e variáveis.
+
+--- 
+
+Para a seção "6.2. Cálculo do Salário-de-Benefício (Regra Antiga)":
+
+Calcule o valor final do benefício. Para isso, identifique os 80% maiores salários de contribuição desde julho de 1994, some os valores corrigidos e divida o resultado pelo número de contribuições a serem utilizadas (conforme a tabela, neste caso 238).
+
+Preencha os campos "Soma dos 80% Maiores Salários Corrigidos", "Cálculo da Média" e "Salário-de-Benefício (SB) Resultante (Regra Antiga)" com os valores exatos que você calcular.
         `,
         promptFiles: files,
         systemInstruction: systemInstructionFileBuffer,
