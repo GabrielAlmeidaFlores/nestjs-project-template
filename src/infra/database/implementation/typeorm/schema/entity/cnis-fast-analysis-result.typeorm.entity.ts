@@ -39,7 +39,7 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
 
   @Column({
     name: 'cnis_complete_analysis',
-    type: 'text',
+    type: 'longtext',
     nullable: true,
   })
   public cnisCompleteAnalysis: string | null;
