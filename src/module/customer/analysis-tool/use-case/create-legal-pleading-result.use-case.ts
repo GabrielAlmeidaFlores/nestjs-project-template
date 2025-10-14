@@ -64,7 +64,7 @@ export class CreateLegalPleadingResultUseCase {
       );
 
     const documentsBuffer: Buffer[] = [
-      Buffer.from(JSON.stringify(legalPleadingQueryResult), 'utf-8'),
+      Buffer.from(JSON.stringify(legalPleadingQueryResult, null, 2), 'utf-8'),
     ];
 
     await Promise.all(
@@ -86,7 +86,7 @@ export class CreateLegalPleadingResultUseCase {
               );
 
             documentBuffer = Buffer.from(
-              JSON.stringify(extractedCnisData),
+              JSON.stringify(extractedCnisData, null, 2),
               'utf-8',
             );
           }
