@@ -11,7 +11,6 @@ RUN yarn build
 FROM node:22.15.0 AS runtime
 WORKDIR /usr/src/app
 
-# Instalar bibliotecas necessárias para o Chrome headless
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
