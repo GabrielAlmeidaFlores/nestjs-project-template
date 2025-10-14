@@ -71,10 +71,9 @@ export class CreateCnisFastAnalysisResultUseCase {
       JSON.stringify(cnisFastAnalysisQueryResult.analysisToolClient),
       'utf-8',
     );
-    const cnisDocumentBuffer =
-      await this.fileProcessorGateway.getFileBuffer(
-        cnisFastAnalysisQueryResult.cnisDocument,
-      );
+    const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
+      cnisFastAnalysisQueryResult.cnisDocument,
+    );
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
