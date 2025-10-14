@@ -9,5 +9,11 @@ export class GenerativeIaApplicationVariable {
       String,
     );
 
+  public static readonly GENERATIVE_IA_SYSTEM_INSTRUCTION_CNIS_FAST_ANALYSIS_RELATIVE_PATH =
+    GenerativeIaApplicationVariable.source.getValueOrThrow<string>(
+      'GENERATIVE_IA_SYSTEM_INSTRUCTION_CNIS_FAST_ANALYSIS_RELATIVE_PATH',
+      String,
+    );
+
   protected readonly _type = GenerativeIaApplicationVariable.name;
 }

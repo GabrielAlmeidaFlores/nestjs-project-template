@@ -43,6 +43,8 @@ import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
+import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
+import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -83,6 +85,8 @@ export class AnalysisToolController {
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
     private readonly listLegalPleadingUseCase: ListLegalPleadingUseCase,
     private readonly createLegalPleadingDocumentAnalysisUseCase: CreateLegalPleadingDocumentAnalysisUseCase,
+    private readonly downloadLegalPleadingSimplifiedAnalysisUseCase: DownloadLegalPleadingSimplifiedAnalysisUseCase,
+    private readonly downloadLegalPleadingCompleteAnalysisUseCase: DownloadLegalPleadingCompleteAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -509,6 +513,70 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       cnisFastAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de Peça Processual simplificada',
+    http: {
+      path: 'legal-pleading/:legalPleadingId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada de peça processual retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadLegalPleadingSimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadLegalPleadingSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de Peça Processual completa',
+    http: {
+      path: 'legal-pleading/:legalPleadingId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa de peça processual retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadLegalPleadingCompleteAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadLegalPleadingCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
       format,
     );
   }
