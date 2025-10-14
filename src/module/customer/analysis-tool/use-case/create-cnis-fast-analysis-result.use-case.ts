@@ -72,7 +72,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       'utf-8',
     );
     const cnisDocumentBuffer =
-      await this.fileProcessorGateway.getDocumentBuffer(
+      await this.fileProcessorGateway.getFileBuffer(
         cnisFastAnalysisQueryResult.cnisDocument,
       );
     const cnisDocumentData =

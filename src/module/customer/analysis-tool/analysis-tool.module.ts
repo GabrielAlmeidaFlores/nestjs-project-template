@@ -8,6 +8,7 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -51,6 +52,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,
     ListLegalPleadingUseCase,
+    CreateLegalPleadingDocumentAnalysisUseCase,
   ],
 })
 export class AnalysisToolModule {
