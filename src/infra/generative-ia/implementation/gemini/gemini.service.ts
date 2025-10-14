@@ -45,8 +45,8 @@ export class GeminiService implements GenerativeIaGateway {
       promptPart.push({ text: props.prompt });
     }
 
-    if (props.files !== undefined) {
-      for (const file of props.files) {
+    if (props.promptFiles !== undefined) {
+      for (const file of props.promptFiles) {
         const fileData = await fileType.fileTypeFromBuffer(file);
 
         if (fileData === undefined) {

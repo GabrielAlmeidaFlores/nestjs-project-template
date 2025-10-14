@@ -2,7 +2,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 export class GenerateResponseInputModel extends BaseBuildableDtoObject {
   public readonly prompt?: string;
-  public readonly files?: Buffer[];
+  public readonly promptFiles?: Buffer[];
 
   protected override readonly _type = GenerateResponseInputModel.name;
 }
