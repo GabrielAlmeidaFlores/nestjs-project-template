@@ -1,11 +1,11 @@
+import type { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+
 export abstract class GenerativeIaGateway {
   public abstract generateHighQualityResponseFromPromptAndFiles(
-    prompt: string,
-    files: Buffer[],
+    props: GenerateResponseInputModel,
   ): Promise<string | null>;
 
   public abstract generateFlashResponseFromPromptAndFiles(
-    prompt: string,
-    files: Buffer[],
+    props: GenerateResponseInputModel,
   ): Promise<string | null>;
 }

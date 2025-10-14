@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { GeminiService } from '@infra/generative-ia/implementation/geminini/gemini.service';
+import { GeminiService } from '@infra/generative-ia/implementation/gemini/gemini.service';
 
 @Module({
   providers: [GeminiService],

@@ -1,20 +1,20 @@
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
-import { InvalidAnalysisToolRecordCodeError } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/error/invalid-analysis-tool-record-code.error';
+import { InvalidLegalPleadingCodeError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/error/invalid-legal-pleading-code.error';
 
-export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCode> {
-  protected readonly _type = AnalysisToolRecordCode.name;
+export class LegalPleadingCode extends BaseValueObject<LegalPleadingCode> {
+  protected readonly _type = LegalPleadingCode.name;
 
   public constructor(value: number | string) {
     let formattedCode: string;
 
     if (typeof value === 'number') {
       if (value < 1 || !Number.isInteger(value)) {
-        throw new InvalidAnalysisToolRecordCodeError();
+        throw new InvalidLegalPleadingCodeError();
       }
-      formattedCode = AnalysisToolRecordCode.generate(value);
+      formattedCode = LegalPleadingCode.generate(value);
     } else {
-      if (!AnalysisToolRecordCode.isValidString(value)) {
-        throw new InvalidAnalysisToolRecordCodeError();
+      if (!LegalPleadingCode.isValidString(value)) {
+        throw new InvalidLegalPleadingCodeError();
       }
       formattedCode = value;
     }
@@ -25,11 +25,11 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
   private static generate(value: number): string {
     const padStart = 3;
     const numericPart = String(value).padStart(padStart, '0');
-    return `AN${numericPart}`;
+    return `AJ${numericPart}`;
   }
 
   private static isValidString(code: string): boolean {
-    const formatRegex = /^AN\d+$/;
+    const formatRegex = /^AJ\d+$/;
     if (!formatRegex.test(code)) {
       return false;
     }
@@ -40,7 +40,7 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
     return numericValue >= 1;
   }
 
-  public equals(other: AnalysisToolRecordCode): boolean {
+  public equals(other: LegalPleadingCode): boolean {
     return this.value === other.value;
   }
 

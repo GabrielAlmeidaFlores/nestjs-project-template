@@ -9,6 +9,8 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { LegalPleadingDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/legal-pleading-document.query.repository.gateway';
 import { GetLegalPleadingDocumentWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/result/get-legal-pleading-document-with-relations.query.result';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
 import { LegalPleadingDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/value-object/legal-pleading-document/legal-pleading-document-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -26,6 +28,39 @@ export class LegalPleadingDocumentTypeormQueryRepository
   ) {
     super(repository);
   }
+  public async findByDocumentType(
+    legalPleadingId: LegalPleadingId,
+    documentType: LegalPleadingDocumentTypeEnum,
+    organizationId: OrganizationId,
+  ): Promise<GetLegalPleadingDocumentWithRelationsQueryResult[]> {
+    const data = await this.find({
+      where: {
+        type: documentType,
+        legalPleading: {
+          id: legalPleadingId.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      LegalPleadingDocumentTypeormEntity,
+      GetLegalPleadingDocumentWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findOneByLegalPleadingDocumentAndOrganizationIdOrFail(
     id: LegalPleadingDocumentId,
     organizationId: OrganizationId,
