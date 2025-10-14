@@ -20,6 +20,7 @@ import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
+import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-document-analysis.response.dto';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
@@ -35,6 +36,7 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enu
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
+import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -80,6 +82,7 @@ export class AnalysisToolController {
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
     private readonly listLegalPleadingUseCase: ListLegalPleadingUseCase,
+    private readonly createLegalPleadingDocumentAnalysisUseCase: CreateLegalPleadingDocumentAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -238,6 +241,35 @@ export class AnalysisToolController {
     legalPleadingId: LegalPleadingId,
   ): Promise<CreateLegalPleadingResultResponseDto> {
     return await this.createLegalPleadingResultUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar análise de documento da peça processual',
+    http: {
+      path: 'legal-pleading/:legalPleadingId/document-analysis',
+      method: RequestMethod.POST,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Análise de documento da peça processual criada com sucesso.',
+      type: CreateLegalPleadingDocumentAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createLegalPleadingDocumentAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+  ): Promise<CreateLegalPleadingDocumentAnalysisResponseDto> {
+    return await this.createLegalPleadingDocumentAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       legalPleadingId,

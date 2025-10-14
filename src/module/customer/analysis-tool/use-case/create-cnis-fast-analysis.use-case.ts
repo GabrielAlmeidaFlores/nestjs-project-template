@@ -81,7 +81,7 @@ export class CreateCnisFastAnalysisUseCase {
 
     const cnisDocument =
       dto.cnisDocument !== undefined
-        ? await this.fileProcessorGateway.uploadDocument(dto.cnisDocument)
+        ? await this.fileProcessorGateway.uploadFile(dto.cnisDocument)
         : null;
 
     const analysisToolClientQueryResult =

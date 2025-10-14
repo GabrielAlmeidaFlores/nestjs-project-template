@@ -69,7 +69,7 @@ export class CreateLegalPleadingResultUseCase {
 
     await Promise.all(
       legalPleadingQueryResult.legalPleadingDocument.map(async (item) => {
-        let documentBuffer = await this.fileProcessorGateway.getDocumentBuffer(
+        let documentBuffer = await this.fileProcessorGateway.getFileBuffer(
           item.document,
         );
 
