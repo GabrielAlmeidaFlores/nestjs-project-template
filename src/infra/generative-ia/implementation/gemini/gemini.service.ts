@@ -1,11 +1,11 @@
 import { GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
+import { jsPDF } from 'jspdf';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
-
 @Injectable()
 export class GeminiService implements GenerativeIaGateway {
   protected readonly _type = GeminiService.name;
@@ -47,24 +47,23 @@ export class GeminiService implements GenerativeIaGateway {
 
     if (props.documents !== undefined) {
       for (const document of props.documents) {
-        if (typeof document === 'string') {
-          promptPart.push({
-            text: document,
-          });
-        } else if (document instanceof Buffer) {
-          const fileData = await fileType.fileTypeFromBuffer(document);
+        const useDocument =
+          typeof document === 'string'
+            ? this.generatePdfFromText(document)
+            : document;
 
-          if (fileData === undefined) {
-            continue;
-          }
+        const fileData = await fileType.fileTypeFromBuffer(useDocument);
 
-          promptPart.push({
-            inlineData: {
-              mimeType: fileData.mime,
-              data: document.toString('base64'),
-            },
-          });
+        if (fileData === undefined) {
+          continue;
         }
+
+        promptPart.push({
+          inlineData: {
+            mimeType: fileData.mime,
+            data: useDocument.toString('base64'),
+          },
+        });
       }
     }
 
@@ -86,5 +85,42 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     return fullResponse.length > 0 ? fullResponse : null;
+  }
+
+  private generatePdfFromText(text: string): Buffer {
+    const doc = new jsPDF();
+    const margin = 10;
+    const lineHeight = 7;
+    let y = margin;
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxWidth = pageWidth - margin * 2;
+    const textLines = doc.splitTextToSize(text, maxWidth) as string[];
+
+    for (const line of textLines) {
+      if (y + lineHeight > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+
+    const pdfArrayBuffer = doc.output('arraybuffer');
+    const pdfBuffer = Buffer.from(pdfArrayBuffer);
+
+    // const tmpDir = path.join(process.cwd(), '.bin');
+    // if (!fs.existsSync(tmpDir)) {
+    //   fs.mkdirSync(tmpDir, { recursive: true });
+    // }
+
+    // const fileName = `generated-doc-${Date.now()}.pdf`;
+    // const filePath = path.join(tmpDir, fileName);
+    // fs.writeFileSync(filePath, pdfBuffer);
+
+    // console.log(`PDF document saved to: ${filePath}`);
+
+    return pdfBuffer;
   }
 }
