@@ -11,7 +11,6 @@ import { OrganizationNotAvailableForCustomerError } from '@module/customer/accou
 import { OrganizationSessionGateway } from '@module/customer/account/lib/organization-session/organization-session.gateway';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
-import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -127,7 +126,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       'jwt-organization-session',
       expect.objectContaining({
         httpOnly: true,
-        secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
+        secure: false,
         sameSite: 'lax',
         path: '/',
         maxAge: 604800,

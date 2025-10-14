@@ -7,7 +7,6 @@ import { CustomerNotFoundError } from '@module/customer/account/error/customer-n
 import { OrganizationNotAvailableForCustomerError } from '@module/customer/account/error/organization-not-available-for-customer.error';
 import { OrganizationSessionGateway } from '@module/customer/account/lib/organization-session/organization-session.gateway';
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
-import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 
 import type { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -53,7 +52,7 @@ export class SetOrganizationForCustomerUseCase {
 
     reply.setCookie(ApiCookieEnum.ORGANIZATION, jwtOrganizationSession, {
       httpOnly: true,
-      secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
+      secure: false,
       sameSite: 'lax',
       path: '/',
       maxAge: sevenDaysInSeconds,
