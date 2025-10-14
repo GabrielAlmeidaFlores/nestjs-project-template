@@ -12,7 +12,6 @@ import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/au
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
-import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Injectable()
@@ -101,7 +100,7 @@ export class AuthIdentitySignInUseCase {
 
     reply.setCookie(ApiCookieEnum.AUTH_TOKEN, jwtSession, {
       httpOnly: true,
-      secure: NodeApplicationVariable.PRODUCTION_ENVIRONMENT,
+      secure: false,
       sameSite: 'lax',
       path: '/',
       maxAge: sevenDaysInSeconds,
