@@ -88,7 +88,7 @@ export class UpdateCnisFastAnalysisUseCase {
 
     const cnisDocument =
       dto.cnisDocument !== undefined
-        ? await this.fileProcessorGateway.uploadDocument(
+        ? await this.fileProcessorGateway.uploadFile(
             dto.cnisDocument,
 
             cnisFastAnalysisQueryResult.cnisDocument ?? undefined,

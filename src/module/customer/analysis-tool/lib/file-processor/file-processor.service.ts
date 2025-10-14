@@ -22,11 +22,11 @@ export class FileProcessorService implements FileProcessorGateway {
     return await this.bucketGateway.getSignedUrl(fileName);
   }
 
-  public async getDocumentBuffer(fileName: string): Promise<Buffer> {
+  public async getFileBuffer(fileName: string): Promise<Buffer> {
     return await this.bucketGateway.getBuffer(fileName);
   }
 
-  public async uploadDocument(
+  public async uploadFile(
     document: FileModel,
     documentLocation?: string,
   ): Promise<string> {
