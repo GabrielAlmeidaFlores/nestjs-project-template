@@ -17,6 +17,7 @@ import { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/enti
 import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -137,6 +138,9 @@ export class GetLegalPleadingAddressDataResponseDto extends BaseBuildableDtoObje
 export class GetLegalPleadingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(LegalPleadingId)
   public id: LegalPleadingId;
+
+  @ResponseDtoEnumProperty(AnalysisStatusEnum)
+  public status: AnalysisStatusEnum;
 
   @ResponseDtoValueObjectProperty(LegalPleadingCode)
   public code: LegalPleadingCode;

@@ -108,7 +108,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        promptFiles: files,
       }),
     );
   }
@@ -123,7 +123,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        promptFiles: files,
       }),
     );
   }
@@ -167,7 +167,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        promptFiles: files,
       }),
     );
   }
@@ -217,7 +217,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        promptFiles: files,
       }),
     );
   }
@@ -248,7 +248,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        files,
+        promptFiles: files,
       }),
     );
   }

@@ -92,6 +92,7 @@ export class ListAnalysisToolRecordUseCase {
         const data = GetAnalysisToolRecordResponseDto.build({
           ...analysisToolRecord,
           analysisId: analysis.id,
+          status: analysis.status,
           client,
           createdBy,
           updatedBy,
