@@ -25,7 +25,7 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public readonly code: LegalPleadingCode;
 
   @Description('Texto descritivo dos fatos que embasam a peça processual.')
-  public readonly statementOfFacts: string;
+  public readonly statementOfFacts: string | null;
 
   @Description('Comentários adicionais sobre a peça processual.')
   public readonly additionalComments: string | null;
@@ -90,7 +90,7 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
 
     this.code = props.code;
     this.status = props.status;
-    this.statementOfFacts = props.statementOfFacts;
+    this.statementOfFacts = props.statementOfFacts ?? null;
     this.additionalComments = props.additionalComments ?? null;
     this.securitySystem = props.securitySystem;
     this.benefitType = props.benefitType;

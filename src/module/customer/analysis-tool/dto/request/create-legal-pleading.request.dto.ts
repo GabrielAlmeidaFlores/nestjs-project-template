@@ -46,8 +46,8 @@ export class CreateLegalPleadingAddressDataRequestDto extends BaseBuildableDtoOb
 
 @RequestDto()
 export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public statementOfFacts: string;
+  @RequestDtoStringProperty({ required: false })
+  public statementOfFacts?: string;
 
   @RequestDtoStringProperty({ required: false })
   public additionalComments?: string;
