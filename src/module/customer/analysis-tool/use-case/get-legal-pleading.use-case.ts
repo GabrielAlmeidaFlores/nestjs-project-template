@@ -12,6 +12,7 @@ import {
   GetLegalPleadingResultResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
@@ -24,6 +25,8 @@ export class GetLegalPleadingUseCase {
     private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -52,6 +55,13 @@ export class GetLegalPleadingUseCase {
           ...legalPleadingQueryResult.legalPleadingResult,
         })
       : null;
+
+    if (legalPleadingResult?.legalPleadingCompleteAnalysis !== undefined) {
+      legalPleadingResult.legalPleadingCompleteAnalysis =
+        await this.exportDocumentGateway.convertMarkdownToHtml(
+          legalPleadingResult.legalPleadingCompleteAnalysis,
+        );
+    }
 
     const createdBy = GetLegalPleadingResponsibleResponseDto.build({
       id: legalPleadingQueryResult.createdBy.customer.id,
@@ -104,7 +114,7 @@ export class GetLegalPleadingUseCase {
         });
 
         return GetLegalPleadingDocumentAnalysisResponseDto.build({
-          analysis: analysis,
+          analysis,
           type,
           legalPleadingDocument,
         });
