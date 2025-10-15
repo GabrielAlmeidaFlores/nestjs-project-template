@@ -74,42 +74,59 @@ export class AnalysisToolRecordTypeormQueryRepository
         where.type = listData.type;
       }
 
-      if (typeof listData.code === 'string') {
-        where.code = Like(listData.code);
-      }
+      if (typeof listData.searchBy === 'string') {
+        searchParams.where.push({
+          ...where,
+          [relation]: {
+            analysisToolClient: {
+              name: Like(`${listData.searchBy}`),
+            },
+            createdBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+          },
+        });
 
-      if (typeof listData.clientName === 'string') {
-        where[relation] = {
-          analysisToolClient: {
-            name: Like(`${listData.clientName}`),
-          },
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
+        searchParams.where.push({
+          ...where,
+          code: Like(`${listData.searchBy}`),
+          [relation]: {
+            createdBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
             },
           },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-          },
-        };
+        });
       } else {
-        where[relation] = {
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
+        searchParams.where.push({
+          ...where,
+          [relation]: {
+            createdBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
             },
           },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-          },
-        };
+        });
       }
-
-      searchParams.where.push(where);
     });
 
     const data = await this.list(listData, searchParams);
