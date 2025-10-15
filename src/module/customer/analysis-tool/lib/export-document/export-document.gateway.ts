@@ -2,6 +2,10 @@ import type { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/li
 import type { StreamableFile } from '@nestjs/common';
 
 export abstract class ExportDocumentGateway {
+  public abstract convertHtmlToMarkdown(html: string): string;
+
+  public abstract convertMarkdownToHtml(markdown: string): Promise<string>;
+
   public abstract downloadFile(
     content: string,
     format: ExportDocumentFormatEnum,
