@@ -2,14 +2,29 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import HtmlToDocx from '@turbodocx/html-to-docx';
 import { marked } from 'marked';
 import * as Puppeteer from 'puppeteer';
+import TurndownService from 'turndown';
 
 import { DownloadCnisFastAnalysisIsNotValidError } from '@module/customer/analysis-tool/error/download-cnis-fast-analysis-not-found.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 
 @Injectable()
-export class ExportDocumentService {
+export class ExportDocumentService implements ExportDocumentGateway {
   protected readonly _type = ExportDocumentService.name;
+
+  private readonly turndownService = new TurndownService();
+
+  public convertHtmlToMarkdown(html: string): string {
+    return this.turndownService.turndown(html);
+  }
+
+  public async convertMarkdownToHtml(markdown: string): Promise<string> {
+    return await marked.parse(markdown, {
+      breaks: true,
+      gfm: true,
+    });
+  }
 
   public getUnifiedStyles(): string {
     return `
@@ -48,17 +63,17 @@ export class ExportDocumentService {
     `;
   }
 
-  public async downloadFile(content: string, format: string): Promise<Buffer> {
-    const markdown = await marked.parse(content, {
-      breaks: true,
-      gfm: true,
-    });
+  public async downloadFile(
+    markdownContent: string,
+    format: string,
+  ): Promise<Buffer> {
+    const htmlContent = await this.convertMarkdownToHtml(markdownContent);
 
     switch (format.toLowerCase()) {
       case 'pdf':
-        return this.generatedPdfForMarkdown(markdown);
+        return this.generatePdfFromHtml(htmlContent);
       case 'docx':
-        return this.generatedDocxForMarkdown(markdown);
+        return this.generateDocxFromHtml(htmlContent);
       default:
         throw new DownloadCnisFastAnalysisIsNotValidError();
     }
@@ -83,20 +98,26 @@ export class ExportDocumentService {
     });
   }
 
-  private async generatedPdfForMarkdown(markdown: string): Promise<Buffer> {
+  private _buildFullHtmlDocument(htmlBody: string): string {
+    return `
+      <html>
+        <head>
+          <meta charset="UTF-8" />
+          <style>${this.getUnifiedStyles()}</style>
+        </head>
+        <body>${htmlBody}</body>
+      </html>
+    `;
+  }
+
+  private async generatePdfFromHtml(htmlContent: string): Promise<Buffer> {
+    const fullHtml = this._buildFullHtmlDocument(htmlContent);
     const browser = await Puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
-    await page.setContent(`
-     <html>
-        <head>
-          <style>${this.getUnifiedStyles()}</style>
-        </head>
-        <body>${markdown}</body>
-      </html>
-    `);
+    await page.setContent(fullHtml);
 
     const pdfUint8Array = await page.pdf({
       format: 'A4',
@@ -108,16 +129,8 @@ export class ExportDocumentService {
     return Buffer.from(pdfUint8Array);
   }
 
-  private async generatedDocxForMarkdown(markdown: string): Promise<Buffer> {
-    const fullHtmlDocument = `
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <style>${this.getUnifiedStyles()}</style>
-        </head>
-        <body>${markdown}</body>
-      </html>
-    `;
+  private async generateDocxFromHtml(htmlContent: string): Promise<Buffer> {
+    const fullHtmlDocument = this._buildFullHtmlDocument(htmlContent);
 
     const docxResult = await HtmlToDocx(fullHtmlDocument, null, {
       orientation: 'portrait',
@@ -127,7 +140,6 @@ export class ExportDocumentService {
     });
 
     let buffer: Buffer;
-
     if (docxResult instanceof ArrayBuffer) {
       buffer = Buffer.from(docxResult);
     } else if (Buffer.isBuffer(docxResult)) {
@@ -138,7 +150,6 @@ export class ExportDocumentService {
     } else {
       throw new UnexpectedHtmlToDocxReturnTypeError();
     }
-
     return buffer;
   }
 }
