@@ -5,6 +5,7 @@ import * as Puppeteer from 'puppeteer';
 
 import { DownloadCnisFastAnalysisIsNotValidError } from '@module/customer/analysis-tool/error/download-cnis-fast-analysis-not-found.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
+import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 
 @Injectable()
 export class ExportDocumentService {
@@ -135,7 +136,7 @@ export class ExportDocumentService {
       const arrayBuffer = await docxResult.arrayBuffer();
       buffer = Buffer.from(arrayBuffer);
     } else {
-      throw new Error('Tipo de retorno inesperado do HtmlToDocx');
+      throw new UnexpectedHtmlToDocxReturnTypeError();
     }
 
     return buffer;
