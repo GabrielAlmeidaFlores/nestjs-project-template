@@ -52,7 +52,7 @@ export class DownloadCnisSimplifiedAnalysisUseCase {
     }
 
     const responseAi =
-      cnisFastAnalysisQueryResult.cnisFastAnalysisResult.cnisCompleteAnalysis;
+      cnisFastAnalysisQueryResult.cnisFastAnalysisResult.cnisSimplifiedAnalysis;
 
     if (responseAi === null) {
       throw new CnisFastAnalysisDoesNotContainSimplifiedAnalysisError();

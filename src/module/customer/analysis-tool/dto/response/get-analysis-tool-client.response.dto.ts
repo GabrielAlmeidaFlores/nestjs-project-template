@@ -51,6 +51,12 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(GenderEnum, { required: false })
   public gender?: GenderEnum;
 
+  @ResponseDtoDateProperty()
+  public createdAt: Date;
+
+  @ResponseDtoDateProperty()
+  public updatedAt: Date;
+
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
