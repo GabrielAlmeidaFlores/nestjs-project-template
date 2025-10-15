@@ -43,7 +43,6 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
     model: string,
   ): Promise<string | null> {
-    const systemInstructionPart: Part[] = [];
     const promptPart: Part[] = [];
 
     if (props.prompt !== undefined) {
@@ -55,13 +54,6 @@ export class GeminiService implements GenerativeIaGateway {
         props.promptFiles,
       );
       promptPart.push(...promptFileParts);
-    }
-
-    if (props.systemInstruction !== undefined) {
-      const systemInstructionFileParts = await this.buildPartWithFileContent(
-        props.systemInstruction,
-      );
-      systemInstructionPart.push(...systemInstructionFileParts);
     }
 
     const contentConfig: GenerateContentParameters = {
@@ -77,10 +69,6 @@ export class GeminiService implements GenerativeIaGateway {
 
     if (promptPart.length > 0) {
       (contentConfig.contents as { parts: Part[] }).parts = promptPart;
-    }
-
-    if (systemInstructionPart.length > 0) {
-      (contentConfig.config as { parts: Part[] }).parts = systemInstructionPart;
     }
 
     const result =
