@@ -82,16 +82,18 @@ export class CreateCnisFastAnalysisResultUseCase {
       'utf-8',
     );
 
-    const [cnisCompleteAnalysis, cnisSimplifiedAnalysis] = await Promise.all([
-      this.analysisProcessorGateway.getCnisCompleteAnalysis([
+    const cnisCompleteAnalysis =
+      await this.analysisProcessorGateway.getCnisCompleteAnalysis([
         clientDataBuffer,
         cnisDocumentDataBuffer,
-      ]),
-      this.analysisProcessorGateway.getCnisSimplifiedAnalysis([
-        clientDataBuffer,
-        cnisDocumentDataBuffer,
-      ]),
-    ]);
+      ]);
+
+    const cnisSimplifiedAnalysis =
+      cnisCompleteAnalysis !== null
+        ? await this.analysisProcessorGateway.getCnisSimplifiedAnalysis([
+            Buffer.from(cnisCompleteAnalysis, 'utf-8'),
+          ])
+        : null;
 
     let clientLastAffiliationDate: Date | null = null;
 
