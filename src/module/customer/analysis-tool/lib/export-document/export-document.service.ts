@@ -56,9 +56,9 @@ export class ExportDocumentService {
 
     switch (format.toLowerCase()) {
       case 'pdf':
-        return this.generatedPdfForMarkdown(markdown);
+        return this.generatePdfFromMarkdown(markdown);
       case 'docx':
-        return this.generatedDocxForMarkdown(markdown);
+        return this.generateDocxFromMarkdown(markdown);
       default:
         throw new DownloadCnisFastAnalysisIsNotValidError();
     }
@@ -83,7 +83,7 @@ export class ExportDocumentService {
     });
   }
 
-  private async generatedPdfForMarkdown(markdown: string): Promise<Buffer> {
+  private async generatePdfFromMarkdown(markdown: string): Promise<Buffer> {
     const browser = await Puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
@@ -108,7 +108,7 @@ export class ExportDocumentService {
     return Buffer.from(pdfUint8Array);
   }
 
-  private async generatedDocxForMarkdown(markdown: string): Promise<Buffer> {
+  private async generateDocxFromMarkdown(markdown: string): Promise<Buffer> {
     const fullHtmlDocument = `
       <html>
         <head>
