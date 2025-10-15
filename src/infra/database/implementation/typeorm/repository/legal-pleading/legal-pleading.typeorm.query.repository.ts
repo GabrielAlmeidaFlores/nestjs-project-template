@@ -54,7 +54,7 @@ export class LegalPleadingTypeormQueryRepository
     if (listData.searchBy !== null) {
       where.push({
         ...baseWhere,
-        code: listData.searchBy,
+        code: Like(listData.searchBy),
       });
 
       where.push({
