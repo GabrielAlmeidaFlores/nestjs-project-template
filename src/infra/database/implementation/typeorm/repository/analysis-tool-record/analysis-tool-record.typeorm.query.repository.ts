@@ -75,7 +75,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       }
 
       if (typeof listData.code === 'string') {
-        where.code = listData.code;
+        where.code = Like(listData.code);
       }
 
       if (typeof listData.clientName === 'string') {
