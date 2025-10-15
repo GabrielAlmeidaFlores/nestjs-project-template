@@ -5,8 +5,7 @@ import type { DeepPartialType } from '@shared/system/type/deep-partial.type';
 
 export class ListAnalysisToolRecordQueryParam extends ListDataInputModel {
   public readonly type: AnalysisToolRecordTypeEnum | null;
-  public readonly clientName: string | null;
-  public readonly code: string | null;
+  public readonly searchBy: string | null;
 
   protected override readonly _type = ListAnalysisToolRecordQueryParam.name;
 
@@ -14,7 +13,6 @@ export class ListAnalysisToolRecordQueryParam extends ListDataInputModel {
     super(props);
 
     this.type = props.type ?? null;
-    this.clientName = props.clientName ?? null;
-    this.code = props.code ?? null;
+    this.searchBy = props.searchBy ?? null;
   }
 }
