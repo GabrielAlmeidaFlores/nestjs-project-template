@@ -1,5 +1,5 @@
-// import fs from 'fs';
-// import path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
@@ -141,16 +141,16 @@ export class GeminiService implements GenerativeIaGateway {
     const pdfArrayBuffer = doc.output('arraybuffer');
     const pdfBuffer = Buffer.from(pdfArrayBuffer);
 
-    // const tmpDir = path.join(process.cwd(), '.bin');
-    // if (!fs.existsSync(tmpDir)) {
-    //   fs.mkdirSync(tmpDir, { recursive: true });
-    // }
+    const tmpDir = path.join(process.cwd(), '.bin');
+    if (!fs.existsSync(tmpDir)) {
+      fs.mkdirSync(tmpDir, { recursive: true });
+    }
 
-    // const fileName = `generated-doc-${Date.now()}.pdf`;
-    // const filePath = path.join(tmpDir, fileName);
-    // fs.writeFileSync(filePath, pdfBuffer);
+    const fileName = `generated-doc-${Date.now()}.pdf`;
+    const filePath = path.join(tmpDir, fileName);
+    fs.writeFileSync(filePath, pdfBuffer);
 
-    // console.warn(`PDF document saved to: ${filePath}`);
+    console.warn(`PDF document saved to: ${filePath}`);
 
     return pdfBuffer;
   }

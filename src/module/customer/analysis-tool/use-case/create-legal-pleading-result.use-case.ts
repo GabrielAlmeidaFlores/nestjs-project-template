@@ -96,15 +96,17 @@ export class CreateLegalPleadingResultUseCase {
       }),
     );
 
-    const [legalPleadingCompleteAnalysis, legalPleadingSimplifiedAnalysis] =
-      await Promise.all([
-        this.analysisProcessorGateway.getLegalPleadingCompleteAnalysis(
-          documentsBuffer,
-        ),
-        this.analysisProcessorGateway.getLegalPleadingSimplifiedAnalysis(
-          documentsBuffer,
-        ),
-      ]);
+    const legalPleadingCompleteAnalysis =
+      await this.analysisProcessorGateway.getLegalPleadingCompleteAnalysis(
+        documentsBuffer,
+      );
+
+    const legalPleadingSimplifiedAnalysis =
+      legalPleadingCompleteAnalysis !== null
+        ? await this.analysisProcessorGateway.getLegalPleadingSimplifiedAnalysis(
+            [Buffer.from(legalPleadingCompleteAnalysis, 'utf-8')],
+          )
+        : null;
 
     const legalPleadingResult = new LegalPleadingResultEntity({
       legalPleadingCompleteAnalysis,
