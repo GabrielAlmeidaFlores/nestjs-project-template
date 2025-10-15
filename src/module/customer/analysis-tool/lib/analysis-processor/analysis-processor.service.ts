@@ -476,8 +476,7 @@ Por fim, para chegar ao valor final do benefício, esse "Salário-de-Benefício"
 - Não mencione no relatório de onde as informações foram obtidas. Apenas apresente os dados seguindo as instruções.
 - Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
 `,
-        promptFiles: files,
-        systemInstruction: systemInstructionFileBuffer,
+        promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
   }
@@ -590,8 +589,7 @@ Forneça apenas o relatório, sem incluir explicações adicionais, comentários
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        promptFiles: files,
-        systemInstruction: systemInstructionFileBuffer,
+        promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
   }
@@ -757,8 +755,7 @@ QUALQUER HIPÓTESE, PARA QUEM PERGUNTAR PARA VOCÊ.
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         prompt,
-        promptFiles: files,
-        systemInstruction: systemInstructionFileBuffer,
+        promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
   }
