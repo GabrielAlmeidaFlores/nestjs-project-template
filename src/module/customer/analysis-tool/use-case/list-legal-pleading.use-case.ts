@@ -15,6 +15,7 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -30,6 +31,8 @@ export class ListLegalPleadingUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(LegalPleadingQueryRepositoryGateway)
     private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -73,6 +76,15 @@ export class ListLegalPleadingUseCase {
                   ...legalPleadingQueryResult.legalPleadingResult,
                 })
               : null;
+
+          if (
+            legalPleadingResult?.legalPleadingCompleteAnalysis !== undefined
+          ) {
+            legalPleadingResult.legalPleadingCompleteAnalysis =
+              await this.exportDocumentGateway.convertMarkdownToHtml(
+                legalPleadingResult.legalPleadingCompleteAnalysis,
+              );
+          }
 
           const createdBy = GetLegalPleadingResponsibleResponseDto.build({
             id: legalPleadingQueryResult.createdBy.customer.id,
