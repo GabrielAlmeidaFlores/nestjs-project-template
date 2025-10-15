@@ -4,6 +4,7 @@ import moment from 'moment';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { CnisFastAnalysisDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-does-not-contain-simplified-analysis.error copy';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
@@ -54,7 +55,7 @@ export class DownloadCnisSimplifiedAnalysisUseCase {
       cnisFastAnalysisQueryResult.cnisFastAnalysisResult.cnisCompleteAnalysis;
 
     if (responseAi === null) {
-      throw new CnisFastAnalysisNotFoundError();
+      throw new CnisFastAnalysisDoesNotContainSimplifiedAnalysisError();
     }
 
     const formatted = moment().format('DD-MM-YYYY');

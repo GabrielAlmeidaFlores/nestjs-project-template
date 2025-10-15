@@ -20,10 +20,7 @@ export class ListAnalysisToolRecordRequestDto extends BaseBuildableDtoObject {
   public readonly type?: AnalysisToolRecordTypeEnum;
 
   @RequestDtoStringProperty({ required: false })
-  public readonly clientName?: string;
-
-  @RequestDtoStringProperty({ required: false })
-  public readonly code?: string;
+  public readonly searchBy?: string;
 
   protected override readonly _type = ListAnalysisToolRecordRequestDto.name;
 }
