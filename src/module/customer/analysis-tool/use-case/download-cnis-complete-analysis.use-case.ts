@@ -1,5 +1,4 @@
 import { Inject, StreamableFile } from '@nestjs/common';
-import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
@@ -58,12 +57,10 @@ export class DownloadCnisCompleteAnalysisUseCase {
       throw new CnisFastAnalysisDoesNotContainCompleteAnalysisError();
     }
 
-    const formatted = moment().format('DD-MM-YYYY');
-
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
-      `analise_completa_rapida_cnis_${formatted}`,
+      'analise_completa_rapida_cnis',
     );
   }
 }

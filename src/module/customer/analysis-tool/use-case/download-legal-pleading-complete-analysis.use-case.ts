@@ -1,11 +1,10 @@
 import { Inject, StreamableFile } from '@nestjs/common';
-import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { LegalPleadingDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/error/legal-pleading-does-not-contain-complete-analysis.error';
+import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
@@ -44,11 +43,11 @@ export class DownloadLegalPleadingCompleteAnalysisUseCase {
       await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
-        CnisFastAnalysisNotFoundError,
+        LegalPleadingNotFoundError,
       );
 
     if (!legalPleadingAnalysisQueryResult.legalPleadingResult) {
-      throw new CnisFastAnalysisNotFoundError();
+      throw new LegalPleadingDoesNotContainCompleteAnalysisError();
     }
 
     const responseAi =
@@ -59,12 +58,10 @@ export class DownloadLegalPleadingCompleteAnalysisUseCase {
       throw new LegalPleadingDoesNotContainCompleteAnalysisError();
     }
 
-    const formatted = moment().format('DD-MM-YYYY');
-
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
-      `analise_completa_peca_processual_${formatted}`,
+      'analise_completa_peca_processual',
     );
   }
 }
