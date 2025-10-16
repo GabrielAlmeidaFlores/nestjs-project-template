@@ -101,16 +101,8 @@ export class CreateLegalPleadingResultUseCase {
         documentsBuffer,
       );
 
-    const legalPleadingSimplifiedAnalysis =
-      legalPleadingCompleteAnalysis !== null
-        ? await this.analysisProcessorGateway.getLegalPleadingSimplifiedAnalysis(
-            [Buffer.from(legalPleadingCompleteAnalysis, 'utf-8')],
-          )
-        : null;
-
     const legalPleadingResult = new LegalPleadingResultEntity({
       legalPleadingCompleteAnalysis,
-      legalPleadingSimplifiedAnalysis,
     });
 
     const analysisToolClient = new AnalysisToolClientEntity({
@@ -154,7 +146,6 @@ export class CreateLegalPleadingResultUseCase {
 
     return CreateLegalPleadingResultResponseDto.build({
       legalPleadingCompleteAnalysis,
-      legalPleadingSimplifiedAnalysis,
     });
   }
 }
