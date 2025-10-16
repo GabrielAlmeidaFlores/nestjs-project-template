@@ -1,6 +1,3 @@
-// import fs from 'fs';
-// import path from 'path';
-
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
@@ -8,6 +5,7 @@ import jsPDF from 'jspdf';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
 
 @Injectable()
@@ -24,51 +22,67 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
+    const maxOutputTokens = 10_000;
+
     return await this.generateResponseFromPromptAndFiles(
       props,
       'gemini-2.5-flash',
+      maxOutputTokens,
     );
   }
 
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
+    const maxOutputTokens = 1_000_000;
+
     return await this.generateResponseFromPromptAndFiles(
       props,
       'gemini-2.5-pro',
+      maxOutputTokens,
     );
   }
 
   private async generateResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
     model: string,
+    maxOutputTokens: number,
   ): Promise<string | null> {
     const promptPart: Part[] = [];
+    const systemInstructionParts: Part[] = [];
 
     if (props.prompt !== undefined) {
       promptPart.push({ text: props.prompt });
     }
 
-    if (props.promptFiles !== undefined) {
-      const promptFileParts = await this.buildPartWithFileContent(
-        props.promptFiles,
-      );
-      promptPart.push(...promptFileParts);
+    if (props.systemInstruction !== undefined) {
+      systemInstructionParts.push({ text: props.systemInstruction });
     }
 
-    const contentConfig: GenerateContentParameters = {
+    if (props.promptFiles !== undefined) {
+      const fileParts = await this.buildPartWithFileContent(props.promptFiles);
+      promptPart.push(...fileParts);
+    }
+
+    const contentConfig = {
       model,
       contents: {
         role: 'user',
       },
       config: {
         temperature: 0.3,
-        maxOutputTokens: 500_000,
+        maxOutputTokens,
       },
-    };
+    } as GenerateContentParameters;
 
     if (promptPart.length > 0) {
-      (contentConfig.contents as { parts: Part[] }).parts = promptPart;
+      contentConfig.contents = promptPart;
+    }
+
+    if (systemInstructionParts.length > 0 && contentConfig.config) {
+      contentConfig.config.systemInstruction = {
+        parts: systemInstructionParts,
+      };
     }
 
     const result =
@@ -78,11 +92,16 @@ export class GeminiService implements GenerativeIaGateway {
   }
 
   private async buildPartWithFileContent(
-    contentList: Buffer[],
+    contentList: GenerativeIaPartType[],
   ): Promise<Part[]> {
     const partList: Part[] = [];
 
     for (let content of contentList) {
+      if (typeof content === 'string') {
+        partList.push({ text: content });
+        continue;
+      }
+
       let fileData = await fileType.fileTypeFromBuffer(content);
 
       if (fileData === undefined) {
@@ -128,17 +147,6 @@ export class GeminiService implements GenerativeIaGateway {
 
     const pdfArrayBuffer = doc.output('arraybuffer');
     const pdfBuffer = Buffer.from(pdfArrayBuffer);
-
-    // const tmpDir = path.join(process.cwd(), '.bin');
-    // if (!fs.existsSync(tmpDir)) {
-    //   fs.mkdirSync(tmpDir, { recursive: true });
-    // }
-
-    // const fileName = `generated-doc-${Date.now()}.pdf`;
-    // const filePath = path.join(tmpDir, fileName);
-    // fs.writeFileSync(filePath, pdfBuffer);
-
-    // console.warn(`PDF document saved to: ${filePath}`);
 
     return pdfBuffer;
   }
