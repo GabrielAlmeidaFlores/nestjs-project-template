@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Head,
+  Header,
   HttpCode,
   HttpStatus,
   Options,
@@ -104,6 +105,12 @@ function buildEndpointResponseSpecification(
 
   if (!isNoContentResponse) {
     decorators.push(SetMetadata('successResponseType', successResponse.type));
+
+    if (successResponse.type === Buffer) {
+      decorators.push(
+        Header('Access-Control-Expose-Headers', 'Content-Disposition'),
+      );
+    }
   }
 
   return decorators;
