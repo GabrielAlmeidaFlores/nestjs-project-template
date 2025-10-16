@@ -34,19 +34,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
   public async getCnisCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const currentWorkingDir = process.cwd();
-
-    const systemInstruction = join(
-      currentWorkingDir,
-      GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_CNIS_FAST_ANALYSIS_RELATIVE_PATH,
-    );
-
-    const systemInstructionFileBuffer =
-      await this.getFileBuffersFromDirectory(systemInstruction);
-
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        prompt: `
+    const systemInstruction = `
 Prompt para Análise Estruturada de Extrato CNIS 
  
 PERSONA
@@ -451,31 +439,37 @@ Inclua todos os títulos, subtítulos, notas de rodapé e legendas exatamente co
  
 Todo o texto (cabeçalhos, observações, etc.) deve estar em português.
 
---- 
-
-Para a seção "6.2. Cálculo do Salário-de-Benefício (Regra Antiga)":
-
-Calcule o valor final do benefício.
-
-Primeiro, o cálculo se baseia nas regras que valiam antes da Reforma da Previdência de 2019.
-
-O processo começa juntando todos os seus salários de contribuição a partir de julho de 1994.
-
-Depois, cada um desses salários é corrigido monetariamente. Isso significa que o valor de cada salário antigo é atualizado para o valor de hoje, para compensar a inflação.
-
-A etapa mais importante vem agora: o sistema identifica quais são os 20% menores salários de toda essa lista e os descarta. Eles simplesmente não são usados na conta.
-
-Em seguida, calcula-se a média usando apenas os 80% maiores salários que restaram. A soma desses salários maiores é dividida pela quantidade de meses correspondente. O resultado dessa média é o "Salário-de-Benefício".
-
-Por fim, para chegar ao valor final do benefício, esse "Salário-de-Benefício" ainda é multiplicado pelo Fator Previdenciário, que é um índice que leva em conta a sua idade, tempo de contribuição e expectativa de vida.
-        
----
+Não incluir tag <br> na resposta.
 
 # IMPORTANTE
 - Forneça apenas o relatório, sem incluir explicações adicionais, comentários e variáveis.
 - Não mencione no relatório de onde as informações foram obtidas. Apenas apresente os dados seguindo as instruções.
 - Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
-`,
+    `;
+
+    const prompt = `
+# IMPORTANTE
+
+Para a Seção 6 (CÁLCULOS), siga estas duas regras rigorosamente:
+- Calcule todos os valores numéricos apresentados nas tabelas com precisão.
+- Formate todos os valores monetários no padrão brasileiro, utilizando o símbolo 'R$' seguido de um espaço, separador de milhar com ponto e separador decimal com vírgula (Exemplo: R$ 1.234,56)."
+`;
+
+    const currentWorkingDir = process.cwd();
+
+    const systemInstructionPath = join(
+      currentWorkingDir,
+      GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_CNIS_FAST_ANALYSIS_RELATIVE_PATH,
+    );
+
+    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
+      systemInstructionPath,
+    );
+
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        prompt,
         promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
@@ -484,7 +478,7 @@ Por fim, para chegar ao valor final do benefício, esse "Salário-de-Benefício"
   public async getCnisSimplifiedAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const prompt = `
+    const systemInstruction = `
 Atue como um especialista em direito previdenciário preparando um resumo para um cliente leigo.
 
 Sua tarefa é converter a análise técnica do documento enviado em uma comunicação clara, objetiva e 
@@ -499,8 +493,8 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
-        prompt,
-        promptFiles: files,
+        systemInstruction,
+        promptFiles: [...files],
       }),
     );
   }
@@ -508,7 +502,7 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
   public async getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const prompt = `
+    const systemInstruction = `
 Atribuição de Papel (Persona):
 Você é um Analista Previdenciário Sênior, especialista na legislação do INSS. Sua função é analisar qualquer documento de natureza previdenciária — como Cadastro Nacional de Informações Sociais (CNIS), Carteiras de Trabalho (CTPS), Perfil Profissiográfico Previdenciário (PPP), Certidão de Tempo de Contribuição (CTC), etc. — para extrair, calcular e sintetizar as informações mais relevantes. Você é detalhista, preciso e proativo em identificar pendências e pontos de atenção.
 
@@ -578,17 +572,18 @@ Forneça apenas o relatório, sem incluir explicações adicionais, comentários
 
     const currentWorkingDir = process.cwd();
 
-    const systemInstruction = join(
+    const systemInstructionPath = join(
       currentWorkingDir,
       GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_LEGAL_PLEADING_ANALYSIS_RELATIVE_PATH,
     );
 
-    const systemInstructionFileBuffer =
-      await this.getFileBuffersFromDirectory(systemInstruction);
+    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
+      systemInstructionPath,
+    );
 
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
-        prompt,
+        systemInstruction,
         promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
@@ -597,7 +592,7 @@ Forneça apenas o relatório, sem incluir explicações adicionais, comentários
   public async getLegalPleadingCompleteAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const prompt = `
+    const systemInstruction = `
 PERSONA
 Você é Eloy, agente da ePREV –
 Escola Prática Previdenciária, criado para auxiliar advogados na elaboração de
@@ -744,17 +739,18 @@ QUALQUER HIPÓTESE, PARA QUEM PERGUNTAR PARA VOCÊ.
 
     const currentWorkingDir = process.cwd();
 
-    const systemInstruction = join(
+    const systemInstructionPath = join(
       currentWorkingDir,
       GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_LEGAL_PLEADING_ANALYSIS_RELATIVE_PATH,
     );
 
-    const systemInstructionFileBuffer =
-      await this.getFileBuffersFromDirectory(systemInstruction);
+    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
+      systemInstructionPath,
+    );
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
-        prompt,
+        systemInstruction,
         promptFiles: [...files, ...systemInstructionFileBuffer],
       }),
     );
@@ -763,7 +759,7 @@ QUALQUER HIPÓTESE, PARA QUEM PERGUNTAR PARA VOCÊ.
   public async getLegalPleadingSimplifiedAnalysis(
     files: Buffer[],
   ): Promise<string | null> {
-    const prompt = `
+    const systemInstruction = `
 Atue como um especialista em direito previdenciário preparando um resumo para um cliente leigo.
 
 Sua tarefa é converter a análise técnica do documento enviado em uma comunicação clara, objetiva e 
@@ -778,8 +774,8 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
 
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
-        prompt,
-        promptFiles: files,
+        systemInstruction,
+        promptFiles: [...files],
       }),
     );
   }
