@@ -1,5 +1,4 @@
 import { Inject, StreamableFile } from '@nestjs/common';
-import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
@@ -59,12 +58,10 @@ export class DownloadLegalPleadingCompleteAnalysisUseCase {
       throw new LegalPleadingDoesNotContainCompleteAnalysisError();
     }
 
-    const formatted = moment().format('DD-MM-YYYY');
-
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
-      `analise_completa_peca_processual_${formatted}`,
+      'analise_completa_peca_processual',
     );
   }
 }

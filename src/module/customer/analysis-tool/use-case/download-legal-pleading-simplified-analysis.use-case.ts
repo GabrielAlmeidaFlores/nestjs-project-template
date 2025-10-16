@@ -1,5 +1,4 @@
 import { Inject, StreamableFile } from '@nestjs/common';
-import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
@@ -106,12 +105,10 @@ export class DownloadLegalPleadingSimplifiedAnalysisUseCase {
       throw new LegalPleadingDoesNotContainSimplifiedAnalysisError();
     }
 
-    const formatted = moment().format('DD-MM-YYYY');
-
     return this.exportDocumentGateway.downloadFileAsStreamable(
       responseAi,
       format,
-      `analise_simplificada_peca_processual_${formatted}`,
+      'analise_simplificada_peca_processual',
     );
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import HtmlToDocx from '@turbodocx/html-to-docx';
 import { marked } from 'marked';
+import moment from 'moment';
 import * as Puppeteer from 'puppeteer';
 import TurndownService from 'turndown';
 
@@ -86,7 +87,9 @@ export class ExportDocumentService implements ExportDocumentGateway {
   ): Promise<StreamableFile> {
     const fileBuffer = await this.downloadFile(content, format);
 
-    const filename = `${name}.${format.toLowerCase()}`;
+    const formatted = moment().format('DD-MM-YYYY');
+
+    const filename = `${name}_${formatted}.${format.toLowerCase()}`;
     const contentType =
       format === ExportDocumentFormatEnum.PDF
         ? 'application/pdf'
