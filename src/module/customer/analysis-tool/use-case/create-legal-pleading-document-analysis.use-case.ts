@@ -16,7 +16,6 @@ import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/do
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
 import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import {
   CreateLegalPleadingDocumentAnalysisResponseDto,
   CreateLegalPleadingDocumentTypeAnalysisResponseDto,
@@ -100,7 +99,6 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
       legalPleadingAddress,
       analysisToolClient,
       legalPleadingResult,
-      status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: legalPleadingQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
