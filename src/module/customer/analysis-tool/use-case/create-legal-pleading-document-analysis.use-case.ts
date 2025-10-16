@@ -3,7 +3,6 @@ import { Injectable, Inject } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
 import { LegalPleadingDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/legal-pleading-document.query.repository.gateway';
@@ -16,7 +15,6 @@ import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/do
 import { LegalPleadingDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/legal-pleading-document.entity';
 import { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import {
   CreateLegalPleadingDocumentAnalysisResponseDto,
   CreateLegalPleadingDocumentTypeAnalysisResponseDto,
@@ -45,8 +43,6 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(LegalPleadingDocumentCommandRepositoryGateway)
     private readonly legalPleadingDocumentCommandRepositoryGateway: LegalPleadingDocumentCommandRepositoryGateway,
-    @Inject(LegalPleadingCommandRepositoryGateway)
-    private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingDocumentAnalysisCommandRepositoryGateway)
     private readonly legalPleadingDocumentAnalysisCommandRepositoryGateway: LegalPleadingDocumentAnalysisCommandRepositoryGateway,
     @Inject(LegalPleadingDocumentQueryRepositoryGateway)
@@ -100,9 +96,8 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
       legalPleadingAddress,
       analysisToolClient,
       legalPleadingResult,
-      status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: legalPleadingQueryResult.createdBy.id,
-      updatedBy: organizationMember.id,
+      updatedBy: legalPleadingQueryResult.updatedBy.id,
     });
 
     const documentGroup: {
@@ -124,13 +119,6 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     const transactions: TransactionType[] = [];
     const responseData: CreateLegalPleadingDocumentTypeAnalysisResponseDto[] =
       [];
-
-    const updateLegalPleading =
-      this.legalPleadingCommandRepositoryGateway.updateLegalPleading(
-        legalPleading.id,
-        legalPleading,
-      );
-    transactions.push(updateLegalPleading);
 
     await Promise.all(
       Object.keys(documentGroup).map(async (key) => {
