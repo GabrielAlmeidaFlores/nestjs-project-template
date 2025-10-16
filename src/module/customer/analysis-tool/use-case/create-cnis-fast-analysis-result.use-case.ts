@@ -88,13 +88,6 @@ export class CreateCnisFastAnalysisResultUseCase {
         cnisDocumentDataBuffer,
       ]);
 
-    const cnisSimplifiedAnalysis =
-      cnisCompleteAnalysis !== null
-        ? await this.analysisProcessorGateway.getCnisSimplifiedAnalysis([
-            Buffer.from(cnisCompleteAnalysis, 'utf-8'),
-          ])
-        : null;
-
     let clientLastAffiliationDate: Date | null = null;
 
     cnisDocumentData.socialSecurityRelations?.forEach(
@@ -126,7 +119,6 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisFastAnalysisResult = new CnisFastAnalysisResultEntity({
       clientLastAffiliationDate,
       cnisCompleteAnalysis,
-      cnisSimplifiedAnalysis,
       clientBirthDate:
         cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null,
       clientName: cnisDocumentData.affiliateIdentification?.nome ?? null,
