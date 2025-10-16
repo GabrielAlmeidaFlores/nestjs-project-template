@@ -7,8 +7,5 @@ export class CreateLegalPleadingResultResponseDto extends BaseBuildableDtoObject
   @ResponseDtoStringProperty({ required: false })
   public legalPleadingCompleteAnalysis?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public legalPleadingSimplifiedAnalysis?: string;
-
   protected override readonly _type = CreateLegalPleadingResultResponseDto.name;
 }

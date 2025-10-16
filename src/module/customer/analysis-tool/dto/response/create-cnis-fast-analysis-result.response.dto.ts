@@ -22,9 +22,6 @@ export class CreateCnisFastAnalysisResultResponseDto extends BaseBuildableDtoObj
   @ResponseDtoStringProperty({ required: false })
   public cnisCompleteAnalysis?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public cnisSimplifiedAnalysis?: string;
-
   protected override readonly _type =
     CreateCnisFastAnalysisResultResponseDto.name;
 }
