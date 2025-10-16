@@ -3,6 +3,7 @@ import { Column, Entity, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 
 @Entity({ name: 'cnis_fast_analysis_result' })
 export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
@@ -26,6 +27,7 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'client_birth_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: true,
   })
   public clientBirthDate: Date | null;
@@ -34,6 +36,7 @@ export class CnisFastAnalysisResultTypeormEntity extends BaseTypeormEntity {
     name: 'client_last_affiliation_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public clientLastAffiliationDate: Date | null;
 
