@@ -3,7 +3,6 @@ import { Injectable, Inject } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
 import { LegalPleadingDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document/query/legal-pleading-document.query.repository.gateway';
@@ -44,8 +43,6 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(LegalPleadingDocumentCommandRepositoryGateway)
     private readonly legalPleadingDocumentCommandRepositoryGateway: LegalPleadingDocumentCommandRepositoryGateway,
-    @Inject(LegalPleadingCommandRepositoryGateway)
-    private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingDocumentAnalysisCommandRepositoryGateway)
     private readonly legalPleadingDocumentAnalysisCommandRepositoryGateway: LegalPleadingDocumentAnalysisCommandRepositoryGateway,
     @Inject(LegalPleadingDocumentQueryRepositoryGateway)
@@ -100,7 +97,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
       analysisToolClient,
       legalPleadingResult,
       createdBy: legalPleadingQueryResult.createdBy.id,
-      updatedBy: organizationMember.id,
+      updatedBy: legalPleadingQueryResult.updatedBy.id,
     });
 
     const documentGroup: {
@@ -122,13 +119,6 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     const transactions: TransactionType[] = [];
     const responseData: CreateLegalPleadingDocumentTypeAnalysisResponseDto[] =
       [];
-
-    const updateLegalPleading =
-      this.legalPleadingCommandRepositoryGateway.updateLegalPleading(
-        legalPleading.id,
-        legalPleading,
-      );
-    transactions.push(updateLegalPleading);
 
     await Promise.all(
       Object.keys(documentGroup).map(async (key) => {
