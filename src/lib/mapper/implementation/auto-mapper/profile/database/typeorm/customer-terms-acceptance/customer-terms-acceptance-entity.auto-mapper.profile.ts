@@ -4,11 +4,11 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { TermsAndConditionsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/terms-and-conditions.typeorm.entity';
+import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
+import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerTermsEntity } from '@module/customer/account/domain/schema/entity/customer-terms/customer-terms.entity';
 import { CustomerTermsAcceptanceEntity } from '@module/customer/account/domain/schema/entity/customer-terms-acceptance/customer-terms-acceptance.entity';
 import { CustomerTermsAcceptanceId } from '@module/customer/account/domain/schema/entity/customer-terms-acceptance/value-object/organization-member-id/customer-terms-acceptance-id.value-object';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
-import { TermsEntity } from '@module/customer/account/domain/schema/entity/terms/terms.entity';
 
 @Injectable()
 export class CustomerTermsAcceptanceEntityAutoMapperProfile {
@@ -33,17 +33,17 @@ export class CustomerTermsAcceptanceEntityAutoMapperProfile {
         CustomerTypeormEntity,
         CustomerEntity,
       );
-      const terms = this.mapper.map(
-        source.terms,
-        TermsAndConditionsTypeormEntity,
-        TermsEntity,
+      const customerTerms = this.mapper.map(
+        source.customerTerms,
+        CustomerTermsTypeormEntity,
+        CustomerTermsEntity,
       );
 
       return new CustomerTermsAcceptanceEntity({
         ...source,
         id: new CustomerTermsAcceptanceId(source.id),
         customer,
-        terms,
+        customerTerms,
       });
     };
 
@@ -67,17 +67,17 @@ export class CustomerTermsAcceptanceEntityAutoMapperProfile {
         CustomerTypeormEntity,
       );
 
-      const terms = this.mapper.map(
-        source.terms,
-        TermsEntity,
-        TermsAndConditionsTypeormEntity,
+      const customerTerms = this.mapper.map(
+        source.customerTerms,
+        CustomerTermsEntity,
+        CustomerTermsTypeormEntity,
       );
 
       return CustomerTermsAcceptanceTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         customer,
-        terms,
+        customerTerms,
       });
     };
 

@@ -8,7 +8,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerTermsAcceptanceQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/customer-terms-acceptance.query.repository.gateway';
 import { GetCustomerTermsAcceptanceQueryResult } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/result/get-customer-terms-acceptance.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { TermsId } from '@module/customer/account/domain/schema/entity/terms/value-object/terms-id/terms-id.value-object';
+import { CustomerTermsId } from '@module/customer/account/domain/schema/entity/customer-terms/value-object/customer-terms-id/customer-terms-id.value-object';
 
 @Injectable()
 export class CustomerTermsAcceptanceTypeormQueryRepository
@@ -25,12 +25,12 @@ export class CustomerTermsAcceptanceTypeormQueryRepository
     super(repository);
   }
   public async findOneByTermsIdAndCustomerId(
-    termsId: TermsId,
+    termsId: CustomerTermsId,
     customerId: CustomerId,
   ): Promise<GetCustomerTermsAcceptanceQueryResult | null> {
     const data = await this.repository.findOne({
       where: {
-        terms: { id: termsId.toString() },
+        customerTerms: { id: termsId.toString() },
         customer: { id: customerId.toString() },
       },
       relations: ['terms', 'customer'],

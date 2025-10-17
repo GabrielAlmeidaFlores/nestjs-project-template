@@ -3,8 +3,8 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 
-@Entity('terms_and_conditions')
-export class TermsAndConditionsTypeormEntity extends BaseTypeormEntity {
+@Entity('customer_terms')
+export class CustomerTermsTypeormEntity extends BaseTypeormEntity {
   @Column({ type: 'text', name: 'content' })
   public content: string;
 
@@ -13,11 +13,11 @@ export class TermsAndConditionsTypeormEntity extends BaseTypeormEntity {
 
   @OneToMany(
     () => CustomerTermsAcceptanceTypeormEntity,
-    (entity) => entity.terms,
+    (entity) => entity.customerTerms,
   )
   public customerTermsAccepted?:
     | CustomerTermsAcceptanceTypeormEntity[]
     | undefined;
 
-  protected override readonly _type = TermsAndConditionsTypeormEntity.name;
+  protected override readonly _type = CustomerTermsTypeormEntity.name;
 }
