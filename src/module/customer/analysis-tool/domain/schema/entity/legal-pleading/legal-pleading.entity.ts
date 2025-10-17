@@ -92,12 +92,12 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     super(LegalPleadingId, props);
 
     LegalPleadingEntity.validateDate(
-      props.applicationSubmissionDate,
       () => new InvalidLegalPleadingApplicationSubmitDateError(),
+      props.applicationSubmissionDate,
     );
     LegalPleadingEntity.validateDate(
-      props.benefitTerminationDate,
       () => new InvalidLegalPleadingBenefitTerminalDateError(),
+      props.benefitTerminationDate,
     );
 
     this.code = props.code;
@@ -125,8 +125,8 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   }
 
   public static validateDate(
+    errorFactory: () => InvalidInputError,
     date?: Date | null,
-    errorFactory?: () => InvalidInputError,
   ): void {
     if (!date) {
       return;
@@ -140,11 +140,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     const isEqualOrFuture =
       dateWithoutTime.getTime() >= currentWithoutTime.getTime();
 
-    const factory: () => InvalidInputError =
-      errorFactory ??
-      ((): InvalidInputError =>
-        new InvalidLegalPleadingBenefitTerminalDateError());
-
-    this.validateAllOrThrow([!isEqualOrFuture], factory);
+    this.validateAllOrThrow([!isEqualOrFuture], errorFactory);
   }
 }
