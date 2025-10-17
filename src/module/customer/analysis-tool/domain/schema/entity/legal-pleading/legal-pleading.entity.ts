@@ -91,12 +91,10 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public constructor(props: LegalPleadingEntityPropsInterface) {
     super(LegalPleadingId, props);
 
-    LegalPleadingEntity.validateDate(
-      () => new InvalidLegalPleadingApplicationSubmitDateError(),
+    LegalPleadingEntity.validateApplicationSubmissionDate(
       props.applicationSubmissionDate,
     );
-    LegalPleadingEntity.validateDate(
-      () => new InvalidLegalPleadingBenefitTerminalDateError(),
+    LegalPleadingEntity.validateBenefitTerminationDate(
       props.benefitTerminationDate,
     );
 
@@ -124,14 +122,32 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     this.updatedBy = props.updatedBy;
   }
 
-  public static validateDate(
-    errorFactory: () => InvalidInputError,
-    date?: Date | null,
-  ): void {
+  public static validateApplicationSubmissionDate(date?: Date | null): void {
     if (!date) {
       return;
     }
 
+    LegalPleadingEntity.validateDate(
+      date,
+      () => new InvalidLegalPleadingApplicationSubmitDateError(),
+    );
+  }
+
+  public static validateBenefitTerminationDate(date?: Date | null): void {
+    if (!date) {
+      return;
+    }
+
+    LegalPleadingEntity.validateDate(
+      date,
+      () => new InvalidLegalPleadingBenefitTerminalDateError(),
+    );
+  }
+
+  private static validateDate(
+    date: Date,
+    error: () => InvalidInputError,
+  ): void {
     const currentDate = new Date();
 
     const dateWithoutTime = new Date(date.setHours(0, 0, 0, 0));
@@ -140,6 +156,6 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     const isEqualOrFuture =
       dateWithoutTime.getTime() >= currentWithoutTime.getTime();
 
-    this.validateAllOrThrow([!isEqualOrFuture], errorFactory);
+    this.validateAllOrThrow([!isEqualOrFuture], error);
   }
 }
