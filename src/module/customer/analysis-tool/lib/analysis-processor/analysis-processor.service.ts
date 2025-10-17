@@ -1,6 +1,3 @@
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
-
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
@@ -8,7 +5,6 @@ import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
-import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
 
 @Injectable()
 export class AnalysisProcessorService implements AnalysisProcessorGateway {
@@ -445,7 +441,16 @@ Não incluir tag <br> na resposta.
 - Forneça apenas o relatório, sem incluir explicações adicionais, comentários e variáveis.
 - Não mencione no relatório de onde as informações foram obtidas. Apenas apresente os dados seguindo as instruções.
 - Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
-    `;
+    
+# BASE DE CONHECIMENTO
+Utilize as seguintes bases de conhecimento para fundamentar suas análises e cálculos:
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/BASE+DE+CONHECIMENTO+-+FATORES+DE+ATUALIZA%C3%87%C3%83O+MONET%C3%81RIA+-+INPC.pdf
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/BASE+DE+CONHECIMENTO+-+normas+sobre+c%C3%A1lculo+dos+benef%C3%ADcios+previdenci%C3%A1rios+-+PORTARIA+INSS+991.pdf
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/BASE+DE+CONHECIMENTO+-+normas+sobre+periodo+de+gra%C3%A7a+-+IN+128.pdf
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/benef%C3%ADcios+por+incapacidade+intercalados.pdf
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/BASE+DE+CONHECIMENTO+-+periodo+de+gra%C3%A7a+-+Tema+239+da+TNU+-+prorroga%C3%A7%C3%A3o+pelo+desemprego+ao+CI.pdf
+- https://agiliza-previ-prd.s3.us-east-1.amazonaws.com/public/system-instruction/cnis-fast-analysis/rela%C3%A7%C3%A3o+de+indicadores.pdf
+  `;
 
     const prompt = `
 # IMPORTANTE
@@ -455,22 +460,11 @@ Para a Seção 6 (CÁLCULOS), siga estas duas regras rigorosamente:
 - Formate todos os valores monetários no padrão brasileiro, utilizando o símbolo 'R$' seguido de um espaço, separador de milhar com ponto e separador decimal com vírgula (Exemplo: R$ 1.234,56)."
 `;
 
-    const currentWorkingDir = process.cwd();
-
-    const systemInstructionPath = join(
-      currentWorkingDir,
-      GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_CNIS_FAST_ANALYSIS_RELATIVE_PATH,
-    );
-
-    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
-      systemInstructionPath,
-    );
-
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
         prompt,
-        promptFiles: [...files, ...systemInstructionFileBuffer],
+        promptFiles: files,
       }),
     );
   }
@@ -494,7 +488,7 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptFiles: [...files],
+        promptFiles: files,
       }),
     );
   }
@@ -570,21 +564,10 @@ Forneça apenas o relatório, sem incluir explicações adicionais, comentários
 - Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
     `;
 
-    const currentWorkingDir = process.cwd();
-
-    const systemInstructionPath = join(
-      currentWorkingDir,
-      GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_LEGAL_PLEADING_ANALYSIS_RELATIVE_PATH,
-    );
-
-    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
-      systemInstructionPath,
-    );
-
     return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptFiles: [...files, ...systemInstructionFileBuffer],
+        promptFiles: files,
       }),
     );
   }
@@ -737,21 +720,10 @@ QUALQUER HIPÓTESE, PARA QUEM PERGUNTAR PARA VOCÊ.
 - Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
     `;
 
-    const currentWorkingDir = process.cwd();
-
-    const systemInstructionPath = join(
-      currentWorkingDir,
-      GenerativeIaApplicationVariable.GENERATIVE_IA_SYSTEM_INSTRUCTION_LEGAL_PLEADING_ANALYSIS_RELATIVE_PATH,
-    );
-
-    const systemInstructionFileBuffer = await this.getFileBuffersFromDirectory(
-      systemInstructionPath,
-    );
-
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptFiles: [...files, ...systemInstructionFileBuffer],
+        promptFiles: files,
       }),
     );
   }
@@ -775,30 +747,8 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
-        promptFiles: [...files],
+        promptFiles: files,
       }),
     );
-  }
-
-  private async getFileBuffersFromDirectory(
-    directoryPath: string,
-  ): Promise<Buffer<ArrayBufferLike>[]> {
-    try {
-      const filenames = await readdir(directoryPath);
-
-      const filePromises = filenames.map(async (filename) => {
-        const filePath = join(directoryPath, filename);
-
-        const buffer = await readFile(filePath);
-
-        return buffer;
-      });
-
-      const filesWithBuffers = await Promise.all(filePromises);
-
-      return filesWithBuffers;
-    } catch {
-      return [];
-    }
   }
 }
