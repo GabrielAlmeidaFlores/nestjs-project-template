@@ -33,7 +33,10 @@ export class CustomerTermsAcceptanceTypeormQueryRepository
         customerTerms: { id: termsId.toString() },
         customer: { id: customerId.toString() },
       },
-      relations: ['terms', 'customer'],
+      relations: {
+        customerTerms: true,
+        customer: true,
+      },
     });
 
     if (!data) {
