@@ -89,8 +89,8 @@ export class LegalPleadingAddressEntity extends BaseEntity<LegalPleadingAddressI
     }
 
     const minLength = 3;
-    const maxLength = 100; // ruas podem ter nomes longos
-    const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\.\-]+$/; // letras, números, espaços, pontos e hífens
+    const maxLength = 100;
+    const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\.\-]+$/;
 
     const isValidLength =
       street.length >= minLength && street.length <= maxLength;
