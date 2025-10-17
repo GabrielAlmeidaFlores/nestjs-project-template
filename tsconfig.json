@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
+      "@cli/*": ["./src/cli/*"],
       "@core/*": ["./src/core/*"],
       "@shared/*": ["./src/shared/*"],
       "@infra/*": ["./src/infra/*"],
