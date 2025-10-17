@@ -4,12 +4,13 @@ import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetTermsAcceptanceDataResponseDto extends BaseBuildableDtoObject {
+export class GetCustomerTermsAcceptanceDataResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public content: string;
 
   @ResponseDtoBooleanProperty()
   public accepted: boolean;
 
-  protected override readonly _type = GetTermsAcceptanceDataResponseDto.name;
+  protected override readonly _type =
+    GetCustomerTermsAcceptanceDataResponseDto.name;
 }

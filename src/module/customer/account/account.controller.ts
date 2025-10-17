@@ -7,14 +7,14 @@ import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
 import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
-import { GetTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
+import { GetCustomerTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
-import { ConfirmTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-terms-acceptance.use-case';
+import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
-import { GetTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-terms-acceptance.use-case';
+import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
@@ -38,8 +38,8 @@ export class AccountController {
     private readonly listCustomerOrganizationsUseCase: ListCustomerOrganizationsUseCase,
     private readonly setOrganizationForCustomerUseCase: SetOrganizationForCustomerUseCase,
     private readonly getAuthenticatedCustomerDataUseCase: GetAuthenticatedCustomerDataUseCase,
-    private readonly getTermsAcceptanceUseCase: GetTermsAcceptanceUseCase,
-    private readonly confirmTermsAcceptanceUseCase: ConfirmTermsAcceptanceUseCase,
+    private readonly getCustomerTermsAcceptanceUseCase: GetCustomerTermsAcceptanceUseCase,
+    private readonly confirmCustomerTermsAcceptanceUseCase: ConfirmCustomerTermsAcceptanceUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -178,7 +178,7 @@ export class AccountController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Dados dos termos e condições retornados com sucesso.',
-      type: GetTermsAcceptanceDataResponseDto,
+      type: GetCustomerTermsAcceptanceDataResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -186,8 +186,8 @@ export class AccountController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-  ): Promise<GetTermsAcceptanceDataResponseDto> {
-    return await this.getTermsAcceptanceUseCase.execute(
+  ): Promise<GetCustomerTermsAcceptanceDataResponseDto> {
+    return await this.getCustomerTermsAcceptanceUseCase.execute(
       sessionData,
       organizationSessionData,
     );
@@ -213,7 +213,7 @@ export class AccountController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CustomerTermsAcceptanceResponseDto> {
-    return await this.confirmTermsAcceptanceUseCase.execute(
+    return await this.confirmCustomerTermsAcceptanceUseCase.execute(
       sessionData,
       organizationSessionData,
     );
