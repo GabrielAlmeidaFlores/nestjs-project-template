@@ -50,7 +50,7 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
     super(AnalysisToolClientId, props);
 
     AnalysisToolClientEntity.validateName(props.name);
-    AnalysisToolClientEntity.validateDate(props.birthDate);
+    AnalysisToolClientEntity.validateBirthDate(props.birthDate);
 
     this.name = props.name ?? null;
     this.federalDocument = props.federalDocument ?? null;
@@ -86,7 +86,7 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
     );
   }
 
-  public static validateDate(date?: Date | null): void {
+  public static validateBirthDate(date?: Date | null): void {
     if (!date) {
       return;
     }
