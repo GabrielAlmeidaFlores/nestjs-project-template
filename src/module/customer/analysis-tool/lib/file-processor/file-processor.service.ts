@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
@@ -32,10 +31,7 @@ export class FileProcessorService implements FileProcessorGateway {
   ): Promise<string> {
     const uploadCnisDocument =
       documentLocation === undefined
-        ? await this.bucketGateway.create(
-            document,
-            BucketApplicationVariable.BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT,
-          )
+        ? await this.bucketGateway.create(document)
         : await this.bucketGateway.update(document, documentLocation);
 
     return uploadCnisDocument;
