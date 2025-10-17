@@ -3,5 +3,5 @@ import type { GetCustomerTermsQueryResult } from '@module/customer/account/domai
 export abstract class CustomerTermsQueryRepositoryGateway {
   public abstract findOneByStatus(
     isActive: boolean,
-  ): Promise<GetCustomerTermsQueryResult>;
+  ): Promise<GetCustomerTermsQueryResult | null>;
 }

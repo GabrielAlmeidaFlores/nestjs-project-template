@@ -1,11 +1,12 @@
 import { Inject } from '@nestjs/common';
 
-import { CustomerTermsAcceptanceQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/customer-terms-acceptance.query.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CustomerTermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms/query/customer-terms.query.repository.gateway';
+import { CustomerTermsAcceptanceQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/customer-terms-acceptance.query.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { CustomerTermsNotFoundError } from '@module/customer/account/error/customer-terms-not-found.error';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 
 import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -20,7 +21,7 @@ export class GetTermsAcceptanceUseCase {
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(CustomerTermsQueryRepositoryGateway)
-    private readonly termsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
+    private readonly customerTermsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
     @Inject(CustomerTermsAcceptanceQueryRepositoryGateway)
     private readonly customerTermsAcceptanceQueryRepositoryGateway: CustomerTermsAcceptanceQueryRepositoryGateway,
   ) {}
@@ -45,7 +46,12 @@ export class GetTermsAcceptanceUseCase {
       throw new InvalidOrganizationSessionError();
     }
 
-    const terms = await this.termsQueryRepositoryGateway.findOneByStatus(true);
+    const terms =
+      await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
+
+    if (terms === null) {
+      throw new CustomerTermsNotFoundError();
+    }
 
     const customerTermsAcceptance =
       await this.customerTermsAcceptanceQueryRepositoryGateway.findOneByTermsIdAndCustomerId(

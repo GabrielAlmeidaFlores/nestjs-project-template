@@ -25,10 +25,14 @@ export class CustomerTermsTypeormQueryRepository
 
   public async findOneByStatus(
     isActive: boolean,
-  ): Promise<GetCustomerTermsQueryResult> {
+  ): Promise<GetCustomerTermsQueryResult | null> {
     const terms = await this.repository.findOne({
       where: { isActive },
     });
+
+    if (!terms) {
+      return null;
+    }
 
     const mappedData = this.mapperGateway.map(
       terms,

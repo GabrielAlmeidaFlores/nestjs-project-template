@@ -13,6 +13,7 @@ import { CustomerTermsAcceptanceEntity } from '@module/customer/account/domain/s
 import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { CustomerTermsAcceptanceError } from '@module/customer/account/error/customer-terms-acceptance.error';
+import { CustomerTermsNotFoundError } from '@module/customer/account/error/customer-terms-not-found.error';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 
 import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -29,7 +30,7 @@ export class ConfirmTermsAcceptanceUseCase {
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(CustomerTermsQueryRepositoryGateway)
-    private readonly termsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
+    private readonly customerTermsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
     @Inject(CustomerTermsAcceptanceQueryRepositoryGateway)
     private readonly customerTermsAcceptanceQueryRepositoryGateway: CustomerTermsAcceptanceQueryRepositoryGateway,
     @Inject(CustomerTermsAcceptanceCommandRepositoryGateway)
@@ -56,7 +57,11 @@ export class ConfirmTermsAcceptanceUseCase {
     }
 
     const termResult =
-      await this.termsQueryRepositoryGateway.findOneByStatus(true);
+      await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
+
+    if (termResult === null) {
+      throw new CustomerTermsNotFoundError();
+    }
 
     const customerTermsAcceptance =
       await this.customerTermsAcceptanceQueryRepositoryGateway.findOneByTermsIdAndCustomerId(
