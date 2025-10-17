@@ -6,7 +6,7 @@ export class InvalidLegalPleadingApplicationSubmitDateError extends InvalidInput
 
   public constructor() {
     super(
-      `Data de submissão da solicitação relacionada deve ser anterior data atual`,
+      `Data de submissão da solicitação relacionada deve ser anterior a data atual`,
     );
   }
 }
