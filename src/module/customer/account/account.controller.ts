@@ -180,7 +180,7 @@ export class AccountController {
       description: 'Dados dos termos e condições retornados com sucesso.',
       type: GetCustomerTermsAcceptanceDataResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard],
   })
   public async getTermsAcceptance(
     @GetSessionData() sessionData: SessionDataModel,
@@ -206,7 +206,7 @@ export class AccountController {
       description: 'Dados dos termos e condições lidos com sucesso.',
       type: CustomerTermsAcceptanceResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard],
   })
   public async confirmTermsAcceptance(
     @GetSessionData() sessionData: SessionDataModel,
