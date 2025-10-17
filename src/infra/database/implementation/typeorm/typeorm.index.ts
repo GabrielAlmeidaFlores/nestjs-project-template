@@ -29,8 +29,8 @@ import { OrganizationMemberTypeormCommandRepository } from '@infra/database/impl
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
-import { TermsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/terms/terms.typeorm.command.repository';
-import { TermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/terms/terms.typeorm.query.repository';
+import { CustomerTermsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.command.repository';
+import { CustomerTermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.query.repository';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
@@ -48,7 +48,7 @@ import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
-import { TermsAndConditionsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/terms-and-conditions.typeorm.entity';
+import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -74,7 +74,7 @@ export class TypeormIndex {
     LegalPleadingDocumentAnalysisTypeormEntity,
     LegalPleadingResultTypeormEntity,
     AnalysisToolRecordTypeormEntity,
-    TermsAndConditionsTypeormEntity,
+    CustomerTermsTypeormEntity,
     CustomerTermsAcceptanceTypeormEntity,
   ];
 
@@ -107,8 +107,8 @@ export class TypeormIndex {
     LegalPleadingDocumentAnalysisTypeormCommandRepository,
     AnalysisToolRecordTypeormQueryRepository,
     AnalysisToolRecordTypeormCommandRepository,
-    TermsTypeormCommandRepository,
-    TermsTypeormQueryRepository,
+    CustomerTermsTypeormCommandRepository,
+    CustomerTermsTypeormQueryRepository,
     CustomerAddressTypeormCommandRepository,
     CustomerTermsAcceptanceTypeormQueryRepository,
   ];

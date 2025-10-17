@@ -44,8 +44,8 @@ import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile }
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
-import { GetTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/terms/get-terms-query-result.auto-mapper.profile';
-import { TermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/terms/terms-entity.auto-mapper.profile';
+import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
+import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -94,9 +94,9 @@ import { TermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-ma
     GetAnalysisToolClientQueryResultAutoMapperProfile,
     AnalysisToolRecordEntityAutoMapperProfile,
     GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile,
-    TermsEntityAutoMapperProfile,
+    CustomerTermsEntityAutoMapperProfile,
     CustomerTermsAcceptanceEntityAutoMapperProfile,
-    GetTermsQueryResultAutoMapperProfile,
+    GetCustomerTermsQueryResultAutoMapperProfile,
     GetCustomerTermsAcceptanceQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],

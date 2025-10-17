@@ -1,8 +1,8 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { TermsAndConditionsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/terms-and-conditions.typeorm.entity';
 
 @Entity('customer_terms_acceptance')
 export class CustomerTermsAcceptanceTypeormEntity extends BaseTypeormEntity {
@@ -11,11 +11,11 @@ export class CustomerTermsAcceptanceTypeormEntity extends BaseTypeormEntity {
   public customer?: CustomerTypeormEntity | undefined;
 
   @ManyToOne(
-    () => TermsAndConditionsTypeormEntity,
+    () => CustomerTermsTypeormEntity,
     (entity) => entity.customerTermsAccepted,
   )
-  @JoinColumn({ name: 'terms_id' })
-  public terms?: TermsAndConditionsTypeormEntity | undefined;
+  @JoinColumn({ name: 'customer_terms_id' })
+  public customerTerms?: CustomerTermsTypeormEntity | undefined;
 
   protected override readonly _type = CustomerTermsAcceptanceTypeormEntity.name;
 }

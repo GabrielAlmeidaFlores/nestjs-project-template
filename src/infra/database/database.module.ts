@@ -32,7 +32,7 @@ import { OrganizationMemberTypeormCommandRepository } from '@infra/database/impl
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
-import { TermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/terms/terms.typeorm.query.repository';
+import { CustomerTermsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer-terms/customer-terms.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -44,7 +44,7 @@ import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/acc
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
 import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
-import { TermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/terms/query/terms.query.repository.gateway';
+import { CustomerTermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms/query/customer-terms.query.repository.gateway';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -193,8 +193,8 @@ const classProvider: ClassProvider[] = [
     useClass: AnalysisToolRecordTypeormQueryRepository,
   },
   {
-    provide: TermsQueryRepositoryGateway,
-    useClass: TermsTypeormQueryRepository,
+    provide: CustomerTermsQueryRepositoryGateway,
+    useClass: CustomerTermsTypeormQueryRepository,
   },
   {
     provide: CustomerTermsAcceptanceQueryRepositoryGateway,

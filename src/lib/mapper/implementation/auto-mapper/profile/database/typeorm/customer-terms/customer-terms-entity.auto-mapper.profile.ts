@@ -2,13 +2,13 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { TermsAndConditionsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/terms-and-conditions.typeorm.entity';
-import { TermsEntity } from '@module/customer/account/domain/schema/entity/terms/terms.entity';
-import { TermsId } from '@module/customer/account/domain/schema/entity/terms/value-object/terms-id/terms-id.value-object';
+import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
+import { CustomerTermsEntity } from '@module/customer/account/domain/schema/entity/customer-terms/customer-terms.entity';
+import { CustomerTermsId } from '@module/customer/account/domain/schema/entity/customer-terms/value-object/customer-terms-id/customer-terms-id.value-object';
 
 @Injectable()
-export class TermsEntityAutoMapperProfile {
-  protected readonly _type = TermsEntityAutoMapperProfile.name;
+export class CustomerTermsEntityAutoMapperProfile {
+  protected readonly _type = CustomerTermsEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -21,11 +21,11 @@ export class TermsEntityAutoMapperProfile {
 
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
-      source: TermsAndConditionsTypeormEntity,
-    ): TermsEntity => {
-      return new TermsEntity({
+      source: CustomerTermsTypeormEntity,
+    ): CustomerTermsEntity => {
+      return new CustomerTermsEntity({
         ...source,
-        id: new TermsId(source.id),
+        id: new CustomerTermsId(source.id),
       });
     };
 
@@ -33,17 +33,17 @@ export class TermsEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      TermsAndConditionsTypeormEntity,
-      TermsEntity,
+      CustomerTermsTypeormEntity,
+      CustomerTermsEntity,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: TermsEntity,
-    ): TermsAndConditionsTypeormEntity => {
-      return TermsAndConditionsTypeormEntity.build({
+      source: CustomerTermsEntity,
+    ): CustomerTermsTypeormEntity => {
+      return CustomerTermsTypeormEntity.build({
         ...source,
         id: source.id.toString(),
       });
@@ -53,8 +53,8 @@ export class TermsEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      TermsEntity,
-      TermsAndConditionsTypeormEntity,
+      CustomerTermsEntity,
+      CustomerTermsTypeormEntity,
       mappingFunction,
     );
   }

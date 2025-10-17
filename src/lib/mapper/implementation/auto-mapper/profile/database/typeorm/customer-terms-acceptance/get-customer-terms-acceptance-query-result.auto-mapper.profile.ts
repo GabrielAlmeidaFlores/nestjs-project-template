@@ -4,10 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { TermsAndConditionsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/terms-and-conditions.typeorm.entity';
-import { GetCustomerTermsAcceptanceQueryResult } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/result/get-customer-terms-acceptance.query.result';
+import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
-import { GetTermsQueryResult } from '@module/customer/account/domain/repository/terms/query/result/get-terms.query.result';
+import { GetCustomerTermsQueryResult } from '@module/customer/account/domain/repository/customer-terms/query/result/get-customer-terms.query.result';
+import { GetCustomerTermsAcceptanceQueryResult } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/result/get-customer-terms-acceptance.query.result';
 import { CustomerTermsAcceptanceId } from '@module/customer/account/domain/schema/entity/customer-terms-acceptance/value-object/organization-member-id/customer-terms-acceptance-id.value-object';
 
 @Injectable()
@@ -33,16 +33,16 @@ export class GetCustomerTermsAcceptanceQueryResultAutoMapperProfile {
         GetCustomerQueryResult,
       );
       const terms = this.mapper.map(
-        source.terms,
-        TermsAndConditionsTypeormEntity,
-        GetTermsQueryResult,
+        source.customerTerms,
+        CustomerTermsTypeormEntity,
+        GetCustomerTermsQueryResult,
       );
 
       return GetCustomerTermsAcceptanceQueryResult.build({
         ...source,
         id: new CustomerTermsAcceptanceId(source.id),
         customer,
-        terms,
+        customerTerms: terms,
       });
     };
 

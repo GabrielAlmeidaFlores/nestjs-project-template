@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { CustomerTermsAcceptanceQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/customer-terms-acceptance.query.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { TermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/terms/query/terms.query.repository.gateway';
+import { CustomerTermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms/query/customer-terms.query.repository.gateway';
 import { GetTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
@@ -19,8 +19,8 @@ export class GetTermsAcceptanceUseCase {
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(TermsQueryRepositoryGateway)
-    private readonly termsQueryRepositoryGateway: TermsQueryRepositoryGateway,
+    @Inject(CustomerTermsQueryRepositoryGateway)
+    private readonly termsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
     @Inject(CustomerTermsAcceptanceQueryRepositoryGateway)
     private readonly customerTermsAcceptanceQueryRepositoryGateway: CustomerTermsAcceptanceQueryRepositoryGateway,
   ) {}
