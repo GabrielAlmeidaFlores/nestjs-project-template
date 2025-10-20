@@ -184,13 +184,8 @@ export class AccountController {
   })
   public async getTermsAcceptance(
     @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<GetCustomerTermsAcceptanceDataResponseDto> {
-    return await this.getCustomerTermsAcceptanceUseCase.execute(
-      sessionData,
-      organizationSessionData,
-    );
+    return await this.getCustomerTermsAcceptanceUseCase.execute(sessionData);
   }
 
   @BuildEndpointSpecification({
@@ -210,12 +205,9 @@ export class AccountController {
   })
   public async confirmTermsAcceptance(
     @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CustomerTermsAcceptanceResponseDto> {
     return await this.confirmCustomerTermsAcceptanceUseCase.execute(
       sessionData,
-      organizationSessionData,
     );
   }
 }
