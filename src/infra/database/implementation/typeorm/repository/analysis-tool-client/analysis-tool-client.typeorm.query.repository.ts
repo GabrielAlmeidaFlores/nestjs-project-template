@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
@@ -27,6 +29,78 @@ export class AnalysisToolClientTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async findOneByEmail(
+    email: Email,
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        email: email.toString(),
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: {
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      },
+    });
+
+    if (data === null) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByFederalDocument(
+    federalDocument: FederalDocument,
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        federalDocument: federalDocument.toString(),
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: {
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      },
+    });
+
+    if (data === null) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithRelationsQueryResult,
+    );
+
+    return mappedData;
   }
 
   public async listByOrganizationId(
