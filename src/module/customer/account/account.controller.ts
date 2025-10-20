@@ -1,16 +1,20 @@
-import { RequestMethod, HttpStatus, Body, Query, Res } from '@nestjs/common';
+import { Body, HttpStatus, Query, RequestMethod, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
+import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
 import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
+import { GetCustomerTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
+import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
+import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
@@ -34,6 +38,8 @@ export class AccountController {
     private readonly listCustomerOrganizationsUseCase: ListCustomerOrganizationsUseCase,
     private readonly setOrganizationForCustomerUseCase: SetOrganizationForCustomerUseCase,
     private readonly getAuthenticatedCustomerDataUseCase: GetAuthenticatedCustomerDataUseCase,
+    private readonly getCustomerTermsAcceptanceUseCase: GetCustomerTermsAcceptanceUseCase,
+    private readonly confirmCustomerTermsAcceptanceUseCase: ConfirmCustomerTermsAcceptanceUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -158,6 +164,50 @@ export class AccountController {
     return await this.getAuthenticatedCustomerDataUseCase.execute(
       sessionData,
       organizationSessionData,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Obter dados dos termos e condições aceitos pelo usuário autenticado',
+    http: {
+      path: 'terms-acceptance',
+      method: RequestMethod.GET,
+    },
+    tag: ['conta-do-usuario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Dados dos termos e condições retornados com sucesso.',
+      type: GetCustomerTermsAcceptanceDataResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getTermsAcceptance(
+    @GetSessionData() sessionData: SessionDataModel,
+  ): Promise<GetCustomerTermsAcceptanceDataResponseDto> {
+    return await this.getCustomerTermsAcceptanceUseCase.execute(sessionData);
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Confirmar aceitação dos termos e condições pelo usuário autenticado',
+    http: {
+      path: 'terms-acceptance',
+      method: RequestMethod.POST,
+    },
+    tag: ['conta-do-usuario'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Dados dos termos e condições lidos com sucesso.',
+      type: CustomerTermsAcceptanceResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async confirmTermsAcceptance(
+    @GetSessionData() sessionData: SessionDataModel,
+  ): Promise<CustomerTermsAcceptanceResponseDto> {
+    return await this.confirmCustomerTermsAcceptanceUseCase.execute(
+      sessionData,
     );
   }
 }

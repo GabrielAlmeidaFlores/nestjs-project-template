@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { ImageProcessorGateway } from '@lib/image-processor/image-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
-import { BucketApplicationVariable } from '@shared/system/constant/application-variable/source/bucket.application-variable';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
@@ -44,10 +43,7 @@ export class FileProcessorService implements FileProcessorGateway {
 
     const uploadProfilePicture =
       profilePictureLocation === undefined
-        ? await this.bucketGateway.create(
-            profilePicture,
-            BucketApplicationVariable.BUCKET_FILE_LOCATION_CUSTOMER_PROFILE_PICTURE,
-          )
+        ? await this.bucketGateway.create(profilePicture)
         : await this.bucketGateway.update(
             profilePicture,
             profilePictureLocation,

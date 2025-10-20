@@ -7,7 +7,6 @@ import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identi
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
 import { PreAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/pre-auth-identity-sign-in.request.dto';
 import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
-import { AuthIdentityForgotPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password.response.dto';
 import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
 import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
 import { PreAuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
@@ -95,9 +94,8 @@ export class AuthIdentityController {
     },
     tag: ['autenticacao'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.NO_CONTENT,
       description: 'E-mail para redefinição de senha enviado com sucesso.',
-      type: AuthIdentityForgotPasswordResponseDto,
     },
     throttle: {
       limit: 10,
@@ -106,7 +104,7 @@ export class AuthIdentityController {
   })
   public async forgotPassword(
     @Body() dto: AuthIdentityForgotPasswordRequestDto,
-  ): Promise<AuthIdentityForgotPasswordResponseDto> {
+  ): Promise<void> {
     return await this.authIdentityForgotPasswordUseCase.execute(dto);
   }
 

@@ -15,7 +15,6 @@ import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-cas
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-up.use-case';
-import { AuthIdentityForgotPasswordUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-forgot-password.use-case-gateway';
 import { AuthIdentityResetPasswordUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-reset-password.use-case-gateway';
 import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
 import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
@@ -47,15 +46,7 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
       useClass: ValidateAuthIdentitySignUpUseCase,
     },
     AuthIdentityForgotPasswordUseCase,
-    {
-      provide: AuthIdentityForgotPasswordUseCaseGateway,
-      useClass: AuthIdentityForgotPasswordUseCase,
-    },
     AuthIdentityForgotPasswordValidateCodeUseCase,
-    {
-      provide: AuthIdentityForgotPasswordUseCaseGateway,
-      useClass: AuthIdentityForgotPasswordValidateCodeUseCase,
-    },
     AuthIdentityResetPasswordUseCase,
     {
       provide: AuthIdentityResetPasswordUseCaseGateway,
