@@ -1,6 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidInputError } from '@core/error/invalid-input.error';
+import { InvalidLegalPleadingApplicationSubmitDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-application-submit-date.error';
+import { InvalidLegalPleadingBenefitTerminalDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-bennefit-terminal-date.error';
 import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -15,7 +19,6 @@ import type { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/ana
 import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 import type { LegalPleadingEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity.props.interface';
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
-import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 
 export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   @Description('Status da solicitação de análise CNIS rápida.')
@@ -88,6 +91,13 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public constructor(props: LegalPleadingEntityPropsInterface) {
     super(LegalPleadingId, props);
 
+    LegalPleadingEntity.validateApplicationSubmissionDate(
+      props.applicationSubmissionDate,
+    );
+    LegalPleadingEntity.validateBenefitTerminationDate(
+      props.benefitTerminationDate,
+    );
+
     this.code = props.code;
     this.status = props.status;
     this.statementOfFacts = props.statementOfFacts ?? null;
@@ -110,5 +120,42 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
+  }
+
+  public static validateApplicationSubmissionDate(date?: Date | null): void {
+    if (!date) {
+      return;
+    }
+
+    LegalPleadingEntity.validateDate(
+      date,
+      () => new InvalidLegalPleadingApplicationSubmitDateError(),
+    );
+  }
+
+  public static validateBenefitTerminationDate(date?: Date | null): void {
+    if (!date) {
+      return;
+    }
+
+    LegalPleadingEntity.validateDate(
+      date,
+      () => new InvalidLegalPleadingBenefitTerminalDateError(),
+    );
+  }
+
+  private static validateDate(
+    date: Date,
+    error: () => InvalidInputError,
+  ): void {
+    const currentDate = new Date();
+
+    const dateWithoutTime = new Date(date.setHours(0, 0, 0, 0));
+    const currentWithoutTime = new Date(currentDate.setHours(0, 0, 0, 0));
+
+    const isEqualOrFuture =
+      dateWithoutTime.getTime() >= currentWithoutTime.getTime();
+
+    this.validateAllOrThrow([!isEqualOrFuture], error);
   }
 }
