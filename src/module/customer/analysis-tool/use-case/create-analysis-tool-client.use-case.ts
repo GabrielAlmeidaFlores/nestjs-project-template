@@ -3,9 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
+import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
+import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -17,6 +20,8 @@ export class CreateAnalysisToolClientUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolClientCommandRepositoryGateway)
     private readonly analysisToolClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -36,6 +41,30 @@ export class CreateAnalysisToolClientUseCase {
 
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
+    }
+
+    if (dto.email) {
+      const verifyConstraint =
+        await this.analysisToolClientQueryRepositoryGateway.findOneByEmail(
+          dto.email,
+          organizationSessionData.organizationId,
+        );
+
+      if (verifyConstraint) {
+        throw new AnalysisToolClientEmailAlreadyInUseError();
+      }
+    }
+
+    if (dto.federalDocument) {
+      const verifyConstraint =
+        await this.analysisToolClientQueryRepositoryGateway.findOneByFederalDocument(
+          dto.federalDocument,
+          organizationSessionData.organizationId,
+        );
+
+      if (verifyConstraint) {
+        throw new AnalysisToolClientFederalDocumentAlreadyInUseError();
+      }
     }
 
     const analysisToolClient = new AnalysisToolClientEntity({
