@@ -5,7 +5,6 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { CustomerTermsQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms/query/customer-terms.query.repository.gateway';
 import { CustomerTermsAcceptanceCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/command/customer-terms-acceptance.command.repository.gateway';
 import { CustomerTermsAcceptanceQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer-terms-acceptance/query/customer-terms-acceptance.query.repository.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
 import { CustomerTermsEntity } from '@module/customer/account/domain/schema/entity/customer-terms/customer-terms.entity';
@@ -14,9 +13,7 @@ import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { CustomerTermsAcceptanceError } from '@module/customer/account/error/customer-terms-acceptance.error';
 import { CustomerTermsNotFoundError } from '@module/customer/account/error/customer-terms-not-found.error';
-import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 
-import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 export class ConfirmCustomerTermsAcceptanceUseCase {
@@ -27,8 +24,6 @@ export class ConfirmCustomerTermsAcceptanceUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
-    @Inject(OrganizationMemberQueryRepositoryGateway)
-    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(CustomerTermsQueryRepositoryGateway)
     private readonly customerTermsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
     @Inject(CustomerTermsAcceptanceQueryRepositoryGateway)
@@ -39,22 +34,12 @@ export class ConfirmCustomerTermsAcceptanceUseCase {
 
   public async execute(
     sessionData: SessionDataModel,
-    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CustomerTermsAcceptanceResponseDto> {
     const customerResult =
       await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
         sessionData.authIdentityId,
         CustomerNotFoundError,
       );
-    const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations(
-        customerResult.id,
-        organizationSessionData.organizationId,
-      );
-
-    if (organizationMember === null) {
-      throw new InvalidOrganizationSessionError();
-    }
 
     const termResult =
       await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
