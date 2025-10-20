@@ -6,6 +6,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 
 @Entity({ name: 'analysis_tool_client' })
@@ -49,6 +50,7 @@ export class AnalysisToolClientTypeormEntity extends BaseTypeormEntity {
     name: 'birth_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public birthDate: Date | null;
 
