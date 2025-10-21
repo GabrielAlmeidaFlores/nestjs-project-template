@@ -33,10 +33,10 @@ export class UpdateAnalysisToolClientUseCase {
   ) {}
 
   public async execute(
-    dto: UpdateAnalysisToolClientRequestDto,
     analysisToolClientId: AnalysisToolClientId,
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
+    dto: UpdateAnalysisToolClientRequestDto,
   ): Promise<UpdateAnalysisToolClientResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
