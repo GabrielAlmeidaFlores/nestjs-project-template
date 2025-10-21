@@ -207,10 +207,10 @@ export class AnalysisToolController {
     @Body() dto: UpdateAnalysisToolClientRequestDto,
   ): Promise<UpdateAnalysisToolClientResponseDto> {
     return await this.updateAnalysisToolClientUseCase.execute(
-      dto,
       analysisToolClientId,
       sessionData,
       organizationSessionData,
+      dto,
     );
   }
 
