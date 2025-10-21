@@ -177,13 +177,13 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar usuário',
+    summary: 'Atualizar cliente da análise',
     http: {
-      path: 'update/:analysisToolClientId',
+      path: ':analysisToolClientId',
       method: RequestMethod.PATCH,
       type: UpdateAnalysisToolClientRequestDto,
     },
-    tag: ['conta-do-usuario'],
+    tag: ['cliente-da-analise'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Cliente atualizado com sucesso.',

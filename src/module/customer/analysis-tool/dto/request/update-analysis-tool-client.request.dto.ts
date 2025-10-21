@@ -33,11 +33,5 @@ export class UpdateAnalysisToolClientRequestDto extends BaseBuildableDtoObject {
   @RequestDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
-  @RequestDtoStringProperty({ required: false })
-  public createdBy?: string;
-
-  @RequestDtoStringProperty({ required: false })
-  public updatedBy?: string;
-
   protected override readonly _type = UpdateAnalysisToolClientRequestDto.name;
 }
