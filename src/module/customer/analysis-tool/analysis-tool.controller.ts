@@ -16,6 +16,7 @@ import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
+import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
@@ -32,6 +33,7 @@ import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-too
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
+import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
@@ -53,6 +55,7 @@ import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/us
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
+import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -91,6 +94,7 @@ export class AnalysisToolController {
     private readonly downloadLegalPleadingSimplifiedAnalysisUseCase: DownloadLegalPleadingSimplifiedAnalysisUseCase,
     private readonly downloadLegalPleadingCompleteAnalysisUseCase: DownloadLegalPleadingCompleteAnalysisUseCase,
     private readonly updateLegalPleadingCompleteAnalysisUseCase: UpdateLegalPleadingCompleteAnalysisUseCase,
+    private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -166,6 +170,40 @@ export class AnalysisToolController {
     @Body() dto: CreateAnalysisToolClientRequestDto,
   ): Promise<CreateAnalysisToolClientResponseDto> {
     return await this.createAnalysisToolClientUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar cliente da análise',
+    http: {
+      path: ':analysisToolClientId',
+      method: RequestMethod.PATCH,
+      type: UpdateAnalysisToolClientRequestDto,
+    },
+    tag: ['cliente-da-analise'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Cliente atualizado com sucesso.',
+      type: UpdateAnalysisToolClientResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateAnalysisToolClient(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData() sessionData: SessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+    @Body() dto: UpdateAnalysisToolClientRequestDto,
+  ): Promise<UpdateAnalysisToolClientResponseDto> {
+    return await this.updateAnalysisToolClientUseCase.execute(
+      analysisToolClientId,
       sessionData,
       organizationSessionData,
       dto,
