@@ -42,6 +42,8 @@ describe(CreateAnalysisToolClientUseCase.name, () => {
       findOneByFederalDocument: jest.fn(),
       findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
+      findOneWithAnalysisRelationsByAnalysisToolClientAndOrganizationIdOrFail:
+        jest.fn(),
     };
 
   const analysisToolClientCommandRepositoryGateway: jest.Mocked<AnalysisToolClientCommandRepositoryGateway> =

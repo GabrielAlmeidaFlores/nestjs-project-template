@@ -15,6 +15,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { GetAnalysisToolClientWithAnalysisRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-analysis-relations.query.result';
 
 @Injectable()
 export class AnalysisToolClientTypeormQueryRepository
@@ -180,5 +181,43 @@ export class AnalysisToolClientTypeormQueryRepository
     );
 
     return mappedData;
+  }
+  public async findOneWithAnalysisRelationsByAnalysisToolClientAndOrganizationIdOrFail(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetAnalysisToolClientWithAnalysisRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: analysisToolClientId.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+        relations: {
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
+          legalPleading: true,
+          cnisFastAnalysis: {
+            analysisToolRecord: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedClient = this.mapperGateway.map(
+      data,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithAnalysisRelationsQueryResult,
+    );
+    return mappedClient;
   }
 }
