@@ -23,6 +23,7 @@ import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/us
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
+import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -59,6 +60,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DownloadLegalPleadingSimplifiedAnalysisUseCase,
     DownloadLegalPleadingCompleteAnalysisUseCase,
     UpdateLegalPleadingCompleteAnalysisUseCase,
+    UpdateAnalysisToolClientUseCase,
   ],
 })
 export class AnalysisToolModule {
