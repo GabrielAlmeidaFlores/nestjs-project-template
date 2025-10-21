@@ -189,10 +189,6 @@ export class AnalysisToolController {
       description: 'Cliente atualizado com sucesso.',
       type: UpdateAnalysisToolClientResponseDto,
     },
-    throttle: {
-      limit: 100,
-      ttlInMinutes: 5,
-    },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async updateAnalysisToolClient(
