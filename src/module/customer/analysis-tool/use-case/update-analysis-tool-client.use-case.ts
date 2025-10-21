@@ -11,6 +11,8 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
+import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
+import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -34,12 +36,12 @@ export class UpdateAnalysisToolClientUseCase {
     dto: UpdateAnalysisToolClientRequestDto,
     analysisToolClientId: AnalysisToolClientId,
     sessionData: SessionDataModel,
-    organizationSessionDataModel: OrganizationSessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<UpdateAnalysisToolClientResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
         sessionData.authIdentityId,
-        organizationSessionDataModel.organizationId,
+        organizationSessionData.organizationId,
       );
 
     if (organizationMember === null) {
@@ -49,9 +51,33 @@ export class UpdateAnalysisToolClientUseCase {
     const client =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
         analysisToolClientId,
-        organizationSessionDataModel.organizationId,
+        organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
+
+    if (dto.email) {
+      const verifyConstraint =
+        await this.analysisToolClientQueryRepositoryGateway.findOneByEmail(
+          dto.email,
+          organizationSessionData.organizationId,
+        );
+
+      if (verifyConstraint) {
+        throw new AnalysisToolClientEmailAlreadyInUseError();
+      }
+    }
+
+    if (dto.federalDocument) {
+      const verifyConstraint =
+        await this.analysisToolClientQueryRepositoryGateway.findOneByFederalDocument(
+          dto.federalDocument,
+          organizationSessionData.organizationId,
+        );
+
+      if (verifyConstraint) {
+        throw new AnalysisToolClientFederalDocumentAlreadyInUseError();
+      }
+    }
 
     const updateClient = await this.updateAnalysisToolClientOnDatabase(
       client,
@@ -79,7 +105,7 @@ export class UpdateAnalysisToolClientUseCase {
       phoneNumber: dto.phoneNumber ?? client.phoneNumber,
       clientType: dto.clientType ?? client.clientType,
       createdAt: client.createdAt,
-      createdBy: organizationMember.id,
+      createdBy: client.createdBy.id,
       updatedBy: organizationMember.id,
     });
 
