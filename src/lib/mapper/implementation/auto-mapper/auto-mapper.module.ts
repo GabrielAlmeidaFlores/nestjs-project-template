@@ -46,6 +46,7 @@ import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/impleme
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
 import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
+import { GetAnalysisToolClientWithAnalysisRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-analysis-relations-query-result.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation
     GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResultAutoMapperProfile,
     GetAnalysisToolClientQueryResultAutoMapperProfile,
+    GetAnalysisToolClientWithAnalysisRelationsQueryResultAutoMapperProfile,
     AnalysisToolRecordEntityAutoMapperProfile,
     GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile,
     CustomerTermsEntityAutoMapperProfile,

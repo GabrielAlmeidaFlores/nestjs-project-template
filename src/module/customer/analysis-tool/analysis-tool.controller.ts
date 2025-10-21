@@ -65,6 +65,7 @@ import { GetSessionData } from '@shared/api/util/decorator/property/get-session-
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
+import { DeleteAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/delete-analysis-tool-client.request.dto';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -420,6 +421,7 @@ export class AnalysisToolController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: DeleteAnalysisToolClientRequestDto,
     @Param(
       'analysisToolClientId',
       new ParseValueObjectPipe(AnalysisToolClientId),
@@ -430,6 +432,7 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       analysisToolClientId,
+      dto,
     );
   }
 

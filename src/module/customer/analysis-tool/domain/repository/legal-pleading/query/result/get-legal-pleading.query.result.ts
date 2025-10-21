@@ -1,0 +1,34 @@
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
+import type { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
+import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import type { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
+import type { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
+import type { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
+import type { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
+import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
+import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
+
+export class GetLegalPleadingQueryResult extends BaseBuildableObject {
+  public readonly id: LegalPleadingId;
+  public readonly code: LegalPleadingCode;
+  public readonly status: AnalysisStatusEnum;
+  public readonly statementOfFacts: string | null;
+  public readonly additionalComments: string | null;
+  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
+  public readonly benefitType: LegalPleadingBenefitTypeEnum;
+  public readonly petitionType: LegalPleadingPetitionTypeEnum;
+  public readonly benefitNumber: BenefitNumber | null;
+  public readonly applicationSubmissionDate: Date | null;
+  public readonly benefitTerminationDate: Date | null;
+  public readonly benefitInitialMonthlyIncome: DecimalValue | null;
+  public readonly benefitCurrentMonthlyIncome: DecimalValue | null;
+  public readonly socialSecurityObjective: LegalPleadingSocialSecurityObjectiveEnum | null;
+  public readonly legalPleadingWritOfMandamusObjective: LegalPleadingWritOfMandamusObjectiveEnum | null;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
+
+  protected override readonly _type = GetLegalPleadingQueryResult.name;
+}
