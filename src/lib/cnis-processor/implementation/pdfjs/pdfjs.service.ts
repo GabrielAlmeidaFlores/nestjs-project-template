@@ -6,19 +6,19 @@ import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway
 import {
   RawCnisInterface,
   RawCnisSessionAffiliateIdentificationInterface,
-  RawCnisSocialSecurityRelationInterface,
   RawCnisSessionSocialSecurityAffiliationEarningsHistoryInterface,
   RawCnisSessionSocialSecurityAffiliationInfoInterface,
+  RawCnisSocialSecurityRelationInterface,
 } from '@lib/cnis-processor/implementation/pdfjs/interface/cnis/raw-cnis.interface';
 import { PdfItemInterface } from '@lib/cnis-processor/implementation/pdfjs/interface/pdf-item/pdf-item.interface';
 import { PdfRawItemInterface } from '@lib/cnis-processor/implementation/pdfjs/interface/pdf-item/pdf-raw-item.interface';
 import { RawPdfJsonType } from '@lib/cnis-processor/implementation/pdfjs/type/raw-pdf-json.type';
 import {
-  CnisOutputModel,
   CnisAffiliateIdentificationOutputModel,
-  CnisSocialSecurityRelationOutputModel,
+  CnisOutputModel,
   CnisSessionSocialSecurityAffiliationEarningsHistoryOutputModel,
   CnisSessionSocialSecurityAffiliationInfoOutputModel,
+  CnisSocialSecurityRelationOutputModel,
 } from '@lib/cnis-processor/model/output/cnis.output.model';
 
 export class PdfUtil {
@@ -324,7 +324,7 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
 
         const sourceValue = data[transformMapStrategy.sourceKey];
 
-        if (sourceValue === undefined) {
+        if (sourceValue === undefined || sourceValue.trim() === '') {
           return {};
         }
 
@@ -442,15 +442,13 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
         }
 
         const sourceValue = data[transformMapStrategy.sourceKey];
-
-        if (sourceValue === undefined) {
+        if (sourceValue === undefined || sourceValue.trim() === '') {
           return {};
         }
 
         const destinyKey = transformMapStrategy.destinyKey;
 
         const destinyValue = transformMapStrategy.transformMethod(sourceValue);
-
         return { [destinyKey]: destinyValue };
       })
       .reduce<Record<string, unknown>>((acc, obj) => {
