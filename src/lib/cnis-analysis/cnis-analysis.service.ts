@@ -5,7 +5,11 @@ import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
 import { CarenciaInterface } from '@lib/cnis-analysis/dto/carencia';
 import { ConcomitanciaInterface } from '@lib/cnis-analysis/dto/concomitancia';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomitancia-detalhes';
-import { TimeContributionInterface } from '@lib/cnis-analysis/dto/time-contribution';
+import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/dto/consolidado-relation';
+import {
+  TimeContributionDataInterface,
+  TimeContributionInterface,
+} from '@lib/cnis-analysis/dto/time-contribution';
 import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
@@ -31,7 +35,6 @@ export class CnisAnalysisService {
 
     const concomitanciaRelations = this.calculateConcomitancia(data);
 
-    // const consolidadoTempoContribuicaoECarencia =
     const consolidadoTempoContribuicaoECarencia =
       this.calculateConsolidadoTempoContribuicaoECarencia(
         temposContribuicao,
@@ -40,12 +43,122 @@ export class CnisAnalysisService {
         data,
       );
 
-    console.log(consolidadoTempoContribuicaoECarencia);
+    const vinculosNaoConcomitantes =
+      consolidadoTempoContribuicaoECarencia.filter(
+        (vinculo) => !vinculo.isConcomitante,
+      );
 
-    // Somar as durações de: todos os vínculos não concomitantes
-    // + os vínculos principais (duração integral) + os vínculos secundários (duração ajustada).
+    const somaVinculosNaoConcomitantes = vinculosNaoConcomitantes.reduce(
+      (accumulator, currentValue) => {
+        const startDate = currentValue.validContributionTime?.dataInicio;
+        const endDate = currentValue.validContributionTime?.dataFim;
+        if (
+          startDate instanceof Date &&
+          !isNaN(startDate.getTime()) &&
+          endDate instanceof Date &&
+          !isNaN(endDate.getTime())
+        ) {
+          const duration = this.daysBetween(startDate, endDate);
+          return accumulator + duration;
+        }
+        return accumulator;
+      },
+      0,
+    );
+    const vinculosPrincipais = consolidadoTempoContribuicaoECarencia.filter(
+      (vinculo) => vinculo.tipo === 'principal',
+    );
+    const somaVinculosPrincipais = vinculosPrincipais.reduce(
+      (accumulator, currentValue) => {
+        const startDate = currentValue.validContributionTime?.dataInicio;
+        const endDate = currentValue.validContributionTime?.dataFim;
+        if (
+          startDate instanceof Date &&
+          !isNaN(startDate.getTime()) &&
+          endDate instanceof Date &&
+          !isNaN(endDate.getTime())
+        ) {
+          const duration = this.daysBetween(startDate, endDate);
+          return accumulator + duration;
+        }
+        return accumulator;
+      },
+      0,
+    );
 
-    const cnis = CnisOutputCompleteModel.build({ idade });
+    const vinculosSecundarios = consolidadoTempoContribuicaoECarencia.filter(
+      (vinculo) => vinculo.tipo === 'secundario',
+    );
+    const somaVinculosSecundarios = vinculosSecundarios.reduce(
+      (accumulator, currentValue) => {
+        const startDate = currentValue.validContributionTime?.dataInicio;
+        const endDate = currentValue.validContributionTime?.dataFim;
+        if (
+          startDate instanceof Date &&
+          !isNaN(startDate.getTime()) &&
+          endDate instanceof Date &&
+          !isNaN(endDate.getTime())
+        ) {
+          const duration = this.daysBetween(startDate, endDate);
+          return accumulator + duration;
+        }
+        return accumulator;
+      },
+      0,
+    );
+
+    const duracaoTotalEmDias =
+      somaVinculosNaoConcomitantes +
+      somaVinculosPrincipais +
+      somaVinculosSecundarios;
+
+    const somaPotencial = consolidadoTempoContribuicaoECarencia.reduce(
+      (acc, curr) =>
+        acc +
+        this.daysBetween(
+          curr.validContributionTime?.dataInicio,
+          curr.validContributionTime?.dataFim,
+        ),
+      0,
+    );
+    const anosPotencial = moment.duration(somaPotencial, 'days').years();
+    const mesesPotencial = moment.duration(somaPotencial, 'days').months();
+    const diasPotencial = moment.duration(somaPotencial, 'days').days();
+
+    const somaPotencialRestrito = consolidadoTempoContribuicaoECarencia
+      .filter((vinculo) => !vinculo.isPendencia)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          this.daysBetween(
+            curr.validContributionTime?.dataInicio,
+            curr.validContributionTime?.dataFim,
+          ),
+        0,
+      );
+
+    const potencialValido = `${anosPotencial}a ${mesesPotencial}m ${diasPotencial}d`;
+
+    const anosRestrito = moment.duration(somaPotencialRestrito, 'days').years();
+    const mesesRestrito = moment
+      .duration(somaPotencialRestrito, 'days')
+      .months();
+    const diasRestrito = moment.duration(somaPotencialRestrito, 'days').days();
+
+    const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
+
+    const indicadoresDePendencia = this.calculateImpactoLiquidoDePendencias(
+      consolidadoTempoContribuicaoECarencia,
+    );
+
+    const cnis = CnisOutputCompleteModel.build({
+      idade,
+      potencialValido,
+      restritoValido,
+      duracaoTotalEmDias,
+      indicadoresDePendencia,
+    });
+
     if (data.affiliateIdentification) {
       cnis.affiliateIdentification = data.affiliateIdentification;
     }
@@ -411,7 +524,7 @@ export class CnisAnalysisService {
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
   }
 
-  private daysBetween(dateStart?: Date, dateEnd?: Date): number {
+  private daysBetween(dateStart?: Date | null, dateEnd?: Date | null): number {
     const MS_PER_DAY = 1000 * 60 * 60 * 24;
     if (!dateStart || !dateEnd) {
       return 0;
@@ -520,7 +633,10 @@ export class CnisAnalysisService {
         const dateEndMoment = moment(endDate);
         const duration = moment.duration(dateEndMoment.diff(dateStartMoment));
         const years = dateEndMoment.diff(dateStartMoment, 'years');
-        const months = dateEndMoment.diff(dateStartMoment, 'months');
+        const months = dateEndMoment.diff(
+          dateStartMoment.clone().add(years, 'years'),
+          'months',
+        );
         const days = duration.days() + 1;
         calculatedContributionTime = {
           seq: seq ?? 1,
@@ -649,7 +765,7 @@ export class CnisAnalysisService {
     carenciaCounts: CarenciaInterface[],
     concomitanciaRelations: ConcomitanciaInterface[],
     data: CnisOutputModel,
-  ) {
+  ): ConsolidadoRelationInterface[] {
     // 2.4. Cálculo Consolidado do Tempo de Contribuição e Carência (Total Anti-Duplicidade):
     // Descrição: Somar o tempo e a carência de todos os vínculos válidos,
     // mas sem contar os períodos concomitantes duas vezes.
@@ -732,28 +848,41 @@ export class CnisAnalysisService {
       this.cleanerListVinculosConcomitantes(listOrdered);
 
     return data.socialSecurityRelations.map((relation) => {
-      const seq = relation.socialSecurityAffiliationInfo.seq;
+      const seq = relation.socialSecurityAffiliationInfo.seq ?? 1;
 
-      // ToDO verificar se é pendência,
-      // pra isso existe o campo indicadores na relação
-      //esta no array  indicators-data.ts
-      const isPendencia = indicadorsData.some((item) => {
-        const indicadores = relation.socialSecurityAffiliationInfo?.indicadores;
-        const sigla = item.sigla;
-        if (typeof indicadores !== 'string' || sigla === undefined) {
-          return false;
-        }
-        return (
-          (indicadores.includes(String(sigla)) &&
-            item.tipo === 'CsPendencia') ||
-          sigla === 'IREM-INDPEND' // Indicação de Pendência de Remuneração
-        );
-      });
-      const contributionTime: TimeContributionInterface['data'] | undefined =
-        temposContribuicao.find((item) => item.seq === seq)?.data;
-      const carencia = carenciaCounts.find(
+      const indicadoresRemuneracao =
+        relation.socialSecurityAffiliationEarningsHistory
+          .map((item) => item.indicadores)
+          .filter((v): v is string => typeof v === 'string' && v.trim() !== '');
+
+      const indicadorPrincipal =
+        relation.socialSecurityAffiliationInfo.indicadores;
+      const indicadoresArray: string[] = [
+        ...(typeof indicadorPrincipal === 'string' &&
+        indicadorPrincipal.trim() !== ''
+          ? [indicadorPrincipal]
+          : []),
+        ...indicadoresRemuneracao,
+      ];
+
+      const indicadores = indicadoresArray.join(',').trim() ?? '';
+      const isPendencia = this.calculateIsPendencia(indicadores);
+
+      const contributionTimeFound = temposContribuicao.find(
         (item) => item.seq === seq,
-      )?.carenciaCount;
+      )?.data;
+      const contributionTime: TimeContributionDataInterface =
+        contributionTimeFound ?? {
+          dataInicio: null,
+          dataFim: null,
+          abreviado: '0a 0m 0d',
+          dias: 0,
+          meses: 0,
+          anos: 0,
+        };
+
+      const carencia =
+        carenciaCounts.find((item) => item.seq === seq)?.carenciaCount ?? 0;
       const isConcomitante = concomitanciaRelations.find(
         (item) => item.seq === seq,
       )?.isConcomitante;
@@ -767,30 +896,24 @@ export class CnisAnalysisService {
       // com a coluna Duração Original
       // é a Tempo Válido para Soma
 
-      const validContributionTime = !isConcomitante
-        ? (contributionTime ?? {
-            dataInicio: null,
-            dataFim: null,
-            abreviado: '0a 0m 0d',
-            dias: 0,
-            meses: 0,
-            anos: 0,
-          })
-        : this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
-            seq ?? 1,
-            concomitanciaDetalhe?.dataAjustada?.dataInicio ?? new Date(),
-            concomitanciaDetalhe?.dataAjustada?.dataFim ?? new Date(),
-          );
+      const validContributionTime: TimeContributionDataInterface =
+        concomitanciaDetalhe?.tipo === 'secundario'
+          ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
+              seq,
+              concomitanciaDetalhe.dataAjustada?.dataInicio,
+              concomitanciaDetalhe.dataAjustada?.dataFim,
+            ).data ?? contributionTime)
+          : contributionTime;
 
       return {
         seq,
-        indicadores: relation?.socialSecurityAffiliationInfo?.indicadores,
+        indicadores,
         isPendencia,
         contributionTime,
-        validContributionTime: { ...validContributionTime },
+        validContributionTime,
         carencia,
-        isConcomitante,
-        tipo: concomitanciaDetalhe?.tipo,
+        isConcomitante: isConcomitante ?? false,
+        tipo: concomitanciaDetalhe?.tipo ?? 'principal',
         ajustado: concomitanciaDetalhe?.ajustado ?? false,
         dataAjustada: {
           ...concomitanciaDetalhe?.dataAjustada,
@@ -801,8 +924,8 @@ export class CnisAnalysisService {
 
   private calculateConsolidatedTimeContributionAndCarenciaAjustado(
     seq: number,
-    startDate: Date,
-    endDate: Date,
+    startDate?: Date,
+    endDate?: Date,
   ): TimeContributionInterface {
     if (
       startDate instanceof Date &&
@@ -839,5 +962,77 @@ export class CnisAnalysisService {
         anos: 0,
       },
     };
+  }
+
+  private calculateIsPendencia(sigla: string | null | undefined): boolean {
+    if (typeof sigla !== 'string') {
+      return false;
+    }
+
+    const pendenciaIndicators = ['IREM-INDPEND', 'IREC-INDPEND'];
+    const isPendencia =
+      pendenciaIndicators.some((ind) => sigla.includes(ind)) ||
+      indicadorsData.some(
+        (list) =>
+          typeof list.sigla === 'string' &&
+          sigla.includes(list.sigla) &&
+          list.tipo === 'CsPendencia',
+      );
+    return isPendencia;
+  }
+
+  private calculateImpactoLiquidoDePendencias(
+    data: ConsolidadoRelationInterface[],
+  ): object[] {
+    //   3.1. Cálculo do Impacto Líquido das Pendências:
+    // Descrição: Somar o tempo e a carência de
+    // todos os vínculos que possuem indicadores de pendência.
+    // Fórmula/Lógica: Impacto = Soma(tempoCalculado
+    // e carenciaCalculada de todos os vínculos com flag 'possuiPendencia = true').
+    // Resultado: Um total de tempo (Xa Ym Zd) e carência (meses) "em risco".
+    // Retornar por sequencia o impacto líquido das pendências
+    const sequenciasComPendencia = data.filter((item) => item.isPendencia);
+    const NUMBER_MONTHS_IN_YEAR = 12;
+    const tempoTotal = sequenciasComPendencia.map((item) => {
+      const startDate = item?.contributionTime?.dataInicio;
+      const endDate = item?.contributionTime?.dataFim;
+      if (!startDate || !endDate) {
+        return {
+          dias: 0,
+          meses: 0,
+          anos: 0,
+          carencia: 0,
+        };
+      }
+
+      const dateStartMoment = moment(startDate);
+      const dateEndMoment = moment(endDate);
+      const duration = moment.duration(dateEndMoment.diff(dateStartMoment));
+      const years = dateEndMoment.diff(dateStartMoment, 'years');
+      const months =
+        dateEndMoment.diff(dateStartMoment, 'months') -
+        years * NUMBER_MONTHS_IN_YEAR;
+      const days = duration.days();
+
+      const startYear = startDate.getFullYear();
+      const startMonth = startDate.getMonth();
+      const endYear = endDate.getFullYear();
+      const endMonth = endDate.getMonth();
+      const carenciaCount =
+        (endYear - startYear) * NUMBER_MONTHS_IN_YEAR +
+        (endMonth - startMonth) +
+        1;
+
+      return {
+        seq: item.seq,
+        indicadores: item.indicadores,
+        dias: days,
+        meses: months,
+        anos: years,
+        carencia: carenciaCount,
+      };
+    });
+
+    return tempoTotal;
   }
 }

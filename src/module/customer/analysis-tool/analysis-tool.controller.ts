@@ -385,7 +385,6 @@ export class AnalysisToolController {
       description: 'Análise rápida de CNIS criada com sucesso.',
       type: Object,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createCnisFasttesteAnalysis(
     @Body() dto: CreateCnisFastAnalysisRequestDto,
