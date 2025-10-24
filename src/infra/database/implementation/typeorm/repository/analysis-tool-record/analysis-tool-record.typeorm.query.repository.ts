@@ -18,6 +18,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record.query.result';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
 @Injectable()
@@ -143,6 +144,44 @@ export class AnalysisToolRecordTypeormQueryRepository
         resource: mappedData,
       },
     );
+  }
+
+  public async countAnalysisToolClientIdAndOrganizationId(
+    organizationId: OrganizationId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number> {
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      this.getEntityRelationsKey().map((key) => {
+        const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+          cnisFastAnalysis: {
+            analysisToolClient: {
+              id: analysisToolClientId.toString(),
+            },
+            createdBy: {
+              organization: { id: organizationId.toString() },
+            },
+            updatedBy: {
+              organization: { id: organizationId.toString() },
+            },
+          },
+        };
+
+        if (key !== 'cnisFastAnalysis') {
+          where[key] = {
+            createdBy: {
+              organization: { id: organizationId.toString() },
+            },
+            updatedBy: {
+              organization: { id: organizationId.toString() },
+            },
+          } as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[typeof key];
+        }
+
+        return where;
+      });
+
+    const total = await this.count({ where: whereClause });
+    return total;
   }
 
   public async countByOrganizationId(
