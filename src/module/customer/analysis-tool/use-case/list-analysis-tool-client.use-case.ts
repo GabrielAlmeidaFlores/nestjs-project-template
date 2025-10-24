@@ -34,8 +34,14 @@ export class ListAnalysisToolClientUseCase {
 
     const resource = await Promise.all(
       listData.resource.map(async (listItem) => {
+        const analysisCount =
+          await this.analysisToolClientQueryRepositoryGateway.countAnalysisByAnalysisToolClientId(
+            listItem.id,
+          );
+
         const mappedData = GetAnalysisToolClientResponseDto.build({
           ...listItem,
+          analysisCount,
           createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
             ...listItem.createdBy.customer,
           }),
