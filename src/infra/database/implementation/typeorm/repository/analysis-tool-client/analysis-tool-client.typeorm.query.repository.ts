@@ -31,6 +31,31 @@ export class AnalysisToolClientTypeormQueryRepository
     super(repository);
   }
 
+  public async countAnalysisByAnalysisToolClientId(
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number> {
+    const count = await this.count({
+      where: [
+        {
+          cnisFastAnalysis: {
+            analysisToolClient: {
+              id: analysisToolClientId.toString(),
+            },
+          },
+        },
+        {
+          legalPleading: {
+            analysisToolClient: {
+              id: analysisToolClientId.toString(),
+            },
+          },
+        },
+      ],
+    });
+
+    return count;
+  }
+
   public async findOneByEmail(
     email: Email,
     organizationId: OrganizationId,
