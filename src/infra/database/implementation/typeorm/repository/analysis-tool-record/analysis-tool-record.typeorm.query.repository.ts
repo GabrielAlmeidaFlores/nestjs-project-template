@@ -151,36 +151,28 @@ export class AnalysisToolRecordTypeormQueryRepository
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      this.getEntityRelationsKey().map((key) => {
-        const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
-          cnisFastAnalysis: {
-            analysisToolClient: {
-              id: analysisToolClientId.toString(),
-            },
-            createdBy: {
-              organization: { id: organizationId.toString() },
-            },
-            updatedBy: {
-              organization: { id: organizationId.toString() },
+      this.getEntityRelationsKey().map((key) => ({
+        [key]: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
             },
           },
-        };
-
-        if (key !== 'cnisFastAnalysis') {
-          where[key] = {
-            createdBy: {
-              organization: { id: organizationId.toString() },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
             },
-            updatedBy: {
-              organization: { id: organizationId.toString() },
-            },
-          } as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[typeof key];
-        }
+          },
+          analysisToolClient: {
+            id: analysisToolClientId.toString(),
+          },
+        },
+      }));
 
-        return where;
-      });
+    const total = await this.count({
+      where: whereClause,
+    });
 
-    const total = await this.count({ where: whereClause });
     return total;
   }
 
