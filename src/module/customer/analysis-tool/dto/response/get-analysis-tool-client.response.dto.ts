@@ -8,6 +8,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
@@ -50,6 +51,9 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoEnumProperty(GenderEnum, { required: false })
   public gender?: GenderEnum;
+
+  @ResponseDtoNumberProperty()
+  public analysisAccount: number;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
