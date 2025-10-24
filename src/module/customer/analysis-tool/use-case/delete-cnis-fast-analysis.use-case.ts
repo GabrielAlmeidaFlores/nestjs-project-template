@@ -63,7 +63,6 @@ export class DeleteCnisFastAnalysisUseCase {
       status: cnisFastAnalysisResult.status,
       createdBy: cnisFastAnalysisResult.createdBy.id,
       updatedBy: organizationMember.id,
-      deletedAt: new Date(),
     });
 
     const updateTransaction =
