@@ -26,7 +26,6 @@ import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
-import { DeleteCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/delete-cnis-fast-analysis.response';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
@@ -44,7 +43,6 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
-import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
@@ -82,7 +80,6 @@ export class AnalysisToolController {
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
-    private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
     private readonly createLegalPleadingUseCase: CreateLegalPleadingUseCase,
     private readonly downloadCnisCompleteAnalysisUseCase: DownloadCnisCompleteAnalysisUseCase,
     private readonly downloadCnisSimplifiedAnalysisUseCase: DownloadCnisSimplifiedAnalysisUseCase,
@@ -468,34 +465,6 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       analysisToolClientId,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Remover análise rápida de CNIS',
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
-      method: RequestMethod.DELETE,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise rápida de CNIS removida com sucesso.',
-      type: DeleteCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async removeCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-  ): Promise<DeleteCnisFastAnalysisResponseDto> {
-    return await this.deleteCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
     );
   }
 

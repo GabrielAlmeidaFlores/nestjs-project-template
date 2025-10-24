@@ -1,4 +1,5 @@
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
@@ -14,5 +15,6 @@ export abstract class AnalysisToolClientCommandRepositoryGateway {
 
   public abstract deleteAnalysisToolClient(
     id: AnalysisToolClientId,
+    updatedBy: OrganizationMemberId,
   ): TransactionType;
 }
