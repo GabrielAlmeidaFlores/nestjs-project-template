@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
+import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
@@ -81,6 +83,22 @@ export class AnalysisToolClientTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.analysisToolClient,
   )
   public legalPleading?: LegalPleadingTypeormEntity[] | undefined;
+
+  @OneToMany(
+    () => AnalysisToolClientInssBenefitTypeormEntity,
+    (entity) => entity.analysisToolClient,
+  )
+  public analysisToolClientInssBenefit?:
+    | AnalysisToolClientInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => AnalysisToolClientLegalProceedingTypeormEntity,
+    (entity) => entity.analysisToolClient,
+  )
+  public analysisToolClientLegalProceeding?:
+    | AnalysisToolClientLegalProceedingTypeormEntity[]
+    | undefined;
 
   @ManyToOne(() => OrganizationMemberTypeormEntity)
   @JoinColumn({ name: 'created_by_id' })

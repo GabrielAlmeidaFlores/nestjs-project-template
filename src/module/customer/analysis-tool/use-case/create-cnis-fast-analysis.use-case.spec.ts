@@ -14,7 +14,7 @@ import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
-import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
+import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
 import { CnisFastAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/command/cnis-fast-analysis-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
@@ -61,10 +61,10 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
       findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
     } as unknown as jest.Mocked<AnalysisToolClientQueryRepositoryGateway>;
 
-  const cnisFastAnalysisInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
+  const cnisFastAnalysisInssBenefitCommandRepositoryGateway: jest.Mocked<CnisFastAnalysisInssBenefitCommandRepositoryGateway> =
     {
       createAnalysisToolClientInssBenefit: jest.fn(),
-    } as unknown as jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway>;
+    } as unknown as jest.Mocked<CnisFastAnalysisInssBenefitCommandRepositoryGateway>;
 
   const cnisFastAnalysisLegalProceedingCommandRepositoryGateway: jest.Mocked<CnisFastAnalysisLegalProceedingCommandRepositoryGateway> =
     {
@@ -188,7 +188,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
           useValue: analysisToolClientQueryRepositoryGateway,
         },
         {
-          provide: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+          provide: CnisFastAnalysisInssBenefitCommandRepositoryGateway,
           useValue: cnisFastAnalysisInssBenefitCommandRepositoryGateway,
         },
         {

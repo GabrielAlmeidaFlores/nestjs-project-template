@@ -53,6 +53,8 @@ export class AnalysisToolClientTypeormQueryRepository
           updatedBy: {
             customer: true,
           },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
         },
       },
       err,
@@ -87,6 +89,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -123,6 +127,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -165,6 +171,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -204,6 +212,8 @@ export class AnalysisToolClientTypeormQueryRepository
           updatedBy: {
             customer: true,
           },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
         },
       },
       err,

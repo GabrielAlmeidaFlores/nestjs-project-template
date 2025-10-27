@@ -64,6 +64,12 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
+  @ResponseDtoStringProperty({ isArray: true })
+  public legalProceedingNumber: string[];
+
+  @ResponseDtoStringProperty({ isArray: true })
+  public inssBenefitNumber: string[];
+
   @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponsibleResponseDto)
   public createdBy: GetAnalysisToolClientResponsibleResponseDto;
 

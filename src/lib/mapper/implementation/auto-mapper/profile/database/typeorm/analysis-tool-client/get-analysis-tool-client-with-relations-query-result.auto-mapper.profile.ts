@@ -5,10 +5,15 @@ import { Injectable } from '@nestjs/common';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
+import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import { GetAnalysisToolClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/query/result/get-analysis-tool-client-inss-benefit.query.result';
+import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
 @Injectable()
@@ -29,6 +34,16 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: AnalysisToolClientTypeormEntity,
     ): GetAnalysisToolClientWithRelationsQueryResult => {
+      if (
+        !source.analysisToolClientInssBenefit ||
+        !source.analysisToolClientLegalProceeding
+      ) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: GetAnalysisToolClientWithRelationsQueryResult.name,
+          sourceClass: AnalysisToolClientTypeormEntity.name,
+        });
+      }
+
       const federalDocument =
         source.federalDocument !== null
           ? new FederalDocument(source.federalDocument)
@@ -51,6 +66,18 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
+      const analysisToolClientInssBenefit = this.mapper.mapArray(
+        source.analysisToolClientInssBenefit,
+        AnalysisToolClientInssBenefitTypeormEntity,
+        GetAnalysisToolClientInssBenefitQueryResult,
+      );
+
+      const analysisToolClientLegalProceeding = this.mapper.mapArray(
+        source.analysisToolClientLegalProceeding,
+        AnalysisToolClientLegalProceedingTypeormEntity,
+        GetAnalysisToolClientLegalProceedingQueryResult,
+      );
+
       return GetAnalysisToolClientWithRelationsQueryResult.build({
         ...source,
         id: new AnalysisToolClientId(source.id),
@@ -59,6 +86,8 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         phoneNumber,
         createdBy,
         updatedBy,
+        analysisToolClientLegalProceeding,
+        analysisToolClientInssBenefit,
       });
     };
 
@@ -96,6 +125,18 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         OrganizationMemberTypeormEntity,
       );
 
+      const analysisToolClientInssBenefit = this.mapper.mapArray(
+        source.analysisToolClientInssBenefit,
+        GetAnalysisToolClientInssBenefitQueryResult,
+        AnalysisToolClientInssBenefitTypeormEntity,
+      );
+
+      const analysisToolClientLegalProceeding = this.mapper.mapArray(
+        source.analysisToolClientLegalProceeding,
+        GetAnalysisToolClientLegalProceedingQueryResult,
+        AnalysisToolClientLegalProceedingTypeormEntity,
+      );
+
       return AnalysisToolClientTypeormEntity.build({
         ...source,
         id: source.id.toString(),
@@ -104,6 +145,8 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         phoneNumber,
         updatedBy,
         createdBy,
+        analysisToolClientInssBenefit,
+        analysisToolClientLegalProceeding,
       });
     };
 
