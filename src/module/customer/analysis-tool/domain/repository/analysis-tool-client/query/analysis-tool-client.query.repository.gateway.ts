@@ -31,8 +31,4 @@ export abstract class AnalysisToolClientQueryRepositoryGateway {
     federalDocument: FederalDocument,
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null>;
-
-  public abstract countAnalysisByAnalysisToolClientId(
-    analysisToolClientId: AnalysisToolClientId,
-  ): Promise<number>;
 }
