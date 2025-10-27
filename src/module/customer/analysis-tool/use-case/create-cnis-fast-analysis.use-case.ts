@@ -13,7 +13,7 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
-import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
+import { CnisFastAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
@@ -108,7 +108,7 @@ export class CreateCnisFastAnalysisUseCase {
     const cnisFastAnalysisInssBenefit =
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
-            return new AnalysisToolClientInssBenefitEntity({
+            return new CnisFastAnalysisInssBenefitEntity({
               inssBenefitNumber: value,
               cnisFastAnalysis,
             });
@@ -150,7 +150,7 @@ export class CreateCnisFastAnalysisUseCase {
 
   private async createOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
-    cnisFastAnalysisInssBenefit: AnalysisToolClientInssBenefitEntity[],
+    cnisFastAnalysisInssBenefit: CnisFastAnalysisInssBenefitEntity[],
     cnisFastAnalysisLegalProceeding: CnisFastAnalysisLegalProceedingEntity[],
     analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
