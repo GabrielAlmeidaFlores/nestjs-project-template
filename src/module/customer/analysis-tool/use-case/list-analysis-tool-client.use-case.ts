@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import {
   GetAnalysisToolClientResponseDto,
   GetAnalysisToolClientResponsibleResponseDto,
@@ -20,6 +22,10 @@ export class ListAnalysisToolClientUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(LegalPleadingQueryRepositoryGateway)
+    private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -34,8 +40,21 @@ export class ListAnalysisToolClientUseCase {
 
     const resource = await Promise.all(
       listData.resource.map(async (listItem) => {
+        const analysisCount =
+          await this.analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId(
+            organizationSessionData.organizationId,
+            listItem.id,
+          );
+
+        const legalPleadingCount =
+          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId(
+            organizationSessionData.organizationId,
+            listItem.id,
+          );
+
         const mappedData = GetAnalysisToolClientResponseDto.build({
           ...listItem,
+          analysisCount: analysisCount + legalPleadingCount,
           createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
             ...listItem.createdBy.customer,
           }),
