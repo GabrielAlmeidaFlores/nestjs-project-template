@@ -6,7 +6,7 @@ import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
-import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
+import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
 import { CnisFastAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/command/cnis-fast-analysis-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
@@ -39,8 +39,8 @@ export class CreateCnisFastAnalysisUseCase {
     private readonly cnisFastAnalysisCommandRepositoryGateway: CnisFastAnalysisCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
-    private readonly cnisFastAnalysisInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    @Inject(CnisFastAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly cnisFastAnalysisInssBenefitCommandRepositoryGateway: CnisFastAnalysisInssBenefitCommandRepositoryGateway,
     @Inject(CnisFastAnalysisLegalProceedingCommandRepositoryGateway)
     private readonly cnisFastAnalysisLegalProceedingCommandRepositoryGateway: CnisFastAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
