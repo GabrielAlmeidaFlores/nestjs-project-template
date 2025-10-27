@@ -61,6 +61,12 @@ export class ListAnalysisToolClientUseCase {
           updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
             ...listItem.updatedBy.customer,
           }),
+          legalProceedingNumber: listItem.analysisToolClientLegalProceeding.map(
+            (legalProceeding) => legalProceeding.legalProceedingNumber,
+          ),
+          inssBenefitNumber: listItem.analysisToolClientInssBenefit.map(
+            (inssBenefit) => inssBenefit.inssBenefitNumber,
+          ),
         });
 
         if (mappedData.createdBy.profilePicture !== undefined) {
