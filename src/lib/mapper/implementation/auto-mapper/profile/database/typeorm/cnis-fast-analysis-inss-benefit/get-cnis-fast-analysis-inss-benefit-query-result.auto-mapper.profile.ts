@@ -7,9 +7,9 @@ import { GetCnisFastAnalysisInssBenefitQueryResult } from '@module/customer/anal
 import { CnisFastAnalysisInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/value-object/cnis-fast-analysis-inss-benefit-id/cnis-fast-analysis-inss-benefit-id.value-object';
 
 @Injectable()
-export class GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile {
+export class GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile.name;
+    GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
