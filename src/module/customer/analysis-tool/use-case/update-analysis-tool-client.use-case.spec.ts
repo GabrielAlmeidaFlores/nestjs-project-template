@@ -14,8 +14,13 @@ import { OrganizationMemberId } from '@module/customer/account/domain/schema/ent
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
-import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
+import { GetAnalysisToolClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/query/result/get-analysis-tool-client-inss-benefit.query.result';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
+import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolClientInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-inss-benefit/value-object/analysis-tool-client-inss-benefit-id/analysis-tool-client-inss-benefit-id.value-object';
+import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
@@ -30,6 +35,7 @@ import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
+import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
 describe(UpdateAnalysisToolClientUseCase.name, () => {
   let useCase: UpdateAnalysisToolClientUseCase;
@@ -47,14 +53,30 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
   const analysisToolClientCommandRepositoryGateway: jest.Mocked<AnalysisToolClientCommandRepositoryGateway> =
     {
       updateAnalysisToolClient: jest.fn(),
-    } as unknown as jest.Mocked<AnalysisToolClientCommandRepositoryGateway>;
+      createAnalysisToolClient: jest.fn(),
+      deleteAnalysisToolClient: jest.fn(),
+    };
 
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
       findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
       findOneByEmail: jest.fn(),
       findOneByFederalDocument: jest.fn(),
-    } as unknown as jest.Mocked<AnalysisToolClientQueryRepositoryGateway>;
+      listByOrganizationId: jest.fn(),
+      findOneByAnalysisToolClientIdOrFail: jest.fn(),
+    };
+
+  const analysisToolClientInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
+    {
+      createAnalysisToolClientInssBenefit: jest.fn(),
+      deleteAnalysisToolClientInssBenefit: jest.fn(),
+    };
+
+  const analysisToolClientLegalProceedingCommandRepositoryGateway: jest.Mocked<AnalysisToolClientLegalProceedingCommandRepositoryGateway> =
+    {
+      createAnalysisToolClientLegalProceeding: jest.fn(),
+      deleteAnalysisToolClientLegalProceeding: jest.fn(),
+    };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -68,12 +90,27 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       organizationId: new OrganizationId(),
     });
 
-  const buildDto = (): UpdateAnalysisToolClientRequestDto =>
-    UpdateAnalysisToolClientRequestDto.build({
-      name: 'Nome Atualizado',
-      email: new Email('email.novo@teste.com'),
-      federalDocument: new FederalDocument('222.222.222-22'),
-    });
+  const buildDto = (
+    options: {
+      updateBasicInfo?: boolean;
+      updateBenefits?: boolean;
+      updateProceedings?: boolean;
+    } = {},
+  ): UpdateAnalysisToolClientRequestDto => {
+    const dtoData: Partial<UpdateAnalysisToolClientRequestDto> = {};
+    if (options.updateBasicInfo === true) {
+      dtoData.name = 'Nome Atualizado';
+      dtoData.email = new Email('email.novo@teste.com');
+      dtoData.federalDocument = new FederalDocument('222.222.222-22');
+    }
+    if (options.updateBenefits === true) {
+      dtoData.inssBenefitNumber = ['1111111111', '2222222222'];
+    }
+    if (options.updateProceedings === true) {
+      dtoData.legalProceedingNumber = ['3333333333', '4444444444'];
+    }
+    return UpdateAnalysisToolClientRequestDto.build(dtoData);
+  };
 
   const buildOrganizationMember = (): GetOrganizationMemberQueryResult =>
     ({
@@ -99,6 +136,23 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
           }),
         });
 
+      const initialBenefit = GetAnalysisToolClientInssBenefitQueryResult.build({
+        id: new AnalysisToolClientInssBenefitId(),
+        inssBenefitNumber: '9999999999',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      });
+
+      const initialProceeding =
+        GetAnalysisToolClientLegalProceedingQueryResult.build({
+          id: new AnalysisToolClientLegalProceedingId(),
+          legalProceedingNumber: '8888888888',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        });
+
       return GetAnalysisToolClientWithRelationsQueryResult.build({
         id: new AnalysisToolClientId(),
         name: 'Nome Antigo',
@@ -111,6 +165,8 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
+        analysisToolClientInssBenefit: [initialBenefit],
+        analysisToolClientLegalProceeding: [initialProceeding],
         createdBy: responsible,
         updatedBy: responsible,
       });
@@ -142,6 +198,14 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
           provide: AnalysisToolClientQueryRepositoryGateway,
           useValue: analysisToolClientQueryRepositoryGateway,
         },
+        {
+          provide: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+          useValue: analysisToolClientInssBenefitCommandRepositoryGateway,
+        },
+        {
+          provide: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+          useValue: analysisToolClientLegalProceedingCommandRepositoryGateway,
+        },
       ],
     }).compile();
 
@@ -149,11 +213,94 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve atualizar um cliente com sucesso', async () => {
+  it('deve atualizar todos os campos e substituir entidades relacionadas', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto();
+    const dto = buildDto({
+      updateBasicInfo: true,
+      updateBenefits: true,
+      updateProceedings: true,
+    });
+    const member = buildOrganizationMember();
+    const client = buildClientQueryResult();
+    const transaction = buildTransaction();
+    const TOTAL_TRANSACTIONS = 7;
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      member,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+      client,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+      null,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+      null,
+    );
+    analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
+      {} as TransactionType,
+    );
+    analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit.mockReturnValue(
+      {} as TransactionType,
+    );
+    analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit.mockReturnValue(
+      {} as TransactionType,
+    );
+    analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding.mockReturnValue(
+      {} as TransactionType,
+    );
+    analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding.mockReturnValue(
+      {} as TransactionType,
+    );
+    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
+
+    const result = await useCase.execute(
+      clientId,
+      sessionData,
+      orgSessionData,
+      dto,
+    );
+
+    expect(result).toBeInstanceOf(UpdateAnalysisToolClientResponseDto);
+    expect(
+      analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
+    ).toHaveBeenCalledTimes(2);
+
+    const [[, capturedEntity]] = analysisToolClientCommandRepositoryGateway
+      .updateAnalysisToolClient.mock.calls as [
+      [AnalysisToolClientId, AnalysisToolClientEntity],
+    ];
+    expect(capturedEntity.name).toBe(dto.name);
+    expect(capturedEntity.email).toBe(dto.email);
+    expect(capturedEntity.updatedBy).toBe(member.id);
+
+    expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
+    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
+      .calls as [[TransactionType[]]];
+    expect(transactions).toHaveLength(TOTAL_TRANSACTIONS);
+    expect(transaction.commit).toHaveBeenCalledTimes(1);
+  });
+
+  it('deve atualizar apenas informações básicas se os arrays de relação não forem fornecidos', async () => {
+    // Arrange
+    const clientId = new AnalysisToolClientId();
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const dto = buildDto({ updateBasicInfo: true }); // Only basic info
     const member = buildOrganizationMember();
     const client = buildClientQueryResult();
     const transaction = buildTransaction();
@@ -175,28 +322,28 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
 
-    const result = await useCase.execute(
-      clientId,
-      sessionData,
-      orgSessionData,
-      dto,
-    );
+    await useCase.execute(clientId, sessionData, orgSessionData, dto);
 
-    expect(result).toBeInstanceOf(UpdateAnalysisToolClientResponseDto);
     expect(
       analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
     ).toHaveBeenCalledTimes(1);
+    expect(
+      analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit,
+    ).not.toHaveBeenCalled();
+    expect(
+      analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit,
+    ).not.toHaveBeenCalled();
+    expect(
+      analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding,
+    ).not.toHaveBeenCalled();
+    expect(
+      analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
+    ).not.toHaveBeenCalled();
 
-    const [[, capturedEntity]] = analysisToolClientCommandRepositoryGateway
-      .updateAnalysisToolClient.mock.calls as [
-      [AnalysisToolClientId, AnalysisToolClientEntity],
-    ];
-
-    expect(capturedEntity).toBeInstanceOf(AnalysisToolClientEntity);
-    expect(capturedEntity.name).toBe(dto.name);
-    expect(capturedEntity.email).toBe(dto.email);
-    expect(capturedEntity.updatedBy).toBe(member.id);
-
+    expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
+    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
+      .calls as [[TransactionType[]]];
+    expect(transactions).toHaveLength(1);
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
@@ -204,7 +351,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto();
+    const dto = buildDto({ updateBasicInfo: true });
     const member = buildOrganizationMember();
     const client = buildClientQueryResult();
 
@@ -227,7 +374,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto();
+    const dto = buildDto({ updateBasicInfo: true });
     const member = buildOrganizationMember();
     const client = buildClientQueryResult();
 

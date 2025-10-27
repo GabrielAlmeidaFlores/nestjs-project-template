@@ -4,7 +4,11 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.entity';
+import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
@@ -24,6 +28,10 @@ export class CreateAnalysisToolClientUseCase {
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AnalysisToolClientCommandRepositoryGateway)
     private readonly analysisToolClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
+    @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
+    private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -73,14 +81,50 @@ export class CreateAnalysisToolClientUseCase {
       updatedBy: organizationMember.id,
     });
 
+    const analysisToolClientInssBenefit =
+      dto.inssBenefitNumber !== undefined
+        ? dto.inssBenefitNumber.map((value) => {
+            return new AnalysisToolClientInssBenefitEntity({
+              inssBenefitNumber: value,
+              analysisToolClient,
+            });
+          })
+        : [];
+
+    const analysisToolClientLegalProceeding =
+      dto.legalProceedingNumber !== undefined
+        ? dto.legalProceedingNumber.map((value) => {
+            return new AnalysisToolClientLegalProceedingEntity({
+              legalProceedingNumber: value,
+              analysisToolClient,
+            });
+          })
+        : [];
+
     const analysisToolClientTransaction =
       this.analysisToolClientCommandRepositoryGateway.createAnalysisToolClient(
         analysisToolClient,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
+    const analysisToolClientInssBenefitTransaction =
+      analysisToolClientInssBenefit.map((entity) => {
+        return this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+          entity,
+        );
+      });
+
+    const analysisToolClientLegalProceedingTransaction =
+      analysisToolClientLegalProceeding.map((entity) => {
+        return this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+          entity,
+        );
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
       analysisToolClientTransaction,
-    );
+      ...analysisToolClientInssBenefitTransaction,
+      ...analysisToolClientLegalProceedingTransaction,
+    ]);
     await transaction.commit();
 
     return CreateAnalysisToolClientResponseDto.build({
