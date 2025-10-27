@@ -2,26 +2,25 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
-import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
-import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
+import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
+import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { DeleteLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/delete-legal-pleading.response';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class DeleteAnalysisToolClientUseCase {
-  protected readonly _type = DeleteAnalysisToolClientUseCase.name;
+export class DeleteLegalPleadingUseCase {
+  protected readonly _type = DeleteLegalPleadingUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(AnalysisToolClientQueryRepositoryGateway)
-    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(AnalysisToolClientCommandRepositoryGateway)
-    private readonly analysisToolClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
+    @Inject(LegalPleadingQueryRepositoryGateway)
+    private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
+    @Inject(LegalPleadingCommandRepositoryGateway)
+    private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -29,8 +28,8 @@ export class DeleteAnalysisToolClientUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    analysisToolClientId: AnalysisToolClientId,
-  ): Promise<DeleteAnalysisToolClientResponseDto> {
+    legalPleadingId: LegalPleadingId,
+  ): Promise<DeleteLegalPleadingResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -41,16 +40,16 @@ export class DeleteAnalysisToolClientUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const analysisToolClientResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
-        analysisToolClientId,
+    const legalPleadingResult =
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+        legalPleadingId,
         organizationSessionData.organizationId,
-        AnalysisToolClientNotFoundError,
+        OrganizationMemberNotFoundError,
       );
 
     const deleteTransaction =
-      this.analysisToolClientCommandRepositoryGateway.deleteAnalysisToolClient(
-        analysisToolClientResult.id,
+      this.legalPleadingCommandRepositoryGateway.deleteLegalPleading(
+        legalPleadingResult.id,
         organizationMember.id,
       );
 
@@ -60,8 +59,8 @@ export class DeleteAnalysisToolClientUseCase {
 
     await transaction.commit();
 
-    return DeleteAnalysisToolClientResponseDto.build({
-      analysisToolClientId: analysisToolClientResult.id,
+    return DeleteLegalPleadingResponseDto.build({
+      legalPleadingId: legalPleadingResult.id,
     });
   }
 }
