@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { GetCnisFastAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/query/result/get-cnis-fast-analysis-inss-benefit.query.result';
-import { AnalysisToolClientInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/value-object/cnis-fast-analysis-inss-benefit-id/cnis-fast-analysis-inss-benefit-id.value-object';
+import { CnisFastAnalysisInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/value-object/cnis-fast-analysis-inss-benefit-id/cnis-fast-analysis-inss-benefit-id.value-object';
 
 @Injectable()
 export class GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile {
@@ -26,7 +26,7 @@ export class GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile {
     ): GetCnisFastAnalysisInssBenefitQueryResult => {
       return GetCnisFastAnalysisInssBenefitQueryResult.build({
         ...source,
-        id: new AnalysisToolClientInssBenefitId(source.id),
+        id: new CnisFastAnalysisInssBenefitId(source.id),
       });
     };
 

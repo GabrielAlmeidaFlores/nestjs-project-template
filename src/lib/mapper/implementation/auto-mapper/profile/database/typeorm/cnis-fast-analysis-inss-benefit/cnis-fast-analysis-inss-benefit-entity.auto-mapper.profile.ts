@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
-import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
-import { AnalysisToolClientInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/value-object/cnis-fast-analysis-inss-benefit-id/cnis-fast-analysis-inss-benefit-id.value-object';
+import { CnisFastAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
+import { CnisFastAnalysisInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/value-object/cnis-fast-analysis-inss-benefit-id/cnis-fast-analysis-inss-benefit-id.value-object';
 
 @Injectable()
 export class AnalysisToolClientInssBenefitEntityAutoMapperProfile {
@@ -25,16 +25,16 @@ export class AnalysisToolClientInssBenefitEntityAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: CnisFastAnalysisInssBenefitTypeormEntity,
-    ): AnalysisToolClientInssBenefitEntity => {
+    ): CnisFastAnalysisInssBenefitEntity => {
       const cnisFastAnalysis = this.mapper.map(
         source.cnisFastAnalysis,
         CnisFastAnalysisTypeormEntity,
         CnisFastAnalysisEntity,
       );
 
-      return new AnalysisToolClientInssBenefitEntity({
+      return new CnisFastAnalysisInssBenefitEntity({
         ...source,
-        id: new AnalysisToolClientInssBenefitId(source.id),
+        id: new CnisFastAnalysisInssBenefitId(source.id),
         cnisFastAnalysis,
       });
     };
@@ -44,14 +44,14 @@ export class AnalysisToolClientInssBenefitEntityAutoMapperProfile {
     createMap(
       this.mapper,
       CnisFastAnalysisInssBenefitTypeormEntity,
-      AnalysisToolClientInssBenefitEntity,
+      CnisFastAnalysisInssBenefitEntity,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: AnalysisToolClientInssBenefitEntity,
+      source: CnisFastAnalysisInssBenefitEntity,
     ): CnisFastAnalysisInssBenefitTypeormEntity => {
       const cnisFastAnalysis = this.mapper.map(
         source.cnisFastAnalysis,
@@ -70,7 +70,7 @@ export class AnalysisToolClientInssBenefitEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      AnalysisToolClientInssBenefitEntity,
+      CnisFastAnalysisInssBenefitEntity,
       CnisFastAnalysisInssBenefitTypeormEntity,
       mappingFunction,
     );
