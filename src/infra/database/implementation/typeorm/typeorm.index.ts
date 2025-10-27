@@ -9,7 +9,7 @@ import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementati
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CnisFastAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.command.repository';
 import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis/cnis-fast-analysis.typeorm.query.repository';
-import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
+import { CnisFastAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
@@ -94,7 +94,7 @@ export class TypeormIndex {
     AnalysisToolClientTypeormCommandRepository,
     AnalysisToolClientTypeormQueryRepository,
     CnisFastAnalysisResultTypeormCommandRepository,
-    AnalysisToolClientInssBenefitTypeormCommandRepository,
+    CnisFastAnalysisInssBenefitTypeormCommandRepository,
     CnisFastAnalysisLegalProceedingTypeormCommandRepository,
     CnisFastAnalysisTypeormQueryRepository,
     LegalPleadingTypeormCommandRepository,
