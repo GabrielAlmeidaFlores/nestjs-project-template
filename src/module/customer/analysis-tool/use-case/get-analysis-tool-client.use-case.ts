@@ -59,6 +59,14 @@ export class GetAnalysisToolClientUseCase {
       updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
         ...analysisToolClientQueryResult.updatedBy.customer,
       }),
+      legalProceedingNumber:
+        analysisToolClientQueryResult.analysisToolClientLegalProceeding.map(
+          (legalProceeding) => legalProceeding.legalProceedingNumber,
+        ),
+      inssBenefitNumber:
+        analysisToolClientQueryResult.analysisToolClientInssBenefit.map(
+          (inssBenefit) => inssBenefit.inssBenefitNumber,
+        ),
     });
 
     if (response.createdBy.profilePicture !== undefined) {
