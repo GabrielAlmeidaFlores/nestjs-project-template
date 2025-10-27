@@ -16,8 +16,8 @@ export class PreAuthIdentitySignInRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(FederalDocument, { required: false })
   public federalDocument?: FederalDocument;
 
-  @RequestDtoEnumProperty(SignInMFAOptionEnum)
-  public mfaOption: SignInMFAOptionEnum;
+  @RequestDtoEnumProperty(SignInMFAOptionEnum, { required: false })
+  public mfaOption?: SignInMFAOptionEnum;
 
   @RequestDtoStringProperty()
   public password: string;
