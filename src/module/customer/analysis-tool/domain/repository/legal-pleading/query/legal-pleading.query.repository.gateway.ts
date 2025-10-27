@@ -27,4 +27,9 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     organizationId: OrganizationId,
     listData: ListLegalPleadingQueryParam,
   ): Promise<ListDataOutputModel<GetLegalPleadingWithRelationsQueryResult>>;
+
+  public abstract countByLegalPleadingIdAndOrganizationId(
+    organizationId: OrganizationId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number>;
 }

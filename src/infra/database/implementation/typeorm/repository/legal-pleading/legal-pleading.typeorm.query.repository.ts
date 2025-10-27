@@ -239,4 +239,29 @@ export class LegalPleadingTypeormQueryRepository
 
     return total;
   }
+
+  public async countByLegalPleadingIdAndOrganizationId(
+    organizationId: OrganizationId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number> {
+    const total = await this.count({
+      where: {
+        analysisToolClient: {
+          id: analysisToolClientId.toString(),
+        },
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+    });
+
+    return total;
+  }
 }
