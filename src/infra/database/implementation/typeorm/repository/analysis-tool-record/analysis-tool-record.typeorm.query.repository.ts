@@ -42,20 +42,7 @@ export class AnalysisToolRecordTypeormQueryRepository
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   > {
-    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {};
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = {
-        analysisToolClient: true,
-        createdBy: {
-          customer: true,
-        },
-        updatedBy: {
-          customer: true,
-        },
-      } as never;
-    }
+    const relationsClause = this.getRelationsClauseOperation();
 
     const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
       where: [],
@@ -194,19 +181,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
       }));
 
-    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {};
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = {
-        createdBy: {
-          customer: true,
-        },
-        updatedBy: {
-          customer: true,
-        },
-      } as never;
-    }
+    const relationsClause = this.getRelationsClauseOperation();
 
     const data = await this.findOneOrFail(
       {
@@ -253,6 +228,25 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
 
     return total;
+  }
+
+  private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
+    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
+      {};
+
+    for (const key of this.getEntityRelationsKey()) {
+      relationsClause[key] = {
+        analysisToolClient: true,
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      } as never;
+    }
+
+    return relationsClause;
   }
 
   private getEntityRelationsKey(): 'cnisFastAnalysis'[] {
