@@ -65,7 +65,9 @@ describe(GetAnalysisToolClientUseCase.name, () => {
   const buildClientQueryResult = (
     options: { withProfilePictures?: boolean } = {},
   ): GetAnalysisToolClientWithRelationsQueryResult => {
-    const responsible = (picPath: string | null) =>
+    const responsible = (
+      picPath: string | null,
+    ): GetOrganizationMemberWithCustomerRelationQueryResult =>
       GetOrganizationMemberWithCustomerRelationQueryResult.build({
         id: new OrganizationMemberId(),
         owner: true,
