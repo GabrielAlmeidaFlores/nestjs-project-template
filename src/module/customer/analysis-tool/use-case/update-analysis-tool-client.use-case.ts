@@ -70,7 +70,7 @@ export class UpdateAnalysisToolClientUseCase {
           organizationSessionData.organizationId,
         );
 
-      if (verifyConstraint && verifyConstraint.id !== client.id) {
+      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
         throw new AnalysisToolClientEmailAlreadyInUseError();
       }
     }
@@ -82,7 +82,7 @@ export class UpdateAnalysisToolClientUseCase {
           organizationSessionData.organizationId,
         );
 
-      if (verifyConstraint && verifyConstraint.id !== client.id) {
+      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
         throw new AnalysisToolClientFederalDocumentAlreadyInUseError();
       }
     }
