@@ -29,4 +29,9 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<number>;
+
+  public abstract findByAnalysisToolClientAndOrganizationIdWithRelations(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]>;
 }

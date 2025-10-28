@@ -159,6 +159,45 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
+  public async findByAnalysisToolClientAndOrganizationIdWithRelations(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]> {
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      this.getEntityRelationsKey().map((key) => ({
+        [key]: {
+          analysisToolClient: {
+            id: analysisToolClientId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      }));
+
+    const relationsClause = this.getRelationsClauseOperation();
+
+    const data = await this.find({
+      where: whereClause,
+      relations: relationsClause,
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findOneByIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
