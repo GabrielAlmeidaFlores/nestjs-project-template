@@ -69,6 +69,12 @@ export class PreAuthIdentitySignInUseCase {
       authIdentity.id,
     );
 
+    if (dto.mfaOption === undefined) {
+      return PreAuthIdentitySignInResponseDto.build({
+        userLevel: UserLevelEnum.CUSTOMER,
+      });
+    }
+
     if (activeSession !== null && dto.forceNewSession !== true) {
       throw new AuthIdentitySessionConflictError();
     }
