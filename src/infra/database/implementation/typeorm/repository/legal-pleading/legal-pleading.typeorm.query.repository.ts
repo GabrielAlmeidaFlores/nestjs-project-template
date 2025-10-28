@@ -80,6 +80,8 @@ export class LegalPleadingTypeormQueryRepository
       where,
       relations: {
         analysisToolClient: {
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
           createdBy: {
             customer: true,
           },
