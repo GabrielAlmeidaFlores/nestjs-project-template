@@ -71,7 +71,6 @@ export class UpdateAnalysisToolClientUseCase {
         );
 
       if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
-        console.log('cheguei');
         throw new AnalysisToolClientEmailAlreadyInUseError();
       }
     }
