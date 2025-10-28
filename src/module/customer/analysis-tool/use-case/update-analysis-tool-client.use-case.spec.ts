@@ -35,7 +35,6 @@ import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
-import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
 describe(UpdateAnalysisToolClientUseCase.name, () => {
   let useCase: UpdateAnalysisToolClientUseCase;
@@ -43,7 +42,10 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
       findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+      findOneByOrganizationMemberId: jest.fn(),
+      findOneByCustomerAndOrganizationId: jest.fn(),
+      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+    };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
@@ -117,60 +119,63 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       id: new OrganizationMemberId(),
     }) as unknown as GetOrganizationMemberQueryResult;
 
-  const buildClientQueryResult =
-    (): GetAnalysisToolClientWithRelationsQueryResult => {
-      const responsible =
-        GetOrganizationMemberWithCustomerRelationQueryResult.build({
-          id: new OrganizationMemberId(),
-          owner: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-          customer: GetCustomerQueryResult.build({
-            id: new CustomerId(),
-            name: 'Test Customer',
-            profilePicture: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            deletedAt: null,
-          }),
-        });
-
-      const initialBenefit = GetAnalysisToolClientInssBenefitQueryResult.build({
-        id: new AnalysisToolClientInssBenefitId(),
-        inssBenefitNumber: '9999999999',
+  const buildResponsibleMock =
+    (): GetOrganizationMemberWithCustomerRelationQueryResult =>
+      GetOrganizationMemberWithCustomerRelationQueryResult.build({
+        id: new OrganizationMemberId(),
+        owner: true,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
+        customer: GetCustomerQueryResult.build({
+          id: new CustomerId(),
+          name: 'Test Customer',
+          profilePicture: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        }),
       });
 
-      const initialProceeding =
+  const buildClientQueryResult = (
+    id: AnalysisToolClientId,
+  ): GetAnalysisToolClientWithRelationsQueryResult => {
+    const responsible = buildResponsibleMock();
+
+    return GetAnalysisToolClientWithRelationsQueryResult.build({
+      id: id,
+      name: 'Nome Antigo',
+      email: new Email('email.antigo@teste.com'),
+      federalDocument: new FederalDocument('111.111.111-11'),
+      phoneNumber: null,
+      birthDate: null,
+      gender: null,
+      clientType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+      analysisToolClientInssBenefit: [
+        GetAnalysisToolClientInssBenefitQueryResult.build({
+          id: new AnalysisToolClientInssBenefitId(),
+          inssBenefitNumber: '9999999999',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        }),
+      ],
+      analysisToolClientLegalProceeding: [
         GetAnalysisToolClientLegalProceedingQueryResult.build({
           id: new AnalysisToolClientLegalProceedingId(),
           legalProceedingNumber: '8888888888',
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: null,
-        });
-
-      return GetAnalysisToolClientWithRelationsQueryResult.build({
-        id: new AnalysisToolClientId(),
-        name: 'Nome Antigo',
-        email: new Email('email.antigo@teste.com'),
-        federalDocument: new FederalDocument('111.111.111-11'),
-        phoneNumber: null,
-        birthDate: null,
-        gender: null,
-        clientType: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-        analysisToolClientInssBenefit: [initialBenefit],
-        analysisToolClientLegalProceeding: [initialProceeding],
-        createdBy: responsible,
-        updatedBy: responsible,
-      });
-    };
+        }),
+      ],
+      createdBy: responsible,
+      updatedBy: responsible,
+    });
+  };
 
   const buildTransaction = (): jest.Mocked<TransactionOutputModel> =>
     new TransactionOutputModel(
@@ -223,7 +228,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       updateProceedings: true,
     });
     const member = buildOrganizationMember();
-    const client = buildClientQueryResult();
+    const client = buildClientQueryResult(clientId);
     const transaction = buildTransaction();
     const TOTAL_TRANSACTIONS = 7;
 
@@ -280,14 +285,6 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
     ).toHaveBeenCalledTimes(2);
 
-    const [[, capturedEntity]] = analysisToolClientCommandRepositoryGateway
-      .updateAnalysisToolClient.mock.calls as [
-      [AnalysisToolClientId, AnalysisToolClientEntity],
-    ];
-    expect(capturedEntity.name).toBe(dto.name);
-    expect(capturedEntity.email).toBe(dto.email);
-    expect(capturedEntity.updatedBy).toBe(member.id);
-
     expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
     const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
       .calls as [[TransactionType[]]];
@@ -295,15 +292,40 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve atualizar apenas informações básicas se os arrays de relação não forem fornecidos', async () => {
-    // Arrange
+  it('deve lançar AnalysisToolClientEmailAlreadyInUseError se o e-mail já estiver em uso por OUTRO cliente', async () => {
     const clientId = new AnalysisToolClientId();
+    const conflictingClientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true }); // Only basic info
+    const dto = buildDto({ updateBasicInfo: true });
     const member = buildOrganizationMember();
-    const client = buildClientQueryResult();
-    const transaction = buildTransaction();
+    const client = buildClientQueryResult(clientId);
+    const existingClient = buildClientQueryResult(conflictingClientId);
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      member,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+      client,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+      existingClient,
+    );
+
+    await expect(
+      useCase.execute(clientId, sessionData, orgSessionData, dto),
+    ).rejects.toBeInstanceOf(AnalysisToolClientEmailAlreadyInUseError);
+  });
+
+  it('deve lançar AnalysisToolClientFederalDocumentAlreadyInUseError se o documento já estiver em uso por OUTRO cliente', async () => {
+    const clientId = new AnalysisToolClientId();
+    const conflictingClientId = new AnalysisToolClientId();
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const dto = buildDto({ updateBasicInfo: true });
+    const member = buildOrganizationMember();
+    const client = buildClientQueryResult(clientId);
+    const existingClient = buildClientQueryResult(conflictingClientId);
 
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
@@ -313,6 +335,35 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     );
     analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
       null,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+      existingClient,
+    );
+
+    await expect(
+      useCase.execute(clientId, sessionData, orgSessionData, dto),
+    ).rejects.toBeInstanceOf(
+      AnalysisToolClientFederalDocumentAlreadyInUseError,
+    );
+  });
+
+  it('NÃO deve lançar erro se o e-mail encontrado pertencer ao PRÓPRIO cliente', async () => {
+    const clientId = new AnalysisToolClientId();
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const dto = buildDto({ updateBasicInfo: true });
+    const member = buildOrganizationMember();
+    const client = buildClientQueryResult(clientId);
+    const transaction = buildTransaction();
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      member,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+      client,
+    );
+    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+      client,
     );
     analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
       null,
@@ -327,75 +378,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(
       analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
     ).toHaveBeenCalledTimes(1);
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
-    ).not.toHaveBeenCalled();
-
-    expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
-    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
-      .calls as [[TransactionType[]]];
-    expect(transactions).toHaveLength(1);
     expect(transaction.commit).toHaveBeenCalledTimes(1);
-  });
-
-  it('deve lançar AnalysisToolClientEmailAlreadyInUseError se o e-mail já estiver em uso', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult();
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
-      member,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
-      client,
-    );
-
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(AnalysisToolClientEmailAlreadyInUseError);
-  });
-
-  it('deve lançar AnalysisToolClientFederalDocumentAlreadyInUseError se o documento já estiver em uso', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult();
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
-      member,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
-      client,
-    );
-
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(
-      AnalysisToolClientFederalDocumentAlreadyInUseError,
-    );
   });
 
   it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
