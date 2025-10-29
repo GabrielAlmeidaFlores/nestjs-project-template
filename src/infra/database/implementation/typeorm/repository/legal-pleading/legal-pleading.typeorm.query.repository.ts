@@ -195,6 +195,8 @@ export class LegalPleadingTypeormQueryRepository
             updatedBy: {
               customer: true,
             },
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
           },
           legalPleadingAddress: true,
           legalPleadingDocument: {
