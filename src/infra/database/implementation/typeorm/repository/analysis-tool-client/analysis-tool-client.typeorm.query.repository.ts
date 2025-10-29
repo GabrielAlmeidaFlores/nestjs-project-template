@@ -31,6 +31,44 @@ export class AnalysisToolClientTypeormQueryRepository
     super(repository);
   }
 
+  public async findOneByAnalysisToolClientIdOrFail(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetAnalysisToolClientWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: analysisToolClientId.toString(),
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+        relations: {
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findOneByEmail(
     email: Email,
     organizationId: OrganizationId,
@@ -51,6 +89,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -87,6 +127,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -129,6 +171,8 @@ export class AnalysisToolClientTypeormQueryRepository
         updatedBy: {
           customer: true,
         },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
       },
     });
 
@@ -168,6 +212,8 @@ export class AnalysisToolClientTypeormQueryRepository
           updatedBy: {
             customer: true,
           },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
         },
       },
       err,

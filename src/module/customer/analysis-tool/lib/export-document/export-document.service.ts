@@ -6,7 +6,7 @@ import * as Puppeteer from 'puppeteer';
 import TurndownService from 'turndown';
 
 import { DownloadCnisFastAnalysisIsNotValidError } from '@module/customer/analysis-tool/error/download-cnis-fast-analysis-not-found.error';
-import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 

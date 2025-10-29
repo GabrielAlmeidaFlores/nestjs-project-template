@@ -7,8 +7,12 @@ import { GetOrganizationMemberQueryResult } from '@module/customer/account/domai
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.entity';
+import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
@@ -30,6 +34,10 @@ export class UpdateAnalysisToolClientUseCase {
     private readonly analysisToolClientCommandRepositoryGateway: AnalysisToolClientCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
+    private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -62,7 +70,7 @@ export class UpdateAnalysisToolClientUseCase {
           organizationSessionData.organizationId,
         );
 
-      if (verifyConstraint) {
+      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
         throw new AnalysisToolClientEmailAlreadyInUseError();
       }
     }
@@ -74,7 +82,7 @@ export class UpdateAnalysisToolClientUseCase {
           organizationSessionData.organizationId,
         );
 
-      if (verifyConstraint) {
+      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
         throw new AnalysisToolClientFederalDocumentAlreadyInUseError();
       }
     }
@@ -91,21 +99,22 @@ export class UpdateAnalysisToolClientUseCase {
   }
 
   private async updateAnalysisToolClientOnDatabase(
-    client: GetAnalysisToolClientWithRelationsQueryResult,
+    analysisToolClientQueryResult: GetAnalysisToolClientWithRelationsQueryResult,
     dto: UpdateAnalysisToolClientRequestDto,
     organizationMember: GetOrganizationMemberQueryResult,
   ): Promise<AnalysisToolClientEntity> {
-    const updatedClient = new AnalysisToolClientEntity({
-      id: client.id,
-      name: dto.name ?? client.name,
-      gender: dto.gender ?? client.gender,
-      birthDate: dto.birthDate ?? client.birthDate,
-      federalDocument: dto.federalDocument ?? client.federalDocument,
-      email: dto.email ?? client.email,
-      phoneNumber: dto.phoneNumber ?? client.phoneNumber,
-      clientType: dto.clientType ?? client.clientType,
-      createdAt: client.createdAt,
-      createdBy: client.createdBy.id,
+    const analysisToolClient = new AnalysisToolClientEntity({
+      id: analysisToolClientQueryResult.id,
+      name: dto.name ?? analysisToolClientQueryResult.name,
+      gender: dto.gender ?? analysisToolClientQueryResult.gender,
+      birthDate: dto.birthDate ?? analysisToolClientQueryResult.birthDate,
+      federalDocument:
+        dto.federalDocument ?? analysisToolClientQueryResult.federalDocument,
+      email: dto.email ?? analysisToolClientQueryResult.email,
+      phoneNumber: dto.phoneNumber ?? analysisToolClientQueryResult.phoneNumber,
+      clientType: dto.clientType ?? analysisToolClientQueryResult.clientType,
+      createdAt: analysisToolClientQueryResult.createdAt,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
 
@@ -113,16 +122,79 @@ export class UpdateAnalysisToolClientUseCase {
 
     transactions.push(
       this.analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient(
-        updatedClient.id,
-        updatedClient,
+        analysisToolClient.id,
+        analysisToolClient,
       ),
     );
+
+    if (dto.inssBenefitNumber) {
+      const newAnalysisToolClientInssBenefit = dto.inssBenefitNumber.map(
+        (value) => {
+          return new AnalysisToolClientInssBenefitEntity({
+            inssBenefitNumber: value,
+            analysisToolClient,
+          });
+        },
+      );
+
+      const createNewAnalysisToolClientInssBenefitTransaction =
+        newAnalysisToolClientInssBenefit.map((entity) => {
+          return this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+            entity,
+          );
+        });
+
+      const deleteOldAnalysisToolClientInssBenefitTransaction =
+        analysisToolClientQueryResult.analysisToolClientInssBenefit.map(
+          (entity) => {
+            return this.analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
+              entity.id,
+            );
+          },
+        );
+
+      transactions.push(...createNewAnalysisToolClientInssBenefitTransaction);
+      transactions.push(...deleteOldAnalysisToolClientInssBenefitTransaction);
+    }
+
+    if (dto.legalProceedingNumber) {
+      const newAnalysisToolClientLegalProceeding =
+        dto.legalProceedingNumber.map((value) => {
+          return new AnalysisToolClientLegalProceedingEntity({
+            legalProceedingNumber: value,
+            analysisToolClient,
+          });
+        });
+
+      const createNewAnalysisToolClientLegalProceedingTransaction =
+        newAnalysisToolClientLegalProceeding.map((entity) => {
+          return this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+            entity,
+          );
+        });
+
+      const deleteOldAnalysisToolClientLegalProceedingTransaction =
+        analysisToolClientQueryResult.analysisToolClientLegalProceeding.map(
+          (entity) => {
+            return this.analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(
+              entity.id,
+            );
+          },
+        );
+
+      transactions.push(
+        ...createNewAnalysisToolClientLegalProceedingTransaction,
+      );
+      transactions.push(
+        ...deleteOldAnalysisToolClientLegalProceedingTransaction,
+      );
+    }
 
     const executeTransactions =
       await this.baseTransactionRepositoryGateway.execute(transactions);
 
     await executeTransactions.commit();
 
-    return updatedClient;
+    return analysisToolClient;
   }
 }
