@@ -8,6 +8,8 @@ export interface ConsolidadoRelationInterface {
   validContributionTime?: TimeContributionDataInterface;
   carencia?: number;
   isConcomitante: boolean;
+  isBeneficio: boolean;
+  isIntercalado: boolean;
   tipo?: 'principal' | 'secundario' | null;
   ajustado: boolean;
   dataAjustada?: {

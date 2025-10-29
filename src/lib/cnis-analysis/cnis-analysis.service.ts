@@ -1,11 +1,13 @@
 import { Inject } from '@nestjs/common';
 import moment from 'moment';
 
+import { especiesData } from '@lib/cnis-analysis/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
 import { CarenciaInterface } from '@lib/cnis-analysis/dto/carencia';
 import { ConcomitanciaInterface } from '@lib/cnis-analysis/dto/concomitancia';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomitancia-detalhes';
 import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/dto/consolidado-relation';
+import { ManutencaoInterface } from '@lib/cnis-analysis/dto/manutencao';
 import {
   TimeContributionDataInterface,
   TimeContributionInterface,
@@ -13,6 +15,7 @@ import {
 import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { diffYmdInclusive } from '@shared/api/util/diff-ymd-inclusive';
 
 export class CnisAnalysisService {
   protected readonly _type = CnisAnalysisService.name;
@@ -29,24 +32,22 @@ export class CnisAnalysisService {
     const idade = this.calculateAge(
       data.affiliateIdentification?.dataDeNascimento,
     );
-    const temposContribuicao = this.calculateTimeContribution(data);
+    const tempoDeContribuicao = this.calculateTimeContribution(data);
+    const carencia = this.calculateCarenciaTotal(tempoDeContribuicao);
 
-    const carenciaCounts = this.calculateCarencia(data);
+    const concomitancia = this.calculateConcomitancia(data);
 
-    const concomitanciaRelations = this.calculateConcomitancia(data);
-
-    const consolidadoTempoContribuicaoECarencia =
+    const consolidadoResumido =
       this.calculateConsolidadoTempoContribuicaoECarencia(
-        temposContribuicao,
-        carenciaCounts,
-        concomitanciaRelations,
+        tempoDeContribuicao,
+        concomitancia,
+        carencia,
         data,
       );
 
-    const vinculosNaoConcomitantes =
-      consolidadoTempoContribuicaoECarencia.filter(
-        (vinculo) => !vinculo.isConcomitante,
-      );
+    const vinculosNaoConcomitantes = consolidadoResumido.filter(
+      (vinculo) => !vinculo.isConcomitante,
+    );
 
     const somaVinculosNaoConcomitantes = vinculosNaoConcomitantes.reduce(
       (accumulator, currentValue) => {
@@ -65,7 +66,7 @@ export class CnisAnalysisService {
       },
       0,
     );
-    const vinculosPrincipais = consolidadoTempoContribuicaoECarencia.filter(
+    const vinculosPrincipais = consolidadoResumido.filter(
       (vinculo) => vinculo.tipo === 'principal',
     );
     const somaVinculosPrincipais = vinculosPrincipais.reduce(
@@ -86,7 +87,7 @@ export class CnisAnalysisService {
       0,
     );
 
-    const vinculosSecundarios = consolidadoTempoContribuicaoECarencia.filter(
+    const vinculosSecundarios = consolidadoResumido.filter(
       (vinculo) => vinculo.tipo === 'secundario',
     );
     const somaVinculosSecundarios = vinculosSecundarios.reduce(
@@ -112,7 +113,7 @@ export class CnisAnalysisService {
       somaVinculosPrincipais +
       somaVinculosSecundarios;
 
-    const somaPotencial = consolidadoTempoContribuicaoECarencia.reduce(
+    const somaPotencial = consolidadoResumido.reduce(
       (acc, curr) =>
         acc +
         this.daysBetween(
@@ -125,7 +126,7 @@ export class CnisAnalysisService {
     const mesesPotencial = moment.duration(somaPotencial, 'days').months();
     const diasPotencial = moment.duration(somaPotencial, 'days').days();
 
-    const somaPotencialRestrito = consolidadoTempoContribuicaoECarencia
+    const somaPotencialRestrito = consolidadoResumido
       .filter((vinculo) => !vinculo.isPendencia)
       .reduce(
         (acc, curr) =>
@@ -147,29 +148,36 @@ export class CnisAnalysisService {
 
     const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
 
-    const indicadoresDePendencia = this.calculateImpactoLiquidoDePendencias(
-      consolidadoTempoContribuicaoECarencia,
-    );
+    const indicadoresDePendencia =
+      this.calculateImpactoLiquidoDePendencias(consolidadoResumido);
+
+    const indicadoresDeIncapacidade =
+      this.calculateIncapacidade(consolidadoResumido);
+
+    const periodoDeGraca = this.calculatePeriodoDeGraca(consolidadoResumido);
+
+    const dataFinalDaQualidadedeDeSegurado =
+      this.calculateDataFinalDaQualidadedeDeSegurado(consolidadoResumido);
+
+    const calculateTempoTotalComRestricoes =
+      this.calculateTempoTotalComRestricoes(consolidadoResumido);
+
+    console.log(calculateTempoTotalComRestricoes);
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
+      tempoDeContribuicao,
+      concomitancia,
+      carenciaTotal: carencia,
       potencialValido,
       restritoValido,
       duracaoTotalEmDias,
       indicadoresDePendencia,
+      consolidadoResumido,
+      indicadoresDeIncapacidade,
+      periodoDeGraca,
+      dataFinalDaQualidadedeDeSegurado,
     });
-
-    if (data.affiliateIdentification) {
-      cnis.affiliateIdentification = data.affiliateIdentification;
-    }
-    if (Array.isArray(data.socialSecurityRelations)) {
-      cnis.socialSecurityRelations = data.socialSecurityRelations;
-    } else {
-      cnis.socialSecurityRelations = [];
-    }
-    // adicionar os dados calculados ao modelo de saída conforme necessário
-    // (por exemplo, como propriedades adicionais ou em uma estrutura separada)
-    // Aqui, apenas retornamos o modelo básico para simplificação
     return cnis;
   }
 
@@ -587,13 +595,42 @@ export class CnisAnalysisService {
     return [...relacionacoesPrincipaisFiltradas, ...relacionacoesSecundarios];
   }
 
-  private calculateAge(birthDate?: Date): number {
+  private calculateAge(birthDate?: Date): {
+    anos: number;
+    meses: number;
+    dias: number;
+    abreviado: string;
+  } {
     // Fórmula/Lógica: Idade = (Data do Extrato) - (Data de Nascimento)
+    // Resultado: Deve ser formatado em Anos, Meses e Dias (Xa Ym Zd).
     if (!birthDate) {
-      return 0;
+      return { anos: 0, meses: 0, dias: 0, abreviado: '0a 0m 0d' };
     }
-    const currentYear = new Date().getFullYear();
-    return currentYear - birthDate.getFullYear();
+
+    const today = new Date();
+    const nascimento = new Date(birthDate);
+
+    let anos = today.getFullYear() - nascimento.getFullYear();
+    let meses = today.getMonth() - nascimento.getMonth();
+    let dias = today.getDate() - nascimento.getDate();
+
+    if (dias < 0) {
+      meses--;
+      const ultimoDiaMesAnterior = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        0,
+      ).getDate();
+      dias += ultimoDiaMesAnterior;
+    }
+    const MONTHS_IN_YEAR = 12;
+
+    if (meses < 0) {
+      anos--;
+      meses += MONTHS_IN_YEAR;
+    }
+
+    return { anos, meses, dias, abreviado: `${anos}a ${meses}m ${dias}d` };
   }
 
   private calculateTimeContribution(
@@ -602,7 +639,9 @@ export class CnisAnalysisService {
     // 2.1. Cálculo do Tempo de Contribuição (por vínculo):
     // Descrição: Apurar a duração exata de cada vínculo previdenciário individualmente.
     // Fórmula/Lógica: (Data Fim - Data Início) + 1 dia.
-    //Resultado: Deve ser formatado em Anos, Meses e Dias (Xa Ym Zd).
+    // Resultado: Deve ser formatado em Anos, Meses e Dias (Xa Ym Zd).
+    // Regra adicional a partir de 01/11/2019:
+    // a Contagem deve ser feita  pelo mes cheio, mesmo que o mes inicio ou fim  do periodo do trabalho seja parcial.
 
     const calculatedContributionTimesResponse: TimeContributionInterface[] = [];
     data.socialSecurityRelations?.forEach((relation) => {
@@ -612,10 +651,15 @@ export class CnisAnalysisService {
       const seq = relation.socialSecurityAffiliationInfo.seq;
 
       let calculatedContributionTime: TimeContributionInterface = {
-        seq: seq ?? 1,
+        seq: seq ?? 0,
+        origemDoVinculo:
+          relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '',
+        tipoDoVinculo:
+          relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
+        indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
         data: {
-          dataInicio: startDate ?? undefined,
-          dataFim: endDate ?? undefined,
+          dataInicio: startDate ?? null,
+          dataFim: endDate ?? null,
           abreviado: '0a 0m 0d',
           dias: 0,
           meses: 0,
@@ -629,21 +673,21 @@ export class CnisAnalysisService {
         endDate instanceof Date &&
         !isNaN(endDate.getTime())
       ) {
-        const dateStartMoment = moment(startDate);
-        const dateEndMoment = moment(endDate);
-        const duration = moment.duration(dateEndMoment.diff(dateStartMoment));
-        const years = dateEndMoment.diff(dateStartMoment, 'years');
-        const months = dateEndMoment.diff(
-          dateStartMoment.clone().add(years, 'years'),
-          'months',
+        const { years, months, days, formatted } = diffYmdInclusive(
+          startDate,
+          endDate,
         );
-        const days = duration.days() + 1;
         calculatedContributionTime = {
-          seq: seq ?? 1,
+          seq: seq ?? 0,
+          origemDoVinculo:
+            relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '',
+          tipoDoVinculo:
+            relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
+          indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
           data: {
             dataInicio: startDate,
             dataFim: endDate,
-            abreviado: `${years}a ${months}m ${days}d`,
+            abreviado: formatted,
             dias: days,
             meses: months,
             anos: years,
@@ -656,18 +700,21 @@ export class CnisAnalysisService {
         !isNaN(startDate.getTime()) &&
         !endDate
       ) {
-        const dateStartMoment = moment(startDate);
-        const dateAtualMoment = moment(lastDateRemun);
-        const duration = moment.duration(dateAtualMoment.diff(dateStartMoment));
-        const years = duration.years();
-        const months = duration.months();
-        const days = duration.days() + 1;
+        const { years, months, days, formatted } = diffYmdInclusive(
+          startDate,
+          lastDateRemun,
+        );
         calculatedContributionTime = {
-          seq: seq ?? 1,
+          seq: seq ?? 0,
+          origemDoVinculo:
+            relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '',
+          tipoDoVinculo:
+            relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
+          indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
           data: {
             dataInicio: startDate,
             dataFim: lastDateRemun,
-            abreviado: `${years}a ${months}m ${days}d`,
+            abreviado: formatted,
             dias: days,
             meses: months,
             anos: years,
@@ -679,55 +726,59 @@ export class CnisAnalysisService {
     return calculatedContributionTimesResponse;
   }
 
-  private calculateCarencia(data: CnisOutputModel): CarenciaInterface[] {
-    // 2.2. Cálculo da Carência (por vínculo):
-    // Descrição: Contar o número de meses de carência para cada vínculo.
-    // Fórmula/Lógica: Contagem do número de meses-calendário distintos,
-    // mesmo que parcialmente trabalhados, dentro do intervalo do vínculo.
-    // Resultado: Um número inteiro de meses.
+  // private calculateCarencia(
+  //   seq: number,
+  //   startDateVinculo?: Date | null,
+  //   endDateVinculo?: Date | null,
+  //   lastDateRemunVinculo?: Date | null,
+  // ): CarenciaInterface {
+  //   // 2.2. Cálculo da Carência (por vínculo):
+  //   // Descrição: Contar o número de meses de carência para cada vínculo.
+  //   // Fórmula/Lógica: Contagem do número de meses-calendário distintos,
+  //   // mesmo que parcialmente trabalhados, dentro do intervalo do vínculo.
+  //   // Resultado: Um número inteiro de meses.
+  //   const startDate = startDateVinculo ?? null;
+  //   const endDate = endDateVinculo ?? lastDateRemunVinculo ?? null;
 
-    const carenciaCounts: CarenciaInterface[] = [];
-    data.socialSecurityRelations?.forEach((relation) => {
-      const startDate = relation.socialSecurityAffiliationInfo.dataInicio;
-      const endDate =
-        relation.socialSecurityAffiliationInfo.dataFim ??
-        relation.socialSecurityAffiliationInfo.ultRemun;
-      const seq = relation.socialSecurityAffiliationInfo.seq;
-      let carenciaCount = 0;
-      const NUMBER_MONTHS_IN_YEAR = 12;
-      if (
-        startDate instanceof Date &&
-        !isNaN(startDate.getTime()) &&
-        endDate instanceof Date &&
-        !isNaN(endDate.getTime())
-      ) {
-        const startYear = startDate.getFullYear();
-        const startMonth = startDate.getMonth();
-        const endYear = endDate.getFullYear();
-        const endMonth = endDate.getMonth();
-        carenciaCount =
-          (endYear - startYear) * NUMBER_MONTHS_IN_YEAR +
-          (endMonth - startMonth) +
-          1;
-      }
-      const carenciaEntry: CarenciaInterface = {
-        seq: seq ?? 1,
-        carenciaCount,
-      };
-      carenciaCounts.push(carenciaEntry);
-    });
-    return carenciaCounts;
-  }
+  //   const NUMBER_MONTHS_IN_YEAR = 12;
+  //   if (
+  //     startDate instanceof Date &&
+  //     !isNaN(startDate.getTime()) &&
+  //     endDate instanceof Date &&
+  //     !isNaN(endDate.getTime())
+  //   ) {
+  //     const startYear = startDate.getFullYear();
+  //     const startMonth = startDate.getMonth();
+  //     const endYear = endDate.getFullYear();
+  //     const endMonth = endDate.getMonth();
+  //     const carencia =
+  //       (endYear - startYear) * NUMBER_MONTHS_IN_YEAR +
+  //       (endMonth - startMonth) +
+  //       1;
+  //     return {
+  //       seq,
+  //       carencia: carencia >= 0 ? carencia : 0,
+  //     };
+  //   }
+  //   return {
+  //     seq,
+  //     carencia: 0,
+  //   };
+  // }
 
   private calculateConcomitancia(
     data: CnisOutputModel,
   ): ConcomitanciaInterface[] {
     // 2.3. Detecção de Sobreposição de Datas (Concomitância):
-    // Descrição: Comparar o período de cada vínculo com todos os outros para identificar sobreposições de dias.
-    // Fórmula/Lógica: Para cada par de vínculos (Vínculo A, Vínculo B), verificar se (Início_A <= Fim_B) e (Fim_A >= Início_B).
-    // Resultado: Uma marcação (flag) de "Concomitante (C)" para todos os vínculos envolvidos em sobreposição.
+    // Descrição: Comparar o período de cada
+    // vínculo com todos os outros para identificar sobreposições de dias.
+    // Fórmula/Lógica:
+    // Para cada par de vínculos (Vínculo A, Vínculo B),
+    // verificar se (Início_A <= Fim_B) e (Fim_A >= Início_B).
+    // Resultado: Uma marcação (flag) de "Concomitante (C)"
+    // para todos os vínculos envolvidos em sobreposição.
 
-    const concomitanciaRelations: ConcomitanciaInterface[] = [];
+    const concomitancia: ConcomitanciaInterface[] = [];
     const relations = data.socialSecurityRelations ?? [];
     relations.forEach((relationA, indexA) => {
       const startA = relationA.socialSecurityAffiliationInfo.dataInicio;
@@ -751,19 +802,19 @@ export class CnisAnalysisService {
         }
       });
 
-      const concomitanciaEntry: ConcomitanciaInterface = {
+      const concomitanciaEntradas: ConcomitanciaInterface = {
         seq,
         isConcomitante,
       };
-      concomitanciaRelations.push(concomitanciaEntry);
+      concomitancia.push(concomitanciaEntradas);
     });
-    return concomitanciaRelations;
+    return concomitancia;
   }
 
   private calculateConsolidadoTempoContribuicaoECarencia(
     temposContribuicao: TimeContributionInterface[],
-    carenciaCounts: CarenciaInterface[],
     concomitanciaRelations: ConcomitanciaInterface[],
+    carenciaTotal: CarenciaInterface[],
     data: CnisOutputModel,
   ): ConsolidadoRelationInterface[] {
     // 2.4. Cálculo Consolidado do Tempo de Contribuição e Carência (Total Anti-Duplicidade):
@@ -791,9 +842,8 @@ export class CnisAnalysisService {
         const seq = relation.socialSecurityAffiliationInfo.seq;
         const contributionTime: TimeContributionInterface['data'] | undefined =
           temposContribuicao.find((item) => item.seq === seq)?.data;
-        const carencia = carenciaCounts.find(
-          (item) => item.seq === seq,
-        )?.carenciaCount;
+        const carencia =
+          carenciaTotal.find((item) => item.seq === seq)?.carencia ?? 0;
         const isConcomitante = concomitanciaRelations.find(
           (item) => item.seq === seq,
         )?.isConcomitante;
@@ -882,7 +932,8 @@ export class CnisAnalysisService {
         };
 
       const carencia =
-        carenciaCounts.find((item) => item.seq === seq)?.carenciaCount ?? 0;
+        carenciaTotal.find((item) => item.seq === seq)?.carencia ?? 0;
+
       const isConcomitante = concomitanciaRelations.find(
         (item) => item.seq === seq,
       )?.isConcomitante;
@@ -905,6 +956,10 @@ export class CnisAnalysisService {
             ).data ?? contributionTime)
           : contributionTime;
 
+      const isBeneficio = this.isEspecieBeneficio(
+        relation.socialSecurityAffiliationInfo.especie,
+      );
+
       return {
         seq,
         indicadores,
@@ -913,6 +968,8 @@ export class CnisAnalysisService {
         validContributionTime,
         carencia,
         isConcomitante: isConcomitante ?? false,
+        isBeneficio,
+        isIntercalado: false,
         tipo: concomitanciaDetalhe?.tipo ?? 'principal',
         ajustado: concomitanciaDetalhe?.ajustado ?? false,
         dataAjustada: {
@@ -933,18 +990,16 @@ export class CnisAnalysisService {
       endDate instanceof Date &&
       !isNaN(endDate.getTime())
     ) {
-      const dateStartMoment = moment(startDate);
-      const dateEndMoment = moment(endDate);
-      const duration = moment.duration(dateEndMoment.diff(dateStartMoment));
-      const years = dateEndMoment.diff(dateStartMoment, 'years');
-      const months = dateEndMoment.diff(dateStartMoment, 'months');
-      const days = duration.days() + 1;
+      const { years, months, days, formatted } = diffYmdInclusive(
+        startDate,
+        endDate,
+      );
       return {
         seq,
         data: {
           dataInicio: startDate,
           dataFim: endDate,
-          abreviado: `${years}a ${months}m ${days}d`,
+          abreviado: formatted,
           dias: days,
           meses: months,
           anos: years,
@@ -1005,14 +1060,7 @@ export class CnisAnalysisService {
         };
       }
 
-      const dateStartMoment = moment(startDate);
-      const dateEndMoment = moment(endDate);
-      const duration = moment.duration(dateEndMoment.diff(dateStartMoment));
-      const years = dateEndMoment.diff(dateStartMoment, 'years');
-      const months =
-        dateEndMoment.diff(dateStartMoment, 'months') -
-        years * NUMBER_MONTHS_IN_YEAR;
-      const days = duration.days();
+      const { years, months, days } = diffYmdInclusive(startDate, endDate);
 
       const startYear = startDate.getFullYear();
       const startMonth = startDate.getMonth();
@@ -1034,5 +1082,345 @@ export class CnisAnalysisService {
     });
 
     return tempoTotal;
+  }
+  private isEspecieBeneficio(especie?: string | null): boolean {
+    const s = String(especie ?? '').trim();
+    if (!s) {
+      return false;
+    }
+    return especiesData.some((ind) => s.includes(ind.codigo));
+  }
+
+  private calculateIncapacidade(
+    consolidado: ConsolidadoRelationInterface[],
+  ): object[] {
+    // Cálculo da Intercalação: Verificar se um benefício por incapacidade é "intercalado".
+    // A lógica consiste em checar se existem contribuições (em outros vínculos)
+    // antes da Data de Início e depois da Data Fim do benefício.
+    // Ajuste de Tempo e Carência (Invalidação):
+    // Após identificar sobreposições entre vínculos de trabalho e
+    // benefícios por incapacidade, o tempo e a carência dos vínculos
+    // sobrepostos devem ser zerados. Este ajuste afeta
+    // diretamente o "Cálculo Consolidado" (item 2.4).
+
+    const indicadoresDeIncapacidade = consolidado.filter(
+      (item) =>
+        item.isBeneficio &&
+        item.contributionTime?.dataInicio !== null &&
+        item.contributionTime?.dataFim !== null,
+    );
+    for (const beneficio of indicadoresDeIncapacidade) {
+      const dataInicioBeneficio =
+        beneficio.contributionTime?.dataInicio ?? null;
+      const dataFimBeneficio = beneficio.contributionTime?.dataFim ?? null;
+
+      if (!dataInicioBeneficio || !dataFimBeneficio) {
+        beneficio.isIntercalado = true;
+        continue;
+      }
+
+      const hasBefore = consolidado.some((item) => {
+        const dataFimItem = item.contributionTime?.dataFim ?? null;
+        return (
+          item.seq !== beneficio.seq &&
+          dataFimItem !== null &&
+          dataFimItem < dataInicioBeneficio
+        );
+      });
+
+      const hasAfter = consolidado.some((item) => {
+        const dataInicioItem = item.contributionTime?.dataInicio ?? null;
+        return (
+          item.seq !== beneficio.seq &&
+          dataInicioItem !== null &&
+          dataInicioItem > dataFimBeneficio
+        );
+      });
+
+      beneficio.isIntercalado = hasBefore && hasAfter;
+      for (const item of consolidado) {
+        if (item.seq === beneficio.seq) {
+          continue;
+        }
+        const dataInicioItem = item.contributionTime?.dataInicio ?? null;
+        const dataFimItem = item.contributionTime?.dataFim ?? null;
+        if (!dataInicioItem || !dataFimItem) {
+          continue;
+        }
+
+        if (
+          dataInicioItem <= dataFimBeneficio &&
+          dataFimItem >= dataInicioBeneficio
+        ) {
+          item.contributionTime = {
+            dataInicio: null,
+            dataFim: null,
+            abreviado: '0a 0m 0d',
+            dias: 0,
+            meses: 0,
+            anos: 0,
+          };
+          item.carencia = 0;
+        }
+      }
+    }
+    return indicadoresDeIncapacidade;
+  }
+  private calculatePeriodoDeGraca(
+    consolidado: ConsolidadoRelationInterface[],
+  ): Record<string, unknown> {
+    const MONTHS_IN_YEAR = 12;
+    const NUMBER_MONTHS_THRESHOLD = 120;
+
+    const buildScenario = (
+      items: ConsolidadoRelationInterface[],
+      typeLabel: string,
+    ) => {
+      const seqsConsiderados = items.map((i) => i.seq);
+      const totalMonths = items.reduce(
+        (acc, cur) => acc + (cur.carencia ?? 0),
+        0,
+      );
+      const validIntervals = items
+        .map((it) => ({
+          seq: it.seq,
+          start: this.toDate(it.contributionTime?.dataInicio),
+          end: this.toDate(it.contributionTime?.dataFim),
+        }))
+        .filter(
+          (it): it is { seq: number; start: Date; end: Date } =>
+            it.start instanceof Date && it.end instanceof Date,
+        )
+        .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+      let continuous = true;
+      if (validIntervals.length === 0) {
+        continuous = false;
+      } else {
+        let prevEnd: Date = validIntervals[0]?.end ?? new Date();
+        for (let i = 1; i < validIntervals.length; i++) {
+          const current = validIntervals[i];
+          if (!current) {
+            continuous = false;
+            break;
+          }
+          const monthsGap =
+            (current.start.getFullYear() - prevEnd?.getFullYear()) *
+              MONTHS_IN_YEAR +
+            (current.start.getMonth() - prevEnd.getMonth());
+          if (monthsGap > MONTHS_IN_YEAR) {
+            continuous = false;
+            break;
+          }
+          if (current.end.getTime() > prevEnd.getTime()) {
+            prevEnd = current.end;
+          }
+        }
+      }
+
+      const continuousMonths = continuous ? totalMonths : 0;
+      const atingiu120 = totalMonths >= NUMBER_MONTHS_THRESHOLD;
+
+      return {
+        type: typeLabel,
+        'Vínculos Considerados': seqsConsiderados,
+        'Total de Contribuições (meses)': totalMonths,
+        'Total de Contribuições Contínuas (meses, 0 se houver hiato >12m)':
+          continuousMonths,
+        'Atingiu 120 Contribuições?': atingiu120 ? 'Sim' : 'Não',
+        'Direito à Prorrogação de +12 meses no Período de Graça': atingiu120
+          ? 'Sim'
+          : 'Não',
+      };
+    };
+
+    const semPendenciasItems = consolidado.filter(
+      (item) => !item.isPendencia && (item.carencia ?? 0) > 0,
+    );
+
+    const totalItems = consolidado.filter((item) => (item.carencia ?? 0) > 0);
+
+    const cenarioSemPendencias = buildScenario(
+      semPendenciasItems,
+      'Períodos Atuais (sem pendências)',
+    );
+    const cenarioTotal = buildScenario(
+      totalItems,
+      'Períodos Potenciais (com pendências resolvidas)',
+    );
+
+    return {
+      cenarios: [cenarioSemPendencias, cenarioTotal],
+    };
+  }
+
+  private calculateCarenciaTotal(
+    data: TimeContributionInterface[],
+  ): CarenciaInterface[] {
+    const monthsAssigned = new Set<string>();
+    const carenciaSeq: CarenciaInterface[] = [];
+
+    const itemsSorted = [...data].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
+
+    for (const item of itemsSorted) {
+      const seq = item.seq;
+      const startDate = this.toDate(item.data?.dataInicio);
+      const endDate = this.toDate(item.data?.dataFim);
+
+      if (!startDate || !endDate || startDate.getTime() > endDate.getTime()) {
+        carenciaSeq.push({ seq, carencia: 0 });
+        continue;
+      }
+
+      const monthsThisSeq = new Set<string>();
+      const current = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        1,
+      );
+      const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+
+      while (current <= end) {
+        const monthKey = `${current.getFullYear()}-${String(
+          current.getMonth() + 1,
+        ).padStart(2, '0')}`;
+        monthsThisSeq.add(monthKey);
+        current.setMonth(current.getMonth() + 1);
+      }
+
+      let newlyAdded = 0;
+      for (const m of monthsThisSeq) {
+        if (!monthsAssigned.has(m)) {
+          monthsAssigned.add(m);
+          newlyAdded++;
+        }
+      }
+      carenciaSeq.push({ seq, carencia: newlyAdded });
+    }
+
+    return carenciaSeq;
+  }
+
+  private calculateDataFinalDaQualidadedeDeSegurado(
+    data: ConsolidadoRelationInterface[],
+  ): ManutencaoInterface[] {
+    // O algoritmo deve seguir este fluxo:
+    // Identificar Hiatos: Percorra a lista de vínculos ordenados. Compare a Data Fim do vínculo N com a Data Início do vínculo N+1. Se houver um intervalo de tempo entre elas, um "hiato" foi encontrado.
+    // Calcular o Período de Graça para cada Hiato: Para cada hiato encontrado, execute o seguinte cálculo:
+    // a. Ponto de Partida: A "última referência" é a Data Fim do vínculo N.
+    // b. Termo Inicial da Contagem: A contagem do período de graça começa sempre no dia 1º do mês seguinte à última referência.
+    // c. Período Base (12 meses): O período de graça padrão é de 12 meses.
+    // d. Verificação de Prorrogações:
+    // +12 meses por +120 Contribuições: Verifique se o segurado possui 120 ou mais contribuições (carência) sem ter perdido a
+    // qualidade de segurado entre elas até aquele ponto. Se sim, o período de graça base sobe para 24 meses.
+    // (Isso gera a necessidade de uma subtabela de análise, que veremos a seguir).
+    // e. Calcular a Data Final da Qualidade de Segurado: Com base no período de graça total (12, 24 ou 36 meses), calcule a data limite.
+    //  Atenção à diferença de contagem:
+    // Contagem Administrativa (INSS):
+    //  A perda ocorre no dia 16 do 2º mês seguinte ao término do prazo nominal (ex: para 12 meses, a perda ocorre em 16/Fevereiro do ano seguinte).
+    // Contagem Judicial (Tese "Meses Cheios"):
+    //  A perda ocorre no dia 16 do 2º mês seguinte ao término do prazo estendido em mais um mês (ex: para 12 meses, a perda ocorre em 16/Março do ano seguinte).
+    // Conclusão da Análise: Compare a Data Início do vínculo N+1 com as duas datas finais calculadas (Administrativa e Judicial).
+    // Se a Data Início do vínculo N+1 for anterior ou igual à data final da qualidade de segurado, a qualidade foi MANTIDA.
+    // Se for posterior, a qualidade foi PERDIDA naquele hiato.
+    // {
+    //  periodo_analisado : ' Entre Seq. 1 e 2',
+    //  ultima_referencia: 'Data Fim do vínculo N',
+    //  proximo_vinculo: 'Data Início do vínculo N+1',
+    //  data_final_qualidade_segurado_administrativa: 'DD/MM/AAAA', -- : Perda no dia 16 do 2º mês seguinte ao fim do prazo.
+    //  data_final_qualidade_segurado_judicial: 'DD/MM/AAAA', -- Perda no dia 16 do 2º mês seguinte ao fim do prazo + 1 mês.
+    //  qualidade_segurado_foi_mantida: 'Sim' | 'Não',
+    // }
+    const DECIMO_SEXTO_DIA = 16;
+    const PERIODO_DE_GRACA_PADRAO = 12;
+    const PERIODO_DE_GRACA_AUMENTADO = 24;
+    const CONTRIBUICOES_MINIMAS = 120;
+
+    data.sort((a, b) => {
+      const aStart = this.toDate(a.contributionTime?.dataInicio);
+      const bStart = this.toDate(b.contributionTime?.dataInicio);
+      if (aStart && bStart) {
+        return aStart.getTime() - bStart.getTime();
+      }
+      return 0;
+    });
+
+    const resultados: ManutencaoInterface[] = [];
+
+    for (let i = 0; i < data.length - 1; i++) {
+      const vinculoAtual = data[i];
+      const vinculoProximo = data[i + 1];
+
+      const dataFimAtual = this.toDate(vinculoAtual?.contributionTime?.dataFim);
+      const dataInicioProximo = this.toDate(
+        vinculoProximo?.contributionTime?.dataInicio,
+      );
+
+      if (!dataFimAtual || !dataInicioProximo) {
+        continue;
+      }
+
+      const hiatoDias = this.daysBetween(dataFimAtual, dataInicioProximo);
+      if (hiatoDias <= 1) {
+        continue;
+      }
+
+      const ultimaReferencia = new Date(dataFimAtual);
+      const termoInicialContagem = this.daysBeforeOrAfter(
+        new Date(
+          ultimaReferencia.getFullYear(),
+          ultimaReferencia.getMonth() + 1,
+          1,
+        ),
+        'after',
+      );
+
+      const carenciaTotal = data.reduce(
+        (acc, cur) => acc + (cur.carencia ?? 0),
+        0,
+      );
+      let periodoDeGracaMeses = PERIODO_DE_GRACA_PADRAO;
+      if (carenciaTotal >= CONTRIBUICOES_MINIMAS) {
+        periodoDeGracaMeses = PERIODO_DE_GRACA_AUMENTADO;
+      }
+
+      const dataFinalAdministrativa = new Date(
+        termoInicialContagem.getFullYear(),
+        termoInicialContagem.getMonth() + periodoDeGracaMeses + 1,
+        DECIMO_SEXTO_DIA,
+      );
+      const dataFinalJudicial = new Date(
+        termoInicialContagem.getFullYear(),
+        termoInicialContagem.getMonth() + periodoDeGracaMeses + 2,
+        DECIMO_SEXTO_DIA,
+      );
+
+      const qualidadeMantida = dataInicioProximo <= dataFinalAdministrativa;
+
+      const register: ManutencaoInterface = {
+        periodo_analisado: `Entre Seq. ${vinculoAtual?.seq} e ${vinculoProximo?.seq}`,
+        ultima_referencia: ultimaReferencia.toISOString().split('T')[0] ?? '',
+        proximo_vinculo: dataInicioProximo.toISOString().split('T')[0] ?? '',
+        data_final_qualidade_segurado_administrativa:
+          dataFinalAdministrativa.toISOString().split('T')[0] ?? '',
+        data_final_qualidade_segurado_judicial:
+          dataFinalJudicial.toISOString().split('T')[0] ?? '',
+        qualidade_segurado_foi_mantida: qualidadeMantida ? true : false,
+      };
+
+      resultados.push(register);
+    }
+
+    return resultados;
+  }
+
+  private calculateTempoTotalComRestricoes(
+    data: ConsolidadoRelationInterface[],
+  ) {
+    // 4.3. Análise de Contribuições no Plano Simplificado:
+    // Cálculo do Tempo Total com Restrição (IREC-LC123/MEI):
+    // Descrição: Somar o tempo de todos os vínculos que foram contribuídos com alíquota reduzida.
+    // Fórmula/Lógica: Soma(tempoCalculado de todos os vínculos com indicador 'IREC-LC123' ou 'IREC-MEI').
+    return data;
   }
 }

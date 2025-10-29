@@ -411,7 +411,7 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
       {
         sourceKey: 'Últ. Remun.',
         destinyKey: 'ultRemun',
-        transformMethod: (v) => moment(v, 'MM/YYYY').toDate(),
+        transformMethod: (v) => moment(v, 'MM/YYYY').endOf('month').toDate(),
       },
       {
         sourceKey: 'Indicadores',

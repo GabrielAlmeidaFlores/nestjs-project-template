@@ -9,5 +9,8 @@ export interface TimeContributionDataInterface {
 
 export interface TimeContributionInterface {
   seq: number;
+  origemDoVinculo?: string;
+  tipoDoVinculo?: string;
+  indicadores?: string | null;
   data?: TimeContributionDataInterface;
 }
