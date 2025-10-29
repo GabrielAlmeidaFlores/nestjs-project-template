@@ -17,7 +17,8 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
-import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record.query.result';
+import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
 @Injectable()
@@ -41,20 +42,7 @@ export class AnalysisToolRecordTypeormQueryRepository
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   > {
-    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {};
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = {
-        analysisToolClient: true,
-        createdBy: {
-          customer: true,
-        },
-        updatedBy: {
-          customer: true,
-        },
-      } as never;
-    }
+    const relationsClause = this.getRelationsClauseOperation();
 
     const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
       where: [],
@@ -171,6 +159,45 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
+  public async findByAnalysisToolClientAndOrganizationIdWithRelations(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]> {
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      this.getEntityRelationsKey().map((key) => ({
+        [key]: {
+          analysisToolClient: {
+            id: analysisToolClientId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      }));
+
+    const relationsClause = this.getRelationsClauseOperation();
+
+    const data = await this.find({
+      where: whereClause,
+      relations: relationsClause,
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findOneByIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
@@ -193,19 +220,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
       }));
 
-    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {};
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = {
-        createdBy: {
-          customer: true,
-        },
-        updatedBy: {
-          customer: true,
-        },
-      } as never;
-    }
+    const relationsClause = this.getRelationsClauseOperation();
 
     const data = await this.findOneOrFail(
       {
@@ -222,6 +237,55 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  public async countAnalysisByAnalysisToolClientId(
+    organizationId: OrganizationId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number> {
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      this.getEntityRelationsKey().map((key) => ({
+        [key]: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          analysisToolClient: {
+            id: analysisToolClientId.toString(),
+          },
+        },
+      }));
+
+    const total = await this.count({
+      where: whereClause,
+    });
+
+    return total;
+  }
+
+  private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
+    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
+      {};
+
+    for (const key of this.getEntityRelationsKey()) {
+      relationsClause[key] = {
+        analysisToolClient: true,
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      } as never;
+    }
+
+    return relationsClause;
   }
 
   private getEntityRelationsKey(): 'cnisFastAnalysis'[] {

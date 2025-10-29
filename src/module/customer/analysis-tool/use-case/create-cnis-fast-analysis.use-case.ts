@@ -6,14 +6,14 @@ import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
-import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
+import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
 import { CnisFastAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/command/cnis-fast-analysis-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
-import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
+import { CnisFastAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
 import { CnisFastAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
@@ -39,8 +39,8 @@ export class CreateCnisFastAnalysisUseCase {
     private readonly cnisFastAnalysisCommandRepositoryGateway: CnisFastAnalysisCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
-    private readonly cnisFastAnalysisInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    @Inject(CnisFastAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly cnisFastAnalysisInssBenefitCommandRepositoryGateway: CnisFastAnalysisInssBenefitCommandRepositoryGateway,
     @Inject(CnisFastAnalysisLegalProceedingCommandRepositoryGateway)
     private readonly cnisFastAnalysisLegalProceedingCommandRepositoryGateway: CnisFastAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -108,7 +108,7 @@ export class CreateCnisFastAnalysisUseCase {
     const cnisFastAnalysisInssBenefit =
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
-            return new AnalysisToolClientInssBenefitEntity({
+            return new CnisFastAnalysisInssBenefitEntity({
               inssBenefitNumber: value,
               cnisFastAnalysis,
             });
@@ -150,7 +150,7 @@ export class CreateCnisFastAnalysisUseCase {
 
   private async createOnDatabase(
     cnisFastAnalysis: CnisFastAnalysisEntity,
-    cnisFastAnalysisInssBenefit: AnalysisToolClientInssBenefitEntity[],
+    cnisFastAnalysisInssBenefit: CnisFastAnalysisInssBenefitEntity[],
     cnisFastAnalysisLegalProceeding: CnisFastAnalysisLegalProceedingEntity[],
     analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {

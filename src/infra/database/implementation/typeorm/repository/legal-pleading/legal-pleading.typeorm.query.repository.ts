@@ -12,6 +12,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 
 @Injectable()
@@ -28,6 +29,7 @@ export class LegalPleadingTypeormQueryRepository
   ) {
     super(repository);
   }
+
   public async listByOrganizationId(
     organizationId: OrganizationId,
     listData: ListLegalPleadingQueryParam,
@@ -78,6 +80,8 @@ export class LegalPleadingTypeormQueryRepository
       where,
       relations: {
         analysisToolClient: {
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
           createdBy: {
             customer: true,
           },
@@ -110,6 +114,59 @@ export class LegalPleadingTypeormQueryRepository
       resource,
     });
   }
+
+  public async findByAnalysisToolClientAndOrganizationId(
+    analysisToolClientId: AnalysisToolClientId,
+    organizationId: OrganizationId,
+  ): Promise<GetLegalPleadingWithRelationsQueryResult[]> {
+    const data = await this.find({
+      where: {
+        analysisToolClient: {
+          id: analysisToolClientId.toString(),
+        },
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: {
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
+        },
+        legalPleadingAddress: true,
+        legalPleadingDocument: {
+          legalPleadingDocumentAnalysis: true,
+        },
+        legalPleadingResult: true,
+        createdBy: {
+          customer: true,
+        },
+        updatedBy: {
+          customer: true,
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      LegalPleadingTypeormEntity,
+      GetLegalPleadingWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findOneByLegalPleadingAndOrganizationIdOrFail(
     id: LegalPleadingId,
     organizationId: OrganizationId,
@@ -138,6 +195,8 @@ export class LegalPleadingTypeormQueryRepository
             updatedBy: {
               customer: true,
             },
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
           },
           legalPleadingAddress: true,
           legalPleadingDocument: {
@@ -169,6 +228,31 @@ export class LegalPleadingTypeormQueryRepository
   ): Promise<number> {
     const total = await this.count({
       where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+    });
+
+    return total;
+  }
+
+  public async countByLegalPleadingIdAndOrganizationId(
+    organizationId: OrganizationId,
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<number> {
+    const total = await this.count({
+      where: {
+        analysisToolClient: {
+          id: analysisToolClientId.toString(),
+        },
         createdBy: {
           organization: {
             id: organizationId.toString(),
