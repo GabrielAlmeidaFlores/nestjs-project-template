@@ -49,7 +49,10 @@ export class CnisFastAnalysisTypeormQueryRepository
       relations: {
         cnisFastAnalysisInssBenefit: true,
         cnisFastAnalysisLegalProceeding: true,
-        analysisToolClient: true,
+        analysisToolClient: {
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
         cnisFastAnalysisResult: true,
         createdBy: {
           customer: true,
