@@ -107,6 +107,8 @@ export class CnisFastAnalysisTypeormQueryRepository
             updatedBy: {
               customer: true,
             },
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
           },
           cnisFastAnalysisResult: true,
           createdBy: {
