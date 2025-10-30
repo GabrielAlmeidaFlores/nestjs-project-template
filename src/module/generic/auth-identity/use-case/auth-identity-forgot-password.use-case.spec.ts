@@ -1,100 +1,300 @@
-import { Test } from '@nestjs/testing';
+import * as testing from '@nestjs/testing';
 
-import { Email } from '@core/domain/schema/value-object/email/email.value-object';
-import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
+import { GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-responsible-and-client-relations.query.result';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
+import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
+import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
+import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/delete-cnis-fast-analysis.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
-import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
-import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
-import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
-import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
-import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-describe(AuthIdentityForgotPasswordUseCase.name, () => {
-  let useCase: AuthIdentityForgotPasswordUseCase;
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
 
-  const authIdentityQueryRepositoryGateway: jest.Mocked<AuthIdentityQueryRepositoryGateway> =
+const mockDeleteCnisFastAnalysisUseCase = {
+  execute: jest.fn(),
+};
+
+describe(DeleteAnalysisToolRecordUseCase.name, () => {
+  let useCase: DeleteAnalysisToolRecordUseCase;
+
+  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
-      findOneAuthIdentityById: jest.fn(),
+      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByOrganizationMemberId: jest.fn(),
+      findOneByCustomerAndOrganizationId: jest.fn(),
+      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
     };
 
-  const emailForgotPassword: jest.Mocked<EmailForgotPasswordGateway> = {
-    generatePersistAndSendForgotPasswordCode: jest.fn(),
-    validateForgotPasswordCode: jest.fn(),
-    invalidateForgotPasswordCode: jest.fn(),
-  };
+  const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
+    {
+      findOneByIdWithRelationsOrFail: jest.fn(),
+      countByOrganizationId: jest.fn(),
+      listByOrganizationId: jest.fn(),
+      countAnalysisByAnalysisToolClientId: jest.fn(),
+      findByAnalysisToolClientAndOrganizationIdWithRelations: jest.fn(),
+    };
 
-  const buildDto = (): AuthIdentityForgotPasswordRequestDto =>
-    AuthIdentityForgotPasswordRequestDto.build({
-      email: new Email('usuario@teste.com'),
+  const analysisToolRecordCommandRepositoryGateway: jest.Mocked<AnalysisToolRecordCommandRepositoryGateway> =
+    {
+      deleteAnalysisToolRecord: jest.fn(),
+      createAnalysisToolRecord: jest.fn(),
+    };
+
+  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
+    {
+      execute: jest.fn(),
+    };
+
+  const buildSessionData = (): SessionDataModel =>
+    SessionDataModel.build({
+      authIdentityId: new AuthIdentityId(),
+      sessionId: new Guid(),
+      userLevel: UserLevelEnum.CUSTOMER,
     });
 
-  const buildAuthIdentityQueryResult = (): GetAuthIdentityQueryResult =>
-    GetAuthIdentityQueryResult.build({
-      id: new AuthIdentityId(),
-      email: new Email('usuario@teste.com'),
-      federalDocument: new FederalDocument('111.111.111-11'),
-      password: new HashedPassword('senha-hash'),
-      authenticatorAppSecret: null,
+  const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
+    OrganizationSessionDataModel.build({
+      organizationId: new OrganizationId(),
+    });
+
+  const buildOrganizationMember = (): GetOrganizationMemberQueryResult =>
+    ({
+      id: new OrganizationMemberId(),
+    }) as unknown as GetOrganizationMemberQueryResult;
+
+  const buildAnalysisToolRecordQueryResult = (
+    options: { withCnisAnalysis?: boolean } = {},
+  ): GetAnalysisToolRecordWithRelationsQueryResult => {
+    const customerMock = GetCustomerQueryResult.build({
+      id: new CustomerId(),
+      name: 'Test Customer',
+      profilePicture: null,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
     });
 
+    const responsibleMock =
+      GetOrganizationMemberWithCustomerRelationQueryResult.build({
+        id: new OrganizationMemberId(),
+        owner: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        customer: customerMock,
+      });
+
+    const clientMock = GetAnalysisToolClientQueryResult.build({
+      id: new AnalysisToolClientId(),
+      name: 'Test Client',
+      federalDocument: null,
+      email: null,
+      phoneNumber: null,
+      birthDate: null,
+      gender: null,
+      clientType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+    const cnisFastAnalysisMock =
+      options.withCnisAnalysis === true
+        ? GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult.build(
+            {
+              id: new CnisFastAnalysisId(),
+              cnisDocument: null,
+              status: AnalysisStatusEnum.COMPLETED,
+              analysisToolClient: clientMock,
+              createdBy: responsibleMock,
+              updatedBy: responsibleMock,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              deletedAt: null,
+            },
+          )
+        : null;
+
+    return GetAnalysisToolRecordWithRelationsQueryResult.build({
+      id: new AnalysisToolRecordId(),
+      code: new AnalysisToolRecordCode(1),
+      type: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
+      cnisFastAnalysis: cnisFastAnalysisMock,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+  };
+
+  const buildTransaction = (): jest.Mocked<TransactionOutputModel> =>
+    new TransactionOutputModel(
+      jest.fn().mockResolvedValue(undefined),
+      jest.fn().mockResolvedValue(undefined),
+    ) as jest.Mocked<TransactionOutputModel>;
+
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
+    const module = await testing.Test.createTestingModule({
       providers: [
-        AuthIdentityForgotPasswordUseCase,
+        DeleteAnalysisToolRecordUseCase,
         {
-          provide: AuthIdentityQueryRepositoryGateway,
-          useValue: authIdentityQueryRepositoryGateway,
+          provide: DeleteCnisFastAnalysisUseCase,
+          useValue: mockDeleteCnisFastAnalysisUseCase,
         },
         {
-          provide: EmailForgotPasswordGateway,
-          useValue: emailForgotPassword,
+          provide: OrganizationMemberQueryRepositoryGateway,
+          useValue: organizationMemberQueryRepositoryGateway,
+        },
+        {
+          provide: AnalysisToolRecordQueryRepositoryGateway,
+          useValue: analysisToolRecordQueryRepositoryGateway,
+        },
+        {
+          provide: AnalysisToolRecordCommandRepositoryGateway,
+          useValue: analysisToolRecordCommandRepositoryGateway,
+        },
+        {
+          provide: BaseTransactionRepositoryGateway,
+          useValue: baseTransactionRepositoryGateway,
         },
       ],
     }).compile();
 
-    useCase = module.get(AuthIdentityForgotPasswordUseCase);
+    useCase = module.get(DeleteAnalysisToolRecordUseCase);
     jest.clearAllMocks();
   });
 
-  it('deve chamar o gateway de e-mail quando o usuário for encontrado', async () => {
-    const dto = buildDto();
-    const authIdentity = buildAuthIdentityQueryResult();
+  it('deve deletar um registro e a análise CNIS associada', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const analysisToolRecordId = new AnalysisToolRecordId();
+    const organizationMember = buildOrganizationMember();
+    const recordQueryResult = buildAnalysisToolRecordQueryResult({
+      withCnisAnalysis: true,
+    });
+    const transaction = buildTransaction();
 
-    authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
-      authIdentity,
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      organizationMember,
     );
-    emailForgotPassword.generatePersistAndSendForgotPasswordCode.mockResolvedValueOnce(
-      undefined,
+    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+      recordQueryResult,
+    );
+    mockDeleteCnisFastAnalysisUseCase.execute.mockResolvedValueOnce(undefined);
+    analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord.mockReturnValue(
+      {} as TransactionType,
+    );
+    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
+
+    const result = await useCase.execute(
+      sessionData,
+      orgSessionData,
+      analysisToolRecordId,
     );
 
-    await useCase.execute(dto);
+    expect(result).toBeInstanceOf(DeleteAnalysisToolRecordResponseDto);
+    expect(result.analysisToolRecordId).toBe(recordQueryResult.id);
 
     expect(
-      authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenCalledWith(dto.email);
+      analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+    ).toHaveBeenCalledWith(
+      analysisToolRecordId,
+      orgSessionData.organizationId,
+      AnalysisToolRecordNotFoundError,
+    );
+    expect(mockDeleteCnisFastAnalysisUseCase.execute).toHaveBeenCalledTimes(1);
+    expect(mockDeleteCnisFastAnalysisUseCase.execute).toHaveBeenCalledWith(
+      sessionData,
+      orgSessionData,
+      recordQueryResult.cnisFastAnalysis?.id,
+    );
     expect(
-      emailForgotPassword.generatePersistAndSendForgotPasswordCode,
-    ).toHaveBeenCalledWith(authIdentity.id, dto.email);
+      analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord,
+    ).toHaveBeenCalledWith(recordQueryResult.id);
+    expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar WrongSignInCredentialsError quando o usuário não for encontrado', async () => {
-    const dto = buildDto();
+  it('deve deletar um registro sem chamar a deleção de CNIS se não houver associação', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const analysisToolRecordId = new AnalysisToolRecordId();
+    const organizationMember = buildOrganizationMember();
+    const recordQueryResult = buildAnalysisToolRecordQueryResult({
+      withCnisAnalysis: false,
+    });
+    const transaction = buildTransaction();
 
-    authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      organizationMember,
+    );
+    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+      recordQueryResult,
+    );
+    analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord.mockReturnValue(
+      {} as TransactionType,
+    );
+    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
+
+    await useCase.execute(sessionData, orgSessionData, analysisToolRecordId);
+
+    expect(mockDeleteCnisFastAnalysisUseCase.execute).not.toHaveBeenCalled();
+    expect(
+      analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord,
+    ).toHaveBeenCalledTimes(1);
+    expect(transaction.commit).toHaveBeenCalledTimes(1);
+  });
+
+  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const analysisToolRecordId = new AnalysisToolRecordId();
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
-    await expect(useCase.execute(dto)).rejects.toBeInstanceOf(
-      WrongSignInCredentialsError,
+    await expect(
+      useCase.execute(sessionData, orgSessionData, analysisToolRecordId),
+    ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
+  });
+
+  it('deve lançar AnalysisToolRecordNotFoundError se o registro não for encontrado', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const analysisToolRecordId = new AnalysisToolRecordId();
+    const organizationMember = buildOrganizationMember();
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+      organizationMember,
     );
-    expect(
-      emailForgotPassword.generatePersistAndSendForgotPasswordCode,
-    ).not.toHaveBeenCalled();
+    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockRejectedValueOnce(
+      new AnalysisToolRecordNotFoundError(),
+    );
+
+    await expect(
+      useCase.execute(sessionData, orgSessionData, analysisToolRecordId),
+    ).rejects.toBeInstanceOf(AnalysisToolRecordNotFoundError);
   });
 });
