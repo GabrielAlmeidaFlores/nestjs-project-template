@@ -21,6 +21,7 @@ export class EmailForgotPasswordService implements EmailForgotPasswordGateway {
 
   public async generatePersistAndSendForgotPasswordCode(
     authIdentity: AuthIdentityId,
+    authIdentityName: string,
     authIdentityEmail: Email,
   ): Promise<void> {
     const code = this.generateCode();
@@ -42,6 +43,7 @@ export class EmailForgotPasswordService implements EmailForgotPasswordGateway {
         to: authIdentityEmail.toString(),
         emailTemplateParameters: {
           code,
+          name: authIdentityName,
         },
       }),
     );

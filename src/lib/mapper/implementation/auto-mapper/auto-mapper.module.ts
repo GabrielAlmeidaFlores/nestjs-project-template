@@ -14,6 +14,7 @@ import { AnalysisToolRecordEntityAutoMapperProfile } from '@lib/mapper/implement
 import { GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-relations-query-result.auto-mapper.profile';
 import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
 import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
+import { GetAuthIdentityWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-with-relations-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
 import { GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-responsible-and-client-relations-query-result.auto-mapper.profile';
@@ -106,6 +107,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     AnalysisToolClientInssBenefitEntityAutoMapperProfile,
     GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile,
     AnalysisToolClientLegalProceedingEntityAutoMapperProfile,
+    GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

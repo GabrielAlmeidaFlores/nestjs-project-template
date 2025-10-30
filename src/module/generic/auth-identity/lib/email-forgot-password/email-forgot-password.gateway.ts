@@ -4,6 +4,7 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 export abstract class EmailForgotPasswordGateway {
   public abstract generatePersistAndSendForgotPasswordCode(
     authIdentity: AuthIdentityId,
+    authIdentityName: string,
     authIdentityEmail: Email,
   ): Promise<void>;
 

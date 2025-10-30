@@ -95,8 +95,30 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
+      const email = dto.email;
+
+      if (!email) {
+        throw new Error('erro aqui');
+      }
+
+      const authIdentityWithRelations =
+        await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityWithRelationsByEmailOrFederalDocument(
+          email,
+        );
+
+      const authIdentityWithRelationsName =
+        authIdentityWithRelations?.customer.name;
+
+      if (
+        authIdentityWithRelationsName === undefined ||
+        authIdentityWithRelationsName.trim() === ''
+      ) {
+        throw new WrongSignInCredentialsError();
+      }
+
       await this.emailMFAGateway.generatePersistAndSendSignInCode(
         authIdentity.id,
+        authIdentityWithRelationsName,
         authIdentity.email,
       );
     }
