@@ -67,15 +67,12 @@ export class GetAnalysisToolClientQueryResultAutoMapperProfile {
       const email = source.email !== null ? source.email.toString() : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
-      const inssPassword =
-        source.inssPassword !== null ? source.inssPassword.toString() : null;
 
       return AnalysisToolClientTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         federalDocument,
         email,
-        inssPassword,
         phoneNumber,
       });
     };
