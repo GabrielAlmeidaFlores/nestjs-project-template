@@ -30,9 +30,9 @@ export class AuthIdentityForgotPasswordUseCase {
       throw new WrongSignInCredentialsError();
     }
 
-    const authIdentityName = authIdentity.customer.name;
+    const authIdentityName = authIdentity.customer?.name;
 
-    if (!authIdentityName) {
+    if (authIdentityName === undefined) {
       throw new WrongSignInCredentialsError();
     }
 
