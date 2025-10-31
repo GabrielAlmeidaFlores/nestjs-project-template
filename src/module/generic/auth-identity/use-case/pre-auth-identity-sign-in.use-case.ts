@@ -95,15 +95,15 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
-      const authIdentityWithRelationsName = authIdentity.customer?.name;
+      const authIdentityName = authIdentity.customer?.name;
 
-      if (authIdentityWithRelationsName === undefined) {
+      if (authIdentityName === undefined) {
         throw new WrongSignInCredentialsError();
       }
 
       await this.emailMFAGateway.generatePersistAndSendSignInCode(
         authIdentity.id,
-        authIdentityWithRelationsName,
+        authIdentityName,
         authIdentity.email,
       );
     }
