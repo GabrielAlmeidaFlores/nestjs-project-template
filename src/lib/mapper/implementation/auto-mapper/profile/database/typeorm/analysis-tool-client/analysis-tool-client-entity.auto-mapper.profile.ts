@@ -70,6 +70,8 @@ export class AnalysisToolClientEntityAutoMapperProfile {
       const email = source.email !== null ? source.email.toString() : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
+      const inssPassword =
+        source.inssPassword !== null ? source.inssPassword.toString() : null;
 
       const createdBy = {
         id: source.createdBy.toString(),
@@ -84,6 +86,7 @@ export class AnalysisToolClientEntityAutoMapperProfile {
         id: source.id.toString(),
         federalDocument,
         email,
+        inssPassword,
         phoneNumber,
         createdBy,
         updatedBy,

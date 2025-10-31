@@ -11,6 +11,7 @@ export interface AnalysisToolClientEntityPropsInterface
   extends BaseEntityPropsInterface<AnalysisToolClientId> {
   name?: string | null;
   federalDocument?: FederalDocument | null;
+  inssPassword?: string | null;
   birthDate?: Date | null;
   gender?: GenderEnum | null;
   email?: Email | null;
