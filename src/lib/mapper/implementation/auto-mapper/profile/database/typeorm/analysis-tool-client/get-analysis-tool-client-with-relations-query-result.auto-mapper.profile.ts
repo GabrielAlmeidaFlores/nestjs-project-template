@@ -112,6 +112,8 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
       const email = source.email !== null ? source.email.toString() : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
+      const inssPassword =
+        source.inssPassword !== null ? source.inssPassword.toString() : null;
 
       const updatedBy = this.mapper.map(
         source.updatedBy,
@@ -142,6 +144,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         id: source.id.toString(),
         federalDocument,
         email,
+        inssPassword,
         phoneNumber,
         updatedBy,
         createdBy,
