@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { PreAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/pre-auth-identity-sign-in.request.dto';
 import {
   PreAuthIdentityAuthenticatorDataSignInResponseDto,
@@ -48,7 +48,7 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityWithRelationsByEmailOrFederalDocument(
         identifier,
       );
 
@@ -95,8 +95,15 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
+      const authIdentityName = authIdentity.customer?.name;
+
+      if (authIdentityName === undefined) {
+        throw new WrongSignInCredentialsError();
+      }
+
       await this.emailMFAGateway.generatePersistAndSendSignInCode(
         authIdentity.id,
+        authIdentityName,
         authIdentity.email,
       );
     }
@@ -107,7 +114,7 @@ export class PreAuthIdentitySignInUseCase {
   }
 
   private async generateAuthenticatorSecret(
-    authIdentity: GetAuthIdentityQueryResult,
+    authIdentity: GetAuthIdentityWithRelationsQueryResult,
   ): Promise<AuthenticatorCredentialsOutputModel> {
     const authenticatorCredentials =
       await this.authenticatorGateway.generateCredentials(
