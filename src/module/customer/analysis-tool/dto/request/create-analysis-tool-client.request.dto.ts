@@ -18,6 +18,9 @@ export class CreateAnalysisToolClientRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(FederalDocument, { required: false })
   public federalDocument?: FederalDocument;
 
+  @RequestDtoStringProperty({ required: false })
+  public inssPassword?: string;
+
   @RequestDtoValueObjectProperty(Email, { required: false })
   public email?: Email;
 
