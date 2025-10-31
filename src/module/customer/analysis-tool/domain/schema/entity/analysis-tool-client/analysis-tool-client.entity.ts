@@ -22,7 +22,7 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
   @Description('Email do cliente da ferramenta de análise.')
   public readonly email: Email | null;
 
-  @Description('Número de telefone do cliente da ferramenta de análise.')
+  @Description('Senha utilizada para acessar o sistema do INSS.')
   public readonly inssPassword: string | null;
 
   @Description('Número de telefone do cliente da ferramenta de análise.')
