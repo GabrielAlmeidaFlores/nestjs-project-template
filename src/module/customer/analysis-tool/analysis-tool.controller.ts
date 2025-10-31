@@ -31,7 +31,6 @@ import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/d
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
-import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
@@ -53,7 +52,6 @@ import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-c
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
-import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
@@ -78,7 +76,6 @@ export class AnalysisToolController {
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
-    private readonly listCnisFastAnalysisUseCase: ListCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
@@ -653,33 +650,6 @@ export class AnalysisToolController {
       organizationSessionData,
       legalPleadingId,
       format,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Listar análises rápidas de CNIS',
-    http: {
-      path: 'cnis-fast-analysis',
-      method: RequestMethod.GET,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Lista de análises rápidas de CNIS retornada com sucesso.',
-      type: ListCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async listCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
-  ): Promise<ListCnisFastAnalysisResponseDto> {
-    return await this.listCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      dto,
     );
   }
 

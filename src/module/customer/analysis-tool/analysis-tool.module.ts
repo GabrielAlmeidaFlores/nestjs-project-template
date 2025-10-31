@@ -24,7 +24,6 @@ import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-c
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
-import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
@@ -47,7 +46,6 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateCnisFastAnalysisUseCase,
     CreateCnisFastAnalysisResultUseCase,
     GetCnisFastAnalysisUseCase,
-    ListCnisFastAnalysisUseCase,
     ListAnalysisToolClientUseCase,
     CreateAnalysisToolClientUseCase,
     DeleteCnisFastAnalysisUseCase,
