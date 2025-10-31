@@ -18,17 +18,9 @@ export class CustomerTermsSeeder implements SeederInterface {
   ) {}
 
   public async execute(): Promise<Array<TransactionType>> {
-    const currentCustomerTerms =
-      await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
-
-    if (currentCustomerTerms) {
-      return [];
-    }
-
     const content = `
 <html lang="pt-BR">
   <body>
-    <h1>Termos e Condições de Uso</h1>
 
     <p>
       Bem-vindo à AgilizaPrevi. Ao criar uma conta, enviar documentos ou utilizar qualquer funcionalidade da plataforma, você concorda com os presentes Termos e Condições de Uso.
@@ -92,6 +84,9 @@ export class CustomerTermsSeeder implements SeederInterface {
 </html>
     `;
 
+    const currentCustomerTerms =
+      await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
+
     const customerTerms = new CustomerTermsEntity({
       content,
       isActive: true,
@@ -102,6 +97,22 @@ export class CustomerTermsSeeder implements SeederInterface {
         customerTerms,
       );
 
-    return [customerTermsTransaction];
+    const transactions = [customerTermsTransaction];
+
+    if (currentCustomerTerms !== null) {
+      const updateCustomerTermsTransaction = new CustomerTermsEntity({
+        ...currentCustomerTerms,
+        isActive: false,
+      });
+
+      transactions.push(
+        this.customerTermsCommandRepositoryGateway.updateCustomerTerms(
+          currentCustomerTerms.id,
+          updateCustomerTermsTransaction,
+        ),
+      );
+    }
+
+    return transactions;
   }
 }
