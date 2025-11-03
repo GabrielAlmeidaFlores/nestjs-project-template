@@ -1,5 +1,3 @@
-import type { DeepPartialType } from '@shared/system/type/deep-partial.type';
-
 export class ListDataInputModel {
   public page: number;
   public limit: number;
@@ -9,7 +7,7 @@ export class ListDataInputModel {
 
   protected readonly _type = ListDataInputModel.name;
 
-  public constructor(props: DeepPartialType<ListDataInputModel>) {
+  public constructor(props: Partial<ListDataInputModel>) {
     const defaultPage = 1;
     const defaultLimit = 10;
 
