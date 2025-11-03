@@ -19,7 +19,7 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     organizationId: OrganizationId,
   ): Promise<number>;
 
-  public abstract listByOrganizationId(
+  public abstract listByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,
