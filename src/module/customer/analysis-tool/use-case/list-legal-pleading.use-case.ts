@@ -53,6 +53,7 @@ export class ListLegalPleadingUseCase {
     const listLegalPleadingQueryResult =
       await this.legalPleadingQueryRepositoryGateway.listByOrganizationId(
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         new ListLegalPleadingQueryParam({ ...dto }),
       );
 
