@@ -72,7 +72,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
       findByAnalysisToolClientAndOrganizationIdWithRelations: jest.fn(),
       findOneByIdWithRelationsOrFail: jest.fn(),
       countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
+      listByOrganizationAndAuthIdentityId: jest.fn(),
       countAnalysisByAnalysisToolClientId: jest.fn(),
     };
 
@@ -81,7 +81,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
       findByAnalysisToolClientAndOrganizationId: jest.fn(),
       findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
       countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
+      listByOrganizationAndAuthIdentityId: jest.fn(),
       countByLegalPleadingIdAndOrganizationId: jest.fn(),
     };
 
