@@ -46,6 +46,7 @@ export class ListAnalysisToolRecordUseCase {
     const analysisToolRecordList =
       await this.analysisToolRecordQueryRepositoryGateway.listByOrganizationId(
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         new ListAnalysisToolRecordQueryParam(dto),
       );
 
@@ -93,7 +94,7 @@ export class ListAnalysisToolRecordUseCase {
           ...analysisToolRecord,
           analysisId: analysis.id,
           status: analysis.status,
-          client,
+          analysisToolClient: client,
           createdBy,
           updatedBy,
         });
