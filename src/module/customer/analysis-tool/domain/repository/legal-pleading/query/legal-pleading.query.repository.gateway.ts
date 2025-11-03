@@ -5,6 +5,7 @@ import type { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool
 import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class LegalPleadingQueryRepositoryGateway {
@@ -23,8 +24,9 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     organizationId: OrganizationId,
   ): Promise<number>;
 
-  public abstract listByOrganizationId(
+  public abstract listByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     listData: ListLegalPleadingQueryParam,
   ): Promise<ListDataOutputModel<GetLegalPleadingWithRelationsQueryResult>>;
 

@@ -49,7 +49,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
       findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
       findByAnalysisToolClientAndOrganizationId: jest.fn(),
       countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
+      listByOrganizationAndAuthIdentityId: jest.fn(),
       countByLegalPleadingIdAndOrganizationId: jest.fn(),
     };
 
