@@ -14,6 +14,7 @@ import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/doma
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class LegalPleadingTypeormQueryRepository
@@ -30,19 +31,30 @@ export class LegalPleadingTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationId(
+  public async listByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     listData: ListLegalPleadingQueryParam,
   ): Promise<ListDataOutputModel<GetLegalPleadingWithRelationsQueryResult>> {
     const where: Array<FindOptionsWhere<LegalPleadingTypeormEntity>> = [];
 
     const baseWhere: FindOptionsWhere<LegalPleadingTypeormEntity> = {
       createdBy: {
+        customer: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
         organization: {
           id: organizationId.toString(),
         },
       },
       updatedBy: {
+        customer: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
         organization: {
           id: organizationId.toString(),
         },

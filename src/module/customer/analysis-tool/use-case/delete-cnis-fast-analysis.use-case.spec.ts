@@ -59,7 +59,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
       findByAnalysisToolClientAndOrganizationId: jest.fn(),
       findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
       countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
+      listByOrganizationAndAuthIdentityId: jest.fn(),
       countByLegalPleadingIdAndOrganizationId: jest.fn(),
     };
 
