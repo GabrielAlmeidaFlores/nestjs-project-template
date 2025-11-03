@@ -217,33 +217,35 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
         });
-      } else {
-        searchParams.where.push({
-          ...where,
-          [relation]: {
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
+
+        return;
+      }
+
+      searchParams.where.push({
+        ...where,
+        [relation]: {
+          createdBy: {
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
               },
             },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
+            organization: {
+              id: organizationId.toString(),
             },
           },
-        });
-      }
+          updatedBy: {
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      });
     });
 
     const data = await this.list(listData, searchParams);
