@@ -24,7 +24,7 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     organizationId: OrganizationId,
   ): Promise<number>;
 
-  public abstract listByOrganizationId(
+  public abstract listByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListLegalPleadingQueryParam,
