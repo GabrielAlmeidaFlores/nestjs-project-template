@@ -82,8 +82,9 @@ export class CreateLegalPleadingUseCase {
         : null;
 
     const countLegalPleading =
-      await this.legalPleadingQueryRepositoryGateway.countByOrganizationId(
+      await this.legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId(
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     const legalPleading = new LegalPleadingEntity({

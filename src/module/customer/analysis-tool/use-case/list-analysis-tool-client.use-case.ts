@@ -50,9 +50,10 @@ export class ListAnalysisToolClientUseCase {
           );
 
         const legalPleadingCount =
-          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId(
+          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId(
             organizationSessionData.organizationId,
             listItem.id,
+            sessionData.authIdentityId,
           );
 
         const mappedData = GetAnalysisToolClientResponseDto.build({

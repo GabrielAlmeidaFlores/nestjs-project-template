@@ -127,9 +127,10 @@ export class LegalPleadingTypeormQueryRepository
     });
   }
 
-  public async findByAnalysisToolClientAndOrganizationId(
+  public async findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<GetLegalPleadingWithRelationsQueryResult[]> {
     const data = await this.find({
       where: {
@@ -140,10 +141,10 @@ export class LegalPleadingTypeormQueryRepository
           organization: {
             id: organizationId.toString(),
           },
-        },
-        updatedBy: {
-          organization: {
-            id: organizationId.toString(),
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
+            },
           },
         },
       },
@@ -181,9 +182,10 @@ export class LegalPleadingTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByLegalPleadingAndOrganizationIdOrFail(
+  public async findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
     id: LegalPleadingId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     err: Constructor<NotFoundError>,
   ): Promise<GetLegalPleadingWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
@@ -194,10 +196,10 @@ export class LegalPleadingTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -237,8 +239,9 @@ export class LegalPleadingTypeormQueryRepository
     return mappedData;
   }
 
-  public async countByOrganizationId(
+  public async countByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const total = await this.count({
       where: {
@@ -246,10 +249,10 @@ export class LegalPleadingTypeormQueryRepository
           organization: {
             id: organizationId.toString(),
           },
-        },
-        updatedBy: {
-          organization: {
-            id: organizationId.toString(),
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
+            },
           },
         },
       },
@@ -258,9 +261,10 @@ export class LegalPleadingTypeormQueryRepository
     return total;
   }
 
-  public async countByLegalPleadingIdAndOrganizationId(
+  public async countByLegalPleadingAndOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const total = await this.count({
       where: {
@@ -271,10 +275,10 @@ export class LegalPleadingTypeormQueryRepository
           organization: {
             id: organizationId.toString(),
           },
-        },
-        updatedBy: {
-          organization: {
-            id: organizationId.toString(),
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
+            },
           },
         },
       },
