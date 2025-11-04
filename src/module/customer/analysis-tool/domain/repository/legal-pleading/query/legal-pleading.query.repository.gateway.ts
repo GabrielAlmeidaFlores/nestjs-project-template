@@ -9,19 +9,22 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class LegalPleadingQueryRepositoryGateway {
-  public abstract findOneByLegalPleadingAndOrganizationIdOrFail(
+  public abstract findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
     id: LegalPleadingId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetLegalPleadingWithRelationsQueryResult>;
 
-  public abstract findByAnalysisToolClientAndOrganizationId(
+  public abstract findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<GetLegalPleadingWithRelationsQueryResult[]>;
 
-  public abstract countByOrganizationId(
+  public abstract countByOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number>;
 
   public abstract listByOrganizationAndAuthIdentityId(
@@ -30,8 +33,9 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     listData: ListLegalPleadingQueryParam,
   ): Promise<ListDataOutputModel<GetLegalPleadingWithRelationsQueryResult>>;
 
-  public abstract countByLegalPleadingIdAndOrganizationId(
+  public abstract countByLegalPleadingAndOrganizationAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number>;
 }

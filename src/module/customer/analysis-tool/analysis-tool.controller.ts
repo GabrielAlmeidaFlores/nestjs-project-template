@@ -403,12 +403,15 @@ export class AnalysisToolController {
   public async getLegalPleading(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
     legalPleadingId: LegalPleadingId,
   ): Promise<GetLegalPleadingResponseDto> {
     return await this.getLegalPleadingUseCase.execute(
       organizationSessionData,
       legalPleadingId,
+      sessionData,
     );
   }
 

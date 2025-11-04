@@ -41,9 +41,10 @@ export class DeleteLegalPleadingUseCase {
     }
 
     const legalPleadingResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         OrganizationMemberNotFoundError,
       );
 

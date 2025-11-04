@@ -57,9 +57,10 @@ export class CreateLegalPleadingResultUseCase {
     }
 
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         LegalPleadingNotFoundError,
       );
 
