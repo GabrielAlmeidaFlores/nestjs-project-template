@@ -152,6 +152,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
         name: 'Test Client',
         federalDocument: null,
         email: null,
+        inssPassword: null,
         phoneNumber: null,
         birthDate: null,
         gender: null,
@@ -161,6 +162,8 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
         deletedAt: null,
         createdBy: responsible,
         updatedBy: responsible,
+        analysisToolClientInssBenefit: [],
+        analysisToolClientLegalProceeding: [],
       });
     };
 
@@ -237,9 +240,9 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolRecordQueryRepositoryGateway.countByOrganizationId.mockResolvedValueOnce(
-      existingRecordCount,
-    );
+    (
+      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId as jest.Mock
+    ).mockResolvedValueOnce(existingRecordCount);
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
 
     cnisFastAnalysisCommandRepositoryGateway.createCnisFastAnalysis.mockReturnValue(
@@ -261,8 +264,12 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisId).toBeDefined();
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.countByOrganizationId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId);
+      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId,
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      client.id,
+      sessionData.authIdentityId,
+    );
 
     expect(
       analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord,

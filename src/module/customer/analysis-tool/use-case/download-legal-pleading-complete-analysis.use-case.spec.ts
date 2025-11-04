@@ -46,11 +46,11 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationId: jest.fn(),
-      countByOrganizationId: jest.fn(),
+      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
+      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingIdAndOrganizationId: jest.fn(),
+      countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
     };
 
   const exportDocumentGateway: jest.Mocked<ExportDocumentGateway> = {
@@ -114,6 +114,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
       name: 'Test Client',
       federalDocument: null,
       email: null,
+      inssPassword: null,
       phoneNumber: null,
       birthDate: null,
       gender: null,
@@ -196,7 +197,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
     exportDocumentGateway.downloadFileAsStreamable.mockResolvedValueOnce(
@@ -246,7 +247,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockRejectedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new LegalPleadingNotFoundError(),
     );
 
@@ -270,7 +271,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
 
@@ -295,7 +296,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
 

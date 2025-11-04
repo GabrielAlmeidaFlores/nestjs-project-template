@@ -44,11 +44,11 @@ describe(DeleteLegalPleadingUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationId: jest.fn(),
-      countByOrganizationId: jest.fn(),
+      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
+      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingIdAndOrganizationId: jest.fn(),
+      countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
     };
 
   const legalPleadingCommandRepositoryGateway: jest.Mocked<LegalPleadingCommandRepositoryGateway> =
@@ -104,6 +104,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
         name: 'Test Client',
         federalDocument: null,
         email: null,
+        inssPassword: null,
         phoneNumber: null,
         birthDate: null,
         gender: null,
@@ -189,7 +190,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleadingResult,
     );
     legalPleadingCommandRepositoryGateway.deleteLegalPleading.mockReturnValue(
@@ -207,7 +208,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     expect(result.legalPleadingId).toBe(legalPleadingResult.id);
 
     expect(
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail,
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(
       legalPleadingId,
       orgSessionData.organizationId,
@@ -252,7 +253,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockRejectedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new OrganizationMemberNotFoundError(),
     );
 
