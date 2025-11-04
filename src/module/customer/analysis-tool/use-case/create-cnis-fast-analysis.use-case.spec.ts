@@ -82,7 +82,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      countByOrganizationId: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
     } as unknown as jest.Mocked<AnalysisToolRecordQueryRepositoryGateway>;
 
   const analysisToolRecordCommandRepositoryGateway: jest.Mocked<AnalysisToolRecordCommandRepositoryGateway> =
@@ -240,9 +240,9 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    (
-      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId as jest.Mock
-    ).mockResolvedValueOnce(existingRecordCount);
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+      existingRecordCount,
+    );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
 
     cnisFastAnalysisCommandRepositoryGateway.createCnisFastAnalysis.mockReturnValue(
@@ -264,10 +264,9 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisId).toBeDefined();
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId,
+      analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       orgSessionData.organizationId,
-      client.id,
       sessionData.authIdentityId,
     );
 

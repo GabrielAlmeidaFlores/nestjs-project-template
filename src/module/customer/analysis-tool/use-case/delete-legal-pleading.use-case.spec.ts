@@ -212,6 +212,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     ).toHaveBeenCalledWith(
       legalPleadingId,
       orgSessionData.organizationId,
+      sessionData.authIdentityId,
       OrganizationMemberNotFoundError,
     );
 

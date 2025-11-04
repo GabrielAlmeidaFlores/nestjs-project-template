@@ -47,7 +47,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
+      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
     } as unknown as jest.Mocked<LegalPleadingQueryRepositoryGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
@@ -183,9 +183,9 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    (
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail as jest.Mock
-    ).mockResolvedValueOnce(queryResult);
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
+      queryResult,
+    );
     fileProcessorGateway.getFileBuffer.mockResolvedValue(
       Buffer.from('fake-pdf'),
     );
@@ -263,16 +263,21 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    expect(
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
-    ).toHaveBeenCalledWith(
-      orgSessionData.organizationId,
-      legalPleadingId,
-      sessionData.authIdentityId,
-    );
 
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockRejectedValueOnce(
+      new LegalPleadingNotFoundError(),
+    );
     await expect(
       useCase.execute(sessionData, orgSessionData, legalPleadingId),
     ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
+
+    expect(
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
+    ).toHaveBeenCalledWith(
+      legalPleadingId,
+      orgSessionData.organizationId,
+      sessionData.authIdentityId,
+      LegalPleadingNotFoundError,
+    );
   });
 });

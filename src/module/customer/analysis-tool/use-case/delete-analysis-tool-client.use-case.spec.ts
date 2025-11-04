@@ -240,13 +240,21 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     expect(result).toBeInstanceOf(DeleteAnalysisToolClientResponseDto);
     expect(result.analysisToolClientId).toBe(clientQueryResult.id);
 
-    // Verifica deleção em cascata
     expect(
       analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations,
-    ).toHaveBeenCalledWith(clientQueryResult.id, orgSessionData.organizationId);
+    ).toHaveBeenCalledWith(
+      clientQueryResult.id,
+      orgSessionData.organizationId,
+      sessionData.authIdentityId,
+    );
+
     expect(
       legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId,
-    ).toHaveBeenCalledWith(clientQueryResult.id, orgSessionData.organizationId);
+    ).toHaveBeenCalledWith(
+      clientQueryResult.id,
+      orgSessionData.organizationId,
+      sessionData.authIdentityId,
+    );
     expect(mockDeleteAnalysisToolRecordUseCase.execute).toHaveBeenCalledTimes(
       analysisToolRecords.length,
     );
