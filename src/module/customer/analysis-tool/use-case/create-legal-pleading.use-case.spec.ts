@@ -170,6 +170,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
         name: 'Test Client',
         federalDocument: null,
         email: null,
+        inssPassword: null,
         phoneNumber: null,
         birthDate: null,
         gender: null,
@@ -247,7 +248,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    legalPleadingQueryRepositoryGateway.countByOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
       initialCount,
     );
     fileProcessorGateway.uploadFile.mockResolvedValue('path/to/uploaded.pdf');
@@ -270,7 +271,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
     expect(result.legalPleadingId).toBeDefined();
 
     expect(
-      legalPleadingQueryRepositoryGateway.countByOrganizationId,
+      legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId,
     ).toHaveBeenCalledWith(orgSessionData.organizationId);
     expect(
       legalPleadingAddressCommandRepositoryGateway.createLegalPleadingAddress,
@@ -309,7 +310,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    legalPleadingQueryRepositoryGateway.countByOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
       initialCount,
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);

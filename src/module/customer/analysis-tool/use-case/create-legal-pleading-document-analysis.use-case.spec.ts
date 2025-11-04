@@ -183,9 +183,9 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
-      queryResult,
-    );
+    (
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail as jest.Mock
+    ).mockResolvedValueOnce(queryResult);
     fileProcessorGateway.getFileBuffer.mockResolvedValue(
       Buffer.from('fake-pdf'),
     );
@@ -263,8 +263,12 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockRejectedValueOnce(
-      new LegalPleadingNotFoundError(),
+    expect(
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      legalPleadingId,
+      sessionData.authIdentityId,
     );
 
     await expect(

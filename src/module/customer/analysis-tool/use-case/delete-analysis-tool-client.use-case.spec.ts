@@ -69,20 +69,21 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      findByAnalysisToolClientAndOrganizationIdWithRelations: jest.fn(),
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationId: jest.fn(),
+      findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations:
+        jest.fn(),
+      findOneByIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countAnalysisByAnalysisToolClientId: jest.fn(),
+      countAnalysisByAnalysisToolClientAndAuthIdentityId: jest.fn(),
     };
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findByAnalysisToolClientAndOrganizationId: jest.fn(),
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-      countByOrganizationId: jest.fn(),
+      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingIdAndOrganizationId: jest.fn(),
+      countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
     };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
@@ -133,6 +134,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
         updatedBy: responsible,
         federalDocument: null,
         email: null,
+        inssPassword: null,
         phoneNumber: null,
         birthDate: null,
         gender: null,
@@ -216,10 +218,10 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations.mockResolvedValueOnce(
       analysisToolRecords,
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
       legalPleadings,
     );
     mockDeleteAnalysisToolRecordUseCase.execute.mockResolvedValue(undefined);
@@ -240,10 +242,10 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
 
     // Verifica deleção em cascata
     expect(
-      analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationIdWithRelations,
+      analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations,
     ).toHaveBeenCalledWith(clientQueryResult.id, orgSessionData.organizationId);
     expect(
-      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationId,
+      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId,
     ).toHaveBeenCalledWith(clientQueryResult.id, orgSessionData.organizationId);
     expect(mockDeleteAnalysisToolRecordUseCase.execute).toHaveBeenCalledTimes(
       analysisToolRecords.length,
@@ -272,10 +274,10 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations.mockResolvedValueOnce(
       [],
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
       [],
     );
     analysisToolClientCommandRepositoryGateway.deleteAnalysisToolClient.mockReturnValue(

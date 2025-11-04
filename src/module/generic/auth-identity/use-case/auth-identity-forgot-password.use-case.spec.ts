@@ -50,11 +50,12 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationId: jest.fn(),
+      findOneByIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countAnalysisByAnalysisToolClientId: jest.fn(),
-      findByAnalysisToolClientAndOrganizationIdWithRelations: jest.fn(),
+      countAnalysisByAnalysisToolClientAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations:
+        jest.fn(),
     };
 
   const analysisToolRecordCommandRepositoryGateway: jest.Mocked<AnalysisToolRecordCommandRepositoryGateway> =
@@ -112,6 +113,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
       name: 'Test Client',
       federalDocument: null,
       email: null,
+      inssPassword: null,
       phoneNumber: null,
       birthDate: null,
       gender: null,
@@ -199,7 +201,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByIdAndAuthIdentityIdWithRelationsOrFail.mockResolvedValueOnce(
       recordQueryResult,
     );
     mockDeleteCnisFastAnalysisUseCase.execute.mockResolvedValueOnce(undefined);
@@ -218,7 +220,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(result.analysisToolRecordId).toBe(recordQueryResult.id);
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+      analysisToolRecordQueryRepositoryGateway.findOneByIdAndAuthIdentityIdWithRelationsOrFail,
     ).toHaveBeenCalledWith(
       analysisToolRecordId,
       orgSessionData.organizationId,
@@ -249,7 +251,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByIdAndAuthIdentityIdWithRelationsOrFail.mockResolvedValueOnce(
       recordQueryResult,
     );
     analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord.mockReturnValue(
@@ -289,7 +291,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockRejectedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByIdAndAuthIdentityIdWithRelationsOrFail.mockRejectedValueOnce(
       new AnalysisToolRecordNotFoundError(),
     );
 
