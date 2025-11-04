@@ -79,7 +79,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      countByOrganizationId: jest.fn(),
+      countByOrganizationAndAuthIdentityId: jest.fn(),
     } as unknown as jest.Mocked<LegalPleadingQueryRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
@@ -272,7 +272,10 @@ describe(CreateLegalPleadingUseCase.name, () => {
 
     expect(
       legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId);
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      sessionData.authIdentityId,
+    );
     expect(
       legalPleadingAddressCommandRepositoryGateway.createLegalPleadingAddress,
     ).toHaveBeenCalledTimes(1);

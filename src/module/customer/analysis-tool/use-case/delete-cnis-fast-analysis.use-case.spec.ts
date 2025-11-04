@@ -233,6 +233,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
     ).toHaveBeenCalledWith(
       cnisResult.analysisToolClient.id,
       orgSessionData.organizationId,
+      sessionData.authIdentityId,
     );
     expect(mockDeleteLegalPleadingUseCase.execute).toHaveBeenCalledTimes(
       legalPleadings.length,

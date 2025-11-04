@@ -202,6 +202,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     ).toHaveBeenCalledWith(
       analysisToolRecordId,
       orgSessionData.organizationId,
+      sessionData.authIdentityId,
       AnalysisToolRecordNotFoundError,
     );
     expect(mockDeleteCnisFastAnalysisUseCase.execute).toHaveBeenCalledTimes(1);

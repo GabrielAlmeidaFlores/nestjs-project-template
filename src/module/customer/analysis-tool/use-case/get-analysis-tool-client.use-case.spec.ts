@@ -194,10 +194,18 @@ describe(GetAnalysisToolClientUseCase.name, () => {
 
     expect(
       analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId, clientQueryResult.id);
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      clientQueryResult.id,
+      sessionModel.authIdentityId,
+    );
     expect(
       legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId, clientQueryResult.id);
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      clientQueryResult.id,
+      sessionModel.authIdentityId,
+    );
 
     expect(fileProcessorGateway.getFileSignedUrl).toHaveBeenCalledTimes(2);
     expect(result.createdBy.profilePicture).toBe(
