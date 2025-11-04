@@ -126,8 +126,9 @@ export class CreateCnisFastAnalysisUseCase {
         : [];
 
     const countRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationId(
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId(
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     const analysisToolRecord = new AnalysisToolRecordEntity({

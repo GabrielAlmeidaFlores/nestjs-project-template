@@ -138,10 +138,13 @@ export class AnalysisToolController {
   public async listAnalysisToolClient(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Query() dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientResponseDto> {
     return await this.listAnalysisToolClientUseCase.execute(
       organizationSessionData,
+      sessionData,
       dto,
     );
   }
@@ -224,6 +227,8 @@ export class AnalysisToolController {
   public async getAnalysisToolClient(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Param(
       'analysisToolClientId',
       new ParseValueObjectPipe(AnalysisToolClientId),
@@ -232,6 +237,7 @@ export class AnalysisToolController {
   ): Promise<GetAnalysisToolClientResponseDto> {
     return await this.getAnalysisToolClientUseCase.execute(
       organizationSessionData,
+      sessionData,
       analysisToolClientId,
     );
   }
