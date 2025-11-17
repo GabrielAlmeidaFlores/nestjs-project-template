@@ -65,7 +65,7 @@ export class DeleteAnalysisToolClientUseCase {
       );
 
     const analysisToolRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations(
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByClientAndOrganizationAndAuthIdentity(
         analysisToolClientResult.id,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
