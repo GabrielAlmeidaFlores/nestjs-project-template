@@ -69,9 +69,8 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      findWithRelationsByClientAndOrganizationAndAuthIdentity:
-        jest.fn(),
-      findOneByIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
+      findWithRelationsByClientAndOrganizationAndAuthIdentity: jest.fn(),
+      findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
       countAnalysisByAnalysisToolClientAndAuthIdentityId: jest.fn(),

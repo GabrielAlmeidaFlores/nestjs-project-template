@@ -9,7 +9,7 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class AnalysisToolRecordQueryRepositoryGateway {
-  public abstract findOneByIdAndAuthIdentityIdWithRelationsOrFail(
+  public abstract findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
     AuthIdentityId: AuthIdentityId,
