@@ -41,7 +41,7 @@ export class GetAnalysisToolClientUseCase {
       );
 
     const analysisCount =
-      await this.analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId(
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         analysisToolClientQueryResult.id,
         sessionData.authIdentityId,

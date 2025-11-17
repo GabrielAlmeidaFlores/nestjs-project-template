@@ -43,7 +43,7 @@ export class ListAnalysisToolClientUseCase {
     const resource = await Promise.all(
       listData.resource.map(async (listItem) => {
         const analysisCount =
-          await this.analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId(
+          await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
             organizationSessionData.organizationId,
             listItem.id,
             sessionData.authIdentityId,
