@@ -47,7 +47,7 @@ export class CreateLegalPleadingResultUseCase {
     legalPleadingId: LegalPleadingId,
   ): Promise<CreateLegalPleadingResultResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -57,7 +57,7 @@ export class CreateLegalPleadingResultUseCase {
     }
 
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,

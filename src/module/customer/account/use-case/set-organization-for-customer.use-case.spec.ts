@@ -100,7 +100,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       >,
     );
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId.mockResolvedValueOnce(
       orgMember,
     );
 
@@ -134,7 +134,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     );
 
     expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId,
+      organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId,
     ).toHaveBeenCalledWith(mockCustomerId, dto.organizationId);
   });
 
@@ -151,7 +151,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     ).rejects.toBeInstanceOf(CustomerNotFoundError);
 
     expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId,
+      organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId,
     ).not.toHaveBeenCalled();
     expect(reply.setCookie).not.toHaveBeenCalled();
   });
@@ -168,7 +168,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       >,
     );
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId.mockResolvedValueOnce(
       null,
     );
 
@@ -193,7 +193,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       >,
     );
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId.mockResolvedValueOnce(
       orgMember,
     );
 

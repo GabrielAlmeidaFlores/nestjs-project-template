@@ -33,10 +33,10 @@ describe(GetAnalysisToolClientUseCase.name, () => {
 
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
-      findOneByAnalysisToolClientIdOrFail: jest.fn(),
-      findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
-      findOneByEmail: jest.fn(),
-      findOneByFederalDocument: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
+      findOneByEmailAndOrganizationId: jest.fn(),
+      findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -44,18 +44,18 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     {
       countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
       findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationAndAuthIdentityId: jest.fn(),
-      listByOrganizationAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
       findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
-      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
+      countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
       findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-      countByOrganizationAndAuthIdentityId: jest.fn(),
-      listByOrganizationAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
@@ -166,13 +166,13 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     const creatorPicSignedUrl = new URL('https://example.com/creator.jpg');
     const updaterPicSignedUrl = new URL('https://example.com/updater.jpg');
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
     analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       analysisCount,
     );
-    legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       legalPleadingCount,
     );
     fileProcessorGateway.getFileSignedUrl
@@ -199,7 +199,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
       sessionModel.authIdentityId,
     );
     expect(
-      legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId,
+      legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       orgSessionData.organizationId,
       clientQueryResult.id,
@@ -223,13 +223,13 @@ describe(GetAnalysisToolClientUseCase.name, () => {
       withProfilePictures: false,
     });
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
     analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       0,
     );
-    legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       0,
     );
 
@@ -251,7 +251,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     const clientId = new AnalysisToolClientId();
     const sessionModel = new SessionDataModel();
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 

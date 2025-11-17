@@ -180,10 +180,10 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const TOTAL_DOCUMENT_TYPES = 2;
     const TOTAL_TRANSACTIONS = 5;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       queryResult,
     );
     fileProcessorGateway.getFileBuffer.mockResolvedValue(
@@ -193,7 +193,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       .mockResolvedValueOnce('Personal Doc Analysis')
       .mockResolvedValueOnce('CNIS Docs Analysis');
 
-    legalPleadingDocumentQueryRepositoryGateway.findByDocumentType
+    legalPleadingDocumentQueryRepositoryGateway.findByDocumentTypeAndOrganizationIdAndLegalPleadingId
       .mockResolvedValueOnce([docPersonal])
       .mockResolvedValueOnce([docCnis1, docCnis2]);
 
@@ -223,7 +223,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis,
     ).toHaveBeenCalledTimes(TOTAL_DOCUMENT_TYPES);
     expect(
-      legalPleadingDocumentQueryRepositoryGateway.findByDocumentType,
+      legalPleadingDocumentQueryRepositoryGateway.findByDocumentTypeAndOrganizationIdAndLegalPleadingId,
     ).toHaveBeenCalledTimes(TOTAL_DOCUMENT_TYPES);
     expect(
       legalPleadingDocumentAnalysisCommandRepositoryGateway.createLegalPleadingDocumentAnalysis,
@@ -245,7 +245,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -260,11 +260,11 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const legalPleadingId = new LegalPleadingId();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
 
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockRejectedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new LegalPleadingNotFoundError(),
     );
     await expect(
@@ -272,7 +272,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
 
     expect(
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(
       legalPleadingId,
       orgSessionData.organizationId,

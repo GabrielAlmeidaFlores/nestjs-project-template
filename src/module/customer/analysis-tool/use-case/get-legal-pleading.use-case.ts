@@ -36,7 +36,7 @@ export class GetLegalPleadingUseCase {
     sessionData: SessionDataModel,
   ): Promise<GetLegalPleadingResponseDto> {
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,

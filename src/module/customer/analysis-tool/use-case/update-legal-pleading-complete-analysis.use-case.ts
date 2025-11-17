@@ -39,7 +39,7 @@ export class UpdateLegalPleadingCompleteAnalysisUseCase {
     dto: UpdateLegalPleadingCompleteAnalysisRequestDto,
   ): Promise<UpdateLegalPleadingCompleteAnalysisResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -49,7 +49,7 @@ export class UpdateLegalPleadingCompleteAnalysisUseCase {
     }
 
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,

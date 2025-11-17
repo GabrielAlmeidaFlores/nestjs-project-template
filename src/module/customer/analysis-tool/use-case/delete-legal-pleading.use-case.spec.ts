@@ -36,19 +36,19 @@ describe(DeleteLegalPleadingUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
       findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-      countByOrganizationAndAuthIdentityId: jest.fn(),
-      listByOrganizationAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
+      countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const legalPleadingCommandRepositoryGateway: jest.Mocked<LegalPleadingCommandRepositoryGateway> =
@@ -187,10 +187,10 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     const legalPleadingResult = buildLegalPleadingQueryResult();
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleadingResult,
     );
     legalPleadingCommandRepositoryGateway.deleteLegalPleading.mockReturnValue(
@@ -208,7 +208,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     expect(result.legalPleadingId).toBe(legalPleadingResult.id);
 
     expect(
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail,
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail,
     ).toHaveBeenCalledWith(
       legalPleadingId,
       orgSessionData.organizationId,
@@ -236,7 +236,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -251,10 +251,10 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     const legalPleadingId = new LegalPleadingId();
     const organizationMember = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail.mockRejectedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new OrganizationMemberNotFoundError(),
     );
 

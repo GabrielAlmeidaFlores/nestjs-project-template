@@ -59,7 +59,7 @@ export class CreateCnisFastAnalysisUseCase {
     dto: CreateCnisFastAnalysisRequestDto,
   ): Promise<CreateCnisFastAnalysisResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -85,7 +85,7 @@ export class CreateCnisFastAnalysisUseCase {
         : null;
 
     const analysisToolClientQueryResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         dto.json.analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
@@ -126,7 +126,7 @@ export class CreateCnisFastAnalysisUseCase {
         : [];
 
     const countRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId(
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );

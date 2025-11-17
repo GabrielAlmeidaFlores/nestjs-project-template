@@ -160,7 +160,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
         >
       >,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
       orgMember,
     );
 
@@ -212,7 +212,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
         >
       >,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
       orgMember,
     );
 
@@ -240,7 +240,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     ).rejects.toBeInstanceOf(CustomerNotFoundError);
 
     expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations,
+      organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations,
     ).not.toHaveBeenCalled();
     expect(
       fileProcessorGateway.getCustomerProfilePicture,
@@ -261,7 +261,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
         >
       >,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
       null,
     );
 

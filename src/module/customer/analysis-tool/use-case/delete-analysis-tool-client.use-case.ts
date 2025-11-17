@@ -42,7 +42,7 @@ export class DeleteAnalysisToolClientUseCase {
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<DeleteAnalysisToolClientResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -52,7 +52,7 @@ export class DeleteAnalysisToolClientUseCase {
     }
 
     const analysisToolClientResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,

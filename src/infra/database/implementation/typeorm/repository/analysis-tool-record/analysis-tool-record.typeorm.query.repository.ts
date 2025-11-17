@@ -37,7 +37,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationAndAuthIdentityId(
+  public async listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,
@@ -264,7 +264,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
   }
 
-  public async countByOrganizationAndAuthIdentityId(
+  public async countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {

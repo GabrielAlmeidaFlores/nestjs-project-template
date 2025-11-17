@@ -34,7 +34,7 @@ export class GetAnalysisToolClientUseCase {
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<GetAnalysisToolClientResponseDto> {
     const analysisToolClientQueryResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
@@ -48,7 +48,7 @@ export class GetAnalysisToolClientUseCase {
       );
 
     const legalPleadingCount =
-      await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId(
+      await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         analysisToolClientQueryResult.id,
         sessionData.authIdentityId,
