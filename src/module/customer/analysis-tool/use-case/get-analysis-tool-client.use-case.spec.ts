@@ -42,7 +42,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      countAnalysisByAnalysisToolClientAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
       findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
@@ -169,7 +169,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       analysisCount,
     );
     legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
@@ -192,7 +192,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     expect(result.legalProceedingNumber).toEqual(['987654']);
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId,
+      analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       orgSessionData.organizationId,
       clientQueryResult.id,
@@ -226,7 +226,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientAndAuthIdentityId.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       0,
     );
     legalPleadingQueryRepositoryGateway.countByLegalPleadingAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(

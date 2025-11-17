@@ -48,7 +48,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
       findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      countAnalysisByAnalysisToolClientAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
       findWithRelationsByClientAndOrganizationAndAuthIdentity: jest.fn(),
     };
 

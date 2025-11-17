@@ -373,7 +373,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async countAnalysisByAnalysisToolClientAndAuthIdentityId(
+  public async countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
     authIdentityId: AuthIdentityId,

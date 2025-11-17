@@ -29,7 +29,7 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   >;
 
-  public abstract countAnalysisByAnalysisToolClientAndAuthIdentityId(
+  public abstract countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
     AuthIdentityId: AuthIdentityId,
