@@ -127,7 +127,7 @@ export class LegalPleadingTypeormQueryRepository
     });
   }
 
-  public async findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
+  public async findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,

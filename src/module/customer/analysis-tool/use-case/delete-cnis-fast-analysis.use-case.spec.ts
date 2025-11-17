@@ -56,7 +56,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
       findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
@@ -209,7 +209,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
     cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisAndOrganizationIdOrFail.mockResolvedValueOnce(
       cnisResult,
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       legalPleadings,
     );
     mockDeleteLegalPleadingUseCase.execute.mockResolvedValue(undefined);
@@ -229,7 +229,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisId).toBe(cnisResult.id);
 
     expect(
-      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId,
+      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       cnisResult.analysisToolClient.id,
       orgSessionData.organizationId,
@@ -279,7 +279,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
     cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisAndOrganizationIdOrFail.mockResolvedValueOnce(
       cnisResult,
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       [],
     );
     cnisFastAnalysisCommandRepositoryGateway.deleteCnisFastAnalysis.mockReturnValue(
@@ -290,7 +290,7 @@ describe(DeleteCnisFastAnalysisUseCase.name, () => {
     await useCase.execute(sessionData, orgSessionData, cnisFastAnalysisId);
 
     expect(
-      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId,
+      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledTimes(1);
     expect(mockDeleteLegalPleadingUseCase.execute).not.toHaveBeenCalled();
     expect(

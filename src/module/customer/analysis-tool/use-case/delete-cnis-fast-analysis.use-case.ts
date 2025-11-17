@@ -54,7 +54,7 @@ export class DeleteCnisFastAnalysisUseCase {
       );
 
     const legalPleadingResult =
-      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
+      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
         cnisFastAnalysisResult.analysisToolClient.id,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,

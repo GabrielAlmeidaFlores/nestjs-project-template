@@ -53,7 +53,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
       findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
       countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),

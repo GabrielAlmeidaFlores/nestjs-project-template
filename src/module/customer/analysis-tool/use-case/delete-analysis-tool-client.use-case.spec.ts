@@ -78,7 +78,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
       findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
@@ -220,7 +220,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     analysisToolRecordQueryRepositoryGateway.findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       analysisToolRecords,
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       legalPleadings,
     );
     mockDeleteAnalysisToolRecordUseCase.execute.mockResolvedValue(undefined);
@@ -248,7 +248,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     );
 
     expect(
-      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId,
+      legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       clientQueryResult.id,
       orgSessionData.organizationId,
@@ -284,7 +284,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     analysisToolRecordQueryRepositoryGateway.findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       [],
     );
-    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       [],
     );
     analysisToolClientCommandRepositoryGateway.deleteAnalysisToolClient.mockReturnValue(
