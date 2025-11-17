@@ -22,12 +22,6 @@ export abstract class AnalysisToolClientQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult>;
 
-  public abstract findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-    analysisToolClientId: AnalysisToolClientId,
-    organizationId: OrganizationId,
-    err: ConstructorType<NotFoundError>,
-  ): Promise<GetAnalysisToolClientWithRelationsQueryResult>;
-
   public abstract findOneByEmailAndOrganizationId(
     email: Email,
     organizationId: OrganizationId,
