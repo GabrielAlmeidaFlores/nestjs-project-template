@@ -16,12 +16,12 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
-  public abstract countByOrganizationAndAuthIdentityId(
+  public abstract countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     AuthIdentityId: AuthIdentityId,
   ): Promise<number>;
 
-  public abstract listByOrganizationAndAuthIdentityId(
+  public abstract listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,

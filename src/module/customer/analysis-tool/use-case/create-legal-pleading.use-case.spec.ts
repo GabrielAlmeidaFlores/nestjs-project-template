@@ -242,13 +242,13 @@ describe(CreateLegalPleadingUseCase.name, () => {
     const TOTAL_DOCUMENTS_UPLOADED = 3;
     const EXPECTED_TRANSACTIONS = 5;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       initialCount,
     );
     fileProcessorGateway.uploadFile.mockResolvedValue('path/to/uploaded.pdf');
@@ -271,7 +271,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
     expect(result.legalPleadingId).toBeDefined();
 
     expect(
-      legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId,
+      legalPleadingQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       orgSessionData.organizationId,
       sessionData.authIdentityId,
@@ -307,13 +307,13 @@ describe(CreateLegalPleadingUseCase.name, () => {
     const initialCount = 10;
     const EXPECTED_TRANSACTIONS = 1;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    legalPleadingQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       initialCount,
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
@@ -349,7 +349,7 @@ describe(CreateLegalPleadingUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const dto = buildDto();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -364,10 +364,10 @@ describe(CreateLegalPleadingUseCase.name, () => {
     const dto = buildDto();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 

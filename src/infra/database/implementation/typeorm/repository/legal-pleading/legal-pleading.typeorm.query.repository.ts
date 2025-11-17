@@ -31,7 +31,7 @@ export class LegalPleadingTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationAndAuthIdentityId(
+  public async listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListLegalPleadingQueryParam,
@@ -182,7 +182,7 @@ export class LegalPleadingTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
+  public async findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
     id: LegalPleadingId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
@@ -239,7 +239,7 @@ export class LegalPleadingTypeormQueryRepository
     return mappedData;
   }
 
-  public async countByOrganizationAndAuthIdentityId(
+  public async countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
@@ -261,7 +261,7 @@ export class LegalPleadingTypeormQueryRepository
     return total;
   }
 
-  public async countByLegalPleadingAndOrganizationAndAuthIdentityId(
+  public async countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
     authIdentityId: AuthIdentityId,

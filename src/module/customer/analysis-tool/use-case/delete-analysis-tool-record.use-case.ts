@@ -34,7 +34,7 @@ export class DeleteAnalysisToolRecordUseCase {
     analysisToolRecordId: AnalysisToolRecordId,
   ): Promise<DeleteAnalysisToolRecordResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );

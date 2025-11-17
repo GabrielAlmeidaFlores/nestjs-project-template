@@ -39,16 +39,16 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      findOneByCnisFastAnalysisAndOrganizationIdOrFail: jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -208,10 +208,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const analysisResult = buildCnisFastAnalysisQueryResult(resultMock);
     const streamableFile = buildStreamableFile();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       analysisResult,
     );
     exportDocumentGateway.downloadFileAsStreamable.mockResolvedValueOnce(
@@ -257,10 +257,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const streamableFile = buildStreamableFile();
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       analysisResult,
     );
     analysisProcessorGateway.getCnisSimplifiedAnalysis.mockResolvedValueOnce(
@@ -302,7 +302,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -322,10 +322,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const cnisFastAnalysisId = new CnisFastAnalysisId();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockRejectedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockRejectedValueOnce(
       new CnisFastAnalysisNotFoundError(),
     );
 
@@ -347,10 +347,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const member = buildOrganizationMember();
     const analysisResult = buildCnisFastAnalysisQueryResult(null);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       analysisResult,
     );
 
@@ -377,10 +377,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     });
     const analysisResult = buildCnisFastAnalysisQueryResult(resultMock);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       analysisResult,
     );
 
@@ -409,10 +409,10 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     const analysisResult = buildCnisFastAnalysisQueryResult(resultMock);
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       analysisResult,
     );
     analysisProcessorGateway.getCnisSimplifiedAnalysis.mockResolvedValueOnce(

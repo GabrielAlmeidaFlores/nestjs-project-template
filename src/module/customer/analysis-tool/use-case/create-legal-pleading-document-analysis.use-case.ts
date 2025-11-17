@@ -55,7 +55,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     legalPleadingId: LegalPleadingId,
   ): Promise<CreateLegalPleadingDocumentAnalysisResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -65,7 +65,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     }
 
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
@@ -154,7 +154,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
         transactions.push(legalPleadingDocumentAnalysisTransaction);
 
         const legalPleadingDocumentsToUpdate =
-          await this.legalPleadingDocumentQueryRepositoryGateway.findByDocumentType(
+          await this.legalPleadingDocumentQueryRepositoryGateway.findByDocumentTypeAndOrganizationIdAndLegalPleadingId(
             legalPleadingId,
             documentType,
             organizationSessionData.organizationId,

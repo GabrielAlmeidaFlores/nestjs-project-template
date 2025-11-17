@@ -37,7 +37,7 @@ export class DeleteCnisFastAnalysisUseCase {
     cnisFastAnalysisId: CnisFastAnalysisId,
   ): Promise<DeleteCnisFastAnalysisResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -47,7 +47,7 @@ export class DeleteCnisFastAnalysisUseCase {
     }
 
     const cnisFastAnalysisResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisAndOrganizationIdOrFail(
+      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,

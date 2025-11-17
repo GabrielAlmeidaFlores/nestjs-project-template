@@ -232,15 +232,15 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     const newRecordCode = existingRecordCount + 1;
     const EXPECTED_TRANSACTION_COUNT = 4;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
     analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(true);
     fileProcessorGateway.uploadFile.mockResolvedValueOnce('path/to/doc.pdf');
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       existingRecordCount,
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
@@ -264,7 +264,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisId).toBeDefined();
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.countByOrganizationAndAuthIdentityId,
+      analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId,
     ).toHaveBeenCalledWith(
       orgSessionData.organizationId,
       sessionData.authIdentityId,
@@ -293,7 +293,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const dto = buildDto();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -308,7 +308,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     const dto = buildDto({ withDocument: true });
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
     analysisProcessorGateway.validateCnisDocument.mockResolvedValueOnce(false);
@@ -324,10 +324,10 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
     const dto = buildDto();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 
