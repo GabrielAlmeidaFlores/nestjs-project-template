@@ -331,7 +331,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail(
+  public async findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,

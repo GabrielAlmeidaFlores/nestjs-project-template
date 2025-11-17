@@ -43,7 +43,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
       countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
-      findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
+      findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
       findWithRelationsByClientAndOrganizationAndAuthIdentity: jest.fn(),
