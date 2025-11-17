@@ -44,7 +44,7 @@ export class DeleteAnalysisToolRecordUseCase {
     }
 
     const analysisToolRecordResult =
-      await this.analysisToolRecordQueryRepositoryGateway.findOneByIdAndAuthIdentityIdWithRelationsOrFail(
+      await this.analysisToolRecordQueryRepositoryGateway.findOneByAnalysisToolRecordIdAndAuthIdentityIdWithRelationsOrFail(
         analysisToolRecordId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
