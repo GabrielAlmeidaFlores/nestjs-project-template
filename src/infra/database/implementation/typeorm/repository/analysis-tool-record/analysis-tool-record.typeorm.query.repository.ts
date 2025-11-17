@@ -291,7 +291,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
-  public async findWithRelationsByClientAndOrganizationAndAuthIdentity(
+  public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
