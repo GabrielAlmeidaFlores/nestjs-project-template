@@ -53,7 +53,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     {
       countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
       findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
     };

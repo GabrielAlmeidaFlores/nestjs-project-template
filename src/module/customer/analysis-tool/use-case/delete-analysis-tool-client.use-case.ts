@@ -82,7 +82,7 @@ export class DeleteAnalysisToolClientUseCase {
     );
 
     const legalPleading =
-      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
+      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
         analysisToolClientResult.id,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,

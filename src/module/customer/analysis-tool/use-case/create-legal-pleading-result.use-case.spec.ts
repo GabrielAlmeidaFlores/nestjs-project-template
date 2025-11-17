@@ -66,7 +66,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
       countByLegalPleadingAndOrganizationAndAuthIdentityId: jest.fn(),
-      findByAnalysisToolClientAndOrganizationAndAuthIdentityId: jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =

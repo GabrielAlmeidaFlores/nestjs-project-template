@@ -16,7 +16,7 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetLegalPleadingWithRelationsQueryResult>;
 
-  public abstract findByAnalysisToolClientAndOrganizationAndAuthIdentityId(
+  public abstract findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
