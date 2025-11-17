@@ -35,7 +35,7 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     AuthIdentityId: AuthIdentityId,
   ): Promise<number>;
 
-  public abstract findWithRelationsByClientAndOrganizationAndAuthIdentity(
+  public abstract findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     AuthIdentityId: AuthIdentityId,
