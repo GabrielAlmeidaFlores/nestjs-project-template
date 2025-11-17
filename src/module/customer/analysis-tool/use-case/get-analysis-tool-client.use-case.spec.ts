@@ -46,7 +46,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
       findOneByIdAndAuthIdentityIdWithRelationsOrFail: jest.fn(),
       countByOrganizationAndAuthIdentityId: jest.fn(),
       listByOrganizationAndAuthIdentityId: jest.fn(),
-      findByAnalysisToolClientAndOrganizationAndAuthIndetityIdIdWithRelations:
+      findWithRelationsByClientAndOrganizationAndAuthIdentity:
         jest.fn(),
     };
 
