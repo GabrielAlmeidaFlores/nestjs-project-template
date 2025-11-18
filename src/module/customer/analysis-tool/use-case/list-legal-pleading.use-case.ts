@@ -41,7 +41,7 @@ export class ListLegalPleadingUseCase {
     dto: ListLegalPleadingRequestDto,
   ): Promise<ListLegalPleadingResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -51,7 +51,7 @@ export class ListLegalPleadingUseCase {
     }
 
     const listLegalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.listByOrganizationAndAuthIdentityId(
+      await this.legalPleadingQueryRepositoryGateway.listByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         new ListLegalPleadingQueryParam({ ...dto }),
