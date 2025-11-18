@@ -16,24 +16,18 @@ export abstract class AnalysisToolClientQueryRepositoryGateway {
     ListDataOutputModel<GetAnalysisToolClientWithRelationsQueryResult>
   >;
 
-  public abstract findOneByAnalysisToolClientAndOrganizationIdOrFail(
+  public abstract findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult>;
 
-  public abstract findOneByAnalysisToolClientIdOrFail(
-    analysisToolClientId: AnalysisToolClientId,
-    organizationId: OrganizationId,
-    err: ConstructorType<NotFoundError>,
-  ): Promise<GetAnalysisToolClientWithRelationsQueryResult>;
-
-  public abstract findOneByEmail(
+  public abstract findOneByEmailAndOrganizationId(
     email: Email,
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null>;
 
-  public abstract findOneByFederalDocument(
+  public abstract findOneByFederalDocumentAndOrganizationId(
     federalDocument: FederalDocument,
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null>;

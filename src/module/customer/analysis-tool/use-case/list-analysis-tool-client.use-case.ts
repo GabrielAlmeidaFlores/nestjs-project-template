@@ -11,6 +11,7 @@ import {
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
@@ -30,6 +31,7 @@ export class ListAnalysisToolClientUseCase {
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
+    sessionData: SessionDataModel,
     dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientResponseDto> {
     const listData =
@@ -41,15 +43,17 @@ export class ListAnalysisToolClientUseCase {
     const resource = await Promise.all(
       listData.resource.map(async (listItem) => {
         const analysisCount =
-          await this.analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId(
+          await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
             organizationSessionData.organizationId,
             listItem.id,
+            sessionData.authIdentityId,
           );
 
         const legalPleadingCount =
-          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId(
+          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
             organizationSessionData.organizationId,
             listItem.id,
+            sessionData.authIdentityId,
           );
 
         const mappedData = GetAnalysisToolClientResponseDto.build({

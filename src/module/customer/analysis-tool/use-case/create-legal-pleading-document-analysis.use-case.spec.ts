@@ -32,43 +32,37 @@ import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/
 describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
   let useCase: CreateLegalPleadingDocumentAnalysisUseCase;
 
-  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
+  const analysisProcessorGateway = {
     getLegalPleadingQuickDocumentAnalysis: jest.fn(),
-  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
+  };
 
-  const fileProcessorGateway: jest.Mocked<FileProcessorGateway> = {
+  const fileProcessorGateway = {
     getFileBuffer: jest.fn(),
-  } as unknown as jest.Mocked<FileProcessorGateway>;
+  };
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+  const organizationMemberQueryRepositoryGateway = {
+    findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+  };
 
-  const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
-    {
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingQueryRepositoryGateway>;
+  const legalPleadingQueryRepositoryGateway = {
+    findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
+  };
 
-  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
-    {
-      execute: jest.fn(),
-    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
+  const baseTransactionRepositoryGateway = {
+    execute: jest.fn(),
+  };
 
-  const legalPleadingDocumentCommandRepositoryGateway: jest.Mocked<LegalPleadingDocumentCommandRepositoryGateway> =
-    {
-      updateLegalPleadingDocument: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentCommandRepositoryGateway>;
+  const legalPleadingDocumentCommandRepositoryGateway = {
+    updateLegalPleadingDocument: jest.fn(),
+  };
 
-  const legalPleadingDocumentAnalysisCommandRepositoryGateway: jest.Mocked<LegalPleadingDocumentAnalysisCommandRepositoryGateway> =
-    {
-      createLegalPleadingDocumentAnalysis: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentAnalysisCommandRepositoryGateway>;
+  const legalPleadingDocumentAnalysisCommandRepositoryGateway = {
+    createLegalPleadingDocumentAnalysis: jest.fn(),
+  };
 
-  const legalPleadingDocumentQueryRepositoryGateway: jest.Mocked<LegalPleadingDocumentQueryRepositoryGateway> =
-    {
-      findByDocumentType: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentQueryRepositoryGateway>;
+  const legalPleadingDocumentQueryRepositoryGateway = {
+    findByDocumentTypeAndOrganizationIdAndLegalPleadingId: jest.fn(),
+  };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -167,6 +161,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       deletedAt: null,
       legalPleadingDocumentAnalysis: null,
     });
+
     const queryResult = {
       legalPleadingDocument: [docPersonal, docCnis1, docCnis2],
       analysisToolClient: { createdBy: {}, updatedBy: {} },
@@ -180,10 +175,10 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const TOTAL_DOCUMENT_TYPES = 2;
     const TOTAL_TRANSACTIONS = 5;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       queryResult,
     );
     fileProcessorGateway.getFileBuffer.mockResolvedValue(
@@ -193,7 +188,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       .mockResolvedValueOnce('Personal Doc Analysis')
       .mockResolvedValueOnce('CNIS Docs Analysis');
 
-    legalPleadingDocumentQueryRepositoryGateway.findByDocumentType
+    legalPleadingDocumentQueryRepositoryGateway.findByDocumentTypeAndOrganizationIdAndLegalPleadingId
       .mockResolvedValueOnce([docPersonal])
       .mockResolvedValueOnce([docCnis1, docCnis2]);
 
@@ -223,7 +218,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis,
     ).toHaveBeenCalledTimes(TOTAL_DOCUMENT_TYPES);
     expect(
-      legalPleadingDocumentQueryRepositoryGateway.findByDocumentType,
+      legalPleadingDocumentQueryRepositoryGateway.findByDocumentTypeAndOrganizationIdAndLegalPleadingId,
     ).toHaveBeenCalledTimes(TOTAL_DOCUMENT_TYPES);
     expect(
       legalPleadingDocumentAnalysisCommandRepositoryGateway.createLegalPleadingDocumentAnalysis,
@@ -245,7 +240,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -260,15 +255,24 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
     const legalPleadingId = new LegalPleadingId();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockRejectedValueOnce(
+
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new LegalPleadingNotFoundError(),
     );
-
     await expect(
       useCase.execute(sessionData, orgSessionData, legalPleadingId),
     ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
+
+    expect(
+      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail,
+    ).toHaveBeenCalledWith(
+      legalPleadingId,
+      orgSessionData.organizationId,
+      sessionData.authIdentityId,
+      LegalPleadingNotFoundError,
+    );
   });
 });
