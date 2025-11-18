@@ -32,43 +32,37 @@ import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/
 describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
   let useCase: CreateLegalPleadingDocumentAnalysisUseCase;
 
-  const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
+  const analysisProcessorGateway = {
     getLegalPleadingQuickDocumentAnalysis: jest.fn(),
-  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
+  };
 
-  const fileProcessorGateway: jest.Mocked<FileProcessorGateway> = {
+  const fileProcessorGateway = {
     getFileBuffer: jest.fn(),
-  } as unknown as jest.Mocked<FileProcessorGateway>;
+  };
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+  const organizationMemberQueryRepositoryGateway = {
+    findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+  };
 
-  const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
-    {
-      findOneByLegalPleadingAndOrganizationAndAuthIdentityIdOrFail: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingQueryRepositoryGateway>;
+  const legalPleadingQueryRepositoryGateway = {
+    findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
+  };
 
-  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
-    {
-      execute: jest.fn(),
-    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
+  const baseTransactionRepositoryGateway = {
+    execute: jest.fn(),
+  };
 
-  const legalPleadingDocumentCommandRepositoryGateway: jest.Mocked<LegalPleadingDocumentCommandRepositoryGateway> =
-    {
-      updateLegalPleadingDocument: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentCommandRepositoryGateway>;
+  const legalPleadingDocumentCommandRepositoryGateway = {
+    updateLegalPleadingDocument: jest.fn(),
+  };
 
-  const legalPleadingDocumentAnalysisCommandRepositoryGateway: jest.Mocked<LegalPleadingDocumentAnalysisCommandRepositoryGateway> =
-    {
-      createLegalPleadingDocumentAnalysis: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentAnalysisCommandRepositoryGateway>;
+  const legalPleadingDocumentAnalysisCommandRepositoryGateway = {
+    createLegalPleadingDocumentAnalysis: jest.fn(),
+  };
 
-  const legalPleadingDocumentQueryRepositoryGateway: jest.Mocked<LegalPleadingDocumentQueryRepositoryGateway> =
-    {
-      findByDocumentType: jest.fn(),
-    } as unknown as jest.Mocked<LegalPleadingDocumentQueryRepositoryGateway>;
+  const legalPleadingDocumentQueryRepositoryGateway = {
+    findByDocumentTypeAndOrganizationIdAndLegalPleadingId: jest.fn(),
+  };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -167,6 +161,7 @@ describe(CreateLegalPleadingDocumentAnalysisUseCase.name, () => {
       deletedAt: null,
       legalPleadingDocumentAnalysis: null,
     });
+
     const queryResult = {
       legalPleadingDocument: [docPersonal, docCnis1, docCnis2],
       analysisToolClient: { createdBy: {}, updatedBy: {} },

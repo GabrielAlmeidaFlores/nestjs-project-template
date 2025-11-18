@@ -3,7 +3,10 @@ import { Test } from '@nestjs/testing';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
@@ -28,7 +31,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
 
 const mockDeleteCnisFastAnalysisUseCase = {
@@ -38,30 +40,22 @@ const mockDeleteCnisFastAnalysisUseCase = {
 describe(DeleteAnalysisToolRecordUseCase.name, () => {
   let useCase: DeleteAnalysisToolRecordUseCase;
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+  const organizationMemberQueryRepositoryGateway = {
+    findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+  };
 
-  const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
-    {
-      findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationIdAndAuthIdentityId: jest.fn(),
-      listByOrganizationIdAndAuthIdentityId: jest.fn(),
-      countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
-      findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-    };
+  const analysisToolRecordQueryRepositoryGateway = {
+    findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail:
+      jest.fn(),
+  };
 
-  const analysisToolRecordCommandRepositoryGateway: jest.Mocked<AnalysisToolRecordCommandRepositoryGateway> =
-    {
-      deleteAnalysisToolRecord: jest.fn(),
-      createAnalysisToolRecord: jest.fn(),
-    };
+  const analysisToolRecordCommandRepositoryGateway = {
+    deleteAnalysisToolRecord: jest.fn(),
+  };
 
-  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
-    {
-      execute: jest.fn(),
-    };
+  const baseTransactionRepositoryGateway = {
+    execute: jest.fn(),
+  };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -83,6 +77,40 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
   const buildAnalysisToolRecordQueryResult = (
     options: { withCnisAnalysis?: boolean } = {},
   ): GetAnalysisToolRecordWithRelationsQueryResult => {
+    const customerMock = GetCustomerQueryResult.build({
+      id: new CustomerId(),
+      name: 'Test Customer',
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+    const responsibleMock =
+      GetOrganizationMemberWithCustomerRelationQueryResult.build({
+        id: new OrganizationMemberId(),
+        owner: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        customer: customerMock,
+      });
+
+    const clientMock = GetAnalysisToolClientQueryResult.build({
+      id: new AnalysisToolClientId(),
+      name: 'Test Client',
+      federalDocument: null,
+      email: null,
+      inssPassword: null,
+      phoneNumber: null,
+      birthDate: null,
+      gender: null,
+      clientType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
     const cnisFastAnalysisMock =
       options.withCnisAnalysis === true
         ? GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult.build(
@@ -90,26 +118,9 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
               id: new CnisFastAnalysisId(),
               cnisDocument: null,
               status: AnalysisStatusEnum.COMPLETED,
-              analysisToolClient: GetAnalysisToolClientQueryResult.build({
-                id: new AnalysisToolClientId(),
-                name: null,
-                federalDocument: null,
-                email: null,
-                inssPassword: null,
-                phoneNumber: null,
-                birthDate: null,
-                gender: null,
-                clientType: null,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                deletedAt: null,
-              }),
-              createdBy: {
-                customer: {},
-              } as GetOrganizationMemberWithCustomerRelationQueryResult,
-              updatedBy: {
-                customer: {},
-              } as GetOrganizationMemberWithCustomerRelationQueryResult,
+              analysisToolClient: clientMock,
+              createdBy: responsibleMock,
+              updatedBy: responsibleMock,
               createdAt: new Date(),
               updatedAt: new Date(),
               deletedAt: null,

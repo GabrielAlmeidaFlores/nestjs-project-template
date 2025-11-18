@@ -47,7 +47,7 @@ export class DeleteCnisFastAnalysisUseCase {
     }
 
     const cnisFastAnalysisResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdOrFail(
+      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
