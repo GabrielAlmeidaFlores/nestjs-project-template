@@ -3,13 +3,17 @@ import moment from 'moment';
 
 import { especiesData } from '@lib/cnis-analysis/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
+import { ipcaData } from '@lib/cnis-analysis/data/ipca';
 import { TetoInssData } from '@lib/cnis-analysis/data/teto.inss';
 import { CarenciaInterface } from '@lib/cnis-analysis/dto/carencia';
 import { ConcomitanciaInterface } from '@lib/cnis-analysis/dto/concomitancia';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomitancia-detalhes';
 import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/dto/consolidado-relation';
+import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/dto/correcao-monetaria';
 import { ManutencaoInterface } from '@lib/cnis-analysis/dto/manutencao';
+import { SalarioInterface } from '@lib/cnis-analysis/dto/salario';
 import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/dto/salario-concomitante';
+import { TetoInterface } from '@lib/cnis-analysis/dto/teto';
 import {
   TimeContributionDataInterface,
   TimeContributionInterface,
@@ -171,7 +175,20 @@ export class CnisAnalysisService {
 
     const ajusteAoTeto = this.calculateAjusteAoTeto(data);
 
-    console.log(ajusteAoTeto);
+    const correcaoMonetaria =
+      this.calculateAplicacaodaCorrecaoMonetaria(ajusteAoTeto);
+
+    const salarioSBPosReforma =
+      this.calculateSalarioSBPosReforma(correcaoMonetaria);
+
+    const salarioSBPreReforma =
+      this.calculateSalarioSBPreReforma(correcaoMonetaria);
+
+    const ajuseFinal = this.ajusteFinalSbMinimoEAoTeto(
+      salarioSBPosReforma,
+      salarioSBPreReforma,
+    );
+    console.log(ajuseFinal);
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -1559,18 +1576,12 @@ export class CnisAnalysisService {
     return salariosConcomitantes;
   }
 
-  private calculateAjusteAoTeto(data: CnisOutputModel): object[] {
-    /// Ajuste ao Teto: Limitar o valor histórico de
-    // cada competência ao teto previdenciário daquele mês/ano.
-    //use TetoInssData apenas o ano para fazer a comparação
-    // então pegue a remuneração e compare com o teto daquele ano, caso a remuneração seja maior que o teto,
-    //  ajuste para o valor do teto
-    // Compare o TetoInssData ano com o ano da competência
-
+  private calculateAjusteAoTeto(data: CnisOutputModel): TetoInterface[] {
+    // Ajuste ao Teto: Limitar o valor histórico de cada competência ao teto previdenciário daquele mês/ano.
     // TODO TETO INSS DATA ANUAL devemos pegar do site, todo mês tem uma atualização e uma nova versão do arquivo
     //  https://www.gov.br/previdencia/pt-br/assuntos/previdencia-social/arquivos/fatores_de_atualizacao_11_2025_art_33.xlsx
 
-    const teto: object[] = [];
+    const teto: TetoInterface[] = [];
     if (!data.socialSecurityRelations) {
       return teto;
     }
@@ -1593,14 +1604,14 @@ export class CnisAnalysisService {
             const salarioAjustado =
               salario > tetoData.tetoInss ? tetoData.tetoInss : salario;
             teto.push({
-              competencia: dataRemuneracao.toISOString().split('T')[0],
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
               salarioOriginal: salario,
               salarioAjustado: salarioAjustado,
               tetoAplicado: tetoData.tetoInss,
             });
           } else {
             teto.push({
-              competencia: dataRemuneracao.toISOString().split('T')[0],
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
               salarioOriginal: salario,
               salarioAjustado: salario,
               tetoAplicado: null,
@@ -1611,5 +1622,142 @@ export class CnisAnalysisService {
     });
 
     return teto;
+  }
+
+  private calculateAplicacaodaCorrecaoMonetaria(
+    data: TetoInterface[],
+  ): CorrecaoMonetariaItemInterface[] {
+    ///Aplicação da Correção Monetária: Para cada salário, calcular o valor corrigido.
+    //Fórmula/Lógica: Valor Corrigido = Valor Histórico (ajustado ao teto) * Fator de Correção (INPC).
+
+    return data.map((item) => {
+      const competenciaFormatted =
+        item.competencia.slice(5, 7) + '/' + item.competencia.slice(0, 4);
+      const fatorData = ipcaData.find(
+        (f) => f.competencia === competenciaFormatted,
+      );
+      const fatorCorrecao = fatorData ? fatorData?.fatorSimplificado : 1;
+
+      const valorCorrigido = item.salarioAjustado * fatorCorrecao;
+
+      return {
+        ...item,
+        fatorCorrecao: fatorCorrecao,
+        valorCorrigido: Number(valorCorrigido.toFixed(2)),
+      };
+    });
+  }
+
+  private calculateSalarioSBPosReforma(
+    data: CorrecaoMonetariaItemInterface[],
+  ): SalarioInterface {
+    // 5.2. Cálculo do Salário-de-Benefício (SB) - Pós-Reforma (Regra Atual):
+    // Descrição: Média de 100% dos salários de contribuição desde julho de 1994.
+    // Fórmula/Lógica: SB = (Soma de todos os 'Valores Corrigidos') / (Número total de competências válidas
+    //  no período).
+
+    const salariosValidos = data.filter((item) => {
+      const competenciaDate = new Date(item.competencia);
+      return (
+        competenciaDate instanceof Date &&
+        !isNaN(competenciaDate.getTime()) &&
+        competenciaDate >= new Date(1994, 6, 1)
+      );
+    });
+
+    const somaValoresCorrigidos = salariosValidos.reduce(
+      (acc, cur) => acc + (cur.valorCorrigido ?? 0),
+      0,
+    );
+
+    const numeroCompetenciasValidas = salariosValidos.length;
+
+    const salarioBeneficio =
+      numeroCompetenciasValidas > 0
+        ? somaValoresCorrigidos / numeroCompetenciasValidas
+        : 0;
+
+    return {
+      salarioBeneficio: Number(salarioBeneficio.toFixed(2)),
+      numeroCompetenciasConsideradas: numeroCompetenciasValidas,
+      somaValoresConsiderados: Number(somaValoresCorrigidos.toFixed(2)),
+    };
+  }
+
+  private calculateSalarioSBPreReforma(
+    data: CorrecaoMonetariaItemInterface[],
+  ): SalarioInterface {
+    // Descrição: Média dos 80% maiores salários de contribuição desde julho de 1994.
+    // Fórmula/Lógica:
+    // Ordenar todos os "Valores Corrigidos" do menor para o maior.
+    // Descartar os 20% menores valores.
+    // SB = (Soma dos 80% maiores 'Valores Corrigidos') / (Número de competências correspondente a 80%).
+
+    const salariosValidos = data.filter((item) => {
+      const competenciaDate = new Date(item.competencia);
+      return (
+        competenciaDate instanceof Date &&
+        !isNaN(competenciaDate.getTime()) &&
+        competenciaDate >= new Date(1994, 6, 1)
+      );
+    });
+
+    const valoresCorrigidosOrdenados = salariosValidos
+      .map((item) => item.valorCorrigido ?? 0)
+      .sort((a, b) => a - b);
+
+    const numeroTotal = valoresCorrigidosOrdenados.length;
+    const numeroParaConsiderar = Math.ceil(numeroTotal * 0.8);
+    const valoresParaConsiderar = valoresCorrigidosOrdenados.slice(
+      numeroTotal - numeroParaConsiderar,
+    );
+
+    const somaValoresConsiderados = valoresParaConsiderar.reduce(
+      (acc, cur) => acc + cur,
+      0,
+    );
+
+    const salarioBeneficio =
+      numeroParaConsiderar > 0
+        ? somaValoresConsiderados / numeroParaConsiderar
+        : 0;
+
+    return {
+      salarioBeneficio: Number(salarioBeneficio.toFixed(2)),
+      numeroCompetenciasConsideradas: numeroParaConsiderar,
+      somaValoresConsiderados: Number(somaValoresConsiderados.toFixed(2)),
+    };
+  }
+
+  private ajusteFinalSbMinimoEAoTeto(
+    pos: SalarioInterface,
+    pre: SalarioInterface,
+  ) {
+    // 5.4. Ajuste Final do SB ao Mínimo e ao Teto
+    // Descrição: Garantir que o SB final (de ambos os cálculos acima) não seja inferior ao salário mínimo vigente
+    // nem superior ao teto do RGPS na data da análise.
+    // Pegue o ultimo salário mínimo vigente e o último teto do RGPS disponível. TetoInssData.Salario mínimo
+    // deve ser atualizado anualmente conforme o governo publica os novos valores.
+
+    const actualYear = new Date().getFullYear();
+
+    const data = TetoInssData.find((t) => t.ano === actualYear);
+
+    const salarioMinimoVigente = data?.salarioMinimo ?? 0;
+
+    const ajusteSbPos = Math.min(
+      Math.max(pos.salarioBeneficio, salarioMinimoVigente),
+      data?.tetoInss ?? pos.salarioBeneficio,
+    );
+
+    const ajusteSbPre = Math.min(
+      Math.max(pre.salarioBeneficio, salarioMinimoVigente),
+      data?.tetoInss ?? pre.salarioBeneficio,
+    );
+
+    return {
+      ajusteSbPos: Number(ajusteSbPos.toFixed(2)),
+      ajusteSbPre: Number(ajusteSbPre.toFixed(2)),
+    };
   }
 }
