@@ -45,40 +45,53 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
   const fileProcessorGateway: jest.Mocked<FileProcessorGateway> = {
     getFileBuffer: jest.fn(),
-  } as unknown as jest.Mocked<FileProcessorGateway>;
+    uploadFile: jest.fn(),
+    getOriginalFileName: jest.fn(),
+    getFileSignedUrl: jest.fn(),
+  };
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const cnisFastAnalysisCommandRepositoryGateway: jest.Mocked<CnisFastAnalysisCommandRepositoryGateway> =
     {
       updateCnisFastAnalysis: jest.fn(),
-    } as unknown as jest.Mocked<CnisFastAnalysisCommandRepositoryGateway>;
+      createCnisFastAnalysis: jest.fn(),
+      deleteCnisFastAnalysis: jest.fn(),
+    };
 
   const cnisFastAnalysisResultCommandRepositoryGateway: jest.Mocked<CnisFastAnalysisResultCommandRepositoryGateway> =
     {
       createCnisFastAnalysisResult: jest.fn(),
-    } as unknown as jest.Mocked<CnisFastAnalysisResultCommandRepositoryGateway>;
+      updateCnisFastAnalysisResult: jest.fn(),
+    };
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-    } as unknown as jest.Mocked<CnisFastAnalysisQueryRepositoryGateway>;
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
+      listByOrganizationId: jest.fn(),
+    };
 
   const analysisProcessorGateway: jest.Mocked<AnalysisProcessorGateway> = {
     parseCnisDocument: jest.fn(),
     getCnisCompleteAnalysis: jest.fn(),
-  } as unknown as jest.Mocked<AnalysisProcessorGateway>;
+    getCnisSimplifiedAnalysis: jest.fn(),
+    validateCnisDocument: jest.fn(),
+    getLegalPleadingCompleteAnalysis: jest.fn(),
+    getLegalPleadingSimplifiedAnalysis: jest.fn(),
+    getLegalPleadingQuickDocumentAnalysis: jest.fn(),
+  };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
+    };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -103,6 +116,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     const responsible =
       GetOrganizationMemberWithCustomerRelationQueryResult.build({
         id: new OrganizationMemberId(),
+        owner: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
         customer: GetCustomerQueryResult.build({
           id: new CustomerId(),
           name: 'Creator User',
@@ -111,10 +128,6 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
           updatedAt: new Date(),
           deletedAt: null,
         }),
-        owner: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
       });
 
     const client = GetAnalysisToolClientWithRelationsQueryResult.build({
@@ -124,6 +137,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       updatedBy: responsible,
       federalDocument: null,
       email: null,
+      inssPassword: null,
       phoneNumber: null,
       birthDate: null,
       gender: null,
@@ -131,6 +145,8 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
+      analysisToolClientInssBenefit: [],
+      analysisToolClientLegalProceeding: [],
     });
 
     return GetCnisFastAnalysisWithRelationsQueryResult.build({
@@ -222,10 +238,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     const mockAiAnalysis = 'This is the complete AI analysis.';
     const mockTransaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       cnisFastAnalysisQueryResult,
     );
     fileProcessorGateway.getFileBuffer.mockResolvedValueOnce(
@@ -255,7 +271,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
 
     expect(result).toBeInstanceOf(CreateCnisFastAnalysisResultResponseDto);
     expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+      cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail,
     ).toHaveBeenCalledWith(
       cnisFastAnalysisId,
       organizationSessionData.organizationId,
@@ -289,7 +305,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     const organizationSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -304,14 +320,13 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     const cnisFastAnalysisId = new CnisFastAnalysisId();
     const organizationMember = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockRejectedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockRejectedValueOnce(
       new CnisFastAnalysisNotFoundError(),
     );
 
-    // Act & Assert
     await expect(
       useCase.execute(sessionData, organizationSessionData, cnisFastAnalysisId),
     ).rejects.toBeInstanceOf(CnisFastAnalysisNotFoundError);
@@ -326,10 +341,10 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
       cnisDocument: null,
     });
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       queryResultWithNullDoc,
     );
 

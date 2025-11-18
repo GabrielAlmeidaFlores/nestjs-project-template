@@ -37,7 +37,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationAndAuthIdentityId(
+  public async listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,
@@ -264,8 +264,9 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
   }
 
-  public async countByOrganizationId(
+  public async countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -274,10 +275,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -290,9 +291,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
-  public async findByAnalysisToolClientAndOrganizationIdWithRelations(
+  public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -304,10 +306,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -329,9 +331,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByIdWithRelationsOrFail(
+  public async findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     err: Constructor<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
@@ -342,10 +345,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -370,9 +373,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async countAnalysisByAnalysisToolClientId(
+  public async countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -381,10 +385,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
           analysisToolClient: {

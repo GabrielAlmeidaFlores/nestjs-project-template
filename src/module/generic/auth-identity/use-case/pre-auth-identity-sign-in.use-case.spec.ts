@@ -42,10 +42,10 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
@@ -62,11 +62,11 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
 
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
-      findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
-      findOneByEmail: jest.fn(),
-      findOneByFederalDocument: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
+      findOneByEmailAndOrganizationId: jest.fn(),
+      findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
-      findOneByAnalysisToolClientIdOrFail: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
     };
 
   const analysisToolClientInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
@@ -233,16 +233,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const transaction = buildTransaction();
     const TOTAL_TRANSACTIONS = 7;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       null,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       null,
     );
     analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
@@ -310,16 +310,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       null,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       null,
     );
     analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
@@ -362,13 +362,13 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const existingClient = buildClientQueryResult(conflictingClientId);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       existingClient,
     );
 
@@ -387,16 +387,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const existingClient = buildClientQueryResult(conflictingClientId);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       null,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       existingClient,
     );
 
@@ -416,16 +416,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       null,
     );
     analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
@@ -447,7 +447,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const dto = buildDto();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -463,10 +463,10 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const dto = buildDto();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 

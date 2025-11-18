@@ -52,7 +52,7 @@ export class CreateLegalPleadingUseCase {
     dto: CreateLegalPleadingRequestDto,
   ): Promise<CreateLegalPleadingResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -62,7 +62,7 @@ export class CreateLegalPleadingUseCase {
     }
 
     const analysisToolClientQueryResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         dto.json.analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
@@ -82,8 +82,9 @@ export class CreateLegalPleadingUseCase {
         : null;
 
     const countLegalPleading =
-      await this.legalPleadingQueryRepositoryGateway.countByOrganizationId(
+      await this.legalPleadingQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     const legalPleading = new LegalPleadingEntity({

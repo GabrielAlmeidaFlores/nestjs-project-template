@@ -43,16 +43,17 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      findOneByCnisFastAnalysisAndOrganizationIdOrFail: jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -204,10 +205,10 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     const updaterPicSignedUrl = new URL('https://example.com/updater.jpg');
     const EXPECTED_SIGNED_URL_CALLS = 3;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       queryResult,
     );
     fileProcessorGateway.getFileSignedUrl
@@ -226,7 +227,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
 
     expect(result).toBeInstanceOf(GetCnisFastAnalysisResponseDto);
     expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+      cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail,
     ).toHaveBeenCalledWith(
       cnisFastAnalysisId,
       orgSessionData.organizationId,
@@ -261,10 +262,10 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
       withProfilePictures: false,
     });
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       queryResult,
     );
 
@@ -289,7 +290,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 

@@ -27,7 +27,7 @@ export class LegalPleadingDocumentAnalysisTypeormQueryRepository
   ) {
     super(repository);
   }
-  public async findOneByLegalPleadingDocumentAnalysisAndOrganizationIdOrFail(
+  public async findOneByLegalPleadingDocumentAnalysisIdAndOrganizationIdOrFail(
     id: LegalPleadingDocumentAnalysisId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
