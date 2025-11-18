@@ -8,6 +8,7 @@ import { ConcomitanciaInterface } from '@lib/cnis-analysis/dto/concomitancia';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomitancia-detalhes';
 import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/dto/consolidado-relation';
 import { ManutencaoInterface } from '@lib/cnis-analysis/dto/manutencao';
+import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/dto/salario-concomitante';
 import {
   TimeContributionDataInterface,
   TimeContributionInterface,
@@ -162,7 +163,10 @@ export class CnisAnalysisService {
     const calculateTempoTotalComRestricoes =
       this.calculateTempoTotalComRestricoes(consolidadoResumido);
 
-    console.log(calculateTempoTotalComRestricoes);
+    const salariosConcomitantes = this.calculateSalariosConcomitantes(
+      data,
+      consolidadoResumido,
+    );
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -177,6 +181,8 @@ export class CnisAnalysisService {
       indicadoresDeIncapacidade,
       periodoDeGraca,
       dataFinalDaQualidadedeDeSegurado,
+      calculateTempoTotalComRestricoes,
+      salariosConcomitantes,
     });
     return cnis;
   }
@@ -914,7 +920,9 @@ export class CnisAnalysisService {
           : []),
         ...indicadoresRemuneracao,
       ];
-
+      const uniqueIndicadores = Array.from(new Set(indicadoresArray));
+      indicadoresArray.length = 0;
+      indicadoresArray.push(...uniqueIndicadores);
       const indicadores = indicadoresArray.join(',').trim() ?? '';
       const isPendencia = this.calculateIsPendencia(indicadores);
 
@@ -1421,6 +1429,132 @@ export class CnisAnalysisService {
     // Cálculo do Tempo Total com Restrição (IREC-LC123/MEI):
     // Descrição: Somar o tempo de todos os vínculos que foram contribuídos com alíquota reduzida.
     // Fórmula/Lógica: Soma(tempoCalculado de todos os vínculos com indicador 'IREC-LC123' ou 'IREC-MEI').
-    return data;
+    const tempoTotalComRestricoes = data
+      .filter((item) => {
+        const indicadores = item.indicadores ?? '';
+        return (
+          indicadores.includes('IREC-LC123') || indicadores.includes('IREC-MEI')
+        );
+      })
+      .map((item) => {
+        return {
+          seq: item.seq,
+          indicadores: item.indicadores,
+          contributionTime: item.contributionTime,
+          validContributionTime: item.validContributionTime,
+          carencia: item.carencia,
+          isConcomitante: item.isConcomitante,
+          isBeneficio: item.isBeneficio,
+          isIntercalado: item.isIntercalado,
+          tipo: item.tipo,
+          ajustado: item.ajustado,
+          dataAjustada: item.dataAjustada,
+        };
+      });
+
+    if (tempoTotalComRestricoes.length === 0) {
+      return [
+        [],
+        {
+          carenciaTotal: 0,
+          tempoTotalComRestricoesContribuicao: { dias: 0, meses: 0, anos: 0 },
+        },
+      ];
+    }
+
+    const tempoTotalComRestricoesContribuicao = tempoTotalComRestricoes.reduce(
+      (acc, cur) => {
+        const dias = acc.dias + (cur.validContributionTime?.dias ?? 0);
+        const meses = acc.meses + (cur.validContributionTime?.meses ?? 0);
+        const anos = acc.anos + (cur.validContributionTime?.anos ?? 0);
+
+        let adjustedMeses = meses;
+        let adjustedAnos = anos;
+
+        if (adjustedMeses >= 12) {
+          adjustedAnos += Math.floor(adjustedMeses / 12);
+          adjustedMeses = adjustedMeses % 12;
+        }
+
+        return {
+          dias,
+          meses: adjustedMeses,
+          anos: adjustedAnos,
+        };
+      },
+      { dias: 0, meses: 0, anos: 0 },
+    );
+
+    const tempoTotalComRestricoesCarencia = tempoTotalComRestricoes.reduce(
+      (acc, cur) => acc + (cur.carencia ?? 0),
+      0,
+    );
+
+    return [
+      tempoTotalComRestricoes,
+      {
+        carenciaTotal: tempoTotalComRestricoesCarencia,
+        tempoTotalComRestricoesContribuicao,
+      },
+    ];
+  }
+
+  private calculateSalariosConcomitantes(
+    data: CnisOutputModel,
+    concomitancia: ConsolidadoRelationInterface[],
+  ): SalariosConcomitantesInterface[] {
+    const salariosConcomitantes: SalariosConcomitantesInterface[] = [];
+
+    if (!data.socialSecurityRelations) {
+      return salariosConcomitantes;
+    }
+
+    const concomitanteSeqs = new Set(
+      concomitancia.filter((c) => c.isConcomitante).map((c) => c.seq),
+    );
+
+    data.socialSecurityRelations.forEach((relation) => {
+      const seq = relation.socialSecurityAffiliationInfo.seq ?? 0;
+      if (!concomitanteSeqs.has(seq)) {
+        return;
+      }
+
+      relation.socialSecurityAffiliationEarningsHistory.forEach((earning) => {
+        const dataRemuneracao = earning.competencia;
+        const rawSalario = earning.remuneracao;
+        const cleanedSalario = String(rawSalario ?? '')
+          .replace(/[.,]/g, '')
+          .replace(',', '.');
+        const formattedSalario = cleanedSalario.replace('.', ',');
+        const salario = parseFloat(formattedSalario) || 0;
+
+        if (
+          dataRemuneracao instanceof Date &&
+          !isNaN(dataRemuneracao.getTime()) &&
+          salario > 0
+        ) {
+          const monthYearKey = `${dataRemuneracao.getFullYear()}-${String(
+            dataRemuneracao.getMonth() + 1,
+          ).padStart(2, '0')}`;
+
+          const existingEntry = salariosConcomitantes.find(
+            (entry) => entry.mesAno === monthYearKey,
+          );
+          if (existingEntry) {
+            existingEntry.totalRemuneracao =
+              (existingEntry.totalRemuneracao ?? 0) + salario;
+            existingEntry.vinculos.push({ seq, remuneracao: salario });
+          } else {
+            salariosConcomitantes.push({
+              mesAno: monthYearKey,
+              totalRemuneracao: salario,
+              vinculos: [{ seq, remuneracao: salario }],
+            });
+          }
+        }
+      });
+    });
+
+    return salariosConcomitantes;
   }
 }
