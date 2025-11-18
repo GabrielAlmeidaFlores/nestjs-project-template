@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { especiesData } from '@lib/cnis-analysis/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
+import { TetoInssData } from '@lib/cnis-analysis/data/teto.inss';
 import { CarenciaInterface } from '@lib/cnis-analysis/dto/carencia';
 import { ConcomitanciaInterface } from '@lib/cnis-analysis/dto/concomitancia';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomitancia-detalhes';
@@ -167,6 +168,10 @@ export class CnisAnalysisService {
       data,
       consolidadoResumido,
     );
+
+    const ajusteAoTeto = this.calculateAjusteAoTeto(data);
+
+    console.log(ajusteAoTeto);
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -1521,12 +1526,8 @@ export class CnisAnalysisService {
 
       relation.socialSecurityAffiliationEarningsHistory.forEach((earning) => {
         const dataRemuneracao = earning.competencia;
-        const rawSalario = earning.remuneracao;
-        const cleanedSalario = String(rawSalario ?? '')
-          .replace(/[.,]/g, '')
-          .replace(',', '.');
-        const formattedSalario = cleanedSalario.replace('.', ',');
-        const salario = parseFloat(formattedSalario) || 0;
+        const rawSalario = earning.remuneracao ?? '';
+        const salario = Number(rawSalario.replace(/\./g, '').replace(',', '.'));
 
         if (
           dataRemuneracao instanceof Date &&
@@ -1556,5 +1557,59 @@ export class CnisAnalysisService {
     });
 
     return salariosConcomitantes;
+  }
+
+  private calculateAjusteAoTeto(data: CnisOutputModel): object[] {
+    /// Ajuste ao Teto: Limitar o valor histórico de
+    // cada competência ao teto previdenciário daquele mês/ano.
+    //use TetoInssData apenas o ano para fazer a comparação
+    // então pegue a remuneração e compare com o teto daquele ano, caso a remuneração seja maior que o teto,
+    //  ajuste para o valor do teto
+    // Compare o TetoInssData ano com o ano da competência
+
+    // TODO TETO INSS DATA ANUAL devemos pegar do site, todo mês tem uma atualização e uma nova versão do arquivo
+    //  https://www.gov.br/previdencia/pt-br/assuntos/previdencia-social/arquivos/fatores_de_atualizacao_11_2025_art_33.xlsx
+
+    const teto: object[] = [];
+    if (!data.socialSecurityRelations) {
+      return teto;
+    }
+
+    data.socialSecurityRelations.forEach((relation) => {
+      relation.socialSecurityAffiliationEarningsHistory.forEach((earning) => {
+        const dataRemuneracao = earning.competencia;
+        const rawSalario = earning.remuneracao ?? '';
+        const salario = Number(rawSalario.replace(/\./g, '').replace(',', '.'));
+
+        if (
+          dataRemuneracao instanceof Date &&
+          !isNaN(dataRemuneracao.getTime()) &&
+          salario > 0
+        ) {
+          const year = dataRemuneracao.getFullYear();
+
+          const tetoData = TetoInssData.find((t) => t.ano === year);
+          if (tetoData) {
+            const salarioAjustado =
+              salario > tetoData.tetoInss ? tetoData.tetoInss : salario;
+            teto.push({
+              competencia: dataRemuneracao.toISOString().split('T')[0],
+              salarioOriginal: salario,
+              salarioAjustado: salarioAjustado,
+              tetoAplicado: tetoData.tetoInss,
+            });
+          } else {
+            teto.push({
+              competencia: dataRemuneracao.toISOString().split('T')[0],
+              salarioOriginal: salario,
+              salarioAjustado: salario,
+              tetoAplicado: null,
+            });
+          }
+        }
+      });
+    });
+
+    return teto;
   }
 }
