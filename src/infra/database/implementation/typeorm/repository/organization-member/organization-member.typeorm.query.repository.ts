@@ -27,7 +27,7 @@ export class OrganizationMemberTypeormQueryRepository
   ) {
     super(repository);
   }
-  public async findOneByCustomerAndAuthIdentityId(
+  public async findOneByCustomerIdAndAuthIdentityId(
     authIdentityId: AuthIdentityId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberQueryResult | null> {
@@ -65,7 +65,7 @@ export class OrganizationMemberTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByCustomerAndOrganizationIdWithRelations(
+  public async findOneByCustomerIdAndOrganizationIdWithRelations(
     customerId: CustomerId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult | null> {
@@ -101,7 +101,7 @@ export class OrganizationMemberTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByCustomerAndOrganizationId(
+  public async findOneByCustomerIdAndOrganizationId(
     customerId: CustomerId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberQueryResult | null> {

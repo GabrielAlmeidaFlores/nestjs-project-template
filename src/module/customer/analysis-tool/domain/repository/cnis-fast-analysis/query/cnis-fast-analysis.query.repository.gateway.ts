@@ -7,7 +7,7 @@ import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/s
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class CnisFastAnalysisQueryRepositoryGateway {
-  public abstract findOneByIdWithRelationsOrFail(
+  public abstract findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
     id: CnisFastAnalysisId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
@@ -17,10 +17,4 @@ export abstract class CnisFastAnalysisQueryRepositoryGateway {
     organizationId: OrganizationId,
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetCnisFastAnalysisWithRelationsQueryResult>>;
-
-  public abstract findOneByCnisFastAnalysisAndOrganizationIdOrFail(
-    cnisFastAnalysisId: CnisFastAnalysisId,
-    organizationId: OrganizationId,
-    err: ConstructorType<NotFoundError>,
-  ): Promise<GetCnisFastAnalysisWithRelationsQueryResult>;
 }
