@@ -51,7 +51,8 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
       findOneByCnisFastAnalysisIdAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
     };

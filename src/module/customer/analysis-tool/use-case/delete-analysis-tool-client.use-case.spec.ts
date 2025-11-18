@@ -70,7 +70,8 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
       findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-      findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail: jest.fn(),
+      findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
       countByOrganizationIdAndAuthIdentityId: jest.fn(),
       listByOrganizationIdAndAuthIdentityId: jest.fn(),
       countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
@@ -79,7 +80,8 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
       findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
+        jest.fn(),
       countByOrganizationIdAndAuthIdentityId: jest.fn(),
       listByOrganizationIdAndAuthIdentityId: jest.fn(),
       countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),

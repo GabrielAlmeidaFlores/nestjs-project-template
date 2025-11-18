@@ -62,7 +62,8 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
+        jest.fn(),
       countByOrganizationIdAndAuthIdentityId: jest.fn(),
       listByOrganizationIdAndAuthIdentityId: jest.fn(),
       countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
