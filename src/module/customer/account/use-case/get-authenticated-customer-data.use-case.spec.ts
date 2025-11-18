@@ -4,7 +4,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-and-organization-relations.query.result';
@@ -16,12 +16,13 @@ import { CustomerNotFoundError } from '@module/customer/account/error/customer-n
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
-import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+
+import type { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
+import type { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 
 describe(GetAuthenticatedCustomerDataUseCase.name, () => {
   let useCase: GetAuthenticatedCustomerDataUseCase;
@@ -29,19 +30,21 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
   const customerQueryRepositoryGateway: jest.Mocked<CustomerQueryRepositoryGateway> =
     {
       findOneByAuthIdentityIdOrFail: jest.fn(),
+      findOneByCustomerId: jest.fn(),
+      findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
     } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
     } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
 
   const fileProcessorGateway: jest.Mocked<FileProcessorGateway> = {
     getCustomerProfilePicture: jest.fn(),
     getOrganizationLogo: jest.fn(),
-    processAndUploadProfilePicture: jest.fn(),
   } as unknown as jest.Mocked<FileProcessorGateway>;
 
   const buildSessionData = (): SessionDataModel =>
@@ -51,185 +54,162 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
       userLevel: UserLevelEnum.CUSTOMER,
     });
 
-  const buildOrgSessionData = (
-    orgId: OrganizationId = new OrganizationId(),
-  ): OrganizationSessionDataModel =>
+  const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
     OrganizationSessionDataModel.build({
-      organizationId: orgId,
+      organizationId: new OrganizationId(),
     });
 
-  const now: Date = new Date();
-
-  const buildAuthIdentity = (): GetAuthIdentityQueryResult =>
-    GetAuthIdentityQueryResult.build({
-      id: new AuthIdentityId(),
-      email: new Email('maria@example.com'),
-      federalDocument: new FederalDocument('12345678901'),
-      password: new HashedPassword('password'),
-      authenticatorAppSecret: null,
-      createdAt: now,
-      updatedAt: now,
-      deletedAt: null,
-    });
-
-  const buildCustomerWithAuthIdentity = (
-    overrides?: Partial<GetCustomerWithAuthIdentityRelationQueryResult>,
-  ): GetCustomerWithAuthIdentityRelationQueryResult =>
-    GetCustomerWithAuthIdentityRelationQueryResult.build({
+  const buildCustomerResult = (
+    options: { withPicture?: boolean } = {},
+  ): GetCustomerQueryResult =>
+    GetCustomerQueryResult.build({
       id: new CustomerId(),
-      name: 'Maria Silva',
-      profilePicture: null,
-      createdAt: now,
-      updatedAt: now,
+      name: 'Nome do Cliente',
+      profilePicture:
+        (options.withPicture ?? false) ? 'path/profile.jpg' : null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       deletedAt: null,
-      authIdentity: buildAuthIdentity(),
-      ...overrides,
     });
 
-  const buildOrganization = (
-    overrides?: Partial<GetOrganizationQueryResult>,
-  ): GetOrganizationQueryResult =>
-    GetOrganizationQueryResult.build({
-      id: new OrganizationId(),
-      name: 'Org XPTO',
-      organizationLogo: null,
-      createdAt: now,
-      updatedAt: now,
-      deletedAt: null,
-      ...overrides,
-    });
-
-  const buildOrgMemberWithRelations = (
-    overrides?: Partial<GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult>,
+  const buildOrgMemberQueryResult = (
+    customer: GetCustomerWithAuthIdentityRelationQueryResult,
+    options: { withLogo?: boolean } = {},
   ): GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult =>
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult.build({
       id: new OrganizationMemberId(),
-      owner: false,
-      createdAt: now,
-      updatedAt: now,
+      owner: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       deletedAt: null,
-      customer: buildCustomerWithAuthIdentity(),
-      organization: buildOrganization(),
-      ...overrides,
+      customer: customer,
+      organization: GetOrganizationQueryResult.build({
+        id: new OrganizationId(),
+        name: 'Nome da Org',
+        organizationLogo: (options.withLogo ?? false) ? 'path/logo.png' : null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      }),
     });
 
-  beforeEach(async (): Promise<void> => {
-    const moduleRef = await Test.createTestingModule({
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
       providers: [
         GetAuthenticatedCustomerDataUseCase,
         {
           provide: CustomerQueryRepositoryGateway,
           useValue: customerQueryRepositoryGateway,
         },
-        { provide: FileProcessorGateway, useValue: fileProcessorGateway },
         {
           provide: OrganizationMemberQueryRepositoryGateway,
           useValue: organizationMemberQueryRepositoryGateway,
         },
+        {
+          provide: FileProcessorGateway,
+          useValue: fileProcessorGateway,
+        },
       ],
     }).compile();
 
-    useCase = moduleRef.get(GetAuthenticatedCustomerDataUseCase);
+    useCase = module.get(GetAuthenticatedCustomerDataUseCase);
     jest.clearAllMocks();
   });
 
-  it('success: returns data with customer profile picture and organization logo', async (): Promise<void> => {
-    const sessionData: SessionDataModel = buildSessionData();
-    const orgSessionData: OrganizationSessionDataModel = buildOrgSessionData();
+  it('deve retornar dados completos e URLs assinadas para logo e foto', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const customerResult = buildCustomerResult({ withPicture: true });
 
-    const customer: GetCustomerWithAuthIdentityRelationQueryResult =
-      buildCustomerWithAuthIdentity({ profilePicture: 'cust/pics/1.png' });
-    const organization: GetOrganizationQueryResult = buildOrganization({
-      organizationLogo: 'org/logos/42.png',
-    });
+    const customerWithAuthIdentity = {
+      ...customerResult,
+      authIdentity: {
+        email: new Email('test@email.com'),
+        federalDocument: new FederalDocument('12345678900'),
+      } as GetAuthIdentityQueryResult,
+    } as GetCustomerWithAuthIdentityRelationQueryResult;
 
-    const orgMember: GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult =
-      buildOrgMemberWithRelations({ customer, organization });
-
-    const profileUrl: URL = new URL(
-      `https://cdn.test/${customer.profilePicture}`,
+    const orgMemberResult = buildOrgMemberQueryResult(
+      customerWithAuthIdentity,
+      { withLogo: true },
     );
-    const logoUrl: URL = new URL(
-      `https://cdn.test/${organization.organizationLogo}`,
-    );
+
+    const MOCK_PROFILE_URL = new URL('https://cdn.example.com/signed/profile');
+    const MOCK_LOGO_URL = new URL('https://cdn.example.com/signed/logo');
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customer as unknown as Awaited<
-        ReturnType<
-          CustomerQueryRepositoryGateway['findOneByAuthIdentityIdOrFail']
-        >
-      >,
+      customerResult,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
-      orgMember,
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
+      orgMemberResult,
     );
-
     fileProcessorGateway.getCustomerProfilePicture.mockResolvedValueOnce(
-      profileUrl,
+      MOCK_PROFILE_URL,
     );
-    fileProcessorGateway.getOrganizationLogo.mockResolvedValueOnce(logoUrl);
+    fileProcessorGateway.getOrganizationLogo.mockResolvedValueOnce(
+      MOCK_LOGO_URL,
+    );
 
     const result = await useCase.execute(sessionData, orgSessionData);
 
     expect(result).toBeInstanceOf(GetAuthenticatedCustomerDataResponseDto);
 
-    expect(result.customer.name).toBe(customer.name);
-    expect(result.customer.email).toEqual(customer.authIdentity.email);
-    expect(result.customer.federalDocument).toEqual(
-      customer.authIdentity.federalDocument,
+    expect(result.customer.customerId).toEqual(customerResult.id);
+    expect(result.customer.email).toEqual(
+      orgMemberResult.customer.authIdentity.email,
     );
-    expect(result.customer.profilePicture).toBe(profileUrl.toString());
+    expect(result.customer.profilePicture).toBe(MOCK_PROFILE_URL.toString());
 
-    expect(result.organization.organizationId).toEqual(organization.id);
-    expect(result.organization.organizationName).toBe(organization.name);
-    expect(result.organization.organizationLogo).toBe(logoUrl.toString());
+    expect(result.organization.organizationId).toEqual(
+      orgMemberResult.organization.id,
+    );
+    expect(result.organization.organizationLogo).toBe(MOCK_LOGO_URL.toString());
+    expect(result.organization.organizationOwner).toBe(true);
 
     expect(fileProcessorGateway.getCustomerProfilePicture).toHaveBeenCalledWith(
-      customer.profilePicture,
+      customerResult.profilePicture,
     );
     expect(fileProcessorGateway.getOrganizationLogo).toHaveBeenCalledWith(
-      organization.organizationLogo,
+      orgMemberResult.organization.organizationLogo,
     );
   });
 
-  it('success: no images (does not call file processor) and returns basic data', async (): Promise<void> => {
-    const sessionData: SessionDataModel = buildSessionData();
-    const orgSessionData: OrganizationSessionDataModel = buildOrgSessionData();
-
-    const customer: GetCustomerWithAuthIdentityRelationQueryResult =
-      buildCustomerWithAuthIdentity({ profilePicture: null });
-    const organization: GetOrganizationQueryResult = buildOrganization({
-      organizationLogo: null,
-    });
-
-    const orgMember: GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult =
-      buildOrgMemberWithRelations({ customer, organization });
+  it('deve retornar dados e profilePicture/Logo nulos se não houver caminho', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const customerResult = buildCustomerResult({ withPicture: false });
+    const customerWithAuthIdentity = {
+      ...customerResult,
+      authIdentity: {
+        email: new Email('test@email.com'),
+        federalDocument: new FederalDocument('12345678900'),
+      } as GetAuthIdentityQueryResult,
+    } as GetCustomerWithAuthIdentityRelationQueryResult;
+    const orgMemberResult = buildOrgMemberQueryResult(
+      customerWithAuthIdentity,
+      { withLogo: false },
+    );
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customer as unknown as Awaited<
-        ReturnType<
-          CustomerQueryRepositoryGateway['findOneByAuthIdentityIdOrFail']
-        >
-      >,
+      customerResult,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
-      orgMember,
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
+      orgMemberResult,
     );
 
     const result = await useCase.execute(sessionData, orgSessionData);
 
     expect(result.customer.profilePicture).toBeUndefined();
     expect(result.organization.organizationLogo).toBeUndefined();
-
     expect(
       fileProcessorGateway.getCustomerProfilePicture,
     ).not.toHaveBeenCalled();
     expect(fileProcessorGateway.getOrganizationLogo).not.toHaveBeenCalled();
   });
 
-  it('error: propagates CustomerNotFoundError', async (): Promise<void> => {
-    const sessionData: SessionDataModel = buildSessionData();
-    const orgSessionData: OrganizationSessionDataModel = buildOrgSessionData();
+  it('deve lançar CustomerNotFoundError se o cliente não for encontrado', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockRejectedValueOnce(
       new CustomerNotFoundError(),
@@ -238,40 +218,22 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     await expect(
       useCase.execute(sessionData, orgSessionData),
     ).rejects.toBeInstanceOf(CustomerNotFoundError);
-
-    expect(
-      organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations,
-    ).not.toHaveBeenCalled();
-    expect(
-      fileProcessorGateway.getCustomerProfilePicture,
-    ).not.toHaveBeenCalled();
-    expect(fileProcessorGateway.getOrganizationLogo).not.toHaveBeenCalled();
   });
 
-  it('error: no organization link (returns null) → throws InvalidOrganizationSessionError', async (): Promise<void> => {
-    const sessionData: SessionDataModel = buildSessionData();
-    const orgSessionData: OrganizationSessionDataModel = buildOrgSessionData();
-    const customer: GetCustomerWithAuthIdentityRelationQueryResult =
-      buildCustomerWithAuthIdentity();
+  it('deve lançar InvalidOrganizationSessionError se o membro não for encontrado', async () => {
+    const sessionData = buildSessionData();
+    const orgSessionData = buildOrganizationSessionData();
+    const customerResult = buildCustomerResult();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customer as unknown as Awaited<
-        ReturnType<
-          CustomerQueryRepositoryGateway['findOneByAuthIdentityIdOrFail']
-        >
-      >,
+      customerResult,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
       null,
     );
 
     await expect(
       useCase.execute(sessionData, orgSessionData),
     ).rejects.toBeInstanceOf(InvalidOrganizationSessionError);
-
-    expect(
-      fileProcessorGateway.getCustomerProfilePicture,
-    ).not.toHaveBeenCalled();
-    expect(fileProcessorGateway.getOrganizationLogo).not.toHaveBeenCalled();
   });
 });

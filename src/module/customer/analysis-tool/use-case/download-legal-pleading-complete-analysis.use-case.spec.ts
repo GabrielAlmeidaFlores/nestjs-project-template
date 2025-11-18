@@ -38,19 +38,20 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationId: jest.fn(),
-      countByOrganizationId: jest.fn(),
-      listByOrganizationAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingIdAndOrganizationId: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
+        jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
+      countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const exportDocumentGateway: jest.Mocked<ExportDocumentGateway> = {
@@ -114,6 +115,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
       name: 'Test Client',
       federalDocument: null,
       email: null,
+      inssPassword: null,
       phoneNumber: null,
       birthDate: null,
       gender: null,
@@ -193,10 +195,10 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     const legalPleading = buildLegalPleadingQueryResult(legalPleadingResult);
     const streamableFile = buildStreamableFile();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
     exportDocumentGateway.downloadFileAsStreamable.mockResolvedValueOnce(
@@ -223,7 +225,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -243,10 +245,10 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     const legalPleadingId = new LegalPleadingId();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockRejectedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockRejectedValueOnce(
       new LegalPleadingNotFoundError(),
     );
 
@@ -267,10 +269,10 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     const member = buildOrganizationMember();
     const legalPleading = buildLegalPleadingQueryResult(null);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
 
@@ -292,10 +294,10 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     const legalPleadingResult = buildLegalPleadingResultQueryResult(null);
     const legalPleading = buildLegalPleadingQueryResult(legalPleadingResult);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleading,
     );
 
