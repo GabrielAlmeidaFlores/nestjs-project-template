@@ -36,7 +36,7 @@ export class SetOrganizationForCustomerUseCase {
       );
 
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationId(
         customer.id,
         dto.organizationId,
       );

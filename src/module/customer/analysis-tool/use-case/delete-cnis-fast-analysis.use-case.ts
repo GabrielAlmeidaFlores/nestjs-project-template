@@ -37,7 +37,7 @@ export class DeleteCnisFastAnalysisUseCase {
     cnisFastAnalysisId: CnisFastAnalysisId,
   ): Promise<DeleteCnisFastAnalysisResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -47,16 +47,17 @@ export class DeleteCnisFastAnalysisUseCase {
     }
 
     const cnisFastAnalysisResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisAndOrganizationIdOrFail(
+      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,
       );
 
     const legalPleadingResult =
-      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationId(
+      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
         cnisFastAnalysisResult.analysisToolClient.id,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     const deleteLegalPleading = legalPleadingResult.map(

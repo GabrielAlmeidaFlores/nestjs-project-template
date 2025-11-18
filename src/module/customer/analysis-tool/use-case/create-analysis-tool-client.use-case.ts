@@ -42,7 +42,7 @@ export class CreateAnalysisToolClientUseCase {
     dto: CreateAnalysisToolClientRequestDto,
   ): Promise<CreateAnalysisToolClientResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -53,7 +53,7 @@ export class CreateAnalysisToolClientUseCase {
 
     if (dto.email) {
       const verifyConstraint =
-        await this.analysisToolClientQueryRepositoryGateway.findOneByEmail(
+        await this.analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId(
           dto.email,
           organizationSessionData.organizationId,
         );
@@ -65,7 +65,7 @@ export class CreateAnalysisToolClientUseCase {
 
     if (dto.federalDocument) {
       const verifyConstraint =
-        await this.analysisToolClientQueryRepositoryGateway.findOneByFederalDocument(
+        await this.analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId(
           dto.federalDocument,
           organizationSessionData.organizationId,
         );

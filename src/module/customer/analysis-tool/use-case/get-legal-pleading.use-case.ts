@@ -15,6 +15,7 @@ import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class GetLegalPleadingUseCase {
@@ -32,11 +33,13 @@ export class GetLegalPleadingUseCase {
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     legalPleadingId: LegalPleadingId,
+    sessionData: SessionDataModel,
   ): Promise<GetLegalPleadingResponseDto> {
     const legalPleadingQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         LegalPleadingNotFoundError,
       );
 

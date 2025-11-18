@@ -38,7 +38,7 @@ export class GetAuthenticatedCustomerDataUseCase {
       );
 
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations(
         customer.id,
         organizationSessionData.organizationId,
       );
