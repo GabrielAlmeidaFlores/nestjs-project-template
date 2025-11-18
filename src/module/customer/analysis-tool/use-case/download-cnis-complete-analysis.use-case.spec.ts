@@ -28,13 +28,18 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+      findOneByOrganizationMemberId: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
+    };
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-    } as unknown as jest.Mocked<CnisFastAnalysisQueryRepositoryGateway>;
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
+      listByOrganizationId: jest.fn(),
+    };
 
   const exportDocumentGateway: jest.Mocked<ExportDocumentGateway> = {
     downloadFileAsStreamable: jest.fn(),
@@ -122,7 +127,6 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
   });
 
   it('deve baixar a análise completa em PDF com sucesso', async () => {
-    // Arrange
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -144,6 +148,7 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
       streamableFile,
     );
 
+    // Act
     const result = await useCase.execute(
       sessionData,
       orgSessionData,
@@ -191,6 +196,7 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
       new CnisFastAnalysisNotFoundError(),
     );
 
+    // Act & Assert
     await expect(
       useCase.execute(
         sessionData,

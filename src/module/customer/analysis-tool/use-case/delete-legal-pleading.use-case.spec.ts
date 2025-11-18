@@ -44,7 +44,8 @@ describe(DeleteLegalPleadingUseCase.name, () => {
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
+        jest.fn(),
       findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
       countByOrganizationIdAndAuthIdentityId: jest.fn(),
       listByOrganizationIdAndAuthIdentityId: jest.fn(),
