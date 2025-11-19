@@ -5,22 +5,26 @@ import { AuthIdentityForgotPasswordValidateCodeRequestDto } from '@module/generi
 import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
 import { AuthIdentityResetPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-reset-password.request.dto';
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
+import { UpdateAuthIdentityRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-update-password.request.dto';
 import { PreAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/pre-auth-identity-sign-in.request.dto';
 import { AuthIdentityForgotPasswordCodeResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password-code.response.dto';
 import { AuthIdentityResetPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-reset-password.response.dto';
 import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
+import { UpdateAuthIdentityResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-update-password.response.dto';
 import { PreAuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { AuthIdentityForgotPasswordValidateCodeUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password-validate-code.use-case';
 import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-forgot-password.use-case';
 import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
+import { AuthIdentityUpdatePasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-update-password.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -33,6 +37,7 @@ export class AuthIdentityController {
     private readonly authIdentityForgotPasswordUseCase: AuthIdentityForgotPasswordUseCase,
     private readonly authIdentityForgotPasswordValidateCodeUseCase: AuthIdentityForgotPasswordValidateCodeUseCase,
     private readonly authIdentityResetPasswordUseCase: AuthIdentityResetPasswordUseCase,
+    private readonly authIdentityUpdatePasswordUseCase: AuthIdentityUpdatePasswordUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -148,6 +153,32 @@ export class AuthIdentityController {
     @Body() dto: AuthIdentityResetPasswordRequestDto,
   ): Promise<AuthIdentityResetPasswordResponseDto> {
     return await this.authIdentityResetPasswordUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar senha do usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'password',
+      method: RequestMethod.PATCH,
+      type: UpdateAuthIdentityRequestDto,
+    },
+    tag: ['conta-do-usuario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Senha do usuário atualizada com sucesso.',
+      type: UpdateAuthIdentityResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async updateCustomerPassword(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Body() dto: UpdateAuthIdentityRequestDto,
+  ): Promise<UpdateAuthIdentityResponseDto> {
+    return await this.authIdentityUpdatePasswordUseCase.execute(
+      sessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
