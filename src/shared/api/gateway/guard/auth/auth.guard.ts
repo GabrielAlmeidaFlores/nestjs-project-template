@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { FastifyRequest } from 'fastify';
 
 import { ValidateAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-in.request.dto';
@@ -15,6 +16,7 @@ export class AuthGuard implements CanActivate {
   protected readonly _type = AuthGuard.name;
 
   public constructor(
+    private readonly reflector: Reflector,
     @Inject(ValidateAuthIdentitySignInUseCaseGateway)
     private readonly validateAuthIdentitySignInUseCaseGateway: ValidateAuthIdentitySignInUseCaseGateway,
   ) {}
@@ -32,6 +34,19 @@ export class AuthGuard implements CanActivate {
       await this.validateAuthIdentitySignInUseCaseGateway.execute(
         ValidateAuthIdentitySignInRequestDto.build({ jwt }),
       );
+
+    const allowedUserLevel = this.reflector.get<string[]>(
+      'userLevel',
+      context.getHandler(),
+    );
+
+    const isValidUserLevel = allowedUserLevel.some(
+      (level) => level === (jwtContent.userLevel as string),
+    );
+
+    if (!isValidUserLevel) {
+      return false;
+    }
 
     const internalRequest = request as unknown as {
       sessionData: unknown;

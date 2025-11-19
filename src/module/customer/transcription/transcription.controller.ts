@@ -7,6 +7,7 @@ import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('audio')
 export class TranscriptionController {
@@ -18,6 +19,7 @@ export class TranscriptionController {
 
   @BuildEndpointSpecification({
     summary: 'Transcrever áudio',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'transcription',
       method: RequestMethod.POST,
