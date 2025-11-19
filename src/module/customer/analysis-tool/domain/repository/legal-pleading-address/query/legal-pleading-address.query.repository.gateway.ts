@@ -5,7 +5,7 @@ import type { LegalPleadingAddressId } from '@module/customer/analysis-tool/doma
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class LegalPleadingAddressQueryRepositoryGateway {
-  public abstract findOneByLegalPleadingAddressAndOrganizationIdOrFail(
+  public abstract findOneByLegalPleadingAddressIdAndOrganizationIdOrFail(
     id: LegalPleadingAddressId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,

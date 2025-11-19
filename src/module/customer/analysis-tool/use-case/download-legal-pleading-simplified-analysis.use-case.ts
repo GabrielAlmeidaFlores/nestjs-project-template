@@ -42,7 +42,7 @@ export class DownloadLegalPleadingSimplifiedAnalysisUseCase {
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -52,9 +52,10 @@ export class DownloadLegalPleadingSimplifiedAnalysisUseCase {
     }
 
     const legalPleadingAnalysisQueryResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         LegalPleadingNotFoundError,
       );
 
