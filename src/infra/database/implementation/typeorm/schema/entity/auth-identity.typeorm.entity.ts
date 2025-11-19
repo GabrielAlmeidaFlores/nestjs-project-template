@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
+import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
@@ -43,6 +44,14 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
     name: 'customer_id',
   })
   public customer?: CustomerTypeormEntity | undefined;
+
+  @OneToOne(() => AdminTypeormEntity, (entity) => entity.authIdentity, {
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'admin_id',
+  })
+  public admin?: AdminTypeormEntity | undefined;
 
   protected override readonly _type = AuthIdentityTypeormEntity.name;
 }
