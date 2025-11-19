@@ -1,6 +1,8 @@
 import { ClassProvider, Module } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { AdminTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.command.repository';
+import { AdminTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/admin/admin.typeorm.query.repository';
 import { AnalysisToolClientTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.command.repository';
 import { AnalysisToolClientTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client/analysis-tool-client.typeorm.query.repository';
 import { AnalysisToolClientInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.typeorm.command.repository';
@@ -39,6 +41,8 @@ import { OrganizationMemberTypeormCommandRepository } from '@infra/database/impl
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
+import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
+import { AdminQueryRepositoryGateway } from '@module/admin/account/domain/repository/admin/query/admin.query.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -221,6 +225,15 @@ const classProvider: ClassProvider[] = [
   {
     provide: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
     useClass: AnalysisToolClientLegalProceedingTypeormCommandRepository,
+  },
+
+  {
+    provide: AdminCommandRepositoryGateway,
+    useClass: AdminTypeormCommandRepository,
+  },
+  {
+    provide: AdminQueryRepositoryGateway,
+    useClass: AdminTypeormQueryRepository,
   },
 ];
 
