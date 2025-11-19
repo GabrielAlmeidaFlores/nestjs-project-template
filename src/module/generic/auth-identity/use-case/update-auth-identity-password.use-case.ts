@@ -12,8 +12,8 @@ import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/er
 import { WrongCurrentAuthIdentityPasswordError } from '@module/generic/auth-identity/error/wrong-current-auth-identity-password.error';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-export class AuthIdentityUpdatePasswordUseCase {
-  protected readonly _type = AuthIdentityUpdatePasswordUseCase.name;
+export class UpdateAuthIdentityPasswordUseCase {
+  protected readonly _type = UpdateAuthIdentityPasswordUseCase.name;
 
   public constructor(
     @Inject(BaseTransactionRepositoryGateway)
