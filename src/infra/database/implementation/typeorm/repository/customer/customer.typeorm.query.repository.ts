@@ -146,13 +146,6 @@ export class CustomerTypeormQueryRepository
           },
         },
       },
-      relations: {
-        organizationMember: {
-          customer: {
-            authIdentity: true,
-          },
-        },
-      },
     });
 
     if (data === null) {
