@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { InvalidPasswordError } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/error/invalid-customer-name.error';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
@@ -25,6 +26,9 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   @Description('Cliente associado à identidade de autenticação.')
   public readonly customer: CustomerId | null;
 
+  @Description('Administrador associado à identidade de autenticação.')
+  public readonly admin: AdminId | null;
+
   protected readonly _type = AuthIdentityEntity.name;
 
   public constructor(props: AuthIdentityEntityPropsInterface) {
@@ -35,8 +39,9 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     this.email = props.email;
     this.federalDocument = props.federalDocument;
     this.password = props.password;
-    this.customer = props.customer ?? null;
     this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
+    this.customer = props.customer ?? null;
+    this.admin = props.admin ?? null;
   }
 
   public static validatePassword(password: string | HashedPassword): void {
