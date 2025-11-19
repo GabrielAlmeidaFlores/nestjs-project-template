@@ -3,6 +3,7 @@ import { FastifyReply } from 'fastify';
 
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
+import { UpdateCustomerPasswordRequestDto } from '@module/customer/account/dto/request/update-customer-password.request.dto';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
@@ -10,6 +11,7 @@ import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/accoun
 import { GetCustomerTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
+import { UpdateCustomerPasswordResponseDto } from '@module/customer/account/dto/response/update-customer-password.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
@@ -17,6 +19,7 @@ import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/us
 import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
+import { UpdateCustomerPasswordUseCase } from '@module/customer/account/use-case/update-customer-password.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -35,6 +38,7 @@ export class AccountController {
   public constructor(
     private readonly customerSignUpUseCase: CustomerSignUpUseCase,
     private readonly updateCustomerProfilePictureUseCase: UpdateCustomerProfilePictureUseCase,
+    private readonly updateCustomerPasswordUseCase: UpdateCustomerPasswordUseCase,
     private readonly listCustomerOrganizationsUseCase: ListCustomerOrganizationsUseCase,
     private readonly setOrganizationForCustomerUseCase: SetOrganizationForCustomerUseCase,
     private readonly getAuthenticatedCustomerDataUseCase: GetAuthenticatedCustomerDataUseCase,
@@ -89,6 +93,28 @@ export class AccountController {
       sessionData,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar senha do usuário autenticado',
+    http: {
+      path: 'change-password',
+      method: RequestMethod.PATCH,
+      type: UpdateCustomerPasswordRequestDto,
+    },
+    tag: ['conta-do-usuario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Senha do usuário atualizada com sucesso.',
+      type: UpdateCustomerPasswordResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async updateCustomerPassword(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Body() dto: UpdateCustomerPasswordRequestDto,
+  ): Promise<UpdateCustomerPasswordResponseDto> {
+    return await this.updateCustomerPasswordUseCase.execute(sessionData, dto);
   }
 
   @BuildEndpointSpecification({
