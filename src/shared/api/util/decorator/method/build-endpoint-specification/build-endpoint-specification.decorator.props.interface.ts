@@ -2,6 +2,7 @@ import type { CanActivate, Type } from '@nestjs/common';
 import type { BuildEndpointHttpSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-http-specification.type';
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
 import type { BuildEndpointThrottleSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-throttle-specification.type';
+import type { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 export interface BuildEndpointSpecificationDecoratorPropsInterface {
   summary: string;
@@ -10,5 +11,6 @@ export interface BuildEndpointSpecificationDecoratorPropsInterface {
   http: BuildEndpointHttpSpecificationType;
   throttle?: BuildEndpointThrottleSpecificationType;
   guard?: Array<Type<CanActivate> | CanActivate>;
+  userLevel?: Array<UserLevelEnum>;
   tag?: Array<string>;
 }

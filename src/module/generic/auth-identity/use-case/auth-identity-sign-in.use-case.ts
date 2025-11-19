@@ -40,7 +40,7 @@ export class AuthIdentitySignInUseCase {
     }
 
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
         identifier,
       );
 
@@ -89,7 +89,9 @@ export class AuthIdentitySignInUseCase {
       }
     }
 
-    const userLevel = UserLevelEnum.CUSTOMER;
+    const userLevel = authIdentity.admin
+      ? UserLevelEnum.ADMIN
+      : UserLevelEnum.CUSTOMER;
 
     const jwtSession = await this.authIdentitySessionGateway.createSession(
       authIdentity.id,

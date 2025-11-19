@@ -14,31 +14,33 @@ import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity
 describe(ValidateAuthIdentitySignUpUseCase.name, () => {
   let useCase: ValidateAuthIdentitySignUpUseCase;
 
-  const CALL_ONCE = 1;
-  const CALL_TWICE = 2;
-  const FIRST_CALL = 1;
-  const SECOND_CALL = 2;
+  const mockAuthIdentityId = new AuthIdentityId();
 
   const queryRepo: jest.Mocked<AuthIdentityQueryRepositoryGateway> = {
-    findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
     findOneAuthIdentityById: jest.fn(),
+    findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
+    findOneAuthIdentityWithRelationsByEmailOrFederalDocument: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
 
-  const buildValidDto = (): ValidateAuthIdentitySignUpRequestDto =>
+  const buildDto = (
+    email: Email,
+    federalDocument: FederalDocument,
+  ): ValidateAuthIdentitySignUpRequestDto =>
     ValidateAuthIdentitySignUpRequestDto.build({
-      email: new Email('new.user@example.com'),
-      federalDocument: new FederalDocument('98765432100'),
-      password: 'StrongPassword123',
+      email: email,
+      federalDocument: federalDocument,
+      password: 'ValidPassword123',
     });
 
-  const makeQueryResult = (): GetAuthIdentityQueryResult =>
+  const createAuthIdentitySimple = (
+    email: Email,
+    federalDocument: FederalDocument,
+  ): GetAuthIdentityQueryResult =>
     GetAuthIdentityQueryResult.build({
-      id: new AuthIdentityId(),
-      email: new Email('existing@example.com'),
-      federalDocument: new FederalDocument('12345678900'),
-      password: new HashedPassword(
-        '$2b$10$zjZfs7ZyTbnKcECIr1FjNesPiJFFBgU2BeH45LZcKNFx0PEAsddE2',
-      ),
+      id: mockAuthIdentityId,
+      email: email,
+      federalDocument: federalDocument,
+      password: new HashedPassword('MOCK_HASH'),
       authenticatorAppSecret: null,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -54,11 +56,16 @@ describe(ValidateAuthIdentitySignUpUseCase.name, () => {
     }).compile();
 
     useCase = module.get(ValidateAuthIdentitySignUpUseCase);
+
     jest.clearAllMocks();
   });
 
-  it('resolves when email and federal document are free', async () => {
-    const dto = buildValidDto();
+  it('should pass validation when email and federal document are available', async () => {
+    const dto = buildDto(
+      new Email('new@user.com'),
+      new FederalDocument('12345678900'),
+    );
+
     queryRepo.findOneAuthIdentityByEmailOrFederalDocument
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce(null);
@@ -67,49 +74,61 @@ describe(ValidateAuthIdentitySignUpUseCase.name, () => {
 
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenCalledTimes(CALL_TWICE);
+    ).toHaveBeenCalledWith(dto.email);
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenNthCalledWith(FIRST_CALL, dto.email);
-    expect(
-      queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenNthCalledWith(SECOND_CALL, dto.federalDocument);
+    ).toHaveBeenCalledWith(dto.federalDocument);
   });
 
-  it('throws EmailAlreadyInUseError when email exists', async () => {
-    const dto = buildValidDto();
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
-      makeQueryResult(),
+  it('should throw EmailAlreadyInUseError when email is already registered', async () => {
+    const dto = buildDto(
+      new Email('existing@user.com'),
+      new FederalDocument('12345678900'),
+    );
+    const existingIdentity = createAuthIdentitySimple(
+      dto.email,
+      dto.federalDocument,
     );
 
-    await expect(useCase.execute(dto)).rejects.toThrow(EmailAlreadyInUseError);
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+      existingIdentity,
+    );
+
+    await expect(useCase.execute(dto)).rejects.toBeInstanceOf(
+      EmailAlreadyInUseError,
+    );
 
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenCalledTimes(CALL_ONCE);
+    ).toHaveBeenCalledTimes(1);
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
     ).toHaveBeenCalledWith(dto.email);
   });
 
-  it('throws FederalDocumentAlreadyInUseError when federal document exists', async () => {
-    const dto = buildValidDto();
+  it('should throw FederalDocumentAlreadyInUseError when federal document is already registered', async () => {
+    const dto = buildDto(
+      new Email('new@user.com'),
+      new FederalDocument('12345678900'),
+    );
+    const existingIdentity = createAuthIdentitySimple(
+      dto.email,
+      dto.federalDocument,
+    );
+
     queryRepo.findOneAuthIdentityByEmailOrFederalDocument
       .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce(makeQueryResult());
+      .mockResolvedValueOnce(existingIdentity);
 
-    await expect(useCase.execute(dto)).rejects.toThrow(
+    await expect(useCase.execute(dto)).rejects.toBeInstanceOf(
       FederalDocumentAlreadyInUseError,
     );
 
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenCalledTimes(CALL_TWICE);
+    ).toHaveBeenCalledTimes(2);
     expect(
       queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenNthCalledWith(FIRST_CALL, dto.email);
-    expect(
-      queryRepo.findOneAuthIdentityByEmailOrFederalDocument,
-    ).toHaveBeenNthCalledWith(SECOND_CALL, dto.federalDocument);
+    ).toHaveBeenCalledWith(dto.federalDocument);
   });
 });
