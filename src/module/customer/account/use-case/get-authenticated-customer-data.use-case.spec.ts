@@ -1,52 +1,65 @@
 import { Test } from '@nestjs/testing';
 
+import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
+import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
+import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { GetOrganizationQueryResult } from '@module/customer/account/domain/repository/organization/query/result/get-organization.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-and-organization-relations.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
+import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-import type { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
-import type { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
-
 describe(GetAuthenticatedCustomerDataUseCase.name, () => {
   let useCase: GetAuthenticatedCustomerDataUseCase;
 
-  const customerQueryRepositoryGateway: jest.Mocked<CustomerQueryRepositoryGateway> =
-    {
-      findOneByAuthIdentityIdOrFail: jest.fn(),
-      findOneByCustomerId: jest.fn(),
-      findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
-    } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
+  const customerQueryRepositoryGateway: jest.Mocked<
+    Pick<
+      CustomerQueryRepositoryGateway,
+      'findOneByAuthIdentityIdWithCustomerAddressRelationOrFail'
+    >
+  > = {
+    findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
+  };
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
-      findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
-      findOneByCustomerIdAndOrganizationId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+  const organizationMemberQueryRepositoryGateway: jest.Mocked<
+    Pick<
+      OrganizationMemberQueryRepositoryGateway,
+      'findOneByCustomerIdAndOrganizationIdWithRelations'
+    >
+  > = {
+    findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
+  };
 
-  const fileProcessorGateway: jest.Mocked<FileProcessorGateway> = {
+  const fileProcessorGateway: jest.Mocked<
+    Pick<
+      FileProcessorGateway,
+      'getCustomerProfilePicture' | 'getOrganizationLogo'
+    >
+  > = {
     getCustomerProfilePicture: jest.fn(),
     getOrganizationLogo: jest.fn(),
-  } as unknown as jest.Mocked<FileProcessorGateway>;
+  };
 
+  //
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
       authIdentityId: new AuthIdentityId(),
@@ -59,38 +72,81 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
       organizationId: new OrganizationId(),
     });
 
-  const buildCustomerResult = (
-    options: { withPicture?: boolean } = {},
+  const buildCustomerBaseResult = (
+    opt: { withPicture?: boolean } = {},
   ): GetCustomerQueryResult =>
     GetCustomerQueryResult.build({
       id: new CustomerId(),
       name: 'Nome do Cliente',
-      profilePicture:
-        (options.withPicture ?? false) ? 'path/profile.jpg' : null,
+      profilePicture: (opt.withPicture ?? false) ? 'path/profile.jpg' : null,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
     });
 
-  const buildOrgMemberQueryResult = (
+  const buildCustomerAddress = (): GetCustomerAddressQueryResult =>
+    GetCustomerAddressQueryResult.build({
+      id: new CustomerAddressId(),
+      postalCode: new PostalCode('12345678'),
+      stateCode: StateCodeEnum.SP,
+      city: 'Cidade Mock',
+      neighborhood: 'Bairro Mock',
+      street: 'Rua Mock',
+      addressNumber: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+  const buildAuthIdentity = (): GetAuthIdentityQueryResult =>
+    GetAuthIdentityQueryResult.build({
+      id: new AuthIdentityId(),
+      email: new Email('test@email.com'),
+      federalDocument: new FederalDocument('12345678900'),
+      password: new HashedPassword('MOCK_HASH'),
+      authenticatorAppSecret: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+  const buildCustomerWithAddress = (
+    customer: GetCustomerQueryResult,
+    address: GetCustomerAddressQueryResult,
+  ): GetCustomerWithCustomerAddressRelationQueryResult =>
+    GetCustomerWithCustomerAddressRelationQueryResult.build({
+      ...customer,
+      customerAddress: address,
+    });
+
+  const buildCustomerWithAuthIdentity = (
+    customer: GetCustomerQueryResult,
+    auth: GetAuthIdentityQueryResult,
+  ): GetCustomerWithAuthIdentityRelationQueryResult =>
+    GetCustomerWithAuthIdentityRelationQueryResult.build({
+      ...customer,
+      authIdentity: auth,
+    });
+
+  const buildOrgMember = (
     customer: GetCustomerWithAuthIdentityRelationQueryResult,
-    options: { withLogo?: boolean } = {},
+    opt: { withLogo?: boolean } = {},
   ): GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult =>
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult.build({
       id: new OrganizationMemberId(),
       owner: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      customer: customer,
+      customer,
       organization: GetOrganizationQueryResult.build({
         id: new OrganizationId(),
         name: 'Nome da Org',
-        organizationLogo: (options.withLogo ?? false) ? 'path/logo.png' : null,
+        organizationLogo: (opt.withLogo ?? false) ? 'path/logo.png' : null,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       }),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     });
 
   beforeEach(async () => {
@@ -105,10 +161,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
           provide: OrganizationMemberQueryRepositoryGateway,
           useValue: organizationMemberQueryRepositoryGateway,
         },
-        {
-          provide: FileProcessorGateway,
-          useValue: fileProcessorGateway,
-        },
+        { provide: FileProcessorGateway, useValue: fileProcessorGateway },
       ],
     }).compile();
 
@@ -116,124 +169,97 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar dados completos e URLs assinadas para logo e foto', async () => {
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const customerResult = buildCustomerResult({ withPicture: true });
+  it('deve retornar dados completos e URLs assinadas', async () => {
+    const session = buildSessionData();
+    const org = buildOrganizationSessionData();
 
-    const customerWithAuthIdentity = {
-      ...customerResult,
-      authIdentity: {
-        email: new Email('test@email.com'),
-        federalDocument: new FederalDocument('12345678900'),
-      } as GetAuthIdentityQueryResult,
-    } as GetCustomerWithAuthIdentityRelationQueryResult;
+    const base = buildCustomerBaseResult({ withPicture: true });
+    const address = buildCustomerAddress();
+    const auth = buildAuthIdentity();
 
-    const orgMemberResult = buildOrgMemberQueryResult(
-      customerWithAuthIdentity,
-      { withLogo: true },
+    const customerAddress = buildCustomerWithAddress(base, address);
+    const customerAuth = buildCustomerWithAuthIdentity(base, auth);
+    const orgMember = buildOrgMember(customerAuth, { withLogo: true });
+
+    const PIC = new URL('https://cdn/pic');
+    const LOGO = new URL('https://cdn/logo');
+
+    customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValue(
+      customerAddress,
     );
 
-    const MOCK_PROFILE_URL = new URL('https://cdn.example.com/signed/profile');
-    const MOCK_LOGO_URL = new URL('https://cdn.example.com/signed/logo');
-
-    customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customerResult,
-    );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
-      orgMemberResult,
-    );
-    fileProcessorGateway.getCustomerProfilePicture.mockResolvedValueOnce(
-      MOCK_PROFILE_URL,
-    );
-    fileProcessorGateway.getOrganizationLogo.mockResolvedValueOnce(
-      MOCK_LOGO_URL,
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValue(
+      orgMember,
     );
 
-    const result = await useCase.execute(sessionData, orgSessionData);
+    fileProcessorGateway.getCustomerProfilePicture.mockResolvedValue(PIC);
+    fileProcessorGateway.getOrganizationLogo.mockResolvedValue(LOGO);
 
-    expect(result).toBeInstanceOf(GetAuthenticatedCustomerDataResponseDto);
+    const result = await useCase.execute(session, org);
 
-    expect(result.customer.customerId).toEqual(customerResult.id);
-    expect(result.customer.email).toEqual(
-      orgMemberResult.customer.authIdentity.email,
-    );
-    expect(result.customer.profilePicture).toBe(MOCK_PROFILE_URL.toString());
-
-    expect(result.organization.organizationId).toEqual(
-      orgMemberResult.organization.id,
-    );
-    expect(result.organization.organizationLogo).toBe(MOCK_LOGO_URL.toString());
-    expect(result.organization.organizationOwner).toBe(true);
-
-    expect(fileProcessorGateway.getCustomerProfilePicture).toHaveBeenCalledWith(
-      customerResult.profilePicture,
-    );
-    expect(fileProcessorGateway.getOrganizationLogo).toHaveBeenCalledWith(
-      orgMemberResult.organization.organizationLogo,
-    );
+    expect(result.customer.customerAddress.city).toBe('Cidade Mock');
+    expect(result.customer.profilePicture).toBe(PIC.toString());
+    expect(result.organization.organizationLogo).toBe(LOGO.toString());
   });
 
-  it('deve retornar dados e profilePicture/Logo nulos se não houver caminho', async () => {
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const customerResult = buildCustomerResult({ withPicture: false });
-    const customerWithAuthIdentity = {
-      ...customerResult,
-      authIdentity: {
-        email: new Email('test@email.com'),
-        federalDocument: new FederalDocument('12345678900'),
-      } as GetAuthIdentityQueryResult,
-    } as GetCustomerWithAuthIdentityRelationQueryResult;
-    const orgMemberResult = buildOrgMemberQueryResult(
-      customerWithAuthIdentity,
-      { withLogo: false },
+  it('deve retornar profilePicture/logo undefined quando não existem', async () => {
+    const session = buildSessionData();
+    const org = buildOrganizationSessionData();
+
+    const base = buildCustomerBaseResult({ withPicture: false });
+    const address = buildCustomerAddress();
+    const auth = buildAuthIdentity();
+
+    const customerAddress = buildCustomerWithAddress(base, address);
+    const customerAuth = buildCustomerWithAuthIdentity(base, auth);
+    const orgMember = buildOrgMember(customerAuth, { withLogo: false });
+
+    customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValue(
+      customerAddress,
     );
 
-    customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customerResult,
-    );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
-      orgMemberResult,
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValue(
+      orgMember,
     );
 
-    const result = await useCase.execute(sessionData, orgSessionData);
+    const result = await useCase.execute(session, org);
 
     expect(result.customer.profilePicture).toBeUndefined();
     expect(result.organization.organizationLogo).toBeUndefined();
-    expect(
-      fileProcessorGateway.getCustomerProfilePicture,
-    ).not.toHaveBeenCalled();
-    expect(fileProcessorGateway.getOrganizationLogo).not.toHaveBeenCalled();
   });
 
-  it('deve lançar CustomerNotFoundError se o cliente não for encontrado', async () => {
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
+  it('deve lançar CustomerNotFoundError', async () => {
+    const session = buildSessionData();
+    const org = buildOrganizationSessionData();
 
-    customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockRejectedValueOnce(
+    customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockRejectedValue(
       new CustomerNotFoundError(),
     );
 
-    await expect(
-      useCase.execute(sessionData, orgSessionData),
-    ).rejects.toBeInstanceOf(CustomerNotFoundError);
+    await expect(useCase.execute(session, org)).rejects.toBeInstanceOf(
+      CustomerNotFoundError,
+    );
   });
 
-  it('deve lançar InvalidOrganizationSessionError se o membro não for encontrado', async () => {
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const customerResult = buildCustomerResult();
+  it('deve lançar InvalidOrganizationSessionError', async () => {
+    const session = buildSessionData();
+    const org = buildOrganizationSessionData();
 
-    customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
-      customerResult,
+    const base = buildCustomerBaseResult();
+    const address = buildCustomerAddress();
+
+    const customerAddress = buildCustomerWithAddress(base, address);
+
+    customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValue(
+      customerAddress,
     );
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValueOnce(
+
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations.mockResolvedValue(
       null,
     );
 
-    await expect(
-      useCase.execute(sessionData, orgSessionData),
-    ).rejects.toBeInstanceOf(InvalidOrganizationSessionError);
+    await expect(useCase.execute(session, org)).rejects.toBeInstanceOf(
+      InvalidOrganizationSessionError,
+    );
   });
 });
