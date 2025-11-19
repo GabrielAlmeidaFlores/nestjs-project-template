@@ -17,14 +17,13 @@ import { AuthIdentityForgotPasswordUseCase } from '@module/generic/auth-identity
 import { AuthIdentityResetPasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-reset-password.use-case';
 import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
 import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
-import { AuthIdentityUpdatePasswordUseCase } from '@module/generic/auth-identity/use-case/auth-identity-update-password.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
+import { UpdateAuthIdentityPasswordUseCase } from '@module/generic/auth-identity/use-case/update-auth-identity-password.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -37,7 +36,7 @@ export class AuthIdentityController {
     private readonly authIdentityForgotPasswordUseCase: AuthIdentityForgotPasswordUseCase,
     private readonly authIdentityForgotPasswordValidateCodeUseCase: AuthIdentityForgotPasswordValidateCodeUseCase,
     private readonly authIdentityResetPasswordUseCase: AuthIdentityResetPasswordUseCase,
-    private readonly authIdentityUpdatePasswordUseCase: AuthIdentityUpdatePasswordUseCase,
+    private readonly updateAuthIdentityPasswordUseCase: UpdateAuthIdentityPasswordUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -157,13 +156,12 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar senha do usuário autenticado',
-    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'password',
       method: RequestMethod.PATCH,
       type: UpdateAuthIdentityRequestDto,
     },
-    tag: ['conta-do-usuario'],
+    tag: ['autenticacao'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Senha do usuário atualizada com sucesso.',
@@ -171,11 +169,11 @@ export class AuthIdentityController {
     },
     guard: [AuthGuard],
   })
-  public async updateCustomerPassword(
+  public async updateAuthIdentityPassword(
     @GetSessionData() sessionData: SessionDataModel,
     @Body() dto: UpdateAuthIdentityRequestDto,
   ): Promise<UpdateAuthIdentityResponseDto> {
-    return await this.authIdentityUpdatePasswordUseCase.execute(
+    return await this.updateAuthIdentityPasswordUseCase.execute(
       sessionData,
       dto,
     );
