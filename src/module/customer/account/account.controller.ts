@@ -127,8 +127,9 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar senha do usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'change-password',
+      path: 'password',
       method: RequestMethod.PATCH,
       type: UpdateCustomerPasswordRequestDto,
     },
