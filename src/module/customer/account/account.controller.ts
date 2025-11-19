@@ -100,6 +100,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar dados do usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'profile',
       method: RequestMethod.PATCH,
