@@ -9,9 +9,13 @@ class HashTransformerUtil {
   protected readonly _type = HashTransformerUtil.name;
 
   public static hash(value?: string): string | undefined {
-    const isValueNotAString = typeof value !== 'string';
+    if (typeof value !== 'string') {
+      return value;
+    }
 
-    if (isValueNotAString) {
+    const isBcryptHash = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(value);
+
+    if (isBcryptHash) {
       return value;
     }
 

@@ -1,3 +1,5 @@
+import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { NotFoundError } from '@core/error/not-found.error';
 import type { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import type { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
@@ -14,6 +16,14 @@ export abstract class CustomerQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetCustomerQueryResult>;
+
+  public abstract findOneByEmail(
+    email: Email,
+  ): Promise<GetCustomerQueryResult | null>;
+
+  public abstract findOneByFederalDocument(
+    federalDocument: FederalDocument,
+  ): Promise<GetCustomerQueryResult | null>;
 
   public abstract findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
     authIdentityId: AuthIdentityId,
