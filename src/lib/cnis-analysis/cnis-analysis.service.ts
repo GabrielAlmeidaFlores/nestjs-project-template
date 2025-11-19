@@ -1,3 +1,5 @@
+import console from 'console';
+
 import { Inject } from '@nestjs/common';
 import moment from 'moment';
 
@@ -184,11 +186,27 @@ export class CnisAnalysisService {
     const salarioSBPreReforma =
       this.calculateSalarioSBPreReforma(correcaoMonetaria);
 
-    const ajuseFinal = this.ajusteFinalSbMinimoEAoTeto(
+    const ajusteFinal = this.ajusteFinalSbMinimoEAoTeto(
       salarioSBPosReforma,
       salarioSBPreReforma,
     );
-    console.log(ajuseFinal);
+
+    const pontos = this.calculatePontos(idade.anos, consolidadoResumido);
+
+    const tempoPedagio100 = this.calculateTempoPedagio(
+      consolidadoResumido,
+      'M',
+      1,
+    );
+
+    const tempoPedagio50 = this.calculateTempoPedagio(
+      consolidadoResumido,
+      'M',
+      0.5,
+    );
+
+    console.log(tempoPedagio100);
+    console.log(tempoPedagio50);
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -205,6 +223,12 @@ export class CnisAnalysisService {
       dataFinalDaQualidadedeDeSegurado,
       calculateTempoTotalComRestricoes,
       salariosConcomitantes,
+      ajusteAoTeto,
+      correcaoMonetaria,
+      salarioSBPosReforma,
+      salarioSBPreReforma,
+      ajusteFinal,
+      pontos,
     });
     return cnis;
   }
@@ -1693,12 +1717,14 @@ export class CnisAnalysisService {
     // Descartar os 20% menores valores.
     // SB = (Soma dos 80% maiores 'Valores Corrigidos') / (Número de competências correspondente a 80%).
 
+    const YEAR_1994 = 1994;
+
     const salariosValidos = data.filter((item) => {
       const competenciaDate = new Date(item.competencia);
       return (
         competenciaDate instanceof Date &&
         !isNaN(competenciaDate.getTime()) &&
-        competenciaDate >= new Date(1994, 6, 1)
+        competenciaDate >= new Date(YEAR_1994, 6, 1)
       );
     });
 
@@ -1758,6 +1784,129 @@ export class CnisAnalysisService {
     return {
       ajusteSbPos: Number(ajusteSbPos.toFixed(2)),
       ajusteSbPre: Number(ajusteSbPre.toFixed(2)),
+    };
+  }
+
+  private calculatePontos(idade: number, data: ConsolidadoRelationInterface[]) {
+    // Cálculo de Pontos: Pontos = Idade do segurado + Tempo de Contribuição (em anos).
+    const totalContributionYears = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.anos ?? 0);
+    }, 0);
+
+    const totalMonths = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.meses ?? 0);
+    }, 0);
+
+    const totalDays = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.dias ?? 0);
+    }, 0);
+
+    const MONTHS_IN_YEAR = 12;
+
+    const DAYS_IN_YEAR = 365.25;
+
+    const contribution = Math.ceil(
+      totalContributionYears +
+        totalMonths / MONTHS_IN_YEAR +
+        totalDays / DAYS_IN_YEAR,
+    );
+
+    const pontos = idade + contribution;
+
+    return {
+      idade,
+      totalContributionYears: contribution,
+      pontos,
+    };
+  }
+
+  private calculateTempoPedagio(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    percentualPedagio: number,
+  ) {
+    // Cálculo de Pedágio: Para regras de transição específicas,
+    // calcular o tempo que faltava para se aposentar na data da reforma (13/11/2019)
+    // e aplicar um percentual (50% ou 100%) a esse tempo para determinar o pedágio a ser cumprido.
+    // Caso a data fim for maior, ajuste ate a data da reforma
+
+    // Art. 17. Ao segurado filiado ao Regime Geral de Previdência Social até a data de entrada em vigor
+    // desta Emenda Constitucional e que na referida data contar com mais de 28 (vinte e oito) anos de contribuição,
+    // se mulher, e 33 (trinta e três) anos de contribuição, se homem,
+    // fica assegurado o direito à aposentadoria quando preencher, cumulativamente, os seguintes requisitos:
+    // I - 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; e
+    // II - cumprimento de período adicional correspondente a 50% (cinquenta por cento) do tempo que,
+    // na data de entrada em vigor desta Emenda Constitucional, faltaria para atingir 30 (trinta) anos de contribuição, se mulher,
+    // e 35 (trinta e cinco) anos de contribuição, se homem.
+    // Parágrafo único.
+    // O benefício concedido nos termos deste artigo terá seu valor apurado de acordo com a média aritmética simples dos
+    // salários de contribuição e das remunerações calculada na forma da lei, multiplicada pelo fator previdenciário,
+    // calculado na forma do disposto nos §§ 7º a 9º do art. 29 da Lei nº 8.213, de 24 de julho de 1991.
+    // Art. 18. O segurado de que trata o inciso Ido § 7º do art. 201 da Constituição Federal filiado
+    // ao Regime Geral de Previdência Social até a data de entrada em vigor desta Emenda Constitucional
+    // poderá aposentar-se quando preencher, cumulativamente, os seguintes requisitos:
+    // I - 60 (sessenta) anos de idade, se mulher, e 65 (sessenta e cinco) anos de idade, se homem; e
+    // II - 15 (quinze) anos de contribuição, para ambos os sexos.
+
+    const REFORMA_DATE = new Date(2019, 10, 13);
+
+    // Cálculo do Tempo que Faltava na Data da Reforma:
+
+    const YEARS_IN_CONTRIBUTION_MEN = 35;
+    const YEARS_IN_CONTRIBUTION_WOMEN = 30;
+
+    const requiredContributionYears =
+      gender === 'F' ? YEARS_IN_CONTRIBUTION_WOMEN : YEARS_IN_CONTRIBUTION_MEN;
+
+    let totalContributionYearsAtReforma = 0;
+    let totalContributionMonthsAtReforma = 0;
+    let totalContributionDaysAtReforma = 0;
+
+    data.forEach((item) => {
+      const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
+      let dataFim = this.toDate(item.validContributionTime?.dataFim);
+
+      if (!dataInicio) {
+        return;
+      }
+
+      if (!dataFim || dataFim > REFORMA_DATE) {
+        dataFim = REFORMA_DATE;
+      }
+
+      if (dataInicio >= REFORMA_DATE) {
+        return;
+      }
+
+      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+
+      totalContributionYearsAtReforma += years;
+      totalContributionMonthsAtReforma += months;
+      totalContributionDaysAtReforma += days;
+    });
+
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+
+    const totalContributionAtReforma = Math.ceil(
+      totalContributionYearsAtReforma +
+        totalContributionMonthsAtReforma / MONTHS_IN_YEAR +
+        totalContributionDaysAtReforma / DAYS_IN_YEAR,
+    );
+
+    const tempoFaltante =
+      requiredContributionYears - totalContributionAtReforma;
+
+    const pedagio = tempoFaltante * percentualPedagio;
+
+    const tempoTotalNecessario =
+      totalContributionAtReforma + tempoFaltante + pedagio;
+
+    return {
+      totalContributionAtReforma,
+      tempoFaltante,
+      pedagio,
+      tempoTotalNecessario,
     };
   }
 }

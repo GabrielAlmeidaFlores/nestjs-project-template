@@ -1,8 +1,11 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { CarenciaInterface } from '@lib/cnis-analysis/dto/carencia';
+import type { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/dto/correcao-monetaria';
 import type { ManutencaoInterface } from '@lib/cnis-analysis/dto/manutencao';
+import type { SalarioInterface } from '@lib/cnis-analysis/dto/salario';
 import type { SalariosConcomitantesInterface } from '@lib/cnis-analysis/dto/salario-concomitante';
+import type { TetoInterface } from '@lib/cnis-analysis/dto/teto';
 
 export class CnisOutputCompleteModel extends BaseBuildableObject {
   public idade: object;
@@ -19,6 +22,12 @@ export class CnisOutputCompleteModel extends BaseBuildableObject {
   public dataFinalDaQualidadedeDeSegurado: ManutencaoInterface[];
   public calculateTempoTotalComRestricoes: object;
   public salariosConcomitantes: SalariosConcomitantesInterface[];
+  public ajusteAoTeto: TetoInterface[];
+  public correcaoMonetaria: CorrecaoMonetariaItemInterface[];
+  public salarioSBPosReforma: SalarioInterface;
+  public salarioSBPreReforma: SalarioInterface;
+  public ajusteFinal: object;
+  public pontos: object;
 
   protected override readonly _type = CnisOutputCompleteModel.name;
 }
