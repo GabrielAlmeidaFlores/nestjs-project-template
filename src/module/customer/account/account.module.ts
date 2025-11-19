@@ -11,7 +11,6 @@ import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/us
 import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
-import { UpdateCustomerPasswordUseCase } from '@module/customer/account/use-case/update-customer-password.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
 import { ValidateOrganizationSessionUseCase } from '@module/customer/account/use-case/validate-organization-session.use-case';
@@ -31,7 +30,6 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     CustomerSignUpUseCase,
     UpdateCustomerProfilePictureUseCase,
     UpdateCustomerUseCase,
-    UpdateCustomerPasswordUseCase,
     ListCustomerOrganizationsUseCase,
     SetOrganizationForCustomerUseCase,
     ValidateOrganizationSessionUseCase,

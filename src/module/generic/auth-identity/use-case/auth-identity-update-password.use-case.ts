@@ -2,19 +2,18 @@ import { Inject } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { UpdateCustomerPasswordRequestDto } from '@module/customer/account/dto/request/update-customer-password.request.dto';
-import { UpdateCustomerPasswordResponseDto } from '@module/customer/account/dto/response/update-customer-password.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { WrongCurrentCustomerPasswordError } from '@module/customer/account/error/wrong-current-customer-password.error';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
+import { UpdateAuthIdentityRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-update-password.request.dto';
+import { UpdateAuthIdentityResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-update-password.response.dto';
 import { NewPasswordMatchesCurrentError } from '@module/generic/auth-identity/error/new-password-matches-current.error';
+import { WrongCurrentAuthIdentityPasswordError } from '@module/generic/auth-identity/error/wrong-current-auth-identity-password.error';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-export class UpdateCustomerPasswordUseCase {
-  protected readonly _type = UpdateCustomerPasswordUseCase.name;
+export class AuthIdentityUpdatePasswordUseCase {
+  protected readonly _type = AuthIdentityUpdatePasswordUseCase.name;
 
   public constructor(
     @Inject(BaseTransactionRepositoryGateway)
@@ -23,20 +22,12 @@ export class UpdateCustomerPasswordUseCase {
     private readonly authIdentityCommandRepositoryGateway: AuthIdentityCommandRepositoryGateway,
     @Inject(AuthIdentityQueryRepositoryGateway)
     private readonly authIdentityQueryRepositoryGateway: AuthIdentityQueryRepositoryGateway,
-    @Inject(CustomerQueryRepositoryGateway)
-    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
     sessionData: SessionDataModel,
-    dto: UpdateCustomerPasswordRequestDto,
-  ): Promise<UpdateCustomerPasswordResponseDto> {
-    const customer =
-      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
-        sessionData.authIdentityId,
-        CustomerNotFoundError,
-      );
-
+    dto: UpdateAuthIdentityRequestDto,
+  ): Promise<UpdateAuthIdentityResponseDto> {
     const authIdentity =
       await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityById(
         sessionData.authIdentityId,
@@ -50,7 +41,7 @@ export class UpdateCustomerPasswordUseCase {
       authIdentity.password.toString(),
     );
     if (!isSamePassword) {
-      throw new WrongCurrentCustomerPasswordError();
+      throw new WrongCurrentAuthIdentityPasswordError();
     }
     const isSamePasswordAsPrevious = bcrypt.compareSync(
       dto.newPassword,
@@ -74,8 +65,8 @@ export class UpdateCustomerPasswordUseCase {
       await this.baseTransactionRepositoryGateway.execute(updateAuthIdentity);
     await transaction.commit();
 
-    return UpdateCustomerPasswordResponseDto.build({
-      customer: customer.id,
+    return UpdateAuthIdentityResponseDto.build({
+      authIdentity: authEntity.id,
     });
   }
 }
