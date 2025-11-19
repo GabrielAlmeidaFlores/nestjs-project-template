@@ -34,7 +34,7 @@ export class ListAnalysisToolRecordUseCase {
     dto: ListAnalysisToolRecordRequestDto,
   ): Promise<ListAnalysisToolRecordResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -44,7 +44,7 @@ export class ListAnalysisToolRecordUseCase {
     }
 
     const analysisToolRecordList =
-      await this.analysisToolRecordQueryRepositoryGateway.listByOrganizationAndAuthIdentityId(
+      await this.analysisToolRecordQueryRepositoryGateway.listByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         new ListAnalysisToolRecordQueryParam(dto),

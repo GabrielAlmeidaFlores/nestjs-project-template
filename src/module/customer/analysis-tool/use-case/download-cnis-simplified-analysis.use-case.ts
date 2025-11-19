@@ -41,7 +41,7 @@ export class DownloadCnisSimplifiedAnalysisUseCase {
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -51,7 +51,7 @@ export class DownloadCnisSimplifiedAnalysisUseCase {
     }
 
     const cnisFastAnalysisQueryResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
+      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,

@@ -9,17 +9,19 @@ import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class AnalysisToolRecordQueryRepositoryGateway {
-  public abstract findOneByIdWithRelationsOrFail(
+  public abstract findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
+    AuthIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
-  public abstract countByOrganizationId(
+  public abstract countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
+    AuthIdentityId: AuthIdentityId,
   ): Promise<number>;
 
-  public abstract listByOrganizationAndAuthIdentityId(
+  public abstract listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,
@@ -27,13 +29,15 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
   >;
 
-  public abstract countAnalysisByAnalysisToolClientId(
+  public abstract countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
+    AuthIdentityId: AuthIdentityId,
   ): Promise<number>;
 
-  public abstract findByAnalysisToolClientAndOrganizationIdWithRelations(
+  public abstract findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
+    AuthIdentityId: AuthIdentityId,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]>;
 }
