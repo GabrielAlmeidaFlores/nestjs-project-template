@@ -8,6 +8,7 @@ import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typ
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
+import { CustomerAddressId } from '@module/customer/account/domain/schema/entity/customer-address/value-object/customer-address-id/customer-address-id.value-object';
 
 @Injectable()
 export class CustomerAddressTypeormCommandRepository
@@ -32,5 +33,18 @@ export class CustomerAddressTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public updateCustomerAddress(
+    customerAddressId: CustomerAddressId,
+    props: CustomerAddressEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      CustomerAddressEntity,
+      CustomerAddressTypeormEntity,
+    );
+
+    return this.update(customerAddressId.toString(), mappedData);
   }
 }

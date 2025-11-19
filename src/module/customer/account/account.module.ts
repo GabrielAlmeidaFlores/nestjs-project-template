@@ -12,6 +12,7 @@ import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
+import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
 import { ValidateOrganizationSessionUseCase } from '@module/customer/account/use-case/validate-organization-session.use-case';
 import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -28,6 +29,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
   providers: [
     CustomerSignUpUseCase,
     UpdateCustomerProfilePictureUseCase,
+    UpdateCustomerUseCase,
     ListCustomerOrganizationsUseCase,
     SetOrganizationForCustomerUseCase,
     ValidateOrganizationSessionUseCase,
