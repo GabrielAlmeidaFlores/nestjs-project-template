@@ -4,6 +4,7 @@ import { FastifyReply } from 'fastify';
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 import { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
+import { UpdateCustomerRequestDto } from '@module/customer/account/dto/request/update-customer.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
 import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
@@ -11,6 +12,7 @@ import { GetCustomerTermsAcceptanceDataResponseDto } from '@module/customer/acco
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
+import { UpdateCustomerResponseDto } from '@module/customer/account/dto/response/update-customer-response.dto';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
@@ -18,6 +20,7 @@ import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
+import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -35,6 +38,7 @@ export class AccountController {
   public constructor(
     private readonly customerSignUpUseCase: CustomerSignUpUseCase,
     private readonly updateCustomerProfilePictureUseCase: UpdateCustomerProfilePictureUseCase,
+    private readonly updateCustomerUseCase: UpdateCustomerUseCase,
     private readonly listCustomerOrganizationsUseCase: ListCustomerOrganizationsUseCase,
     private readonly setOrganizationForCustomerUseCase: SetOrganizationForCustomerUseCase,
     private readonly getAuthenticatedCustomerDataUseCase: GetAuthenticatedCustomerDataUseCase,
@@ -87,6 +91,34 @@ export class AccountController {
   ): Promise<UpdateCustomerProfilePictureResponseDto> {
     return await this.updateCustomerProfilePictureUseCase.execute(
       sessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar dados do usuário',
+    http: {
+      path: 'profile',
+      method: RequestMethod.PATCH,
+      type: UpdateCustomerRequestDto,
+    },
+    tag: ['conta-do-usuario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Dados do usuário atualizados com sucesso.',
+      type: UpdateCustomerResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateCustomerProfile(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: UpdateCustomerRequestDto,
+  ): Promise<UpdateCustomerResponseDto> {
+    return await this.updateCustomerUseCase.execute(
+      sessionData,
+      organizationSessionData,
       dto,
     );
   }
