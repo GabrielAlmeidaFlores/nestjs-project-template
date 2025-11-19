@@ -6,7 +6,7 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { UpdateCustomerPasswordRequestDto } from '@module/customer/account/dto/request/update-customer-password.request.dto';
 import { UpdateCustomerPasswordResponseDto } from '@module/customer/account/dto/response/update-customer-password.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { CustomerWrongCurrentPasswordError } from '@module/customer/account/error/customer-wrong-current-password.error';
+import { WrongCurrentCustomerPasswordError } from '@module/customer/account/error/wrong-current-customer-password.error';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/auth-identity.entity';
@@ -50,7 +50,7 @@ export class UpdateCustomerPasswordUseCase {
       authIdentity.password.toString(),
     );
     if (!isSamePassword) {
-      throw new CustomerWrongCurrentPasswordError();
+      throw new WrongCurrentCustomerPasswordError();
     }
     const isSamePasswordAsPrevious = bcrypt.compareSync(
       dto.newPassword,
