@@ -3,12 +3,12 @@ import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dt
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class UpdateCustomerPasswordRequestDto extends BaseBuildableDtoObject {
+export class UpdateAuthIdentityRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public password: string;
 
   @RequestDtoStringProperty()
   public newPassword: string;
 
-  protected override readonly _type = UpdateCustomerPasswordRequestDto.name;
+  protected override readonly _type = UpdateAuthIdentityRequestDto.name;
 }
