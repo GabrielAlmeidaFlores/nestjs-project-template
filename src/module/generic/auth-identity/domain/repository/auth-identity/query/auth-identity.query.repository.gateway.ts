@@ -13,7 +13,7 @@ export abstract class AuthIdentityQueryRepositoryGateway {
     value: FederalDocument | Email,
   ): Promise<GetAuthIdentityQueryResult | null>;
 
-  public abstract findOneAuthIdentityWithRelationsByEmailOrFederalDocument(
+  public abstract findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
     value: FederalDocument | Email,
   ): Promise<GetAuthIdentityWithRelationsQueryResult | null>;
 }

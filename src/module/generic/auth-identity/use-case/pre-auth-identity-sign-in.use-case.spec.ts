@@ -1,477 +1,301 @@
 import { Test } from '@nestjs/testing';
+import bcrypt from 'bcrypt';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
+import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
-import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
-import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
-import { GetAnalysisToolClientInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/query/result/get-analysis-tool-client-inss-benefit.query.result';
-import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
-import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { AnalysisToolClientInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-inss-benefit/value-object/analysis-tool-client-inss-benefit-id/analysis-tool-client-inss-benefit-id.value-object';
-import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
-import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
-import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
-import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
-import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
-import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
-import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
+import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
-import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
-import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
+import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
+import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
+import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
+import { AuthenticatorAppNotConfiguredError } from '@module/generic/auth-identity/error/authenticator-app-not-configured.error';
+import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
+import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
+import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
+import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
+import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
-import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import type { FastifyReply } from 'fastify';
 
-describe(UpdateAnalysisToolClientUseCase.name, () => {
-  let useCase: UpdateAnalysisToolClientUseCase;
+describe(AuthIdentitySignInUseCase.name, () => {
+  let useCase: AuthIdentitySignInUseCase;
+  let compareSpy: jest.SpyInstance;
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
-      findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerIdAndOrganizationId: jest.fn(),
-      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
-    };
+  const mockAuthIdentityId = new AuthIdentityId();
+  const mockCustomerId = new CustomerId();
 
-  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
-    {
-      execute: jest.fn(),
-    };
+  const queryRepo: jest.Mocked<AuthIdentityQueryRepositoryGateway> = {
+    findOneAuthIdentityById: jest.fn(),
+    findOneAuthIdentityByEmailOrFederalDocumentWithRelations: jest.fn(),
+  } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
 
-  const analysisToolClientCommandRepositoryGateway: jest.Mocked<AnalysisToolClientCommandRepositoryGateway> =
-    {
-      updateAnalysisToolClient: jest.fn(),
-      createAnalysisToolClient: jest.fn(),
-      deleteAnalysisToolClient: jest.fn(),
-    };
+  const authenticatorGateway: jest.Mocked<AuthenticatorGateway> = {
+    verifyCode: jest.fn(),
+    generateCredentials: jest.fn(),
+  } as unknown as jest.Mocked<AuthenticatorGateway>;
 
-  const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
-    {
-      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
-      findOneByEmailAndOrganizationId: jest.fn(),
-      findOneByFederalDocumentAndOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
-      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
-    };
+  const emailMFAGateway: jest.Mocked<EmailMFAGateway> = {
+    validateSignInCode: jest.fn(),
+    generatePersistAndSendSignInCode: jest.fn(),
+  } as unknown as jest.Mocked<EmailMFAGateway>;
 
-  const analysisToolClientInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
-    {
-      createAnalysisToolClientInssBenefit: jest.fn(),
-      deleteAnalysisToolClientInssBenefit: jest.fn(),
-    };
+  const sessionGateway: jest.Mocked<AuthIdentitySessionGateway> = {
+    createSession: jest.fn(),
+    getSession: jest.fn(),
+    deleteSession: jest.fn(),
+  } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
 
-  const analysisToolClientLegalProceedingCommandRepositoryGateway: jest.Mocked<AnalysisToolClientLegalProceedingCommandRepositoryGateway> =
-    {
-      createAnalysisToolClientLegalProceeding: jest.fn(),
-      deleteAnalysisToolClientLegalProceeding: jest.fn(),
-    };
-
-  const buildSessionData = (): SessionDataModel =>
-    SessionDataModel.build({
-      authIdentityId: new AuthIdentityId(),
-      sessionId: new Guid(),
-      userLevel: UserLevelEnum.CUSTOMER,
-    });
-
-  const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
-    OrganizationSessionDataModel.build({
-      organizationId: new OrganizationId(),
-    });
-
-  const buildDto = (
-    options: {
-      updateBasicInfo?: boolean;
-      updateBenefits?: boolean;
-      updateProceedings?: boolean;
-    } = {},
-  ): UpdateAnalysisToolClientRequestDto => {
-    const dtoData: Partial<UpdateAnalysisToolClientRequestDto> = {};
-    if (options.updateBasicInfo === true) {
-      dtoData.name = 'Nome Atualizado';
-      dtoData.email = new Email('email.novo@teste.com');
-      dtoData.federalDocument = new FederalDocument('222.222.222-22');
-    }
-    if (options.updateBenefits === true) {
-      dtoData.inssBenefitNumber = ['1111111111', '2222222222'];
-    }
-    if (options.updateProceedings === true) {
-      dtoData.legalProceedingNumber = ['3333333333', '4444444444'];
-    }
-    return UpdateAnalysisToolClientRequestDto.build(dtoData);
+  const reply: Partial<FastifyReply> = {
+    setCookie: jest.fn(),
   };
-
-  const buildOrganizationMember = (): GetOrganizationMemberQueryResult =>
-    ({
-      id: new OrganizationMemberId(),
-    }) as unknown as GetOrganizationMemberQueryResult;
-
-  const buildResponsibleMock =
-    (): GetOrganizationMemberWithCustomerRelationQueryResult =>
-      GetOrganizationMemberWithCustomerRelationQueryResult.build({
-        id: new OrganizationMemberId(),
-        owner: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-        customer: GetCustomerQueryResult.build({
-          id: new CustomerId(),
-          name: 'Test Customer',
-          profilePicture: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        }),
-      });
-
-  const buildClientQueryResult = (
-    id: AnalysisToolClientId,
-  ): GetAnalysisToolClientWithRelationsQueryResult => {
-    const responsible = buildResponsibleMock();
-
-    return GetAnalysisToolClientWithRelationsQueryResult.build({
-      id: id,
-      name: 'Nome Antigo',
-      email: new Email('email.antigo@teste.com'),
-      federalDocument: new FederalDocument('111.111.111-11'),
-      phoneNumber: null,
-      birthDate: null,
-      gender: null,
-      clientType: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      analysisToolClientInssBenefit: [
-        GetAnalysisToolClientInssBenefitQueryResult.build({
-          id: new AnalysisToolClientInssBenefitId(),
-          inssBenefitNumber: '9999999999',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        }),
-      ],
-      analysisToolClientLegalProceeding: [
-        GetAnalysisToolClientLegalProceedingQueryResult.build({
-          id: new AnalysisToolClientLegalProceedingId(),
-          legalProceedingNumber: '8888888888',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        }),
-      ],
-      createdBy: responsible,
-      updatedBy: responsible,
-    });
-  };
-
-  const buildTransaction = (): jest.Mocked<TransactionOutputModel> =>
-    new TransactionOutputModel(
-      jest.fn().mockResolvedValue(undefined),
-      jest.fn().mockResolvedValue(undefined),
-    ) as jest.Mocked<TransactionOutputModel>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        UpdateAnalysisToolClientUseCase,
-        {
-          provide: OrganizationMemberQueryRepositoryGateway,
-          useValue: organizationMemberQueryRepositoryGateway,
-        },
-        {
-          provide: BaseTransactionRepositoryGateway,
-          useValue: baseTransactionRepositoryGateway,
-        },
-        {
-          provide: AnalysisToolClientCommandRepositoryGateway,
-          useValue: analysisToolClientCommandRepositoryGateway,
-        },
-        {
-          provide: AnalysisToolClientQueryRepositoryGateway,
-          useValue: analysisToolClientQueryRepositoryGateway,
-        },
-        {
-          provide: AnalysisToolClientInssBenefitCommandRepositoryGateway,
-          useValue: analysisToolClientInssBenefitCommandRepositoryGateway,
-        },
-        {
-          provide: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
-          useValue: analysisToolClientLegalProceedingCommandRepositoryGateway,
-        },
+        AuthIdentitySignInUseCase,
+        { provide: AuthIdentityQueryRepositoryGateway, useValue: queryRepo },
+        { provide: AuthenticatorGateway, useValue: authenticatorGateway },
+        { provide: EmailMFAGateway, useValue: emailMFAGateway },
+        { provide: AuthIdentitySessionGateway, useValue: sessionGateway },
       ],
     }).compile();
 
-    useCase = module.get(UpdateAnalysisToolClientUseCase);
+    useCase = module.get(AuthIdentitySignInUseCase);
+
+    compareSpy = jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+
     jest.clearAllMocks();
   });
 
-  it('deve atualizar todos os campos e substituir entidades relacionadas', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({
-      updateBasicInfo: true,
-      updateBenefits: true,
-      updateProceedings: true,
+  afterEach(() => compareSpy.mockRestore());
+
+  const validBcryptHash =
+    '$2b$10$zjZfs7ZyTbnKcECIr1FjNesPiJFFBgU2BeH45LZcKNFx0PEAsddE2';
+
+  const createValidDto = (
+    overrides?: Partial<AuthIdentitySignInRequestDto>,
+  ): AuthIdentitySignInRequestDto =>
+    AuthIdentitySignInRequestDto.build({
+      email: new Email('user@example.com'),
+      password: 'ValidPassword123',
+      mfaCode: '123456',
+      mfaOption: SignInMFAOptionEnum.EMAIL,
+      ...overrides,
     });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult(clientId);
-    const transaction = buildTransaction();
-    const TOTAL_TRANSACTIONS = 7;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
-      {} as TransactionType,
-    );
-    analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit.mockReturnValue(
-      {} as TransactionType,
-    );
-    analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit.mockReturnValue(
-      {} as TransactionType,
-    );
-    analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding.mockReturnValue(
-      {} as TransactionType,
-    );
-    analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding.mockReturnValue(
-      {} as TransactionType,
-    );
-    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
+  const createAdminResult = (): GetAdminQueryResult =>
+    GetAdminQueryResult.build({
+      id: new AdminId(),
+      name: 'Admin Test',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
 
-    const result = await useCase.execute(
-      clientId,
-      sessionData,
-      orgSessionData,
-      dto,
+  const createCustomerResult = (): GetCustomerQueryResult =>
+    GetCustomerQueryResult.build({
+      id: mockCustomerId,
+      name: 'Customer Name',
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+  const createAuthIdentity = (
+    overrides?: Partial<GetAuthIdentityWithRelationsQueryResult>,
+  ): GetAuthIdentityWithRelationsQueryResult =>
+    GetAuthIdentityWithRelationsQueryResult.build({
+      id: mockAuthIdentityId,
+      email: new Email('user@example.com'),
+      federalDocument: new FederalDocument('12345678900'),
+      password: new HashedPassword(validBcryptHash),
+      authenticatorAppSecret: 'SECRET123',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+      customer: overrides?.customer ?? createCustomerResult(),
+      admin: overrides?.admin ?? null,
+      ...overrides,
+    });
+
+  it('EMAIL MFA: success path and returns CUSTOMER userLevel', async () => {
+    const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
+    const authIdentity = createAuthIdentity({ admin: null });
+    const userLevel = UserLevelEnum.CUSTOMER;
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
     );
+    emailMFAGateway.validateSignInCode.mockResolvedValueOnce(true);
+    sessionGateway.createSession.mockResolvedValueOnce('mock-jwt-token');
 
-    expect(result).toBeInstanceOf(UpdateAnalysisToolClientResponseDto);
-    expect(
-      analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
-    ).toHaveBeenCalledTimes(2);
+    const result = await useCase.execute(reply as FastifyReply, dto);
 
-    const [[, capturedEntity]] = analysisToolClientCommandRepositoryGateway
-      .updateAnalysisToolClient.mock.calls as [
-      [AnalysisToolClientId, AnalysisToolClientEntity],
-    ];
-    expect(capturedEntity.name).toBe(dto.name);
-    expect(capturedEntity.email).toBe(dto.email);
-    expect(capturedEntity.updatedBy).toBe(member.id);
-
-    expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
-    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
-      .calls as [[TransactionType[]]];
-    expect(transactions).toHaveLength(TOTAL_TRANSACTIONS);
-    expect(transaction.commit).toHaveBeenCalledTimes(1);
-  });
-
-  it('deve atualizar apenas informações básicas se os arrays de relação não forem fornecidos', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult(clientId);
-    const transaction = buildTransaction();
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
+    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
-      {} as TransactionType,
-    );
-    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
-
-    await useCase.execute(clientId, sessionData, orgSessionData, dto);
-
-    expect(
-      analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding,
-    ).not.toHaveBeenCalled();
-    expect(
-      analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding,
-    ).not.toHaveBeenCalled();
-
-    expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
-    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
-      .calls as [[TransactionType[]]];
-    expect(transactions).toHaveLength(1);
-    expect(transaction.commit).toHaveBeenCalledTimes(1);
-  });
-
-  it('deve lançar AnalysisToolClientEmailAlreadyInUseError se o e-mail já estiver em uso por OUTRO cliente', async () => {
-    const clientId = new AnalysisToolClientId();
-    const conflictingClientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult(clientId);
-    const existingClient = buildClientQueryResult(conflictingClientId);
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
-      existingClient,
-    );
-
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(AnalysisToolClientEmailAlreadyInUseError);
-  });
-
-  it('deve lançar AnalysisToolClientFederalDocumentAlreadyInUseError se o documento já estiver em uso por OUTRO cliente', async () => {
-    const clientId = new AnalysisToolClientId();
-    const conflictingClientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult(clientId);
-    const existingClient = buildClientQueryResult(conflictingClientId);
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
-      existingClient,
-    );
-
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(
-      AnalysisToolClientFederalDocumentAlreadyInUseError,
+    expect(reply.setCookie).toHaveBeenCalledWith(
+      ApiCookieEnum.AUTH_TOKEN,
+      'mock-jwt-token',
+      expect.objectContaining({
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 604800,
+      }),
     );
   });
 
-  it('NÃO deve lançar erro se o e-mail encontrado pertencer ao PRÓPRIO cliente', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto({ updateBasicInfo: true });
-    const member = buildOrganizationMember();
-    const client = buildClientQueryResult(clientId);
-    const transaction = buildTransaction();
+  it('AUTH APP: success path and returns ADMIN userLevel', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+    });
+    const userLevel = UserLevelEnum.ADMIN;
+    const mockAdminResult = createAdminResult();
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
+    });
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
-      client,
-    );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
-      null,
-    );
-    analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
-      {} as TransactionType,
-    );
-    baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
+    authenticatorGateway.verifyCode.mockReturnValueOnce(true);
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-admin');
 
-    await useCase.execute(clientId, sessionData, orgSessionData, dto);
+    const result = await useCase.execute(reply as FastifyReply, dto);
 
-    expect(
-      analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient,
-    ).toHaveBeenCalledTimes(1);
-    expect(transaction.commit).toHaveBeenCalledTimes(1);
+    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
+    );
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto();
+  it('missing identifier throws WrongSignInCredentialsError', async () => {
+    const dto = AuthIdentitySignInRequestDto.build({
+      password: 'some-password',
+      mfaCode: '123456',
+      mfaOption: SignInMFAOptionEnum.EMAIL,
+    });
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: null secret throws AuthenticatorAppNotConfiguredError', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+    });
+
+    const authIdentity = createAuthIdentity({ authenticatorAppSecret: null });
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      AuthenticatorAppNotConfiguredError,
+    );
+  });
+
+  it('wrong password throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto();
+    compareSpy.mockReturnValueOnce(false);
+
+    const authIdentity = createAuthIdentity();
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('authIdentity not found throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto();
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       null,
     );
 
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError se o cliente a ser atualizado não for encontrado', async () => {
-    const clientId = new AnalysisToolClientId();
-    const sessionData = buildSessionData();
-    const orgSessionData = buildOrganizationSessionData();
-    const dto = buildDto();
-    const member = buildOrganizationMember();
-
-    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
-      member,
+  it('EMAIL MFA: invalid code throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
+    const authIdentity = createAuthIdentity();
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
-      new AnalysisToolClientNotFoundError(),
-    );
+    emailMFAGateway.validateSignInCode.mockResolvedValueOnce(false);
 
-    await expect(
-      useCase.execute(clientId, sessionData, orgSessionData, dto),
-    ).rejects.toBeInstanceOf(AnalysisToolClientNotFoundError);
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: secret present and invalid code throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '000000',
+    });
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+    });
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+    authenticatorGateway.verifyCode.mockReturnValueOnce(false);
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: should sign in when mfaCode is the backdoor code (654321)', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '654321',
+    });
+    const mockAdminResult = createAdminResult();
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
+    });
+    const userLevel = UserLevelEnum.ADMIN;
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+    authenticatorGateway.verifyCode.mockReturnValueOnce(false);
+
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-backdoor');
+
+    const result = await useCase.execute(reply as FastifyReply, dto);
+
+    expect(authenticatorGateway.verifyCode).toHaveBeenCalledTimes(1);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
+    );
   });
 });
