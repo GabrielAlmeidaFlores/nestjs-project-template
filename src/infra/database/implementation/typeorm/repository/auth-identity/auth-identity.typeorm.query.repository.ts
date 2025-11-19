@@ -26,6 +26,7 @@ export class AuthIdentityTypeormQueryRepository
   ) {
     super(repository);
   }
+
   public async findOneAuthIdentityByEmailOrFederalDocument(
     value: FederalDocument | Email,
   ): Promise<GetAuthIdentityQueryResult | null> {
@@ -54,6 +55,34 @@ export class AuthIdentityTypeormQueryRepository
 
     return mappedData;
   }
+  public async findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
+    value: FederalDocument | Email,
+  ): Promise<GetAuthIdentityWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: [
+        {
+          federalDocument: value.toString(),
+        },
+        {
+          email: value.toString(),
+        },
+      ],
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AuthIdentityTypeormEntity,
+      GetAuthIdentityWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
 
   public async findOneAuthIdentityById(
     id: AuthIdentityId,
@@ -74,40 +103,6 @@ export class AuthIdentityTypeormQueryRepository
       data,
       AuthIdentityTypeormEntity,
       GetAuthIdentityQueryResult,
-    );
-
-    return mappedData;
-  }
-
-  public async findOneAuthIdentityWithRelationsByEmailOrFederalDocument(
-    value: FederalDocument | Email,
-  ): Promise<GetAuthIdentityWithRelationsQueryResult | null> {
-    const data = await this.findOne({
-      where: [
-        {
-          federalDocument: value.toString(),
-        },
-        {
-          email: value.toString(),
-        },
-      ],
-      relations: {
-        customer: {
-          customerAddress: true,
-        },
-      },
-    });
-
-    const dataDoesNotExists = data === null;
-
-    if (dataDoesNotExists) {
-      return null;
-    }
-
-    const mappedData = this.mapperGateway.map(
-      data,
-      AuthIdentityTypeormEntity,
-      GetAuthIdentityWithRelationsQueryResult,
     );
 
     return mappedData;

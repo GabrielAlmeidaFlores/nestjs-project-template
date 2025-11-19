@@ -39,8 +39,8 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     this.email = props.email;
     this.federalDocument = props.federalDocument;
     this.password = props.password;
-    this.customer = props.customer ?? null;
     this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
+    this.customer = props.customer ?? null;
     this.admin = props.admin ?? null;
   }
 
