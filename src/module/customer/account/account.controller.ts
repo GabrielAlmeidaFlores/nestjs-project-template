@@ -116,15 +116,9 @@ export class AccountController {
   })
   public async updateCustomerProfile(
     @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: UpdateCustomerRequestDto,
   ): Promise<UpdateCustomerResponseDto> {
-    return await this.updateCustomerUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      dto,
-    );
+    return await this.updateCustomerUseCase.execute(sessionData, dto);
   }
 
   @BuildEndpointSpecification({
