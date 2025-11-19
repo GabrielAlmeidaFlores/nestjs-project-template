@@ -67,6 +67,10 @@ export class AuthIdentityTypeormQueryRepository
           email: value.toString(),
         },
       ],
+      relations: {
+        admin: true,
+        customer: true,
+      },
     });
 
     const dataDoesNotExists = data === null;
