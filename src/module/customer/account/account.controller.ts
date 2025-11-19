@@ -30,6 +30,7 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('account')
 export class AccountController {
@@ -48,6 +49,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Cadastro de usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'sign-up',
       method: RequestMethod.POST,
@@ -72,6 +74,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar foto de perfil do usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'profile/picture',
       method: RequestMethod.PATCH,
@@ -125,6 +128,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Listar organizações do usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'available/organization',
       method: RequestMethod.GET,
@@ -149,6 +153,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Definir organização para a sessão do usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'session/organization',
       method: RequestMethod.POST,
@@ -176,6 +181,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Obter dados do usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '',
       method: RequestMethod.GET,
@@ -202,6 +208,7 @@ export class AccountController {
   @BuildEndpointSpecification({
     summary:
       'Obter dados dos termos e condições aceitos pelo usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'terms-acceptance',
       method: RequestMethod.GET,
@@ -223,6 +230,7 @@ export class AccountController {
   @BuildEndpointSpecification({
     summary:
       'Confirmar aceitação dos termos e condições pelo usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'terms-acceptance',
       method: RequestMethod.POST,

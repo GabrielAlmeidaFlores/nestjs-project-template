@@ -48,13 +48,17 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityWithRelationsByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
         identifier,
       );
 
     if (!authIdentity) {
       throw new WrongSignInCredentialsError();
     }
+
+    const userLevel = authIdentity.admin
+      ? UserLevelEnum.ADMIN
+      : UserLevelEnum.CUSTOMER;
 
     const isPasswordRight = bcrypt.compareSync(
       dto.password,
@@ -71,7 +75,7 @@ export class PreAuthIdentitySignInUseCase {
 
     if (dto.mfaOption === undefined) {
       return PreAuthIdentitySignInResponseDto.build({
-        userLevel: UserLevelEnum.CUSTOMER,
+        userLevel,
       });
     }
 
@@ -109,7 +113,7 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     return PreAuthIdentitySignInResponseDto.build({
-      userLevel: UserLevelEnum.CUSTOMER,
+      userLevel,
     });
   }
 

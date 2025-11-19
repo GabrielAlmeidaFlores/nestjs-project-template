@@ -40,6 +40,7 @@ import type { BuildEndpointHttpSpecificationType } from '@shared/api/util/decora
 import type { BuildEndpointSuccessResponseSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-success-response-specification.type';
 import type { BuildEndpointThrottleSpecificationType } from '@shared/api/util/decorator/method/build-endpoint-specification/type/build-endpoint-throttle-specification.type';
 import type { DtoPropMetaType } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/type/dto-props-metadata.type';
+import type { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 function buildEndpointOperationSpecification(
   summary: string,
@@ -218,11 +219,24 @@ function buildEndpointTagSpecification(
   return [ApiTags(...tags)];
 }
 
+function buildEndpointUserLevelSpecification(
+  userLevels?: Array<UserLevelEnum>,
+): MethodDecorator[] {
+  if (!userLevels) {
+    return [];
+  }
+
+  return [SetMetadata('userLevel', userLevels)];
+}
+
 export function BuildEndpointSpecification(
   props: BuildEndpointSpecificationDecoratorPropsInterface,
 ): MethodDecorator {
   const isEndpointDeprecated = props.deprecated ?? false;
 
+  const endpointUserLevelSpecification = buildEndpointUserLevelSpecification(
+    props.userLevel,
+  );
   const endpointOperationSpecification = buildEndpointOperationSpecification(
     props.summary,
     isEndpointDeprecated,
@@ -243,6 +257,7 @@ export function BuildEndpointSpecification(
   const endpointTagSpecification = buildEndpointTagSpecification(props.tag);
 
   const decorators = [
+    ...endpointUserLevelSpecification,
     ...endpointOperationSpecification,
     ...endpointResponseSpecification,
     ...endpointAuthSpecification,

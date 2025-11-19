@@ -4,8 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -35,6 +37,12 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         GetCustomerQueryResult,
       );
 
+      const admin = this.mapper.map(
+        source.admin,
+        AdminTypeormEntity,
+        GetAdminQueryResult,
+      );
+
       return GetAuthIdentityWithRelationsQueryResult.build({
         ...source,
         id: new AuthIdentityId(source.id),
@@ -42,6 +50,7 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         email: new Email(source.email),
         password: new HashedPassword(source.password),
         customer,
+        admin,
       });
     };
 
@@ -65,6 +74,12 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         CustomerTypeormEntity,
       );
 
+      const admin = this.mapper.map(
+        source.admin,
+        GetAdminQueryResult,
+        AdminTypeormEntity,
+      );
+
       return AuthIdentityTypeormEntity.build({
         id: source.id.toString(),
         email: source.email.toString(),
@@ -75,6 +90,7 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
         customer,
+        admin,
       });
     };
 
