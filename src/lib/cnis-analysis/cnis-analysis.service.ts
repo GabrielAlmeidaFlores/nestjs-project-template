@@ -240,9 +240,12 @@ export class CnisAnalysisService {
         gender,
       );
 
-    this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
-      consolidadoResumido,
-    );
+    const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16 =
+      this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+      );
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -270,6 +273,7 @@ export class CnisAnalysisService {
       aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido,
       aposentadoriaPorIdadeUrbanaComDireitoAdquirido,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15,
+      aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20,
     });
     return cnis;
@@ -2352,15 +2356,6 @@ export class CnisAnalysisService {
     return monthsToContribution;
   }
 
-  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
-    consolidadoResumido: ConsolidadoRelationInterface[],
-  ) {
-    console.log(
-      'Não implementado: Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 16',
-      consolidadoResumido,
-    );
-  }
-
   private totalContributionType(
     consolidadoResumido: ConsolidadoRelationInterface[],
   ) {
@@ -2452,6 +2447,114 @@ export class CnisAnalysisService {
       meetsContributionTimeRequirement,
       meetsCarenciaRequirement,
       isEligible,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
+    consolidadoResumido: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+  ) {
+    // #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 16,
+    // da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de
+    // contribuição, se homem; e b) idade de 56 (cinquenta e seis) anos, se mulher, e 61 (sessenta
+    // e um) anos, se homem. A partir de 1º de janeiro de 2020, a idade a que se refere o inciso II
+    // do caput será acrescida de 6 (seis) meses a cada ano, até atingir 62 (sessenta e dois) anos
+    // de idade, se mulher, e 65 (sessenta e cinco) anos de idade, se homem. c) carência de 180
+    // meses, para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de
+    // benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que
+    // exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de
+    // 15 (quinze) anos de contribuição, se mulher.
+    const REQUIRED_CONTRIBUTION_YEARS_MEN = 35;
+    const REQUIRED_CONTRIBUTION_YEARS_WOMEN = 30;
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const BASE_AGE_MEN = 61;
+    const BASE_AGE_WOMEN = 56;
+    const MAX_AGE_MEN = 65;
+    const MAX_AGE_WOMEN = 62;
+
+    const requiredContributionYears =
+      gender === 'F'
+        ? REQUIRED_CONTRIBUTION_YEARS_WOMEN
+        : REQUIRED_CONTRIBUTION_YEARS_MEN;
+
+    const baseAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
+    const maxAge = gender === 'F' ? MAX_AGE_WOMEN : MAX_AGE_MEN;
+
+    const totalContributionYears = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.anos ?? 0);
+    }, 0);
+
+    const totalContributionMonths = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.meses ?? 0);
+    }, 0);
+
+    const totalContributionDays = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.dias ?? 0);
+    }, 0);
+
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+
+    const totalContribution = Math.ceil(
+      totalContributionYears +
+        totalContributionMonths / MONTHS_IN_YEAR +
+        totalContributionDays / DAYS_IN_YEAR,
+    );
+
+    const totalCarenciaMonths = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.carencia ?? 0);
+    }, 0);
+
+    const currentYear = new Date().getFullYear();
+    const year2020 = 2020;
+
+    const yearsSince2020 = Math.max(0, currentYear - year2020);
+    let requiredAge = baseAge + yearsSince2020 * 0.5;
+    if (requiredAge > maxAge) {
+      requiredAge = maxAge;
+    }
+
+    const actualDate = new Date();
+    const monthsToContribution = this.monthsRemainingForContribution(
+      totalContributionYears,
+      totalContributionMonths,
+      totalContributionDays,
+      requiredContributionYears,
+    );
+
+    const monthsToCarencia =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS
+        ? 0
+        : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    const monthsToAge =
+      age >= requiredAge ? 0 : Math.ceil((requiredAge - age) * MONTHS_IN_YEAR);
+
+    const monthsToFulfill = Math.max(
+      monthsToContribution,
+      monthsToCarencia,
+      monthsToAge,
+    );
+
+    const projectedFulfillmentDate = new Date(
+      actualDate.getFullYear(),
+      actualDate.getMonth() + monthsToFulfill,
+      actualDate.getDate(),
+    );
+
+    return {
+      type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 16',
+      requiredContributionYears,
+      requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+      requiredAge,
+      totalContribution,
+      totalCarenciaMonths,
+      meetsContributionRequirement:
+        totalContribution >= requiredContributionYears,
+      meetsCarenciaRequirement: totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS,
+      meetsAgeRequirement: age >= requiredAge,
       projectedFulfillmentDate,
     };
   }
