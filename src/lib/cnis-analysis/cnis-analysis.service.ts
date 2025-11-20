@@ -1,5 +1,3 @@
-import console from 'console';
-
 import { Inject } from '@nestjs/common';
 import moment from 'moment';
 
@@ -13,6 +11,7 @@ import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/dto/concomita
 import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/dto/consolidado-relation';
 import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/dto/correcao-monetaria';
 import { ManutencaoInterface } from '@lib/cnis-analysis/dto/manutencao';
+import { PedagioInterface } from '@lib/cnis-analysis/dto/pedagio';
 import { SalarioInterface } from '@lib/cnis-analysis/dto/salario';
 import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/dto/salario-concomitante';
 import { TetoInterface } from '@lib/cnis-analysis/dto/teto';
@@ -191,22 +190,42 @@ export class CnisAnalysisService {
       salarioSBPreReforma,
     );
 
-    const pontos = this.calculatePontos(idade.anos, consolidadoResumido);
+    const gender = 'M'; // TODO: obter do CNIS
+
+    const points = this.calculatePontos(idade.anos, consolidadoResumido);
 
     const tempoPedagio100 = this.calculateTempoPedagio(
       consolidadoResumido,
-      'M',
+      gender,
       1,
     );
 
     const tempoPedagio50 = this.calculateTempoPedagio(
       consolidadoResumido,
-      'M',
+      gender,
       0.5,
     );
 
-    console.log(tempoPedagio100);
-    console.log(tempoPedagio50);
+    const aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido =
+      this.aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido(
+        consolidadoResumido,
+        gender,
+        points.pontos,
+      );
+
+    const aposentadoriaPorIdadeUrbanaComDireitoAdquirido =
+      this.aposentadoriaPorIdadeUrbanaComDireitoAdquirido(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+      );
+
+    const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103 =
+      this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+      );
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -228,7 +247,12 @@ export class CnisAnalysisService {
       salarioSBPosReforma,
       salarioSBPreReforma,
       ajusteFinal,
-      pontos,
+      points,
+      tempoPedagio100,
+      tempoPedagio50,
+      aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido,
+      aposentadoriaPorIdadeUrbanaComDireitoAdquirido,
+      aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103,
     });
     return cnis;
   }
@@ -1824,29 +1848,10 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     percentualPedagio: number,
-  ) {
+  ): PedagioInterface {
     // Cálculo de Pedágio: Para regras de transição específicas,
     // calcular o tempo que faltava para se aposentar na data da reforma (13/11/2019)
     // e aplicar um percentual (50% ou 100%) a esse tempo para determinar o pedágio a ser cumprido.
-    // Caso a data fim for maior, ajuste ate a data da reforma
-
-    // Art. 17. Ao segurado filiado ao Regime Geral de Previdência Social até a data de entrada em vigor
-    // desta Emenda Constitucional e que na referida data contar com mais de 28 (vinte e oito) anos de contribuição,
-    // se mulher, e 33 (trinta e três) anos de contribuição, se homem,
-    // fica assegurado o direito à aposentadoria quando preencher, cumulativamente, os seguintes requisitos:
-    // I - 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; e
-    // II - cumprimento de período adicional correspondente a 50% (cinquenta por cento) do tempo que,
-    // na data de entrada em vigor desta Emenda Constitucional, faltaria para atingir 30 (trinta) anos de contribuição, se mulher,
-    // e 35 (trinta e cinco) anos de contribuição, se homem.
-    // Parágrafo único.
-    // O benefício concedido nos termos deste artigo terá seu valor apurado de acordo com a média aritmética simples dos
-    // salários de contribuição e das remunerações calculada na forma da lei, multiplicada pelo fator previdenciário,
-    // calculado na forma do disposto nos §§ 7º a 9º do art. 29 da Lei nº 8.213, de 24 de julho de 1991.
-    // Art. 18. O segurado de que trata o inciso Ido § 7º do art. 201 da Constituição Federal filiado
-    // ao Regime Geral de Previdência Social até a data de entrada em vigor desta Emenda Constitucional
-    // poderá aposentar-se quando preencher, cumulativamente, os seguintes requisitos:
-    // I - 60 (sessenta) anos de idade, se mulher, e 65 (sessenta e cinco) anos de idade, se homem; e
-    // II - 15 (quinze) anos de contribuição, para ambos os sexos.
 
     const REFORMA_DATE = new Date(2019, 10, 13);
 
@@ -1908,5 +1913,385 @@ export class CnisAnalysisService {
       pedagio,
       tempoTotalNecessario,
     };
+  }
+
+  private aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    points: number,
+  ) {
+    // Aposentadoria por Tempo de Contribuição com Direito Adquirido até a EC 103
+    // (requisitos cumpridos até 13/11/2019): a) não exige idade mínima; b) tempo mínimo de
+    // contribuição de 35 anos para homens e 30 anos para mulheres; c) carência mínima de 180
+    // meses para ambos os sexos. A RMI será de 100% do salário-de-benefício calculado na
+    // forma do art. 29, da Lei 8.231/91, com incidência do fator previdenciários, podendo esse ser
+    // dispensado se o filiado contar com o somatório de idade (em anos, meses e dias) e tempo
+    // de contribuição (em anos, meses e dias) de 86 pontos (mulheres) e 96 pontos (homens),
+    // em 13/11/2019.
+
+    const REQUIRED_CONTRIBUTION_YEARS_MEN = 35;
+    const REQUIRED_CONTRIBUTION_YEARS_WOMEN = 30;
+    const REQUIRED_CARENCIA_MONTHS = 180;
+
+    const requiredContributionYears =
+      gender === 'F'
+        ? REQUIRED_CONTRIBUTION_YEARS_WOMEN
+        : REQUIRED_CONTRIBUTION_YEARS_MEN;
+
+    const REFORMA_DATE = new Date(2019, 10, 13);
+
+    data.forEach((item) => {
+      const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
+      let dataFim = this.toDate(item.validContributionTime?.dataFim);
+
+      if (!dataInicio) {
+        return;
+      }
+
+      if (!dataFim || dataFim > REFORMA_DATE) {
+        dataFim = REFORMA_DATE;
+      }
+
+      if (dataInicio >= REFORMA_DATE) {
+        item.validContributionTime = {
+          dataInicio: null,
+          dataFim: null,
+          abreviado: '0a 0m 0d',
+          dias: 0,
+          meses: 0,
+          anos: 0,
+        };
+        return;
+      }
+
+      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+
+      item.validContributionTime = {
+        dataInicio: dataInicio,
+        dataFim: dataFim,
+        abreviado: `${years}a ${months}m ${days}d`,
+        dias: days,
+        meses: months,
+        anos: years,
+      };
+    });
+
+    const totalContributionYears = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.anos ?? 0);
+    }, 0);
+
+    const totalContributionMonths = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.meses ?? 0);
+    }, 0);
+
+    const totalContributionDays = data.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.dias ?? 0);
+    }, 0);
+
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+
+    const totalContribution = Math.ceil(
+      totalContributionYears +
+        totalContributionMonths / MONTHS_IN_YEAR +
+        totalContributionDays / DAYS_IN_YEAR,
+    );
+
+    const totalCarenciaMonths = data.reduce((acc, cur) => {
+      return acc + (cur.carencia ?? 0);
+    }, 0);
+
+    const pointsNeeded = gender === 'F' ? 86 : 96;
+
+    const meetsContributionRequirement =
+      totalContribution >= requiredContributionYears;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+    const meetsPointsRequirement = points >= pointsNeeded;
+
+    const isEligible =
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement &&
+      meetsPointsRequirement;
+
+    const dateActual = new Date();
+    const monthsToContribution = meetsContributionRequirement
+      ? 0
+      : (requiredContributionYears - totalContribution) * MONTHS_IN_YEAR;
+
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    const monthsToPoints = meetsPointsRequirement
+      ? 0
+      : (pointsNeeded - points) * MONTHS_IN_YEAR;
+
+    const monthsToFulfill = Math.max(
+      monthsToContribution,
+      monthsToCarencia,
+      monthsToPoints,
+    );
+
+    const projectedFulfillmentDate = new Date(
+      dateActual.getFullYear(),
+      dateActual.getMonth() + monthsToFulfill,
+      dateActual.getDate(),
+    );
+
+    return {
+      type: 'Aposentadoria por Tempo de Contribuição com Direito Adquirido',
+      isEligible,
+      totalContributionYears,
+      totalCarenciaMonths,
+      points,
+      meetsContributionRequirement,
+      meetsCarenciaRequirement,
+      meetsPointsRequirement,
+      pointsNeeded,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorIdadeUrbanaComDireitoAdquirido(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+  ) {
+    // Aposentadoria por Idade Urbana com Direito Adquirido até a EC 103 (requisitos
+    // cumpridos até 13/11/2019): a) idade mínima de 65 anos (homens) ou 60 anos (mulheres); b)
+    // não exige tempo de contribuição mínimo; c) carência mínima de 180 meses para ambos os
+    // sexos. A RMI será de 70% (setenta por cento) do salário de benefício, com acréscimo de
+    // 1% (um por cento) deste, a cada grupo de 12 (doze) contribuições, até o limite máximo de
+    // 100% (cem por cento).
+
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const REQUIRED_AGE_MEN = 65;
+    const REQUIRED_AGE_WOMEN = 60;
+    const MONTHS_IN_YEAR = 12;
+
+    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+
+    const CUTOFF_DATE = new Date('2019-11-13');
+    data.forEach((item) => {
+      const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
+      let dataFim = this.toDate(item.validContributionTime?.dataFim);
+
+      if (!dataInicio) {
+        return;
+      }
+
+      if (!dataFim || dataFim > CUTOFF_DATE) {
+        dataFim = CUTOFF_DATE;
+      }
+
+      if (dataInicio >= CUTOFF_DATE) {
+        item.validContributionTime = {
+          dataInicio: null,
+          dataFim: null,
+          abreviado: '0a 0m 0d',
+          dias: 0,
+          meses: 0,
+          anos: 0,
+        };
+        return;
+      }
+
+      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+
+      item.validContributionTime = {
+        dataInicio: dataInicio,
+        dataFim: dataFim,
+        abreviado: `${years}a ${months}m ${days}d`,
+        dias: days,
+        meses: months,
+        anos: years,
+      };
+    });
+
+    const totalCarenciaMonths = data.reduce((acc, cur) => {
+      return acc + (cur.carencia ?? 0);
+    }, 0);
+
+    const meetsAgeRequirement = age >= requiredAge;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const isEligible = meetsAgeRequirement && meetsCarenciaRequirement;
+
+    const dateActual = new Date();
+    const monthsToAge = meetsAgeRequirement
+      ? 0
+      : (requiredAge - age) * MONTHS_IN_YEAR;
+
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    const monthsToFulfill = Math.max(monthsToAge, monthsToCarencia);
+
+    const projectedFulfillmentDate = new Date(
+      dateActual.getFullYear(),
+      dateActual.getMonth() + monthsToFulfill,
+      dateActual.getDate(),
+    );
+
+    return {
+      type: 'Aposentadoria por Idade Urbana com Direito Adquirido',
+      isEligible,
+      age,
+      totalCarenciaMonths,
+      meetsAgeRequirement,
+      meetsCarenciaRequirement,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103(
+    consolidadoResumido: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+  ) {
+    // #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 15,
+    // da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de
+    // contribuição, se homem; b) somatório da idade e do tempo de contribuição, incluídas as
+    // frações, equivalente a 86 (oitenta e seis) pontos, se mulher, e 96 (noventa e seis) pontos, se
+    // homem. A partir de 1º de janeiro de 2020, a pontuação a que se refere o inciso anterior será
+    // acrescida a cada ano de 1 (um) ponto, até atingir o limite de 100 (cem) pontos, se mulher, e
+    // de 105 (cento e cinco) pontos, se homem. A idade e o tempo de contribuição serão
+    // apurados em dias para o cálculo do somatório de pontos; c) carência de 180 meses, para
+    // ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com
+    // acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o
+    // tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15
+    // (quinze) anos de contribuição, se mulher.
+
+    const REQUIRED_CONTRIBUTION_YEARS_MEN = 35;
+    const REQUIRED_CONTRIBUTION_YEARS_WOMEN = 30;
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const BASE_POINTS_MEN = 96;
+    const BASE_POINTS_WOMEN = 86;
+    const MAX_POINTS_MEN = 105;
+    const MAX_POINTS_WOMEN = 100;
+
+    const requiredContributionYears =
+      gender === 'F'
+        ? REQUIRED_CONTRIBUTION_YEARS_WOMEN
+        : REQUIRED_CONTRIBUTION_YEARS_MEN;
+    const basePoints = gender === 'F' ? BASE_POINTS_WOMEN : BASE_POINTS_MEN;
+    const maxPoints = gender === 'F' ? MAX_POINTS_WOMEN : MAX_POINTS_MEN;
+
+    const totalContributionYears = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.anos ?? 0);
+    }, 0);
+
+    const totalContributionMonths = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.meses ?? 0);
+    }, 0);
+
+    const totalContributionDays = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.validContributionTime?.dias ?? 0);
+    }, 0);
+
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+
+    const totalContribution = Math.ceil(
+      totalContributionYears +
+        totalContributionMonths / MONTHS_IN_YEAR +
+        totalContributionDays / DAYS_IN_YEAR,
+    );
+
+    const totalCarenciaMonths = consolidadoResumido.reduce((acc, cur) => {
+      return acc + (cur.carencia ?? 0);
+    }, 0);
+
+    const currentYear = new Date().getFullYear();
+    const year2020 = 2020;
+
+    const yearsSince2020 = Math.max(0, currentYear - year2020);
+    let requiredPoints = basePoints + yearsSince2020;
+    if (requiredPoints > maxPoints) {
+      requiredPoints = maxPoints;
+    }
+
+    const pontos =
+      (totalContributionYears ?? 0) +
+      (totalContributionMonths ?? 0) / MONTHS_IN_YEAR +
+      (totalContributionDays ?? 0) / DAYS_IN_YEAR +
+      age;
+
+    const actualDate = new Date();
+    const monthsToContribution = this.monthsRemainingForContribution(
+      totalContributionYears,
+      totalContributionMonths,
+      totalContributionDays,
+      requiredContributionYears,
+    );
+
+    const monthsToCarencia =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS
+        ? 0
+        : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    const monthsToPoints =
+      pontos >= requiredPoints
+        ? 0
+        : Math.ceil((requiredPoints - pontos) * MONTHS_IN_YEAR);
+
+    const adjustedMonthsToPoints = Math.max(
+      0,
+      monthsToPoints - monthsToContribution,
+    );
+
+    const monthsToFulfill = Math.max(
+      monthsToContribution,
+      monthsToCarencia,
+      adjustedMonthsToPoints,
+    );
+
+    const projectedFulfillmentDate = new Date(
+      actualDate.getFullYear(),
+      actualDate.getMonth() + monthsToFulfill,
+      actualDate.getDate(),
+    );
+
+    return {
+      type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição',
+      requiredContributionYears,
+      requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+      requiredPoints,
+      totalContribution,
+      totalCarenciaMonths,
+      pontos,
+      meetsContributionRequirement:
+        totalContribution >= requiredContributionYears,
+      meetsCarenciaRequirement: totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS,
+      meetsPointsRequirement: pontos >= requiredPoints,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private monthsRemainingForContribution(
+    totalYears: number,
+    totalMonths: number,
+    totalDays: number,
+    requiredYears: number,
+  ): number {
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+    const DAYS_IN_MONTH = DAYS_IN_YEAR / MONTHS_IN_YEAR; // ≈ 30.4375
+
+    const totalMonthsExact =
+      (totalYears || 0) * MONTHS_IN_YEAR +
+      (totalMonths || 0) +
+      (totalDays || 0) / DAYS_IN_MONTH;
+
+    const requiredMonths = requiredYears * MONTHS_IN_YEAR;
+    const monthsToContribution = Math.max(
+      0,
+      Math.ceil(requiredMonths - totalMonthsExact),
+    );
+
+    return monthsToContribution;
   }
 }
