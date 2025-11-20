@@ -32,6 +32,7 @@ export class CnisAnalysisService {
   private readonly REQUIRED_CONTRIBUTION_MEN = 35;
   private readonly REQUIRED_CONTRIBUTION_WOMEN = 30;
   private readonly REFORMA_DATE = new Date(2019, 10, 13);
+  private readonly CUTOFF_DATE = new Date('2019-11-13');
 
   public constructor(
     @Inject(CnisProcessorGateway)
@@ -200,16 +201,19 @@ export class CnisAnalysisService {
 
     const points = this.calculatePontos(idade.anos, consolidadoResumido);
 
+    const PEDAGIO_ONE_HUNDRED_PERCENT = 1;
+    const PEDAGIO_FIFTY_PERCENT = 0.5;
+
     const tempoPedagio100 = this.calculateTempoPedagio(
       consolidadoResumido,
       gender,
-      1,
+      PEDAGIO_ONE_HUNDRED_PERCENT,
     );
 
     const tempoPedagio50 = this.calculateTempoPedagio(
       consolidadoResumido,
       gender,
-      0.5,
+      PEDAGIO_FIFTY_PERCENT,
     );
 
     const aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido =
@@ -253,6 +257,21 @@ export class CnisAnalysisService {
         idade.anos,
       );
 
+    const aposentadoriaPorIdadeHibridaComDireitoAdquirido =
+      this.aposentadoriaPorIdadeHibridaComDireitoAdquirido(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+      );
+
+    const aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18 =
+      this.aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
+      );
+
     const cnis = CnisOutputCompleteModel.build({
       idade,
       tempoDeContribuicao,
@@ -282,6 +301,8 @@ export class CnisAnalysisService {
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20,
+      aposentadoriaPorIdadeHibridaComDireitoAdquirido,
+      aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18,
     });
     return cnis;
   }
@@ -670,9 +691,32 @@ export class CnisAnalysisService {
 
   private calculateTotalCarencia(
     consolidado: ConsolidadoRelationInterface[],
+    dateCuttoff?: Date,
   ): number {
+    if (dateCuttoff) {
+      return consolidado.reduce((acc, cur) => {
+        const startDate = cur.validContributionTime?.dataInicio;
+        const endDate = cur.validContributionTime?.dataFim;
+
+        if (
+          startDate instanceof Date &&
+          !isNaN(startDate.getTime()) &&
+          endDate instanceof Date &&
+          !isNaN(endDate.getTime())
+        ) {
+          const effectiveEndDate =
+            endDate > dateCuttoff ? dateCuttoff : endDate;
+          const durationInMonths = Math.floor(
+            this.daysBetween(startDate, effectiveEndDate) / 30,
+          );
+          return acc + durationInMonths;
+        }
+        return acc;
+      }, 0);
+    }
     return consolidado.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
   }
+
   private convertToDecimalYears(
     years: number,
     months: number,
@@ -1970,12 +2014,6 @@ export class CnisAnalysisService {
     gender: string,
     percentualPedagio: number,
   ): PedagioInterface {
-    // Cálculo de Pedágio: Para regras de transição específicas,
-    // calcular o tempo que faltava para se aposentar na data da reforma (13/11/2019)
-    // e aplicar um percentual (50% ou 100%) a esse tempo para determinar o pedágio a ser cumprido.
-
-    // Cálculo do Tempo que Faltava na Data da Reforma:
-
     const requiredContributionYears = this.getRequiredContributionAge(gender);
 
     let totalContributionYearsAtReforma = 0;
@@ -1986,13 +2024,17 @@ export class CnisAnalysisService {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!dataInicio) return;
+      if (!dataInicio) {
+        return;
+      }
 
       if (!dataFim || dataFim > this.REFORMA_DATE) {
         dataFim = this.REFORMA_DATE;
       }
 
-      if (dataInicio >= this.REFORMA_DATE) return;
+      if (dataInicio >= this.REFORMA_DATE) {
+        return;
+      }
 
       const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
 
@@ -2459,16 +2501,6 @@ export class CnisAnalysisService {
     gender: string,
     age: number,
   ) {
-    // #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 16,
-    // da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de
-    // contribuição, se homem; e b) idade de 56 (cinquenta e seis) anos, se mulher, e 61 (sessenta
-    // e um) anos, se homem. A partir de 1º de janeiro de 2020, a idade a que se refere o inciso II
-    // do caput será acrescida de 6 (seis) meses a cada ano, até atingir 62 (sessenta e dois) anos
-    // de idade, se mulher, e 65 (sessenta e cinco) anos de idade, se homem. c) carência de 180
-    // meses, para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de
-    // benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que
-    // exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de
-    // 15 (quinze) anos de contribuição, se mulher.
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 61;
     const BASE_AGE_WOMEN = 56;
@@ -2605,6 +2637,194 @@ export class CnisAnalysisService {
       totalContributionAtReforma: pedagioData.totalContributionAtReforma,
       totalCarenciaMonths,
       meetsContributionTimeRequirement,
+      meetsCarenciaRequirement,
+      isEligible,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorIdadeHibridaComDireitoAdquirido(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+  ) {
+    /// TODO verificar isso
+    // derivada da soma dos períodos rurais e
+    // urbanos apurados no CNIS.
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const REQUIRED_AGE_MEN = 65;
+    const REQUIRED_AGE_WOMEN = 60;
+
+    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+
+    data.forEach((item) => {
+      const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
+      let dataFim = this.toDate(item.validContributionTime?.dataFim);
+
+      if (!dataInicio) {
+        return;
+      }
+
+      if (!dataFim || dataFim > this.CUTOFF_DATE) {
+        dataFim = this.CUTOFF_DATE;
+      }
+
+      if (dataInicio >= this.CUTOFF_DATE) {
+        item.validContributionTime = {
+          dataInicio: null,
+          dataFim: null,
+          abreviado: '0a 0m 0d',
+          dias: 0,
+          meses: 0,
+          anos: 0,
+        };
+        return;
+      }
+
+      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+
+      item.validContributionTime = {
+        dataInicio: dataInicio,
+        dataFim: dataFim,
+        abreviado: `${years}a ${months}m ${days}d`,
+        dias: days,
+        meses: months,
+        anos: years,
+      };
+    });
+
+    const totalCarenciaMonths = this.calculateTotalCarencia(
+      data,
+      this.CUTOFF_DATE,
+    );
+
+    const meetsAgeRequirement = age >= requiredAge;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const isEligible = meetsAgeRequirement && meetsCarenciaRequirement;
+
+    const projectedFulfillmentDate = null;
+
+    return {
+      type: 'Aposentadoria por Idade Híbrida com Direito Adquirido',
+      isEligible,
+      age,
+      totalCarenciaMonths,
+      meetsAgeRequirement,
+      meetsCarenciaRequirement,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+    birthDate: Date | undefined,
+  ) {
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const BASE_AGE_MEN = 65;
+    const BASE_AGE_WOMEN = 60;
+    const MAX_AGE_WOMEN = 62;
+    const REQUIRED_CONTRIBUTION_YEARS = 15;
+
+    const requiredAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
+    const calculatedTotals = this.calculateTotals(data);
+
+    const currentYear = new Date().getFullYear();
+    const year2020 = 2020;
+
+    const SIX_MONTHS_IN_YEARS_PERCENTUAL = 0.5;
+
+    let requiredAgeAdjusted = requiredAge;
+    if (gender === 'F') {
+      const yearsSince2020 = Math.max(0, currentYear - year2020);
+      requiredAgeAdjusted =
+        BASE_AGE_WOMEN + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL;
+      if (requiredAgeAdjusted > MAX_AGE_WOMEN) {
+        requiredAgeAdjusted = MAX_AGE_WOMEN;
+      }
+    }
+
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
+    );
+
+    const totalCarenciaMonths = this.calculateTotalCarencia(data);
+
+    const meetsAgeRequirement = age >= requiredAgeAdjusted;
+    const meetsContributionRequirement =
+      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const isEligible =
+      meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement;
+
+    const actualDate = new Date();
+
+    const monthsToAge = meetsAgeRequirement
+      ? 0
+      : Math.ceil((requiredAgeAdjusted - age) * this.MONTHS_IN_YEAR);
+
+    const monthsToContribution = meetsContributionRequirement
+      ? 0
+      : Math.ceil(
+          (this.REQUIRED_CONTRIBUTION_WOMEN - totalContribution) *
+            this.MONTHS_IN_YEAR,
+        );
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    let monthsToFulfill = Math.max(
+      monthsToAge,
+      monthsToContribution,
+      monthsToCarencia,
+    );
+
+    let projectedFulfillmentDate: Date;
+    if (
+      birthDate &&
+      !meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement
+    ) {
+      const monthsToBirthDate =
+        (birthDate.getFullYear() - actualDate.getFullYear()) *
+          this.MONTHS_IN_YEAR +
+        (birthDate.getMonth() - actualDate.getMonth());
+
+      if (monthsToBirthDate > 0) {
+        monthsToFulfill = Math.max(monthsToFulfill, monthsToBirthDate);
+      }
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        birthDate.getDate(),
+      );
+    } else {
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        actualDate.getDate(),
+      );
+    }
+
+    return {
+      type: 'Aposentadoria por Idade Urbana - Regra de Transição - Emenda 103 art. 18',
+      requiredAge: requiredAgeAdjusted,
+      requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
+      requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+      totalContribution,
+      totalCarenciaMonths,
+      meetsAgeRequirement,
+      meetsContributionRequirement,
       meetsCarenciaRequirement,
       isEligible,
       projectedFulfillmentDate,
