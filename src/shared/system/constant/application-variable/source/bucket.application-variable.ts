@@ -5,20 +5,6 @@ export class BucketApplicationVariable {
 
   public static readonly source = new EnvironmentVariableService();
 
-  public static readonly BUCKET_FILE_LOCATION_CUSTOMER_PROFILE_PICTURE =
-    BucketApplicationVariable.source.getValueOrDefault<string>(
-      'BUCKET_FILE_LOCATION_CUSTOMER_PROFILE_PICTURE',
-      String,
-      'customer/profile-picture',
-    );
-
-  public static readonly BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT =
-    BucketApplicationVariable.source.getValueOrDefault<string>(
-      'BUCKET_FILE_LOCATION_ORGANIZATION_DOCUMENT',
-      String,
-      'organization/document',
-    );
-
   public static readonly BUCKET_S3_REGION =
     BucketApplicationVariable.source.getValueOrThrow<string>(
       'BUCKET_S3_REGION',

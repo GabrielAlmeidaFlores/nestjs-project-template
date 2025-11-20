@@ -1,4 +1,4 @@
-import type { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/enum/export-document-type.enum';
+import type { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import type { StreamableFile } from '@nestjs/common';
 
 export abstract class ExportDocumentGateway {

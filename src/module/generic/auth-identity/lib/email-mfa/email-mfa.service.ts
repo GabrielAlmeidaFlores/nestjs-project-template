@@ -21,6 +21,7 @@ export class EmailMFAService implements EmailMFAGateway {
 
   public async generatePersistAndSendSignInCode(
     authIdentity: AuthIdentityId,
+    authIdentityName: string,
     authIdentityEmail: Email,
   ): Promise<void> {
     const code = this.generateCode();
@@ -43,6 +44,7 @@ export class EmailMFAService implements EmailMFAGateway {
         to: authIdentityEmail.toString(),
         emailTemplateParameters: {
           code,
+          name: authIdentityName,
         },
       }),
     );

@@ -47,7 +47,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     cnisFastAnalysisId: CnisFastAnalysisId,
   ): Promise<CreateCnisFastAnalysisResultResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -57,7 +57,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     }
 
     const cnisFastAnalysisQueryResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail(
+      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
         CnisFastAnalysisNotFoundError,

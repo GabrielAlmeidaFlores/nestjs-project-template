@@ -6,6 +6,7 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -50,7 +51,15 @@ export class CnisFastAnalysisTypeormCommandRepository
     return this.create(mappedData);
   }
 
-  public deleteCnisFastAnalysis(id: CnisFastAnalysisId): TransactionType {
-    return this.delete(id.toString());
+  public deleteCnisFastAnalysis(
+    id: CnisFastAnalysisId,
+    updatedBy: OrganizationMemberId,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      deletedAt: new Date(),
+      updatedBy: {
+        id: updatedBy.toString(),
+      },
+    });
   }
 }

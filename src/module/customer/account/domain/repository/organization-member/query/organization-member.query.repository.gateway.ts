@@ -10,17 +10,17 @@ export abstract class OrganizationMemberQueryRepositoryGateway {
     organizationMemberId: OrganizationMemberId,
   ): Promise<GetOrganizationMemberQueryResult | null>;
 
-  public abstract findOneByCustomerAndAuthIdentityId(
+  public abstract findOneByCustomerIdAndAuthIdentityId(
     authIdentityId: AuthIdentityId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberQueryResult | null>;
 
-  public abstract findOneByCustomerAndOrganizationId(
+  public abstract findOneByCustomerIdAndOrganizationId(
     customerId: CustomerId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberQueryResult | null>;
 
-  public abstract findOneByCustomerAndOrganizationIdWithRelations(
+  public abstract findOneByCustomerIdAndOrganizationIdWithRelations(
     customerId: CustomerId,
     organizationId: OrganizationId,
   ): Promise<GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult | null>;

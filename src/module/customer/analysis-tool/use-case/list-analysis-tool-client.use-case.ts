@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import {
   GetAnalysisToolClientResponseDto,
   GetAnalysisToolClientResponsibleResponseDto,
@@ -9,6 +11,7 @@ import {
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
@@ -20,10 +23,15 @@ export class ListAnalysisToolClientUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(LegalPleadingQueryRepositoryGateway)
+    private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
   ) {}
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
+    sessionData: SessionDataModel,
     dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientResponseDto> {
     const listData =
@@ -34,14 +42,35 @@ export class ListAnalysisToolClientUseCase {
 
     const resource = await Promise.all(
       listData.resource.map(async (listItem) => {
+        const analysisCount =
+          await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
+            organizationSessionData.organizationId,
+            listItem.id,
+            sessionData.authIdentityId,
+          );
+
+        const legalPleadingCount =
+          await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
+            organizationSessionData.organizationId,
+            listItem.id,
+            sessionData.authIdentityId,
+          );
+
         const mappedData = GetAnalysisToolClientResponseDto.build({
           ...listItem,
+          analysisCount: analysisCount + legalPleadingCount,
           createdBy: GetAnalysisToolClientResponsibleResponseDto.build({
             ...listItem.createdBy.customer,
           }),
           updatedBy: GetAnalysisToolClientResponsibleResponseDto.build({
             ...listItem.updatedBy.customer,
           }),
+          legalProceedingNumber: listItem.analysisToolClientLegalProceeding.map(
+            (legalProceeding) => legalProceeding.legalProceedingNumber,
+          ),
+          inssBenefitNumber: listItem.analysisToolClientInssBenefit.map(
+            (inssBenefit) => inssBenefit.inssBenefitNumber,
+          ),
         });
 
         if (mappedData.createdBy.profilePicture !== undefined) {

@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { AuthIdentityForgotPasswordRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-forgot-password.request.dto';
-import { AuthIdentityForgotPasswordResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-forgot-password.response.dto';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 
@@ -19,11 +18,11 @@ export class AuthIdentityForgotPasswordUseCase {
 
   public async execute(
     dto: AuthIdentityForgotPasswordRequestDto,
-  ): Promise<AuthIdentityForgotPasswordResponseDto> {
+  ): Promise<void> {
     const email = dto.email;
 
     const authIdentity =
-      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocument(
+      await this.authIdentityQueryRepositoryGateway.findOneAuthIdentityByEmailOrFederalDocumentWithRelations(
         email,
       );
 
@@ -31,13 +30,16 @@ export class AuthIdentityForgotPasswordUseCase {
       throw new WrongSignInCredentialsError();
     }
 
+    const authIdentityName = authIdentity.customer?.name;
+
+    if (authIdentityName === undefined) {
+      throw new WrongSignInCredentialsError();
+    }
+
     await this.emailForgotPassword.generatePersistAndSendForgotPasswordCode(
       authIdentity.id,
+      authIdentityName,
       email,
     );
-
-    return AuthIdentityForgotPasswordResponseDto.build({
-      message: 'O código foi enviado com sucesso',
-    });
   }
 }
