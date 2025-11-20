@@ -39,6 +39,7 @@ export class CnisOutputCompleteModel extends BaseBuildableObject {
   public aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20: object;
   public aposentadoriaPorIdadeHibridaComDireitoAdquirido: object;
   public aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18: object;
+  public aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18: object;
 
   protected override readonly _type = CnisOutputCompleteModel.name;
 }
