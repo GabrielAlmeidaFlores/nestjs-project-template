@@ -26,7 +26,7 @@ export class LegalPleadingAddressTypeormQueryRepository
   ) {
     super(repository);
   }
-  public async findOneByLegalPleadingAddressAndOrganizationIdOrFail(
+  public async findOneByLegalPleadingAddressIdAndOrganizationIdOrFail(
     id: LegalPleadingAddressId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,

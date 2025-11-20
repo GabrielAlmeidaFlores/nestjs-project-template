@@ -1,0 +1,61 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ['qa']
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: /home/worker/workspace/agiliza-previ/agiliza-previ-back
+
+jobs:
+  build:
+    runs-on: quality-assurance
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐳 Build Docker Image
+        run: |
+          docker build --no-cache -t ${{ vars.REGISTRY_URL }} .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Extract App Version
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: 🛑 SSH - Stop Old Docker Container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.QA_SSH_HOST }}
+          username: ${{ secrets.QA_SSH_USER }}
+          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ env.WORKING_DIRECTORY }}
+            bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh
+
+      - name: ⚙️ SSH - Update Container Environment Variables
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.QA_SSH_HOST }}
+          username: ${{ secrets.QA_SSH_USER }}
+          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ env.WORKING_DIRECTORY }}
+            echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+
+      - name: 🚀 SSH - Start New Docker Container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.QA_SSH_HOST }}
+          username: ${{ secrets.QA_SSH_USER }}
+          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ env.WORKING_DIRECTORY }}
+            bash ${{ env.WORKING_DIRECTORY }}/start.container.sh
+

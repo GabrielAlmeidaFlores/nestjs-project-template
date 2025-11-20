@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidAnalysisToolClientBirthDateError } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/error/invalid-analysis-tool-client-date.error';
 import { InvalidAnalysisToolClientNameError } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/error/invalid-analysis-tool-client-name.error';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -20,6 +21,9 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
 
   @Description('Email do cliente da ferramenta de análise.')
   public readonly email: Email | null;
+
+  @Description('Senha utilizada para acessar o sistema do INSS.')
+  public readonly inssPassword: string | null;
 
   @Description('Número de telefone do cliente da ferramenta de análise.')
   public readonly phoneNumber: PhoneNumber | null;
@@ -49,10 +53,12 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
     super(AnalysisToolClientId, props);
 
     AnalysisToolClientEntity.validateName(props.name);
+    AnalysisToolClientEntity.validateBirthDate(props.birthDate);
 
     this.name = props.name ?? null;
     this.federalDocument = props.federalDocument ?? null;
     this.email = props.email ?? null;
+    this.inssPassword = props.inssPassword ?? null;
     this.phoneNumber = props.phoneNumber ?? null;
     this.birthDate = props.birthDate ?? null;
     this.gender = props.gender ?? null;
@@ -81,6 +87,25 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
           maxLength: maxNameLength,
           minLength: minNameLength,
         }),
+    );
+  }
+
+  public static validateBirthDate(date?: Date | null): void {
+    if (!date) {
+      return;
+    }
+
+    const currentDate = new Date();
+
+    const dateWithoutTime = new Date(date.setHours(0, 0, 0, 0));
+    const currentWithoutTime = new Date(currentDate.setHours(0, 0, 0, 0));
+
+    const isEqualOrFuture =
+      dateWithoutTime.getTime() >= currentWithoutTime.getTime();
+
+    this.validateAllOrThrow(
+      [!isEqualOrFuture],
+      () => new InvalidAnalysisToolClientBirthDateError(),
     );
   }
 }

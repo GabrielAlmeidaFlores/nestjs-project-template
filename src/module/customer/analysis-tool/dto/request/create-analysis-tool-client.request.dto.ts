@@ -18,6 +18,9 @@ export class CreateAnalysisToolClientRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(FederalDocument, { required: false })
   public federalDocument?: FederalDocument;
 
+  @RequestDtoStringProperty({ required: false })
+  public inssPassword?: string;
+
   @RequestDtoValueObjectProperty(Email, { required: false })
   public email?: Email;
 
@@ -32,6 +35,12 @@ export class CreateAnalysisToolClientRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
 
   protected override readonly _type = CreateAnalysisToolClientRequestDto.name;
 }

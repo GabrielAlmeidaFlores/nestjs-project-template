@@ -13,6 +13,7 @@ import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementatio
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
 import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
@@ -84,6 +85,7 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
     name: 'application_submission_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public readonly applicationSubmissionDate: Date | null;
 
@@ -91,6 +93,7 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
     name: 'benefit_termination_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public readonly benefitTerminationDate: Date | null;
 

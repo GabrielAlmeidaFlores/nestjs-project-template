@@ -75,6 +75,19 @@ export class GeminiService implements GenerativeIaGateway {
       },
     } as GenerateContentParameters;
 
+    const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;
+
+    const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
+    const hasUrl = URL_REGEX.test(unifiedInstruction);
+
+    if (hasUrl && contentConfig.config) {
+      contentConfig.config.tools = [
+        {
+          urlContext: {},
+        },
+      ];
+    }
+
     if (promptPart.length > 0) {
       contentConfig.contents = promptPart;
     }

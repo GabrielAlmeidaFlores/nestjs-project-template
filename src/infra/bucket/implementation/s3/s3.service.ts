@@ -66,20 +66,9 @@ export class S3Service implements BucketGateway {
     return fileLocation;
   }
 
-  public async create(file: FileModel, dir?: string): Promise<string> {
-    if (dir !== undefined) {
-      if (dir.startsWith('/')) {
-        const secondStringIndex = 1;
-        dir = dir.slice(secondStringIndex, dir.length);
-      }
-
-      if (!dir.endsWith('/')) {
-        dir = `${dir}/`;
-      }
-    }
-
+  public async create(file: FileModel): Promise<string> {
     const fileMetadata = await fileType.fileTypeFromBuffer(file.buffer);
-    const fileName = `${dir ?? ''}${new Guid().toString()}`;
+    const fileName = new Guid().toString();
     const fileMimeType = fileMetadata?.mime ?? 'application/octet-stream';
 
     await this.s3Client.send(

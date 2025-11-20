@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -91,6 +93,62 @@ export class CustomerTypeormQueryRepository
     const dataDoesNotExists = data === null;
 
     if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      GetCustomerQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByEmail(
+    email: Email,
+  ): Promise<GetCustomerQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        organizationMember: {
+          customer: {
+            authIdentity: {
+              email: email.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    if (data === null) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      CustomerTypeormEntity,
+      GetCustomerQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByFederalDocument(
+    federalDocument: FederalDocument,
+  ): Promise<GetCustomerQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        organizationMember: {
+          customer: {
+            authIdentity: {
+              federalDocument: federalDocument.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    if (data === null) {
       return null;
     }
 
