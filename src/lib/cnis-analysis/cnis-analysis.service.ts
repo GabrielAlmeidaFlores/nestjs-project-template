@@ -31,6 +31,7 @@ export class CnisAnalysisService {
   private readonly DAYS_IN_YEAR = 365.25;
   private readonly REQUIRED_CONTRIBUTION_MEN = 35;
   private readonly REQUIRED_CONTRIBUTION_WOMEN = 30;
+  private readonly REFORMA_DATE = new Date(2019, 10, 13);
 
   public constructor(
     @Inject(CnisProcessorGateway)
@@ -623,6 +624,61 @@ export class CnisAnalysisService {
 
     // recursão com o próximo conjunto
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
+  }
+  private getRequiredContributionAge(gender: string) {
+    return gender === 'F'
+      ? this.REQUIRED_CONTRIBUTION_WOMEN
+      : this.REQUIRED_CONTRIBUTION_MEN;
+  }
+  private calculateTotalContributionYears(
+    consolidado: ConsolidadoRelationInterface[],
+  ): number {
+    return consolidado.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.anos ?? 0),
+      0,
+    );
+  }
+
+  private calculateTotalContributionMonths(
+    consolidado: ConsolidadoRelationInterface[],
+  ): number {
+    return consolidado.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.meses ?? 0),
+      0,
+    );
+  }
+
+  private calculateTotalContributionDays(
+    consolidado: ConsolidadoRelationInterface[],
+  ): number {
+    return consolidado.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.dias ?? 0),
+      0,
+    );
+  }
+
+  private calculateTotalCarencia(
+    consolidado: ConsolidadoRelationInterface[],
+  ): number {
+    return consolidado.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
+  }
+  private convertToDecimalYears(
+    years: number,
+    months: number,
+    days: number,
+  ): number {
+    return Math.ceil(
+      years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR,
+    );
+  }
+
+  private calculateTotals(consolidado: ConsolidadoRelationInterface[]) {
+    return {
+      years: this.calculateTotalContributionYears(consolidado),
+      months: this.calculateTotalContributionMonths(consolidado),
+      days: this.calculateTotalContributionDays(consolidado),
+      carencia: this.calculateTotalCarencia(consolidado),
+    };
   }
 
   private daysBetween(dateStart?: Date | null, dateEnd?: Date | null): number {
@@ -1395,7 +1451,6 @@ export class CnisAnalysisService {
   // private calculateCarenciaTotalUntilReforma(
   //   data: TimeContributionInterface[],
   // ): CarenciaInterface[] {
-  //   const reforma = new Date(2019, 10, 13);
   //   const monthsAssigned = new Set<string>();
   //   const carenciaSeq: CarenciaInterface[] = [];
 
@@ -1412,8 +1467,8 @@ export class CnisAnalysisService {
   //     }
 
   //     const endDate =
-  //       endDateOriginal.getTime() > reforma.getTime()
-  //         ? reforma
+  //       endDateOriginal.getTime() > this.REFORMA_DATE.getTime()
+  //         ? this.REFORMA_DATE
   //         : endDateOriginal;
 
   //     if (startDate.getTime() > endDate.getTime()) {
@@ -1526,10 +1581,7 @@ export class CnisAnalysisService {
         'after',
       );
 
-      const carenciaTotal = data.reduce(
-        (acc, cur) => acc + (cur.carencia ?? 0),
-        0,
-      );
+      const carenciaTotal = this.calculateTotalCarencia(data);
       let periodoDeGracaMeses = PERIODO_DE_GRACA_PADRAO;
       if (carenciaTotal >= CONTRIBUICOES_MINIMAS) {
         periodoDeGracaMeses = PERIODO_DE_GRACA_AUMENTADO;
@@ -1886,22 +1938,11 @@ export class CnisAnalysisService {
 
   private calculatePontos(idade: number, data: ConsolidadoRelationInterface[]) {
     // Cálculo de Pontos: Pontos = Idade do segurado + Tempo de Contribuição (em anos).
-    const totalContributionYears = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.anos ?? 0);
-    }, 0);
-
-    const totalMonths = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.meses ?? 0);
-    }, 0);
-
-    const totalDays = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.dias ?? 0);
-    }, 0);
-
-    const contribution = Math.ceil(
-      totalContributionYears +
-        totalMonths / this.MONTHS_IN_YEAR +
-        totalDays / this.DAYS_IN_YEAR,
+    const calculatedTotals = this.calculateTotals(data);
+    const contribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
     );
 
     const pontos = idade + contribution;
@@ -1922,15 +1963,9 @@ export class CnisAnalysisService {
     // calcular o tempo que faltava para se aposentar na data da reforma (13/11/2019)
     // e aplicar um percentual (50% ou 100%) a esse tempo para determinar o pedágio a ser cumprido.
 
-    const REFORMA_DATE = new Date(2019, 10, 13);
-
     // Cálculo do Tempo que Faltava na Data da Reforma:
 
-    const YEARS_IN_CONTRIBUTION_MEN = 35;
-    const YEARS_IN_CONTRIBUTION_WOMEN = 30;
-
-    const requiredContributionYears =
-      gender === 'F' ? YEARS_IN_CONTRIBUTION_WOMEN : YEARS_IN_CONTRIBUTION_MEN;
+    const requiredContributionYears = this.getRequiredContributionAge(gender);
 
     let totalContributionYearsAtReforma = 0;
     let totalContributionMonthsAtReforma = 0;
@@ -1944,11 +1979,11 @@ export class CnisAnalysisService {
         return;
       }
 
-      if (!dataFim || dataFim > REFORMA_DATE) {
-        dataFim = REFORMA_DATE;
+      if (!dataFim || dataFim > this.REFORMA_DATE) {
+        dataFim = this.REFORMA_DATE;
       }
 
-      if (dataInicio >= REFORMA_DATE) {
+      if (dataInicio >= this.REFORMA_DATE) {
         return;
       }
 
@@ -1959,12 +1994,11 @@ export class CnisAnalysisService {
       totalContributionDaysAtReforma += days;
     });
 
-    const totalContributionAtReforma = Math.ceil(
-      totalContributionYearsAtReforma +
-        totalContributionMonthsAtReforma / this.MONTHS_IN_YEAR +
-        totalContributionDaysAtReforma / this.DAYS_IN_YEAR,
+    const totalContributionAtReforma = this.convertToDecimalYears(
+      totalContributionYearsAtReforma,
+      totalContributionMonthsAtReforma,
+      totalContributionDaysAtReforma,
     );
-
     const tempoFaltante =
       requiredContributionYears - totalContributionAtReforma;
 
@@ -1997,12 +2031,7 @@ export class CnisAnalysisService {
 
     const REQUIRED_CARENCIA_MONTHS = 180;
 
-    const requiredContributionYears =
-      gender === 'F'
-        ? this.REQUIRED_CONTRIBUTION_WOMEN
-        : this.REQUIRED_CONTRIBUTION_MEN;
-
-    const REFORMA_DATE = new Date(2019, 10, 13);
+    const requiredContributionYears = this.getRequiredContributionAge(gender);
 
     data.forEach((item) => {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
@@ -2012,11 +2041,11 @@ export class CnisAnalysisService {
         return;
       }
 
-      if (!dataFim || dataFim > REFORMA_DATE) {
-        dataFim = REFORMA_DATE;
+      if (!dataFim || dataFim > this.REFORMA_DATE) {
+        dataFim = this.REFORMA_DATE;
       }
 
-      if (dataInicio >= REFORMA_DATE) {
+      if (dataInicio >= this.REFORMA_DATE) {
         item.validContributionTime = {
           dataInicio: null,
           dataFim: null,
@@ -2040,26 +2069,13 @@ export class CnisAnalysisService {
       };
     });
 
-    const totalContributionYears = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.anos ?? 0);
-    }, 0);
-
-    const totalContributionMonths = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.meses ?? 0);
-    }, 0);
-
-    const totalContributionDays = data.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.dias ?? 0);
-    }, 0);
-
-    const totalContribution = Math.ceil(
-      totalContributionYears +
-        totalContributionMonths / this.MONTHS_IN_YEAR +
-        totalContributionDays / this.DAYS_IN_YEAR,
+    const calculatedTotals = this.calculateTotals(data);
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
     );
-    const totalCarenciaMonths = data.reduce((acc, cur) => {
-      return acc + (cur.carencia ?? 0);
-    }, 0);
+    const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const pointsNeeded = gender === 'F' ? 86 : 96;
 
@@ -2108,7 +2124,7 @@ export class CnisAnalysisService {
     return {
       type: 'Aposentadoria por Tempo de Contribuição com Direito Adquirido',
       isEligible,
-      totalContributionYears,
+      totalContributionYears: calculatedTotals.years,
       totalCarenciaMonths,
       points,
       meetsContributionRequirement,
@@ -2174,9 +2190,7 @@ export class CnisAnalysisService {
       };
     });
 
-    const totalCarenciaMonths = data.reduce((acc, cur) => {
-      return acc + (cur.carencia ?? 0);
-    }, 0);
+    const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const meetsAgeRequirement = age >= requiredAge;
     const meetsCarenciaRequirement =
@@ -2236,34 +2250,19 @@ export class CnisAnalysisService {
     const MAX_POINTS_MEN = 105;
     const MAX_POINTS_WOMEN = 100;
 
-    const requiredContributionYears =
-      gender === 'F'
-        ? this.REQUIRED_CONTRIBUTION_WOMEN
-        : this.REQUIRED_CONTRIBUTION_MEN;
+    const requiredContributionYears = this.getRequiredContributionAge(gender);
     const basePoints = gender === 'F' ? BASE_POINTS_WOMEN : BASE_POINTS_MEN;
     const maxPoints = gender === 'F' ? MAX_POINTS_WOMEN : MAX_POINTS_MEN;
 
-    const totalContributionYears = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.anos ?? 0);
-    }, 0);
-
-    const totalContributionMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.meses ?? 0);
-    }, 0);
-
-    const totalContributionDays = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.dias ?? 0);
-    }, 0);
-
-    const totalContribution = Math.ceil(
-      totalContributionYears +
-        totalContributionMonths / this.MONTHS_IN_YEAR +
-        totalContributionDays / this.DAYS_IN_YEAR,
+    const calculatedTotals = this.calculateTotals(consolidadoResumido);
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
     );
 
-    const totalCarenciaMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.carencia ?? 0);
-    }, 0);
+    const totalCarenciaMonths =
+      this.calculateTotalCarencia(consolidadoResumido);
 
     const currentYear = new Date().getFullYear();
     const year2020 = 2020;
@@ -2275,16 +2274,16 @@ export class CnisAnalysisService {
     }
 
     const pontos =
-      totalContributionYears +
-      totalContributionMonths / this.MONTHS_IN_YEAR +
-      totalContributionDays / this.DAYS_IN_YEAR +
+      calculatedTotals.years +
+      calculatedTotals.months / this.MONTHS_IN_YEAR +
+      calculatedTotals.days / this.DAYS_IN_YEAR +
       age;
 
     const actualDate = new Date();
     const monthsToContribution = this.monthsRemainingForContribution(
-      totalContributionYears,
-      totalContributionMonths,
-      totalContributionDays,
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
       requiredContributionYears,
     );
 
@@ -2365,22 +2364,12 @@ export class CnisAnalysisService {
   private totalContributionType(
     consolidadoResumido: ConsolidadoRelationInterface[],
   ) {
-    const totalContributionYears = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.anos ?? 0);
-    }, 0);
+    const calculatedTotals = this.calculateTotals(consolidadoResumido);
 
-    const totalContributionMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.meses ?? 0);
-    }, 0);
-
-    const totalContributionDays = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.dias ?? 0);
-    }, 0);
-
-    const totalContribution = Math.ceil(
-      totalContributionYears +
-        totalContributionMonths / this.MONTHS_IN_YEAR +
-        totalContributionDays / this.DAYS_IN_YEAR,
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
     );
 
     return totalContribution;
@@ -2397,10 +2386,7 @@ export class CnisAnalysisService {
     const PEDAGIO_PERCENTAGE = 1;
 
     const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
-    const requiredContribution =
-      gender === 'F'
-        ? this.REQUIRED_CONTRIBUTION_WOMEN
-        : this.REQUIRED_CONTRIBUTION_MEN;
+    const requiredContribution = this.getRequiredContributionAge(gender);
 
     const totalContribution = this.totalContributionType(consolidadoResumido);
 
@@ -2410,9 +2396,8 @@ export class CnisAnalysisService {
       PEDAGIO_PERCENTAGE,
     );
 
-    const totalCarenciaMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.carencia ?? 0);
-    }, 0);
+    const totalCarenciaMonths =
+      this.calculateTotalCarencia(consolidadoResumido);
 
     const meetsAgeRequirement = age >= requiredAge;
     const meetsContributionTimeRequirement =
