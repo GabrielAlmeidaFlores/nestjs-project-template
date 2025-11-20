@@ -280,6 +280,14 @@ export class CnisAnalysisService {
         data.affiliateIdentification?.dataDeNascimento,
       );
 
+    const aposentadoriaProgramadaComumPrevistaNoArt19 =
+      this.aposentadoriaProgramadaComumPrevistaNoArt19(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
+      );
+
     const cnis = CnisOutputCompleteModel.build({
       idade,
       tempoDeContribuicao,
@@ -312,6 +320,7 @@ export class CnisAnalysisService {
       aposentadoriaPorIdadeHibridaComDireitoAdquirido,
       aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18,
       aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18,
+      aposentadoriaProgramadaComumPrevistaNoArt19,
     });
     return cnis;
   }
@@ -2987,6 +2996,113 @@ export class CnisAnalysisService {
     return {
       type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
       requiredAge: requiredAgeAdjusted,
+      requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
+      requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+      totalContribution,
+      totalCarenciaMonths,
+      meetsAgeRequirement,
+      meetsContributionRequirement,
+      meetsCarenciaRequirement,
+      isEligible,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaProgramadaComumPrevistaNoArt19(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+    birthDate: Date | undefined,
+  ) {
+    //     #### Aposentadoria Programada Comum prevista no art. 19, caput, da EC 103: a) aos 62
+    // (sessenta e dois) anos de idade, se mulher, e aos 65 (sessenta e cinco) anos de idade, se
+    // homem; e b) 15 (quinze) anos de tempo de contribuição, se mulher, e 20 (vinte) anos de
+    // tempo de contribuição, se homem; c) 180 (cento e oitenta) meses de carência, para ambos
+    // os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo
+    // de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20
+    // (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de
+    // contribuição, se mulher.
+
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const REQUIRED_AGE_WOMEN = 62;
+    const REQUIRED_AGE_MEN = 65;
+    const REQUIRED_CONTRIBUTION_YEARS = gender === 'F' ? 15 : 20;
+
+    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+
+    const calculatedTotals = this.calculateTotals(data);
+
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
+    );
+    const totalCarenciaMonths = this.calculateTotalCarencia(data);
+
+    const meetsAgeRequirement = age >= requiredAge;
+    const meetsContributionRequirement =
+      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const isEligible =
+      meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement;
+    const actualDate = new Date();
+
+    const monthsToAge = meetsAgeRequirement
+      ? 0
+      : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
+
+    const monthsToContribution = meetsContributionRequirement
+      ? 0
+      : Math.ceil(
+          (REQUIRED_CONTRIBUTION_YEARS - totalContribution) *
+            this.MONTHS_IN_YEAR,
+        );
+
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    let monthsToFulfill = Math.max(
+      monthsToAge,
+      monthsToContribution,
+      monthsToCarencia,
+    );
+
+    let projectedFulfillmentDate: Date;
+    if (
+      birthDate &&
+      !meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement
+    ) {
+      const monthsToBirthDate =
+        (birthDate.getFullYear() - actualDate.getFullYear()) *
+          this.MONTHS_IN_YEAR +
+        (birthDate.getMonth() - actualDate.getMonth());
+
+      if (monthsToBirthDate > 0) {
+        monthsToFulfill = Math.max(monthsToFulfill, monthsToBirthDate);
+      }
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        birthDate.getDate(),
+      );
+    } else {
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        actualDate.getDate(),
+      );
+    }
+
+    return {
+      type: 'Aposentadoria Programada Comum - Emenda 103 art. 19',
+      requiredAge,
       requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
       requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
       totalContribution,
