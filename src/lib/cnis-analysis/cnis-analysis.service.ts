@@ -2000,7 +2000,7 @@ export class CnisAnalysisService {
         totalContributionMonths / MONTHS_IN_YEAR +
         totalContributionDays / DAYS_IN_YEAR,
     );
-
+    // TODO AJUSTE CARÊNCIA PARA ATE  2019 da data reforma
     const totalCarenciaMonths = data.reduce((acc, cur) => {
       return acc + (cur.carencia ?? 0);
     }, 0);
@@ -2027,14 +2027,20 @@ export class CnisAnalysisService {
       ? 0
       : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
 
-    const monthsToPoints = meetsPointsRequirement
-      ? 0
-      : (pointsNeeded - points) * MONTHS_IN_YEAR;
+    const monthsToPoints =
+      points >= pointsNeeded
+        ? 0
+        : Math.ceil((pointsNeeded - points) * MONTHS_IN_YEAR);
+
+    const adjustedMonthsToPoints = Math.max(
+      0,
+      monthsToPoints - monthsToContribution,
+    );
 
     const monthsToFulfill = Math.max(
       monthsToContribution,
       monthsToCarencia,
-      monthsToPoints,
+      adjustedMonthsToPoints,
     );
 
     const projectedFulfillmentDate = new Date(
