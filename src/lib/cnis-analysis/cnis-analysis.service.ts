@@ -272,6 +272,14 @@ export class CnisAnalysisService {
         data.affiliateIdentification?.dataDeNascimento,
       );
 
+    const aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18 =
+      this.aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
+      );
+
     const cnis = CnisOutputCompleteModel.build({
       idade,
       tempoDeContribuicao,
@@ -303,6 +311,7 @@ export class CnisAnalysisService {
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20,
       aposentadoriaPorIdadeHibridaComDireitoAdquirido,
       aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18,
+      aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18,
     });
     return cnis;
   }
@@ -1102,7 +1111,6 @@ export class CnisAnalysisService {
 
     return data.socialSecurityRelations.map((relation) => {
       const seq = relation.socialSecurityAffiliationInfo.seq ?? 1;
-
       const indicadoresRemuneracao =
         relation.socialSecurityAffiliationEarningsHistory
           .map((item) => item.indicadores)
@@ -1164,11 +1172,13 @@ export class CnisAnalysisService {
       const isBeneficio = this.isEspecieBeneficio(
         relation.socialSecurityAffiliationInfo.especie,
       );
-
+      const origem =
+        relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '';
       return {
         seq,
         indicadores,
         isPendencia,
+        origem,
         contributionTime,
         validContributionTime,
         carencia,
@@ -2648,9 +2658,21 @@ export class CnisAnalysisService {
     gender: string,
     age: number,
   ) {
-    /// TODO verificar isso
-    // derivada da soma dos períodos rurais e
-    // urbanos apurados no CNIS.
+    const existPeriodoSeguradoEspecial = data.some(
+      (item) => item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL',
+    );
+    if (!existPeriodoSeguradoEspecial) {
+      return {
+        type: 'Aposentadoria por Idade Híbrida com Direito Adquirido',
+        isEligible: false,
+        age,
+        totalCarenciaMonths: 0,
+        meetsAgeRequirement: false,
+        meetsCarenciaRequirement: false,
+        projectedFulfillmentDate: null,
+      };
+    }
+
     const REQUIRED_CARENCIA_MONTHS = 180;
     const REQUIRED_AGE_MEN = 65;
     const REQUIRED_AGE_WOMEN = 60;
@@ -2746,6 +2768,14 @@ export class CnisAnalysisService {
         requiredAgeAdjusted = MAX_AGE_WOMEN;
       }
     }
+    if (gender === 'M') {
+      const yearsSince2020 = Math.max(0, currentYear - year2020);
+      requiredAgeAdjusted =
+        BASE_AGE_MEN + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL;
+      if (requiredAgeAdjusted > BASE_AGE_MEN) {
+        requiredAgeAdjusted = BASE_AGE_MEN;
+      }
+    }
 
     const totalContribution = this.convertToDecimalYears(
       calculatedTotals.years,
@@ -2818,6 +2848,144 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Idade Urbana - Regra de Transição - Emenda 103 art. 18',
+      requiredAge: requiredAgeAdjusted,
+      requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
+      requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+      totalContribution,
+      totalCarenciaMonths,
+      meetsAgeRequirement,
+      meetsContributionRequirement,
+      meetsCarenciaRequirement,
+      isEligible,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18(
+    data: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+    birthDate: Date | undefined,
+  ) {
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const BASE_AGE_MEN = 65;
+    const BASE_AGE_WOMEN = 60;
+    const MAX_AGE_WOMEN = 62;
+    const REQUIRED_CONTRIBUTION_YEARS = 15;
+
+    const requiredAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
+    const calculatedTotals = this.calculateTotals(data);
+
+    const currentYear = new Date().getFullYear();
+    const year2020 = 2020;
+
+    const SIX_MONTHS_IN_YEARS_PERCENTUAL = 0.5;
+
+    let requiredAgeAdjusted = requiredAge;
+    if (gender === 'F') {
+      const yearsSince2020 = Math.max(0, currentYear - year2020);
+      requiredAgeAdjusted = Math.min(
+        requiredAge + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
+        MAX_AGE_WOMEN,
+      );
+    }
+    if (gender === 'M') {
+      const yearsSince2020 = Math.max(0, currentYear - year2020);
+      requiredAgeAdjusted = Math.min(
+        requiredAge + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
+        BASE_AGE_MEN,
+      );
+    }
+
+    const existPeriodoSeguradoEspecial = data.some(
+      (item) => item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL',
+    );
+    if (!existPeriodoSeguradoEspecial) {
+      return {
+        type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
+        requiredAge: requiredAgeAdjusted,
+        requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
+        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        totalContribution: 0,
+        totalCarenciaMonths: 0,
+        meetsAgeRequirement: false,
+        meetsContributionRequirement: false,
+        meetsCarenciaRequirement: false,
+        isEligible: false,
+        projectedFulfillmentDate: null,
+      };
+    }
+
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
+    );
+
+    const totalCarenciaMonths = this.calculateTotalCarencia(data);
+
+    const meetsAgeRequirement = age >= requiredAgeAdjusted;
+    const meetsContributionRequirement =
+      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const isEligible =
+      meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement;
+
+    const actualDate = new Date();
+
+    const monthsToAge = meetsAgeRequirement
+      ? 0
+      : Math.ceil((requiredAgeAdjusted - age) * this.MONTHS_IN_YEAR);
+
+    const monthsToContribution = meetsContributionRequirement
+      ? 0
+      : Math.ceil(
+          (REQUIRED_CONTRIBUTION_YEARS - totalContribution) *
+            this.MONTHS_IN_YEAR,
+        );
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    let monthsToFulfill = Math.max(
+      monthsToAge,
+      monthsToContribution,
+      monthsToCarencia,
+    );
+
+    let projectedFulfillmentDate: Date;
+    if (
+      birthDate &&
+      !meetsAgeRequirement &&
+      meetsContributionRequirement &&
+      meetsCarenciaRequirement
+    ) {
+      const monthsToBirthDate =
+        (birthDate.getFullYear() - actualDate.getFullYear()) *
+          this.MONTHS_IN_YEAR +
+        (birthDate.getMonth() - actualDate.getMonth());
+
+      if (monthsToBirthDate > 0) {
+        monthsToFulfill = Math.max(monthsToFulfill, monthsToBirthDate);
+      }
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        birthDate.getDate(),
+      );
+    } else {
+      projectedFulfillmentDate = new Date(
+        actualDate.getFullYear(),
+        actualDate.getMonth() + monthsToFulfill,
+        actualDate.getDate(),
+      );
+    }
+    return {
+      type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
       requiredAge: requiredAgeAdjusted,
       requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
       requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,

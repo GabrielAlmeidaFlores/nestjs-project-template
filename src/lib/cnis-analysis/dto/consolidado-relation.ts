@@ -4,6 +4,7 @@ export interface ConsolidadoRelationInterface {
   seq: number;
   indicadores: string | null;
   isPendencia: boolean;
+  origem: string | null;
   contributionTime?: TimeContributionDataInterface;
   validContributionTime?: TimeContributionDataInterface;
   carencia?: number;
