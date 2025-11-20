@@ -246,6 +246,12 @@ export class CnisAnalysisService {
         gender,
         idade.anos,
       );
+    const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17 =
+      this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17(
+        consolidadoResumido,
+        gender,
+        idade.anos,
+      );
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -274,6 +280,7 @@ export class CnisAnalysisService {
       aposentadoriaPorIdadeUrbanaComDireitoAdquirido,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16,
+      aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17,
       aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20,
     });
     return cnis;
@@ -1979,17 +1986,13 @@ export class CnisAnalysisService {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!dataInicio) {
-        return;
-      }
+      if (!dataInicio) return;
 
       if (!dataFim || dataFim > this.REFORMA_DATE) {
         dataFim = this.REFORMA_DATE;
       }
 
-      if (dataInicio >= this.REFORMA_DATE) {
-        return;
-      }
+      if (dataInicio >= this.REFORMA_DATE) return;
 
       const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
 
@@ -2003,13 +2006,13 @@ export class CnisAnalysisService {
       totalContributionMonthsAtReforma,
       totalContributionDaysAtReforma,
     );
+
     const tempoFaltante =
       requiredContributionYears - totalContributionAtReforma;
 
     const pedagio = tempoFaltante * percentualPedagio;
 
-    const tempoTotalNecessario =
-      totalContributionAtReforma + tempoFaltante + pedagio;
+    const tempoTotalNecessario = requiredContributionYears + pedagio;
 
     return {
       totalContributionAtReforma,
@@ -2466,8 +2469,6 @@ export class CnisAnalysisService {
     // benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que
     // exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de
     // 15 (quinze) anos de contribuição, se mulher.
-    const REQUIRED_CONTRIBUTION_YEARS_MEN = 35;
-    const REQUIRED_CONTRIBUTION_YEARS_WOMEN = 30;
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 61;
     const BASE_AGE_WOMEN = 56;
@@ -2476,36 +2477,19 @@ export class CnisAnalysisService {
 
     const requiredContributionYears =
       gender === 'F'
-        ? REQUIRED_CONTRIBUTION_YEARS_WOMEN
-        : REQUIRED_CONTRIBUTION_YEARS_MEN;
+        ? this.REQUIRED_CONTRIBUTION_WOMEN
+        : this.REQUIRED_CONTRIBUTION_MEN;
 
     const baseAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
     const maxAge = gender === 'F' ? MAX_AGE_WOMEN : MAX_AGE_MEN;
 
-    const totalContributionYears = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.anos ?? 0);
-    }, 0);
+    const calculatedTotals = this.calculateTotals(consolidadoResumido);
 
-    const totalContributionMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.meses ?? 0);
-    }, 0);
-
-    const totalContributionDays = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.validContributionTime?.dias ?? 0);
-    }, 0);
-
-    const MONTHS_IN_YEAR = 12;
-    const DAYS_IN_YEAR = 365.25;
-
-    const totalContribution = Math.ceil(
-      totalContributionYears +
-        totalContributionMonths / MONTHS_IN_YEAR +
-        totalContributionDays / DAYS_IN_YEAR,
+    const totalContribution = this.convertToDecimalYears(
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
     );
-
-    const totalCarenciaMonths = consolidadoResumido.reduce((acc, cur) => {
-      return acc + (cur.carencia ?? 0);
-    }, 0);
 
     const currentYear = new Date().getFullYear();
     const year2020 = 2020;
@@ -2518,19 +2502,21 @@ export class CnisAnalysisService {
 
     const actualDate = new Date();
     const monthsToContribution = this.monthsRemainingForContribution(
-      totalContributionYears,
-      totalContributionMonths,
-      totalContributionDays,
+      calculatedTotals.years,
+      calculatedTotals.months,
+      calculatedTotals.days,
       requiredContributionYears,
     );
 
     const monthsToCarencia =
-      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS
+      calculatedTotals.carencia >= REQUIRED_CARENCIA_MONTHS
         ? 0
-        : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+        : REQUIRED_CARENCIA_MONTHS - calculatedTotals.carencia;
 
     const monthsToAge =
-      age >= requiredAge ? 0 : Math.ceil((requiredAge - age) * MONTHS_IN_YEAR);
+      age >= requiredAge
+        ? 0
+        : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
 
     const monthsToFulfill = Math.max(
       monthsToContribution,
@@ -2550,11 +2536,77 @@ export class CnisAnalysisService {
       requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
       requiredAge,
       totalContribution,
-      totalCarenciaMonths,
+      totalCarenciaMonths: calculatedTotals.carencia,
       meetsContributionRequirement:
         totalContribution >= requiredContributionYears,
-      meetsCarenciaRequirement: totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS,
+      meetsCarenciaRequirement:
+        calculatedTotals.carencia >= REQUIRED_CARENCIA_MONTHS,
       meetsAgeRequirement: age >= requiredAge,
+      projectedFulfillmentDate,
+    };
+  }
+
+  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17(
+    consolidadoResumido: ConsolidadoRelationInterface[],
+    gender: string,
+    age: number,
+  ) {
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const PEDAGIO_PERCENTAGE = 0.5;
+
+    const requiredContribution = this.getRequiredContributionAge(gender);
+
+    const totalContribution = this.totalContributionType(consolidadoResumido);
+
+    const pedagioData = this.calculateTempoPedagio(
+      consolidadoResumido,
+      gender,
+      PEDAGIO_PERCENTAGE,
+    );
+
+    const totalCarenciaMonths =
+      this.calculateTotalCarencia(consolidadoResumido);
+
+    const meetsContributionTimeRequirement =
+      totalContribution >= pedagioData.tempoTotalNecessario;
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const actualDate = new Date();
+
+    const monthsToContribution = meetsContributionTimeRequirement
+      ? 0
+      : Math.ceil(
+          (pedagioData.tempoTotalNecessario - totalContribution) *
+            this.MONTHS_IN_YEAR,
+        );
+
+    const monthsToCarencia = meetsCarenciaRequirement
+      ? 0
+      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+
+    const monthsToFulfill = Math.max(monthsToContribution, monthsToCarencia);
+
+    const projectedFulfillmentDate = new Date(
+      actualDate.getFullYear(),
+      actualDate.getMonth() + monthsToFulfill,
+      actualDate.getDate(),
+    );
+
+    const isEligible =
+      meetsContributionTimeRequirement && meetsCarenciaRequirement;
+
+    return {
+      type: 'Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 17',
+      age,
+      gender,
+      totalContribution,
+      requiredContribution,
+      totalContributionAtReforma: pedagioData.totalContributionAtReforma,
+      totalCarenciaMonths,
+      meetsContributionTimeRequirement,
+      meetsCarenciaRequirement,
+      isEligible,
       projectedFulfillmentDate,
     };
   }
