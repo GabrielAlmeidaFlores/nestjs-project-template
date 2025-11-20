@@ -220,12 +220,16 @@ export class CnisAnalysisService {
         idade.anos,
       );
 
-    const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103 =
-      this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103(
+    const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15 =
+      this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15(
         consolidadoResumido,
         gender,
         idade.anos,
       );
+
+    this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
+      consolidadoResumido,
+    );
 
     const cnis = CnisOutputCompleteModel.build({
       idade,
@@ -252,7 +256,7 @@ export class CnisAnalysisService {
       tempoPedagio50,
       aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido,
       aposentadoriaPorIdadeUrbanaComDireitoAdquirido,
-      aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103,
+      aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15,
     });
     return cnis;
   }
@@ -2147,7 +2151,7 @@ export class CnisAnalysisService {
     };
   }
 
-  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoEmenda103(
+  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15(
     consolidadoResumido: ConsolidadoRelationInterface[],
     gender: string,
     age: number,
@@ -2215,9 +2219,9 @@ export class CnisAnalysisService {
     }
 
     const pontos =
-      (totalContributionYears ?? 0) +
-      (totalContributionMonths ?? 0) / MONTHS_IN_YEAR +
-      (totalContributionDays ?? 0) / DAYS_IN_YEAR +
+      totalContributionYears +
+      totalContributionMonths / MONTHS_IN_YEAR +
+      totalContributionDays / DAYS_IN_YEAR +
       age;
 
     const actualDate = new Date();
@@ -2256,7 +2260,7 @@ export class CnisAnalysisService {
     );
 
     return {
-      type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição',
+      type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 15',
       requiredContributionYears,
       requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
       requiredPoints,
@@ -2279,7 +2283,7 @@ export class CnisAnalysisService {
   ): number {
     const MONTHS_IN_YEAR = 12;
     const DAYS_IN_YEAR = 365.25;
-    const DAYS_IN_MONTH = DAYS_IN_YEAR / MONTHS_IN_YEAR; // ≈ 30.4375
+    const DAYS_IN_MONTH = DAYS_IN_YEAR / MONTHS_IN_YEAR;
 
     const totalMonthsExact =
       (totalYears || 0) * MONTHS_IN_YEAR +
@@ -2293,5 +2297,14 @@ export class CnisAnalysisService {
     );
 
     return monthsToContribution;
+  }
+
+  private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
+    consolidadoResumido: ConsolidadoRelationInterface[],
+  ) {
+    console.log(
+      'Não implementado: Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 16',
+      consolidadoResumido,
+    );
   }
 }
