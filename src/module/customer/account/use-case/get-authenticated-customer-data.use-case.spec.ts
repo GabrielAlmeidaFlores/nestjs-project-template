@@ -169,7 +169,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar dados completos e URLs assinadas', async () => {
+  it('should return complete data and signed URLs', async () => {
     const session = buildSessionData();
     const org = buildOrganizationSessionData();
 
@@ -202,7 +202,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     expect(result.organization.organizationLogo).toBe(LOGO.toString());
   });
 
-  it('deve retornar profilePicture/logo undefined quando não existem', async () => {
+  it('should return profilePicture/logo as undefined when they do not exist', async () => {
     const session = buildSessionData();
     const org = buildOrganizationSessionData();
 
@@ -228,7 +228,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     expect(result.organization.organizationLogo).toBeUndefined();
   });
 
-  it('deve lançar CustomerNotFoundError', async () => {
+  it('should throw CustomerNotFoundError', async () => {
     const session = buildSessionData();
     const org = buildOrganizationSessionData();
 
@@ -241,7 +241,7 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     );
   });
 
-  it('deve lançar InvalidOrganizationSessionError', async () => {
+  it('should throw InvalidOrganizationSessionError', async () => {
     const session = buildSessionData();
     const org = buildOrganizationSessionData();
 

@@ -218,7 +218,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve atualizar todos os campos e substituir entidades relacionadas', async () => {
+  it('should update all fields and replace related entities', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
@@ -292,7 +292,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar AnalysisToolClientEmailAlreadyInUseError se o e-mail já estiver em uso por OUTRO cliente', async () => {
+  it('should throw AnalysisToolClientEmailAlreadyInUseError when email is already in use by ANOTHER client', async () => {
     const clientId = new AnalysisToolClientId();
     const conflictingClientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
@@ -317,7 +317,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     ).rejects.toBeInstanceOf(AnalysisToolClientEmailAlreadyInUseError);
   });
 
-  it('deve lançar AnalysisToolClientFederalDocumentAlreadyInUseError se o documento já estiver em uso por OUTRO cliente', async () => {
+  it('should throw AnalysisToolClientFederalDocumentAlreadyInUseError when federal document is already in use by ANOTHER client', async () => {
     const clientId = new AnalysisToolClientId();
     const conflictingClientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
@@ -381,7 +381,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
@@ -396,7 +396,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError se o cliente a ser atualizado não for encontrado', async () => {
+  it('should throw AnalysisToolClientNotFoundError when client to be updated is not found', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();

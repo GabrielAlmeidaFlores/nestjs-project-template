@@ -178,7 +178,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve criar um resultado de petição e processar um documento CNIS válido', async () => {
+  it('should create pleading result and process valid CNIS document', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -246,7 +246,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve criar uma análise mesmo que o documento CNIS seja inválido', async () => {
+  it('should create analysis even when CNIS document is invalid', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -281,7 +281,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -295,7 +295,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar LegalPleadingNotFoundError se a petição não for encontrada', async () => {
+  it('should throw LegalPleadingNotFoundError when pleading is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();

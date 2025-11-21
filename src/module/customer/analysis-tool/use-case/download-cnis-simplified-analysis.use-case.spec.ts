@@ -195,7 +195,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve baixar a análise simplificada quando ela já existe', async () => {
+  it('should download simplified analysis when it already exists', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -242,7 +242,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve gerar, salvar e baixar a análise simplificada se ela não existir', async () => {
+  it('should generate, save and download simplified analysis when it does not exist', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -298,7 +298,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -317,7 +317,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar CnisFastAnalysisNotFoundError se a análise não for encontrada', async () => {
+  it('should throw CnisFastAnalysisNotFoundError when analysis is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -340,7 +340,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(CnisFastAnalysisNotFoundError);
   });
 
-  it('deve lançar CnisFastAnalysisDoesNotContainCompleteAnalysisError se cnisFastAnalysisResult for nulo', async () => {
+  it('should throw CnisFastAnalysisDoesNotContainCompleteAnalysisError when cnisFastAnalysisResult is null', async () => {
     // Arrange
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
@@ -367,7 +367,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve lançar CnisFastAnalysisDoesNotContainCompleteAnalysisError se cnisCompleteAnalysis for nulo', async () => {
+  it('should throw CnisFastAnalysisDoesNotContainCompleteAnalysisError when cnisCompleteAnalysis is null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -397,7 +397,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve lançar CnisFastAnalysisDoesNotContainSimplifiedAnalysisError se a geração da análise falhar (retornar nulo)', async () => {
+  it('should throw CnisFastAnalysisDoesNotContainSimplifiedAnalysisError when analysis generation fails (returns null)', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
