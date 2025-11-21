@@ -31,24 +31,20 @@ describe(UpdateCustomerProfilePictureUseCase.name, () => {
 
   const txRepo: jest.Mocked<BaseTransactionRepositoryGateway> = {
     execute: jest.fn(),
-  };
+  } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const customerCmdRepo: jest.Mocked<CustomerCommandRepositoryGateway> = {
     updateCustomer: jest.fn(),
-    createCustomer: jest.fn(),
-  };
+  } as unknown as jest.Mocked<CustomerCommandRepositoryGateway>;
 
   const customerQueryRepo: jest.Mocked<CustomerQueryRepositoryGateway> = {
     findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
-    findOneByCustomerId: jest.fn(),
-    findOneByAuthIdentityIdOrFail: jest.fn(),
-  };
+  } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
   const fileProcessor: jest.Mocked<FileProcessorGateway> = {
     processAndUploadProfilePicture: jest.fn(),
     getCustomerProfilePicture: jest.fn(),
-    getOrganizationLogo: jest.fn(),
-  };
+  } as unknown as jest.Mocked<FileProcessorGateway>;
 
   const sessionData = SessionDataModel.build({
     authIdentityId: new AuthIdentityId(),
