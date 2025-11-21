@@ -67,7 +67,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -188,7 +188,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve deletar um registro e a análise CNIS associada', async () => {
+  it('should delete record and associated CNIS analysis', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
@@ -239,7 +239,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve deletar um registro sem chamar a deleção de CNIS se não houver associação', async () => {
+  it('should delete record without calling CNIS deletion when no association exists', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
@@ -269,7 +269,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
@@ -283,7 +283,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar AnalysisToolRecordNotFoundError se o registro não for encontrado', async () => {
+  it('should throw AnalysisToolRecordNotFoundError when record is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
