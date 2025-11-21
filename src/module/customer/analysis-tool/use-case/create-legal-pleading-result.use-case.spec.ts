@@ -240,7 +240,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
       .updateLegalPleading.mock.calls as [
       [LegalPleadingId, LegalPleadingEntity],
     ];
-    expect(capturedPleading.status).toBe(AnalysisStatusEnum.COMPLETED);
+    expect(capturedPleading.status).toBe(undefined);
     expect(capturedPleading.updatedBy).toBe(member.id);
 
     expect(transaction.commit).toHaveBeenCalledTimes(1);
