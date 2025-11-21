@@ -50,7 +50,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const analysisToolClientCommandRepositoryGateway: jest.Mocked<AnalysisToolClientCommandRepositoryGateway> =
     {

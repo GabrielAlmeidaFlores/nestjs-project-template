@@ -34,7 +34,7 @@ describe(AuthIdentityResetPasswordUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const emailForgotPasswordGateway: jest.Mocked<EmailForgotPasswordGateway> = {
     validateForgotPasswordCode: jest.fn(),

@@ -29,12 +29,12 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
   const customerTermsQueryRepositoryGateway: jest.Mocked<CustomerTermsQueryRepositoryGateway> =
     {
       findOneByStatus: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsQueryRepositoryGateway>;
 
   const customerTermsAcceptanceQueryRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway> =
     {
       findOneByTermsIdAndCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({

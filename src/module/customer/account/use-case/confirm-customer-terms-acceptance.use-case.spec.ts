@@ -35,29 +35,27 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const customerQueryRepositoryGateway: jest.Mocked<CustomerQueryRepositoryGateway> =
     {
       findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
-      findOneByAuthIdentityIdOrFail: jest.fn(),
-      findOneByCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
   const customerTermsQueryRepositoryGateway: jest.Mocked<CustomerTermsQueryRepositoryGateway> =
     {
       findOneByStatus: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsQueryRepositoryGateway>;
 
   const customerTermsAcceptanceQueryRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway> =
     {
       findOneByTermsIdAndCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway>;
 
   const customerTermsAcceptanceCommandRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceCommandRepositoryGateway> =
     {
       createCustomerTermsAcceptance: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceCommandRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({

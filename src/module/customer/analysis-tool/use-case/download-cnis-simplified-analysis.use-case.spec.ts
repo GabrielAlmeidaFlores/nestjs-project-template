@@ -62,7 +62,7 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const exportDocumentGateway: jest.Mocked<ExportDocumentGateway> = {
     downloadFileAsStreamable: jest.fn(),
