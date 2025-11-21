@@ -148,7 +148,6 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
       streamableFile,
     );
 
-    // Act
     const result = await useCase.execute(
       sessionData,
       orgSessionData,
@@ -196,7 +195,6 @@ describe(DownloadCnisCompleteAnalysisUseCase.name, () => {
       new CnisFastAnalysisNotFoundError(),
     );
 
-    // Act & Assert
     await expect(
       useCase.execute(
         sessionData,

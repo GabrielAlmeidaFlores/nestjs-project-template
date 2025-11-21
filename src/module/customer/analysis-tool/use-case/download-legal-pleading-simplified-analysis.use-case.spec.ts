@@ -351,7 +351,6 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
   });
 
   it('should throw LegalPleadingNotFoundError when pleading is not found', async () => {
-    // Arrange
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();

@@ -49,7 +49,6 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
     {
       findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
         jest.fn(),
-      findOneByCnisFastAnalysisIdAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -219,7 +218,6 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
       streamableFile,
     );
 
-    // Act
     const result = await useCase.execute(
       sessionData,
       orgSessionData,
@@ -341,7 +339,6 @@ describe(DownloadCnisSimplifiedAnalysisUseCase.name, () => {
   });
 
   it('should throw CnisFastAnalysisDoesNotContainCompleteAnalysisError when cnisFastAnalysisResult is null', async () => {
-    // Arrange
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();

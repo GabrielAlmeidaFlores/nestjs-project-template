@@ -104,7 +104,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     const sessionData = createSessionData();
     const dto = createDto();
     const customerResult = createCustomerResult();
-    const orgMemberResult = createOrgMemberResult(true); // owner = true
+    const orgMemberResult = createOrgMemberResult(true);
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
       customerResult,
@@ -124,7 +124,6 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       dto,
     );
 
-    // Assert
     expect(result).toBeInstanceOf(SetOrganizationForCustomerResponseDto);
     expect(result.owner).toBe(true);
 

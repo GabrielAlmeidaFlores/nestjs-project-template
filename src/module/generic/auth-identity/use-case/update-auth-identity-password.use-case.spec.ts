@@ -107,8 +107,8 @@ describe(UpdateAuthIdentityPasswordUseCase.name, () => {
       authIdentity,
     );
     mockedBcrypt.compareSync
-      .mockReturnValueOnce(true) // Current password matches
-      .mockReturnValueOnce(false); // New password is different
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(false);
     authIdentityCommandRepositoryGateway.updateAuthIdentity.mockReturnValue(
       {} as TransactionType,
     );
@@ -158,7 +158,7 @@ describe(UpdateAuthIdentityPasswordUseCase.name, () => {
     authIdentityQueryRepositoryGateway.findOneAuthIdentityById.mockResolvedValueOnce(
       authIdentity,
     );
-    mockedBcrypt.compareSync.mockReturnValueOnce(false); // Current password doesn't match
+    mockedBcrypt.compareSync.mockReturnValueOnce(false);
 
     await expect(useCase.execute(sessionData, dto)).rejects.toBeInstanceOf(
       WrongCurrentAuthIdentityPasswordError,
@@ -178,8 +178,8 @@ describe(UpdateAuthIdentityPasswordUseCase.name, () => {
       authIdentity,
     );
     mockedBcrypt.compareSync
-      .mockReturnValueOnce(true) // Current password matches
-      .mockReturnValueOnce(true); // New password is the same as current
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(true);
 
     await expect(useCase.execute(sessionData, dto)).rejects.toBeInstanceOf(
       NewPasswordMatchesCurrentError,

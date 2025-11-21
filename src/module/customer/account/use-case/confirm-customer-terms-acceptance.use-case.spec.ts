@@ -142,7 +142,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   });
 
   it('should confirm terms acceptance successfully', async () => {
-    // Arrange
     const sessionData = buildSessionData();
     const transaction = buildTransaction();
 
@@ -160,7 +159,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
 
-    // Act
     const result = await useCase.execute(sessionData);
 
     expect(result).toBeInstanceOf(CustomerTermsAcceptanceResponseDto);
@@ -173,7 +171,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   });
 
   it('should throw CustomerTermsAcceptanceError when terms are already accepted', async () => {
-    // Arrange
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
@@ -183,7 +180,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
       termsQueryResult,
     );
     customerTermsAcceptanceQueryRepositoryGateway.findOneByTermsIdAndCustomerId.mockResolvedValueOnce(
-      termsAcceptanceQueryResult, // Mock para simular que o termo já foi aceito
+      termsAcceptanceQueryResult,
     );
 
     await expect(useCase.execute(sessionData)).rejects.toBeInstanceOf(
@@ -192,7 +189,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   });
 
   it('should throw CustomerTermsNotFoundError when no active terms exist', async () => {
-    // Arrange
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
@@ -208,7 +204,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   });
 
   it('should propagate CustomerNotFoundError when customer is not found', async () => {
-    // Arrange
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockRejectedValueOnce(
