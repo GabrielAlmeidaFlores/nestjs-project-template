@@ -65,7 +65,6 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       findOneByEmailAndOrganizationId: jest.fn(),
       findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
-      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
     };
 
   const analysisToolClientInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
@@ -174,6 +173,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
       ],
       createdBy: responsible,
       updatedBy: responsible,
+      inssPassword: null,
     });
   };
 
