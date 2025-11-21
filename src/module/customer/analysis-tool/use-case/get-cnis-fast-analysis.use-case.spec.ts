@@ -188,7 +188,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar uma análise CNIS completa com todos os campos e URLs assinadas', async () => {
+  it('should return complete CNIS analysis with all fields and signed URLs', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -251,7 +251,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve retornar uma análise sem URLs de arquivo se os campos forem nulos', async () => {
+  it('should return analysis without file URLs when fields are null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -285,7 +285,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisResult).toBeUndefined();
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();

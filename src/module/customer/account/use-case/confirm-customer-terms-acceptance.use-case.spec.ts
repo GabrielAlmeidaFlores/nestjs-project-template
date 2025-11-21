@@ -143,7 +143,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve confirmar o aceite dos termos com sucesso', async () => {
+  it('should confirm terms acceptance successfully', async () => {
     // Arrange
     const sessionData = buildSessionData();
     const transaction = buildTransaction();
@@ -174,7 +174,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar CustomerTermsAcceptanceError se os termos já foram aceitos', async () => {
+  it('should throw CustomerTermsAcceptanceError when terms are already accepted', async () => {
     // Arrange
     const sessionData = buildSessionData();
 
@@ -193,7 +193,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
   });
 
-  it('deve lançar CustomerTermsNotFoundError se não houver termos ativos', async () => {
+  it('should throw CustomerTermsNotFoundError when no active terms exist', async () => {
     // Arrange
     const sessionData = buildSessionData();
 
@@ -209,7 +209,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
   });
 
-  it('deve propagar CustomerNotFoundError se o cliente não for encontrado', async () => {
+  it('should propagate CustomerNotFoundError when customer is not found', async () => {
     // Arrange
     const sessionData = buildSessionData();
 

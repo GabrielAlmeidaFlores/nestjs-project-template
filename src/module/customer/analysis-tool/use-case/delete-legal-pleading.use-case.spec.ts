@@ -180,7 +180,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve deletar uma petição legal com sucesso', async () => {
+  it('should delete legal pleading successfully', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -232,7 +232,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -246,7 +246,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se a petição não for encontrada (erro configurado)', async () => {
+  it('should throw OrganizationMemberNotFoundError when pleading is not found (configured error)', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
