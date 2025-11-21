@@ -230,7 +230,7 @@ describe(UpdateCustomerUseCase.name, () => {
     const [, customerEntity] = customerCommandRepositoryGateway.updateCustomer
       .mock.calls[0] as [CustomerId, CustomerEntity];
     expect(customerEntity.name).toBe('New Name Only');
-    // Address should be updated with new values merged with existing ones
+
     expect(customerEntity.customerAddress.city).toBe('São Paulo Updated');
     expect(customerEntity.customerAddress.neighborhood).toBe('Centro Updated');
   });
