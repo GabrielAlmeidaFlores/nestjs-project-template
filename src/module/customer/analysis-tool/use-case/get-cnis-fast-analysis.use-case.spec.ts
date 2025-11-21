@@ -53,7 +53,6 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     {
       findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
         jest.fn(),
-      findOneByCnisFastAnalysisIdAndOrganizationIdOrFail: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -116,6 +115,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
       analysisToolClientLegalProceeding: [],
       createdBy: responsible(null),
       updatedBy: responsible(null),
+      inssPassword: null,
     });
 
     return GetCnisFastAnalysisWithRelationsQueryResult.build({
