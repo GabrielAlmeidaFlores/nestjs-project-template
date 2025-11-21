@@ -73,7 +73,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const legalPleadingCommandRepositoryGateway: jest.Mocked<LegalPleadingCommandRepositoryGateway> =
     {
