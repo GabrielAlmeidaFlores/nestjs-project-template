@@ -24,6 +24,7 @@ import { GenericControllerRoute } from '@shared/api/util/decorator/class/control
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @GenericControllerRoute('auth-identity')
 export class AuthIdentityController {
@@ -181,6 +182,7 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Validar sessão do usuário autenticado',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'sign-in/validate',
       method: RequestMethod.GET,
@@ -201,6 +203,7 @@ export class AuthIdentityController {
 
   @BuildEndpointSpecification({
     summary: 'Logout de usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'sign-out',
       method: RequestMethod.HEAD,
