@@ -2668,7 +2668,12 @@ export class CnisAnalysisService {
     age: number,
   ) {
     const existPeriodoSeguradoEspecial = data.some(
-      (item) => item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL',
+      (item) =>
+        item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' &&
+        typeof item.tipo === 'string' &&
+        item.tipo !== null &&
+        item.tipo !== undefined &&
+        item.tipo.toUpperCase() === 'SEGURADO ESPECIAL',
     );
     if (!existPeriodoSeguradoEspecial) {
       return {
@@ -2907,7 +2912,12 @@ export class CnisAnalysisService {
     }
 
     const existPeriodoSeguradoEspecial = data.some(
-      (item) => item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL',
+      (item) =>
+        item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' &&
+        typeof item.tipo === 'string' &&
+        item.tipo !== null &&
+        item.tipo !== undefined &&
+        item.tipo.toUpperCase() === 'SEGURADO ESPECIAL',
     );
     if (!existPeriodoSeguradoEspecial) {
       return {
