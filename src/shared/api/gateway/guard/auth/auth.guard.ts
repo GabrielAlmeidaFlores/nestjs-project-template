@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
     );
 
     const isValidUserLevel = allowedUserLevel.some(
-      (level) => level === jwtContent.userLevel,
+      (level) => level === (jwtContent.userLevel as string),
     );
 
     if (!isValidUserLevel) {
