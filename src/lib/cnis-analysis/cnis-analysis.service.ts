@@ -2620,6 +2620,7 @@ export class CnisAnalysisService {
 
     const meetsContributionTimeRequirement =
       totalContribution >= pedagioData.tempoTotalNecessario;
+
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
@@ -2647,6 +2648,34 @@ export class CnisAnalysisService {
     const isEligible =
       meetsContributionTimeRequirement && meetsCarenciaRequirement;
 
+    // =========================
+    // NOVA PARTE (somente isso)
+    // =========================
+
+    let contributionHitDate: Date | null = null;
+    let carenciaHitDate: Date | null = null;
+
+    if (meetsContributionTimeRequirement) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - monthsToContribution);
+      contributionHitDate = d;
+    }
+
+    if (meetsCarenciaRequirement) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - monthsToCarencia);
+      carenciaHitDate = d;
+    }
+
+    let eligibilityDate: Date | null = null;
+
+    if (contributionHitDate && carenciaHitDate) {
+      eligibilityDate =
+        contributionHitDate > carenciaHitDate
+          ? contributionHitDate
+          : carenciaHitDate;
+    }
+
     return {
       type: 'Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 17',
       age,
@@ -2659,6 +2688,8 @@ export class CnisAnalysisService {
       meetsCarenciaRequirement,
       isEligible,
       projectedFulfillmentDate,
+
+      eligibilityDate,
     };
   }
 
@@ -2679,6 +2710,7 @@ export class CnisAnalysisService {
         meetsAgeRequirement: false,
         meetsCarenciaRequirement: false,
         projectedFulfillmentDate: null,
+        eligibilityDate: null,
       };
     }
 
@@ -2737,6 +2769,41 @@ export class CnisAnalysisService {
 
     const projectedFulfillmentDate = null;
 
+    // ======================================================
+    // NOVA PARTE (exatamente como aplicado na função do art. 17)
+    // ======================================================
+
+    let ageHitDate: Date | null = null;
+    let carenciaHitDate: Date | null = null;
+
+    // 1. Quando atingiu idade
+    if (meetsAgeRequirement) {
+      const hoje = new Date();
+      const anosQueFaltavam = meetsAgeRequirement ? 0 : requiredAge - age;
+      const d = new Date(hoje);
+      d.setFullYear(d.getFullYear() - anosQueFaltavam);
+      ageHitDate = d;
+    }
+
+    // 2. Quando atingiu carência
+    if (meetsCarenciaRequirement) {
+      const hoje = new Date();
+      const mesesQueFaltavam = meetsCarenciaRequirement
+        ? 0
+        : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
+      const d = new Date(hoje);
+      d.setMonth(d.getMonth() - mesesQueFaltavam);
+      carenciaHitDate = d;
+    }
+
+    // 3. Data final de elegibilidade
+    let eligibilityDate: Date | null = null;
+
+    if (ageHitDate && carenciaHitDate) {
+      eligibilityDate =
+        ageHitDate > carenciaHitDate ? ageHitDate : carenciaHitDate;
+    }
+
     return {
       type: 'Aposentadoria por Idade Híbrida com Direito Adquirido',
       isEligible,
@@ -2745,6 +2812,7 @@ export class CnisAnalysisService {
       meetsAgeRequirement,
       meetsCarenciaRequirement,
       projectedFulfillmentDate,
+      eligibilityDate,
     };
   }
 
@@ -3014,28 +3082,18 @@ export class CnisAnalysisService {
     age: number,
     birthDate: Date | undefined,
   ) {
-    //     #### Aposentadoria Programada Comum prevista no art. 19, caput, da EC 103: a) aos 62
-    // (sessenta e dois) anos de idade, se mulher, e aos 65 (sessenta e cinco) anos de idade, se
-    // homem; e b) 15 (quinze) anos de tempo de contribuição, se mulher, e 20 (vinte) anos de
-    // tempo de contribuição, se homem; c) 180 (cento e oitenta) meses de carência, para ambos
-    // os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo
-    // de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20
-    // (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de
-    // contribuição, se mulher.
-
     const REQUIRED_CARENCIA_MONTHS = 180;
     const REQUIRED_AGE_WOMEN = 62;
     const REQUIRED_AGE_MEN = 65;
     const REQUIRED_CONTRIBUTION_YEARS = gender === 'F' ? 15 : 20;
-
     const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
 
-    const calculatedTotals = this.calculateTotals(data);
-
+    // ---------- Totais atuais (funções auxiliares existentes) ----------
+    const totals = this.calculateTotals(data);
     const totalContribution = this.convertToDecimalYears(
-      calculatedTotals.years,
-      calculatedTotals.months,
-      calculatedTotals.days,
+      totals.years,
+      totals.months,
+      totals.days,
     );
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
@@ -3045,73 +3103,101 @@ export class CnisAnalysisService {
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
+    const ageRequirementDate = birthDate
+      ? new Date(
+          birthDate.getFullYear() + requiredAge,
+          birthDate.getMonth(),
+          birthDate.getDate(),
+        )
+      : null;
+
+    const contributionRequirementDate = (() => {
+      let accYears = 0;
+      let accMonths = 0;
+      let accDays = 0;
+
+      const add = (v: TimeContributionDataInterface) => {
+        accYears += v.anos ?? 0;
+        accMonths += v.meses ?? 0;
+        accDays += v.dias ?? 0;
+
+        if (accDays >= 30) {
+          accMonths += Math.floor(accDays / 30);
+          accDays = accDays % 30;
+        }
+
+        if (accMonths >= 12) {
+          accYears += Math.floor(accMonths / 12);
+          accMonths = accMonths % 12;
+        }
+      };
+
+      for (const item of data) {
+        const v = item.validContributionTime;
+        if (!v) continue;
+
+        add(v);
+
+        const totalDecimal = accYears + accMonths / 12 + accDays / 365;
+
+        if (totalDecimal >= REQUIRED_CONTRIBUTION_YEARS) {
+          return item.dataAjustada?.dataFim ?? v.dataFim ?? null;
+        }
+      }
+
+      return null;
+    })();
+
+    const carenciaRequirementDate = (() => {
+      let acc = 0;
+
+      for (const item of data) {
+        const c = item.carencia ?? 0;
+        if (c > 0) {
+          acc += c;
+        }
+
+        if (acc >= REQUIRED_CARENCIA_MONTHS) {
+          const fim = item.dataAjustada?.dataFim;
+          return fim ?? null;
+        }
+      }
+
+      return null;
+    })();
+
+    const requirementDates = [
+      ageRequirementDate,
+      contributionRequirementDate,
+      carenciaRequirementDate,
+    ].filter((d): d is Date => d instanceof Date);
+
+    const eligibilityDate =
+      requirementDates.length > 0
+        ? new Date(Math.max(...requirementDates.map((d) => d.getTime())))
+        : null;
+
     const isEligible =
       meetsAgeRequirement &&
       meetsContributionRequirement &&
       meetsCarenciaRequirement;
-    const actualDate = new Date();
-
-    const monthsToAge = meetsAgeRequirement
-      ? 0
-      : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
-
-    const monthsToContribution = meetsContributionRequirement
-      ? 0
-      : Math.ceil(
-          (REQUIRED_CONTRIBUTION_YEARS - totalContribution) *
-            this.MONTHS_IN_YEAR,
-        );
-
-    const monthsToCarencia = meetsCarenciaRequirement
-      ? 0
-      : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
-
-    let monthsToFulfill = Math.max(
-      monthsToAge,
-      monthsToContribution,
-      monthsToCarencia,
-    );
-
-    let projectedFulfillmentDate: Date;
-    if (
-      birthDate &&
-      !meetsAgeRequirement &&
-      meetsContributionRequirement &&
-      meetsCarenciaRequirement
-    ) {
-      const monthsToBirthDate =
-        (birthDate.getFullYear() - actualDate.getFullYear()) *
-          this.MONTHS_IN_YEAR +
-        (birthDate.getMonth() - actualDate.getMonth());
-
-      if (monthsToBirthDate > 0) {
-        monthsToFulfill = Math.max(monthsToFulfill, monthsToBirthDate);
-      }
-      projectedFulfillmentDate = new Date(
-        actualDate.getFullYear(),
-        actualDate.getMonth() + monthsToFulfill,
-        birthDate.getDate(),
-      );
-    } else {
-      projectedFulfillmentDate = new Date(
-        actualDate.getFullYear(),
-        actualDate.getMonth() + monthsToFulfill,
-        actualDate.getDate(),
-      );
-    }
 
     return {
       type: 'Aposentadoria Programada Comum - Emenda 103 art. 19',
+
       requiredAge,
       requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
       requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+
       totalContribution,
       totalCarenciaMonths,
+
       meetsAgeRequirement,
       meetsContributionRequirement,
       meetsCarenciaRequirement,
+
       isEligible,
-      projectedFulfillmentDate,
+      eligibilityDate,
     };
   }
 }
