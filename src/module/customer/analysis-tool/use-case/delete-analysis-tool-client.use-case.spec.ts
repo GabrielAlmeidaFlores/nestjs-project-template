@@ -54,7 +54,6 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
       findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
-      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
       findOneByEmailAndOrganizationId: jest.fn(),
       findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
@@ -90,7 +89,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -205,7 +204,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve deletar um cliente e suas análises e petições associadas', async () => {
+  it('should delete client and its associated analyses and pleadings', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolClientId = new AnalysisToolClientId();
@@ -269,7 +268,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve deletar um cliente sem registros ou petições associadas', async () => {
+  it('should delete client without associated records or pleadings', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolClientId = new AnalysisToolClientId();
@@ -304,7 +303,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError quando o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolClientId = new AnalysisToolClientId();
@@ -318,7 +317,7 @@ describe(DeleteAnalysisToolClientUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError quando o cliente a ser deletado não for encontrado', async () => {
+  it('should throw AnalysisToolClientNotFoundError when client to be deleted is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolClientId = new AnalysisToolClientId();

@@ -183,7 +183,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve baixar a análise completa com sucesso', async () => {
+  it('should download complete analysis successfully', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -220,7 +220,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -239,7 +239,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar LegalPleadingNotFoundError se a petição não for encontrada', async () => {
+  it('should throw LegalPleadingNotFoundError when pleading is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -262,7 +262,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
   });
 
-  it('deve lançar LegalPleadingDoesNotContainCompleteAnalysisError se o resultado da petição for nulo', async () => {
+  it('should throw LegalPleadingDoesNotContainCompleteAnalysisError when pleading result is null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -286,7 +286,7 @@ describe(DownloadLegalPleadingCompleteAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingDoesNotContainCompleteAnalysisError);
   });
 
-  it('deve lançar LegalPleadingDoesNotContainCompleteAnalysisError se a análise completa for nula', async () => {
+  it('should throw LegalPleadingDoesNotContainCompleteAnalysisError when complete analysis is null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();

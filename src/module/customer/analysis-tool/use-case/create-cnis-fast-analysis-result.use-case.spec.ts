@@ -91,7 +91,7 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
