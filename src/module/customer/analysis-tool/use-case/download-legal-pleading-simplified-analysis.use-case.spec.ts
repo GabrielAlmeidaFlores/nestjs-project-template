@@ -69,7 +69,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const exportDocumentGateway: jest.Mocked<ExportDocumentGateway> = {
     convertHtmlToMarkdown: jest.fn(),
@@ -229,7 +229,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve baixar a análise simplificada quando ela já existe', async () => {
+  it('should download simplified analysis when it already exists', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -275,7 +275,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve gerar, salvar e baixar a análise simplificada se ela não existir', async () => {
+  it('should generate, save and download simplified analysis when it does not exist', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -331,7 +331,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -350,8 +350,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar LegalPleadingNotFoundError se a petição não for encontrada', async () => {
-    // Arrange
+  it('should throw LegalPleadingNotFoundError when pleading is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -374,7 +373,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
   });
 
-  it('deve lançar LegalPleadingDoesNotContainCompleteAnalysisError se o resultado for nulo', async () => {
+  it('should throw LegalPleadingDoesNotContainCompleteAnalysisError when result is null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -398,7 +397,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingDoesNotContainCompleteAnalysisError);
   });
 
-  it('deve lançar LegalPleadingDoesNotContainCompleteAnalysisError se a análise completa for nula', async () => {
+  it('should throw LegalPleadingDoesNotContainCompleteAnalysisError when complete analysis is null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -426,7 +425,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
     ).rejects.toBeInstanceOf(LegalPleadingDoesNotContainCompleteAnalysisError);
   });
 
-  it('deve lançar LegalPleadingDoesNotContainSimplifiedAnalysisError se a geração da análise falhar (retornar nulo)', async () => {
+  it('should throw LegalPleadingDoesNotContainSimplifiedAnalysisError when analysis generation fails (returns null)', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();

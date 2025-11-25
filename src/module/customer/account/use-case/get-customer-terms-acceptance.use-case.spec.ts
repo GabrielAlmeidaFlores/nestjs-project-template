@@ -29,12 +29,12 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
   const customerTermsQueryRepositoryGateway: jest.Mocked<CustomerTermsQueryRepositoryGateway> =
     {
       findOneByStatus: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsQueryRepositoryGateway>;
 
   const customerTermsAcceptanceQueryRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway> =
     {
       findOneByTermsIdAndCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -91,7 +91,7 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar "accepted: true" se o cliente já aceitou os termos', async () => {
+  it('should return "accepted: true" when customer has already accepted terms', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
@@ -114,7 +114,7 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
     ).toHaveBeenCalledWith(termsQueryResult.id, customerQueryResult.id);
   });
 
-  it('deve retornar "accepted: false" se o cliente ainda não aceitou os termos', async () => {
+  it('should return "accepted: false" when customer has not yet accepted terms', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
@@ -132,7 +132,7 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
     expect(result.accepted).toBe(false);
   });
 
-  it('deve lançar CustomerTermsNotFoundError se não houver termos ativos', async () => {
+  it('should throw CustomerTermsNotFoundError when no active terms exist', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockResolvedValueOnce(
@@ -147,7 +147,7 @@ describe(GetCustomerTermsAcceptanceUseCase.name, () => {
     );
   });
 
-  it('deve propagar CustomerNotFoundError se o cliente não for encontrado', async () => {
+  it('should propagate CustomerNotFoundError when customer is not found', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail.mockRejectedValueOnce(
