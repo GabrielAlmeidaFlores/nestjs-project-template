@@ -93,7 +93,7 @@ export class UpdateLegalPleadingStatusToCompleteUseCase {
     await transaction.commit();
 
     return UpdateLegalPleadingStatusToCompleteResponseDto.build({
-      message: 'Status da peça processual atualizado com sucesso.',
+      legalPleadingId: legalPleadingQueryResult.id,
     });
   }
 }
