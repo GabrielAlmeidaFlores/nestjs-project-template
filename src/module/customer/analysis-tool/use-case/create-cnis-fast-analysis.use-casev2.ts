@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { CnisAnalysisService } from '@lib/cnis-analysis/cnis-analysis.service';
+import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 
 @Injectable()
@@ -12,10 +13,12 @@ export class CreateCnisFastAnalysisUseCaseV2 {
     private readonly cnisAnalysisService: CnisAnalysisService,
   ) {}
 
-  public async execute(dto: CreateCnisFastAnalysisRequestDto): Promise<any> {
+  public async execute(
+    dto: CreateCnisFastAnalysisRequestDto,
+  ): Promise<CnisOutputCompleteModel> {
     if (dto.cnisDocument?.buffer !== undefined) {
       return await this.cnisAnalysisService.parseCnisDocumentComplete(
-        dto.cnisDocument?.buffer,
+        dto.cnisDocument.buffer,
       );
     }
     throw new Error('CNIS document buffer is undefined.');

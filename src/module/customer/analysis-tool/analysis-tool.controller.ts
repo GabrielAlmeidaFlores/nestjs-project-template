@@ -8,6 +8,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
+import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
@@ -474,7 +475,7 @@ export class AnalysisToolController {
   })
   public async createCnisFasttesteAnalysis(
     @Body() dto: CreateCnisFastAnalysisRequestDto,
-  ): Promise<any> {
+  ): Promise<CnisOutputCompleteModel> {
     return await this.createCnisFastAnalysisUseCaseV2.execute(dto);
   }
 

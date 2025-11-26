@@ -1,4 +1,4 @@
-import type { TimeContributionDataInterface } from '@lib/cnis-analysis/dto/time-contribution';
+import type { TimeContributionDataInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
 
 export interface ConsolidadoRelationInterface {
   seq: number;
