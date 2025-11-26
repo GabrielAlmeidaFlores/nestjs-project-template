@@ -35,6 +35,12 @@ import { OrganizationTypeormCommandRepository } from '@infra/database/implementa
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
+import { OrganizationPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan/organization-payment-plan.typeorm.command.repository';
+import { OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-enable-paid-resource/organization-payment-plan-enable-paid-resource.typeorm.command.repository';
+import { PaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.command.repository';
+import { PaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource.typeorm.command.repository';
+import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
+import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-inss-benefit.typeorm.entity';
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
@@ -55,7 +61,12 @@ import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementati
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enable-paid-resource.typeorm.entity';
+import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
+import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
+import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -86,6 +97,11 @@ export class TypeormIndex {
     CustomerTermsAcceptanceTypeormEntity,
     AnalysisToolClientLegalProceedingTypeormEntity,
     AdminTypeormEntity,
+    PaymentPlanTypeormEntity,
+    PaymentPlanPaidResourceTypeormEntity,
+    OrganizationPaymentPlanTypeormEntity,
+    PaymentPlanEnablePaidResourceTypeormEntity,
+    OrganizationPaymentPlanEnablePaidResourceTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -125,6 +141,12 @@ export class TypeormIndex {
     AnalysisToolClientLegalProceedingTypeormCommandRepository,
     AdminTypeormCommandRepository,
     AdminTypeormQueryRepository,
+    PaymentPlanPaidResourceTypeormCommandRepository,
+    PaymentPlanPaidResourceTypeormQueryRepository,
+    OrganizationPaymentPlanTypeormCommandRepository,
+    PaymentPlanTypeormCommandRepository,
+    PaymentPlanEnablePaidResourceTypeormCommandRepository,
+    OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

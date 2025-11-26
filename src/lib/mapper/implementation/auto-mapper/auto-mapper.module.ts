@@ -53,6 +53,11 @@ import { GetOrganizationMemberQueryResultAutoMapperProfile } from '@lib/mapper/i
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-and-organization-relations-query-result.auto-mapper.profile';
 import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-relation-query-result.auto-mapper.profile';
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
+import { OrganizationPaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-entity.auto.mapper.profile';
+import { OrganizationPaymentPlanEnablePaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-enable-paid-resource/organization-payment-plan-enable-paid-resource-entity.auto.mapper.profile';
+import { PaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan/payment-plan-entity.auto.mapper.profile';
+import { PaymentPlanEnablePaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity.auto.mapper.profile';
+import { PaymentPlanPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/payment-plan-paid-resource-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -112,6 +117,11 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
+    PaymentPlanPaidResourceEntityAutoMapperProfile,
+    PaymentPlanEntityAutoMapperProfile,
+    OrganizationPaymentPlanEntityAutoMapperProfile,
+    PaymentPlanEnablePaidResourceEntityAutoMapperProfile,
+    OrganizationPaymentPlanEnablePaidResourceEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
