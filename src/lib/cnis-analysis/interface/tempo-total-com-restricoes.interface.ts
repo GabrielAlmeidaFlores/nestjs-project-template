@@ -1,0 +1,34 @@
+import type { ConsolidadoRelationInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
+
+export interface TempoRestricoesContribuicaoTotalInterface {
+  dias: number;
+  meses: number;
+  anos: number;
+}
+
+export interface TempoComRestricaoItemInterface {
+  seq: number;
+  indicadores: string | null | undefined;
+  contributionTime: ConsolidadoRelationInterface['contributionTime'];
+  validContributionTime: ConsolidadoRelationInterface['validContributionTime'];
+  carencia: number | null | undefined;
+  isConcomitante: boolean | null | undefined;
+  isBeneficio: boolean | null | undefined;
+  isIntercalado: boolean | null | undefined;
+  tipo: string | null | undefined;
+  ajustado: boolean | null | undefined;
+  dataAjustada:
+    | { dataInicio?: Date | null; dataFim?: Date | null }
+    | null
+    | undefined;
+}
+
+export interface TempoComRestricoesResumoInterface {
+  carenciaTotal: number;
+  tempoTotalComRestricoesContribuicao: TempoRestricoesContribuicaoTotalInterface;
+}
+
+export interface TempoTotalComRestricoesInterface {
+  tempoComRestricaoItem: TempoComRestricaoItemInterface[];
+  tempoComRestricoesResumo: TempoComRestricoesResumoInterface;
+}

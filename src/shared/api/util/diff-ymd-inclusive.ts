@@ -1,9 +1,26 @@
-export interface DiffYmdResult {
+export interface DiffYmdResultInterface {
   years: number;
   months: number;
   days: number;
   formatted: string; // "Xa Ym Zd"
 }
+
+// Constantes tipadas para evitar magic numbers
+export const MILLIS_PER_SECOND = 1000;
+export const SECONDS_PER_MINUTE = 60;
+export const MINUTES_PER_HOUR = 60;
+export const HOURS_PER_DAY = 24;
+
+export const Time = {
+  Millisecond: 1,
+  Second: MILLIS_PER_SECOND,
+  Minute: MILLIS_PER_SECOND * SECONDS_PER_MINUTE,
+  Hour: MILLIS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR,
+  Day:
+    MILLIS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR * HOURS_PER_DAY,
+} as const;
+
+export type TimeUnitType = (typeof Time)[keyof typeof Time];
 
 /**
  * Diferença exata entre start e end em anos, meses e dias (inclusivo).
@@ -15,7 +32,7 @@ export interface DiffYmdResult {
 export function diffYmdInclusive(
   start: Date | null | undefined,
   end: Date | null | undefined,
-): DiffYmdResult {
+): DiffYmdResultInterface {
   if (
     !start ||
     !end ||
@@ -27,7 +44,9 @@ export function diffYmdInclusive(
     return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
   }
 
-  const msPerDay = 1000 * 60 * 60 * 24;
+  // substituição do magic number 1000 * 60 * 60 * 24
+  const msPerDay: TimeUnitType = Time.Day;
+
   const toUtcDay = (d: Date) =>
     new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const s = toUtcDay(start);
@@ -62,11 +81,14 @@ export function diffYmdInclusive(
   };
 
   const NUMBER_MONTHS_IN_YEAR = 12;
+
   let months = 0;
+
   const roughMonths =
     (e.getUTCFullYear() - afterYears.getUTCFullYear()) * NUMBER_MONTHS_IN_YEAR +
     (e.getUTCMonth() - afterYears.getUTCMonth());
   months = Math.max(0, roughMonths);
+
   while (months > 0) {
     const cand = addMonths(afterYears, months);
     if (cand.getTime() > e.getTime()) {
@@ -75,18 +97,18 @@ export function diffYmdInclusive(
       break;
     }
   }
-  while (true) {
-    const cand = addMonths(afterYears, months + 1);
-    if (cand.getTime() <= e.getTime()) {
-      months += 1;
-    } else {
-      break;
-    }
+  while (addMonths(afterYears, months + 1) <= e) {
+    months++;
   }
+
   const base = addMonths(afterYears, months);
   let days = Math.floor((e.getTime() - base.getTime()) / msPerDay) + 1;
 
-  const RULE_START_UTC = Date.UTC(2019, 10, 1);
+  const YEAR_2019 = 2019;
+  const MONTH_NOVEMBER = 10; // zero-based
+  const DAY_FIRST = 1;
+  const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
+
   if (s.getTime() >= RULE_START_UTC || e.getTime() >= RULE_START_UTC) {
     if (days > 0) {
       months += 1;
