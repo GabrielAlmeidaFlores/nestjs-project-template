@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 
 @Entity({ name: 'organization' })
 export class OrganizationTypeormEntity extends BaseTypeormEntity {
@@ -21,6 +22,14 @@ export class OrganizationTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.organization,
   )
   public organizationMember?: OrganizationMemberTypeormEntity[] | undefined;
+
+  @OneToMany(
+    () => OrganizationPaymentPlanTypeormEntity,
+    (entity) => entity.organization,
+  )
+  public organizationPaymentPlan?:
+    | OrganizationMemberTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = OrganizationTypeormEntity.name;
 }

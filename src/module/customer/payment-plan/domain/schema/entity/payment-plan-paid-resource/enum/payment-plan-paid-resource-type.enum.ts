@@ -1,0 +1,5 @@
+export enum PaymentPlanPaidResourceTypeEnum {
+  DOCUMENT_ANALYSIS = 'DOCUMENT_ANALYSIS',
+  FAST_PROCESSING = 'FAST_PROCESSING',
+  GEN_AI_REPORT = 'GEN_AI_REPORT',
+}
