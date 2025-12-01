@@ -297,6 +297,7 @@ export class CnisAnalysisService {
         consolidadoResumido,
         gender,
         idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
       );
 
     const aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18 =
@@ -1636,7 +1637,9 @@ export class CnisAnalysisService {
 
     for (const item of data) {
       const v = item.validContributionTime ?? item.contributionTime;
-      if (!v || !v.dataFim) continue;
+      if (!v?.dataFim) {
+        continue;
+      }
 
       accYears += v.anos;
       accMonths += v.meses;
@@ -2099,10 +2102,10 @@ export class CnisAnalysisService {
     const MONTHS_IN_YEAR = 12;
     const DAYS_IN_YEAR = 365.25;
 
-    const years = data.reduce(
-      (acc, cur) => acc + (cur.validContributionTime?.anos ?? 0),
-      0,
-    );
+    const years = data.reduce((acc, cur) => {
+      const anos = cur.validContributionTime?.anos ?? 0;
+      return acc + anos;
+    }, 0);
 
     const months = data.reduce(
       (acc, cur) => acc + (cur.validContributionTime?.meses ?? 0),
@@ -2244,6 +2247,8 @@ export class CnisAnalysisService {
     age: number,
     requiredPoints: number,
   ): Date | null {
+    const today = new Date();
+
     const currentPoints =
       totals.years +
       totals.months / this.MONTHS_IN_YEAR +
@@ -2251,21 +2256,70 @@ export class CnisAnalysisService {
       age;
 
     if (currentPoints >= requiredPoints) {
-      return new Date();
+      // Encontrar quando atingiu, voltando mês a mês
+      let cursor = new Date(today.getFullYear(), today.getMonth(), 1);
+      let tempAge = age;
+      let tempContributionYears =
+        totals.years +
+        totals.months / this.MONTHS_IN_YEAR +
+        totals.days / this.DAYS_IN_YEAR;
+
+      const birthMonth =
+        (today.getMonth() - (Math.floor(age * 12) % 12) + 12) % 12;
+
+      while (true) {
+        // Reverte um mês
+        cursor.setMonth(cursor.getMonth() - 1);
+
+        // Recalcula contribuição
+        tempContributionYears -= 1 / 12;
+
+        // Recalcula idade somente se retroceder do pós-aniversário para o pré-aniversário
+        if (cursor.getMonth() === birthMonth && cursor.getDate() === 1) {
+          tempAge -= 1;
+        }
+
+        const points = tempContributionYears + tempAge;
+        if (points < requiredPoints) {
+          // Atingiu no mês seguinte
+          cursor.setMonth(cursor.getMonth() + 1);
+          return cursor;
+        }
+
+        if (cursor.getFullYear() < 1950) return null;
+      }
     }
 
-    let tempPoints = currentPoints;
-    let cursor = new Date();
+    // Caso ainda não tenha atingido, simula avanço mês a mês
+    let cursor = new Date(today.getFullYear(), today.getMonth(), 1);
+    let tempAge = age;
+    let tempContributionYears =
+      totals.years +
+      totals.months / this.MONTHS_IN_YEAR +
+      totals.days / this.DAYS_IN_YEAR;
 
-    const monthlyIncrease = 2 / this.MONTHS_IN_YEAR;
+    const birthDate = new Date(
+      today.getFullYear() - age,
+      today.getMonth(),
+      today.getDate(),
+    );
 
-    while (tempPoints < requiredPoints) {
-      cursor = new Date(
-        cursor.getFullYear(),
-        cursor.getMonth() + 1,
-        cursor.getDate(),
-      );
-      tempPoints += monthlyIncrease;
+    while (tempContributionYears + tempAge < requiredPoints) {
+      // Avança um mês
+      cursor.setMonth(cursor.getMonth() + 1);
+
+      // Aumenta contribuição
+      tempContributionYears += 1 / 12;
+
+      // Aumenta idade no aniversário
+      if (
+        cursor.getMonth() === birthDate.getMonth() &&
+        cursor.getDate() === birthDate.getDate()
+      ) {
+        tempAge += 1;
+      }
+
+      if (cursor.getFullYear() > 2050) break;
     }
 
     return cursor;
@@ -2286,7 +2340,9 @@ export class CnisAnalysisService {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!dataInicio) return;
+      if (!dataInicio) {
+        return;
+      }
 
       if (!dataFim || dataFim > this.REFORMA_DATE) {
         dataFim = this.REFORMA_DATE;
@@ -2454,7 +2510,9 @@ export class CnisAnalysisService {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!dataInicio) return;
+      if (!dataInicio) {
+        return;
+      }
 
       if (!dataFim || dataFim > CUTOFF_DATE) {
         dataFim = CUTOFF_DATE;
@@ -2588,30 +2646,35 @@ export class CnisAnalysisService {
     const MAX_POINTS_WOMEN = 100;
 
     const requiredContributionYears = this.getRequiredContributionAge(gender);
+
     const basePoints = gender === 'F' ? BASE_POINTS_WOMEN : BASE_POINTS_MEN;
     const maxPoints = gender === 'F' ? MAX_POINTS_WOMEN : MAX_POINTS_MEN;
 
-    const calculatedTotals = this.calculateTotals(data);
-
+    const totals = this.calculateTotals(data);
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const currentYear = new Date().getFullYear();
-    const year2020 = 2020;
-
-    const yearsSince2020 = Math.max(0, currentYear - year2020);
-    let requiredPoints = basePoints + yearsSince2020;
-    if (requiredPoints > maxPoints) {
-      requiredPoints = maxPoints;
-    }
+    const requiredPoints = Math.min(
+      basePoints + Math.max(0, currentYear - 2020),
+      maxPoints,
+    );
 
     const pontos = this.calculatePontos(age, data);
-    const contributionRequirementDate =
-      calculatedTotals.totalInYears >= requiredContributionYears
-        ? this.calculateContributionRequirementDate(
-            data,
-            requiredContributionYears,
-          )
-        : null;
+
+    const meetsContributionRequirement =
+      totals.totalInYears >= requiredContributionYears;
+
+    const meetsCarenciaRequirement =
+      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
+
+    const meetsPointsRequirement = pontos >= requiredPoints;
+
+    const contributionRequirementDate = meetsContributionRequirement
+      ? this.calculateContributionRequirementDate(
+          data,
+          requiredContributionYears,
+        )
+      : null;
 
     const carenciaRequirementDate = this.calculateCarenciaRequirementDate(
       data,
@@ -2619,27 +2682,19 @@ export class CnisAnalysisService {
     );
 
     const pointsRequirementDate = this.calculatePointsRequirementDate(
-      calculatedTotals,
+      totals,
       age,
       requiredPoints,
     );
 
     const actualDate = new Date();
 
-    const meetsContributionRequirement =
-      calculatedTotals.totalInYears >= requiredContributionYears;
-
-    const meetsCarenciaRequirement =
-      totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
-
-    const meetsPointsRequirement = pontos >= requiredPoints;
-
     const monthsToContribution = meetsContributionRequirement
       ? 0
       : this.monthsRemainingForContribution(
-          calculatedTotals.years,
-          calculatedTotals.months,
-          calculatedTotals.days,
+          totals.years,
+          totals.months,
+          totals.days,
           requiredContributionYears,
         );
 
@@ -2668,18 +2723,25 @@ export class CnisAnalysisService {
       actualDate.getDate(),
     );
 
-    const dates = [
-      contributionRequirementDate,
-      carenciaRequirementDate,
-      pointsRequirementDate,
-    ].filter((d): d is Date => d instanceof Date);
-
-    const eligibilityDate =
-      meetsCarenciaRequirement &&
+    const allRequirementsMet =
       meetsContributionRequirement &&
-      meetsPointsRequirement
-        ? new Date(Math.max(...dates.map((d) => d.getTime())))
-        : null;
+      meetsCarenciaRequirement &&
+      meetsPointsRequirement;
+
+    let eligibilityDate: Date | null = null;
+
+    if (allRequirementsMet) {
+      const dates = [
+        contributionRequirementDate,
+        carenciaRequirementDate,
+        pointsRequirementDate,
+      ].filter((d): d is Date => d instanceof Date);
+
+      eligibilityDate =
+        dates.length > 0
+          ? new Date(Math.max(...dates.map((d) => d.getTime())))
+          : null;
+    }
 
     const finalProjectedFulfillmentDate = eligibilityDate
       ? null
@@ -2687,7 +2749,7 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 15',
-      totalContributionYears: calculatedTotals.totalInYears,
+      totalContributionYears: totals.totalInYears,
       totalCarenciaMonths,
       points: pontos,
       age,
@@ -2906,7 +2968,9 @@ export class CnisAnalysisService {
     const yearsSince2020 = Math.max(0, currentYear - YEARS_INCREASE_START);
 
     let requiredAge = baseAge + yearsSince2020 * PEDAGIO_PERCENTAGE;
-    if (requiredAge > maxAge) requiredAge = maxAge;
+    if (requiredAge > maxAge) {
+      requiredAge = maxAge;
+    }
 
     const meetsContributionRequirement =
       totalContributionDecimal >= requiredContributionYears;
@@ -2932,15 +2996,21 @@ export class CnisAnalysisService {
       REQUIRED_CARENCIA_MONTHS,
     );
 
-    const ageTime = ageRequirementDate ? ageRequirementDate.getTime() : 0;
-    const contributionTime = contributionRequirementDate?.getTime() ?? 0;
-    const carenciaTime = carenciaRequirementDate?.getTime() ?? 0;
-
     const eligibilityDate =
       meetsAgeRequirement &&
       meetsContributionRequirement &&
       meetsCarenciaRequirement
-        ? new Date(Math.max(ageTime, contributionTime, carenciaTime))
+        ? (() => {
+            const dates = [
+              ageRequirementDate,
+              contributionRequirementDate,
+              carenciaRequirementDate,
+            ].filter((d): d is Date => d instanceof Date);
+
+            return dates.length > 0
+              ? new Date(Math.max(...dates.map((d) => d.getTime())))
+              : null;
+          })()
         : null;
 
     const monthsToContribution = meetsContributionRequirement
@@ -3107,16 +3177,27 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     age: number,
+    birthDate?: Date,
   ): AnalysisServiceInterface {
-    const existPeriodoSeguradoEspecial = data.some(
+    if (!birthDate) {
+      throw new Error('birthDate is required for this calculation.');
+    }
+
+    const REQUIRED_CARENCIA_MONTHS = 180;
+    const REQUIRED_AGE_MEN = 65;
+    const REQUIRED_AGE_WOMEN = 60;
+
+    const cutoff = this.CUTOFF_DATE;
+    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+
+    const hasSeguradoEspecial = data.some(
       (item) =>
         item.origem === 'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' &&
         typeof item.tipo === 'string' &&
-        item.tipo !== null &&
-        item.tipo !== undefined &&
         item.tipo.toUpperCase() === 'SEGURADO ESPECIAL',
     );
-    if (!existPeriodoSeguradoEspecial) {
+
+    if (!hasSeguradoEspecial) {
       return {
         type: 'Aposentadoria por Idade Híbrida com Direito Adquirido',
         age,
@@ -3133,25 +3214,16 @@ export class CnisAnalysisService {
       };
     }
 
-    const REQUIRED_CARENCIA_MONTHS = 180;
-    const REQUIRED_AGE_MEN = 65;
-    const REQUIRED_AGE_WOMEN = 60;
-
-    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
-
+    // Ajuste dos períodos ao cutoff
     data.forEach((item) => {
-      const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
-      let dataFim = this.toDate(item.validContributionTime?.dataFim);
+      const inicio = this.toDate(item.validContributionTime?.dataInicio);
+      let fim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!dataInicio) {
-        return;
-      }
+      if (!inicio) return;
 
-      if (!dataFim || dataFim > this.CUTOFF_DATE) {
-        dataFim = this.CUTOFF_DATE;
-      }
+      if (!fim || fim > cutoff) fim = cutoff;
 
-      if (dataInicio >= this.CUTOFF_DATE) {
+      if (inicio >= cutoff) {
         item.validContributionTime = {
           dataInicio: null,
           dataFim: null,
@@ -3163,11 +3235,11 @@ export class CnisAnalysisService {
         return;
       }
 
-      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+      const { years, months, days } = diffYmdInclusive(inicio, fim);
 
       item.validContributionTime = {
-        dataInicio: dataInicio,
-        dataFim: dataFim,
+        dataInicio: inicio,
+        dataFim: fim,
         abreviado: `${years}a ${months}m ${days}d`,
         dias: days,
         meses: months,
@@ -3175,10 +3247,7 @@ export class CnisAnalysisService {
       };
     });
 
-    const totalCarenciaMonths = this.calculateTotalCarencia(
-      data,
-      this.CUTOFF_DATE,
-    );
+    const totalCarenciaMonths = this.calculateTotalCarencia(data, cutoff);
 
     const meetsAgeRequirement = age >= requiredAge;
     const meetsCarenciaRequirement =
@@ -3186,34 +3255,22 @@ export class CnisAnalysisService {
 
     const isEligible = meetsAgeRequirement && meetsCarenciaRequirement;
 
-    const projectedFulfillmentDate = null;
+    const ageCompletionDate = new Date(
+      birthDate.getFullYear() + requiredAge,
+      birthDate.getMonth(),
+      birthDate.getDate(),
+    );
 
-    let ageHitDate: Date | null = null;
-    let carenciaHitDate: Date | null = null;
-
-    if (meetsAgeRequirement) {
-      const hoje = new Date();
-      const anosQueFaltavam = meetsAgeRequirement ? 0 : requiredAge - age;
-      const d = new Date(hoje);
-      d.setFullYear(d.getFullYear() - anosQueFaltavam);
-      ageHitDate = d;
-    }
-
-    if (meetsCarenciaRequirement) {
-      const hoje = new Date();
-      const mesesQueFaltavam = meetsCarenciaRequirement
-        ? 0
-        : REQUIRED_CARENCIA_MONTHS - totalCarenciaMonths;
-      const d = new Date(hoje);
-      d.setMonth(d.getMonth() - mesesQueFaltavam);
-      carenciaHitDate = d;
-    }
+    // Carência é sempre até a data de corte
+    const carenciaCompletionDate = cutoff;
 
     let eligibilityDate: Date | null = null;
 
-    if (ageHitDate && carenciaHitDate) {
+    if (isEligible) {
       eligibilityDate =
-        ageHitDate > carenciaHitDate ? ageHitDate : carenciaHitDate;
+        ageCompletionDate > carenciaCompletionDate
+          ? ageCompletionDate
+          : carenciaCompletionDate;
     }
 
     return {
@@ -3221,15 +3278,15 @@ export class CnisAnalysisService {
       age,
       totalCarenciaMonths,
       requirements: {
-        meetsAgeRequirement,
-        meetsCarenciaRequirement,
         requiredAge,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        meetsAgeRequirement,
+        meetsCarenciaRequirement,
       },
       eligibility: {
         isEligible,
-        projectedFulfillmentDate,
         eligibilityDate,
+        projectedFulfillmentDate: null,
       },
     };
   }
@@ -3384,8 +3441,8 @@ export class CnisAnalysisService {
       monthsToCarencia,
     );
 
-    const projectedFulfillmentDate = allRequirementsMet
-      ? eligibilityDate
+    const projectedFulfillmentDate = eligibilityDate
+      ? null
       : new Date(
           now.getFullYear(),
           now.getMonth() + monthsToFulfill,
