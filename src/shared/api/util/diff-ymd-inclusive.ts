@@ -47,7 +47,7 @@ export function diffYmdInclusive(
   // substituição do magic number 1000 * 60 * 60 * 24
   const msPerDay: TimeUnitType = Time.Day;
 
-  const toUtcDay = (d: Date) =>
+  const toUtcDay = (d: Date): Date =>
     new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const s = toUtcDay(start);
   const e = toUtcDay(end);
