@@ -2423,6 +2423,8 @@ export class CnisAnalysisService {
         meetsContributionRequirement,
         meetsCarenciaRequirement,
         meetsPointsRequirement,
+        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        requiredContributionYears,
         requiredPoints,
       },
       eligibility: {
@@ -2852,6 +2854,7 @@ export class CnisAnalysisService {
       requirements: {
         requiredAge,
         requiredContributionYears: requiredContribution,
+        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         meetsAgeRequirement,
         meetsContributionRequirement,
         meetsCarenciaRequirement,
@@ -3088,7 +3091,7 @@ export class CnisAnalysisService {
       totalCarenciaMonths,
       requirements: {
         requiredContributionYears: requiredContribution,
-
+        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         meetsContributionRequirement: meetsContributionTimeRequirement,
         meetsCarenciaRequirement,
       },
@@ -3220,6 +3223,8 @@ export class CnisAnalysisService {
       requirements: {
         meetsAgeRequirement,
         meetsCarenciaRequirement,
+        requiredAge,
+        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
       },
       eligibility: {
         isEligible,
@@ -3477,17 +3482,11 @@ export class CnisAnalysisService {
       };
     }
 
-    const totalContribution = this.convertToDecimalYears(
-      calculatedTotals.years,
-      calculatedTotals.months,
-      calculatedTotals.days,
-    );
-
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const meetsAgeRequirement = age >= requiredAgeAdjusted;
     const meetsContributionRequirement =
-      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+      calculatedTotals.totalInYears >= REQUIRED_CONTRIBUTION_YEARS;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
@@ -3582,7 +3581,7 @@ export class CnisAnalysisService {
     const monthsToContribution = meetsContributionRequirement
       ? 0
       : Math.ceil(
-          (REQUIRED_CONTRIBUTION_YEARS - totalContribution) *
+          (REQUIRED_CONTRIBUTION_YEARS - calculatedTotals.totalInYears) *
             this.MONTHS_IN_YEAR,
         );
 
@@ -3632,7 +3631,7 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
-      totalContributionYears: totalContribution,
+      totalContributionYears: calculatedTotals.totalInYears,
       totalCarenciaMonths,
       age,
       requirements: {
