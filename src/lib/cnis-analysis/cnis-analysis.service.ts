@@ -755,39 +755,6 @@ export class CnisAnalysisService {
     return Number(decimalYears.toFixed(6));
   }
 
-  private calculateTotals(consolidado: ConsolidadoRelationInterface[]): {
-    years: number;
-    months: number;
-    days: number;
-    carencia: number;
-  } {
-    // Aggregate precisely by converting each contribution period to days,
-    // summing, then converting the grand total back to years/months/days.
-    const carencia = this.calculateTotalCarencia(consolidado);
-
-    const daysPerYear = this.DAYS_IN_YEAR;
-    const daysPerMonth = this.DAYS_IN_MONTH;
-
-    let totalDays = 0;
-
-    for (const cur of consolidado) {
-      const v = cur.validContributionTime;
-      if (!v) continue;
-      const yrs = v.anos ?? 0;
-      const mons = v.meses ?? 0;
-      const dys = v.dias ?? 0;
-
-      totalDays += yrs * daysPerYear + mons * daysPerMonth + dys;
-    }
-
-    const years = Math.floor(totalDays / daysPerYear);
-    let remainderDays = totalDays - years * daysPerYear;
-    const months = Math.floor(remainderDays / daysPerMonth);
-    remainderDays = Math.round(remainderDays - months * daysPerMonth);
-
-    return { years, months, days: remainderDays, carencia };
-  }
-
   private daysBetween(dateStart?: Date | null, dateEnd?: Date | null): number {
     const millisecondsInSecond = 1000;
     const secondsInMinute = 60;
@@ -1784,7 +1751,6 @@ export class CnisAnalysisService {
         termoInicialContagem.getMonth() + periodoDeGracaMeses + 2,
         DECIMO_SEXTO_DIA,
       );
-
       const qualidadeMantida = dataInicioProximo <= dataFinalAdministrativa;
 
       const register: ManutencaoInterface = {
@@ -2129,15 +2095,38 @@ export class CnisAnalysisService {
     };
   }
 
-  private calculatePontos(idade: number, data: ConsolidadoRelationInterface[]) {
-    const calculatedTotals = this.calculateTotals(data);
-    const contribution = this.convertToDecimalYears(
-      calculatedTotals.years,
-      calculatedTotals.months,
-      calculatedTotals.days,
+  private calculateTotals(data: ConsolidadoRelationInterface[]) {
+    const MONTHS_IN_YEAR = 12;
+    const DAYS_IN_YEAR = 365.25;
+
+    const years = data.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.anos ?? 0),
+      0,
     );
 
-    const pontos = idade + contribution;
+    const months = data.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.meses ?? 0),
+      0,
+    );
+
+    const days = data.reduce(
+      (acc, cur) => acc + (cur.validContributionTime?.dias ?? 0),
+      0,
+    );
+
+    const carencia = data.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
+
+    const totalInYears = Math.ceil(
+      years + months / MONTHS_IN_YEAR + days / DAYS_IN_YEAR,
+    );
+
+    return { years, months, days, totalInYears, carencia };
+  }
+
+  private calculatePontos(idade: number, data: ConsolidadoRelationInterface[]) {
+    const calculatedTotals = this.calculateTotals(data);
+
+    const pontos = idade + calculatedTotals.totalInYears;
 
     return pontos;
   }
@@ -2327,17 +2316,12 @@ export class CnisAnalysisService {
     });
 
     const totals = this.calculateTotals(data);
-    const totalContributionDecimal = this.convertToDecimalYears(
-      totals.years,
-      totals.months,
-      totals.days,
-    );
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
     const requiredPoints = gender === 'F' ? POINTS_WOMEN : POINTS_MEN;
 
     const meetsContributionRequirement =
-      totalContributionDecimal >= requiredContributionYears;
+      totals.totalInYears >= requiredContributionYears;
 
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
@@ -2397,7 +2381,7 @@ export class CnisAnalysisService {
     const monthsToContribution = meetsContributionRequirement
       ? 0
       : Math.ceil(
-          (requiredContributionYears - totalContributionDecimal) *
+          (requiredContributionYears - totals.totalInYears) *
             this.MONTHS_IN_YEAR,
         );
 
@@ -2433,11 +2417,6 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Tempo de Contribuição com Direito Adquirido',
-      totalContributionYears: this.convertToDecimalYears(
-        totals.years,
-        totals.months,
-        totals.days,
-      ),
       totalCarenciaMonths,
       points,
       requirements: {
@@ -2611,11 +2590,6 @@ export class CnisAnalysisService {
     const maxPoints = gender === 'F' ? MAX_POINTS_WOMEN : MAX_POINTS_MEN;
 
     const calculatedTotals = this.calculateTotals(data);
-    const totalContribution = this.convertToDecimalYears(
-      calculatedTotals.years,
-      calculatedTotals.months,
-      calculatedTotals.days,
-    );
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
@@ -2628,14 +2602,9 @@ export class CnisAnalysisService {
       requiredPoints = maxPoints;
     }
 
-    const pontos =
-      calculatedTotals.years +
-      calculatedTotals.months / this.MONTHS_IN_YEAR +
-      calculatedTotals.days / this.DAYS_IN_YEAR +
-      age;
-
+    const pontos = this.calculatePontos(age, data);
     const contributionRequirementDate =
-      totalContribution >= requiredContributionYears
+      calculatedTotals.totalInYears >= requiredContributionYears
         ? this.calculateContributionRequirementDate(
             data,
             requiredContributionYears,
@@ -2656,7 +2625,7 @@ export class CnisAnalysisService {
     const actualDate = new Date();
 
     const meetsContributionRequirement =
-      totalContribution >= requiredContributionYears;
+      calculatedTotals.totalInYears >= requiredContributionYears;
 
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
@@ -2716,9 +2685,10 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 15',
-      totalContributionYears: totalContribution,
+      totalContributionYears: calculatedTotals.totalInYears,
       totalCarenciaMonths,
       points: pontos,
+      age,
 
       requirements: {
         requiredContributionYears,
@@ -3005,6 +2975,7 @@ export class CnisAnalysisService {
       type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 16',
       totalContributionYears: totalContributionDecimal,
       totalCarenciaMonths: totals.carencia,
+      age,
 
       requirements: {
         requiredContributionYears,
@@ -3040,7 +3011,6 @@ export class CnisAnalysisService {
     const requiredContribution = this.getRequiredContributionAge(gender);
 
     const totalContribution = this.totalContributionType(consolidadoResumido);
-    console.log('totalContribution', totalContribution);
     const pedagioData = this.calculateTempoPedagio(
       consolidadoResumido,
       gender,
@@ -3425,6 +3395,7 @@ export class CnisAnalysisService {
       type: 'Aposentadoria por Idade Urbana - Regra de Transição - Emenda 103 art. 18',
       totalContributionYears: totalContribution,
       totalCarenciaMonths,
+      age,
       requirements: {
         requiredAge,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
@@ -3489,6 +3460,7 @@ export class CnisAnalysisService {
         type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
         totalContributionYears: 0,
         totalCarenciaMonths: 0,
+        age,
         requirements: {
           requiredAge: requiredAgeAdjusted,
           requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
@@ -3662,6 +3634,7 @@ export class CnisAnalysisService {
       type: 'Aposentadoria por Idade Híbrida - Regra de Transição - Emenda 103 art. 18',
       totalContributionYears: totalContribution,
       totalCarenciaMonths,
+      age,
       requirements: {
         requiredAge: requiredAgeAdjusted,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
@@ -3820,7 +3793,7 @@ export class CnisAnalysisService {
       type: 'Aposentadoria Programada Comum - Emenda 103 art. 19',
       totalContributionYears: totalContribution,
       totalCarenciaMonths,
-
+      age,
       requirements: {
         requiredAge,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
