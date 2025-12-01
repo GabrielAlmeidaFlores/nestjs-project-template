@@ -36,6 +36,7 @@ import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
+import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
@@ -58,6 +59,7 @@ import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-cas
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
+import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -93,6 +95,7 @@ export class AnalysisToolController {
     private readonly downloadLegalPleadingSimplifiedAnalysisUseCase: DownloadLegalPleadingSimplifiedAnalysisUseCase,
     private readonly downloadLegalPleadingCompleteAnalysisUseCase: DownloadLegalPleadingCompleteAnalysisUseCase,
     private readonly updateLegalPleadingCompleteAnalysisUseCase: UpdateLegalPleadingCompleteAnalysisUseCase,
+    private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
     private readonly createCnisFastAnalysisUseCaseV2: CreateCnisFastAnalysisUseCaseV2,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
@@ -338,6 +341,35 @@ export class AnalysisToolController {
       organizationSessionData,
       legalPleadingId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar o status da peça processual para completo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'legal-pleading/:legalPleadingId/complete',
+      method: RequestMethod.PATCH,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Status de peça processual atualizado com sucesso',
+      type: UpdateLegalPleadingStatusToCompleteResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateLegalPleadingStatusToComplete(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+  ): Promise<UpdateLegalPleadingStatusToCompleteResponseDto> {
+    return await this.updateLegalPleadingToCompleteStatusUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
     );
   }
 

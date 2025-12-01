@@ -34,7 +34,6 @@ describe(GetAnalysisToolClientUseCase.name, () => {
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
       findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
-      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
       findOneByEmailAndOrganizationId: jest.fn(),
       findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
@@ -154,7 +153,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar um cliente com contagens e URLs de perfil assinadas', async () => {
+  it('should return client with counts and signed profile URLs', async () => {
     const orgSessionData = buildOrganizationSessionData();
     const clientId = new AnalysisToolClientId();
     const sessionModel = new SessionDataModel();
@@ -217,7 +216,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     );
   });
 
-  it('deve retornar um cliente sem URLs de perfil se elas não existirem', async () => {
+  it('should return client without profile URLs when they do not exist', async () => {
     const orgSessionData = buildOrganizationSessionData();
     const sessionModel = new SessionDataModel();
     const clientId = new AnalysisToolClientId();
@@ -248,7 +247,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     expect(result.updatedBy.profilePicture).toBeUndefined();
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError se o cliente não for encontrado', async () => {
+  it('should throw AnalysisToolClientNotFoundError when client is not found', async () => {
     const orgSessionData = buildOrganizationSessionData();
     const clientId = new AnalysisToolClientId();
     const sessionModel = new SessionDataModel();
