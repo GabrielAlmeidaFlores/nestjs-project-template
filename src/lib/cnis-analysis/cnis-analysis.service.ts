@@ -1070,6 +1070,7 @@ export class CnisAnalysisService {
         const isConcomitante = concomitanciaRelations.find(
           (item) => item.seq === seq,
         )?.isConcomitante;
+        console.log('isConcomitante seq', seq, isConcomitante);
         return {
           seq,
           contributionTime,
@@ -2098,10 +2099,13 @@ export class CnisAnalysisService {
     };
   }
 
-  private calculateTotals(data: ConsolidadoRelationInterface[]) {
-    const MONTHS_IN_YEAR = 12;
-    const DAYS_IN_YEAR = 365.25;
-
+  private calculateTotals(data: ConsolidadoRelationInterface[]): {
+    years: number;
+    months: number;
+    days: number;
+    totalInYears: number;
+    carencia: number;
+  } {
     const years = data.reduce((acc, cur) => {
       const anos = cur.validContributionTime?.anos ?? 0;
       return acc + anos;
@@ -2120,7 +2124,7 @@ export class CnisAnalysisService {
     const carencia = data.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
 
     const totalInYears = Math.ceil(
-      years + months / MONTHS_IN_YEAR + days / DAYS_IN_YEAR,
+      years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR,
     );
 
     return { years, months, days, totalInYears, carencia };
@@ -2257,7 +2261,7 @@ export class CnisAnalysisService {
 
     if (currentPoints >= requiredPoints) {
       // Encontrar quando atingiu, voltando mês a mês
-      let cursor = new Date(today.getFullYear(), today.getMonth(), 1);
+      const cursor = new Date(today.getFullYear(), today.getMonth(), 1);
       let tempAge = age;
       let tempContributionYears =
         totals.years +
@@ -2286,12 +2290,14 @@ export class CnisAnalysisService {
           return cursor;
         }
 
-        if (cursor.getFullYear() < 1950) return null;
+        if (cursor.getFullYear() < 1950) {
+          return null;
+        }
       }
     }
 
     // Caso ainda não tenha atingido, simula avanço mês a mês
-    let cursor = new Date(today.getFullYear(), today.getMonth(), 1);
+    const cursor = new Date(today.getFullYear(), today.getMonth(), 1);
     let tempAge = age;
     let tempContributionYears =
       totals.years +
@@ -2319,7 +2325,9 @@ export class CnisAnalysisService {
         tempAge += 1;
       }
 
-      if (cursor.getFullYear() > 2050) break;
+      if (cursor.getFullYear() > 2050) {
+        break;
+      }
     }
 
     return cursor;
@@ -3219,9 +3227,13 @@ export class CnisAnalysisService {
       const inicio = this.toDate(item.validContributionTime?.dataInicio);
       let fim = this.toDate(item.validContributionTime?.dataFim);
 
-      if (!inicio) return;
+      if (!inicio) {
+        return;
+      }
 
-      if (!fim || fim > cutoff) fim = cutoff;
+      if (!fim || fim > cutoff) {
+        fim = cutoff;
+      }
 
       if (inicio >= cutoff) {
         item.validContributionTime = {
