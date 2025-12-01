@@ -187,7 +187,6 @@ describe(AuthIdentitySignInUseCase.name, () => {
   });
 
   it('missing identifier throws WrongSignInCredentialsError', async () => {
-    // Arrange
     const dto = AuthIdentitySignInRequestDto.build({
       password: 'some-password',
       mfaCode: '123456',

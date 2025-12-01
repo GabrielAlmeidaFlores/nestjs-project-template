@@ -3,36 +3,31 @@ import { Test } from '@nestjs/testing';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
-import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
-import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
-import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
-import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
-import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
+import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
-import { DeleteLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/delete-legal-pleading.response';
+import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
+import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DeleteLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/delete-legal-pleading.use-case';
+import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
+import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
+import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
-describe(DeleteLegalPleadingUseCase.name, () => {
-  let useCase: DeleteLegalPleadingUseCase;
+describe(UpdateLegalPleadingStatusToCompleteUseCase.name, () => {
+  let useCase: UpdateLegalPleadingStatusToCompleteUseCase;
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
@@ -40,24 +35,24 @@ describe(DeleteLegalPleadingUseCase.name, () => {
       findOneByOrganizationMemberId: jest.fn(),
       findOneByCustomerIdAndOrganizationId: jest.fn(),
       findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
-    };
+    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
       findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
         jest.fn(),
-      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-      countByOrganizationIdAndAuthIdentityId: jest.fn(),
-      listByOrganizationIdAndAuthIdentityId: jest.fn(),
-      countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
-    };
+      findByAnalysisToolClientAndOrganizationId: jest.fn(),
+      countByOrganizationId: jest.fn(),
+      listByOrganizationId: jest.fn(),
+      countByLegalPleadingIdAndOrganizationId: jest.fn(),
+    } as unknown as jest.Mocked<LegalPleadingQueryRepositoryGateway>;
 
   const legalPleadingCommandRepositoryGateway: jest.Mocked<LegalPleadingCommandRepositoryGateway> =
     {
-      deleteLegalPleading: jest.fn(),
-      createLegalPleading: jest.fn(),
       updateLegalPleading: jest.fn(),
-    };
+      createLegalPleading: jest.fn(),
+      deleteLegalPleading: jest.fn(),
+    } as unknown as jest.Mocked<LegalPleadingCommandRepositoryGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
@@ -81,71 +76,26 @@ describe(DeleteLegalPleadingUseCase.name, () => {
       id: new OrganizationMemberId(),
     }) as unknown as GetOrganizationMemberQueryResult;
 
-  const buildLegalPleadingQueryResult =
-    (): GetLegalPleadingWithRelationsQueryResult => {
-      const responsible =
-        GetOrganizationMemberWithCustomerRelationQueryResult.build({
-          id: new OrganizationMemberId(),
-          owner: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-          customer: GetCustomerQueryResult.build({
-            id: new CustomerId(),
-            name: 'Test Customer',
-            profilePicture: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            deletedAt: null,
-          }),
-        });
-
-      const client = GetAnalysisToolClientWithRelationsQueryResult.build({
-        id: new AnalysisToolClientId(),
-        name: 'Test Client',
-        federalDocument: null,
-        email: null,
-        inssPassword: null,
-        phoneNumber: null,
-        birthDate: null,
-        gender: null,
-        clientType: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-        analysisToolClientInssBenefit: [],
-        analysisToolClientLegalProceeding: [],
-        createdBy: responsible,
-        updatedBy: responsible,
-      });
-
-      return GetLegalPleadingWithRelationsQueryResult.build({
-        id: new LegalPleadingId(),
-        code: new LegalPleadingCode(1),
-        status: AnalysisStatusEnum.IN_PROGRESS,
-        statementOfFacts: null,
-        additionalComments: null,
-        securitySystem: LegalPleadingSocialSecuritySystemEnum.RGPS,
-        benefitType: LegalPleadingBenefitTypeEnum.ACCIDENT_BENEFIT,
-        petitionType: LegalPleadingPetitionTypeEnum.INITIAL_COMPLAINT,
-        benefitNumber: null,
-        applicationSubmissionDate: null,
-        benefitTerminationDate: null,
-        benefitInitialMonthlyIncome: null,
-        benefitCurrentMonthlyIncome: null,
-        socialSecurityObjective: null,
-        legalPleadingWritOfMandamusObjective: null,
-        analysisToolClient: client,
-        legalPleadingDocument: [],
-        legalPleadingAddress: null,
-        legalPleadingResult: null,
-        createdBy: responsible,
-        updatedBy: responsible,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      });
-    };
+  const buildLegalPleadingQueryResult = (
+    id: LegalPleadingId,
+    currentStatus: AnalysisStatusEnum,
+  ): GetLegalPleadingWithRelationsQueryResult =>
+    ({
+      id: id,
+      status: currentStatus,
+      analysisToolClient: {
+        createdBy: new OrganizationMemberId(),
+        updatedBy: new OrganizationMemberId(),
+      } as AnalysisToolClientEntity,
+      createdBy: {
+        id: new Guid(),
+      } as GetOrganizationMemberWithCustomerRelationQueryResult,
+      updatedBy: {
+        id: new Guid(),
+      } as GetOrganizationMemberWithCustomerRelationQueryResult,
+      legalPleadingAddress: null,
+      legalPleadingResult: null,
+    }) as unknown as GetLegalPleadingWithRelationsQueryResult;
 
   const buildTransaction = (): jest.Mocked<TransactionOutputModel> =>
     new TransactionOutputModel(
@@ -156,7 +106,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        DeleteLegalPleadingUseCase,
+        UpdateLegalPleadingStatusToCompleteUseCase,
         {
           provide: OrganizationMemberQueryRepositoryGateway,
           useValue: organizationMemberQueryRepositoryGateway,
@@ -166,26 +116,29 @@ describe(DeleteLegalPleadingUseCase.name, () => {
           useValue: legalPleadingQueryRepositoryGateway,
         },
         {
-          provide: LegalPleadingCommandRepositoryGateway,
-          useValue: legalPleadingCommandRepositoryGateway,
-        },
-        {
           provide: BaseTransactionRepositoryGateway,
           useValue: baseTransactionRepositoryGateway,
+        },
+        {
+          provide: LegalPleadingCommandRepositoryGateway,
+          useValue: legalPleadingCommandRepositoryGateway,
         },
       ],
     }).compile();
 
-    useCase = module.get(DeleteLegalPleadingUseCase);
+    useCase = module.get(UpdateLegalPleadingStatusToCompleteUseCase);
     jest.clearAllMocks();
   });
 
-  it('should delete legal pleading successfully', async () => {
+  it('should update legal pleading status to COMPLETED and commit transaction', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
     const organizationMember = buildOrganizationMember();
-    const legalPleadingResult = buildLegalPleadingQueryResult();
+    const legalPleadingResult = buildLegalPleadingQueryResult(
+      legalPleadingId,
+      AnalysisStatusEnum.IN_PROGRESS,
+    );
     const transaction = buildTransaction();
 
     organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
@@ -194,7 +147,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockResolvedValueOnce(
       legalPleadingResult,
     );
-    legalPleadingCommandRepositoryGateway.deleteLegalPleading.mockReturnValue(
+    legalPleadingCommandRepositoryGateway.updateLegalPleading.mockReturnValue(
       {} as TransactionType,
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
@@ -205,30 +158,32 @@ describe(DeleteLegalPleadingUseCase.name, () => {
       legalPleadingId,
     );
 
-    expect(result).toBeInstanceOf(DeleteLegalPleadingResponseDto);
-    expect(result.legalPleadingId).toBe(legalPleadingResult.id);
-
-    expect(
-      legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail,
-    ).toHaveBeenCalledWith(
-      legalPleadingId,
-      orgSessionData.organizationId,
-      sessionData.authIdentityId,
-      OrganizationMemberNotFoundError,
+    expect(result).toBeInstanceOf(
+      UpdateLegalPleadingStatusToCompleteResponseDto,
     );
+    expect(result.legalPleadingId).toEqual(legalPleadingId);
 
     expect(
-      legalPleadingCommandRepositoryGateway.deleteLegalPleading,
+      legalPleadingCommandRepositoryGateway.updateLegalPleading,
     ).toHaveBeenCalledTimes(1);
-    expect(
-      legalPleadingCommandRepositoryGateway.deleteLegalPleading,
-    ).toHaveBeenCalledWith(legalPleadingResult.id, organizationMember.id);
+
+    const updateCall =
+      legalPleadingCommandRepositoryGateway.updateLegalPleading.mock.calls[0];
+
+    expect(updateCall).toBeDefined();
+
+    const [capturedId, capturedEntity] = updateCall as [
+      LegalPleadingId,
+      LegalPleadingEntity,
+    ];
+
+    expect(capturedId).toBe(legalPleadingId);
+
+    expect(capturedEntity).toBeInstanceOf(LegalPleadingEntity);
+    expect(capturedEntity.status).toBe(AnalysisStatusEnum.COMPLETED);
+    expect(capturedEntity.updatedBy).toBe(organizationMember.id);
 
     expect(baseTransactionRepositoryGateway.execute).toHaveBeenCalledTimes(1);
-    const [[transactions]] = baseTransactionRepositoryGateway.execute.mock
-      .calls as [[TransactionType[]]];
-    expect(transactions).toHaveLength(1);
-
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
@@ -246,7 +201,7 @@ describe(DeleteLegalPleadingUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('should throw OrganizationMemberNotFoundError when pleading is not found (configured error)', async () => {
+  it('should throw LegalPleadingNotFoundError when pleading is not found by query', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const legalPleadingId = new LegalPleadingId();
@@ -256,11 +211,11 @@ describe(DeleteLegalPleadingUseCase.name, () => {
       organizationMember,
     );
     legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail.mockRejectedValueOnce(
-      new OrganizationMemberNotFoundError(),
+      new LegalPleadingNotFoundError(),
     );
 
     await expect(
       useCase.execute(sessionData, orgSessionData, legalPleadingId),
-    ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
+    ).rejects.toBeInstanceOf(LegalPleadingNotFoundError);
   });
 });
