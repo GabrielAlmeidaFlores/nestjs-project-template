@@ -48,10 +48,14 @@ export class CnisAnalysisService {
   private readonly CUTOFF_DATE: Date;
   private readonly DAYS_IN_MONTH: number;
 
-  // Magic number constants
   private readonly REFORMA_YEAR: number;
   private readonly REFORMA_MONTH: number;
   private readonly REFORMA_DAY: number;
+  private readonly DECIMAL_PRECISION: number;
+  private readonly EIGHTY_PERCENT: number;
+  private readonly YEAR_1950: number;
+  private readonly YEAR_2020: number;
+  private readonly YEAR_2050: number;
 
   public constructor(
     @Inject(CnisProcessorGateway)
@@ -64,6 +68,11 @@ export class CnisAnalysisService {
     this.REFORMA_YEAR = 2019;
     this.REFORMA_MONTH = 10;
     this.REFORMA_DAY = 13;
+    this.DECIMAL_PRECISION = 6;
+    this.EIGHTY_PERCENT = 0.8;
+    this.YEAR_1950 = 1950;
+    this.YEAR_2020 = 2020;
+    this.YEAR_2050 = 2050;
     this.REFORMA_DATE = new Date(
       this.REFORMA_YEAR,
       this.REFORMA_MONTH,
@@ -426,7 +435,7 @@ export class CnisAnalysisService {
       }
     }
 
-    const diasDeDuracao = (s: Date | null, e: Date | null) => {
+    const diasDeDuracao = (s: Date | null, e: Date | null): number => {
       if (!s || !e) {
         return 0;
       }
@@ -499,10 +508,10 @@ export class CnisAnalysisService {
     }
 
     // processar membros do grupo: marcar principal e ajustar secundários
-    const grupoProcessado: any[] = [];
-    grupoProcessado.push(vinculoPrincipal);
+    const grupoProcessado: ConcomitanciaDetalhesInterface[] = [];
+    grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
-    const secundariosAjustados: any[] = [];
+    const secundariosAjustados: ConcomitanciaDetalhesInterface[] = [];
 
     for (const membro of group) {
       if (membro === entradaPrincipal) {
@@ -516,11 +525,11 @@ export class CnisAnalysisService {
       if (!s || !e) {
         const zero = {
           ...orig,
-          tipo: 'secundario',
+          tipo: 'secundario' as const,
           contributionTime: {
-            ...(orig.contributionTime ?? {}),
-            dataInicio: orig.contributionTime?.dataInicio,
-            dataFim: orig.contributionTime?.dataFim,
+            ...orig.contributionTime,
+            dataInicio: orig.contributionTime.dataInicio,
+            dataFim: orig.contributionTime.dataFim,
             abreviado: '0 anos 0 meses 0 dias',
             dias: 0,
             meses: 0,
@@ -531,7 +540,7 @@ export class CnisAnalysisService {
             dataInicio: s,
             dataFim: e,
           },
-        };
+        } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(zero);
         continue;
       }
@@ -543,9 +552,9 @@ export class CnisAnalysisService {
       ) {
         const zero = {
           ...orig,
-          tipo: 'secundario',
+          tipo: 'secundario' as const,
           contributionTime: {
-            ...(orig?.contributionTime ?? {}),
+            ...orig.contributionTime,
             dataInicio: s,
             dataFim: e,
             abreviado: '0 anos 0 meses 0 dias',
@@ -558,7 +567,7 @@ export class CnisAnalysisService {
             dataInicio: s,
             dataFim: e,
           },
-        };
+        } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(zero);
         continue;
       }
@@ -593,9 +602,9 @@ export class CnisAnalysisService {
         if (s.getTime() <= antesFim.getTime()) {
           const parteAntes = {
             ...orig,
-            tipo: 'secundario',
+            tipo: 'secundario' as const,
             contributionTime: {
-              ...(orig?.contributionTime ?? {}),
+              ...orig.contributionTime,
               dataInicio: s,
               dataFim: antesFim,
             },
@@ -604,16 +613,16 @@ export class CnisAnalysisService {
               dataInicio: s,
               dataFim: antesFim,
             },
-          };
+          } as ConcomitanciaDetalhesInterface;
           secundariosAjustados.push(parteAntes);
         }
         const depoisInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
         if (depoisInicio.getTime() <= e.getTime()) {
           const parteDepois = {
             ...orig,
-            tipo: 'secundario',
+            tipo: 'secundario' as const,
             contributionTime: {
-              ...(orig?.contributionTime ?? {}),
+              ...orig.contributionTime,
               dataInicio: depoisInicio,
               dataFim: e,
             },
@@ -622,15 +631,15 @@ export class CnisAnalysisService {
               dataInicio: depoisInicio,
               dataFim: e,
             },
-          };
+          } as ConcomitanciaDetalhesInterface;
           secundariosAjustados.push(parteDepois);
         }
         // marcar o original como considerado (zerado) no grupo processado
         const zero = {
           ...orig,
-          tipo: 'secundario',
+          tipo: 'secundario' as const,
           contributionTime: {
-            ...(orig?.contributionTime ?? {}),
+            ...orig.contributionTime,
             dataInicio: s,
             dataFim: e,
             abreviado: '0 anos 0 meses 0 dias',
@@ -643,7 +652,7 @@ export class CnisAnalysisService {
             dataInicio: s,
             dataFim: e,
           },
-        };
+        } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(zero);
         continue;
       }
@@ -652,9 +661,9 @@ export class CnisAnalysisService {
       if (novoInicio.getTime() <= novoFim.getTime()) {
         const ajustado = {
           ...orig,
-          tipo: 'secundario',
+          tipo: 'secundario' as const,
           contributionTime: {
-            ...(orig?.contributionTime ?? {}),
+            ...orig.contributionTime,
             dataInicio: novoInicio,
             dataFim: novoFim,
           },
@@ -663,7 +672,7 @@ export class CnisAnalysisService {
             dataInicio: novoInicio,
             dataFim: novoFim,
           },
-        };
+        } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(ajustado);
         // coletar para reprocessamento, pois pode ainda sobrepor com itens seguintes
         secundariosAjustados.push(ajustado);
@@ -671,9 +680,9 @@ export class CnisAnalysisService {
         // nada resta após truncamento -> zerado
         const zero = {
           ...orig,
-          tipo: 'secundario',
+          tipo: 'secundario' as const,
           contributionTime: {
-            ...(orig?.contributionTime ?? {}),
+            ...orig.contributionTime,
             dataInicio: s,
             dataFim: e,
             abreviado: '0 anos 0 meses 0 dias',
@@ -686,7 +695,7 @@ export class CnisAnalysisService {
             dataInicio: s,
             dataFim: e,
           },
-        };
+        } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(zero);
       }
     }
@@ -699,13 +708,17 @@ export class CnisAnalysisService {
     const restantes = items.slice(group.length).map((it) => it.original);
 
     // - mais os secundários ajustados que ainda tenham duração positiva e possam sobrepor os restantes
+
     const ajustadosParaProximaRodada = secundariosAjustados.filter((s) => {
-      const st = this.toDate(s.contributionTime?.dataInicio);
-      const en = this.toDate(s.contributionTime?.dataFim);
-      return st && en && st.getTime() <= en.getTime();
+      const st = this.toDate(s.contributionTime.dataInicio);
+      const en = this.toDate(s.contributionTime.dataFim);
+      return st !== null && en !== null && st.getTime() <= en.getTime();
     });
 
-    const proximaLista = [...ajustadosParaProximaRodada, ...restantes];
+    const proximaLista: ConcomitanciaDetalhesInterface[] = [
+      ...ajustadosParaProximaRodada,
+      ...restantes,
+    ];
 
     // recursão com o próximo conjunto
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
@@ -753,7 +766,7 @@ export class CnisAnalysisService {
     // to avoid inflating totals when summing multiple periods.
     const decimalYears =
       years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR;
-    return Number(decimalYears.toFixed(6));
+    return Number(decimalYears.toFixed(this.DECIMAL_PRECISION));
   }
 
   private daysBetween(dateStart?: Date | null, dateEnd?: Date | null): number {
@@ -1070,7 +1083,6 @@ export class CnisAnalysisService {
         const isConcomitante = concomitanciaRelations.find(
           (item) => item.seq === seq,
         )?.isConcomitante;
-        console.log('isConcomitante seq', seq, isConcomitante);
         return {
           seq,
           contributionTime,
@@ -1625,7 +1637,7 @@ export class CnisAnalysisService {
     let accMonths = 0;
     let accDays = 0;
 
-    const normalize = () => {
+    const normalize = (): void => {
       if (accDays >= this.DAYS_IN_MONTH) {
         accMonths += Math.floor(accDays / this.DAYS_IN_MONTH);
         accDays = accDays % this.DAYS_IN_MONTH;
@@ -1655,8 +1667,8 @@ export class CnisAnalysisService {
 
       if (totalDecimal >= requiredYears) {
         return (
-          (item.dataAjustada && this.toDate(item.dataAjustada.dataFim)) ||
-          this.toDate(v.dataFim) ||
+          (item.dataAjustada && this.toDate(item.dataAjustada.dataFim)) ??
+          this.toDate(v.dataFim) ??
           null
         );
       }
@@ -1967,7 +1979,7 @@ export class CnisAnalysisService {
       const fatorData = ipcaData.find(
         (f) => f.competencia === competenciaFormatted,
       );
-      const fatorCorrecao = fatorData ? fatorData?.fatorSimplificado : 1;
+      const fatorCorrecao = fatorData ? fatorData.fatorSimplificado : 1;
 
       const valorCorrigido = item.salarioAjustado * fatorCorrecao;
 
@@ -2045,7 +2057,7 @@ export class CnisAnalysisService {
       .sort((a, b) => a - b);
 
     const numeroTotal = valoresCorrigidosOrdenados.length;
-    const numeroParaConsiderar = Math.ceil(numeroTotal * 0.8);
+    const numeroParaConsiderar = Math.ceil(numeroTotal * this.EIGHTY_PERCENT);
     const valoresParaConsiderar = valoresCorrigidosOrdenados.slice(
       numeroTotal - numeroParaConsiderar,
     );
@@ -2123,14 +2135,17 @@ export class CnisAnalysisService {
 
     const carencia = data.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
 
-    const totalInYears = Math.ceil(
+    const totalInYears = Math.floor(
       years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR,
     );
 
     return { years, months, days, totalInYears, carencia };
   }
 
-  private calculatePontos(idade: number, data: ConsolidadoRelationInterface[]) {
+  private calculatePontos(
+    idade: number,
+    data: ConsolidadoRelationInterface[],
+  ): number {
     const calculatedTotals = this.calculateTotals(data);
 
     const pontos = idade + calculatedTotals.totalInYears;
@@ -2269,14 +2284,18 @@ export class CnisAnalysisService {
         totals.days / this.DAYS_IN_YEAR;
 
       const birthMonth =
-        (today.getMonth() - (Math.floor(age * 12) % 12) + 12) % 12;
+        (today.getMonth() -
+          (Math.floor(age * this.MONTHS_IN_YEAR) % this.MONTHS_IN_YEAR) +
+          this.MONTHS_IN_YEAR) %
+        this.MONTHS_IN_YEAR;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       while (true) {
         // Reverte um mês
         cursor.setMonth(cursor.getMonth() - 1);
 
         // Recalcula contribuição
-        tempContributionYears -= 1 / 12;
+        tempContributionYears -= 1 / this.MONTHS_IN_YEAR;
 
         // Recalcula idade somente se retroceder do pós-aniversário para o pré-aniversário
         if (cursor.getMonth() === birthMonth && cursor.getDate() === 1) {
@@ -2290,7 +2309,7 @@ export class CnisAnalysisService {
           return cursor;
         }
 
-        if (cursor.getFullYear() < 1950) {
+        if (cursor.getFullYear() < this.YEAR_1950) {
           return null;
         }
       }
@@ -2315,7 +2334,7 @@ export class CnisAnalysisService {
       cursor.setMonth(cursor.getMonth() + 1);
 
       // Aumenta contribuição
-      tempContributionYears += 1 / 12;
+      tempContributionYears += 1 / this.MONTHS_IN_YEAR;
 
       // Aumenta idade no aniversário
       if (
@@ -2325,7 +2344,7 @@ export class CnisAnalysisService {
         tempAge += 1;
       }
 
-      if (cursor.getFullYear() > 2050) {
+      if (cursor.getFullYear() > this.YEAR_2050) {
         break;
       }
     }
@@ -2464,7 +2483,7 @@ export class CnisAnalysisService {
     );
 
     const projectedFulfillmentDate =
-      eligibilityDate ||
+      eligibilityDate ??
       new Date(
         today.getFullYear(),
         today.getMonth() + monthsToFulfill,
@@ -2610,7 +2629,7 @@ export class CnisAnalysisService {
     const monthsToFulfill = Math.max(monthsToAge, monthsToCarencia);
 
     const projectedFulfillmentDate =
-      eligibilityDate ||
+      eligibilityDate ??
       new Date(
         today.getFullYear(),
         today.getMonth() + monthsToFulfill,
@@ -2663,7 +2682,7 @@ export class CnisAnalysisService {
 
     const currentYear = new Date().getFullYear();
     const requiredPoints = Math.min(
-      basePoints + Math.max(0, currentYear - 2020),
+      basePoints + Math.max(0, currentYear - this.YEAR_2020),
       maxPoints,
     );
 
@@ -2806,7 +2825,7 @@ export class CnisAnalysisService {
 
   private totalContributionType(
     consolidadoResumido: ConsolidadoRelationInterface[],
-  ) {
+  ): number {
     const calculatedTotals = this.calculateTotals(consolidadoResumido);
 
     const totalContribution = this.convertToDecimalYears(
@@ -2815,7 +2834,9 @@ export class CnisAnalysisService {
       calculatedTotals.days,
     );
 
-    return totalContribution;
+    const totalContributionFinal = Math.floor(totalContribution);
+
+    return totalContributionFinal;
   }
 
   private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20(
@@ -3008,7 +3029,7 @@ export class CnisAnalysisService {
       meetsAgeRequirement &&
       meetsContributionRequirement &&
       meetsCarenciaRequirement
-        ? (() => {
+        ? ((): Date | null => {
             const dates = [
               ageRequirementDate,
               contributionRequirementDate,
@@ -3054,7 +3075,7 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Tempo de Contribuição - Regra de Transição - Emenda 103 art. 16',
-      totalContributionYears: totalContributionDecimal,
+      totalContributionYears: totals.totalInYears,
       totalCarenciaMonths: totals.carencia,
       age,
 
@@ -3361,12 +3382,12 @@ export class CnisAnalysisService {
         )
       : null;
 
-    const contributionRequirementDate = (() => {
+    const contributionRequirementDate = ((): Date | null => {
       let accYears = 0;
       let accMonths = 0;
       let accDays = 0;
 
-      const add = (v: TimeContributionDataInterface) => {
+      const add = (v: TimeContributionDataInterface): void => {
         accYears += v.anos;
         accMonths += v.meses;
         accDays += v.dias;
@@ -3402,7 +3423,7 @@ export class CnisAnalysisService {
       return null;
     })();
 
-    const carenciaRequirementDate = (() => {
+    const carenciaRequirementDate = ((): Date | null => {
       let acc = 0;
 
       for (const item of data) {
@@ -3564,7 +3585,7 @@ export class CnisAnalysisService {
       meetsContributionRequirement &&
       meetsCarenciaRequirement;
 
-    const ageRequirementDate = (() => {
+    const ageRequirementDate = ((): Date | null => {
       if (!birthDate) {
         return null;
       }
@@ -3576,12 +3597,12 @@ export class CnisAnalysisService {
       );
     })();
 
-    const contributionRequirementDate = (() => {
+    const contributionRequirementDate = ((): Date | null => {
       let accYears = 0;
       let accMonths = 0;
       let accDays = 0;
 
-      const add = (v: TimeContributionDataInterface) => {
+      const add = (v: TimeContributionDataInterface): void => {
         accYears += v.anos;
         accMonths += v.meses;
         accDays += v.dias;
@@ -3736,17 +3757,12 @@ export class CnisAnalysisService {
     const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
 
     const totals = this.calculateTotals(data);
-    const totalContribution = this.convertToDecimalYears(
-      totals.years,
-      totals.months,
-      totals.days,
-    );
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const meetsAgeRequirement = age >= requiredAge;
     const meetsContributionRequirement =
-      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+      totals.totalInYears >= REQUIRED_CONTRIBUTION_YEARS;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
@@ -3758,12 +3774,12 @@ export class CnisAnalysisService {
         )
       : null;
 
-    const contributionRequirementDate = (() => {
+    const contributionRequirementDate = ((): Date | null => {
       let accYears = 0;
       let accMonths = 0;
       let accDays = 0;
 
-      const add = (v: TimeContributionDataInterface) => {
+      const add = (v: TimeContributionDataInterface): void => {
         accYears += v.anos;
         accMonths += v.meses;
         accDays += v.dias;
@@ -3828,7 +3844,7 @@ export class CnisAnalysisService {
 
     const missingContributionYears = meetsContributionRequirement
       ? 0
-      : REQUIRED_CONTRIBUTION_YEARS - totalContribution;
+      : REQUIRED_CONTRIBUTION_YEARS - totals.totalInYears;
 
     const missingCarenciaMonths = meetsCarenciaRequirement
       ? 0
@@ -3859,7 +3875,7 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria Programada Comum - Emenda 103 art. 19',
-      totalContributionYears: totalContribution,
+      totalContributionYears: totals.totalInYears,
       totalCarenciaMonths,
       age,
       requirements: {
