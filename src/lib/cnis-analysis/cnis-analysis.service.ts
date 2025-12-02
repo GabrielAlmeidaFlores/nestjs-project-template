@@ -258,6 +258,8 @@ export class CnisAnalysisService {
         consolidadoResumido,
         gender,
         points,
+        idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
       );
 
     const aposentadoriaPorIdadeUrbanaComDireitoAdquirido =
@@ -2191,6 +2193,8 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     points: number,
+    age: number,
+    birthDate: Date | undefined,
   ): AnalysisServiceInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const POINTS_MEN = 96;
@@ -2263,10 +2267,12 @@ export class CnisAnalysisService {
       REQUIRED_CARENCIA_MONTHS,
     );
 
-    const pointsRequirementDate = meetsPointsRequirement
-      ? (data.find((item) => item.validContributionTime?.dataFim)
-          ?.validContributionTime?.dataFim ?? null)
-      : null;
+    const pointsRequirementDate = this.calculatePointsRequirementDate(
+      data,
+      requiredPoints,
+      age,
+      birthDate,
+    );
 
     let eligibilityDate: Date | null = null;
 
