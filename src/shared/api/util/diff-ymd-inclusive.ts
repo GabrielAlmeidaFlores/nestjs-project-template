@@ -2,10 +2,9 @@ export interface DiffYmdResultInterface {
   years: number;
   months: number;
   days: number;
-  formatted: string; // "Xa Ym Zd"
+  formatted: string;
 }
 
-// Constantes tipadas para evitar magic numbers
 export const MILLIS_PER_SECOND = 1000;
 export const SECONDS_PER_MINUTE = 60;
 export const MINUTES_PER_HOUR = 60;
@@ -22,13 +21,6 @@ export const Time = {
 
 export type TimeUnitType = (typeof Time)[keyof typeof Time];
 
-/**
- * Diferença exata entre start e end em anos, meses e dias (inclusivo).
- * Retorna zeros se end < start ou datas inválidas.
- * Usa moment no código que consome este util (implementado com API padrão Date).
- * Regra adicional a partir de 01/11/2019:
- * A contagem deve ser feita  pelo mes cheio, mesmo que o mes inicio ou fim do periodo  do trabalho seja parcial.
- */
 export function diffYmdInclusive(
   start: Date | null | undefined,
   end: Date | null | undefined,
@@ -44,7 +36,6 @@ export function diffYmdInclusive(
     return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
   }
 
-  // substituição do magic number 1000 * 60 * 60 * 24
   const msPerDay: TimeUnitType = Time.Day;
 
   const toUtcDay = (d: Date): Date =>
@@ -105,7 +96,7 @@ export function diffYmdInclusive(
   let days = Math.floor((e.getTime() - base.getTime()) / msPerDay) + 1;
 
   const YEAR_2019 = 2019;
-  const MONTH_NOVEMBER = 10; // zero-based
+  const MONTH_NOVEMBER = 10;
   const DAY_FIRST = 1;
   const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
 
