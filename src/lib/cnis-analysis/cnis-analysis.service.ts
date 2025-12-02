@@ -3029,8 +3029,12 @@ export class CnisAnalysisService {
         age,
         totalCarenciaMonths: 0,
         requirements: {
+          requiredAge,
+          requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
           meetsAgeRequirement: false,
           meetsCarenciaRequirement: false,
+          reachedAgeRequirementDate: null,
+          reachedCarenciaRequirementDate: null,
         },
         eligibility: {
           isEligible: false,
@@ -3307,6 +3311,9 @@ export class CnisAnalysisService {
           meetsAgeRequirement: false,
           meetsContributionRequirement: false,
           meetsCarenciaRequirement: false,
+          reachedAgeRequirementDate: null,
+          reachedContributionRequirementDate: null,
+          reachedCarenciaRequirementDate: null,
         },
         eligibility: {
           isEligible: false,
