@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import moment from 'moment';
 
 import { especiesData } from '@lib/cnis-analysis/data/especies-data';
@@ -36,8 +36,10 @@ import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-ou
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { diffYmdInclusive } from '@shared/api/util/diff-ymd-inclusive';
+import { CnisAnalysisGateway } from '@lib/cnis-analysis/cnis-analysis-gateway';
 
-export class CnisAnalysisService {
+@Injectable()
+export class CnisAnalysisService implements CnisAnalysisGateway {
   protected readonly _type = CnisAnalysisService.name;
 
   private readonly MONTHS_IN_YEAR: number;

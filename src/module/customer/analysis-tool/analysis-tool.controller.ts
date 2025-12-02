@@ -464,7 +464,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Criar análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
+    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
     http: {
       path: 'cnis-fast-analysis',
       method: RequestMethod.POST,
