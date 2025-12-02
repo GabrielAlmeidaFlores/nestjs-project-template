@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import moment from 'moment';
 
+import { CnisAnalysisGateway } from '@lib/cnis-analysis/cnis-analysis-gateway';
 import { especiesData } from '@lib/cnis-analysis/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
 import { ipcaData } from '@lib/cnis-analysis/data/ipca';
@@ -36,7 +37,6 @@ import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-ou
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { diffYmdInclusive } from '@shared/api/util/diff-ymd-inclusive';
-import { CnisAnalysisGateway } from '@lib/cnis-analysis/cnis-analysis-gateway';
 
 @Injectable()
 export class CnisAnalysisService implements CnisAnalysisGateway {

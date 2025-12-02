@@ -1,4 +1,4 @@
-import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
+import type { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 
 export abstract class CnisAnalysisGateway {
   public abstract parseCnisDocumentComplete(
