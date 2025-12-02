@@ -51,11 +51,8 @@ export class CnisAnalysisService {
   private readonly REFORMA_YEAR: number;
   private readonly REFORMA_MONTH: number;
   private readonly REFORMA_DAY: number;
-  private readonly DECIMAL_PRECISION: number;
   private readonly EIGHTY_PERCENT: number;
-  private readonly YEAR_1950: number;
   private readonly YEAR_2020: number;
-  private readonly YEAR_2050: number;
 
   public constructor(
     @Inject(CnisProcessorGateway)
@@ -68,11 +65,8 @@ export class CnisAnalysisService {
     this.REFORMA_YEAR = 2019;
     this.REFORMA_MONTH = 10;
     this.REFORMA_DAY = 13;
-    this.DECIMAL_PRECISION = 6;
     this.EIGHTY_PERCENT = 0.8;
-    this.YEAR_1950 = 1950;
     this.YEAR_2020 = 2020;
-    this.YEAR_2050 = 2050;
     this.REFORMA_DATE = new Date(
       this.REFORMA_YEAR,
       this.REFORMA_MONTH,
@@ -271,6 +265,7 @@ export class CnisAnalysisService {
         consolidadoResumido,
         gender,
         idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
       );
 
     const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15 =
@@ -278,6 +273,7 @@ export class CnisAnalysisService {
         consolidadoResumido,
         gender,
         idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
       );
 
     const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20 =
@@ -293,6 +289,7 @@ export class CnisAnalysisService {
         consolidadoResumido,
         gender,
         idade.anos,
+        data.affiliateIdentification?.dataDeNascimento,
       );
     const aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17 =
       this.aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17(
@@ -373,6 +370,7 @@ export class CnisAnalysisService {
   private calcularVinculosConcomitantes(
     vinculos: ConcomitanciaDetalhesInterface[],
     resultadoFinal: ConcomitanciaDetalhesInterface[] = [],
+    processedSeqs: Set<number> = new Set(),
   ): ConcomitanciaDetalhesInterface[] {
     if (vinculos.length === 0) {
       return resultadoFinal;
@@ -416,7 +414,6 @@ export class CnisAnalysisService {
     for (let i = 1; i < items.length; i++) {
       const it = items[i];
       const inicioIt = it?.start ? it.start.getTime() : 0;
-      // se começa antes ou no fim atual do grupo -> pertence ao grupo
       if (inicioIt <= endOfGroup) {
         group.push(
           it ?? {
@@ -430,7 +427,6 @@ export class CnisAnalysisService {
           endOfGroup = fimIt;
         }
       } else {
-        // não sobrepõe o grupo atual -> parar de montar este grupo
         break;
       }
     }
@@ -442,30 +438,41 @@ export class CnisAnalysisService {
       return this.daysBetween(s, e) + 1;
     };
 
-    // escolher o vínculo principal dentro do grupo:
-    // maior duração; empate -> início mais antigo; empate -> menor seq (se existir)
-    let entradaPrincipal = group[0];
-    for (let i = 1; i < group.length; i++) {
+    let entradaPrincipal = group.find(
+      (g) => !processedSeqs.has(g.original.seq),
+    );
+
+    entradaPrincipal ??= group[0];
+
+    for (let i = 0; i < group.length; i++) {
       const atual = group[i];
+      if (!atual || processedSeqs.has(atual.original.seq)) {
+        continue;
+      }
+
+      if (!entradaPrincipal) {
+        entradaPrincipal = atual;
+        continue;
+      }
+
       const durMelhor = diasDeDuracao(
-        entradaPrincipal?.start ?? null,
-        entradaPrincipal?.end ?? null,
+        entradaPrincipal.start ?? null,
+        entradaPrincipal.end ?? null,
       );
-      const durAtual = diasDeDuracao(atual?.start ?? null, atual?.end ?? null);
+      const durAtual = diasDeDuracao(atual.start, atual.end);
       if (durAtual > durMelhor) {
         entradaPrincipal = atual;
         continue;
       }
       if (durAtual === durMelhor) {
-        if (atual?.start && entradaPrincipal?.start) {
+        if (atual.start && entradaPrincipal.start) {
           if (atual.start.getTime() < entradaPrincipal.start.getTime()) {
             entradaPrincipal = atual;
             continue;
           }
         }
-        const seqMelhor =
-          entradaPrincipal?.original.seq ?? Number.MAX_SAFE_INTEGER;
-        const seqAtual = atual?.original.seq ?? Number.MAX_SAFE_INTEGER;
+        const seqMelhor = entradaPrincipal.original.seq;
+        const seqAtual = atual.original.seq;
         if (seqAtual < seqMelhor) {
           entradaPrincipal = atual;
         }
@@ -473,11 +480,9 @@ export class CnisAnalysisService {
     }
 
     if (!entradaPrincipal) {
-      // segurança: se não houver entrada principal, retorna o resultado acumulado
       return resultadoFinal;
     }
 
-    // garantir tipo não-any e extrair contributionTime de forma segura
     const originalObj = entradaPrincipal.original;
     const contributionTimeObj =
       (originalObj['contributionTime'] as
@@ -493,7 +498,6 @@ export class CnisAnalysisService {
     };
 
     const inicioPrincipal = this.toDate(
-      // contributionTime was typed as a Record via casting earlier, so use bracket access
       vinculoPrincipal.contributionTime['dataInicio'] as
         | Date
         | null
@@ -503,11 +507,9 @@ export class CnisAnalysisService {
       vinculoPrincipal.contributionTime['dataFim'] as Date | null | undefined,
     );
     if (!inicioPrincipal || !fimPrincipal) {
-      // cannot process the group without valid principal start and end dates
       return resultadoFinal;
     }
 
-    // processar membros do grupo: marcar principal e ajustar secundários
     const grupoProcessado: ConcomitanciaDetalhesInterface[] = [];
     grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
@@ -516,12 +518,13 @@ export class CnisAnalysisService {
     for (const membro of group) {
       if (membro === entradaPrincipal) {
         continue;
-      } // já processado o principal
+      }
       const orig = membro.original;
       const s = this.toDate(orig.contributionTime.dataInicio);
       const e = this.toDate(orig.contributionTime.dataFim);
 
-      // se faltar data de início ou fim -> considerar zerado as datas
+      processedSeqs.add(orig.seq);
+
       if (!s || !e) {
         const zero = {
           ...orig,
@@ -545,7 +548,6 @@ export class CnisAnalysisService {
         continue;
       }
 
-      // totalmente contido no principal -> zera
       if (
         s.getTime() >= inicioPrincipal.getTime() &&
         e.getTime() <= fimPrincipal.getTime()
@@ -572,32 +574,25 @@ export class CnisAnalysisService {
         continue;
       }
 
-      // sobreposição parcial -> truncar
       let novoInicio = s;
       let novoFim = e;
 
-      // sobrepõe no final do membro (membro começa antes do principal e termina dentro do principal)
       if (
         s.getTime() < inicioPrincipal.getTime() &&
         e.getTime() >= inicioPrincipal.getTime() &&
         e.getTime() <= fimPrincipal.getTime()
       ) {
         novoFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
-      }
-      // sobrepõe no início do membro (membro começa dentro do principal e termina depois do principal)
-      else if (
+      } else if (
         s.getTime() >= inicioPrincipal.getTime() &&
         s.getTime() <= fimPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
         novoInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
-      }
-      // membro envolve o principal (começa antes e termina depois)
-      else if (
+      } else if (
         s.getTime() < inicioPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
-        // separar em duas partes: antes do principal e depois do principal
         const antesFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
         if (s.getTime() <= antesFim.getTime()) {
           const parteAntes = {
@@ -634,7 +629,6 @@ export class CnisAnalysisService {
           } as ConcomitanciaDetalhesInterface;
           secundariosAjustados.push(parteDepois);
         }
-        // marcar o original como considerado (zerado) no grupo processado
         const zero = {
           ...orig,
           tipo: 'secundario' as const,
@@ -657,7 +651,6 @@ export class CnisAnalysisService {
         continue;
       }
 
-      // verificar se o intervalo ajustado ainda é válido
       if (novoInicio.getTime() <= novoFim.getTime()) {
         const ajustado = {
           ...orig,
@@ -674,10 +667,8 @@ export class CnisAnalysisService {
           },
         } as ConcomitanciaDetalhesInterface;
         grupoProcessado.push(ajustado);
-        // coletar para reprocessamento, pois pode ainda sobrepor com itens seguintes
         secundariosAjustados.push(ajustado);
       } else {
-        // nada resta após truncamento -> zerado
         const zero = {
           ...orig,
           tipo: 'secundario' as const,
@@ -700,14 +691,9 @@ export class CnisAnalysisService {
       }
     }
 
-    // adicionar grupo processado ao resultado final da lista
     resultadoFinal.push(...grupoProcessado);
 
-    // construir próximo conjunto a processar:
-    // - itens restantes após o grupo na lista ordenada original
     const restantes = items.slice(group.length).map((it) => it.original);
-
-    // - mais os secundários ajustados que ainda tenham duração positiva e possam sobrepor os restantes
 
     const ajustadosParaProximaRodada = secundariosAjustados.filter((s) => {
       const st = this.toDate(s.contributionTime.dataInicio);
@@ -720,8 +706,11 @@ export class CnisAnalysisService {
       ...restantes,
     ];
 
-    // recursão com o próximo conjunto
-    return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
+    return this.calcularVinculosConcomitantes(
+      proximaLista,
+      resultadoFinal,
+      processedSeqs,
+    );
   }
   private getRequiredContributionAge(gender: string): number {
     return gender === 'F'
@@ -762,11 +751,10 @@ export class CnisAnalysisService {
     months: number,
     days: number,
   ): number {
-    // Return a precise decimal number of years (do not round up),
-    // to avoid inflating totals when summing multiple periods.
-    const decimalYears =
-      years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR;
-    return Number(decimalYears.toFixed(this.DECIMAL_PRECISION));
+    const decimalYears = Math.floor(
+      years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR,
+    );
+    return decimalYears;
   }
 
   private daysBetween(dateStart?: Date | null, dateEnd?: Date | null): number {
@@ -819,27 +807,16 @@ export class CnisAnalysisService {
       return [];
     }
 
-    const resultado = rawResult;
+    const processedSeqs = new Set(rawResult.map((v) => v.seq));
 
-    const relacionacoesSecundarios = resultado.filter(
-      (v: ConcomitanciaDetalhesInterface) => v.tipo === 'secundario',
-    );
-    const relacionacoesPrincipais = resultado.filter(
-      (v: ConcomitanciaDetalhesInterface) => v.tipo === 'principal',
-    );
-    const seqsSecundarios = new Set(
-      relacionacoesSecundarios.map((v) => String(v.seq)),
-    );
-    const relacionacoesPrincipaisFiltradas = relacionacoesPrincipais.filter(
-      (v) => !seqsSecundarios.has(String(v.seq)),
+    const unprocessedItems = data.filter(
+      (item) => !processedSeqs.has(item.seq),
     );
 
-    return [...relacionacoesPrincipaisFiltradas, ...relacionacoesSecundarios];
+    return [...rawResult, ...unprocessedItems];
   }
 
   private calculateAge(birthDate?: Date): IdadeInterface {
-    // Fórmula/Lógica: Idade = (Data do Extrato) - (Data de Nascimento)
-    // Resultado: Deve ser formatado em Anos, Meses e Dias (Xa Ym Zd).
     if (!birthDate) {
       return { anos: 0, meses: 0, dias: 0, abreviado: '0a 0m 0d' };
     }
@@ -872,13 +849,6 @@ export class CnisAnalysisService {
   private calculateTimeContribution(
     data: CnisOutputModel,
   ): TimeContributionInterface[] {
-    // 2.1. Cálculo do Tempo de Contribuição (por vínculo):
-    // Descrição: Apurar a duração exata de cada vínculo previdenciário individualmente.
-    // Fórmula/Lógica: (Data Fim - Data Início) + 1 dia.
-    // Resultado: Deve ser formatado em Anos, Meses e Dias (Xa Ym Zd).
-    // Regra adicional a partir de 01/11/2019:
-    // a Contagem deve ser feita  pelo mes cheio, mesmo que o mes inicio ou fim  do periodo do trabalho seja parcial.
-
     const calculatedContributionTimesResponse: TimeContributionInterface[] = [];
     data.socialSecurityRelations?.forEach((relation) => {
       const startDate = relation.socialSecurityAffiliationInfo.dataInicio;
@@ -962,58 +932,9 @@ export class CnisAnalysisService {
     return calculatedContributionTimesResponse;
   }
 
-  // private calculateCarencia(
-  //   seq: number,
-  //   startDateVinculo?: Date | null,
-  //   endDateVinculo?: Date | null,
-  //   lastDateRemunVinculo?: Date | null,
-  // ): CarenciaInterface {
-  //   // 2.2. Cálculo da Carência (por vínculo):
-  //   // Descrição: Contar o número de meses de carência para cada vínculo.
-  //   // Fórmula/Lógica: Contagem do número de meses-calendário distintos,
-  //   // mesmo que parcialmente trabalhados, dentro do intervalo do vínculo.
-  //   // Resultado: Um número inteiro de meses.
-  //   const startDate = startDateVinculo ?? null;
-  //   const endDate = endDateVinculo ?? lastDateRemunVinculo ?? null;
-
-  //   const NUMBER_MONTHS_IN_YEAR = 12;
-  //   if (
-  //     startDate instanceof Date &&
-  //     !isNaN(startDate.getTime()) &&
-  //     endDate instanceof Date &&
-  //     !isNaN(endDate.getTime())
-  //   ) {
-  //     const startYear = startDate.getFullYear();
-  //     const startMonth = startDate.getMonth();
-  //     const endYear = endDate.getFullYear();
-  //     const endMonth = endDate.getMonth();
-  //     const carencia =
-  //       (endYear - startYear) * NUMBER_MONTHS_IN_YEAR +
-  //       (endMonth - startMonth) +
-  //       1;
-  //     return {
-  //       seq,
-  //       carencia: carencia >= 0 ? carencia : 0,
-  //     };
-  //   }
-  //   return {
-  //     seq,
-  //     carencia: 0,
-  //   };
-  // }
-
   private calculateConcomitancia(
     data: CnisOutputModel,
   ): ConcomitanciaInterface[] {
-    // 2.3. Detecção de Sobreposição de Datas (Concomitância):
-    // Descrição: Comparar o período de cada
-    // vínculo com todos os outros para identificar sobreposições de dias.
-    // Fórmula/Lógica:
-    // Para cada par de vínculos (Vínculo A, Vínculo B),
-    // verificar se (Início_A <= Fim_B) e (Fim_A >= Início_B).
-    // Resultado: Uma marcação (flag) de "Concomitante (C)"
-    // para todos os vínculos envolvidos em sobreposição.
-
     const concomitancia: ConcomitanciaInterface[] = [];
     const relations = data.socialSecurityRelations ?? [];
     relations.forEach((relationA, indexA) => {
@@ -1053,22 +974,6 @@ export class CnisAnalysisService {
     carenciaTotal: CarenciaInterface[],
     data: CnisOutputModel,
   ): ConsolidadoRelationInterface[] {
-    // 2.4. Cálculo Consolidado do Tempo de Contribuição e Carência (Total Anti-Duplicidade):
-    // Descrição: Somar o tempo e a carência de todos os vínculos válidos,
-    // mas sem contar os períodos concomitantes duas vezes.
-    // Este é um dos algoritmos centrais do sistema.
-    // Fórmula/Lógica:
-    // Identificar grupos de vínculos concomitantes.
-    // Em cada grupo, eleger um "vínculo principal" (o de maior duração ou mais antigo).
-    // Ajustar as datas de início e/ou fim dos "vínculos secundários"
-    // para eliminar a sobreposição com o principal.
-    // Somar as durações de:
-    // todos os vínculos não concomitantes + os vínculos principais (duração integral) + os vínculos secundários (duração ajustada).
-    // Observação: Este cálculo deve ser executado duas vezes para gerar os dois cenários finais:
-    // Cenário Potencial: Utilizando todos os vínculos válidos.
-    // Cenário Restrito: Utilizando apenas os vínculos válidos e sem pendências (sem a marcação ⚠️).
-    /// Depois de calculados os dados, montar a tabela completa:
-
     if (!data.socialSecurityRelations) {
       return [];
     }
@@ -1104,11 +1009,7 @@ export class CnisAnalysisService {
       isConcomitante: boolean;
     }[];
 
-    const onlyComitantesItems = completeData.filter(
-      (item) => item.isConcomitante,
-    );
-
-    const listaCerta = onlyComitantesItems.map((item) => {
+    const allItemsForProcessing = completeData.map((item) => {
       return {
         ...item,
         contributionTime: {
@@ -1122,7 +1023,7 @@ export class CnisAnalysisService {
       };
     });
 
-    const listOrdered: ConcomitanciaDetalhesInterface[] = listaCerta
+    const listOrdered: ConcomitanciaDetalhesInterface[] = allItemsForProcessing
       .map((item) => ({
         ...item,
       }))
@@ -1177,13 +1078,6 @@ export class CnisAnalysisService {
       const concomitanciaDetalhe = concomitanciaListCleaner.find(
         (item) => item.seq === seq,
       );
-      // TODOD contar tempo valido ajustado aqui também
-      // se for secundario considerar o tempo ajustado
-      // se for principal considerar o tempo original
-      // cotagens de dias / meses e anos baseado no contributionTime e no concomitanciaDetalhe
-      // com a coluna Duração Original
-      // é a Tempo Válido para Soma
-
       const validContributionTime: TimeContributionDataInterface =
         concomitanciaDetalhe?.tipo === 'secundario'
           ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
@@ -1278,13 +1172,6 @@ export class CnisAnalysisService {
   private calculateImpactoLiquidoDePendencias(
     data: ConsolidadoRelationInterface[],
   ): CnisIndicadoresDePendenciaInterface[] {
-    //   3.1. Cálculo do Impacto Líquido das Pendências:
-    // Descrição: Somar o tempo e a carência de
-    // todos os vínculos que possuem indicadores de pendência.
-    // Fórmula/Lógica: Impacto = Soma(tempoCalculado
-    // e carenciaCalculada de todos os vínculos com flag 'possuiPendencia = true').
-    // Resultado: Um total de tempo (Xa Ym Zd) e carência (meses) "em risco".
-    // Retornar por sequencia o impacto líquido das pendências
     const sequenciasComPendencia = data.filter((item) => item.isPendencia);
     const tempoTotal = sequenciasComPendencia.map((item) => {
       const startDate = item.contributionTime?.dataInicio;
@@ -1597,31 +1484,25 @@ export class CnisAnalysisService {
   private calculateRequirementDateByAge(
     requiredAge: number,
     currentAge: number,
-    birthDate?: Date | null,
+    birthDate: Date | null,
   ): Date | null {
-    if (birthDate instanceof Date && !isNaN(birthDate.getTime())) {
-      return new Date(
-        birthDate.getFullYear() + Math.floor(requiredAge),
-        birthDate.getMonth(),
-        birthDate.getDate(),
-      );
+    const hasValidBirthDate =
+      birthDate instanceof Date && !isNaN(birthDate.getTime());
+
+    if (!hasValidBirthDate) {
+      return null;
     }
 
-    // se não temos birthDate, estimativa: hoje + (requiredAge - currentAge) anos
-    const diffYears = requiredAge - currentAge;
-    const hoje = new Date();
-    if (diffYears === 0) {
-      return hoje;
+    if (currentAge < requiredAge) {
+      return null;
     }
-    // se diffYears < 0 significa que já passou (retorna hoje)
-    if (diffYears < 0) {
-      return hoje;
-    }
+
+    const fullRequiredAge = Math.floor(requiredAge);
 
     return new Date(
-      hoje.getFullYear() + Math.ceil(diffYears),
-      hoje.getMonth(),
-      hoje.getDate(),
+      birthDate.getFullYear() + fullRequiredAge,
+      birthDate.getMonth(),
+      birthDate.getDate(),
     );
   }
 
@@ -1680,33 +1561,6 @@ export class CnisAnalysisService {
   private calculateDataFinalDaQualidadedeDeSegurado(
     data: ConsolidadoRelationInterface[],
   ): ManutencaoInterface[] {
-    // O algoritmo deve seguir este fluxo:
-    // Identificar Hiatos: Percorra a lista de vínculos ordenados. Compare a Data Fim do vínculo N com a Data Início do vínculo N+1. Se houver um intervalo de tempo entre elas, um "hiato" foi encontrado.
-    // Calcular o Período de Graça para cada Hiato: Para cada hiato encontrado, execute o seguinte cálculo:
-    // a. Ponto de Partida: A "última referência" é a Data Fim do vínculo N.
-    // b. Termo Inicial da Contagem: A contagem do período de graça começa sempre no dia 1º do mês seguinte à última referência.
-    // c. Período Base (12 meses): O período de graça padrão é de 12 meses.
-    // d. Verificação de Prorrogações:
-    // +12 meses por +120 Contribuições: Verifique se o segurado possui 120 ou mais contribuições (carência) sem ter perdido a
-    // qualidade de segurado entre elas até aquele ponto. Se sim, o período de graça base sobe para 24 meses.
-    // (Isso gera a necessidade de uma subtabela de análise, que veremos a seguir).
-    // e. Calcular a Data Final da Qualidade de Segurado: Com base no período de graça total (12, 24 ou 36 meses), calcule a data limite.
-    //  Atenção à diferença de contagem:
-    // Contagem Administrativa (INSS):
-    //  A perda ocorre no dia 16 do 2º mês seguinte ao término do prazo nominal (ex: para 12 meses, a perda ocorre em 16/Fevereiro do ano seguinte).
-    // Contagem Judicial (Tese "Meses Cheios"):
-    //  A perda ocorre no dia 16 do 2º mês seguinte ao término do prazo estendido em mais um mês (ex: para 12 meses, a perda ocorre em 16/Março do ano seguinte).
-    // Conclusão da Análise: Compare a Data Início do vínculo N+1 com as duas datas finais calculadas (Administrativa e Judicial).
-    // Se a Data Início do vínculo N+1 for anterior ou igual à data final da qualidade de segurado, a qualidade foi MANTIDA.
-    // Se for posterior, a qualidade foi PERDIDA naquele hiato.
-    // {
-    //  periodo_analisado : ' Entre Seq. 1 e 2',
-    //  ultima_referencia: 'Data Fim do vínculo N',
-    //  proximo_vinculo: 'Data Início do vínculo N+1',
-    //  data_final_qualidade_segurado_administrativa: 'DD/MM/AAAA', -- : Perda no dia 16 do 2º mês seguinte ao fim do prazo.
-    //  data_final_qualidade_segurado_judicial: 'DD/MM/AAAA', -- Perda no dia 16 do 2º mês seguinte ao fim do prazo + 1 mês.
-    //  qualidade_segurado_foi_mantida: 'Sim' | 'Não',
-    // }
     const DECIMO_SEXTO_DIA = 16;
     const PERIODO_DE_GRACA_PADRAO = 12;
     const PERIODO_DE_GRACA_AUMENTADO = 24;
@@ -1914,10 +1768,6 @@ export class CnisAnalysisService {
   }
 
   private calculateAjusteAoTeto(data: CnisOutputModel): TetoInterface[] {
-    // Ajuste ao Teto: Limitar o valor histórico de cada competência ao teto previdenciário daquele mês/ano.
-    // TODO TETO INSS DATA ANUAL devemos pegar do site, todo mês tem uma atualização e uma nova versão do arquivo
-    //  https://www.gov.br/previdencia/pt-br/assuntos/previdencia-social/arquivos/fatores_de_atualizacao_11_2025_art_33.xlsx
-
     const teto: TetoInterface[] = [];
     if (!data.socialSecurityRelations) {
       return teto;
@@ -1964,8 +1814,6 @@ export class CnisAnalysisService {
   private calculateAplicacaodaCorrecaoMonetaria(
     data: TetoInterface[],
   ): CorrecaoMonetariaItemInterface[] {
-    ///Aplicação da Correção Monetária: Para cada salário, calcular o valor corrigido.
-    //Fórmula/Lógica: Valor Corrigido = Valor Histórico (ajustado ao teto) * Fator de Correção (INPC).
     const COMPETENCIA_YEAR_START = 0;
     const COMPETENCIA_YEAR_END = 4;
     const COMPETENCIA_MONTH_START = 5;
@@ -1994,10 +1842,6 @@ export class CnisAnalysisService {
   private calculateSalarioSBPosReforma(
     data: CorrecaoMonetariaItemInterface[],
   ): SalarioInterface {
-    // 5.2. Cálculo do Salário-de-Benefício (SB) - Pós-Reforma (Regra Atual):
-    // Descrição: Média de 100% dos salários de contribuição desde julho de 1994.
-    // Fórmula/Lógica: SB = (Soma de todos os 'Valores Corrigidos') / (Número total de competências válidas
-    //  no período).
     const YEAR_1994 = 1994;
     const MONTH_JULY = 6;
     const DAY_FIRST = 1;
@@ -2033,12 +1877,6 @@ export class CnisAnalysisService {
   private calculateSalarioSBPreReforma(
     data: CorrecaoMonetariaItemInterface[],
   ): SalarioInterface {
-    // Descrição: Média dos 80% maiores salários de contribuição desde julho de 1994.
-    // Fórmula/Lógica:
-    // Ordenar todos os "Valores Corrigidos" do menor para o maior.
-    // Descartar os 20% menores valores.
-    // SB = (Soma dos 80% maiores 'Valores Corrigidos') / (Número de competências correspondente a 80%).
-
     const YEAR_1994 = 1994;
     const MONTH_JULY = 6;
     const DAY_FIRST = 1;
@@ -2083,12 +1921,6 @@ export class CnisAnalysisService {
     pos: SalarioInterface,
     pre: SalarioInterface,
   ): AjusteFinalInterface {
-    // 5.4. Ajuste Final do SB ao Mínimo e ao Teto
-    // Descrição: Garantir que o SB final (de ambos os cálculos acima) não seja inferior ao salário mínimo vigente
-    // nem superior ao teto do RGPS na data da análise.
-    // Pegue o ultimo salário mínimo vigente e o último teto do RGPS disponível. TetoInssData.Salario mínimo
-    // deve ser atualizado anualmente conforme o governo publica os novos valores.
-
     const actualYear = new Date().getFullYear();
 
     const data = TetoInssData.find((t) => t.ano === actualYear);
@@ -2118,25 +1950,31 @@ export class CnisAnalysisService {
     totalInYears: number;
     carencia: number;
   } {
-    const years = data.reduce((acc, cur) => {
+    const dataFilter = data.filter(
+      (item) => item.tipo === 'principal' || item.tipo === undefined,
+    );
+    const years = dataFilter.reduce((acc, cur) => {
       const anos = cur.validContributionTime?.anos ?? 0;
       return acc + anos;
     }, 0);
 
-    const months = data.reduce(
+    const months = dataFilter.reduce(
       (acc, cur) => acc + (cur.validContributionTime?.meses ?? 0),
       0,
     );
 
-    const days = data.reduce(
+    const days = dataFilter.reduce(
       (acc, cur) => acc + (cur.validContributionTime?.dias ?? 0),
       0,
     );
 
-    const carencia = data.reduce((acc, cur) => acc + (cur.carencia ?? 0), 0);
-
     const totalInYears = Math.floor(
       years + months / this.MONTHS_IN_YEAR + days / this.DAYS_IN_YEAR,
+    );
+
+    const carencia = dataFilter.reduce(
+      (acc, cur) => acc + (cur.carencia ?? 0),
+      0,
     );
 
     return { years, months, days, totalInYears, carencia };
@@ -2148,40 +1986,114 @@ export class CnisAnalysisService {
   ): number {
     const calculatedTotals = this.calculateTotals(data);
 
-    const pontos = idade + calculatedTotals.totalInYears;
+    const pontos = Math.floor(idade + calculatedTotals.totalInYears);
 
     return pontos;
   }
 
-  // private calculatePointsRequirementDate(
-  //   data: ConsolidadoRelationInterface[],
-  //   requiredPoints: number,
-  //   age: number,
-  // ): Date | null {
-  //   if (!Array.isArray(data) || data.length === 0) {
-  //     return null;
-  //   }
+  private calculatePointsRequirementDate(
+    data: ConsolidadoRelationInterface[],
+    requiredPoints: number,
+    currentAge: number,
+    birthDate?: Date,
+  ): Date | null {
+    if (!Array.isArray(data) || data.length === 0 || !birthDate) {
+      return null;
+    }
 
-  //   for (const item of data) {
-  //     const v = item.validContributionTime ?? item.contributionTime;
-  //     if (!v) continue;
+    const totalPoints = this.calculateTotals(data);
+    const totalPointsAcquired = currentAge + totalPoints.totalInYears;
 
-  //     const end =
-  //       (item.dataAjustada && this.toDate(item.dataAjustada.dataFim)) ??
-  //       this.toDate(v.dataFim);
+    if (totalPointsAcquired < requiredPoints) {
+      return null;
+    }
 
-  //     if (!end) continue;
+    const sortedData = [...data]
+      .filter((item) => {
+        return item.tipo !== 'secundario';
+      })
+      .filter((item) => {
+        const v = item.validContributionTime ?? item.contributionTime;
+        return v?.dataInicio;
+      })
+      .sort((a, b) => {
+        const dateA = this.toDate(
+          a.validContributionTime?.dataInicio ?? a.contributionTime?.dataInicio,
+        );
+        const dateB = this.toDate(
+          b.validContributionTime?.dataInicio ?? b.contributionTime?.dataInicio,
+        );
+        return (dateA?.getTime() ?? 0) - (dateB?.getTime() ?? 0);
+      });
 
-  //     const years = this.convertToDecimalYears(v.anos, v.meses, v.dias);
-  //     const points = age + years;
+    let accumulatedContributionYears = 0;
 
-  //     if (points >= requiredPoints) {
-  //       return end;
-  //     }
-  //   }
+    for (const item of sortedData) {
+      const v = item.validContributionTime ?? item.contributionTime;
+      if (!v) {
+        continue;
+      }
 
-  //   return null;
-  // }
+      const startDate = this.toDate(v.dataInicio);
+      const endDate = this.toDate(v.dataFim);
+
+      if (!startDate || !endDate) {
+        continue;
+      }
+
+      const durationInYears = this.convertToDecimalYears(
+        v.anos,
+        v.meses,
+        v.dias,
+      );
+
+      const ageAtStartOfPeriod = this.calculateAgeAtDate(birthDate, startDate);
+
+      const pointsBeforePeriod =
+        ageAtStartOfPeriod + accumulatedContributionYears;
+
+      const pointsGainedInPeriod = durationInYears * 2;
+      const pointsAtEndOfPeriod = pointsBeforePeriod + pointsGainedInPeriod;
+
+      if (pointsAtEndOfPeriod >= requiredPoints) {
+        const pointsNeeded = requiredPoints - pointsBeforePeriod;
+
+        const yearsNeededForPoints = pointsNeeded / 2;
+
+        const daysNeeded = yearsNeededForPoints * this.DAYS_IN_YEAR;
+
+        const resultDate = new Date(startDate);
+        resultDate.setDate(resultDate.getDate() + Math.ceil(daysNeeded));
+
+        if (resultDate <= endDate) {
+          return resultDate;
+        } else {
+          return endDate;
+        }
+      }
+
+      accumulatedContributionYears += durationInYears;
+    }
+
+    return null;
+  }
+
+  private calculateAgeAtDate(birthDate: Date, targetDate: Date): number {
+    const birth = new Date(birthDate);
+    const target = new Date(targetDate);
+
+    let age = target.getFullYear() - birth.getFullYear();
+    const monthDiff = target.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && target.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+
+    return Math.max(0, age);
+  }
 
   private calculateTempoPedagio(
     data: ConsolidadoRelationInterface[],
@@ -2194,7 +2106,9 @@ export class CnisAnalysisService {
     let totalContributionMonthsAtReforma = 0;
     let totalContributionDaysAtReforma = 0;
 
-    data.forEach((item) => {
+    const filteredData = data.filter((item) => item.tipo !== 'secundario');
+
+    filteredData.forEach((item) => {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
 
@@ -2245,111 +2159,23 @@ export class CnisAnalysisService {
     let accumulated = 0;
 
     for (const item of data) {
-      const value = item.carencia ?? 0;
+      const carencia = item.carencia ?? 0;
 
-      if (value > 0) {
-        accumulated += value;
+      if (carencia > 0) {
+        accumulated += carencia;
       }
 
       if (accumulated >= requiredCarenciaMonths) {
-        return item.dataAjustada?.dataFim
-          ? this.toDate(item.dataAjustada.dataFim)
-          : null;
+        const end =
+          item.dataAjustada?.dataFim ??
+          item.validContributionTime?.dataFim ??
+          null;
+
+        return end ? this.toDate(end) : null;
       }
     }
 
     return null;
-  }
-
-  private calculatePointsRequirementDate(
-    totals: { years: number; months: number; days: number },
-    age: number,
-    requiredPoints: number,
-  ): Date | null {
-    const today = new Date();
-
-    const currentPoints =
-      totals.years +
-      totals.months / this.MONTHS_IN_YEAR +
-      totals.days / this.DAYS_IN_YEAR +
-      age;
-
-    if (currentPoints >= requiredPoints) {
-      // Encontrar quando atingiu, voltando mês a mês
-      const cursor = new Date(today.getFullYear(), today.getMonth(), 1);
-      let tempAge = age;
-      let tempContributionYears =
-        totals.years +
-        totals.months / this.MONTHS_IN_YEAR +
-        totals.days / this.DAYS_IN_YEAR;
-
-      const birthMonth =
-        (today.getMonth() -
-          (Math.floor(age * this.MONTHS_IN_YEAR) % this.MONTHS_IN_YEAR) +
-          this.MONTHS_IN_YEAR) %
-        this.MONTHS_IN_YEAR;
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      while (true) {
-        // Reverte um mês
-        cursor.setMonth(cursor.getMonth() - 1);
-
-        // Recalcula contribuição
-        tempContributionYears -= 1 / this.MONTHS_IN_YEAR;
-
-        // Recalcula idade somente se retroceder do pós-aniversário para o pré-aniversário
-        if (cursor.getMonth() === birthMonth && cursor.getDate() === 1) {
-          tempAge -= 1;
-        }
-
-        const points = tempContributionYears + tempAge;
-        if (points < requiredPoints) {
-          // Atingiu no mês seguinte
-          cursor.setMonth(cursor.getMonth() + 1);
-          return cursor;
-        }
-
-        if (cursor.getFullYear() < this.YEAR_1950) {
-          return null;
-        }
-      }
-    }
-
-    // Caso ainda não tenha atingido, simula avanço mês a mês
-    const cursor = new Date(today.getFullYear(), today.getMonth(), 1);
-    let tempAge = age;
-    let tempContributionYears =
-      totals.years +
-      totals.months / this.MONTHS_IN_YEAR +
-      totals.days / this.DAYS_IN_YEAR;
-
-    const birthDate = new Date(
-      today.getFullYear() - age,
-      today.getMonth(),
-      today.getDate(),
-    );
-
-    while (tempContributionYears + tempAge < requiredPoints) {
-      // Avança um mês
-      cursor.setMonth(cursor.getMonth() + 1);
-
-      // Aumenta contribuição
-      tempContributionYears += 1 / this.MONTHS_IN_YEAR;
-
-      // Aumenta idade no aniversário
-      if (
-        cursor.getMonth() === birthDate.getMonth() &&
-        cursor.getDate() === birthDate.getDate()
-      ) {
-        tempAge += 1;
-      }
-
-      if (cursor.getFullYear() > this.YEAR_2050) {
-        break;
-      }
-    }
-
-    return cursor;
   }
 
   private aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido(
@@ -2416,10 +2242,6 @@ export class CnisAnalysisService {
       meetsCarenciaRequirement &&
       meetsPointsRequirement;
 
-    // -------------------------------------------------------------------
-    // REQUIREMENT DATES (real, não hoje)
-    // -------------------------------------------------------------------
-
     const contributionRequirementDate = meetsContributionRequirement
       ? this.calculateContributionRequirementDate(
           data,
@@ -2437,10 +2259,6 @@ export class CnisAnalysisService {
           ?.validContributionTime?.dataFim ?? null)
       : null;
 
-    // -------------------------------------------------------------------
-    // ELIGIBILITY DATE — mesma regra do Art. 17
-    // -------------------------------------------------------------------
-
     let eligibilityDate: Date | null = null;
 
     if (isEligible) {
@@ -2454,10 +2272,6 @@ export class CnisAnalysisService {
         eligibilityDate = new Date(Math.max(...dates.map((d) => d.getTime())));
       }
     }
-
-    // -------------------------------------------------------------------
-    // PROJECTED FULFILLMENT DATE
-    // -------------------------------------------------------------------
 
     const today = new Date();
 
@@ -2494,10 +2308,6 @@ export class CnisAnalysisService {
       ? null
       : projectedFulfillmentDate;
 
-    // -------------------------------------------------------------------
-    // FINAL RESULT
-    // -------------------------------------------------------------------
-
     return {
       type: 'Aposentadoria por Tempo de Contribuição com Direito Adquirido',
       totalCarenciaMonths,
@@ -2509,6 +2319,9 @@ export class CnisAnalysisService {
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         requiredContributionYears,
         requiredPoints,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        reachedContributionRequirementDate: contributionRequirementDate,
+        reachedPointsRequirementDate: pointsRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -2522,6 +2335,7 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     age: number,
+    birthDate: Date | undefined,
   ): AnalysisServiceInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const REQUIRED_AGE_MEN = 65;
@@ -2530,9 +2344,6 @@ export class CnisAnalysisService {
     const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
     const CUTOFF_DATE = new Date('2019-11-13');
 
-    // ---------------------------------------------------------
-    // Ajuste de períodos (mesma lógica já existente)
-    // ---------------------------------------------------------
     data.forEach((item) => {
       const dataInicio = this.toDate(item.validContributionTime?.dataInicio);
       let dataFim = this.toDate(item.validContributionTime?.dataFim);
@@ -2569,36 +2380,21 @@ export class CnisAnalysisService {
       };
     });
 
-    // ---------------------------------------------------------
-    // Totais
-    // ---------------------------------------------------------
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    // ---------------------------------------------------------
-    // Requisitos
-    // ---------------------------------------------------------
     const meetsAgeRequirement = age >= requiredAge;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
-    // ---------------------------------------------------------
-    // DATA REAL EM QUE CADA REQUISITO FOI ATINGIDO
-    // ---------------------------------------------------------
-
-    // 1) Data em que atingiu a idade (real, não hoje)
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age)
+      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
       : null;
 
-    // 2) Data em que atingiu a carência (real)
     const carenciaRequirementDate = this.calculateCarenciaRequirementDate(
       data,
       REQUIRED_CARENCIA_MONTHS,
     );
 
-    // ---------------------------------------------------------
-    // Eligibility Date — mesma regra do Art. 17
-    // ---------------------------------------------------------
     const isEligible = meetsAgeRequirement && meetsCarenciaRequirement;
 
     let eligibilityDate: Date | null = null;
@@ -2613,9 +2409,6 @@ export class CnisAnalysisService {
       }
     }
 
-    // ---------------------------------------------------------
-    // PROJECTED FULFILLMENT DATE
-    // ---------------------------------------------------------
     const today = new Date();
 
     const monthsToAge = meetsAgeRequirement
@@ -2640,9 +2433,6 @@ export class CnisAnalysisService {
       ? null
       : projectedFulfillmentDate;
 
-    // ---------------------------------------------------------
-    // RESULTADO
-    // ---------------------------------------------------------
     return {
       type: 'Aposentadoria por Idade Urbana com Direito Adquirido',
       age,
@@ -2652,6 +2442,8 @@ export class CnisAnalysisService {
         meetsCarenciaRequirement,
         requiredAge,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        reachedAgeRequirementDate: ageRequirementDate,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -2665,9 +2457,10 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     age: number,
+    birthDate?: Date,
   ): AnalysisServiceInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
-    const BASE_POINTS_MEN = 96;
+    const BASE_POINTS_MEN = 70;
     const BASE_POINTS_WOMEN = 86;
     const MAX_POINTS_MEN = 105;
     const MAX_POINTS_WOMEN = 100;
@@ -2709,9 +2502,10 @@ export class CnisAnalysisService {
     );
 
     const pointsRequirementDate = this.calculatePointsRequirementDate(
-      totals,
-      age,
+      data,
       requiredPoints,
+      age,
+      birthDate,
     );
 
     const actualDate = new Date();
@@ -2843,7 +2637,7 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     age: number,
     gender: string,
-    birthDate?: Date,
+    birthDate: Date | undefined,
   ): AnalysisServiceInterface {
     const REQUIRED_AGE_WOMEN = 57;
     const REQUIRED_AGE_MEN = 60;
@@ -2872,8 +2666,8 @@ export class CnisAnalysisService {
     const actualDate = new Date();
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate)
-      : this.calculateRequirementDateByAge(requiredAge, age, birthDate);
+      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      : this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null);
 
     const contributionRequirementDate = meetsContributionRequirement
       ? this.calculateContributionRequirementDate(
@@ -2942,6 +2736,9 @@ export class CnisAnalysisService {
       type: 'Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 20',
       age,
       gender,
+      totalContributionYears: totalContribution,
+      totalContributionYearsAtReforma: pedagioData.totalContributionAtReforma,
+      totalCarenciaMonths,
       requirements: {
         requiredAge,
         requiredContributionYears: requiredContribution,
@@ -2953,13 +2750,10 @@ export class CnisAnalysisService {
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
-      totalContributionYears: totalContribution,
-      totalContributionYearsAtReforma: pedagioData.totalContributionAtReforma,
-      totalCarenciaMonths,
       eligibility: {
+        isEligible,
         eligibilityDate,
         projectedFulfillmentDate: finalProjectedFulfillmentDate,
-        isEligible,
       },
     };
   }
@@ -2968,6 +2762,7 @@ export class CnisAnalysisService {
     data: ConsolidadoRelationInterface[],
     gender: string,
     age: number,
+    birthDate: Date | undefined,
   ): AnalysisServiceInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 61;
@@ -2987,12 +2782,6 @@ export class CnisAnalysisService {
 
     const totals = this.calculateTotals(data);
 
-    const totalContributionDecimal = this.convertToDecimalYears(
-      totals.years,
-      totals.months,
-      totals.days,
-    );
-
     const currentYear = new Date().getFullYear();
     const yearsSince2020 = Math.max(0, currentYear - YEARS_INCREASE_START);
 
@@ -3002,7 +2791,7 @@ export class CnisAnalysisService {
     }
 
     const meetsContributionRequirement =
-      totalContributionDecimal >= requiredContributionYears;
+      totals.totalInYears >= requiredContributionYears;
 
     const meetsCarenciaRequirement =
       totals.carencia >= REQUIRED_CARENCIA_MONTHS;
@@ -3010,7 +2799,7 @@ export class CnisAnalysisService {
     const meetsAgeRequirement = age >= requiredAge;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age)
+      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
       : null;
 
     const contributionRequirementDate = meetsContributionRequirement
@@ -3078,7 +2867,6 @@ export class CnisAnalysisService {
       totalContributionYears: totals.totalInYears,
       totalCarenciaMonths: totals.carencia,
       age,
-
       requirements: {
         requiredContributionYears,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
@@ -3086,12 +2874,10 @@ export class CnisAnalysisService {
         meetsContributionRequirement,
         meetsCarenciaRequirement,
         meetsAgeRequirement,
-
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
         reachedAgeRequirementDate: ageRequirementDate,
       },
-
       eligibility: {
         isEligible: eligibilityDate !== null,
         eligibilityDate,
@@ -3193,6 +2979,8 @@ export class CnisAnalysisService {
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         meetsContributionRequirement: meetsContributionTimeRequirement,
         meetsCarenciaRequirement,
+        reachedContributionRequirementDate: contributionRequirementDate,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -3243,7 +3031,6 @@ export class CnisAnalysisService {
       };
     }
 
-    // Ajuste dos períodos ao cutoff
     data.forEach((item) => {
       const inicio = this.toDate(item.validContributionTime?.dataInicio);
       let fim = this.toDate(item.validContributionTime?.dataFim);
@@ -3294,7 +3081,6 @@ export class CnisAnalysisService {
       birthDate.getDate(),
     );
 
-    // Carência é sempre até a data de corte
     const carenciaCompletionDate = cutoff;
 
     let eligibilityDate: Date | null = null;
@@ -3315,6 +3101,8 @@ export class CnisAnalysisService {
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         meetsAgeRequirement,
         meetsCarenciaRequirement,
+        reachedAgeRequirementDate: ageCompletionDate,
+        reachedCarenciaRequirementDate: carenciaCompletionDate,
       },
       eligibility: {
         isEligible,
@@ -3355,17 +3143,12 @@ export class CnisAnalysisService {
     }
 
     const totals = this.calculateTotals(data);
-    const totalContribution = this.convertToDecimalYears(
-      totals.years,
-      totals.months,
-      totals.days,
-    );
+
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    // ---- Requisitos ----
     const meetsAgeRequirement = age >= requiredAge;
     const meetsContributionRequirement =
-      totalContribution >= REQUIRED_CONTRIBUTION_YEARS;
+      totals.totalInYears >= REQUIRED_CONTRIBUTION_YEARS;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
@@ -3460,7 +3243,7 @@ export class CnisAnalysisService {
     const monthsToContribution = meetsContributionRequirement
       ? 0
       : Math.ceil(
-          (REQUIRED_CONTRIBUTION_YEARS - totalContribution) *
+          (REQUIRED_CONTRIBUTION_YEARS - totals.totalInYears) *
             this.MONTHS_IN_YEAR,
         );
 
@@ -3488,7 +3271,7 @@ export class CnisAnalysisService {
 
     return {
       type: 'Aposentadoria por Idade Urbana - Regra de Transição - Emenda 103 art. 18',
-      totalContributionYears: totalContribution,
+      totalContributionYears: totals.totalInYears,
       totalCarenciaMonths,
       age,
       requirements: {
@@ -3498,6 +3281,9 @@ export class CnisAnalysisService {
         meetsAgeRequirement,
         meetsContributionRequirement,
         meetsCarenciaRequirement,
+        reachedAgeRequirementDate: ageRequirementDate,
+        reachedContributionRequirementDate: contributionRequirementDate,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
       eligibility: {
         isEligible: allRequirementsMet,
@@ -3597,47 +3383,11 @@ export class CnisAnalysisService {
       );
     })();
 
-    const contributionRequirementDate = ((): Date | null => {
-      let accYears = 0;
-      let accMonths = 0;
-      let accDays = 0;
-
-      const add = (v: TimeContributionDataInterface): void => {
-        accYears += v.anos;
-        accMonths += v.meses;
-        accDays += v.dias;
-
-        if (accDays >= this.DAYS_IN_MONTH) {
-          accMonths += Math.floor(accDays / this.DAYS_IN_MONTH);
-          accDays = accDays % this.DAYS_IN_MONTH;
-        }
-
-        if (accMonths >= this.MONTHS_IN_YEAR) {
-          accYears += Math.floor(accMonths / this.MONTHS_IN_YEAR);
-          accMonths = accMonths % this.MONTHS_IN_YEAR;
-        }
-      };
-
-      for (const item of data) {
-        const v = item.validContributionTime;
-        if (!v) {
-          continue;
-        }
-
-        add(v);
-
-        const totalDecimal =
-          accYears +
-          accMonths / this.MONTHS_IN_YEAR +
-          accDays / this.DAYS_IN_YEAR;
-
-        if (totalDecimal >= REQUIRED_CONTRIBUTION_YEARS) {
-          return item.dataAjustada?.dataFim ?? v.dataFim ?? null;
-        }
-      }
-
-      return null;
-    })();
+    const contributionRequirementDate =
+      this.calculateContributionRequirementDate(
+        data,
+        REQUIRED_CONTRIBUTION_YEARS,
+      );
 
     const carenciaRequirementDate = this.calculateCarenciaRequirementDate(
       data,
@@ -3731,11 +3481,14 @@ export class CnisAnalysisService {
         meetsAgeRequirement,
         meetsContributionRequirement,
         meetsCarenciaRequirement,
+        reachedAgeRequirementDate: ageRequirementDate,
+        reachedContributionRequirementDate: contributionRequirementDate,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
-        projectedFulfillmentDate: finalProjectedFulfillmentDate,
         eligibilityDate,
+        projectedFulfillmentDate: finalProjectedFulfillmentDate,
       },
     };
   }
@@ -3774,48 +3527,11 @@ export class CnisAnalysisService {
         )
       : null;
 
-    const contributionRequirementDate = ((): Date | null => {
-      let accYears = 0;
-      let accMonths = 0;
-      let accDays = 0;
-
-      const add = (v: TimeContributionDataInterface): void => {
-        accYears += v.anos;
-        accMonths += v.meses;
-        accDays += v.dias;
-
-        if (accDays >= this.DAYS_IN_MONTH) {
-          accMonths += Math.floor(accDays / this.DAYS_IN_MONTH);
-          accDays %= this.DAYS_IN_MONTH;
-        }
-
-        if (accMonths >= this.MONTHS_IN_YEAR) {
-          accYears += Math.floor(accMonths / this.MONTHS_IN_YEAR);
-          accMonths %= this.MONTHS_IN_YEAR;
-        }
-        return;
-      };
-
-      for (const item of data) {
-        const v = item.validContributionTime;
-        if (!v) {
-          continue;
-        }
-
-        add(v);
-
-        const totalDecimal =
-          accYears +
-          accMonths / this.MONTHS_IN_YEAR +
-          accDays / this.DAYS_IN_YEAR;
-
-        if (totalDecimal >= REQUIRED_CONTRIBUTION_YEARS) {
-          return item.dataAjustada?.dataFim ?? v.dataFim ?? null;
-        }
-      }
-
-      return null;
-    })();
+    const contributionRequirementDate =
+      this.calculateContributionRequirementDate(
+        data,
+        REQUIRED_CONTRIBUTION_YEARS,
+      );
 
     const carenciaRequirementDate = this.calculateCarenciaRequirementDate(
       data,
@@ -3885,6 +3601,9 @@ export class CnisAnalysisService {
         meetsAgeRequirement,
         meetsContributionRequirement,
         meetsCarenciaRequirement,
+        reachedAgeRequirementDate: ageRequirementDate,
+        reachedContributionRequirementDate: contributionRequirementDate,
+        reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
       eligibility: {
         isEligible: allRequirementsMet,
