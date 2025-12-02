@@ -19,6 +19,7 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { CnisAnalysisGateway } from '@lib/cnis-analysis/cnis-analysis-gateway';
 
 @Injectable()
 export class CreateCnisFastAnalysisResultUseCase {
@@ -39,6 +40,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(CnisAnalysisGateway)
+    private readonly cnisAnalysisGateway: CnisAnalysisGateway,
   ) {}
 
   public async execute(
@@ -82,10 +85,21 @@ export class CreateCnisFastAnalysisResultUseCase {
       'utf-8',
     );
 
+    const cnisAnalysisDocument =
+      await this.cnisAnalysisGateway.parseCnisDocumentComplete(
+        cnisDocumentBuffer,
+      );
+
+    const cnisAnalysisDocumentBuffer = Buffer.from(
+      JSON.stringify(cnisAnalysisDocument, null, 2),
+      'utf-8',
+    );
+
     const cnisCompleteAnalysis =
       await this.analysisProcessorGateway.getCnisCompleteAnalysis([
         clientDataBuffer,
         cnisDocumentDataBuffer,
+        cnisAnalysisDocumentBuffer,
       ]);
 
     let clientLastAffiliationDate: Date | null = null;
