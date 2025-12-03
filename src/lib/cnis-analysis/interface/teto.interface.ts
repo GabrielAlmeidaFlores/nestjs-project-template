@@ -1,4 +1,4 @@
-export interface TetoInterface {
+export interface SalarioTetoInterface {
   competencia: string;
   salarioOriginal: number;
   salarioAjustado: number;

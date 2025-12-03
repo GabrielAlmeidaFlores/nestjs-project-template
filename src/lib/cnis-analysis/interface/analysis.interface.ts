@@ -1,9 +1,9 @@
-export interface AnalysisServiceInterface {
+export interface AnalyzerServiceInterface {
   type: string;
-  eligibility: EligibilityInterface;
+  eligibility: ElegibilidadeInterface;
   age?: number;
   gender?: string;
-  requirements: RequirementsInterface;
+  requirements: RequerimentosInterface;
   points?: number | null;
   totalContributionYears?: number | null;
   totalContributionYearsAtReforma?: number | null;
@@ -12,13 +12,13 @@ export interface AnalysisServiceInterface {
   totalContributionDays?: number | null;
 }
 
-interface EligibilityInterface {
+interface ElegibilidadeInterface {
   isEligible?: boolean;
   eligibilityDate?: Date | null;
   projectedFulfillmentDate?: Date | null;
 }
 
-interface RequirementsInterface {
+interface RequerimentosInterface {
   requiredAge?: number;
   requiredPoints?: number;
   requiredContributionYears?: number;

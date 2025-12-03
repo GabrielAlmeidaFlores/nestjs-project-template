@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { CnisAnalysisGateway } from '@lib/cnis-analysis/cnis-analysis-gateway';
+import { CnisAnalyzerGateway } from '@lib/cnis-analysis/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
@@ -40,8 +40,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-    @Inject(CnisAnalysisGateway)
-    private readonly cnisAnalysisGateway: CnisAnalysisGateway,
+    @Inject(CnisAnalyzerGateway)
+    private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
   ) {}
 
   public async execute(
@@ -86,9 +86,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     );
 
     const cnisAnalysisDocument =
-      await this.cnisAnalysisGateway.parseCnisDocumentComplete(
-        cnisDocumentBuffer,
-      );
+      await this.cnisAnalysisGateway.analyseCnisDocument(cnisDocumentBuffer);
 
     const cnisAnalysisDocumentBuffer = Buffer.from(
       JSON.stringify(cnisAnalysisDocument, null, 2),

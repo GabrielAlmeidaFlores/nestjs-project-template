@@ -1,4 +1,4 @@
-export interface PedagioInterface {
+export interface PedagioPosReformaInterface {
   totalContributionAtReforma: number;
   tempoFaltante: number;
   pedagio: number;

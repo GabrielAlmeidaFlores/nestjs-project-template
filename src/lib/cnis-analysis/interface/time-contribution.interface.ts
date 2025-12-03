@@ -1,6 +1,7 @@
+import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
+
 export interface TimeContributionDataInterface {
-  dataInicio?: Date | null | undefined;
-  dataFim?: Date | null | undefined;
+  data: DataInterface | null | undefined;
   abreviado: string;
   dias: number;
   meses: number;
