@@ -1,4 +1,4 @@
-export interface ManutencaoInterface {
+export interface ManutencaoQualidadeSeguradoInterface {
   periodo_analisado: string;
   ultima_referencia: string;
   proximo_vinculo: string;

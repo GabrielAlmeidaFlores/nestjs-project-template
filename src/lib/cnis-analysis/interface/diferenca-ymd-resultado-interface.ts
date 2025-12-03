@@ -1,6 +1,6 @@
 export interface DiferencaYmdResultadoInterface {
-  anos: number;
-  meses: number;
-  dias: number;
-  formatado: string;
+  years: number;
+  months: number;
+  days: number;
+  formatted: string;
 }

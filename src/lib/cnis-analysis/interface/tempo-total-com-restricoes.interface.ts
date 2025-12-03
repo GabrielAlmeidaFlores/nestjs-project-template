@@ -1,4 +1,4 @@
-import type { ConsolidadoRelationInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
+import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
 import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
 
 export interface TempoRestricoesContribuicaoTotalInterface {
@@ -10,8 +10,8 @@ export interface TempoRestricoesContribuicaoTotalInterface {
 export interface TempoComRestricaoItemInterface {
   seq: number;
   indicadores: string | null | undefined;
-  contributionTime: ConsolidadoRelationInterface['contributionTime'];
-  validContributionTime: ConsolidadoRelationInterface['validContributionTime'];
+  contributionTime: ConsolidadoRelacaoInterface['contributionTime'];
+  validContributionTime: ConsolidadoRelacaoInterface['validContributionTime'];
   carencia: number | null | undefined;
   isConcomitante: boolean | null | undefined;
   isBeneficio: boolean | null | undefined;

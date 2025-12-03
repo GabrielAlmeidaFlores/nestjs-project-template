@@ -1,15 +1,8 @@
+import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
+
 export interface CnisConsolidadeResumidoInterface {
   seq: number;
-  contributionTime?: ContributionTimeInterface;
+  contributionTime?: TempoDeContribuicaoDetalhesInterface;
   carencia: number;
   isConcomitante: boolean;
-}
-
-export interface ContributionTimeInterface {
-  dataInicio?: Date;
-  dataFim?: Date;
-  abreviado: string;
-  dias: number;
-  meses: number;
-  anos: number;
 }

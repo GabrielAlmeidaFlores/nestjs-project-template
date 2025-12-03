@@ -1,4 +1,4 @@
-export interface AnalyzerServiceInterface {
+export interface AnalisePrevidenciariaInterface {
   type: string;
   eligibility: ElegibilidadeInterface;
   age?: number;

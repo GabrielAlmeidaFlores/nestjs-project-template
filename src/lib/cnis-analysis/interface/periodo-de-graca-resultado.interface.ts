@@ -1,4 +1,4 @@
-export interface PeriodoDeGracaScenarioInterface {
+export interface PeriodoDeGracaInterface {
   type: string;
   'Vínculos Considerados': number[];
   'Total de Contribuições (meses)': number;
@@ -6,6 +6,6 @@ export interface PeriodoDeGracaScenarioInterface {
   'Atingiu 120 Contribuições?': 'Sim' | 'Não';
   'Direito à Prorrogação de +12 meses no Período de Graça': 'Sim' | 'Não';
 }
-export interface PeriodoDeGracaResultInterface {
-  cenarios: PeriodoDeGracaScenarioInterface[];
+export interface PeriodoDeGracaResultadoInterface {
+  cenarios: PeriodoDeGracaInterface[];
 }
