@@ -31,11 +31,11 @@ import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/d
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
-import { ListCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/list-cnis-fast-analysis.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
+import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
@@ -53,11 +53,11 @@ import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-c
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
-import { ListCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/list-cnis-fast-analysis.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
+import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -68,6 +68,7 @@ import { GetSessionData } from '@shared/api/util/decorator/property/get-session-
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -78,7 +79,6 @@ export class AnalysisToolController {
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
-    private readonly listCnisFastAnalysisUseCase: ListCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
@@ -93,12 +93,14 @@ export class AnalysisToolController {
     private readonly downloadLegalPleadingSimplifiedAnalysisUseCase: DownloadLegalPleadingSimplifiedAnalysisUseCase,
     private readonly downloadLegalPleadingCompleteAnalysisUseCase: DownloadLegalPleadingCompleteAnalysisUseCase,
     private readonly updateLegalPleadingCompleteAnalysisUseCase: UpdateLegalPleadingCompleteAnalysisUseCase,
+    private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
   ) {}
 
   @BuildEndpointSpecification({
     summary: 'Listar registros de análises',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analysis-tool-record',
       method: RequestMethod.GET,
@@ -126,6 +128,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Listar clientes da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analysis-tool-client',
       method: RequestMethod.GET,
@@ -141,16 +144,20 @@ export class AnalysisToolController {
   public async listAnalysisToolClient(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Query() dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientResponseDto> {
     return await this.listAnalysisToolClientUseCase.execute(
       organizationSessionData,
+      sessionData,
       dto,
     );
   }
 
   @BuildEndpointSpecification({
     summary: 'Criar cliente da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analysis-tool-client',
       method: RequestMethod.POST,
@@ -178,6 +185,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar cliente da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':analysisToolClientId',
       method: RequestMethod.PATCH,
@@ -212,6 +220,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Obter cliente da análise por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analysis-tool-client/:analysisToolClientId',
       method: RequestMethod.GET,
@@ -227,6 +236,8 @@ export class AnalysisToolController {
   public async getAnalysisToolClient(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Param(
       'analysisToolClientId',
       new ParseValueObjectPipe(AnalysisToolClientId),
@@ -235,12 +246,14 @@ export class AnalysisToolController {
   ): Promise<GetAnalysisToolClientResponseDto> {
     return await this.getAnalysisToolClientUseCase.execute(
       organizationSessionData,
+      sessionData,
       analysisToolClientId,
     );
   }
 
   @BuildEndpointSpecification({
     summary: 'Listar peças processuais',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading',
       method: RequestMethod.GET,
@@ -268,6 +281,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Criar peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading',
       method: RequestMethod.POST,
@@ -296,6 +310,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar análise completa da peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId/complete-analysis',
       method: RequestMethod.PATCH,
@@ -327,7 +342,37 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Atualizar o status da peça processual para completo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'legal-pleading/:legalPleadingId/complete',
+      method: RequestMethod.PATCH,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Status de peça processual atualizado com sucesso',
+      type: UpdateLegalPleadingStatusToCompleteResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateLegalPleadingStatusToComplete(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+  ): Promise<UpdateLegalPleadingStatusToCompleteResponseDto> {
+    return await this.updateLegalPleadingToCompleteStatusUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Criar resultado da peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId/result',
       method: RequestMethod.POST,
@@ -356,6 +401,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Criar análise de documento da peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId/document-analysis',
       method: RequestMethod.POST,
@@ -385,6 +431,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Obter peça processual por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId',
       method: RequestMethod.GET,
@@ -400,17 +447,21 @@ export class AnalysisToolController {
   public async getLegalPleading(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
     legalPleadingId: LegalPleadingId,
   ): Promise<GetLegalPleadingResponseDto> {
     return await this.getLegalPleadingUseCase.execute(
       organizationSessionData,
       legalPleadingId,
+      sessionData,
     );
   }
 
   @BuildEndpointSpecification({
     summary: 'Criar análise rápida de CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'cnis-fast-analysis',
       method: RequestMethod.POST,
@@ -439,6 +490,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Atualizar análise rápida de CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.PATCH,
@@ -471,6 +523,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Remover cliente da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'analysis-tool-client/:analysisToolClientId',
       method: RequestMethod.DELETE,
@@ -502,6 +555,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Obter análise rápida de CNIS por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId',
       method: RequestMethod.GET,
@@ -530,6 +584,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Baixar análise de CNIS simplificada',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/simplified-version',
       method: RequestMethod.GET,
@@ -562,6 +617,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Baixar análise de CNIS completa',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/complete-version',
       method: RequestMethod.GET,
@@ -594,6 +650,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Baixar análise de Peça Processual simplificada',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId/download/simplified-version',
       method: RequestMethod.GET,
@@ -626,6 +683,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Baixar análise de Peça Processual completa',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'legal-pleading/:legalPleadingId/download/complete-version',
       method: RequestMethod.GET,
@@ -657,34 +715,8 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar análises rápidas de CNIS',
-    http: {
-      path: 'cnis-fast-analysis',
-      method: RequestMethod.GET,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Lista de análises rápidas de CNIS retornada com sucesso.',
-      type: ListCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async listCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
-  ): Promise<ListCnisFastAnalysisResponseDto> {
-    return await this.listCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
     summary: 'Criar resultado da análise rápida de CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'cnis-fast-analysis/:cnisFastAnalysisId/result',
       method: RequestMethod.POST,

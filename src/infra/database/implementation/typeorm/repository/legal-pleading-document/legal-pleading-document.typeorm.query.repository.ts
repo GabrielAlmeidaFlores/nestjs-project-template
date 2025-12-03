@@ -28,7 +28,7 @@ export class LegalPleadingDocumentTypeormQueryRepository
   ) {
     super(repository);
   }
-  public async findByDocumentType(
+  public async findByDocumentTypeAndOrganizationIdAndLegalPleadingId(
     legalPleadingId: LegalPleadingId,
     documentType: LegalPleadingDocumentTypeEnum,
     organizationId: OrganizationId,
@@ -61,7 +61,7 @@ export class LegalPleadingDocumentTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByLegalPleadingDocumentAndOrganizationIdOrFail(
+  public async findOneByLegalPleadingDocumentIdAndOrganizationIdOrFail(
     id: LegalPleadingDocumentId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,

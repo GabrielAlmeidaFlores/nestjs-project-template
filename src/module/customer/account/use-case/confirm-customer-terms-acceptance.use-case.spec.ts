@@ -35,29 +35,27 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const customerQueryRepositoryGateway: jest.Mocked<CustomerQueryRepositoryGateway> =
     {
       findOneByAuthIdentityIdWithCustomerAddressRelationOrFail: jest.fn(),
-      findOneByAuthIdentityIdOrFail: jest.fn(),
-      findOneByCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerQueryRepositoryGateway>;
 
   const customerTermsQueryRepositoryGateway: jest.Mocked<CustomerTermsQueryRepositoryGateway> =
     {
       findOneByStatus: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsQueryRepositoryGateway>;
 
   const customerTermsAcceptanceQueryRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway> =
     {
       findOneByTermsIdAndCustomerId: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceQueryRepositoryGateway>;
 
   const customerTermsAcceptanceCommandRepositoryGateway: jest.Mocked<CustomerTermsAcceptanceCommandRepositoryGateway> =
     {
       createCustomerTermsAcceptance: jest.fn(),
-    };
+    } as unknown as jest.Mocked<CustomerTermsAcceptanceCommandRepositoryGateway>;
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -143,8 +141,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve confirmar o aceite dos termos com sucesso', async () => {
-    // Arrange
+  it('should confirm terms acceptance successfully', async () => {
     const sessionData = buildSessionData();
     const transaction = buildTransaction();
 
@@ -162,7 +159,6 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
     baseTransactionRepositoryGateway.execute.mockResolvedValueOnce(transaction);
 
-    // Act
     const result = await useCase.execute(sessionData);
 
     expect(result).toBeInstanceOf(CustomerTermsAcceptanceResponseDto);
@@ -174,8 +170,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar CustomerTermsAcceptanceError se os termos já foram aceitos', async () => {
-    // Arrange
+  it('should throw CustomerTermsAcceptanceError when terms are already accepted', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
@@ -185,7 +180,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
       termsQueryResult,
     );
     customerTermsAcceptanceQueryRepositoryGateway.findOneByTermsIdAndCustomerId.mockResolvedValueOnce(
-      termsAcceptanceQueryResult, // Mock para simular que o termo já foi aceito
+      termsAcceptanceQueryResult,
     );
 
     await expect(useCase.execute(sessionData)).rejects.toBeInstanceOf(
@@ -193,8 +188,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
   });
 
-  it('deve lançar CustomerTermsNotFoundError se não houver termos ativos', async () => {
-    // Arrange
+  it('should throw CustomerTermsNotFoundError when no active terms exist', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockResolvedValueOnce(
@@ -209,8 +203,7 @@ describe(ConfirmCustomerTermsAcceptanceUseCase.name, () => {
     );
   });
 
-  it('deve propagar CustomerNotFoundError se o cliente não for encontrado', async () => {
-    // Arrange
+  it('should propagate CustomerNotFoundError when customer is not found', async () => {
     const sessionData = buildSessionData();
 
     customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail.mockRejectedValueOnce(

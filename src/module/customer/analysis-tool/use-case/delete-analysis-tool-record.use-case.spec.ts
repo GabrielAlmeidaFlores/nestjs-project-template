@@ -3,7 +3,10 @@ import { Test } from '@nestjs/testing';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
@@ -28,7 +31,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
 
 const mockDeleteCnisFastAnalysisUseCase = {
@@ -38,29 +40,22 @@ const mockDeleteCnisFastAnalysisUseCase = {
 describe(DeleteAnalysisToolRecordUseCase.name, () => {
   let useCase: DeleteAnalysisToolRecordUseCase;
 
-  const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
-    {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
-    } as unknown as jest.Mocked<OrganizationMemberQueryRepositoryGateway>;
+  const organizationMemberQueryRepositoryGateway = {
+    findOneByCustomerIdAndAuthIdentityId: jest.fn(),
+  };
 
-  const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
-    {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
-      countAnalysisByAnalysisToolClientId: jest.fn(),
-    };
+  const analysisToolRecordQueryRepositoryGateway = {
+    findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail:
+      jest.fn(),
+  };
 
-  const analysisToolRecordCommandRepositoryGateway: jest.Mocked<AnalysisToolRecordCommandRepositoryGateway> =
-    {
-      deleteAnalysisToolRecord: jest.fn(),
-      createAnalysisToolRecord: jest.fn(),
-    };
+  const analysisToolRecordCommandRepositoryGateway = {
+    deleteAnalysisToolRecord: jest.fn(),
+  };
 
-  const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
-    {
-      execute: jest.fn(),
-    };
+  const baseTransactionRepositoryGateway = {
+    execute: jest.fn(),
+  };
 
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
@@ -82,6 +77,40 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
   const buildAnalysisToolRecordQueryResult = (
     options: { withCnisAnalysis?: boolean } = {},
   ): GetAnalysisToolRecordWithRelationsQueryResult => {
+    const customerMock = GetCustomerQueryResult.build({
+      id: new CustomerId(),
+      name: 'Test Customer',
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+    const responsibleMock =
+      GetOrganizationMemberWithCustomerRelationQueryResult.build({
+        id: new OrganizationMemberId(),
+        owner: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        customer: customerMock,
+      });
+
+    const clientMock = GetAnalysisToolClientQueryResult.build({
+      id: new AnalysisToolClientId(),
+      name: 'Test Client',
+      federalDocument: null,
+      email: null,
+      inssPassword: null,
+      phoneNumber: null,
+      birthDate: null,
+      gender: null,
+      clientType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
     const cnisFastAnalysisMock =
       options.withCnisAnalysis === true
         ? GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResult.build(
@@ -89,25 +118,9 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
               id: new CnisFastAnalysisId(),
               cnisDocument: null,
               status: AnalysisStatusEnum.COMPLETED,
-              analysisToolClient: GetAnalysisToolClientQueryResult.build({
-                id: new AnalysisToolClientId(),
-                name: null,
-                federalDocument: null,
-                email: null,
-                phoneNumber: null,
-                birthDate: null,
-                gender: null,
-                clientType: null,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                deletedAt: null,
-              }),
-              createdBy: {
-                customer: {},
-              } as GetOrganizationMemberWithCustomerRelationQueryResult,
-              updatedBy: {
-                customer: {},
-              } as GetOrganizationMemberWithCustomerRelationQueryResult,
+              analysisToolClient: clientMock,
+              createdBy: responsibleMock,
+              updatedBy: responsibleMock,
               createdAt: new Date(),
               updatedAt: new Date(),
               deletedAt: null,
@@ -163,7 +176,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve deletar um registro e a análise CNIS associada', async () => {
+  it('should delete record and associated CNIS analysis', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
@@ -173,10 +186,10 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     });
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       recordQueryResult,
     );
     mockDeleteCnisFastAnalysisUseCase.execute.mockResolvedValueOnce(undefined);
@@ -195,10 +208,11 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(result.analysisToolRecordId).toBe(recordQueryResult.id);
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+      analysisToolRecordQueryRepositoryGateway.findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail,
     ).toHaveBeenCalledWith(
       analysisToolRecordId,
       orgSessionData.organizationId,
+      sessionData.authIdentityId,
       AnalysisToolRecordNotFoundError,
     );
     expect(mockDeleteCnisFastAnalysisUseCase.execute).toHaveBeenCalledTimes(1);
@@ -213,7 +227,7 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve deletar um registro sem chamar a deleção de CNIS se não houver associação', async () => {
+  it('should delete record without calling CNIS deletion when no association exists', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
@@ -223,10 +237,10 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     });
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       recordQueryResult,
     );
     analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord.mockReturnValue(
@@ -243,12 +257,12 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -257,16 +271,16 @@ describe(DeleteAnalysisToolRecordUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar AnalysisToolRecordNotFoundError se o registro não for encontrado', async () => {
+  it('should throw AnalysisToolRecordNotFoundError when record is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const analysisToolRecordId = new AnalysisToolRecordId();
     const organizationMember = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    analysisToolRecordQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockRejectedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail.mockRejectedValueOnce(
       new AnalysisToolRecordNotFoundError(),
     );
 

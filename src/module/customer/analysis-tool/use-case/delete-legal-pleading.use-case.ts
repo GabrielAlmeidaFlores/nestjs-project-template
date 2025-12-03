@@ -31,7 +31,7 @@ export class DeleteLegalPleadingUseCase {
     legalPleadingId: LegalPleadingId,
   ): Promise<DeleteLegalPleadingResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -41,9 +41,10 @@ export class DeleteLegalPleadingUseCase {
     }
 
     const legalPleadingResult =
-      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingAndOrganizationIdOrFail(
+      await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
         legalPleadingId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         OrganizationMemberNotFoundError,
       );
 

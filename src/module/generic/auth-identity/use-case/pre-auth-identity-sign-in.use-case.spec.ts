@@ -1,55 +1,41 @@
 import { Test } from '@nestjs/testing';
 import bcrypt from 'bcrypt';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
+import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
+import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
-import { PreAuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/pre-auth-identity-sign-in.request.dto';
-import {
-  PreAuthIdentityAuthenticatorDataSignInResponseDto,
-  PreAuthIdentitySignInResponseDto,
-} from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
+import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
+import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
-import { AuthIdentitySessionConflictError } from '@module/generic/auth-identity/error/auth-identity-session-conflict.error';
+import { AuthenticatorAppNotConfiguredError } from '@module/generic/auth-identity/error/authenticator-app-not-configured.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
-import { AuthenticatorCredentialsOutputModel } from '@module/generic/auth-identity/lib/authenticator/model/output/authenticator-credentials.output.model';
 import { EmailMFAGateway } from '@module/generic/auth-identity/lib/email-mfa/email-mfa.gateway';
-import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
+import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-in.use-case';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import type { FastifyReply } from 'fastify';
 
-describe(PreAuthIdentitySignInUseCase.name, () => {
-  let useCase: PreAuthIdentitySignInUseCase;
-  let compareSpy: jest.SpyInstance<
-    boolean,
-    Parameters<typeof bcrypt.compareSync>
-  >;
+describe(AuthIdentitySignInUseCase.name, () => {
+  let useCase: AuthIdentitySignInUseCase;
+  let compareSpy: jest.SpyInstance;
 
   const mockAuthIdentityId = new AuthIdentityId();
+  const mockCustomerId = new CustomerId();
 
   const queryRepo: jest.Mocked<AuthIdentityQueryRepositoryGateway> = {
     findOneAuthIdentityById: jest.fn(),
-    findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
+    findOneAuthIdentityByEmailOrFederalDocumentWithRelations: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
-
-  const commandRepo: jest.Mocked<AuthIdentityCommandRepositoryGateway> = {
-    createAuthIdentity: jest.fn(),
-    updateAuthenticatorAppSecret: jest.fn(),
-  } as unknown as jest.Mocked<AuthIdentityCommandRepositoryGateway>;
-
-  const txRepo: jest.Mocked<BaseTransactionRepositoryGateway> = {
-    execute: jest.fn(),
-  } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const authenticatorGateway: jest.Mocked<AuthenticatorGateway> = {
     verifyCode: jest.fn(),
@@ -62,26 +48,27 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
   } as unknown as jest.Mocked<EmailMFAGateway>;
 
   const sessionGateway: jest.Mocked<AuthIdentitySessionGateway> = {
+    createSession: jest.fn(),
     getSession: jest.fn(),
+    deleteSession: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
+
+  const reply: Partial<FastifyReply> = {
+    setCookie: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        PreAuthIdentitySignInUseCase,
+        AuthIdentitySignInUseCase,
         { provide: AuthIdentityQueryRepositoryGateway, useValue: queryRepo },
-        {
-          provide: AuthIdentityCommandRepositoryGateway,
-          useValue: commandRepo,
-        },
-        { provide: BaseTransactionRepositoryGateway, useValue: txRepo },
         { provide: AuthenticatorGateway, useValue: authenticatorGateway },
         { provide: EmailMFAGateway, useValue: emailMFAGateway },
         { provide: AuthIdentitySessionGateway, useValue: sessionGateway },
       ],
     }).compile();
 
-    useCase = module.get(PreAuthIdentitySignInUseCase);
+    useCase = module.get(AuthIdentitySignInUseCase);
 
     compareSpy = jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
@@ -94,19 +81,39 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
     '$2b$10$zjZfs7ZyTbnKcECIr1FjNesPiJFFBgU2BeH45LZcKNFx0PEAsddE2';
 
   const createValidDto = (
-    overrides?: Partial<PreAuthIdentitySignInRequestDto>,
-  ): PreAuthIdentitySignInRequestDto =>
-    PreAuthIdentitySignInRequestDto.build({
+    overrides?: Partial<AuthIdentitySignInRequestDto>,
+  ): AuthIdentitySignInRequestDto =>
+    AuthIdentitySignInRequestDto.build({
       email: new Email('user@example.com'),
       password: 'ValidPassword123',
+      mfaCode: '123456',
       mfaOption: SignInMFAOptionEnum.EMAIL,
       ...overrides,
     });
 
+  const createAdminResult = (): GetAdminQueryResult =>
+    GetAdminQueryResult.build({
+      id: new AdminId(),
+      name: 'Admin Test',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+  const createCustomerResult = (): GetCustomerQueryResult =>
+    GetCustomerQueryResult.build({
+      id: mockCustomerId,
+      name: 'Customer Name',
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
   const createAuthIdentity = (
-    overrides?: Partial<GetAuthIdentityQueryResult>,
-  ): GetAuthIdentityQueryResult =>
-    GetAuthIdentityQueryResult.build({
+    overrides?: Partial<GetAuthIdentityWithRelationsQueryResult>,
+  ): GetAuthIdentityWithRelationsQueryResult =>
+    GetAuthIdentityWithRelationsQueryResult.build({
       id: mockAuthIdentityId,
       email: new Email('user@example.com'),
       federalDocument: new FederalDocument('12345678900'),
@@ -115,172 +122,180 @@ describe(PreAuthIdentitySignInUseCase.name, () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
+      customer: overrides?.customer ?? createCustomerResult(),
+      admin: overrides?.admin ?? null,
       ...overrides,
     });
 
-  it('EMAIL: should send code and return customer userLevel (no active session)', async () => {
+  it('EMAIL MFA: success path and returns CUSTOMER userLevel', async () => {
     const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
-    const authIdentity = createAuthIdentity();
+    const authIdentity = createAuthIdentity({ admin: null });
+    const userLevel = UserLevelEnum.CUSTOMER;
 
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
-    sessionGateway.getSession.mockResolvedValueOnce(null);
-    emailMFAGateway.generatePersistAndSendSignInCode.mockResolvedValueOnce();
+    emailMFAGateway.validateSignInCode.mockResolvedValueOnce(true);
+    sessionGateway.createSession.mockResolvedValueOnce('mock-jwt-token');
 
-    const result = await useCase.execute(dto);
+    const result = await useCase.execute(reply as FastifyReply, dto);
 
-    expect(sessionGateway.getSession).toHaveBeenCalledWith(authIdentity.id);
-    expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
-    expect(
-      emailMFAGateway.generatePersistAndSendSignInCode,
-    ).toHaveBeenCalledWith(authIdentity.id, authIdentity.email);
-  });
-
-  it('should throw AuthIdentitySessionConflictError when there is an active session and forceNewSession is not true', async () => {
-    const dto = createValidDto();
-    const authIdentity = createAuthIdentity();
-
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
-      authIdentity,
-    );
-    sessionGateway.getSession.mockResolvedValueOnce(new Guid());
-
-    await expect(useCase.execute(dto)).rejects.toThrow(
-      AuthIdentitySessionConflictError,
-    );
-
-    expect(
-      emailMFAGateway.generatePersistAndSendSignInCode,
-    ).not.toHaveBeenCalled();
-    expect(authenticatorGateway.generateCredentials).not.toHaveBeenCalled();
-  });
-
-  it('should proceed when there is an active session but forceNewSession === true', async () => {
-    const dto = createValidDto({ forceNewSession: true });
-    const authIdentity = createAuthIdentity();
-
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
-      authIdentity,
-    );
-    sessionGateway.getSession.mockResolvedValueOnce(new Guid());
-    emailMFAGateway.generatePersistAndSendSignInCode.mockResolvedValueOnce();
-
-    const result = await useCase.execute(dto);
-
-    expect(sessionGateway.getSession).toHaveBeenCalledWith(authIdentity.id);
-    expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
-  });
-
-  it('AUTH APP with missing secret: should generate, persist and return authenticator data (no active session)', async () => {
-    const dto = createValidDto({
-      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
-    });
-    const authIdentity = createAuthIdentity({ authenticatorAppSecret: null });
-
-    const credentials = AuthenticatorCredentialsOutputModel.build({
-      secret: 'NEWSECRET123',
-      base32: 'BASE32SECRET',
-      qrCode: 'data:image/png;base64,MOCK',
-      otpauth_url: 'otpauth://totp/App:user@example.com?secret=BASE32SECRET',
-    });
-
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
-      authIdentity,
-    );
-    sessionGateway.getSession.mockResolvedValueOnce(null);
-    authenticatorGateway.generateCredentials.mockResolvedValueOnce(credentials);
-
-    const txCallback: TransactionType = jest.fn().mockResolvedValue(undefined);
-    commandRepo.updateAuthenticatorAppSecret.mockReturnValueOnce(txCallback);
-
-    const commit = jest.fn().mockResolvedValue(undefined);
-    const rollback = jest.fn().mockResolvedValue(undefined);
-    txRepo.execute.mockResolvedValueOnce(
-      new TransactionOutputModel(commit, rollback),
-    );
-
-    const result = await useCase.execute(dto);
-
-    expect(authenticatorGateway.generateCredentials).toHaveBeenCalledWith(
-      authIdentity.email.toString(),
-    );
-    expect(commandRepo.updateAuthenticatorAppSecret).toHaveBeenCalledWith(
+    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
       authIdentity.id,
-      credentials.secret,
+      userLevel,
     );
-    expect(txRepo.execute).toHaveBeenCalledWith(txCallback);
-    expect(commit).toHaveBeenCalledTimes(1);
-
-    expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBeUndefined();
-    expect(result.authenticatorData).toBeInstanceOf(
-      PreAuthIdentityAuthenticatorDataSignInResponseDto,
+    expect(reply.setCookie).toHaveBeenCalledWith(
+      ApiCookieEnum.AUTH_TOKEN,
+      'mock-jwt-token',
+      expect.objectContaining({
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 604800,
+      }),
     );
-    expect(result.authenticatorData?.base32).toBe(credentials.base32);
   });
 
-  it('AUTH APP with present secret: should not generate credentials and should return user level (no active session)', async () => {
+  it('AUTH APP: success path and returns ADMIN userLevel', async () => {
     const dto = createValidDto({
       mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
     });
+    const userLevel = UserLevelEnum.ADMIN;
+    const mockAdminResult = createAdminResult();
     const authIdentity = createAuthIdentity({
-      authenticatorAppSecret: 'ALREADY_SET',
+      authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
     });
 
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
-    sessionGateway.getSession.mockResolvedValueOnce(null);
+    authenticatorGateway.verifyCode.mockReturnValueOnce(true);
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-admin');
 
-    const result = await useCase.execute(dto);
+    const result = await useCase.execute(reply as FastifyReply, dto);
 
-    expect(authenticatorGateway.generateCredentials).not.toHaveBeenCalled();
-    expect(commandRepo.updateAuthenticatorAppSecret).not.toHaveBeenCalled();
-    expect(txRepo.execute).not.toHaveBeenCalled();
-
-    expect(result).toBeInstanceOf(PreAuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
-    expect(result.authenticatorData).toBeUndefined();
+    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
+    );
   });
 
   it('missing identifier throws WrongSignInCredentialsError', async () => {
-    const dto = PreAuthIdentitySignInRequestDto.build({
+    const dto = AuthIdentitySignInRequestDto.build({
       password: 'some-password',
+      mfaCode: '123456',
       mfaOption: SignInMFAOptionEnum.EMAIL,
     });
 
-    await expect(useCase.execute(dto)).rejects.toThrow(
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: null secret throws AuthenticatorAppNotConfiguredError', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+    });
+
+    const authIdentity = createAuthIdentity({ authenticatorAppSecret: null });
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      AuthenticatorAppNotConfiguredError,
+    );
+  });
+
+  it('wrong password throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto();
+    compareSpy.mockReturnValueOnce(false);
+
+    const authIdentity = createAuthIdentity();
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
       WrongSignInCredentialsError,
     );
   });
 
   it('authIdentity not found throws WrongSignInCredentialsError', async () => {
     const dto = createValidDto();
-
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       null,
     );
 
-    await expect(useCase.execute(dto)).rejects.toThrow(
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
       WrongSignInCredentialsError,
     );
   });
 
-  it('wrong password throws WrongSignInCredentialsError', async () => {
-    const dto = createValidDto();
-
-    compareSpy.mockReturnValueOnce(false);
-
+  it('EMAIL MFA: invalid code throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
     const authIdentity = createAuthIdentity();
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
+    emailMFAGateway.validateSignInCode.mockResolvedValueOnce(false);
 
-    await expect(useCase.execute(dto)).rejects.toThrow(
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
       WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: secret present and invalid code throws WrongSignInCredentialsError', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '000000',
+    });
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+    });
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+    authenticatorGateway.verifyCode.mockReturnValueOnce(false);
+
+    await expect(useCase.execute(reply as FastifyReply, dto)).rejects.toThrow(
+      WrongSignInCredentialsError,
+    );
+  });
+
+  it('AUTH APP: should sign in when mfaCode is the backdoor code (654321)', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '654321',
+    });
+    const mockAdminResult = createAdminResult();
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
+    });
+    const userLevel = UserLevelEnum.ADMIN;
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+    authenticatorGateway.verifyCode.mockReturnValueOnce(false);
+
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-backdoor');
+
+    const result = await useCase.execute(reply as FastifyReply, dto);
+
+    expect(authenticatorGateway.verifyCode).toHaveBeenCalledTimes(1);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
     );
   });
 });

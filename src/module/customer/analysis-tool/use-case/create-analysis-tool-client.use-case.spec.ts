@@ -41,16 +41,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const analysisToolClientCommandRepositoryGateway: jest.Mocked<AnalysisToolClientCommandRepositoryGateway> =
     {
@@ -61,11 +61,10 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
 
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
-      findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
-      findOneByEmail: jest.fn(),
-      findOneByFederalDocument: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
+      findOneByEmailAndOrganizationId: jest.fn(),
+      findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
-      findOneByAnalysisToolClientIdOrFail: jest.fn(),
     };
 
   const analysisToolClientInssBenefitCommandRepositoryGateway: jest.Mocked<AnalysisToolClientInssBenefitCommandRepositoryGateway> =
@@ -218,7 +217,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve atualizar todos os campos e substituir entidades relacionadas', async () => {
+  it('should update all fields and replace related entities', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
@@ -232,16 +231,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const transaction = buildTransaction();
     const TOTAL_TRANSACTIONS = 7;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       null,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       null,
     );
     analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
@@ -292,7 +291,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar AnalysisToolClientEmailAlreadyInUseError se o e-mail já estiver em uso por OUTRO cliente', async () => {
+  it('should throw AnalysisToolClientEmailAlreadyInUseError when email is already in use by ANOTHER client', async () => {
     const clientId = new AnalysisToolClientId();
     const conflictingClientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
@@ -302,13 +301,13 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const existingClient = buildClientQueryResult(conflictingClientId);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       existingClient,
     );
 
@@ -317,7 +316,7 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     ).rejects.toBeInstanceOf(AnalysisToolClientEmailAlreadyInUseError);
   });
 
-  it('deve lançar AnalysisToolClientFederalDocumentAlreadyInUseError se o documento já estiver em uso por OUTRO cliente', async () => {
+  it('should throw AnalysisToolClientFederalDocumentAlreadyInUseError when federal document is already in use by ANOTHER client', async () => {
     const clientId = new AnalysisToolClientId();
     const conflictingClientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
@@ -327,16 +326,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const existingClient = buildClientQueryResult(conflictingClientId);
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       null,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       existingClient,
     );
 
@@ -356,16 +355,16 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     const client = buildClientQueryResult(clientId);
     const transaction = buildTransaction();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByEmail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId.mockResolvedValueOnce(
       client,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByFederalDocument.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId.mockResolvedValueOnce(
       null,
     );
     analysisToolClientCommandRepositoryGateway.updateAnalysisToolClient.mockReturnValue(
@@ -381,13 +380,13 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     expect(transaction.commit).toHaveBeenCalledTimes(1);
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const dto = buildDto();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 
@@ -396,17 +395,17 @@ describe(UpdateAnalysisToolClientUseCase.name, () => {
     ).rejects.toBeInstanceOf(OrganizationMemberNotFoundError);
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError se o cliente a ser atualizado não for encontrado', async () => {
+  it('should throw AnalysisToolClientNotFoundError when client to be updated is not found', async () => {
     const clientId = new AnalysisToolClientId();
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const dto = buildDto();
     const member = buildOrganizationMember();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       member,
     );
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 

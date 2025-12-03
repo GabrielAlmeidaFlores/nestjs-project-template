@@ -81,7 +81,7 @@ export class GetAnalysisToolRecordResponseDto extends BaseBuildableDtoObject {
   public readonly analysisId: Guid;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolRecordClientResponseDto)
-  public readonly client: GetAnalysisToolRecordClientResponseDto;
+  public readonly analysisToolClient: GetAnalysisToolRecordClientResponseDto;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolRecordResponsibleResponseDto)
   public readonly createdBy: GetAnalysisToolRecordResponsibleResponseDto;

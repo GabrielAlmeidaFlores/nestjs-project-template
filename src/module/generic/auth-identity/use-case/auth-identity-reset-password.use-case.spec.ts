@@ -26,16 +26,15 @@ describe(AuthIdentityResetPasswordUseCase.name, () => {
   let useCase: AuthIdentityResetPasswordUseCase;
   const mockedBcrypt = bcrypt as jest.Mocked<typeof bcrypt>;
 
-  const authIdentityQueryRepositoryGateway: jest.Mocked<AuthIdentityQueryRepositoryGateway> =
-    {
-      findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
-      findOneAuthIdentityById: jest.fn(),
-    };
+  const authIdentityQueryRepositoryGateway = {
+    findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
+    findOneAuthIdentityById: jest.fn(),
+  } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
 
   const baseTransactionRepositoryGateway: jest.Mocked<BaseTransactionRepositoryGateway> =
     {
       execute: jest.fn(),
-    };
+    } as unknown as jest.Mocked<BaseTransactionRepositoryGateway>;
 
   const emailForgotPasswordGateway: jest.Mocked<EmailForgotPasswordGateway> = {
     validateForgotPasswordCode: jest.fn(),

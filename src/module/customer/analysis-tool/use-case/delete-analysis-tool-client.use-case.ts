@@ -42,7 +42,7 @@ export class DeleteAnalysisToolClientUseCase {
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<DeleteAnalysisToolClientResponseDto> {
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
         organizationSessionData.organizationId,
       );
@@ -52,7 +52,7 @@ export class DeleteAnalysisToolClientUseCase {
     }
 
     const analysisToolClientResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientAndOrganizationIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
@@ -65,9 +65,10 @@ export class DeleteAnalysisToolClientUseCase {
       );
 
     const analysisToolRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationIdWithRelations(
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
         analysisToolClientResult.id,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     await Promise.all(
@@ -81,9 +82,10 @@ export class DeleteAnalysisToolClientUseCase {
     );
 
     const legalPleading =
-      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientAndOrganizationId(
+      await this.legalPleadingQueryRepositoryGateway.findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId(
         analysisToolClientResult.id,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
       );
 
     await Promise.all(

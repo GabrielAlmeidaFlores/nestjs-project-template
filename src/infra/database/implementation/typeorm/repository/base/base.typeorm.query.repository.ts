@@ -227,7 +227,7 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
     const parentOffset = 2;
     const childOffset = 1;
 
-    for (let i = path.length; i > minDepthForNesting; i--) {
+    for (let i = path.length; i >= minDepthForNesting; i--) {
       const parentKey = path[i - parentOffset];
       const childKey = path[i - childOffset];
 

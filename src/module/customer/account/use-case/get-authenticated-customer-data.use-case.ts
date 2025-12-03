@@ -4,6 +4,7 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import {
   GetAuthenticatedCustomerDataResponseDto,
+  GetCustomerAddressResponseDto,
   GetCustomerDataResponseDto,
   GetOrganizationDataResponseDto,
 } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
@@ -31,13 +32,13 @@ export class GetAuthenticatedCustomerDataUseCase {
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<GetAuthenticatedCustomerDataResponseDto> {
     const customer =
-      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdWithCustomerAddressRelationOrFail(
         sessionData.authIdentityId,
         CustomerNotFoundError,
       );
 
     const organizationMember =
-      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerAndOrganizationIdWithRelations(
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndOrganizationIdWithRelations(
         customer.id,
         organizationSessionData.organizationId,
       );
@@ -58,6 +59,14 @@ export class GetAuthenticatedCustomerDataUseCase {
         federalDocument:
           organizationMember.customer.authIdentity.federalDocument,
         name: organizationMember.customer.name,
+        customerAddress: GetCustomerAddressResponseDto.build({
+          city: customer.customerAddress.city,
+          neighborhood: customer.customerAddress.neighborhood,
+          postalCode: customer.customerAddress.postalCode,
+          stateCode: customer.customerAddress.stateCode,
+          street: customer.customerAddress.street,
+          addressNumber: customer.customerAddress.addressNumber,
+        }),
       }),
     });
 
