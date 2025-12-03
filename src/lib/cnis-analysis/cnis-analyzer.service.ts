@@ -2014,12 +2014,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const MONTH_JULY = 6;
     const DAY_FIRST = 1;
 
+    const reformaDate = this.REFORMA_DATE;
+
     const salariosValidos = data.filter((item) => {
       const competenciaDate = new Date(item.competencia);
       return (
         competenciaDate instanceof Date &&
         !isNaN(competenciaDate.getTime()) &&
-        competenciaDate >= new Date(YEAR_1994, MONTH_JULY, DAY_FIRST)
+        competenciaDate >= new Date(YEAR_1994, MONTH_JULY, DAY_FIRST) &&
+        competenciaDate <= reformaDate
       );
     });
 
@@ -2029,6 +2032,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const numeroTotal = valoresCorrigidosOrdenados.length;
     const numeroParaConsiderar = Math.ceil(numeroTotal * this.EIGHTY_PERCENT);
+
     const valoresParaConsiderar = valoresCorrigidosOrdenados.slice(
       numeroTotal - numeroParaConsiderar,
     );
