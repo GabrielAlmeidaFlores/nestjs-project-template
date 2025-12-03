@@ -15,6 +15,6 @@ import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
   ],
   exports: [CnisAnalyzerGateway, CnisAnalyzerService],
 })
-export class CnisAnalysisModule {
-  protected readonly _type = CnisAnalysisModule.name;
+export class CnisAnalyzerModule {
+  protected readonly _type = CnisAnalyzerModule.name;
 }
