@@ -3,6 +3,7 @@ import type { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.outp
 export abstract class AnalysisProcessorGateway {
   public abstract getCnisCompleteAnalysis(
     files: Buffer[],
+    cnisJson: string,
   ): Promise<string | null>;
 
   public abstract getCnisSimplifiedAnalysis(
