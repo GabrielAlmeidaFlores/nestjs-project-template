@@ -1,13 +1,13 @@
 import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
-import type { TimeContributionDataInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
+import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
 
-export interface ConsolidadoRelationInterface {
+export interface ConsolidadoRelacaoInterface {
   seq: number;
   indicadores: string | null;
   isPendencia: boolean;
   origem: string | null;
-  contributionTime?: TimeContributionDataInterface;
-  validContributionTime?: TimeContributionDataInterface;
+  contributionTime?: TempoDeContribuicaoDetalhesInterface;
+  validContributionTime?: TempoDeContribuicaoDetalhesInterface;
   carencia?: number;
   isConcomitante: boolean;
   isBeneficio: boolean;

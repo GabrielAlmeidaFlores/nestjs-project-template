@@ -6,37 +6,38 @@ import { especiesData } from '@lib/cnis-analysis/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
 import { ipcaData } from '@lib/cnis-analysis/data/ipca';
 import { TetoInssData } from '@lib/cnis-analysis/data/teto.inss';
-import { AjusteFinalInterface } from '@lib/cnis-analysis/interface/ajuste-final.interface';
-import { AnalyzerServiceInterface } from '@lib/cnis-analysis/interface/analysis.interface';
+import { AjusteSalarioBeneficioInterface } from '@lib/cnis-analysis/interface/ajuste-salario-beneficio.interface';
+import { AnalisePrevidenciariaInterface } from '@lib/cnis-analysis/interface/analise-previdenciaria.interface';
 import { CarenciaInterface } from '@lib/cnis-analysis/interface/carencia.interface';
 import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/interface/concomitancia-detalhes.interface';
 import { ConcomitanciaInterface } from '@lib/cnis-analysis/interface/concomitancia.interface';
-import { ConsolidadoRelationInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
-import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/interface/correcao-monetaria.interface';
-import { PessoaCnisIdadeInterface } from '@lib/cnis-analysis/interface/idade.interface';
+import { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
+import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/interface/correcao-monetaria-item.interface';
+import { DiferencaYmdResultadoInterface } from '@lib/cnis-analysis/interface/diferenca-ymd-resultado-interface';
 import { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analysis/interface/indicadores-de-pendencia.interface';
-import { ManutencaoInterface } from '@lib/cnis-analysis/interface/manutencao.interface';
-import { PedagioPosReformaInterface } from '@lib/cnis-analysis/interface/pedagio.interface';
+import { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analysis/interface/manutencao-qualidade-segurado.interface';
+import { PedagioPosReformaInterface } from '@lib/cnis-analysis/interface/pedagio-pos-reforma.interface';
 import {
-  PeriodoDeGracaResultInterface,
-  PeriodoDeGracaScenarioInterface,
-} from '@lib/cnis-analysis/interface/periodo-de-graca-result.interface';
-import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/interface/salario-concomitante.interface';
+  PeriodoDeGracaResultadoInterface,
+  PeriodoDeGracaInterface,
+} from '@lib/cnis-analysis/interface/periodo-de-graca-resultado.interface';
+import { PessoaCnisIdadeInterface } from '@lib/cnis-analysis/interface/pessoa-cnis-idade.interface';
+import { SalarioTetoInterface } from '@lib/cnis-analysis/interface/salario-teto.interface';
 import { SalarioInterface } from '@lib/cnis-analysis/interface/salario.interface';
+import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/interface/salarios-concomitantes.interface';
 import {
   TempoComRestricaoItemInterface,
   TempoRestricoesContribuicaoTotalInterface,
   TempoTotalComRestricoesInterface,
 } from '@lib/cnis-analysis/interface/tempo-total-com-restricoes.interface';
-import { SalarioTetoInterface } from '@lib/cnis-analysis/interface/teto.interface';
 import {
-  TimeContributionDataInterface,
-  TimeContributionInterface,
+  TempoDeContribuicaoDetalhesInterface,
+  TempoDeContribuicaoInterface,
 } from '@lib/cnis-analysis/interface/time-contribution.interface';
 import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-analyzer-output-complete.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
-import { diffYmdInclusive } from '@shared/api/util/diff-ymd-inclusive';
+import { Time } from '@shared/api/util/diff-ymd-inclusive';
 
 @Injectable()
 export class CnisAnalyzerService implements CnisAnalyzerGateway {
@@ -369,6 +370,111 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       aposentadoriaProgramadaComumPrevistaNoArt19,
     });
     return cnis;
+  }
+
+  private diffYmdInclusive(
+    start: Date | null | undefined,
+    end: Date | null | undefined,
+  ): DiferencaYmdResultadoInterface {
+    if (
+      !start ||
+      !end ||
+      !(start instanceof Date) ||
+      !(end instanceof Date) ||
+      isNaN(start.getTime()) ||
+      isNaN(end.getTime())
+    ) {
+      return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
+    }
+
+    const msPerDay = Time.Day;
+
+    const toUtcDay = (d: Date): Date =>
+      new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const s = toUtcDay(start);
+    const e = toUtcDay(end);
+
+    if (e.getTime() < s.getTime()) {
+      return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
+    }
+
+    let years = e.getUTCFullYear() - s.getUTCFullYear();
+    const sPlusYears = new Date(
+      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
+    );
+
+    if (sPlusYears.getTime() > e.getTime()) {
+      years -= 1;
+    }
+
+    const afterYears = new Date(
+      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
+    );
+
+    const addMonths = (d: Date, months: number): Date => {
+      const y = d.getUTCFullYear();
+      const m = d.getUTCMonth() + months;
+      const day = d.getUTCDate();
+      let cand = new Date(Date.UTC(y, m, day));
+
+      if (cand.getUTCDate() !== day) {
+        cand = new Date(
+          Date.UTC(cand.getUTCFullYear(), cand.getUTCMonth() + 1, 0),
+        );
+      }
+      return cand;
+    };
+
+    const NUMBER_MONTHS_IN_YEAR = 12;
+
+    let months = 0;
+    const roughMonths =
+      (e.getUTCFullYear() - afterYears.getUTCFullYear()) *
+        NUMBER_MONTHS_IN_YEAR +
+      (e.getUTCMonth() - afterYears.getUTCMonth());
+
+    months = Math.max(0, roughMonths);
+
+    while (months > 0) {
+      const cand = addMonths(afterYears, months);
+      if (cand.getTime() > e.getTime()) {
+        months -= 1;
+      } else {
+        break;
+      }
+    }
+
+    while (addMonths(afterYears, months + 1) <= e) {
+      months++;
+    }
+
+    const base = addMonths(afterYears, months);
+    let days = Math.floor((e.getTime() - base.getTime()) / msPerDay) + 1;
+
+    const YEAR_2019 = 2019;
+    const MONTH_NOVEMBER = 10;
+    const DAY_FIRST = 1;
+    const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
+
+    if (s.getTime() >= RULE_START_UTC || e.getTime() >= RULE_START_UTC) {
+      if (days > 0) {
+        months += 1;
+        days = 0;
+      }
+
+      if (months >= NUMBER_MONTHS_IN_YEAR) {
+        const addYears = Math.floor(months / NUMBER_MONTHS_IN_YEAR);
+        years += addYears;
+        months = months % NUMBER_MONTHS_IN_YEAR;
+      }
+    }
+
+    return {
+      years,
+      months,
+      days,
+      formatted: `${years}a ${months}m ${days}d`,
+    };
   }
 
   private calcularVinculosConcomitantes(
@@ -723,7 +829,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateTotalCarencia(
-    consolidado: ConsolidadoRelationInterface[],
+    consolidado: ConsolidadoRelacaoInterface[],
     dateCuttoff?: Date,
   ): number {
     if (dateCuttoff) {
@@ -852,22 +958,23 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculateTimeContribution(
     data: CnisOutputModel,
-  ): TimeContributionInterface[] {
-    const calculatedContributionTimesResponse: TimeContributionInterface[] = [];
+  ): TempoDeContribuicaoInterface[] {
+    const calculatedContributionTimesResponse: TempoDeContribuicaoInterface[] =
+      [];
     data.socialSecurityRelations?.forEach((relation) => {
       const startDate = relation.socialSecurityAffiliationInfo.dataInicio;
       const endDate = relation.socialSecurityAffiliationInfo.dataFim;
       const lastDateRemun = relation.socialSecurityAffiliationInfo.ultRemun;
       const seq = relation.socialSecurityAffiliationInfo.seq;
 
-      let calculatedContributionTime: TimeContributionInterface = {
+      let calculatedContributionTime: TempoDeContribuicaoInterface = {
         seq: seq ?? 0,
         origemDoVinculo:
           relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '',
         tipoDoVinculo:
           relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
         indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
-        data: {
+        dados: {
           data: {
             dataInicio: startDate ?? null,
             dataFim: endDate ?? null,
@@ -885,7 +992,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         endDate instanceof Date &&
         !isNaN(endDate.getTime())
       ) {
-        const { years, months, days, formatted } = diffYmdInclusive(
+        const { years, months, days, formatted } = this.diffYmdInclusive(
           startDate,
           endDate,
         );
@@ -896,7 +1003,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           tipoDoVinculo:
             relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
           indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
-          data: {
+          dados: {
             data: {
               dataInicio: startDate,
               dataFim: endDate,
@@ -914,7 +1021,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         !isNaN(startDate.getTime()) &&
         !endDate
       ) {
-        const { years, months, days, formatted } = diffYmdInclusive(
+        const { years, months, days, formatted } = this.diffYmdInclusive(
           startDate,
           lastDateRemun,
         );
@@ -925,7 +1032,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           tipoDoVinculo:
             relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
           indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
-          data: {
+          dados: {
             data: {
               dataInicio: startDate,
               dataFim: lastDateRemun,
@@ -979,11 +1086,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateConsolidadoTempoContribuicaoECarencia(
-    temposContribuicao: TimeContributionInterface[],
+    temposContribuicao: TempoDeContribuicaoInterface[],
     concomitanciaRelations: ConcomitanciaInterface[],
     carenciaTotal: CarenciaInterface[],
     data: CnisOutputModel,
-  ): ConsolidadoRelationInterface[] {
+  ): ConsolidadoRelacaoInterface[] {
     if (!data.socialSecurityRelations) {
       return [];
     }
@@ -991,8 +1098,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const completeData = data.socialSecurityRelations
       .map((relation) => {
         const seq = relation.socialSecurityAffiliationInfo.seq;
-        const contributionTime: TimeContributionInterface['data'] | undefined =
-          temposContribuicao.find((item) => item.seq === seq)?.data;
+        const contributionTime:
+          | TempoDeContribuicaoInterface['dados']
+          | undefined = temposContribuicao.find(
+          (item) => item.seq === seq,
+        )?.dados;
         const carencia =
           carenciaTotal.find((item) => item.seq === seq)?.carencia ?? 0;
         const isConcomitante = concomitanciaRelations.find(
@@ -1068,8 +1178,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
       const contributionTimeFound = temposContribuicao.find(
         (item) => item.seq === seq,
-      )?.data;
-      const contributionTime: TimeContributionDataInterface =
+      )?.dados;
+      const contributionTime: TempoDeContribuicaoDetalhesInterface =
         contributionTimeFound ?? {
           data: {
             dataInicio: null,
@@ -1090,13 +1200,13 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const concomitanciaDetalhe = concomitanciaListCleaner.find(
         (item) => item.seq === seq,
       );
-      const validContributionTime: TimeContributionDataInterface =
+      const validContributionTime: TempoDeContribuicaoDetalhesInterface =
         concomitanciaDetalhe?.tipo === 'secundario'
           ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
               seq,
               concomitanciaDetalhe.dataAjustada?.dataInicio ?? undefined,
               concomitanciaDetalhe.dataAjustada?.dataFim ?? undefined,
-            ).data ?? contributionTime)
+            ).dados ?? contributionTime)
           : contributionTime;
 
       const isBeneficio = this.isEspecieBeneficio(
@@ -1131,20 +1241,20 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     seq: number,
     startDate?: Date,
     endDate?: Date,
-  ): TimeContributionInterface {
+  ): TempoDeContribuicaoInterface {
     if (
       startDate instanceof Date &&
       !isNaN(startDate.getTime()) &&
       endDate instanceof Date &&
       !isNaN(endDate.getTime())
     ) {
-      const { years, months, days, formatted } = diffYmdInclusive(
+      const { years, months, days, formatted } = this.diffYmdInclusive(
         startDate,
         endDate,
       );
       return {
         seq,
-        data: {
+        dados: {
           data: {
             dataInicio: startDate,
             dataFim: endDate,
@@ -1158,7 +1268,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     }
     return {
       seq,
-      data: {
+      dados: {
         data: {
           dataInicio: null,
           dataFim: null,
@@ -1189,7 +1299,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateImpactoLiquidoDePendencias(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
   ): CnisIndicadoresDePendenciaInterface[] {
     const sequenciasComPendencia = data.filter((item) => item.isPendencia);
     const tempoTotal = sequenciasComPendencia.map((item) => {
@@ -1204,7 +1314,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         };
       }
 
-      const { years, months, days } = diffYmdInclusive(startDate, endDate);
+      const { years, months, days } = this.diffYmdInclusive(startDate, endDate);
 
       const startYear = startDate.getFullYear();
       const startMonth = startDate.getMonth();
@@ -1236,8 +1346,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateIncapacidade(
-    consolidado: ConsolidadoRelationInterface[],
-  ): ConsolidadoRelationInterface[] {
+    consolidado: ConsolidadoRelacaoInterface[],
+  ): ConsolidadoRelacaoInterface[] {
     const indicadoresDeIncapacidade = consolidado.filter(
       (item) =>
         item.isBeneficio &&
@@ -1312,14 +1422,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculatePeriodoDeGraca(
-    consolidado: ConsolidadoRelationInterface[],
-  ): PeriodoDeGracaResultInterface {
+    consolidado: ConsolidadoRelacaoInterface[],
+  ): PeriodoDeGracaResultadoInterface {
     const NUMBER_MONTHS_THRESHOLD = 120;
 
     const buildScenario = (
-      items: ConsolidadoRelationInterface[],
+      items: ConsolidadoRelacaoInterface[],
       typeLabel: string,
-    ): PeriodoDeGracaScenarioInterface => {
+    ): PeriodoDeGracaInterface => {
       const seqsConsiderados = items.map((i) => i.seq);
       const totalMonths = items.reduce(
         (acc, cur) => acc + (cur.carencia ?? 0),
@@ -1399,7 +1509,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateCarenciaTotal(
-    data: TimeContributionInterface[],
+    data: TempoDeContribuicaoInterface[],
   ): CarenciaInterface[] {
     const monthsAssigned = new Set<string>();
     const carenciaSeq: CarenciaInterface[] = [];
@@ -1408,8 +1518,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     for (const item of itemsSorted) {
       const seq = item.seq;
-      const startDate = this.toDate(item.data?.data?.dataInicio);
-      const endDate = this.toDate(item.data?.data?.dataFim);
+      const startDate = this.toDate(item.dados?.data?.dataInicio);
+      const endDate = this.toDate(item.dados?.data?.dataFim);
 
       if (!startDate || !endDate || startDate.getTime() > endDate.getTime()) {
         carenciaSeq.push({ seq, carencia: 0 });
@@ -1529,7 +1639,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateContributionRequirementDate(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     requiredYears: number,
   ): Date | null {
     if (!Array.isArray(data) || data.length === 0) {
@@ -1580,8 +1690,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateDataFinalDaQualidadedeDeSegurado(
-    data: ConsolidadoRelationInterface[],
-  ): ManutencaoInterface[] {
+    data: ConsolidadoRelacaoInterface[],
+  ): ManutencaoQualidadeSeguradoInterface[] {
     const DECIMO_SEXTO_DIA = 16;
     const PERIODO_DE_GRACA_PADRAO = 12;
     const PERIODO_DE_GRACA_AUMENTADO = 24;
@@ -1596,7 +1706,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return 0;
     });
 
-    const resultados: ManutencaoInterface[] = [];
+    const resultados: ManutencaoQualidadeSeguradoInterface[] = [];
 
     for (let i = 0; i < data.length - 1; i++) {
       const vinculoAtual = data[i];
@@ -1646,7 +1756,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       );
       const qualidadeMantida = dataInicioProximo <= dataFinalAdministrativa;
 
-      const register: ManutencaoInterface = {
+      const register: ManutencaoQualidadeSeguradoInterface = {
         periodo_analisado: `Entre Seq. ${vinculoAtual?.seq} e ${vinculoProximo?.seq}`,
         ultima_referencia: ultimaReferencia.toISOString().split('T')[0] ?? '',
         proximo_vinculo: dataInicioProximo.toISOString().split('T')[0] ?? '',
@@ -1664,7 +1774,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateTempoTotalComRestricoes(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
   ): TempoTotalComRestricoesInterface {
     const tempoComRestricaoItem = data
       .filter((item) => {
@@ -1737,7 +1847,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculateSalariosConcomitantes(
     data: CnisOutputModel,
-    concomitancia: ConsolidadoRelationInterface[],
+    concomitancia: ConsolidadoRelacaoInterface[],
   ): SalariosConcomitantesInterface[] {
     const salariosConcomitantes: SalariosConcomitantesInterface[] = [];
 
@@ -1943,7 +2053,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   private ajusteFinalSbMinimoEAoTeto(
     pos: SalarioInterface,
     pre: SalarioInterface,
-  ): AjusteFinalInterface {
+  ): AjusteSalarioBeneficioInterface {
     const actualYear = new Date().getFullYear();
 
     const data = TetoInssData.find((t) => t.ano === actualYear);
@@ -1966,7 +2076,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     };
   }
 
-  private calculateTotals(data: ConsolidadoRelationInterface[]): {
+  private calculateTotals(data: ConsolidadoRelacaoInterface[]): {
     years: number;
     months: number;
     days: number;
@@ -2005,7 +2115,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculatePontos(
     idade: number,
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
   ): number {
     const calculatedTotals = this.calculateTotals(data);
 
@@ -2015,7 +2125,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculatePointsRequirementDate(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     requiredPoints: number,
     currentAge: number,
     birthDate?: Date,
@@ -2121,7 +2231,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateTempoPedagio(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     percentualPedagio: number,
   ): PedagioPosReformaInterface {
@@ -2151,7 +2261,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+      const { years, months, days } = this.diffYmdInclusive(
+        dataInicio,
+        dataFim,
+      );
 
       totalContributionYearsAtReforma += years;
       totalContributionMonthsAtReforma += months;
@@ -2180,7 +2293,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateCarenciaRequirementDate(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     requiredCarenciaMonths: number,
   ): Date | null {
     let accumulated = 0;
@@ -2215,12 +2328,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     points: number,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const POINTS_MEN = 96;
     const POINTS_WOMEN = 86;
@@ -2255,7 +2368,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+      const { years, months, days } = this.diffYmdInclusive(
+        dataInicio,
+        dataFim,
+      );
       item.validContributionTime = {
         data: {
           dataInicio,
@@ -2378,11 +2494,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorIdadeUrbanaComDireitoAdquirido(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const REQUIRED_AGE_MEN = 65;
     const REQUIRED_AGE_WOMEN = 60;
@@ -2418,7 +2534,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = diffYmdInclusive(dataInicio, dataFim);
+      const { years, months, days } = this.diffYmdInclusive(
+        dataInicio,
+        dataFim,
+      );
 
       item.validContributionTime = {
         data: {
@@ -2506,11 +2625,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate?: Date,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_POINTS_MEN = 70;
     const BASE_POINTS_WOMEN = 86;
@@ -2670,7 +2789,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private totalContributionType(
-    consolidadoResumido: ConsolidadoRelationInterface[],
+    consolidadoResumido: ConsolidadoRelacaoInterface[],
   ): number {
     const calculatedTotals = this.calculateTotals(consolidadoResumido);
 
@@ -2686,11 +2805,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     age: number,
     gender: string,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_AGE_WOMEN = 57;
     const REQUIRED_AGE_MEN = 60;
     const REQUIRED_CARENCIA_MONTHS = 180;
@@ -2811,11 +2930,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 61;
     const BASE_AGE_WOMEN = 56;
@@ -2941,10 +3060,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17(
-    consolidadoResumido: ConsolidadoRelationInterface[],
+    consolidadoResumido: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const PEDAGIO_PERCENTAGE = 0.5;
 
@@ -3043,11 +3162,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorIdadeHibridaComDireitoAdquirido(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate?: Date,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     if (!birthDate) {
       throw new Error('birthDate is required for this calculation.');
     }
@@ -3113,7 +3232,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = diffYmdInclusive(inicio, fim);
+      const { years, months, days } = this.diffYmdInclusive(inicio, fim);
 
       item.validContributionTime = {
         data: {
@@ -3173,11 +3292,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 65;
     const BASE_AGE_WOMEN = 60;
@@ -3303,11 +3422,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const BASE_AGE_MEN = 65;
     const BASE_AGE_WOMEN = 60;
@@ -3498,11 +3617,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private aposentadoriaProgramadaComumPrevistaNoArt19(
-    data: ConsolidadoRelationInterface[],
+    data: ConsolidadoRelacaoInterface[],
     gender: string,
     age: number,
     birthDate: Date | undefined,
-  ): AnalyzerServiceInterface {
+  ): AnalisePrevidenciariaInterface {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const REQUIRED_AGE_WOMEN = 62;
     const REQUIRED_AGE_MEN = 65;

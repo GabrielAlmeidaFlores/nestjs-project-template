@@ -1,6 +1,6 @@
 import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
 
-export interface TimeContributionDataInterface {
+export interface TempoDeContribuicaoDetalhesInterface {
   data: DataInterface | null | undefined;
   abreviado: string;
   dias: number;
@@ -8,10 +8,10 @@ export interface TimeContributionDataInterface {
   anos: number;
 }
 
-export interface TimeContributionInterface {
+export interface TempoDeContribuicaoInterface {
   seq: number;
   origemDoVinculo?: string;
   tipoDoVinculo?: string;
   indicadores?: string | null;
-  data?: TimeContributionDataInterface;
+  dados?: TempoDeContribuicaoDetalhesInterface;
 }
