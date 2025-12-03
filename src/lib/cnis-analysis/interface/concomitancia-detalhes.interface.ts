@@ -1,3 +1,5 @@
+import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
+
 export interface ConcomitanciaDetalhesInterface {
   seq: number;
   contributionTime: {
@@ -12,8 +14,5 @@ export interface ConcomitanciaDetalhesInterface {
   isConcomitante: boolean;
   tipo?: 'principal' | 'secundario' | null;
   ajustado?: boolean;
-  dataAjustada?: {
-    dataInicio: Date;
-    dataFim: Date;
-  };
+  dataAjustada?: DataInterface | null | undefined;
 }

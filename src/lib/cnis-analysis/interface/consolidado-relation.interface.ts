@@ -1,3 +1,4 @@
+import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
 import type { TimeContributionDataInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
 
 export interface ConsolidadoRelationInterface {
@@ -13,8 +14,5 @@ export interface ConsolidadoRelationInterface {
   isIntercalado: boolean;
   tipo?: 'principal' | 'secundario' | null;
   ajustado: boolean;
-  dataAjustada?: {
-    dataInicio?: Date | null;
-    dataFim?: Date | null;
-  } | null;
+  dataAjustada?: DataInterface | null;
 }

@@ -1,4 +1,5 @@
 import type { ConsolidadoRelationInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
+import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
 
 export interface TempoRestricoesContribuicaoTotalInterface {
   dias: number;
@@ -17,10 +18,7 @@ export interface TempoComRestricaoItemInterface {
   isIntercalado: boolean | null | undefined;
   tipo: string | null | undefined;
   ajustado: boolean | null | undefined;
-  dataAjustada:
-    | { dataInicio?: Date | null; dataFim?: Date | null }
-    | null
-    | undefined;
+  dataAjustada: DataInterface | null | undefined;
 }
 
 export interface TempoComRestricoesResumoInterface {

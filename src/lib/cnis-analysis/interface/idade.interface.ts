@@ -1,4 +1,4 @@
-export interface IdadeInterface {
+export interface PessoaCnisIdadeInterface {
   anos: number;
   meses: number;
   dias: number;

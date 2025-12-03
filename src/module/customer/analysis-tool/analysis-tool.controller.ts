@@ -8,7 +8,6 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
-import { CnisOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-output-complete.model';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
@@ -41,7 +40,6 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
-import { CreateCnisFastAnalysisUseCaseV2 } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-casev2';
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
@@ -96,7 +94,6 @@ export class AnalysisToolController {
     private readonly downloadLegalPleadingCompleteAnalysisUseCase: DownloadLegalPleadingCompleteAnalysisUseCase,
     private readonly updateLegalPleadingCompleteAnalysisUseCase: UpdateLegalPleadingCompleteAnalysisUseCase,
     private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
-    private readonly createCnisFastAnalysisUseCaseV2: CreateCnisFastAnalysisUseCaseV2,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
   ) {}
@@ -489,26 +486,6 @@ export class AnalysisToolController {
       organizationSessionData,
       dto,
     );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Criar análise rápida de CNIS',
-    http: {
-      path: 'cnis-fast-analysis-teste',
-      method: RequestMethod.POST,
-      type: CreateCnisFastAnalysisRequestDto,
-    },
-    tag: ['analise-rapida-cnis-teste'],
-    successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Análise rápida de CNIS criada com sucesso.',
-      type: Object,
-    },
-  })
-  public async createCnisFasttesteAnalysis(
-    @Body() dto: CreateCnisFastAnalysisRequestDto,
-  ): Promise<CnisOutputCompleteModel> {
-    return await this.createCnisFastAnalysisUseCaseV2.execute(dto);
   }
 
   @BuildEndpointSpecification({
