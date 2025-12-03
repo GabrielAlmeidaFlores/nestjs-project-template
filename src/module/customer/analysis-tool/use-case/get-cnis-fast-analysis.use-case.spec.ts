@@ -43,16 +43,16 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
 
   const organizationMemberQueryRepositoryGateway: jest.Mocked<OrganizationMemberQueryRepositoryGateway> =
     {
-      findOneByCustomerAndAuthIdentityId: jest.fn(),
+      findOneByCustomerIdAndAuthIdentityId: jest.fn(),
       findOneByOrganizationMemberId: jest.fn(),
-      findOneByCustomerAndOrganizationId: jest.fn(),
-      findOneByCustomerAndOrganizationIdWithRelations: jest.fn(),
+      findOneByCustomerIdAndOrganizationId: jest.fn(),
+      findOneByCustomerIdAndOrganizationIdWithRelations: jest.fn(),
     };
 
   const cnisFastAnalysisQueryRepositoryGateway: jest.Mocked<CnisFastAnalysisQueryRepositoryGateway> =
     {
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      findOneByCnisFastAnalysisAndOrganizationIdOrFail: jest.fn(),
+      findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
@@ -115,6 +115,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
       analysisToolClientLegalProceeding: [],
       createdBy: responsible(null),
       updatedBy: responsible(null),
+      inssPassword: null,
     });
 
     return GetCnisFastAnalysisWithRelationsQueryResult.build({
@@ -187,7 +188,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar uma análise CNIS completa com todos os campos e URLs assinadas', async () => {
+  it('should return complete CNIS analysis with all fields and signed URLs', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -204,10 +205,10 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     const updaterPicSignedUrl = new URL('https://example.com/updater.jpg');
     const EXPECTED_SIGNED_URL_CALLS = 3;
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       queryResult,
     );
     fileProcessorGateway.getFileSignedUrl
@@ -226,7 +227,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
 
     expect(result).toBeInstanceOf(GetCnisFastAnalysisResponseDto);
     expect(
-      cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail,
+      cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail,
     ).toHaveBeenCalledWith(
       cnisFastAnalysisId,
       orgSessionData.organizationId,
@@ -250,7 +251,7 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     );
   });
 
-  it('deve retornar uma análise sem URLs de arquivo se os campos forem nulos', async () => {
+  it('should return analysis without file URLs when fields are null', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
@@ -261,10 +262,10 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
       withProfilePictures: false,
     });
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       organizationMember,
     );
-    cnisFastAnalysisQueryRepositoryGateway.findOneByIdWithRelationsOrFail.mockResolvedValueOnce(
+    cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail.mockResolvedValueOnce(
       queryResult,
     );
 
@@ -284,12 +285,12 @@ describe(GetCnisFastAnalysisUseCase.name, () => {
     expect(result.cnisFastAnalysisResult).toBeUndefined();
   });
 
-  it('deve lançar OrganizationMemberNotFoundError se o membro não for encontrado', async () => {
+  it('should throw OrganizationMemberNotFoundError when member is not found', async () => {
     const sessionData = buildSessionData();
     const orgSessionData = buildOrganizationSessionData();
     const cnisFastAnalysisId = new CnisFastAnalysisId();
 
-    organizationMemberQueryRepositoryGateway.findOneByCustomerAndAuthIdentityId.mockResolvedValueOnce(
+    organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId.mockResolvedValueOnce(
       null,
     );
 

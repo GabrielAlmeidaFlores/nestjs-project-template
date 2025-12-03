@@ -17,10 +17,13 @@ describe(AuthIdentityForgotPasswordValidateCodeUseCase.name, () => {
   const authIdentityQueryRepository: jest.Mocked<AuthIdentityQueryRepositoryGateway> =
     {
       findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
+      findOneAuthIdentityById: jest.fn(),
     } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
 
   const emailForgotPassword: jest.Mocked<EmailForgotPasswordGateway> = {
     validateForgotPasswordCode: jest.fn(),
+    generatePersistAndSendForgotPasswordCode: jest.fn(),
+    invalidateForgotPasswordCode: jest.fn(),
   } as unknown as jest.Mocked<EmailForgotPasswordGateway>;
 
   const buildDto = (): AuthIdentityForgotPasswordValidateCodeRequestDto =>

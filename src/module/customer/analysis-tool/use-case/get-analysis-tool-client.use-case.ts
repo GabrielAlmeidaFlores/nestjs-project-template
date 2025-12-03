@@ -11,6 +11,7 @@ import {
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class GetAnalysisToolClientUseCase {
@@ -29,25 +30,28 @@ export class GetAnalysisToolClientUseCase {
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
+    sessionData: SessionDataModel,
     analysisToolClientId: AnalysisToolClientId,
   ): Promise<GetAnalysisToolClientResponseDto> {
     const analysisToolClientQueryResult =
-      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail(
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
 
     const analysisCount =
-      await this.analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId(
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         analysisToolClientQueryResult.id,
+        sessionData.authIdentityId,
       );
 
     const legalPleadingCount =
-      await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId(
+      await this.legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         analysisToolClientQueryResult.id,
+        sessionData.authIdentityId,
       );
 
     const response = GetAnalysisToolClientResponseDto.build({

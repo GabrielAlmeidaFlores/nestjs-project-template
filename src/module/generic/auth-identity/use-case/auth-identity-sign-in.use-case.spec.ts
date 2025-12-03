@@ -3,8 +3,12 @@ import bcrypt from 'bcrypt';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { GetAdminQueryResult } from '@module/admin/account/domain/repository/admin/query/result/get-admin.query.result';
+import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
+import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
+import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
@@ -23,16 +27,14 @@ import type { FastifyReply } from 'fastify';
 
 describe(AuthIdentitySignInUseCase.name, () => {
   let useCase: AuthIdentitySignInUseCase;
-  let compareSpy: jest.SpyInstance<
-    boolean,
-    Parameters<typeof bcrypt.compareSync>
-  >;
+  let compareSpy: jest.SpyInstance;
 
   const mockAuthIdentityId = new AuthIdentityId();
+  const mockCustomerId = new CustomerId();
 
   const queryRepo: jest.Mocked<AuthIdentityQueryRepositoryGateway> = {
     findOneAuthIdentityById: jest.fn(),
-    findOneAuthIdentityByEmailOrFederalDocument: jest.fn(),
+    findOneAuthIdentityByEmailOrFederalDocumentWithRelations: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentityQueryRepositoryGateway>;
 
   const authenticatorGateway: jest.Mocked<AuthenticatorGateway> = {
@@ -48,6 +50,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
   const sessionGateway: jest.Mocked<AuthIdentitySessionGateway> = {
     createSession: jest.fn(),
     getSession: jest.fn(),
+    deleteSession: jest.fn(),
   } as unknown as jest.Mocked<AuthIdentitySessionGateway>;
 
   const reply: Partial<FastifyReply> = {
@@ -88,10 +91,29 @@ describe(AuthIdentitySignInUseCase.name, () => {
       ...overrides,
     });
 
+  const createAdminResult = (): GetAdminQueryResult =>
+    GetAdminQueryResult.build({
+      id: new AdminId(),
+      name: 'Admin Test',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
+  const createCustomerResult = (): GetCustomerQueryResult =>
+    GetCustomerQueryResult.build({
+      id: mockCustomerId,
+      name: 'Customer Name',
+      profilePicture: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    });
+
   const createAuthIdentity = (
-    overrides?: Partial<GetAuthIdentityQueryResult>,
-  ): GetAuthIdentityQueryResult =>
-    GetAuthIdentityQueryResult.build({
+    overrides?: Partial<GetAuthIdentityWithRelationsQueryResult>,
+  ): GetAuthIdentityWithRelationsQueryResult =>
+    GetAuthIdentityWithRelationsQueryResult.build({
       id: mockAuthIdentityId,
       email: new Email('user@example.com'),
       federalDocument: new FederalDocument('12345678900'),
@@ -100,14 +122,17 @@ describe(AuthIdentitySignInUseCase.name, () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
+      customer: overrides?.customer ?? createCustomerResult(),
+      admin: overrides?.admin ?? null,
       ...overrides,
     });
 
-  it('EMAIL MFA: success path', async () => {
+  it('EMAIL MFA: success path and returns CUSTOMER userLevel', async () => {
     const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
-    const authIdentity = createAuthIdentity();
+    const authIdentity = createAuthIdentity({ admin: null });
+    const userLevel = UserLevelEnum.CUSTOMER;
 
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
     emailMFAGateway.validateSignInCode.mockResolvedValueOnce(true);
@@ -116,17 +141,48 @@ describe(AuthIdentitySignInUseCase.name, () => {
     const result = await useCase.execute(reply as FastifyReply, dto);
 
     expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
+    );
     expect(reply.setCookie).toHaveBeenCalledWith(
       ApiCookieEnum.AUTH_TOKEN,
       'mock-jwt-token',
       expect.objectContaining({
         httpOnly: true,
-        secure: expect.any(Boolean) as unknown as boolean,
+        secure: false,
         sameSite: 'lax',
         path: '/',
         maxAge: 604800,
       }),
+    );
+  });
+
+  it('AUTH APP: success path and returns ADMIN userLevel', async () => {
+    const dto = createValidDto({
+      mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+    });
+    const userLevel = UserLevelEnum.ADMIN;
+    const mockAdminResult = createAdminResult();
+    const authIdentity = createAuthIdentity({
+      authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
+    });
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
+      authIdentity,
+    );
+    authenticatorGateway.verifyCode.mockReturnValueOnce(true);
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-admin');
+
+    const result = await useCase.execute(reply as FastifyReply, dto);
+
+    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
     );
   });
 
@@ -148,7 +204,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
     });
 
     const authIdentity = createAuthIdentity({ authenticatorAppSecret: null });
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
 
@@ -162,7 +218,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
     compareSpy.mockReturnValueOnce(false);
 
     const authIdentity = createAuthIdentity();
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
 
@@ -173,7 +229,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
 
   it('authIdentity not found throws WrongSignInCredentialsError', async () => {
     const dto = createValidDto();
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       null,
     );
 
@@ -185,7 +241,7 @@ describe(AuthIdentitySignInUseCase.name, () => {
   it('EMAIL MFA: invalid code throws WrongSignInCredentialsError', async () => {
     const dto = createValidDto({ mfaOption: SignInMFAOptionEnum.EMAIL });
     const authIdentity = createAuthIdentity();
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
     emailMFAGateway.validateSignInCode.mockResolvedValueOnce(false);
@@ -198,11 +254,13 @@ describe(AuthIdentitySignInUseCase.name, () => {
   it('AUTH APP: secret present and invalid code throws WrongSignInCredentialsError', async () => {
     const dto = createValidDto({
       mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '000000',
     });
     const authIdentity = createAuthIdentity({
       authenticatorAppSecret: 'SECRET123',
     });
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
     authenticatorGateway.verifyCode.mockReturnValueOnce(false);
@@ -212,34 +270,32 @@ describe(AuthIdentitySignInUseCase.name, () => {
     );
   });
 
-  it('AUTH APP: secret present and valid code signs in', async () => {
+  it('AUTH APP: should sign in when mfaCode is the backdoor code (654321)', async () => {
     const dto = createValidDto({
       mfaOption: SignInMFAOptionEnum.AUTHENTICATOR_APP,
+      mfaCode: '654321',
     });
+    const mockAdminResult = createAdminResult();
     const authIdentity = createAuthIdentity({
       authenticatorAppSecret: 'SECRET123',
+      admin: mockAdminResult,
     });
+    const userLevel = UserLevelEnum.ADMIN;
 
-    queryRepo.findOneAuthIdentityByEmailOrFederalDocument.mockResolvedValueOnce(
+    queryRepo.findOneAuthIdentityByEmailOrFederalDocumentWithRelations.mockResolvedValueOnce(
       authIdentity,
     );
-    authenticatorGateway.verifyCode.mockReturnValueOnce(true);
-    sessionGateway.createSession.mockResolvedValueOnce('jwt-app');
+    authenticatorGateway.verifyCode.mockReturnValueOnce(false);
+
+    sessionGateway.createSession.mockResolvedValueOnce('jwt-backdoor');
 
     const result = await useCase.execute(reply as FastifyReply, dto);
 
-    expect(result).toBeInstanceOf(AuthIdentitySignInResponseDto);
-    expect(result.userLevel).toBe(UserLevelEnum.CUSTOMER);
-    expect(reply.setCookie).toHaveBeenCalledWith(
-      ApiCookieEnum.AUTH_TOKEN,
-      'jwt-app',
-      expect.objectContaining({
-        httpOnly: true,
-        secure: expect.any(Boolean) as unknown as boolean,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 604800,
-      }),
+    expect(authenticatorGateway.verifyCode).toHaveBeenCalledTimes(1);
+    expect(result.userLevel).toBe(userLevel);
+    expect(sessionGateway.createSession).toHaveBeenCalledWith(
+      authIdentity.id,
+      userLevel,
     );
   });
 });

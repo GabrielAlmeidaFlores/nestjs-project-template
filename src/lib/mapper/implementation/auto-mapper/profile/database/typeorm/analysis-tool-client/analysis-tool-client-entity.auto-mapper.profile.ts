@@ -70,7 +70,6 @@ export class AnalysisToolClientEntityAutoMapperProfile {
       const email = source.email !== null ? source.email.toString() : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
-
       const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;

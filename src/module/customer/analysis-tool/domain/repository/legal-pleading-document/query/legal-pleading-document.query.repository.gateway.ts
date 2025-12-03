@@ -7,13 +7,13 @@ import type { LegalPleadingDocumentId } from '@module/customer/analysis-tool/dom
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class LegalPleadingDocumentQueryRepositoryGateway {
-  public abstract findOneByLegalPleadingDocumentAndOrganizationIdOrFail(
+  public abstract findOneByLegalPleadingDocumentIdAndOrganizationIdOrFail(
     id: LegalPleadingDocumentId,
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetLegalPleadingDocumentWithRelationsQueryResult>;
 
-  public abstract findByDocumentType(
+  public abstract findByDocumentTypeAndOrganizationIdAndLegalPleadingId(
     legalPleadingId: LegalPleadingId,
     documentType: LegalPleadingDocumentTypeEnum,
     organizationId: OrganizationId,

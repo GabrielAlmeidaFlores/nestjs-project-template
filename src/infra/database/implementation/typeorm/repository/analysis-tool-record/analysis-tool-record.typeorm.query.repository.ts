@@ -20,6 +20,7 @@ import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class AnalysisToolRecordTypeormQueryRepository
@@ -36,8 +37,9 @@ export class AnalysisToolRecordTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationId(
+  public async listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     listData: ListAnalysisToolRecordQueryParam,
   ): Promise<
     ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
@@ -61,6 +63,103 @@ export class AnalysisToolRecordTypeormQueryRepository
       if (typeof listData.type === 'string') {
         where.type = listData.type;
       }
+      const hasSearchBy = typeof listData.searchBy === 'string';
+      const hasAnalysisToolClientId =
+        listData.analysisToolClientId instanceof AnalysisToolClientId;
+
+      if (hasSearchBy && hasAnalysisToolClientId) {
+        searchParams.where.push({
+          ...where,
+          [relation]: {
+            analysisToolClient: {
+              id: listData.analysisToolClientId.toString(),
+              name: Like(`${listData.searchBy}`),
+            },
+            createdBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+          },
+        });
+        searchParams.where.push({
+          ...where,
+          code: Like(`${listData.searchBy}`),
+          [relation]: {
+            analysisToolClient: {
+              id: listData.analysisToolClientId.toString(),
+            },
+            createdBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+          },
+        });
+        return;
+      }
+
+      if (listData.analysisToolClientId instanceof AnalysisToolClientId) {
+        searchParams.where.push({
+          ...where,
+          [relation]: {
+            analysisToolClient: {
+              id: listData.analysisToolClientId.toString(),
+            },
+            createdBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+            updatedBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
+              organization: {
+                id: organizationId.toString(),
+              },
+            },
+          },
+        });
+        return;
+      }
 
       if (typeof listData.searchBy === 'string') {
         searchParams.where.push({
@@ -70,11 +169,21 @@ export class AnalysisToolRecordTypeormQueryRepository
               name: Like(`${listData.searchBy}`),
             },
             createdBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
               organization: {
                 id: organizationId.toString(),
               },
             },
             updatedBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
               organization: {
                 id: organizationId.toString(),
               },
@@ -87,34 +196,56 @@ export class AnalysisToolRecordTypeormQueryRepository
           code: Like(`${listData.searchBy}`),
           [relation]: {
             createdBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
               organization: {
                 id: organizationId.toString(),
               },
             },
             updatedBy: {
+              customer: {
+                authIdentity: {
+                  id: authIdentityId.toString(),
+                },
+              },
               organization: {
                 id: organizationId.toString(),
               },
             },
           },
         });
-      } else {
-        searchParams.where.push({
-          ...where,
-          [relation]: {
-            createdBy: {
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
+
+        return;
       }
+
+      searchParams.where.push({
+        ...where,
+        [relation]: {
+          createdBy: {
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+          updatedBy: {
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      });
     });
 
     const data = await this.list(listData, searchParams);
@@ -133,8 +264,9 @@ export class AnalysisToolRecordTypeormQueryRepository
     );
   }
 
-  public async countByOrganizationId(
+  public async countByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -143,10 +275,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -159,9 +291,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
-  public async findByAnalysisToolClientAndOrganizationIdWithRelations(
+  public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -173,10 +306,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -198,9 +331,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByIdWithRelationsOrFail(
+  public async findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail(
     id: AnalysisToolRecordId,
     organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
     err: Constructor<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
@@ -211,10 +345,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
         },
@@ -239,9 +373,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async countAnalysisByAnalysisToolClientId(
+  public async countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId(
     organizationId: OrganizationId,
     analysisToolClientId: AnalysisToolClientId,
+    authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
       this.getEntityRelationsKey().map((key) => ({
@@ -250,10 +385,10 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: {
               id: organizationId.toString(),
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
             },
           },
           analysisToolClient: {

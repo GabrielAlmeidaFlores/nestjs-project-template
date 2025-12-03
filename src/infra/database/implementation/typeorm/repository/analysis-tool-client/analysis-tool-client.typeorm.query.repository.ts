@@ -31,7 +31,7 @@ export class AnalysisToolClientTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneByAnalysisToolClientIdOrFail(
+  public async findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
     err: Constructor<NotFoundError>,
@@ -69,7 +69,7 @@ export class AnalysisToolClientTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByEmail(
+  public async findOneByEmailAndOrganizationId(
     email: Email,
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null> {
@@ -107,7 +107,7 @@ export class AnalysisToolClientTypeormQueryRepository
     return mappedData;
   }
 
-  public async findOneByFederalDocument(
+  public async findOneByFederalDocumentAndOrganizationId(
     federalDocument: FederalDocument,
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientWithRelationsQueryResult | null> {
@@ -188,43 +188,5 @@ export class AnalysisToolClientTypeormQueryRepository
         resource: mappedData,
       },
     );
-  }
-
-  public async findOneByAnalysisToolClientAndOrganizationIdOrFail(
-    analysisToolClientId: AnalysisToolClientId,
-    organizationId: OrganizationId,
-    err: Constructor<NotFoundError>,
-  ): Promise<GetAnalysisToolClientWithRelationsQueryResult> {
-    const data = await this.findOneOrFail(
-      {
-        where: {
-          id: analysisToolClientId.toString(),
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-          },
-        },
-        relations: {
-          createdBy: {
-            customer: true,
-          },
-          updatedBy: {
-            customer: true,
-          },
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-        },
-      },
-      err,
-    );
-
-    const mappedData = this.mapperGateway.map(
-      data,
-      AnalysisToolClientTypeormEntity,
-      GetAnalysisToolClientWithRelationsQueryResult,
-    );
-
-    return mappedData;
   }
 }

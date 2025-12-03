@@ -19,6 +19,7 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 describe(GetAnalysisToolClientUseCase.name, () => {
   let useCase: GetAnalysisToolClientUseCase;
@@ -32,29 +33,30 @@ describe(GetAnalysisToolClientUseCase.name, () => {
 
   const analysisToolClientQueryRepositoryGateway: jest.Mocked<AnalysisToolClientQueryRepositoryGateway> =
     {
-      findOneByAnalysisToolClientIdOrFail: jest.fn(),
-      findOneByAnalysisToolClientAndOrganizationIdOrFail: jest.fn(),
-      findOneByEmail: jest.fn(),
-      findOneByFederalDocument: jest.fn(),
+      findOneByAnalysisToolClientIdAndOrganizationIdOrFail: jest.fn(),
+      findOneByEmailAndOrganizationId: jest.fn(),
+      findOneByFederalDocumentAndOrganizationId: jest.fn(),
       listByOrganizationId: jest.fn(),
     };
 
   const analysisToolRecordQueryRepositoryGateway: jest.Mocked<AnalysisToolRecordQueryRepositoryGateway> =
     {
-      countAnalysisByAnalysisToolClientId: jest.fn(),
-      findOneByIdWithRelationsOrFail: jest.fn(),
-      countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
-      findByAnalysisToolClientAndOrganizationIdWithRelations: jest.fn(),
+      countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId: jest.fn(),
+      findOneByAnalysisToolRecordIdAndAuthIdentityIdAndOrganizationIdWithRelationsOrFail:
+        jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
+      findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const legalPleadingQueryRepositoryGateway: jest.Mocked<LegalPleadingQueryRepositoryGateway> =
     {
-      countByLegalPleadingIdAndOrganizationId: jest.fn(),
-      findOneByLegalPleadingAndOrganizationIdOrFail: jest.fn(),
-      findByAnalysisToolClientAndOrganizationId: jest.fn(),
-      countByOrganizationId: jest.fn(),
-      listByOrganizationId: jest.fn(),
+      countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
+      findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail:
+        jest.fn(),
+      findByAnalysisToolClientIdAndOrganizationIdAndAuthIdentityId: jest.fn(),
+      countByOrganizationIdAndAuthIdentityId: jest.fn(),
+      listByOrganizationIdAndAuthIdentityId: jest.fn(),
     };
 
   const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
@@ -89,6 +91,7 @@ describe(GetAnalysisToolClientUseCase.name, () => {
       name: 'Test Client',
       federalDocument: null,
       email: null,
+      inssPassword: null,
       phoneNumber: null,
       birthDate: null,
       gender: null,
@@ -150,9 +153,10 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     jest.clearAllMocks();
   });
 
-  it('deve retornar um cliente com contagens e URLs de perfil assinadas', async () => {
+  it('should return client with counts and signed profile URLs', async () => {
     const orgSessionData = buildOrganizationSessionData();
     const clientId = new AnalysisToolClientId();
+    const sessionModel = new SessionDataModel();
     const clientQueryResult = buildClientQueryResult({
       withProfilePictures: true,
     });
@@ -163,20 +167,24 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     const creatorPicSignedUrl = new URL('https://example.com/creator.jpg');
     const updaterPicSignedUrl = new URL('https://example.com/updater.jpg');
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       analysisCount,
     );
-    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       legalPleadingCount,
     );
     fileProcessorGateway.getFileSignedUrl
       .mockResolvedValueOnce(creatorPicSignedUrl)
       .mockResolvedValueOnce(updaterPicSignedUrl);
 
-    const result = await useCase.execute(orgSessionData, clientId);
+    const result = await useCase.execute(
+      orgSessionData,
+      sessionModel,
+      clientId,
+    );
 
     expect(result).toBeInstanceOf(GetAnalysisToolClientResponseDto);
     expect(result.id).toBe(clientQueryResult.id);
@@ -185,11 +193,19 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     expect(result.legalProceedingNumber).toEqual(['987654']);
 
     expect(
-      analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId, clientQueryResult.id);
+      analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId,
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      clientQueryResult.id,
+      sessionModel.authIdentityId,
+    );
     expect(
-      legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId,
-    ).toHaveBeenCalledWith(orgSessionData.organizationId, clientQueryResult.id);
+      legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId,
+    ).toHaveBeenCalledWith(
+      orgSessionData.organizationId,
+      clientQueryResult.id,
+      sessionModel.authIdentityId,
+    );
 
     expect(fileProcessorGateway.getFileSignedUrl).toHaveBeenCalledTimes(2);
     expect(result.createdBy.profilePicture).toBe(
@@ -200,24 +216,29 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     );
   });
 
-  it('deve retornar um cliente sem URLs de perfil se elas não existirem', async () => {
+  it('should return client without profile URLs when they do not exist', async () => {
     const orgSessionData = buildOrganizationSessionData();
+    const sessionModel = new SessionDataModel();
     const clientId = new AnalysisToolClientId();
     const clientQueryResult = buildClientQueryResult({
       withProfilePictures: false,
     });
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockResolvedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockResolvedValueOnce(
       clientQueryResult,
     );
-    analysisToolRecordQueryRepositoryGateway.countAnalysisByAnalysisToolClientId.mockResolvedValueOnce(
+    analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAnalysisToolClientIdAndAuthIdentityId.mockResolvedValueOnce(
       0,
     );
-    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationId.mockResolvedValueOnce(
+    legalPleadingQueryRepositoryGateway.countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId.mockResolvedValueOnce(
       0,
     );
 
-    const result = await useCase.execute(orgSessionData, clientId);
+    const result = await useCase.execute(
+      orgSessionData,
+      sessionModel,
+      clientId,
+    );
 
     expect(result).toBeInstanceOf(GetAnalysisToolClientResponseDto);
     expect(result.analysisCount).toBe(0);
@@ -226,16 +247,17 @@ describe(GetAnalysisToolClientUseCase.name, () => {
     expect(result.updatedBy.profilePicture).toBeUndefined();
   });
 
-  it('deve lançar AnalysisToolClientNotFoundError se o cliente não for encontrado', async () => {
+  it('should throw AnalysisToolClientNotFoundError when client is not found', async () => {
     const orgSessionData = buildOrganizationSessionData();
     const clientId = new AnalysisToolClientId();
+    const sessionModel = new SessionDataModel();
 
-    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdOrFail.mockRejectedValueOnce(
+    analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail.mockRejectedValueOnce(
       new AnalysisToolClientNotFoundError(),
     );
 
     await expect(
-      useCase.execute(orgSessionData, clientId),
+      useCase.execute(orgSessionData, sessionModel, clientId),
     ).rejects.toBeInstanceOf(AnalysisToolClientNotFoundError);
   });
 });
