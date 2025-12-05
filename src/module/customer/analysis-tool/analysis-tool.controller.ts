@@ -76,7 +76,6 @@ export class AnalysisToolController {
 
   public constructor(
     private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
-    private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
@@ -96,6 +95,7 @@ export class AnalysisToolController {
     private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
+    private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -460,6 +460,38 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Atualizar análise rápida de CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
+      method: RequestMethod.PATCH,
+      type: UpdateCnisFastAnalysisRequestDto,
+    },
+    tag: ['analise-rapida-cnis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise rápida de CNIS atualizada com sucesso.',
+      type: UpdateCnisFastAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateCnisFastAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: UpdateCnisFastAnalysisRequestDto,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+  ): Promise<UpdateCnisFastAnalysisResponseDto> {
+    return await this.updateCnisFastAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Criar análise rápida de CNIS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -484,39 +516,6 @@ export class AnalysisToolController {
     return await this.createCnisFastAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
-      method: RequestMethod.PATCH,
-      type: UpdateCnisFastAnalysisRequestDto,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise rápida de CNIS atualizada com sucesso.',
-      type: UpdateCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-    @Body()
-    dto: UpdateCnisFastAnalysisRequestDto,
-  ): Promise<UpdateCnisFastAnalysisResponseDto> {
-    return await this.updateCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
       dto,
     );
   }

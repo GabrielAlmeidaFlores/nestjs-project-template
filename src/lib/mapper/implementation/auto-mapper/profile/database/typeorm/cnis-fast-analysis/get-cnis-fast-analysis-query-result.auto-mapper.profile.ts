@@ -2,15 +2,14 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
-import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 
 @Injectable()
-export class CnisFastAnalysisEntityAutoMapperProfile {
-  protected readonly _type = CnisFastAnalysisEntityAutoMapperProfile.name;
+export class GetCnisFastAnalysisQueryResultAutoMapperProfile {
+  protected readonly _type =
+    GetCnisFastAnalysisQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -24,17 +23,10 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: CnisFastAnalysisTypeormEntity,
-    ): CnisFastAnalysisEntity => {
-      const cnisFastAnalysisResult = this.mapper.map(
-        source.cnisFastAnalysisResult,
-        CnisFastAnalysisResultTypeormEntity,
-        CnisFastAnalysisResultEntity,
-      );
-
-      return new CnisFastAnalysisEntity({
+    ): GetCnisFastAnalysisQueryResult => {
+      return GetCnisFastAnalysisQueryResult.build({
         ...source,
         id: new CnisFastAnalysisId(source.id),
-        cnisFastAnalysisResult,
       });
     };
 
@@ -43,25 +35,18 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
     createMap(
       this.mapper,
       CnisFastAnalysisTypeormEntity,
-      CnisFastAnalysisEntity,
+      GetCnisFastAnalysisQueryResult,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: CnisFastAnalysisEntity,
+      source: GetCnisFastAnalysisQueryResult,
     ): CnisFastAnalysisTypeormEntity => {
-      const cnisFastAnalysisResult = this.mapper.map(
-        source.cnisFastAnalysisResult,
-        CnisFastAnalysisResultEntity,
-        CnisFastAnalysisResultTypeormEntity,
-      );
-
       return CnisFastAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        cnisFastAnalysisResult,
       });
     };
 
@@ -69,7 +54,7 @@ export class CnisFastAnalysisEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      CnisFastAnalysisEntity,
+      GetCnisFastAnalysisQueryResult,
       CnisFastAnalysisTypeormEntity,
       mappingFunction,
     );
