@@ -1,5 +1,4 @@
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 
@@ -15,6 +14,5 @@ export abstract class CnisFastAnalysisCommandRepositoryGateway {
 
   public abstract deleteCnisFastAnalysis(
     id: CnisFastAnalysisId,
-    updatedBy: OrganizationMemberId,
   ): TransactionType;
 }
