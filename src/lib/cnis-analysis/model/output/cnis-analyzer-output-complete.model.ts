@@ -3,6 +3,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 import type { AjusteSalarioBeneficioInterface } from '@lib/cnis-analysis/interface/ajuste-salario-beneficio.interface';
 import type { AnalisePrevidenciariaInterface } from '@lib/cnis-analysis/interface/analise-previdenciaria.interface';
 import type { CarenciaInterface } from '@lib/cnis-analysis/interface/carencia.interface';
+import type { CnisClientDataInterface } from '@lib/cnis-analysis/interface/cnis-client-data.interface';
 import type { ConcomitanciaInterface } from '@lib/cnis-analysis/interface/concomitancia.interface';
 import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
 import type { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/interface/correcao-monetaria-item.interface';
@@ -16,8 +17,7 @@ import type { SalarioInterface } from '@lib/cnis-analysis/interface/salario.inte
 import type { SalariosConcomitantesInterface } from '@lib/cnis-analysis/interface/salarios-concomitantes.interface';
 import type { TempoTotalComRestricoesInterface } from '@lib/cnis-analysis/interface/tempo-total-com-restricoes.interface';
 import type { TempoDeContribuicaoInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
-import { CnisClientDataInterface } from '@lib/cnis-analysis/interface/cnis-client-data.interface';
-import { CnisSocialSecurityRelationOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import type { CnisSocialSecurityRelationOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 
 export class CnisAnalyzerOutputCompleteModel extends BaseBuildableObject {
   public idade: PessoaCnisIdadeInterface;
