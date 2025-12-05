@@ -36,7 +36,7 @@ import {
   TempoDeContribuicaoDetalhesInterface,
   TempoDeContribuicaoInterface,
 } from '@lib/cnis-analyzer/interface/time-contribution.interface';
-import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analyzer/model/output/cnis-analyzer-output-complete.model';
+import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
 import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 
@@ -80,7 +80,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   public analyzeCnisDocument(
     data: CnisModel,
     analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult,
-  ): Promise<CnisAnalyzerOutputCompleteModel> {
+  ): Promise<CnisAnalysisResultModel> {
     const idade = this.calculateAge(
       data.affiliateIdentification?.dataDeNascimento,
     );
@@ -348,7 +348,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         data.affiliateIdentification?.dataDeNascimento,
       );
 
-    const cnis = CnisAnalyzerOutputCompleteModel.build({
+    const cnis = CnisAnalysisResultModel.build({
       idade,
       clientData,
       beneficios,

@@ -19,7 +19,7 @@ import type { TempoTotalComRestricoesInterface } from '@lib/cnis-analyzer/interf
 import type { TempoDeContribuicaoInterface } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 import type { CnisSocialSecurityRelationModel } from '@lib/cnis-processor/model/generic/cnis.model';
 
-export class CnisAnalyzerOutputCompleteModel extends BaseBuildableObject {
+export class CnisAnalysisResultModel extends BaseBuildableObject {
   public idade: PessoaCnisIdadeInterface;
   public clientData: CnisClientDataInterface;
   public beneficios: CnisSocialSecurityRelationModel[] | undefined;
@@ -56,5 +56,5 @@ export class CnisAnalyzerOutputCompleteModel extends BaseBuildableObject {
   public aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18: AnalisePrevidenciariaInterface;
   public aposentadoriaProgramadaComumPrevistaNoArt19: AnalisePrevidenciariaInterface;
 
-  protected override readonly _type = CnisAnalyzerOutputCompleteModel.name;
+  protected override readonly _type = CnisAnalysisResultModel.name;
 }
