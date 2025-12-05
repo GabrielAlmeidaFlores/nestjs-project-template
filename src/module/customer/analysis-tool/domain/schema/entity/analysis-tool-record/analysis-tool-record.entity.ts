@@ -30,10 +30,14 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
 
-  @Description('Membro da organização que criou a análise CNIS rápida.')
+  @Description(
+    'Membro da organização que criou o registro da ferramenta de análise.',
+  )
   public readonly createdBy: OrganizationMemberId;
 
-  @Description('Membro da organização que atualizou a análise CNIS rápida.')
+  @Description(
+    'Membro da organização que atualizou o registro da ferramenta de análise.',
+  )
   public readonly updatedBy: OrganizationMemberId;
 
   protected readonly _type = AnalysisToolRecordEntity.name;
