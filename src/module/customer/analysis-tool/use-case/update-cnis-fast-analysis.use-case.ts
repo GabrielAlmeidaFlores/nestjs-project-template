@@ -4,6 +4,8 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/command/cnis-fast-analysis-inss-benefit.command.repository.gateway';
@@ -11,6 +13,7 @@ import { GetCnisFastAnalysisInssBenefitQueryResult } from '@module/customer/anal
 import { CnisFastAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/command/cnis-fast-analysis-legal-proceeding.command.repository.gateway';
 import { GetCnisFastAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/query/result/get-cnis-fast-analysis-legal-proceeding.query.result';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CnisFastAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.entity';
@@ -48,8 +51,12 @@ export class UpdateCnisFastAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -72,6 +79,14 @@ export class UpdateCnisFastAnalysisUseCase {
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
+        CnisFastAnalysisNotFoundError,
+      );
+
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        cnisFastAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         CnisFastAnalysisNotFoundError,
       );
 
@@ -98,7 +113,7 @@ export class UpdateCnisFastAnalysisUseCase {
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         dto.json?.analysisToolClientId ??
-          cnisFastAnalysisQueryResult.analysisToolClient.id,
+          analysisToolRecordQueryResult.analysisToolClient.id,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
@@ -111,11 +126,16 @@ export class UpdateCnisFastAnalysisUseCase {
 
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       ...cnisFastAnalysisQueryResult,
-      analysisToolClient,
       cnisDocument,
-      status: AnalysisStatusEnum.IN_PROGRESS,
       cnisFastAnalysisResult: null,
-      createdBy: cnisFastAnalysisQueryResult.createdBy.id,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      ...analysisToolRecordQueryResult,
+      cnisFastAnalysis,
+      analysisToolClient,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
 
@@ -149,6 +169,13 @@ export class UpdateCnisFastAnalysisUseCase {
         cnisFastAnalysis,
       );
     transactions.push(cnisFastAnalysisTransaction);
+
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
+    transactions.push(analysisToolRecordTransaction);
 
     const executeTransactions =
       await this.baseTransactionRepositoryGateway.execute(transactions);

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import {
@@ -24,6 +25,8 @@ export class GetCnisFastAnalysisUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
   ) {}
@@ -43,6 +46,14 @@ export class GetCnisFastAnalysisUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        cnisFastAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        CnisFastAnalysisNotFoundError,
+      );
+
     const cnisFastAnalysisQueryResult =
       await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
         cnisFastAnalysisId,
@@ -52,8 +63,11 @@ export class GetCnisFastAnalysisUseCase {
 
     const response = GetCnisFastAnalysisResponseDto.build({
       ...cnisFastAnalysisQueryResult,
+      status: analysisToolRecordQueryResult.status,
+      updatedAt: analysisToolRecordQueryResult.updatedAt,
+      createdAt: analysisToolRecordQueryResult.createdAt,
       analysisToolClient: GetCnisFastAnalysisClientResponseDto.build({
-        ...cnisFastAnalysisQueryResult.analysisToolClient,
+        ...analysisToolRecordQueryResult.analysisToolClient,
       }),
       legalProceedingNumber:
         cnisFastAnalysisQueryResult.cnisFastAnalysisLegalProceeding.map(
@@ -70,10 +84,10 @@ export class GetCnisFastAnalysisUseCase {
             })
           : null,
       createdBy: GetCnisFastAnalysisResponsibleResponseDto.build({
-        ...cnisFastAnalysisQueryResult.createdBy.customer,
+        ...analysisToolRecordQueryResult.createdBy.customer,
       }),
       updatedBy: GetCnisFastAnalysisResponsibleResponseDto.build({
-        ...cnisFastAnalysisQueryResult.updatedBy.customer,
+        ...analysisToolRecordQueryResult.updatedBy.customer,
       }),
     });
 
@@ -93,20 +107,20 @@ export class GetCnisFastAnalysisUseCase {
     }
 
     if (
-      cnisFastAnalysisQueryResult.createdBy.customer.profilePicture !== null
+      analysisToolRecordQueryResult.createdBy.customer.profilePicture !== null
     ) {
       const profilePicture = await this.fileProcessorGateway.getFileSignedUrl(
-        cnisFastAnalysisQueryResult.createdBy.customer.profilePicture,
+        analysisToolRecordQueryResult.createdBy.customer.profilePicture,
       );
 
       response.createdBy.profilePicture = profilePicture.toString();
     }
 
     if (
-      cnisFastAnalysisQueryResult.updatedBy.customer.profilePicture !== null
+      analysisToolRecordQueryResult.updatedBy.customer.profilePicture !== null
     ) {
       const profilePicture = await this.fileProcessorGateway.getFileSignedUrl(
-        cnisFastAnalysisQueryResult.updatedBy.customer.profilePicture,
+        analysisToolRecordQueryResult.updatedBy.customer.profilePicture,
       );
 
       response.updatedBy.profilePicture = profilePicture.toString();
