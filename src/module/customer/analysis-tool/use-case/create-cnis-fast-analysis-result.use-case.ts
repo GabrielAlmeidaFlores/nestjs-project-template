@@ -3,10 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
-import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
@@ -33,8 +35,10 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly cnisFastAnalysisCommandRepositoryGateway: CnisFastAnalysisCommandRepositoryGateway,
     @Inject(CnisFastAnalysisResultCommandRepositoryGateway)
     private readonly cnisFastAnalysisResultCommandRepositoryGateway: CnisFastAnalysisResultCommandRepositoryGateway,
-    @Inject(CnisFastAnalysisQueryRepositoryGateway)
-    private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -56,19 +60,27 @@ export class CreateCnisFastAnalysisResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const cnisFastAnalysisQueryResult =
-      await this.cnisFastAnalysisQueryRepositoryGateway.findOneByCnisFastAnalysisIdAndOrganizationIdWithRelationsOrFail(
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
         cnisFastAnalysisId,
         organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         CnisFastAnalysisNotFoundError,
       );
+
+    const cnisFastAnalysisQueryResult =
+      analysisToolRecordQueryResult.cnisFastAnalysis;
+
+    if (cnisFastAnalysisQueryResult === null) {
+      throw new CnisFastAnalysisNotFoundError();
+    }
 
     if (cnisFastAnalysisQueryResult.cnisDocument === null) {
       throw new CnisDocumentRequiredError();
     }
 
     const clientDataBuffer = Buffer.from(
-      JSON.stringify(cnisFastAnalysisQueryResult.analysisToolClient, null, 2),
+      JSON.stringify(analysisToolRecordQueryResult.analysisToolClient, null, 2),
       'utf-8',
     );
     const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
@@ -128,21 +140,32 @@ export class CreateCnisFastAnalysisResultUseCase {
           : null,
     });
 
-    const analysisToolClient = new AnalysisToolClientEntity({
-      ...cnisFastAnalysisQueryResult.analysisToolClient,
-      createdBy: cnisFastAnalysisQueryResult.analysisToolClient.createdBy.id,
-      updatedBy: cnisFastAnalysisQueryResult.analysisToolClient.updatedBy.id,
-    });
-
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       ...cnisFastAnalysisQueryResult,
-      analysisToolClient,
       cnisFastAnalysisResult,
-      status: AnalysisStatusEnum.COMPLETED,
       cnisDocument: cnisFastAnalysisQueryResult.cnisDocument,
-      createdBy: cnisFastAnalysisQueryResult.createdBy.id,
+    });
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      ...analysisToolRecordQueryResult,
+      status: AnalysisStatusEnum.COMPLETED,
+      analysisToolClient,
+      cnisFastAnalysis,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
+
+    const updateAnalysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
 
     const createCnisFastAnalysisResultTransaction =
       this.cnisFastAnalysisResultCommandRepositoryGateway.createCnisFastAnalysisResult(
@@ -157,6 +180,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       createCnisFastAnalysisResultTransaction,
       updateCnisFastAnalysisTransaction,
+      updateAnalysisToolRecordTransaction,
     ]);
     await transaction.commit();
 

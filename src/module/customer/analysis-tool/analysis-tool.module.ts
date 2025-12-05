@@ -44,7 +44,6 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   controllers: [AnalysisToolController],
   providers: [
     CreateCnisFastAnalysisUseCase,
-    UpdateCnisFastAnalysisUseCase,
     CreateCnisFastAnalysisResultUseCase,
     GetCnisFastAnalysisUseCase,
     ListAnalysisToolClientUseCase,
@@ -67,6 +66,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteAnalysisToolRecordUseCase,
     DeleteLegalPleadingUseCase,
     GetAnalysisToolClientUseCase,
+    UpdateCnisFastAnalysisUseCase,
   ],
 })
 export class AnalysisToolModule {
