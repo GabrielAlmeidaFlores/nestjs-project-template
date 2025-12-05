@@ -556,7 +556,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     for (let i = 1; i < items.length; i++) {
       const it = items[i];
       const inicioIt = it?.start ? it.start.getTime() : 0;
-      // se começa antes ou no fim atual do grupo -> pertence ao grupo
       if (inicioIt <= endOfGroup) {
         group.push(
           it ?? {
@@ -570,7 +569,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           endOfGroup = fimIt;
         }
       } else {
-        // não sobrepõe o grupo atual -> parar de montar este grupo
         break;
       }
     }
@@ -582,8 +580,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return this.daysBetween(s, e) + 1;
     };
 
-    // escolher o vínculo principal dentro do grupo:
-    // maior duração; empate -> início mais antigo; empate -> menor seq (se existir)
     let entradaPrincipal = group[0];
     for (let i = 1; i < group.length; i++) {
       const atual = group[i];
@@ -1093,22 +1089,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     carenciaTotal: CarenciaInterface[],
     data: CnisModel,
   ): ConsolidadoRelacaoInterface[] {
-    // 2.4. Cálculo Consolidado do Tempo de Contribuição e Carência (Total Anti-Duplicidade):
-    // Descrição: Somar o tempo e a carência de todos os vínculos válidos,
-    // mas sem contar os períodos concomitantes duas vezes.
-    // Este é um dos algoritmos centrais do sistema.
-    // Fórmula/Lógica:
-    // Identificar grupos de vínculos concomitantes.
-    // Em cada grupo, eleger um "vínculo principal" (o de maior duração ou mais antigo).
-    // Ajustar as datas de início e/ou fim dos "vínculos secundários"
-    // para eliminar a sobreposição com o principal.
-    // Somar as durações de:
-    // todos os vínculos não concomitantes + os vínculos principais (duração integral) + os vínculos secundários (duração ajustada).
-    // Observação: Este cálculo deve ser executado duas vezes para gerar os dois cenários finais:
-    // Cenário Potencial: Utilizando todos os vínculos válidos.
-    // Cenário Restrito: Utilizando apenas os vínculos válidos e sem pendências (sem a marcação ⚠️).
-    /// Depois de calculados os dados, montar a tabela completa:
-
     if (!data.socialSecurityRelations) {
       return [];
     }
