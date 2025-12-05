@@ -2,15 +2,11 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-inss-benefit.typeorm.entity';
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetCnisFastAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis-with-relations.query.result';
 import { GetCnisFastAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-inss-benefit/query/result/get-cnis-fast-analysis-inss-benefit.query.result';
 import { GetCnisFastAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-legal-proceeding/query/result/get-cnis-fast-analysis-legal-proceeding.query.result';
@@ -45,12 +41,6 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         });
       }
 
-      const analysisToolClient = this.mapper.map(
-        source.analysisToolClient,
-        AnalysisToolClientTypeormEntity,
-        GetAnalysisToolClientWithRelationsQueryResult,
-      );
-
       const cnisFastAnalysisResult = this.mapper.map(
         source.cnisFastAnalysisResult,
         CnisFastAnalysisResultTypeormEntity,
@@ -69,27 +59,12 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         GetCnisFastAnalysisLegalProceedingQueryResult,
       );
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
-      const createdBy = this.mapper.map(
-        source.updatedBy,
-        OrganizationMemberTypeormEntity,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-      );
-
       return GetCnisFastAnalysisWithRelationsQueryResult.build({
         ...source,
         id: new CnisFastAnalysisId(source.id),
-        analysisToolClient,
         cnisFastAnalysisResult,
         cnisFastAnalysisInssBenefit,
         cnisFastAnalysisLegalProceeding,
-        createdBy,
-        updatedBy,
       });
     };
 
@@ -107,12 +82,6 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: GetCnisFastAnalysisWithRelationsQueryResult,
     ): CnisFastAnalysisTypeormEntity => {
-      const analysisToolClient = this.mapper.map(
-        source.analysisToolClient,
-        GetAnalysisToolClientWithRelationsQueryResult,
-        AnalysisToolClientTypeormEntity,
-      );
-
       const cnisFastAnalysisResult = this.mapper.map(
         source.cnisFastAnalysisResult,
         GetCnisFastAnalysisResultQueryResult,
@@ -131,27 +100,12 @@ export class GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile {
         CnisFastAnalysisLegalProceedingTypeormEntity,
       );
 
-      const updatedBy = this.mapper.map(
-        source.updatedBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
-
-      const createdBy = this.mapper.map(
-        source.updatedBy,
-        GetOrganizationMemberWithCustomerRelationQueryResult,
-        OrganizationMemberTypeormEntity,
-      );
-
       return CnisFastAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        analysisToolClient,
         cnisFastAnalysisResult,
         cnisFastAnalysisInssBenefit,
         cnisFastAnalysisLegalProceeding,
-        createdBy,
-        updatedBy,
       });
     };
 

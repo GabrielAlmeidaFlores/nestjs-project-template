@@ -18,8 +18,8 @@ import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/
 import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
 import { GetAuthIdentityWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-with-relations-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
+import { GetCnisFastAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-query-result.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
-import { GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-responsible-and-client-relations-query-result.auto-mapper.profile';
 import { CnisFastAnalysisInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-inss-benefit/get-cnis-fast-analysis-inss-benefit-query-result.auto-mapper.profile';
 import { CnisFastAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding-entity.auto-mapper.profile';
@@ -65,6 +65,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetAuthIdentityQueryResultAutoMapperProfile,
     GetCustomerQueryResultAutoMapperProfile,
     GetCustomerAddressQueryResultAutoMapperProfile,
+    GetCnisFastAnalysisQueryResultAutoMapperProfile,
     GetOrganizationQueryResultAutoMapperProfile,
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
@@ -97,7 +98,6 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     LegalPleadingResultEntityAutoMapperProfile,
     GetLegalPleadingResultQueryResultAutoMapperProfile,
     GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMapperProfile,
-    GetCnisFastAnalysisWithResponsibleAndClientRelationsQueryResultAutoMapperProfile,
     GetAnalysisToolClientQueryResultAutoMapperProfile,
     AnalysisToolRecordEntityAutoMapperProfile,
     GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile,
