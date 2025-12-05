@@ -37,7 +37,6 @@ import {
 import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-analyzer-output-complete.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
-import { Time } from '@shared/api/util/diff-ymd-inclusive';
 
 @Injectable()
 export class CnisAnalyzerService implements CnisAnalyzerGateway {
@@ -376,6 +375,23 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     start: Date | null | undefined,
     end: Date | null | undefined,
   ): DiferencaYmdResultadoInterface {
+    const MILLIS_PER_SECOND = 1000;
+    const SECONDS_PER_MINUTE = 60;
+    const MINUTES_PER_HOUR = 60;
+    const HOURS_PER_DAY = 24;
+
+    const Time = {
+      Millisecond: 1,
+      Second: MILLIS_PER_SECOND,
+      Minute: MILLIS_PER_SECOND * SECONDS_PER_MINUTE,
+      Hour: MILLIS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR,
+      Day:
+        MILLIS_PER_SECOND *
+        SECONDS_PER_MINUTE *
+        MINUTES_PER_HOUR *
+        HOURS_PER_DAY,
+    } as const;
+
     if (
       !start ||
       !end ||
