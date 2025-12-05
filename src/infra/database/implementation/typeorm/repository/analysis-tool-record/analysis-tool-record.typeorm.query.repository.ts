@@ -20,7 +20,9 @@ import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()
 export class AnalysisToolRecordTypeormQueryRepository
@@ -51,202 +53,84 @@ export class AnalysisToolRecordTypeormQueryRepository
       relations: relationsClause,
     };
 
-    const relations = this.getEntityRelationsKey();
+    const baseWhere: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdBy: {
+        customer: {
+          authIdentity: { id: authIdentityId.toString() },
+        },
+        organization: { id: organizationId.toString() },
+      },
+    };
 
-    relations.forEach((relation) => {
-      if (!Array.isArray(searchParams.where)) {
-        return;
-      }
+    const withUpdatedBy = {
+      ...baseWhere,
+      updatedBy: {
+        customer: {
+          authIdentity: { id: authIdentityId.toString() },
+        },
+        organization: { id: organizationId.toString() },
+      },
+    };
 
-      const where: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {};
+    const whereType =
+      typeof listData.type === 'string' ? { type: listData.type } : {};
 
-      if (typeof listData.type === 'string') {
-        where.type = listData.type;
-      }
-      const hasSearchBy = typeof listData.searchBy === 'string';
-      const hasAnalysisToolClientId =
-        listData.analysisToolClientId instanceof AnalysisToolClientId;
+    const hasSearchBy = typeof listData.searchBy === 'string';
+    const hasClientId =
+      listData.analysisToolClientId instanceof AnalysisToolClientId;
 
-      if (hasSearchBy && hasAnalysisToolClientId) {
-        searchParams.where.push({
-          ...where,
-          [relation]: {
-            analysisToolClient: {
-              id: listData.analysisToolClientId.toString(),
-              name: Like(`${listData.searchBy}`),
-            },
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
-        searchParams.where.push({
-          ...where,
-          code: Like(`${listData.searchBy}`),
-          [relation]: {
-            analysisToolClient: {
-              id: listData.analysisToolClientId.toString(),
-            },
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
-        return;
-      }
-
-      if (listData.analysisToolClientId instanceof AnalysisToolClientId) {
-        searchParams.where.push({
-          ...where,
-          [relation]: {
-            analysisToolClient: {
-              id: listData.analysisToolClientId.toString(),
-            },
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
-        return;
-      }
-
-      if (typeof listData.searchBy === 'string') {
-        searchParams.where.push({
-          ...where,
-          [relation]: {
-            analysisToolClient: {
-              name: Like(`${listData.searchBy}`),
-            },
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
-
-        searchParams.where.push({
-          ...where,
-          code: Like(`${listData.searchBy}`),
-          [relation]: {
-            createdBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-            updatedBy: {
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
-              organization: {
-                id: organizationId.toString(),
-              },
-            },
-          },
-        });
-
-        return;
-      }
-
-      searchParams.where.push({
-        ...where,
-        [relation]: {
-          createdBy: {
-            customer: {
-              authIdentity: {
-                id: authIdentityId.toString(),
-              },
-            },
-            organization: {
-              id: organizationId.toString(),
-            },
-          },
-          updatedBy: {
-            customer: {
-              authIdentity: {
-                id: authIdentityId.toString(),
-              },
-            },
-            organization: {
-              id: organizationId.toString(),
-            },
+    if (hasSearchBy && hasClientId) {
+      searchParams.where = [
+        {
+          ...whereType,
+          ...baseWhere,
+          analysisToolClient: {
+            id: listData.analysisToolClientId.toString(),
+            name: Like(`${listData.searchBy}`),
           },
         },
-      });
-    });
+        {
+          ...whereType,
+          ...baseWhere,
+          code: Like(`${listData.searchBy}`),
+          analysisToolClient: {
+            id: listData.analysisToolClientId.toString(),
+          },
+        },
+      ];
+    } else if (hasClientId) {
+      searchParams.where = [
+        {
+          ...whereType,
+          ...baseWhere,
+          analysisToolClient: {
+            id: listData.analysisToolClientId.toString(),
+          },
+        },
+      ];
+    } else if (hasSearchBy) {
+      searchParams.where = [
+        {
+          ...whereType,
+          ...baseWhere,
+          analysisToolClient: {
+            name: Like(`${listData.searchBy}`),
+          },
+        },
+        {
+          ...whereType,
+          ...baseWhere,
+          code: Like(`${listData.searchBy}`),
+        },
+      ];
+    } else {
+      searchParams.where = [
+        {
+          ...whereType,
+          ...withUpdatedBy,
+        },
+      ];
+    }
 
     const data = await this.list(listData, searchParams);
 
@@ -268,24 +152,19 @@ export class AnalysisToolRecordTypeormQueryRepository
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
-    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      this.getEntityRelationsKey().map((key) => ({
-        [key]: {
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-            customer: {
-              authIdentity: {
-                id: authIdentityId.toString(),
-              },
+    const total = await this.count({
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
             },
           },
         },
-      }));
-
-    const total = await this.count({
-      where: whereClause,
+      },
     });
 
     return total;
@@ -296,29 +175,24 @@ export class AnalysisToolRecordTypeormQueryRepository
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult[]> {
-    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      this.getEntityRelationsKey().map((key) => ({
-        [key]: {
-          analysisToolClient: {
-            id: analysisToolClientId.toString(),
-          },
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
-            },
-            customer: {
-              authIdentity: {
-                id: authIdentityId.toString(),
-              },
-            },
-          },
-        },
-      }));
-
     const relationsClause = this.getRelationsClauseOperation();
 
     const data = await this.find({
-      where: whereClause,
+      where: {
+        analysisToolClient: {
+          id: analysisToolClientId.toString(),
+        },
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
+            },
+          },
+        },
+      },
       relations: relationsClause,
     });
 
@@ -337,10 +211,12 @@ export class AnalysisToolRecordTypeormQueryRepository
     authIdentityId: AuthIdentityId,
     err: Constructor<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
-    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      this.getEntityRelationsKey().map((key) => ({
-        id: id.toString(),
-        [key]: {
+    const relationsClause = this.getRelationsClauseOperation();
+
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: id.toString(),
           createdBy: {
             organization: {
               id: organizationId.toString(),
@@ -352,13 +228,6 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
         },
-      }));
-
-    const relationsClause = this.getRelationsClauseOperation();
-
-    const data = await this.findOneOrFail(
-      {
-        where: whereClause,
         relations: relationsClause,
       },
       err,
@@ -378,9 +247,39 @@ export class AnalysisToolRecordTypeormQueryRepository
     analysisToolClientId: AnalysisToolClientId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
-    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
-      this.getEntityRelationsKey().map((key) => ({
-        [key]: {
+    const total = await this.count({
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+          customer: {
+            authIdentity: {
+              id: authIdentityId.toString(),
+            },
+          },
+        },
+        analysisToolClient: {
+          id: analysisToolClientId.toString(),
+        },
+      },
+    });
+
+    return total;
+  }
+
+  public async findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    cnisFastAnalysisId: CnisFastAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          cnisFastAnalysis: {
+            id: cnisFastAnalysisId.toString(),
+          },
           createdBy: {
             organization: {
               id: organizationId.toString(),
@@ -391,36 +290,66 @@ export class AnalysisToolRecordTypeormQueryRepository
               },
             },
           },
+        },
+        relations: {
           analysisToolClient: {
-            id: analysisToolClientId.toString(),
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+            },
+            updatedBy: {
+              customer: true,
+            },
+          },
+          cnisFastAnalysis: {
+            cnisFastAnalysisResult: true,
+            cnisFastAnalysisInssBenefit: true,
+            cnisFastAnalysisLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
           },
         },
-      }));
+      },
+      err,
+    );
 
-    const total = await this.count({
-      where: whereClause,
-    });
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
 
-    return total;
+    return mappedData;
   }
 
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {};
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = {
-        analysisToolClient: {
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-        },
+      {
         createdBy: {
           customer: true,
         },
         updatedBy: {
           customer: true,
         },
-      } as never;
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
+          analysisToolClientLegalProceeding: true,
+          analysisToolClientInssBenefit: true,
+        },
+      };
+
+    for (const key of this.getEntityRelationsKey()) {
+      relationsClause[key] = true as never;
     }
 
     return relationsClause;
