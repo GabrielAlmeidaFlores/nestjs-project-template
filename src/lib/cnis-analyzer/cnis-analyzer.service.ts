@@ -37,7 +37,7 @@ import {
   TempoDeContribuicaoInterface,
 } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analyzer/model/output/cnis-analyzer-output-complete.model';
-import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 
 @Injectable()
@@ -77,8 +77,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     this.DAYS_IN_MONTH = 30;
   }
 
-  public analyseCnisDocument(
-    data: CnisOutputModel,
+  public analyzeCnisDocument(
+    data: CnisModel,
     analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult,
   ): Promise<CnisAnalyzerOutputCompleteModel> {
     const idade = this.calculateAge(
@@ -990,7 +990,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateTimeContribution(
-    data: CnisOutputModel,
+    data: CnisModel,
   ): TempoDeContribuicaoInterface[] {
     const calculatedContributionTimesResponse: TempoDeContribuicaoInterface[] =
       [];
@@ -1083,7 +1083,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateConcomitancia(
-    data: CnisOutputModel,
+    data: CnisModel,
   ): ConcomitanciaInterface[] {
     const concomitancia: ConcomitanciaInterface[] = [];
     const relations = data.socialSecurityRelations ?? [];
@@ -1122,7 +1122,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     temposContribuicao: TempoDeContribuicaoInterface[],
     concomitanciaRelations: ConcomitanciaInterface[],
     carenciaTotal: CarenciaInterface[],
-    data: CnisOutputModel,
+    data: CnisModel,
   ): ConsolidadoRelacaoInterface[] {
     if (!data.socialSecurityRelations) {
       return [];
@@ -1880,7 +1880,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateSalariosConcomitantes(
-    data: CnisOutputModel,
+    data: CnisModel,
     concomitancia: ConsolidadoRelacaoInterface[],
   ): SalariosConcomitantesInterface[] {
     const salariosConcomitantes: SalariosConcomitantesInterface[] = [];
@@ -1934,7 +1934,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     return salariosConcomitantes;
   }
 
-  private calculateAjusteAoTeto(data: CnisOutputModel): SalarioTetoInterface[] {
+  private calculateAjusteAoTeto(data: CnisModel): SalarioTetoInterface[] {
     const teto: SalarioTetoInterface[] = [];
     if (!data.socialSecurityRelations) {
       return teto;

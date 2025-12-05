@@ -1,4 +1,4 @@
-import type { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import type { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 
 export abstract class AnalysisProcessorGateway {
   public abstract getCnisCompleteAnalysis(
@@ -22,7 +22,7 @@ export abstract class AnalysisProcessorGateway {
 
   public abstract parseCnisDocument(
     cnisDocument: Buffer,
-  ): Promise<CnisOutputModel>;
+  ): Promise<CnisModel>;
 
   public abstract getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],

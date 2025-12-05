@@ -82,7 +82,7 @@ export class CreateCnisFastAnalysisResultUseCase {
     // const cnisDocumentJson = JSON.stringify(cnisDocumentData, null, 2);
 
     const cnisAnalyzerResponse =
-      await this.cnisAnalysisGateway.analyseCnisDocument(
+      await this.cnisAnalysisGateway.analyzeCnisDocument(
         cnisDocumentData,
         cnisFastAnalysisQueryResult.analysisToolClient,
       );

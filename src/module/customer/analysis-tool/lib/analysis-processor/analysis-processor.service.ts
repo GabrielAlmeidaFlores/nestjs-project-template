@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
-import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
 
   public async parseCnisDocument(
     cnisDocument: Buffer,
-  ): Promise<CnisOutputModel> {
+  ): Promise<CnisModel> {
     return await this.cnisParserGateway.parseCnisDocument(cnisDocument);
   }
 

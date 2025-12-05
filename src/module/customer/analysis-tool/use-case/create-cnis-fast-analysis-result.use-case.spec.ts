@@ -4,11 +4,11 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import {
-  CnisAffiliateIdentificationOutputModel,
-  CnisOutputModel,
-  CnisSessionSocialSecurityAffiliationInfoOutputModel,
-  CnisSocialSecurityRelationOutputModel,
-} from '@lib/cnis-processor/model/output/cnis.output.model';
+  CnisAffiliateIdentificationModel,
+  CnisModel,
+  CnisSessionSocialSecurityAffiliationInfoModel,
+  CnisSocialSecurityRelationModel,
+} from '@lib/cnis-processor/model/generic/cnis.model';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
@@ -166,17 +166,17 @@ describe(CreateCnisFastAnalysisResultUseCase.name, () => {
     });
   };
 
-  const buildParsedCnisDocumentData = (): CnisOutputModel => {
-    return CnisOutputModel.build({
-      affiliateIdentification: CnisAffiliateIdentificationOutputModel.build({
+  const buildParsedCnisDocumentData = (): CnisModel => {
+    return CnisModel.build({
+      affiliateIdentification: CnisAffiliateIdentificationModel.build({
         nome: 'John Doe',
         cpf: '12345678901',
         dataDeNascimento: new Date('1990-01-15'),
       }),
       socialSecurityRelations: [
-        CnisSocialSecurityRelationOutputModel.build({
+        CnisSocialSecurityRelationModel.build({
           socialSecurityAffiliationInfo:
-            CnisSessionSocialSecurityAffiliationInfoOutputModel.build({
+            CnisSessionSocialSecurityAffiliationInfoModel.build({
               dataFim: new Date('2022-08-20'),
             }),
           socialSecurityAffiliationEarningsHistory: [],
