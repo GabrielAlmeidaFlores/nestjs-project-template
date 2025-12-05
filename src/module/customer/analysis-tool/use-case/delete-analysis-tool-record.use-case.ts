@@ -62,6 +62,7 @@ export class DeleteAnalysisToolRecordUseCase {
     const deleteTransaction =
       this.analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord(
         analysisToolRecordResult.id,
+        organizationMember.id,
       );
 
     const transaction =
