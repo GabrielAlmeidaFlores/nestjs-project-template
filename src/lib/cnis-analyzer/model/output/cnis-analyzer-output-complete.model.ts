@@ -17,12 +17,12 @@ import type { SalarioInterface } from '@lib/cnis-analyzer/interface/salario.inte
 import type { SalariosConcomitantesInterface } from '@lib/cnis-analyzer/interface/salarios-concomitantes.interface';
 import type { TempoTotalComRestricoesInterface } from '@lib/cnis-analyzer/interface/tempo-total-com-restricoes.interface';
 import type { TempoDeContribuicaoInterface } from '@lib/cnis-analyzer/interface/time-contribution.interface';
-import type { CnisSocialSecurityRelationOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import type { CnisSocialSecurityRelationModel } from '@lib/cnis-processor/model/generic/cnis.model';
 
 export class CnisAnalyzerOutputCompleteModel extends BaseBuildableObject {
   public idade: PessoaCnisIdadeInterface;
   public clientData: CnisClientDataInterface;
-  public beneficios: CnisSocialSecurityRelationOutputModel[] | undefined;
+  public beneficios: CnisSocialSecurityRelationModel[] | undefined;
   public tempoDeContribuicao: TempoDeContribuicaoInterface[];
   public concomitancia: ConcomitanciaInterface[];
   public carencia: CarenciaInterface[];
