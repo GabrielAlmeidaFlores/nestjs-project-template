@@ -1082,9 +1082,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     return calculatedContributionTimesResponse;
   }
 
-  private calculateConcomitancia(
-    data: CnisModel,
-  ): ConcomitanciaInterface[] {
+  private calculateConcomitancia(data: CnisModel): ConcomitanciaInterface[] {
     const concomitancia: ConcomitanciaInterface[] = [];
     const relations = data.socialSecurityRelations ?? [];
     relations.forEach((relationA, indexA) => {
@@ -1588,64 +1586,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     return carenciaSeq;
   }
-  // private calculateCarenciaTotalUntilReforma(
-  //   data: TimeContributionInterface[],
-  // ): CarenciaInterface[] {
-  //   const monthsAssigned = new Set<string>();
-  //   const carenciaSeq: CarenciaInterface[] = [];
-
-  //   const itemsSorted = [...data].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
-
-  //   for (const item of itemsSorted) {
-  //     const seq = item.seq;
-  //     const startDate = this.toDate(item.data?.dataInicio);
-  //     const endDateOriginal = this.toDate(item.data?.dataFim);
-
-  //     if (!startDate || !endDateOriginal) {
-  //       carenciaSeq.push({ seq, carencia: 0 });
-  //       continue;
-  //     }
-
-  //     const endDate =
-  //       endDateOriginal.getTime() > this.REFORMA_DATE.getTime()
-  //         ? this.REFORMA_DATE
-  //         : endDateOriginal;
-
-  //     if (startDate.getTime() > endDate.getTime()) {
-  //       carenciaSeq.push({ seq, carencia: 0 });
-  //       continue;
-  //     }
-
-  //     const monthsThisSeq = new Set<string>();
-  //     const current = new Date(
-  //       startDate.getFullYear(),
-  //       startDate.getMonth(),
-  //       1,
-  //     );
-  //     const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
-
-  //     while (current <= end) {
-  //       const monthKey = `${current.getFullYear()}-${String(
-  //         current.getMonth() + 1,
-  //       ).padStart(2, '0')}`;
-
-  //       monthsThisSeq.add(monthKey);
-  //       current.setMonth(current.getMonth() + 1);
-  //     }
-
-  //     let newlyAdded = 0;
-  //     for (const m of monthsThisSeq) {
-  //       if (!monthsAssigned.has(m)) {
-  //         monthsAssigned.add(m);
-  //         newlyAdded++;
-  //       }
-  //     }
-
-  //     carenciaSeq.push({ seq, carencia: newlyAdded });
-  //   }
-
-  //   return carenciaSeq;
-  // }
 
   private calculateRequirementDateByAge(
     requiredAge: number,

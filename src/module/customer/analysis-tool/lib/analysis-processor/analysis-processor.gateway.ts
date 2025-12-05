@@ -20,9 +20,7 @@ export abstract class AnalysisProcessorGateway {
 
   public abstract validateCnisDocument(cnisDocument: Buffer): Promise<boolean>;
 
-  public abstract parseCnisDocument(
-    cnisDocument: Buffer,
-  ): Promise<CnisModel>;
+  public abstract parseCnisDocument(cnisDocument: Buffer): Promise<CnisModel>;
 
   public abstract getLegalPleadingQuickDocumentAnalysis(
     files: Buffer[],
