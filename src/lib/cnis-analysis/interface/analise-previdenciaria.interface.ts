@@ -23,10 +23,14 @@ interface RequerimentosInterface {
   requiredPoints?: number;
   requiredContributionYears?: number;
   requiredCarenciaMonths?: number;
-  meetsAgeRequirement?: boolean;
-  meetsContributionRequirement?: boolean;
-  meetsCarenciaRequirement?: boolean;
-  meetsPointsRequirement?: boolean;
+  atingiuRequisitoDeIdade?: boolean;
+  atingiuRequisitoDeContribuicao?: boolean;
+  atingiuRequisitoDeCarencia?: boolean;
+  atingiuRequisitoDePontos?: boolean;
+  dataQueAtingiraRequisitoDeIdade?: Date | null;
+  dataQueIraAtingirRequisitoDeContribuicao?: Date | null;
+  dataQueIraAtingirRequisitoDeCarencia?: Date | null;
+  dataQueIraAtingirRequisitoDePontos?: Date | null;
   reachedContributionRequirementDate?: Date | null;
   reachedCarenciaRequirementDate?: Date | null;
   reachedPointsRequirementDate?: Date | null;

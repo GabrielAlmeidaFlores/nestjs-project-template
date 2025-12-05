@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import moment from 'moment';
 
 import { CnisAnalyzerGateway } from '@lib/cnis-analysis/cnis-analyzer-gateway';
@@ -35,8 +35,10 @@ import {
   TempoDeContribuicaoInterface,
 } from '@lib/cnis-analysis/interface/time-contribution.interface';
 import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-analyzer-output-complete.model';
-import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { CnisClientDataInterface } from '@lib/cnis-analysis/interface/cnis-client-data.interface';
 
 @Injectable()
 export class CnisAnalyzerService implements CnisAnalyzerGateway {
@@ -56,10 +58,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   private readonly EIGHTY_PERCENT: number;
   private readonly YEAR_2020: number;
 
-  public constructor(
-    @Inject(CnisProcessorGateway)
-    private readonly cnisParserGateway: CnisProcessorGateway,
-  ) {
+  public constructor() {
     this.MONTHS_IN_YEAR = 12;
     this.DAYS_IN_YEAR = 365.25;
     this.REQUIRED_CONTRIBUTION_MEN = 35;
@@ -79,15 +78,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   public async analyseCnisDocument(
-    cnisDocument: Buffer,
+    data: CnisOutputModel,
+    analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult,
   ): Promise<CnisAnalyzerOutputCompleteModel> {
-    const data = await this.cnisParserGateway.parseCnisDocument(cnisDocument);
     const idade = this.calculateAge(
       data.affiliateIdentification?.dataDeNascimento,
     );
     const tempoDeContribuicao = this.calculateTimeContribution(data);
     const carencia = this.calculateCarenciaTotal(tempoDeContribuicao);
-
+    const carenciaTotal = carencia.reduce((acc, cur) => acc + cur.carencia, 0);
     const concomitancia = this.calculateConcomitancia(data);
 
     const consolidadoResumido =
@@ -97,6 +96,20 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         carencia,
         data,
       );
+
+    const beneficios = data.socialSecurityRelations?.filter((beneficio) =>
+      beneficio.socialSecurityAffiliationInfo.origemDoVinculo?.includes(
+        'Benefício',
+      ),
+    );
+
+    const clientData: CnisClientDataInterface = {
+      clientMotherName: data.affiliateIdentification?.nomeDaMae,
+      clientNIT: data.affiliateIdentification?.nit,
+      clientName: data.affiliateIdentification?.nome,
+      clientBirthDate: data.affiliateIdentification?.dataDeNascimento,
+      clientFederalDocument: data.affiliateIdentification?.cpf,
+    };
 
     const vinculosNaoConcomitantes = consolidadoResumido.filter(
       (vinculo) => !vinculo.isConcomitante,
@@ -236,7 +249,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       salarioSBPreReforma,
     );
 
-    const gender = 'M'; // TODO: obter do CNIS
+    const gender = analysisToolClient.gender === GenderEnum.MALE ? 'M' : 'F';
 
     const points = this.calculatePontos(idade.anos, consolidadoResumido);
 
@@ -336,9 +349,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const cnis = CnisAnalyzerOutputCompleteModel.build({
       idade,
+      clientData,
+      beneficios,
       tempoDeContribuicao,
       concomitancia,
-      carenciaTotal: carencia,
+      carencia,
+      carenciaTotal,
       potencialValido,
       restritoValido,
       duracaoTotalEmDias,
@@ -1216,6 +1232,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const concomitanciaDetalhe = concomitanciaListCleaner.find(
         (item) => item.seq === seq,
       );
+
       const validContributionTime: TempoDeContribuicaoDetalhesInterface =
         concomitanciaDetalhe?.tipo === 'secundario'
           ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
@@ -2403,7 +2420,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         anos: years,
       };
     });
-
     const totals = this.calculateTotals(data);
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
@@ -2495,9 +2511,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalCarenciaMonths,
       points,
       requirements: {
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
-        meetsPointsRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
+        atingiuRequisitoDePontos: meetsPointsRequirement,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         requiredContributionYears,
         requiredPoints,
@@ -2629,8 +2645,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       age,
       totalCarenciaMonths,
       requirements: {
-        meetsAgeRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         requiredAge,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         reachedAgeRequirementDate: ageRequirementDate,
@@ -2770,9 +2786,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredContributionYears,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         requiredPoints,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
-        meetsPointsRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
+        atingiuRequisitoDePontos: meetsPointsRequirement,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
         reachedPointsRequirementDate: pointsRequirementDate,
@@ -2934,9 +2950,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredAge,
         requiredContributionYears: requiredContribution,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsAgeRequirement,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedAgeRequirementDate: ageRequirementDate,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
@@ -3062,9 +3078,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredContributionYears,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
         requiredAge,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
-        meetsAgeRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
         reachedAgeRequirementDate: ageRequirementDate,
@@ -3168,8 +3184,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       requirements: {
         requiredContributionYears: requiredContribution,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsContributionRequirement: meetsContributionTimeRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionTimeRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
       },
@@ -3213,8 +3229,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requirements: {
           requiredAge,
           requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-          meetsAgeRequirement: false,
-          meetsCarenciaRequirement: false,
+          atingiuRequisitoDeIdade: false,
+          atingiuRequisitoDeCarencia: false,
           reachedAgeRequirementDate: null,
           reachedCarenciaRequirementDate: null,
         },
@@ -3298,8 +3314,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       requirements: {
         requiredAge,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsAgeRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedAgeRequirementDate: ageCompletionDate,
         reachedCarenciaRequirementDate: carenciaCompletionDate,
       },
@@ -3426,9 +3442,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredAge,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsAgeRequirement,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedAgeRequirementDate: ageRequirementDate,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
@@ -3494,9 +3510,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           requiredAge: requiredAgeAdjusted,
           requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
           requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-          meetsAgeRequirement: false,
-          meetsContributionRequirement: false,
-          meetsCarenciaRequirement: false,
+          atingiuRequisitoDeIdade: false,
+          atingiuRequisitoDeContribuicao: false,
+          atingiuRequisitoDeCarencia: false,
           reachedAgeRequirementDate: null,
           reachedContributionRequirementDate: null,
           reachedCarenciaRequirementDate: null,
@@ -3621,9 +3637,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredAge: requiredAgeAdjusted,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsAgeRequirement,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedAgeRequirementDate: ageRequirementDate,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,
@@ -3737,9 +3753,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         requiredAge,
         requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
         requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        meetsAgeRequirement,
-        meetsContributionRequirement,
-        meetsCarenciaRequirement,
+        atingiuRequisitoDeIdade: meetsAgeRequirement,
+        atingiuRequisitoDeContribuicao: meetsContributionRequirement,
+        atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         reachedAgeRequirementDate: ageRequirementDate,
         reachedContributionRequirementDate: contributionRequirementDate,
         reachedCarenciaRequirementDate: carenciaRequirementDate,

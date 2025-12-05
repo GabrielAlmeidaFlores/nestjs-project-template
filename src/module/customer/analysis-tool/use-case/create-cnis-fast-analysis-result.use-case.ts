@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { stringify } from 'flatted';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
@@ -80,19 +79,23 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisDocumentDataBuffer = Buffer.from(
-      JSON.stringify(cnisDocumentData, null, 2),
-      'utf-8',
-    );
+    // const cnisDocumentJson = JSON.stringify(cnisDocumentData, null, 2);
 
     const cnisAnalyzerResponse =
-      await this.cnisAnalysisGateway.analyseCnisDocument(cnisDocumentBuffer);
+      await this.cnisAnalysisGateway.analyseCnisDocument(
+        cnisDocumentData,
+        cnisFastAnalysisQueryResult.analysisToolClient,
+      );
 
-    const jsonCnisAnalyzerResponse = stringify(cnisAnalyzerResponse);
+    const jsonCnisAnalyzerResponse = JSON.stringify(
+      cnisAnalyzerResponse,
+      null,
+      2,
+    );
 
     const cnisCompleteAnalysis =
       await this.analysisProcessorGateway.getCnisCompleteAnalysis(
-        [clientDataBuffer, cnisDocumentDataBuffer],
+        [clientDataBuffer],
         jsonCnisAnalyzerResponse,
       );
 
