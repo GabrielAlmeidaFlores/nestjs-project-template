@@ -29,7 +29,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
 
   public async getCnisCompleteAnalysis(
     files: Buffer[],
-    cnisJson: string,
+    cnisAnalysisJson: string,
   ): Promise<string | null> {
     const systemInstruction = `
 Prompt para Análise Estruturada de Extrato CNIS 
@@ -455,17 +455,18 @@ Utilize as seguintes bases de conhecimento para fundamentar suas análises e cá
 
     const prompt = `
 # IMPORTANTE
-- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato TOON; use o documento bruto apenas como apoio.
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
 - Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
 
 Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
-
-1. Garanta precisão absoluta nos cálculos numéricos que precisar fazer.
-2. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56). 
+1. Para cálculos ja efetuados, não calcule novamente, use os valores fornecidos na análise do CNIS.
+2. Garanta precisão absoluta nos cálculos numéricos que precisar fazer.
+3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56). 
 
 Análise processada do CNIS:
- ${cnisJson}`;
-
+ ${cnisAnalysisJson}
+ 
+ `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
