@@ -35,30 +35,34 @@ export class CnisFastAnalysisTypeormQueryRepository
   ): Promise<ListDataOutputModel<GetCnisFastAnalysisWithRelationsQueryResult>> {
     const data = await this.list(listData, {
       where: {
-        createdBy: {
-          organization: {
-            id: organizationId.toString(),
+        analysisToolRecord: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
           },
-        },
-        updatedBy: {
-          organization: {
-            id: organizationId.toString(),
+          updatedBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
           },
         },
       },
       relations: {
         cnisFastAnalysisInssBenefit: true,
         cnisFastAnalysisLegalProceeding: true,
-        analysisToolClient: {
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-        },
         cnisFastAnalysisResult: true,
-        createdBy: {
-          customer: true,
-        },
-        updatedBy: {
-          customer: true,
+        analysisToolRecord: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+          },
+          updatedBy: {
+            customer: true,
+          },
         },
       },
     });
@@ -86,36 +90,40 @@ export class CnisFastAnalysisTypeormQueryRepository
       {
         where: {
           id: id.toString(),
-          createdBy: {
-            organization: {
-              id: organizationId.toString(),
+          analysisToolRecord: {
+            createdBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
             },
-          },
-          updatedBy: {
-            organization: {
-              id: organizationId.toString(),
+            updatedBy: {
+              organization: {
+                id: organizationId.toString(),
+              },
             },
           },
         },
         relations: {
           cnisFastAnalysisInssBenefit: true,
           cnisFastAnalysisLegalProceeding: true,
-          analysisToolClient: {
+          cnisFastAnalysisResult: true,
+          analysisToolRecord: {
+            analysisToolClient: {
+              createdBy: {
+                customer: true,
+              },
+              updatedBy: {
+                customer: true,
+              },
+              analysisToolClientInssBenefit: true,
+              analysisToolClientLegalProceeding: true,
+            },
             createdBy: {
               customer: true,
             },
             updatedBy: {
               customer: true,
             },
-            analysisToolClientInssBenefit: true,
-            analysisToolClientLegalProceeding: true,
-          },
-          cnisFastAnalysisResult: true,
-          createdBy: {
-            customer: true,
-          },
-          updatedBy: {
-            customer: true,
           },
         },
       },
