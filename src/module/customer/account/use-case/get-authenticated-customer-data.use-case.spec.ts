@@ -59,7 +59,6 @@ describe(GetAuthenticatedCustomerDataUseCase.name, () => {
     getOrganizationLogo: jest.fn(),
   };
 
-  //
   const buildSessionData = (): SessionDataModel =>
     SessionDataModel.build({
       authIdentityId: new AuthIdentityId(),
