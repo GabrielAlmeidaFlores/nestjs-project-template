@@ -513,7 +513,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   private calcularVinculosConcomitantes(
     vinculos: ConcomitanciaDetalhesInterface[],
     resultadoFinal: ConcomitanciaDetalhesInterface[] = [],
-    processedSeqs: Set<number> = new Set(),
   ): ConcomitanciaDetalhesInterface[] {
     if (vinculos.length === 0) {
       return resultadoFinal;
@@ -581,41 +580,28 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return this.daysBetween(s, e) + 1;
     };
 
-    let entradaPrincipal = group.find(
-      (g) => !processedSeqs.has(g.original.seq),
-    );
-
-    entradaPrincipal ??= group[0];
-
-    for (let i = 0; i < group.length; i++) {
+    let entradaPrincipal = group[0];
+    for (let i = 1; i < group.length; i++) {
       const atual = group[i];
-      if (!atual || processedSeqs.has(atual.original.seq)) {
-        continue;
-      }
-
-      if (!entradaPrincipal) {
-        entradaPrincipal = atual;
-        continue;
-      }
-
       const durMelhor = diasDeDuracao(
-        entradaPrincipal.start ?? null,
-        entradaPrincipal.end ?? null,
+        entradaPrincipal?.start ?? null,
+        entradaPrincipal?.end ?? null,
       );
-      const durAtual = diasDeDuracao(atual.start, atual.end);
+      const durAtual = diasDeDuracao(atual?.start ?? null, atual?.end ?? null);
       if (durAtual > durMelhor) {
         entradaPrincipal = atual;
         continue;
       }
       if (durAtual === durMelhor) {
-        if (atual.start && entradaPrincipal.start) {
+        if (atual?.start && entradaPrincipal?.start) {
           if (atual.start.getTime() < entradaPrincipal.start.getTime()) {
             entradaPrincipal = atual;
             continue;
           }
         }
-        const seqMelhor = entradaPrincipal.original.seq;
-        const seqAtual = atual.original.seq;
+        const seqMelhor =
+          entradaPrincipal?.original.seq ?? Number.MAX_SAFE_INTEGER;
+        const seqAtual = atual?.original.seq ?? Number.MAX_SAFE_INTEGER;
         if (seqAtual < seqMelhor) {
           entradaPrincipal = atual;
         }
@@ -665,8 +651,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const orig = membro.original;
       const s = this.toDate(orig.contributionTime.dataInicio);
       const e = this.toDate(orig.contributionTime.dataFim);
-
-      processedSeqs.add(orig.seq);
 
       if (!s || !e) {
         const zero = {
@@ -844,16 +828,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return st !== null && en !== null && st.getTime() <= en.getTime();
     });
 
-    const proximaLista: ConcomitanciaDetalhesInterface[] = [
-      ...ajustadosParaProximaRodada,
-      ...restantes,
-    ];
+    const proximaLista = [...ajustadosParaProximaRodada, ...restantes];
 
-    return this.calcularVinculosConcomitantes(
-      proximaLista,
-      resultadoFinal,
-      processedSeqs,
-    );
+    return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
   }
   private getRequiredContributionAge(gender: string): number {
     return gender === 'F'
@@ -944,19 +921,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     data: ConcomitanciaDetalhesInterface[],
   ): ConcomitanciaDetalhesInterface[] {
     const rawResult: ConcomitanciaDetalhesInterface[] =
-      this.calcularVinculosConcomitantes(Array.isArray(data) ? data : [], []);
+      this.calcularVinculosConcomitantes(Array.isArray(data) ? data : []);
 
-    if (!Array.isArray(rawResult) || rawResult.length === 0) {
-      return [];
-    }
-
-    const processedSeqs = new Set(rawResult.map((v) => v.seq));
-
-    const unprocessedItems = data.filter(
-      (item) => !processedSeqs.has(item.seq),
-    );
-
-    return [...rawResult, ...unprocessedItems];
+    return rawResult;
   }
 
   private calculateAge(birthDate?: Date): PessoaCnisIdadeInterface {
@@ -1160,7 +1127,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       isConcomitante: boolean;
     }[];
 
-    const allItemsForProcessing = completeData.map((item) => {
+    const onlyComitantesItems = completeData.filter(
+      (item) => item.isConcomitante,
+    );
+
+    const listaCerta = onlyComitantesItems.map((item) => {
       return {
         ...item,
         contributionTime: {
@@ -1174,7 +1145,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       };
     });
 
-    const listOrdered: ConcomitanciaDetalhesInterface[] = allItemsForProcessing
+    const listOrdered: ConcomitanciaDetalhesInterface[] = listaCerta
       .map((item) => ({
         ...item,
       }))
@@ -1260,10 +1231,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         tipo: concomitanciaDetalhe?.tipo ?? 'principal',
         ajustado: concomitanciaDetalhe?.ajustado ?? false,
         dataAjustada: {
-          ...(concomitanciaDetalhe?.dataAjustada ?? {
-            dataInicio: null,
-            dataFim: null,
-          }),
+          ...concomitanciaDetalhe?.dataAjustada,
         },
       };
     });
