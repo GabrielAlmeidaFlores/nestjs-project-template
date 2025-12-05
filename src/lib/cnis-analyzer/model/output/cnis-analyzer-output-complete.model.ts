@@ -1,22 +1,22 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { AjusteSalarioBeneficioInterface } from '@lib/cnis-analysis/interface/ajuste-salario-beneficio.interface';
-import type { AnalisePrevidenciariaInterface } from '@lib/cnis-analysis/interface/analise-previdenciaria.interface';
-import type { CarenciaInterface } from '@lib/cnis-analysis/interface/carencia.interface';
-import type { CnisClientDataInterface } from '@lib/cnis-analysis/interface/cnis-client-data.interface';
-import type { ConcomitanciaInterface } from '@lib/cnis-analysis/interface/concomitancia.interface';
-import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
-import type { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/interface/correcao-monetaria-item.interface';
-import type { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analysis/interface/indicadores-de-pendencia.interface';
-import type { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analysis/interface/manutencao-qualidade-segurado.interface';
-import type { PedagioPosReformaInterface } from '@lib/cnis-analysis/interface/pedagio-pos-reforma.interface';
-import type { PeriodoDeGracaResultadoInterface } from '@lib/cnis-analysis/interface/periodo-de-graca-resultado.interface';
-import type { PessoaCnisIdadeInterface } from '@lib/cnis-analysis/interface/pessoa-cnis-idade.interface';
-import type { SalarioTetoInterface } from '@lib/cnis-analysis/interface/salario-teto.interface';
-import type { SalarioInterface } from '@lib/cnis-analysis/interface/salario.interface';
-import type { SalariosConcomitantesInterface } from '@lib/cnis-analysis/interface/salarios-concomitantes.interface';
-import type { TempoTotalComRestricoesInterface } from '@lib/cnis-analysis/interface/tempo-total-com-restricoes.interface';
-import type { TempoDeContribuicaoInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
+import type { AjusteSalarioBeneficioInterface } from '@lib/cnis-analyzer/interface/ajuste-salario-beneficio.interface';
+import type { AnalisePrevidenciariaInterface } from '@lib/cnis-analyzer/interface/analise-previdenciaria.interface';
+import type { CarenciaInterface } from '@lib/cnis-analyzer/interface/carencia.interface';
+import type { CnisClientDataInterface } from '@lib/cnis-analyzer/interface/cnis-client-data.interface';
+import type { ConcomitanciaInterface } from '@lib/cnis-analyzer/interface/concomitancia.interface';
+import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analyzer/interface/consolidado-relation.interface';
+import type { CorrecaoMonetariaItemInterface } from '@lib/cnis-analyzer/interface/correcao-monetaria-item.interface';
+import type { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analyzer/interface/indicadores-de-pendencia.interface';
+import type { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analyzer/interface/manutencao-qualidade-segurado.interface';
+import type { PedagioPosReformaInterface } from '@lib/cnis-analyzer/interface/pedagio-pos-reforma.interface';
+import type { PeriodoDeGracaResultadoInterface } from '@lib/cnis-analyzer/interface/periodo-de-graca-resultado.interface';
+import type { PessoaCnisIdadeInterface } from '@lib/cnis-analyzer/interface/pessoa-cnis-idade.interface';
+import type { SalarioTetoInterface } from '@lib/cnis-analyzer/interface/salario-teto.interface';
+import type { SalarioInterface } from '@lib/cnis-analyzer/interface/salario.interface';
+import type { SalariosConcomitantesInterface } from '@lib/cnis-analyzer/interface/salarios-concomitantes.interface';
+import type { TempoTotalComRestricoesInterface } from '@lib/cnis-analyzer/interface/tempo-total-com-restricoes.interface';
+import type { TempoDeContribuicaoInterface } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 import type { CnisSocialSecurityRelationOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 
 export class CnisAnalyzerOutputCompleteModel extends BaseBuildableObject {

@@ -1,4 +1,4 @@
-import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
+import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 
 export interface CnisConsolidadeResumidoInterface {
   seq: number;
