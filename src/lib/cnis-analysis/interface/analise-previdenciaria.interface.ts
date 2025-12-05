@@ -27,7 +27,7 @@ interface RequerimentosInterface {
   atingiuRequisitoDeContribuicao?: boolean;
   atingiuRequisitoDeCarencia?: boolean;
   atingiuRequisitoDePontos?: boolean;
-  dataQueAtingiraRequisitoDeIdade?: Date | null;
+  dataQueIraAtingirRequisitoDeIdade?: Date | null;
   dataQueIraAtingirRequisitoDeContribuicao?: Date | null;
   dataQueIraAtingirRequisitoDeCarencia?: Date | null;
   dataQueIraAtingirRequisitoDePontos?: Date | null;

@@ -13,5 +13,5 @@ export interface TempoDeContribuicaoInterface {
   origemDoVinculo?: string;
   tipoDoVinculo?: string;
   indicadores?: string | null;
-  dados?: TempoDeContribuicaoDetalhesInterface;
+  dados?: TempoDeContribuicaoDetalhesInterface | undefined;
 }
