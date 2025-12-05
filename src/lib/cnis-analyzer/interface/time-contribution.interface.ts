@@ -1,4 +1,4 @@
-import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
+import type { DataInterface } from '@lib/cnis-analyzer/interface/data-interface';
 
 export interface TempoDeContribuicaoDetalhesInterface {
   data: DataInterface | null | undefined;

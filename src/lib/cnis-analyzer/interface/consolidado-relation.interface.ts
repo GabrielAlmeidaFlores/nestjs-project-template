@@ -1,5 +1,5 @@
-import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
-import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analysis/interface/time-contribution.interface';
+import type { DataInterface } from '@lib/cnis-analyzer/interface/data-interface';
+import type { TempoDeContribuicaoDetalhesInterface } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 
 export interface ConsolidadoRelacaoInterface {
   seq: number;

@@ -1,5 +1,5 @@
-import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
-import type { DataInterface } from '@lib/cnis-analysis/interface/data-interface';
+import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analyzer/interface/consolidado-relation.interface';
+import type { DataInterface } from '@lib/cnis-analyzer/interface/data-interface';
 
 export interface TempoRestricoesContribuicaoTotalInterface {
   dias: number;

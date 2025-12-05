@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { CnisAnalyzerGateway } from '@lib/cnis-analysis/cnis-analyzer-gateway';
-import { CnisAnalyzerService } from '@lib/cnis-analysis/cnis-analyzer.service';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { CnisAnalyzerService } from '@lib/cnis-analyzer/cnis-analyzer.service';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 
 @Module({

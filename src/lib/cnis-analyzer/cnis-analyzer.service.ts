@@ -2,41 +2,41 @@ import { Injectable } from '@nestjs/common';
 import moment from 'moment';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
-import { CnisAnalyzerGateway } from '@lib/cnis-analysis/cnis-analyzer-gateway';
-import { especiesData } from '@lib/cnis-analysis/data/especies-data';
-import { indicadorsData } from '@lib/cnis-analysis/data/indicadors-data';
-import { ipcaData } from '@lib/cnis-analysis/data/ipca';
-import { TetoInssData } from '@lib/cnis-analysis/data/teto.inss';
-import { AjusteSalarioBeneficioInterface } from '@lib/cnis-analysis/interface/ajuste-salario-beneficio.interface';
-import { AnalisePrevidenciariaInterface } from '@lib/cnis-analysis/interface/analise-previdenciaria.interface';
-import { CarenciaInterface } from '@lib/cnis-analysis/interface/carencia.interface';
-import { CnisClientDataInterface } from '@lib/cnis-analysis/interface/cnis-client-data.interface';
-import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analysis/interface/concomitancia-detalhes.interface';
-import { ConcomitanciaInterface } from '@lib/cnis-analysis/interface/concomitancia.interface';
-import { ConsolidadoRelacaoInterface } from '@lib/cnis-analysis/interface/consolidado-relation.interface';
-import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analysis/interface/correcao-monetaria-item.interface';
-import { DiferencaYmdResultadoInterface } from '@lib/cnis-analysis/interface/diferenca-ymd-resultado-interface';
-import { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analysis/interface/indicadores-de-pendencia.interface';
-import { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analysis/interface/manutencao-qualidade-segurado.interface';
-import { PedagioPosReformaInterface } from '@lib/cnis-analysis/interface/pedagio-pos-reforma.interface';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { especiesData } from '@lib/cnis-analyzer/data/especies-data';
+import { indicadorsData } from '@lib/cnis-analyzer/data/indicadors-data';
+import { ipcaData } from '@lib/cnis-analyzer/data/ipca';
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
+import { AjusteSalarioBeneficioInterface } from '@lib/cnis-analyzer/interface/ajuste-salario-beneficio.interface';
+import { AnalisePrevidenciariaInterface } from '@lib/cnis-analyzer/interface/analise-previdenciaria.interface';
+import { CarenciaInterface } from '@lib/cnis-analyzer/interface/carencia.interface';
+import { CnisClientDataInterface } from '@lib/cnis-analyzer/interface/cnis-client-data.interface';
+import { ConcomitanciaDetalhesInterface } from '@lib/cnis-analyzer/interface/concomitancia-detalhes.interface';
+import { ConcomitanciaInterface } from '@lib/cnis-analyzer/interface/concomitancia.interface';
+import { ConsolidadoRelacaoInterface } from '@lib/cnis-analyzer/interface/consolidado-relation.interface';
+import { CorrecaoMonetariaItemInterface } from '@lib/cnis-analyzer/interface/correcao-monetaria-item.interface';
+import { DiferencaYmdResultadoInterface } from '@lib/cnis-analyzer/interface/diferenca-ymd-resultado-interface';
+import { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analyzer/interface/indicadores-de-pendencia.interface';
+import { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analyzer/interface/manutencao-qualidade-segurado.interface';
+import { PedagioPosReformaInterface } from '@lib/cnis-analyzer/interface/pedagio-pos-reforma.interface';
 import {
   PeriodoDeGracaResultadoInterface,
   PeriodoDeGracaInterface,
-} from '@lib/cnis-analysis/interface/periodo-de-graca-resultado.interface';
-import { PessoaCnisIdadeInterface } from '@lib/cnis-analysis/interface/pessoa-cnis-idade.interface';
-import { SalarioTetoInterface } from '@lib/cnis-analysis/interface/salario-teto.interface';
-import { SalarioInterface } from '@lib/cnis-analysis/interface/salario.interface';
-import { SalariosConcomitantesInterface } from '@lib/cnis-analysis/interface/salarios-concomitantes.interface';
+} from '@lib/cnis-analyzer/interface/periodo-de-graca-resultado.interface';
+import { PessoaCnisIdadeInterface } from '@lib/cnis-analyzer/interface/pessoa-cnis-idade.interface';
+import { SalarioTetoInterface } from '@lib/cnis-analyzer/interface/salario-teto.interface';
+import { SalarioInterface } from '@lib/cnis-analyzer/interface/salario.interface';
+import { SalariosConcomitantesInterface } from '@lib/cnis-analyzer/interface/salarios-concomitantes.interface';
 import {
   TempoComRestricaoItemInterface,
   TempoRestricoesContribuicaoTotalInterface,
   TempoTotalComRestricoesInterface,
-} from '@lib/cnis-analysis/interface/tempo-total-com-restricoes.interface';
+} from '@lib/cnis-analyzer/interface/tempo-total-com-restricoes.interface';
 import {
   TempoDeContribuicaoDetalhesInterface,
   TempoDeContribuicaoInterface,
-} from '@lib/cnis-analysis/interface/time-contribution.interface';
-import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analysis/model/output/cnis-analyzer-output-complete.model';
+} from '@lib/cnis-analyzer/interface/time-contribution.interface';
+import { CnisAnalyzerOutputCompleteModel } from '@lib/cnis-analyzer/model/output/cnis-analyzer-output-complete.model';
 import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 
