@@ -17,9 +17,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     private readonly cnisParserGateway: CnisProcessorGateway,
   ) {}
 
-  public async parseCnisDocument(
-    cnisDocument: Buffer,
-  ): Promise<CnisModel> {
+  public async parseCnisDocument(cnisDocument: Buffer): Promise<CnisModel> {
     return await this.cnisParserGateway.parseCnisDocument(cnisDocument);
   }
 

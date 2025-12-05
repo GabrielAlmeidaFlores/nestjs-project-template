@@ -196,9 +196,7 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
     > = {
       sourceKey: string;
       destinyKey: K;
-      transformMethod: (
-        value: string,
-      ) => CnisAffiliateIdentificationModel[K];
+      transformMethod: (value: string) => CnisAffiliateIdentificationModel[K];
     };
 
     type AnyTransformMapItemType = {
@@ -269,8 +267,7 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
     data: RawCnisSessionSocialSecurityAffiliationEarningsHistoryInterface,
   ): CnisSessionSocialSecurityAffiliationEarningsHistoryModel {
     type TransformMapItemType<
-      K extends
-        keyof CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
+      K extends keyof CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
     > = {
       sourceKey: string;
       destinyKey: K;
@@ -343,11 +340,9 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
         return acc;
       }, {});
 
-    return CnisSessionSocialSecurityAffiliationEarningsHistoryModel.build(
-      {
-        ...parsedContent,
-      },
-    );
+    return CnisSessionSocialSecurityAffiliationEarningsHistoryModel.build({
+      ...parsedContent,
+    });
   }
 
   private parseCnisSocialSecurityAffiliationInfo(

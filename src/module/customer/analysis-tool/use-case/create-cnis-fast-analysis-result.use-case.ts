@@ -79,8 +79,6 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    // const cnisDocumentJson = JSON.stringify(cnisDocumentData, null, 2);
-
     const cnisAnalyzerResponse =
       await this.cnisAnalysisGateway.analyzeCnisDocument(
         cnisDocumentData,
