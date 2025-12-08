@@ -20,6 +20,7 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
     name: 'resource',
     type: 'simple-enum',
     enum: PaymentPlanPaidResourceTypeEnum,
+    unique: true,
   })
   public resource: PaymentPlanPaidResourceTypeEnum;
 
