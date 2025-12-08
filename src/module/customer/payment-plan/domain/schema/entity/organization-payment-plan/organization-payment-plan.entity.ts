@@ -8,13 +8,13 @@ import { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/s
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymentPlanId> {
-  @Description('Nome do Plano')
+  @Description('Nome do plano de pagamento')
   public readonly name: string;
 
   @Description('Descrição sobre o plano e seus recursos')
   public readonly description: string;
 
-  @Description('Valor do plano')
+  @Description('Preço do plano de pagamento')
   public readonly price: DecimalValue;
 
   @Description('Quantidade maxima de membros participantes')
@@ -29,10 +29,10 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   @Description('Tipo de assinatura contratada pelo cliente')
   public readonly cycle: PaymentPlanCycleTypeEnum;
 
-  @Description('Organizacao pertencente')
+  @Description('Organização pertencente ao plano de pagamento')
   public readonly organization: OrganizationEntity | null;
 
-  @Description('Plano de pagamento pertencente')
+  @Description('Plano de pagamento vinculado a organização')
   public readonly paymentPlan: PaymentPlanEntity | null;
 
   protected readonly _type = OrganizationPaymentPlanEntity.name;

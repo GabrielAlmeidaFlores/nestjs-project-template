@@ -6,10 +6,10 @@ import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/dom
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class PaymentPlanEnablePaidResourceEntity extends BaseEntity<PaymentPlanEnablePaidResourceId> {
-  @Description('')
+  @Description('Plano de pagamento vinculado ao recurso pago habilitado')
   public readonly paymentPlan: PaymentPlanEntity | null;
 
-  @Description('')
+  @Description('Recurso pago habilitado para o plano de pagamento')
   public readonly paymentPlanPaidResource: PaymentPlanPaidResourceEntity | null;
 
   protected readonly _type = PaymentPlanEnablePaidResourceEntity.name;

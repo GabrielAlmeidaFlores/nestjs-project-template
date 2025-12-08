@@ -6,13 +6,13 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 
 export class PaymentPlanPaidResourceEntity extends BaseEntity<PaymentPlanPaidResourceId> {
-  @Description('Recursos disponiveis')
+  @Description('Tipo de recurso pago')
   public readonly resource: PaymentPlanPaidResourceTypeEnum;
 
-  @Description('Quantidade de credito para compra')
+  @Description('Custo em créditos do recurso pago')
   public readonly creditCost: number;
 
-  @Description('Descrição sobre o recurso disponível')
+  @Description('Descrição do recurso pago')
   public readonly description: string;
 
   protected readonly _type = PaymentPlanPaidResourceEntity.name;
