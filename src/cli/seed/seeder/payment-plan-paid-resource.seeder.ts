@@ -9,32 +9,34 @@ import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/dom
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 
-export const PAYMENT_PLAN_PAID_RESOURCE_SEED = [
-  {
-    resource:
-      PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-    creditCost: 5,
-    description: 'Análise completa do CNIS com parecer detalhado.',
-  },
-  {
-    resource:
-      PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS,
-    creditCost: 5,
-    description: 'Análise simplificada do CNIS com parecer resumido.',
-  },
-  {
-    resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
-    creditCost: 5,
-    description: 'Análise completa de peças jurídicas com parecer detalhado.',
-  },
-  {
-    resource:
-      PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_SIMPLIFIED_ANALYSIS,
-    creditCost: 5,
-    description:
-      'Análise simplificada de peças jurídicas com parecer resumido.',
-  },
-];
+export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntity> =
+  [
+    new PaymentPlanPaidResourceEntity({
+      resource:
+        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      description: 'Análise completa do CNIS com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      resource:
+        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      description: 'Análise simplificada do CNIS com parecer resumido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      resource:
+        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      description: 'Análise completa de peças jurídicas com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      resource:
+        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      description:
+        'Análise simplificada de peças jurídicas com parecer resumido.',
+    }),
+  ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
   protected readonly _type = PaymentPlanPaidResourceSeeder.name;
