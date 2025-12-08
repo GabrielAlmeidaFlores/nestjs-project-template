@@ -32,7 +32,6 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => RetirementPlanningRppsResultTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
-    { nullable: true },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_result_id' })
   public retirementPlanningRppsResult?:
@@ -42,14 +41,12 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
-    { nullable: true },
   )
-  public analysisToolRecord: AnalysisToolRecordTypeormEntity;
+  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   @OneToMany(
     () => RetirementPlanningRppsRemuneration,
     (entity) => entity.retirementPlanningRpps,
-    { nullable: true },
   )
   public remunerations?: RetirementPlanningRppsRemuneration[] | undefined;
 

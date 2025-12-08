@@ -25,7 +25,9 @@ export class CidTenTypeormEntity extends BaseTypeormEntity {
     () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
     (entity) => entity.cid,
   )
-  public retirementPlanningRppsPeriodDisability: RetirementPlanningRppsPeriodDisabilityTypeormEntity[];
+  public retirementPlanningRppsPeriodDisability?:
+    | RetirementPlanningRppsPeriodDisabilityTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = CidTenTypeormEntity.name;
 }

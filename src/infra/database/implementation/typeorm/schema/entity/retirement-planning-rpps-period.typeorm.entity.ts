@@ -90,7 +90,9 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
     { nullable: true },
   )
   @JoinColumn({ name: 'disability_period_id' })
-  public disabilityPeriod?: RetirementPlanningRppsPeriodDisabilityTypeormEntity | null;
+  public disabilityPeriod?:
+    | RetirementPlanningRppsPeriodDisabilityTypeormEntity
+    | undefined;
 
   @OneToMany(
     () => RetirementPlanningRppsPeriodDocumentTypeormEntity,

@@ -47,10 +47,6 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   })
   public category: RetirementPlanningDisabilityCategoryEnum;
 
-  @ManyToOne(() => CidTenTypeormEntity, { nullable: false })
-  @JoinColumn({ name: 'cid_id' })
-  public cid: CidTenTypeormEntity;
-
   @Column({
     name: 'daily_impact',
     type: 'text',
@@ -58,13 +54,19 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   })
   public dailyImpact: string;
 
+  @ManyToOne(() => CidTenTypeormEntity, { nullable: false })
+  @JoinColumn({ name: 'cid_id' })
+  public cid?: CidTenTypeormEntity | undefined;
+
   @OneToOne(
     () => RetirementPlanningRppsPeriodTypeormEntity,
     (entity) => entity.disabilityPeriod,
     { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_id' })
-  public retirementPlanningRppsPeriod: RetirementPlanningRppsPeriodTypeormEntity;
+  public retirementPlanningRppsPeriod?:
+    | RetirementPlanningRppsPeriodTypeormEntity
+    | undefined;
 
   protected override readonly _type =
     RetirementPlanningRppsPeriodDisabilityTypeormEntity.name;

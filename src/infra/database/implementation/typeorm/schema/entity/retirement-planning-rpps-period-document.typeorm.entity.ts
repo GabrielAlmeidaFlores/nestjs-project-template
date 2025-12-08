@@ -29,7 +29,9 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
     { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_id' })
-  public retirementPlanningRppsPeriod: RetirementPlanningRppsPeriodTypeormEntity;
+  public retirementPlanningRppsPeriod?:
+    | RetirementPlanningRppsPeriodTypeormEntity
+    | undefined;
 
   protected override readonly _type =
     RetirementPlanningRppsPeriodDocumentTypeormEntity.name;
