@@ -39,6 +39,13 @@ import { OrganizationTypeormCommandRepository } from '@infra/database/implementa
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
+import { OrganizationPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan/organization-payment-plan.typeorm.command.repository';
+import { OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-enable-paid-resource/organization-payment-plan-enable-paid-resource.typeorm.command.repository';
+import { PaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource.typeorm.command.repository';
+import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
+import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
+import { PaymentPlanPaidResourceIaConfigTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.typeorm.command.repository';
+import { PaymentPlanPaidResourceIaConfigTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.typeorm.query.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
@@ -76,6 +83,13 @@ import { LegalPleadingDocumentAnalysisCommandRepositoryGateway } from '@module/c
 import { LegalPleadingDocumentAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document-analysis/query/legal-pleading-document-analysis.query.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
 import { LegalPleadingResultQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/legal-pleading-result.query.repository.gateway';
+import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
+import { OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enable-paid-resource/command/organization-payment-plan-enable-paid-resource.repository.gateway';
+import { PaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/command/payment-plan-enable-paid-resource.command.repository.gateway';
+import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/command/payment-plan-paid-resource.command.repository.gateway';
+import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
+import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
+import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 
@@ -234,6 +248,34 @@ const classProvider: ClassProvider[] = [
   {
     provide: AdminQueryRepositoryGateway,
     useClass: AdminTypeormQueryRepository,
+  },
+  {
+    provide: OrganizationPaymentPlanCommandRepositoryGateway,
+    useClass: OrganizationPaymentPlanTypeormCommandRepository,
+  },
+  {
+    provide: PaymentPlanPaidResourceCommandRepositoryGateway,
+    useClass: PaymentPlanPaidResourceTypeormCommandRepository,
+  },
+  {
+    provide: PaymentPlanPaidResourceQueryRepositoryGateway,
+    useClass: PaymentPlanPaidResourceTypeormQueryRepository,
+  },
+  {
+    provide: PaymentPlanEnablePaidResourceCommandRepositoryGateway,
+    useClass: PaymentPlanEnablePaidResourceTypeormCommandRepository,
+  },
+  {
+    provide: OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway,
+    useClass: OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository,
+  },
+  {
+    provide: PaymentPlanPaidResourceIaConfigCommandRepositoryGateway,
+    useClass: PaymentPlanPaidResourceIaConfigTypeormCommandRepository,
+  },
+  {
+    provide: PaymentPlanPaidResourceIaConfigQueryRepositoryGateway,
+    useClass: PaymentPlanPaidResourceIaConfigTypeormQueryRepository,
   },
 ];
 
