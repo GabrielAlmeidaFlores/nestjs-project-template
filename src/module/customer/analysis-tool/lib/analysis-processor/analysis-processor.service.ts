@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
-import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 
 @Injectable()
@@ -17,9 +17,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     private readonly cnisParserGateway: CnisProcessorGateway,
   ) {}
 
-  public async parseCnisDocument(
-    cnisDocument: Buffer,
-  ): Promise<CnisOutputModel> {
+  public async parseCnisDocument(cnisDocument: Buffer): Promise<CnisModel> {
     return await this.cnisParserGateway.parseCnisDocument(cnisDocument);
   }
 
@@ -29,6 +27,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
 
   public async getCnisCompleteAnalysis(
     files: Buffer[],
+    cnisAnalysisJson: string,
   ): Promise<string | null> {
     const systemInstruction = `
 Prompt para Análise Estruturada de Extrato CNIS 
@@ -454,12 +453,18 @@ Utilize as seguintes bases de conhecimento para fundamentar suas análises e cá
 
     const prompt = `
 # IMPORTANTE
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
+1. Para cálculos ja efetuados, não calcule novamente, use os valores fornecidos na análise do CNIS.
+2. Garanta precisão absoluta nos cálculos numéricos e de datas que precisar fazer.
+3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56).
 
-Para a Seção 6 (CÁLCULOS), siga estas duas regras rigorosamente:
-- Calcule todos os valores numéricos apresentados nas tabelas com precisão.
-- Formate todos os valores monetários no padrão brasileiro, utilizando o símbolo 'R$' seguido de um espaço, separador de milhar com ponto e separador decimal com vírgula (Exemplo: R$ 1.234,56)."
-`;
-
+Análise processada do CNIS:
+ ${cnisAnalysisJson}
+ 
+ `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
