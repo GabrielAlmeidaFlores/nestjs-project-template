@@ -11,19 +11,28 @@ import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 
 export const PAYMENT_PLAN_PAID_RESOURCE_SEED = [
   {
-    resource: PaymentPlanPaidResourceTypeEnum.DOCUMENT_ANALYSIS,
+    resource:
+      PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
     creditCost: 5,
-    description: 'Análise automática de documentos',
+    description: 'Análise completa do CNIS com parecer detalhado.',
   },
   {
-    resource: PaymentPlanPaidResourceTypeEnum.FAST_PROCESSING,
-    creditCost: 10,
-    description: 'Processamento prioritário do documento',
+    resource:
+      PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS,
+    creditCost: 5,
+    description: 'Análise simplificada do CNIS com parecer resumido.',
   },
   {
-    resource: PaymentPlanPaidResourceTypeEnum.GEN_AI_REPORT,
-    creditCost: 20,
-    description: 'Geração de relatório por IA',
+    resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
+    creditCost: 5,
+    description: 'Análise completa de peças jurídicas com parecer detalhado.',
+  },
+  {
+    resource:
+      PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_SIMPLIFIED_ANALYSIS,
+    creditCost: 5,
+    description:
+      'Análise simplificada de peças jurídicas com parecer resumido.',
   },
 ];
 
