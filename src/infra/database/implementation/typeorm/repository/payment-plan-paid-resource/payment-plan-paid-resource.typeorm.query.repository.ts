@@ -10,7 +10,7 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
-import { GetPaymentPlayPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.results';
+import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.results';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value.object';
 
 @Injectable()
@@ -30,25 +30,25 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
 
   public async listPaymentPlanPaidResource(
     listData: ListDataInputModel,
-  ): Promise<ListDataOutputModel<GetPaymentPlayPaidResourceQueryResult>> {
+  ): Promise<ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>> {
     const data = await this.list(listData);
 
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
       PaymentPlanPaidResourceTypeormEntity,
-      GetPaymentPlayPaidResourceQueryResult,
+      GetPaymentPlanPaidResourceQueryResult,
     );
 
-    return new ListDataOutputModel<GetPaymentPlayPaidResourceQueryResult>({
+    return new ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>({
       ...data,
       resource: mappedData,
     });
   }
 
-  public async findOnePaymentPlanPaidResource(
+  public async findOnePaymentPlanPaidResourceByIdOrFail(
     id: PaymentPlanPaidResourceId,
     err: Constructor<NotFound>,
-  ): Promise<GetPaymentPlayPaidResourceQueryResult> {
+  ): Promise<GetPaymentPlanPaidResourceQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
@@ -61,7 +61,7 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
     const resource = this.mapperGateway.map(
       data,
       PaymentPlanPaidResourceTypeormEntity,
-      GetPaymentPlayPaidResourceQueryResult,
+      GetPaymentPlanPaidResourceQueryResult,
     );
 
     return resource;
