@@ -65,6 +65,7 @@ import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/d
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
+import { PaymentPlanPaidResourceIaConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource-ia-config.typeorm.entity';
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
@@ -102,6 +103,7 @@ export class TypeormIndex {
     OrganizationPaymentPlanTypeormEntity,
     PaymentPlanEnablePaidResourceTypeormEntity,
     OrganizationPaymentPlanEnablePaidResourceTypeormEntity,
+    PaymentPlanPaidResourceIaConfigTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

@@ -1,14 +1,27 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enable-paid-resource.typeorm.entity';
 import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
+import { PaymentPlanPaidResourceIaConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource-ia-config.typeorm.entity';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 
 @Entity({ name: 'payment_plan_paid_resource' })
 export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'resource', type: 'varchar', length: 100 })
-  public resource: string;
+  @Column({
+    name: 'resource',
+    type: 'simple-enum',
+    enum: PaymentPlanPaidResourceTypeEnum,
+  })
+  public resource: PaymentPlanPaidResourceTypeEnum;
 
   @Column({ name: 'credit_cost', type: 'double' })
   public creditCost: number;
@@ -38,6 +51,14 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
   )
   public organizationPaymentPlanEnablePaidResource?:
     | OrganizationPaymentPlanEnablePaidResourceTypeormEntity[]
+    | undefined;
+
+  @OneToOne(
+    () => PaymentPlanPaidResourceIaConfigTypeormEntity,
+    (entity) => entity.paymentPlanPaidResource,
+  )
+  public paymentPlanPaidResourceIaConfig?:
+    | PaymentPlanPaidResourceIaConfigTypeormEntity
     | undefined;
 
   protected override readonly _type = PaymentPlanPaidResourceTypeormEntity.name;
