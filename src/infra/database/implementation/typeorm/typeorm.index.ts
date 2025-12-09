@@ -61,6 +61,13 @@ import { DatabaseApplicationVariable } from '@shared/system/constant/application
 import type { Provider } from '@nestjs/common';
 import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import type { DataSourceOptions } from 'typeorm';
+import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
+import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
+import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
+import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
+import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
+import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten-typeorm.entity';
 
 export class TypeormIndex {
   public static readonly entities: EntityClassOrSchema[] = [
@@ -86,6 +93,13 @@ export class TypeormIndex {
     CustomerTermsAcceptanceTypeormEntity,
     AnalysisToolClientLegalProceedingTypeormEntity,
     AdminTypeormEntity,
+    RetirementPlanningRppsTypeormEntity,
+    RetirementPlanningRppsRemunerationTypeormEntity,
+    RetirementPlanningRppsResultTypeormEntity,
+    RetirementPlanningRppsPeriodTypeormEntity,
+    RetirementPlanningRppsPeriodDisabilityTypeormEntity,
+    RetirementPlanningRppsPeriodDocumentTypeormEntity,
+    CidTenTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
