@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { RetirementPlanningRppsRemuneration } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
+import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 
 @Entity('retirement_planning_rpps')
@@ -45,10 +45,12 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   @OneToMany(
-    () => RetirementPlanningRppsRemuneration,
+    () => RetirementPlanningRppsRemunerationTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
   )
-  public remunerations?: RetirementPlanningRppsRemuneration[] | undefined;
+  public remunerations?:
+    | RetirementPlanningRppsRemunerationTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = RetirementPlanningRppsTypeormEntity.name;
 }

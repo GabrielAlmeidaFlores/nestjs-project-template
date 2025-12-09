@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 
 @Entity({ name: 'retirement_planning_rpps_remuneration' })
-export class RetirementPlanningRppsRemuneration extends BaseTypeormEntity {
+export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'remuneration_type',
     type: 'varchar',
@@ -32,5 +32,6 @@ export class RetirementPlanningRppsRemuneration extends BaseTypeormEntity {
     | RetirementPlanningRppsTypeormEntity
     | undefined;
 
-  protected override readonly _type = RetirementPlanningRppsRemuneration.name;
+  protected override readonly _type =
+    RetirementPlanningRppsRemunerationTypeormEntity.name;
 }
