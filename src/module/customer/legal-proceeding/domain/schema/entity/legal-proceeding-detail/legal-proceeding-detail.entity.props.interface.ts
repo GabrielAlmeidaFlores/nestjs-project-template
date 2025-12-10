@@ -5,5 +5,5 @@ import type { LegalProceedingDetailId } from '@module/customer/legal-proceeding/
 export interface LegalProceedingDetailEntityPropsInterface
   extends BaseEntityPropsInterface<LegalProceedingDetailId> {
   detail: string;
-  analysisToolClientLegalProceedingId: AnalysisToolClientLegalProceedingId;
+  analysisToolClientLegalProceeding: AnalysisToolClientLegalProceedingId;
 }

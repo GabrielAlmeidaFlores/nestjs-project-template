@@ -9,7 +9,7 @@ export class LegalProceedingDetailEntity extends BaseEntity<LegalProceedingDetai
   public readonly detail: string;
 
   @Description('Id correspondente ao processo judicial')
-  public readonly analysisToolClientLegalProceedingId: AnalysisToolClientLegalProceedingId;
+  public readonly analysisToolClientLegalProceeding: AnalysisToolClientLegalProceedingId;
 
   protected readonly _type = LegalProceedingDetailEntity.name;
 
@@ -17,7 +17,7 @@ export class LegalProceedingDetailEntity extends BaseEntity<LegalProceedingDetai
     super(LegalProceedingDetailId, props);
 
     this.detail = props.detail;
-    this.analysisToolClientLegalProceedingId =
-      props.analysisToolClientLegalProceedingId;
+    this.analysisToolClientLegalProceeding =
+      props.analysisToolClientLegalProceeding;
   }
 }

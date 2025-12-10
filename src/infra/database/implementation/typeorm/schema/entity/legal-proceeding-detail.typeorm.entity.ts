@@ -7,7 +7,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 export class LegalProceedingDetailTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis_tool_client_legal_proceeding_detail',
-    type: 'varchar',
+    type: 'longtext',
   })
   public detail: string;
 
