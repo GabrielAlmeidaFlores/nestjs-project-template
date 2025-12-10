@@ -6,16 +6,16 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { AnalysisToolClientLegalProceedingDetailCoomandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
+import { LegalProceedingDetailCoomandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailEntity } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/legal-proceeding-detail.entity';
+import { LegalProceedingDetailId } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/value-object/analysis-tool-client-legal-proceeding-detail-id/legal-proceeding-detail-id.value-object';
 
 @Injectable()
-export class AnalysisToolClientLegalProceedingDetailTypeormCommandRepository
+export class LegalProceedingDetailTypeormCommandRepository
   extends BaseTypeormCommandRepository<LegalProceedingDetailTypeormEntity>
-  implements AnalysisToolClientLegalProceedingDetailCoomandRepositoryGateway
+  implements LegalProceedingDetailCoomandRepositoryGateway
 {
-  protected readonly _type =
-    AnalysisToolClientLegalProceedingDetailTypeormCommandRepository.name;
+  protected readonly _type = LegalProceedingDetailTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(LegalProceedingDetailTypeormEntity)
@@ -25,7 +25,7 @@ export class AnalysisToolClientLegalProceedingDetailTypeormCommandRepository
     super(repository);
   }
 
-  public createAnalysisToolClientLegalProceedingDetail(
+  public createLegalProceedingDetail(
     props: LegalProceedingDetailEntity,
   ): TransactionType {
     const mappedData = this.mapperGateway.map(
@@ -35,5 +35,18 @@ export class AnalysisToolClientLegalProceedingDetailTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public updateLegalProceedingDetail(
+    id: LegalProceedingDetailId,
+    props: LegalProceedingDetailEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      LegalProceedingDetailEntity,
+      LegalProceedingDetailTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 }
