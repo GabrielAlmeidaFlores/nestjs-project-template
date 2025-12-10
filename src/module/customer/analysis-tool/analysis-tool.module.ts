@@ -12,6 +12,7 @@ import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
+import { CreateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration.use-case';
 import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -33,7 +34,6 @@ import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/ana
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
-
 @Module({
   imports: [
     AuthModule,
@@ -71,6 +71,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetAnalysisToolClientUseCase,
     UpdateCnisFastAnalysisUseCase,
     CreateRetirementPlanningRppsUseCase,
+    CreateRetirementPlanningRppsRemunerationUseCase,
   ],
 })
 export class AnalysisToolModule {
