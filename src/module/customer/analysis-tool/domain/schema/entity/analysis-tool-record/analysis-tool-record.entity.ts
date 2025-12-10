@@ -4,6 +4,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -24,6 +25,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Análise rápida do CNIS associada ao registro da ferramenta de análise',
   )
   public readonly cnisFastAnalysis: CnisFastAnalysisEntity | null;
+
+  @Description(
+    'Registro de planejamento de aposentadoria RPPS associado ao registro da ferramenta de análise',
+  )
+  public readonly retirementPlanningRpps: RetirementPlanningRppsEntity | null;
 
   @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
@@ -48,6 +54,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.code = props.code;
     this.type = props.type;
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
+    this.retirementPlanningRpps = props.retirementPlanningRpps ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

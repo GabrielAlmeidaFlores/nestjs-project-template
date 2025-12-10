@@ -1,18 +1,10 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
-import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
+import { RetirementPlanningRppsPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-special-time.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
-import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-special-time-type.enum';
 
 @Entity({ name: 'retirement_planning_rpps_period' })
 export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity {
@@ -62,27 +54,15 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   })
   public department: string;
 
-  @Column({
-    name: 'special_time_type',
-    type: 'simple-enum',
-    nullable: true,
-    enum: RetirementPlanningPeriodSpecialTimeTypeEnum,
-  })
-  public specialTimeType?: RetirementPlanningPeriodSpecialTimeTypeEnum | null;
-
-  @Column({
-    name: 'special_time_start_date',
-    type: 'date',
-    nullable: true,
-  })
-  public specialTimeStartDate?: Date | null;
-
-  @Column({
-    name: 'special_time_end_date',
-    type: 'date',
-    nullable: true,
-  })
-  public specialTimeEndDate?: Date | null;
+  @OneToOne(
+    () => RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
+    (entity) => entity.retirementPlanningRppsPeriod,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'special_time_period_id' })
+  public specialTimePeriod?:
+    | RetirementPlanningRppsPeriodSpecialTimeTypeormEntity
+    | undefined;
 
   @OneToOne(
     () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
@@ -92,14 +72,6 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   @JoinColumn({ name: 'disability_period_id' })
   public disabilityPeriod?:
     | RetirementPlanningRppsPeriodDisabilityTypeormEntity
-    | undefined;
-
-  @OneToMany(
-    () => RetirementPlanningRppsPeriodDocumentTypeormEntity,
-    (entity) => entity.retirementPlanningRppsPeriod,
-  )
-  public periodDocuments?:
-    | RetirementPlanningRppsPeriodDocumentTypeormEntity[]
     | undefined;
 
   @ManyToOne(

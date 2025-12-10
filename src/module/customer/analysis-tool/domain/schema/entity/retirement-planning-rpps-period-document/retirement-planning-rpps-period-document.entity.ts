@@ -1,8 +1,9 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { RetirementPlanningRppsPeriodDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/value-object/retirement-planning-rpps-period-document-id.value-object';
+import { RetirementPlanningRppsPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-plannig-rpps-period.entity';
+import type { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
 import type { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import type { RetirementPlanningRppsPeriodDocumentEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/retirement-planning-rpps-period-document.entity.props.interface';
 
@@ -11,8 +12,10 @@ export class RetirementPlanningRppsPeriodDocumentEntity extends BaseEntity<Retir
   public readonly document: string;
   @Description('Tipo do documento do período RPPS')
   public readonly documentType: RetirementPlanningDocumentTypeEnum;
-  @Description('Período RPPS associado ao documento')
-  public readonly retirementPlanningRppsPeriod: RetirementPlanningRppsPeriodEntity;
+  @Description('Tempo especial associado ao documento')
+  public readonly retirementPlanningRppsPeriodSpecialTime: RetirementPlanningRppsPeriodSpecialTimeEntity | null;
+  @Description('Deficiência associada ao documento')
+  public readonly retirementPlanningRppsPeriodDisability: RetirementPlanningRppsPeriodDisabilityEntity | null;
 
   protected readonly _type = RetirementPlanningRppsPeriodDocumentEntity.name;
   public constructor(
@@ -21,6 +24,9 @@ export class RetirementPlanningRppsPeriodDocumentEntity extends BaseEntity<Retir
     super(RetirementPlanningRppsPeriodDocumentId, props);
     this.document = props.document;
     this.documentType = props.documentType;
-    this.retirementPlanningRppsPeriod = props.retirementPlanningRppsPeriod;
+    this.retirementPlanningRppsPeriodSpecialTime =
+      props.retirementPlanningRppsPeriodSpecialTime ?? null;
+    this.retirementPlanningRppsPeriodDisability =
+      props.retirementPlanningRppsPeriodDisability ?? null;
   }
 }

@@ -8,7 +8,7 @@ export class CidTenTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'code',
     type: 'varchar',
-    length: 3,
+    length: 10,
     nullable: false,
     unique: true,
   })

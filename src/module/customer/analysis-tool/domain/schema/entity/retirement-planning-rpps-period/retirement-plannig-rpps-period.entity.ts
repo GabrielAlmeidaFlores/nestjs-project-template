@@ -1,7 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
-import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-special-time-type.enum';
 import { RetirementPlanningRppsPeriodEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity.props.interface';
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -19,12 +18,6 @@ export class RetirementPlanningRppsPeriodEntity extends BaseEntity<RetirementPla
   public readonly serviceType: RetirementPlanningPeriodServiceTypeEnum;
   @Description('Departamento associado ao período RPPS')
   public readonly department: string;
-  @Description('Tipo de tempo especial para o período RPPS')
-  public readonly specialTimeType: RetirementPlanningPeriodSpecialTimeTypeEnum | null;
-  @Description('Data de início do tempo especial para o período RPPS')
-  public readonly specialTimeStartDate: Date | null;
-  @Description('Data de término do tempo especial para o período RPPS')
-  public readonly specialTimeEndDate: Date | null;
   @Description(
     'Análise de planejamento previdenciário RPPS associada ao período',
   )
@@ -40,9 +33,6 @@ export class RetirementPlanningRppsPeriodEntity extends BaseEntity<RetirementPla
     this.career = props.career;
     this.serviceType = props.serviceType;
     this.department = props.department;
-    this.specialTimeType = props.specialTimeType ?? null;
-    this.specialTimeStartDate = props.specialTimeStartDate ?? null;
-    this.specialTimeEndDate = props.specialTimeEndDate ?? null;
     this.retirementPlanningRpps = props.retirementPlanningRpps;
   }
 }

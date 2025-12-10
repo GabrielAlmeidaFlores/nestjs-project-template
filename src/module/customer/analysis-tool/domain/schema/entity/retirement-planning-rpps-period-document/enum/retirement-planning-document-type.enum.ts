@@ -5,4 +5,5 @@ export enum RetirementPlanningDocumentTypeEnum {
   JUDICIAL = 'judicial',
   MEDICAL = 'medico',
   OTHER = 'outros',
+  OTHER_MEDICAL = 'outros_medicos',
 }
