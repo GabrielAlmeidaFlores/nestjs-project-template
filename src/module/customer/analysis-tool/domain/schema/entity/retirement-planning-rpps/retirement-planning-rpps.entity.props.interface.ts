@@ -4,8 +4,8 @@ import type { RetirementPlanningRppsResultEntity } from '@module/customer/analys
 
 export interface RetirementPlanningRppsEntityPropsInterface
   extends BaseEntityPropsInterface<RetirementPlanningRppsId> {
-  ctcDocument: string;
+  ctcDocument?: string | null;
   careerStartDate: Date;
   publicServiceStartDate: Date;
-  retirementPlanningRppsResult: RetirementPlanningRppsResultEntity;
+  retirementPlanningRppsResult?: RetirementPlanningRppsResultEntity | null;
 }

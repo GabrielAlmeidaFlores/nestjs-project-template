@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
+import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
+import { RetirementPlanningRppsPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-special-time.typeorm.entity';
 import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 
 @Entity({ name: 'retirement_planning_rpps_period_document' })
@@ -24,13 +25,23 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
   public document: string;
 
   @ManyToOne(
-    () => RetirementPlanningRppsPeriodTypeormEntity,
-    (entity) => entity.periodDocuments,
-    { nullable: false },
+    () => RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
+    (entity) => entity.specialTimeDocuments,
+    { nullable: true },
   )
-  @JoinColumn({ name: 'retirement_planning_rpps_period_id' })
-  public retirementPlanningRppsPeriod?:
-    | RetirementPlanningRppsPeriodTypeormEntity
+  @JoinColumn({ name: 'retirement_planning_rpps_period_special_time_id' })
+  public retirementPlanningRppsPeriodSpecialTime?:
+    | RetirementPlanningRppsPeriodSpecialTimeTypeormEntity
+    | undefined;
+
+  @ManyToOne(
+    () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
+    (entity) => entity.disabilityDocuments,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'retirement_planning_rpps_period_disability_id' })
+  public retirementPlanningRppsPeriodDisability?:
+    | RetirementPlanningRppsPeriodDisabilityTypeormEntity
     | undefined;
 
   protected override readonly _type =
