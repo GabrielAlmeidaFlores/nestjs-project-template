@@ -5,8 +5,6 @@ import { OrganizationMemberId } from '@module/customer/account/domain/schema/ent
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { GetAnalysisToolClientLegalProceedingWithRelationsResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding-with-relations.response.dto';
-import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
-import { ListAnalysisToolClientLegalProceedingWithRelationsResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-with-relations.response.dto';
 import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding.response.dto';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
@@ -19,33 +17,9 @@ export class ListAnalysisToolClientLegalProceedingUseCase {
     private readonly analysisToolClientLegalProceedingQueryRepositoryGateway: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
   ) {}
 
-  public async execute(
-    dto: ListDataRequestDto,
-  ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
-    const queryResult =
-      await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listAnalysisToolClient(
-        new ListDataInputModel(dto),
-      );
-
-    const resource: GetAnalysisToolClientLegalProceedingResponseDto[] = [];
-
-    for (const item of queryResult.resource) {
-      const mapped = GetAnalysisToolClientLegalProceedingResponseDto.build({
-        legalProceedingNumber: item.legalProceedingNumber,
-      });
-
-      resource.push(mapped);
-    }
-
-    return ListAnalysisToolClientLegalProceedingResponseDto.build({
-      ...queryResult,
-      resource,
-    });
-  }
-
   public async findAnalysisToolClientLegalProceedingWithRelations(
     dto: ListDataRequestDto,
-  ): Promise<ListAnalysisToolClientLegalProceedingWithRelationsResponseDto> {
+  ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
     const queryResult =
       await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listAnalysisToolClientWithRelations(
         new ListDataInputModel(dto),
@@ -71,7 +45,7 @@ export class ListAnalysisToolClientLegalProceedingUseCase {
       );
     });
 
-    return ListAnalysisToolClientLegalProceedingWithRelationsResponseDto.build({
+    return ListAnalysisToolClientLegalProceedingResponseDto.build({
       ...queryResult,
       resource,
     });

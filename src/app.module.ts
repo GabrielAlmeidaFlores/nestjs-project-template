@@ -1,6 +1,7 @@
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
@@ -45,6 +46,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
         };
       },
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],
