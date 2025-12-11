@@ -1,10 +1,14 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
+import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param.gateway';
+import { GetLegalProceedingDetailWithRelationsQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail-with-relations.query.result';
 import { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
 
 export class LegalProceedingDetailTypeormQueryRepository
@@ -42,5 +46,54 @@ export class LegalProceedingDetailTypeormQueryRepository
     );
 
     return mapped;
+  }
+
+  public async listByOrganizationIdAndAnalysisToolClientId(
+    organizationId: OrganizationId,
+    listData: ListLegalProceedingDetailQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>
+  > {
+    const where = {
+      analysisToolClientLegalProceeding: {
+        analysisToolClient: {
+          id: '',
+          createdBy: {
+            organization: { id: organizationId.toString() },
+          },
+        },
+      },
+    };
+
+    if (listData.analysisToolClientId !== null) {
+      where.analysisToolClientLegalProceeding.analysisToolClient.id =
+        listData.analysisToolClientId.toString();
+    }
+
+    const data = await this.list(listData, {
+      where,
+      relations: {
+        analysisToolClientLegalProceeding: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            analysisToolRecord: true,
+          },
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      LegalProceedingDetailTypeormEntity,
+      GetLegalProceedingDetailWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
   }
 }
