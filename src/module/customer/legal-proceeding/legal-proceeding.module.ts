@@ -5,6 +5,7 @@ import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool
 import { LegalProceedingController } from '@module/customer/legal-proceeding/legal-proceeding.controller';
 import { LegalProceedingConsumerModule } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.module';
 import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
+import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
@@ -17,7 +18,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     OrganizationSessionModule,
   ],
   controllers: [LegalProceedingController],
-  providers: [LegalProceedingCronUseCase],
+  providers: [LegalProceedingCronUseCase, ListLegalProceedingDetailUseCase],
 })
 export class LegalProceedingModule {
   protected readonly _type = LegalProceedingModule.name;

@@ -13,7 +13,7 @@ export class LegalProceedingDetailTypeormEntity extends BaseTypeormEntity {
 
   @ManyToOne(
     () => AnalysisToolClientLegalProceedingTypeormEntity,
-    (entity) => entity.analysisToolClientLegalProceedingDetail,
+    (entity) => entity.legalProceedingDetail,
   )
   @JoinColumn({ name: 'analysis_tool_client_legal_proceeding_id' })
   public analysisToolClientLegalProceeding?:

@@ -24,7 +24,7 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
     () => LegalProceedingDetailTypeormEntity,
     (entity) => entity.analysisToolClientLegalProceeding,
   )
-  public analysisToolClientLegalProceedingDetail?:
+  public legalProceedingDetail?:
     | LegalProceedingDetailTypeormEntity[]
     | undefined;
 
