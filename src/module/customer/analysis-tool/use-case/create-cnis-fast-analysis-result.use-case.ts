@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -21,7 +22,6 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-
 @Injectable()
 export class CreateCnisFastAnalysisResultUseCase {
   protected readonly _type = CreateCnisFastAnalysisResultUseCase.name;
@@ -43,6 +43,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(CnisAnalyzerGateway)
+    private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
   ) {}
 
   public async execute(
@@ -89,16 +91,23 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisDocumentData =
       await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
 
-    const cnisDocumentDataBuffer = Buffer.from(
-      JSON.stringify(cnisDocumentData, null, 2),
-      'utf-8',
+    const cnisAnalyzerResponse =
+      await this.cnisAnalysisGateway.analyzeCnisDocument(
+        cnisDocumentData,
+        analysisToolRecordQueryResult.analysisToolClient,
+      );
+
+    const jsonCnisAnalyzerResponse = JSON.stringify(
+      cnisAnalyzerResponse,
+      null,
+      2,
     );
 
     const cnisCompleteAnalysis =
-      await this.analysisProcessorGateway.getCnisCompleteAnalysis([
-        clientDataBuffer,
-        cnisDocumentDataBuffer,
-      ]);
+      await this.analysisProcessorGateway.getCnisCompleteAnalysis(
+        [clientDataBuffer],
+        jsonCnisAnalyzerResponse,
+      );
 
     let clientLastAffiliationDate: Date | null = null;
 
