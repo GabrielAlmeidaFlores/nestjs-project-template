@@ -4,9 +4,11 @@ import { Injectable } from '@nestjs/common';
 
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
+import { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
 
 @Injectable()
 export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMapperProfile {
@@ -31,11 +33,19 @@ export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMap
         AnalysisToolClientTypeormEntity,
         GetAnalysisToolClientWithRelationsQueryResult,
       );
+
+      const legalProceedingDetail = this.mapper.mapArray(
+        source.legalProceedingDetail ?? [],
+        LegalProceedingDetailTypeormEntity,
+        GetLegalProceedingDetailQueryResult,
+      );
+
       return GetAnalysisToolClientLegalProceedingWithRelationsQueryResult.build(
         {
           ...source,
           id: new AnalysisToolClientLegalProceedingId(source.id),
           analysisToolClient,
+          legalProceedingDetail,
         },
       );
     };
@@ -59,10 +69,18 @@ export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMap
         GetAnalysisToolClientWithRelationsQueryResult,
         AnalysisToolClientTypeormEntity,
       );
+
+      const legalProceedingDetail = this.mapper.mapArray(
+        source.legalProceedingDetail,
+        GetLegalProceedingDetailQueryResult,
+        LegalProceedingDetailTypeormEntity,
+      );
+
       return AnalysisToolClientLegalProceedingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         analysisToolClient,
+        legalProceedingDetail,
       });
     };
 

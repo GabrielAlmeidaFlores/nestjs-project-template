@@ -5,6 +5,7 @@ import type { LegalProceedingDetailId } from '@module/customer/legal-proceeding/
 export class GetLegalProceedingDetailQueryResult extends BaseBuildableDtoObject {
   public readonly id: LegalProceedingDetailId;
   public readonly detail: string;
+  public readonly createdAt: Date;
 
   protected override readonly _type = GetLegalProceedingDetailQueryResult.name;
 }

@@ -25,6 +25,7 @@ export class GetLegalProceedingDetailEntityAutoMapperProfile {
       source: LegalProceedingDetailTypeormEntity,
     ): GetLegalProceedingDetailQueryResult => {
       return GetLegalProceedingDetailQueryResult.build({
+        ...source,
         id: new LegalProceedingDetailId(source.id),
         detail: source.detail,
       });
