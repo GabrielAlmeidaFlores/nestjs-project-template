@@ -1,5 +1,7 @@
 import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
+import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
+import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
@@ -11,6 +13,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 @CustomerControllerRoute('legal-proceeding')
 export class LegalProceedingController {
@@ -18,6 +21,7 @@ export class LegalProceedingController {
 
   public constructor(
     private readonly listLegalProceedingDetailUseCase: ListLegalProceedingDetailUseCase,
+    private readonly getAnalysisToolClientLegalProceedingUseCaseGateway: GetAnalysisToolClientLegalProceedingUseCaseGateway,
   ) {}
 
   @BuildEndpointSpecification({
@@ -44,6 +48,35 @@ export class LegalProceedingController {
     return this.listLegalProceedingDetailUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar registros pela organizacao',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization',
+      method: RequestMethod.GET,
+    },
+    tag: ['registro-processos-juridicos-organizacao'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Listar registros detalhados sobre os processos judiciais da organizacao',
+      type: ListLegalProceedingDetailResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listLegalProceedingDetailByOrganization(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
+    return this.getAnalysisToolClientLegalProceedingUseCaseGateway.getAnalysisToolClientLegalProceedingWithRelations(
+      organizationSessionData,
+      sessionData,
       dto,
     );
   }

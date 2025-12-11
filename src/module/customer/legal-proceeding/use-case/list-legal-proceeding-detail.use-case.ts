@@ -3,8 +3,8 @@ import { Inject } from '@nestjs/common';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
-import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param.gateway';
-import { GetLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail.response.dto';
+import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
+import { GetLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-relations.response.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 
 import type { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
@@ -43,9 +43,9 @@ export class ListLegalProceedingDetailUseCase {
         new ListLegalProceedingDetailQueryParam(dto),
       );
 
-    const resource: GetLegalProceedingDetailResponseDto[] =
+    const resource: GetLegalProceedingDetailWithRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
-        return GetLegalProceedingDetailResponseDto.build({
+        return GetLegalProceedingDetailWithRelationsResponseDto.build({
           ...item,
           detail: JSON.parse(item.detail) as object,
         });
