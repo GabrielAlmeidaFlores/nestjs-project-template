@@ -79,6 +79,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
+import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -109,6 +111,7 @@ export class AnalysisToolController {
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly createRetirementPlanningRppsUseCase: CreateRetirementPlanningRppsUseCase,
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
+    private readonly getRetirementPlanningRppsUseCase: GetRetirementPlanningRppsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -849,6 +852,39 @@ export class AnalysisToolController {
       organizationSessionData,
       retirementPlanningRppsId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter planejamento previdenciário RPPS por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rpps/:retirementPlanningRppsId',
+      method: RequestMethod.GET,
+    },
+    tag: ['planejamento-previdenciario-rpps'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Dados do planejamento previdenciário RPPS retornados com sucesso.',
+      type: GetRetirementPlanningRppsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRpps(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRppsId',
+      new ParseValueObjectPipe(RetirementPlanningRppsId),
+    )
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+  ): Promise<GetRetirementPlanningRppsResponseDto> {
+    return await this.getRetirementPlanningRppsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRppsId,
     );
   }
 }

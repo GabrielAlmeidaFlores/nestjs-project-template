@@ -1,0 +1,70 @@
+import { Mapper, constructUsing, createMap } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
+import { Injectable } from '@nestjs/common';
+
+import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
+import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+
+@Injectable()
+export class GetRetirementPlanningRppsQueryResultAutoMapperProfile {
+  protected readonly _type =
+    GetRetirementPlanningRppsQueryResultAutoMapperProfile.name;
+
+  public constructor(@InjectMapper() private readonly mapper: Mapper) {
+    this.createMappings();
+  }
+
+  private createMappings(): void {
+    this.mapOrmEntityToDomainEntity();
+    this.mapDomainEntityToOrmEntity();
+  }
+
+  private mapOrmEntityToDomainEntity(): void {
+    const convertOrmEntityToDomainEntity = (
+      source: RetirementPlanningRppsTypeormEntity,
+    ): GetRetirementPlanningRppsQueryResult => {
+      return GetRetirementPlanningRppsQueryResult.build({
+        id: new RetirementPlanningRppsId(source.id),
+        ctcDocument: source.ctcDocument,
+        careerStartDate: source.careerStartDate,
+        publicServiceStartDate: source.publicServiceStartDate,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+      });
+    };
+
+    createMap(
+      this.mapper,
+      RetirementPlanningRppsTypeormEntity,
+      GetRetirementPlanningRppsQueryResult,
+      constructUsing(convertOrmEntityToDomainEntity),
+    );
+  }
+
+  private mapDomainEntityToOrmEntity(): void {
+    const convertDomainEntityToOrmEntity = (
+      source: GetRetirementPlanningRppsQueryResult,
+    ): RetirementPlanningRppsTypeormEntity => {
+      const entity = new RetirementPlanningRppsTypeormEntity();
+
+      entity.id = source.id.toString();
+      entity.ctcDocument = source.ctcDocument;
+      entity.careerStartDate = source.careerStartDate;
+      entity.publicServiceStartDate = source.publicServiceStartDate;
+      entity.createdAt = source.createdAt;
+      entity.updatedAt = source.updatedAt;
+      entity.deletedAt = source.deletedAt;
+
+      return entity;
+    };
+
+    createMap(
+      this.mapper,
+      GetRetirementPlanningRppsQueryResult,
+      RetirementPlanningRppsTypeormEntity,
+      constructUsing(convertDomainEntityToOrmEntity),
+    );
+  }
+}

@@ -59,7 +59,6 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
     (entity) => entity.retirementPlanningRppsPeriod,
     { nullable: true },
   )
-  @JoinColumn({ name: 'special_time_period_id' })
   public specialTimePeriod?:
     | RetirementPlanningRppsPeriodSpecialTimeTypeormEntity
     | undefined;
@@ -69,7 +68,6 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
     (entity) => entity.retirementPlanningRppsPeriod,
     { nullable: true },
   )
-  @JoinColumn({ name: 'disability_period_id' })
   public disabilityPeriod?:
     | RetirementPlanningRppsPeriodDisabilityTypeormEntity
     | undefined;

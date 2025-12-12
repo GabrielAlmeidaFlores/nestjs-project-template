@@ -166,6 +166,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       cnisFastAnalysis,
+      retirementPlanningRpps: null,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
     });
