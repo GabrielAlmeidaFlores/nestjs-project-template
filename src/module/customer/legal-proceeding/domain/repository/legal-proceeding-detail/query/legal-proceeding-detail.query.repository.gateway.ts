@@ -1,3 +1,4 @@
+import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
@@ -21,4 +22,11 @@ export abstract class LegalProceedingDetailQueryRepositoryGateway {
     analysisToolClientLegalProceedingId: AnalysisToolClientLegalProceedingId,
     legalProceedingNumber: string,
   ): Promise<GetLegalProceedingDetailQueryResult | null>;
+
+  public abstract listByLegalProceedingNumber(
+    legalProceedingNumber: string,
+    listData: ListDataInputModel,
+  ): Promise<
+    ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>
+  >;
 }
