@@ -355,7 +355,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     return relationsClause;
   }
 
-  private getEntityRelationsKey(): 'cnisFastAnalysis'[] {
-    return ['cnisFastAnalysis'];
+  private getEntityRelationsKey(): (
+    | 'cnisFastAnalysis'
+    | 'retirementPlanningRpps'
+  )[] {
+    return ['cnisFastAnalysis', 'retirementPlanningRpps'];
   }
 }

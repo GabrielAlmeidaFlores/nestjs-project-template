@@ -8,10 +8,10 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { GetRetirementPlanningRppsWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps-with-relations.query.result';
+import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
-import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
-import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class RetirementPlanningRppsTypeormQueryRepository
@@ -28,12 +28,11 @@ export class RetirementPlanningRppsTypeormQueryRepository
     super(repository);
   }
 
-  public async findOneByRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+  public async findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
     id: RetirementPlanningRppsId,
     organizationId: OrganizationId,
-    authIdentityId: AuthIdentityId,
     err: Constructor<NotFoundError>,
-  ): Promise<RetirementPlanningRppsEntity> {
+  ): Promise<GetRetirementPlanningRppsWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
@@ -43,20 +42,64 @@ export class RetirementPlanningRppsTypeormQueryRepository
               organization: {
                 id: organizationId.toString(),
               },
-              customer: {
-                authIdentity: {
-                  id: authIdentityId.toString(),
-                },
-              },
             },
           },
         },
         relations: {
+          retirementPlanningRppsResult: true,
+          remunerations: true,
+          periods: {
+            specialTimePeriod: true,
+            disabilityPeriod: {
+              cid: true,
+              disabilityDocuments: true,
+            },
+          },
+          analysisToolRecord: {
+            analysisToolClient: {
+              createdBy: {
+                customer: true,
+              },
+              updatedBy: {
+                customer: true,
+              },
+              analysisToolClientInssBenefit: true,
+              analysisToolClientLegalProceeding: true,
+            },
+            createdBy: {
+              customer: true,
+            },
+            updatedBy: {
+              customer: true,
+            },
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      RetirementPlanningRppsTypeormEntity,
+      GetRetirementPlanningRppsWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneByRetirementPlanningIdAndOrganizationIdOrFail(
+    id: RetirementPlanningRppsId,
+    organizationId: OrganizationId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetRetirementPlanningRppsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          id: id.toString(),
           analysisToolRecord: {
             createdBy: {
-              organization: true,
-              customer: {
-                authIdentity: true,
+              organization: {
+                id: organizationId.toString(),
               },
             },
           },
@@ -68,7 +111,7 @@ export class RetirementPlanningRppsTypeormQueryRepository
     const mappedData = this.mapperGateway.map(
       data,
       RetirementPlanningRppsTypeormEntity,
-      RetirementPlanningRppsEntity,
+      GetRetirementPlanningRppsQueryResult,
     );
 
     return mappedData;

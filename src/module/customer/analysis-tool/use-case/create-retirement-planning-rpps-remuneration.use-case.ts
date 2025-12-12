@@ -4,9 +4,11 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/command/retirement-planning-rpps-remuneration.command.repository.gateway';
+import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.entity';
 import { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
+import { RetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-result/retirement-planning-rpps-result.entity';
 import { CreateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rpps-remuneration-request.dto';
 import { CreateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-remuneration.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -47,14 +49,32 @@ export class CreateRetirementPlanningRppsRemunerationUseCase {
     }
 
     const retirementPlanningRpps =
-      await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
         retirementPlanningRppsId,
         organizationSessionData.organizationId,
-        sessionData.authIdentityId,
         RetirementPlanningRppsNotFoundError,
       );
 
     const transactionOperations = [];
+    const retirementPlanningRppsResultEntity =
+      new RetirementPlanningRppsResultEntity({
+        id: retirementPlanningRpps.retirementPlanningRppsResult?.id ?? null,
+        retirementPlanningRppsCompleteAnalysis:
+          retirementPlanningRpps.retirementPlanningRppsResult
+            ?.retirementPlanningRppsCompleteAnalysis ?? null,
+
+        retirementPlanningRppsSimplifiedAnalysis:
+          retirementPlanningRpps.retirementPlanningRppsResult
+            ?.retirementPlanningRppsSimplifiedAnalysis ?? null,
+      });
+
+    const retirementPlanningRppsEntity = new RetirementPlanningRppsEntity({
+      id: retirementPlanningRpps.id,
+      ctcDocument: retirementPlanningRpps.ctcDocument,
+      careerStartDate: retirementPlanningRpps.careerStartDate,
+      publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
+      retirementPlanningRppsResult: retirementPlanningRppsResultEntity,
+    });
 
     for (const remunerationDto of dto.remunerations) {
       const normalizedDateToDayOne = new Date(
@@ -67,7 +87,7 @@ export class CreateRetirementPlanningRppsRemunerationUseCase {
         id: new RetirementPlanningRppsRemunerationId(),
         date: normalizedDateToDayOne,
         amount: remunerationDto.amount,
-        retirementPlanningRpps,
+        retirementPlanningRpps: retirementPlanningRppsEntity,
       });
 
       transactionOperations.push(

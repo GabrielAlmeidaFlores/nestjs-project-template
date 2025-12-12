@@ -130,7 +130,6 @@ export class CreateRetirementPlanningRppsUseCase {
 
     for (const periodDto of dto.json.periods) {
       const periodId = new RetirementPlanningRppsPeriodId();
-
       const period = new RetirementPlanningRppsPeriodEntity({
         id: periodId,
         startDate: periodDto.startDate,

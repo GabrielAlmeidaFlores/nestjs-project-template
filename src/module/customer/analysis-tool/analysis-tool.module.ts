@@ -34,6 +34,7 @@ import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/ana
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 @Module({
   imports: [
     AuthModule,
@@ -72,6 +73,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateCnisFastAnalysisUseCase,
     CreateRetirementPlanningRppsUseCase,
     CreateRetirementPlanningRppsRemunerationUseCase,
+    GetRetirementPlanningRppsUseCase,
   ],
 })
 export class AnalysisToolModule {
