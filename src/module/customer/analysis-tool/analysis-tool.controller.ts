@@ -20,6 +20,7 @@ import { CreateRetirementPlanningRppsRemunerationRequestDto } from '@module/cust
 import { CreateRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rpps.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
+import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
@@ -40,6 +41,7 @@ import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
+import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
@@ -66,6 +68,7 @@ import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
+import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
@@ -81,9 +84,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
-import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
-import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
