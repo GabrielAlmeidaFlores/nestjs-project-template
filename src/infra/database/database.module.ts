@@ -98,6 +98,8 @@ import { RetirementPlanningRppsRemunerationCommandRepositoryGateway } from '@mod
 import { RetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/command/retirement-planning-rpps-result.command.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { RetirementPlanningRppsRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.query.repository.gateway';
+import { RetirementPlanningRppsRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.typeorm.query.repository';
 
 const classProvider: ClassProvider[] = [
   {
@@ -270,6 +272,10 @@ const classProvider: ClassProvider[] = [
   {
     provide: RetirementPlanningRppsQueryRepositoryGateway,
     useClass: RetirementPlanningRppsTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRppsRemunerationQueryRepositoryGateway,
+    useClass: RetirementPlanningRppsRemunerationTypeormQueryRepository,
   },
   {
     provide: RetirementPlanningRppsPeriodCommandRepositoryGateway,

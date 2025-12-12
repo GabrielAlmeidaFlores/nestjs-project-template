@@ -36,6 +36,7 @@ import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-t
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
+import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
@@ -61,6 +62,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
@@ -79,8 +81,9 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
-import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
+import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
+import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
+import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -112,6 +115,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRppsUseCase: CreateRetirementPlanningRppsUseCase,
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
     private readonly getRetirementPlanningRppsUseCase: GetRetirementPlanningRppsUseCase,
+    private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -885,6 +889,41 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       retirementPlanningRppsId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar remunerações do planejamento previdenciário RPPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      method: RequestMethod.GET,
+      path: 'retirement-planning-rpps/:retirementPlanningRppsId/remuneration',
+    },
+    tag: ['planejamento-previdenciario-rpps'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Remunerações do planejamento previdenciário RPPS listadas com sucesso.',
+      type: ListRetirementPlanningRppsRemunerationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listRetirementPlanningRppsRemuneration(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRppsId',
+      new ParseValueObjectPipe(RetirementPlanningRppsId),
+    )
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+    @Query() dto: ListRetirementPlanningRppsRemunerationRequestDto,
+  ): Promise<ListRetirementPlanningRppsRemunerationResponseDto> {
+    return await this.listRetirementPlanningRppsRemunerationUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRppsId,
+      dto,
     );
   }
 }
