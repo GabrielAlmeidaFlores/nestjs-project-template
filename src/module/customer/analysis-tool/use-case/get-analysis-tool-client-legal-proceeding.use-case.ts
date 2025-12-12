@@ -25,7 +25,7 @@ export class GetAnalysisToolClientLegalProceedingUseCase {
     private readonly analysisToolClientLegalProceedingQueryRepositoryGateway: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
   ) {}
 
-  public async getAnalysisToolClientLegalProceedingWithRelations(
+  public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: GetAnalysisToolClientLegalProceedingRequestDto,

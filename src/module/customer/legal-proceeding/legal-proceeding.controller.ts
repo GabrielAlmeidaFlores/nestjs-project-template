@@ -74,7 +74,7 @@ export class LegalProceedingController {
     organizationSessionData: OrganizationSessionDataModel,
     @Query() dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
-    return this.getAnalysisToolClientLegalProceedingUseCaseGateway.getAnalysisToolClientLegalProceedingWithRelations(
+    return this.getAnalysisToolClientLegalProceedingUseCaseGateway.execute(
       organizationSessionData,
       sessionData,
       dto,

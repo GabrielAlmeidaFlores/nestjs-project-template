@@ -2,7 +2,7 @@ import type { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/c
 import type { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 export abstract class ListAnalysisToolClientLegalProceedingUseCaseGateway {
-  public abstract findAnalysisToolClientLegalProceedingWithRelations(
+  public abstract execute(
     dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingResponseDto>;
 }
