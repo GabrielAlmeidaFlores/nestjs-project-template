@@ -18,7 +18,7 @@ export class ListAnalysisToolClientLegalProceedingUseCase {
     private readonly analysisToolClientLegalProceedingQueryRepositoryGateway: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
   ) {}
 
-  public async findAnalysisToolClientLegalProceedingWithRelations(
+  public async execute(
     dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
     const queryResult =

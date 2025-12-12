@@ -4,7 +4,7 @@ import type { SessionDataModel } from '@shared/api/util/decorator/property/get-s
 import type { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 export abstract class GetAnalysisToolClientLegalProceedingUseCaseGateway {
-  public abstract getAnalysisToolClientLegalProceedingWithRelations(
+  public abstract execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: ListDataRequestDto,

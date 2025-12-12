@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { isEqual } from 'lodash';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { LegalProceedingDetailCoomandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
+import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { LegalProceedingDetailEntity } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/legal-proceeding-detail.entity';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
@@ -22,6 +24,9 @@ export class LegalProceedingCronUseCase {
 
     @Inject(LegalProceedingDetailCoomandRepositoryGateway)
     private readonly legalProceedingDetailCoomandRepositoryGateway: LegalProceedingDetailCoomandRepositoryGateway,
+
+    @Inject(LegalProceedingDetailQueryRepositoryGateway)
+    private readonly legalProceedingDetailQueryRepositoryGateway: LegalProceedingDetailQueryRepositoryGateway,
 
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -43,7 +48,7 @@ export class LegalProceedingCronUseCase {
       dto.limit = limit;
 
       const proceedingsPage =
-        await this.listAnalysisToolClientLegalProceedingUseCaseGateway.findAnalysisToolClientLegalProceedingWithRelations(
+        await this.listAnalysisToolClientLegalProceedingUseCaseGateway.execute(
           dto,
         );
 
@@ -74,6 +79,16 @@ export class LegalProceedingCronUseCase {
             proceeding.analysisToolClientLegalProceedingId.toString(),
           ),
       });
+
+      const proceedingsExist =
+        await this.legalProceedingDetailQueryRepositoryGateway.findLastCreated(
+          proceeding.analysisToolClientLegalProceedingId,
+          proceeding.legalProceedingNumber,
+        );
+
+      if (proceedingsExist && isEqual(proceedingsExist.detail, safeDetail)) {
+        continue;
+      }
 
       const tx =
         this.legalProceedingDetailCoomandRepositoryGateway.createLegalProceedingDetail(

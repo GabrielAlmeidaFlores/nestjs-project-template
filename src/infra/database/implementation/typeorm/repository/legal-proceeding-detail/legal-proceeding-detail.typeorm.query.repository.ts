@@ -6,6 +6,7 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
 import { GetLegalProceedingDetailWithRelationsQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail-with-relations.query.result';
@@ -95,5 +96,33 @@ export class LegalProceedingDetailTypeormQueryRepository
         resource: mappedData,
       },
     );
+  }
+
+  public async findLastCreated(
+    analysisToolClientLegalProceedingId: AnalysisToolClientLegalProceedingId,
+    legalProceedingNumber: string,
+  ): Promise<GetLegalProceedingDetailQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        analysisToolClientLegalProceeding: {
+          id: analysisToolClientLegalProceedingId.toString(),
+          legalProceedingNumber: legalProceedingNumber.toString(),
+        },
+      },
+      relations: {
+        analysisToolClientLegalProceeding: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const mapped = this.mapperGateway.map(
+      data,
+      LegalProceedingDetailTypeormEntity,
+      GetLegalProceedingDetailQueryResult,
+    );
+
+    return mapped;
   }
 }
