@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { SeederInterface } from '@cli/seed/interface/seeder.interface';
+import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
@@ -13,11 +14,15 @@ export class SeedService {
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     private readonly logger: Logger,
+    private readonly adminSeeder: AdminSeeder,
     private readonly customerTermsSeeder: CustomerTermsSeeder,
   ) {}
 
   public async seed(): Promise<void> {
-    const seeders: Array<SeederInterface> = [this.customerTermsSeeder];
+    const seeders: Array<SeederInterface> = [
+      this.adminSeeder,
+      this.customerTermsSeeder,
+    ];
 
     const transactions: Array<TransactionType> = [];
 
