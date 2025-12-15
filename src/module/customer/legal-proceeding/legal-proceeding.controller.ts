@@ -2,9 +2,12 @@ import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
+import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
 import { ListLegalProceedingDetailByLegalProceedingNumberRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-legal-proceeding-number.request.dto';
 import { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
+import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
+import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
 import { ListLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -25,6 +28,7 @@ export class LegalProceedingController {
     private readonly listLegalProceedingDetailUseCase: ListLegalProceedingDetailUseCase,
     private readonly getAnalysisToolClientLegalProceedingUseCaseGateway: GetAnalysisToolClientLegalProceedingUseCaseGateway,
     private readonly listLegalProceedingDetailByLegalProceedingNumberUseCase: ListLegalProceedingDetailByLegalProceedingNumberUseCase,
+    private readonly countLegalProceedingDetailUseCase: CountLegalProceedingDetailUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -34,7 +38,7 @@ export class LegalProceedingController {
       path: 'list-proceeding-detail',
       method: RequestMethod.GET,
     },
-    tag: ['registro-processos-juridicos'],
+    tag: ['processos-juridicos'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Listar registros detalhados sobre os processos judiciais',
@@ -62,7 +66,7 @@ export class LegalProceedingController {
       path: 'organization',
       method: RequestMethod.GET,
     },
-    tag: ['registro-processos-juridicos-organizacao'],
+    tag: ['registro-processos-juridicos'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
@@ -91,7 +95,7 @@ export class LegalProceedingController {
       path: 'numero-processo-judicial',
       method: RequestMethod.GET,
     },
-    tag: ['registro-numero-processos-juridicos'],
+    tag: ['processos-juridicos'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
@@ -109,6 +113,34 @@ export class LegalProceedingController {
     return this.listLegalProceedingDetailByLegalProceedingNumberUseCase.execute(
       organizationSessionData,
       sessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Contagem dos processos judiciais pertencentes ao advogado logado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'count-proceeding-detail',
+      method: RequestMethod.GET,
+    },
+    tag: ['processos-juridicos'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Listar registros detalhados sobre os processos judiciais',
+      type: CountLegalProceedingDetailResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async countLegalProceedingDetail(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: CountLegalProceedingDetailRequestDto,
+  ): Promise<CountLegalProceedingDetailResponseDto> {
+    return this.countLegalProceedingDetailUseCase.execute(
+      sessionData,
+      organizationSessionData,
       dto,
     );
   }

@@ -9,6 +9,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
+import { CountLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/count-legal-proceeding-detail.query.param';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
 import { GetLegalProceedingDetailWithRelationsQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail-with-relations.query.result';
 import { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
@@ -137,6 +138,57 @@ export class LegalProceedingDetailTypeormQueryRepository
       where: {
         analysisToolClientLegalProceeding: {
           legalProceedingNumber,
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      LegalProceedingDetailTypeormEntity,
+      GetLegalProceedingDetailWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
+  }
+
+  public async listByOrganizationIdAndCreatedBy(
+    organizationId: OrganizationId,
+    listData: CountLegalProceedingDetailQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>
+  > {
+    const where = {
+      analysisToolClientLegalProceeding: {
+        analysisToolClient: {
+          createdBy: {
+            organization: { id: organizationId.toString() },
+            customer: {
+              id: '',
+            },
+          },
+        },
+      },
+    };
+
+    if (listData.customerId !== null) {
+      where.analysisToolClientLegalProceeding.analysisToolClient.createdBy.customer.id =
+        listData.customerId.toString();
+    }
+
+    const data = await this.list(listData, {
+      where,
+      relations: {
+        analysisToolClientLegalProceeding: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            analysisToolRecord: true,
+          },
         },
       },
     });

@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
 import { LegalProceedingController } from '@module/customer/legal-proceeding/legal-proceeding.controller';
 import { LegalProceedingConsumerModule } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.module';
+import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
 import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
 import { ListLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
@@ -23,6 +24,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     LegalProceedingCronUseCase,
     ListLegalProceedingDetailUseCase,
     ListLegalProceedingDetailByLegalProceedingNumberUseCase,
+    CountLegalProceedingDetailUseCase,
   ],
 })
 export class LegalProceedingModule {
