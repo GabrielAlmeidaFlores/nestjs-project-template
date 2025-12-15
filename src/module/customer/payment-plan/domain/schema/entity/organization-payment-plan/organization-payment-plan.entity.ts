@@ -4,7 +4,7 @@ import { OrganizationEntity } from '@module/customer/account/domain/schema/entit
 import { OrganizationPaymentPlanEntityPropsInterface } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity.props.interface';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
-import { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-type.enum';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymentPlanId> {
@@ -27,7 +27,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   public readonly active: boolean;
 
   @Description('Tipo de assinatura contratada pelo cliente')
-  public readonly cycle: PaymentPlanCycleTypeEnum;
+  public readonly cycle: PaymentPlanCycleEnum;
 
   @Description('Organização pertencente ao plano de pagamento')
   public readonly organization: OrganizationEntity | null;
