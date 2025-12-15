@@ -1,4 +1,5 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -30,6 +31,12 @@ export class UpdatePaymentPlanRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoEnumProperty(PaymentPlanCycleEnum, { required: false })
   public cycle?: PaymentPlanCycleEnum;
+
+  @RequestDtoValueObjectProperty(PaymentPlanPaidResourceId, {
+    required: false,
+    isArray: true,
+  })
+  public paidResourceIds?: PaymentPlanPaidResourceId[];
 
   protected override readonly _type = UpdatePaymentPlanRequestDto.name;
 }

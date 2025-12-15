@@ -31,7 +31,12 @@ export class PaymentPlanTypeormQueryRepository
   public async listPaymentPlan(
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
-    const data = await this.list(listData);
+    const data = await this.list(listData, {
+      relations: [
+        'paymentPlanEnablePaidResource',
+        'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+      ],
+    });
 
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
@@ -54,6 +59,10 @@ export class PaymentPlanTypeormQueryRepository
         where: {
           id: id.toString(),
         },
+        relations: [
+          'paymentPlanEnablePaidResource',
+          'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+        ],
       },
       err,
     );
