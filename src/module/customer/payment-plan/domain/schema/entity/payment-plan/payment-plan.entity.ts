@@ -19,7 +19,7 @@ export class PaymentPlanEntity extends BaseEntity<PaymentPlanId> {
   public readonly maxMemberCount: number;
 
   @Description('Creditos mensais para organização')
-  public readonly mounthlyCreditAmount: number;
+  public readonly monthlyCreditAmount: number;
 
   @Description('Status do plano na plataforma')
   public readonly active: boolean;
@@ -36,8 +36,8 @@ export class PaymentPlanEntity extends BaseEntity<PaymentPlanId> {
     this.description = props.description;
     this.price = props.price;
     this.maxMemberCount = props.maxMemberCount;
-    this.mounthlyCreditAmount = props.monthlyCreditAmount;
+    this.monthlyCreditAmount = props.monthlyCreditAmount;
     this.active = props.active;
-    this.cycle = props.cycle;
+    this.cycle = props.cycle as PaymentPlanCycleEnum;
   }
 }

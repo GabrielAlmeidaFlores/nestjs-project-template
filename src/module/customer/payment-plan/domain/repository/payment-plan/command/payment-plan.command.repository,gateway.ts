@@ -8,4 +8,5 @@ export abstract class PaymentPlanCommandRepositoryGateway {
     id: PaymentPlanId,
     props: PaymentPlanEntity,
   ): TransactionType;
+  public abstract deletePaymentPlan(id: PaymentPlanId): TransactionType;
 }

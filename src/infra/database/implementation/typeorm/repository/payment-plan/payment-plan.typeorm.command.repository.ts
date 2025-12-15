@@ -47,4 +47,8 @@ export class PaymentPlanTypeormCommandRepository
 
     return this.update(id.toString(), mappedData);
   }
+
+  public deletePaymentPlan(id: PaymentPlanId): TransactionType {
+    return this.delete(id.toString());
+  }
 }

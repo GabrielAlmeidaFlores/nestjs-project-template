@@ -42,6 +42,7 @@ import { OrganizationPaymentPlanBankPaymentTypeormCommandRepository } from '@inf
 import { OrganizationPaymentPlanBankPaymentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.typeorm.query.repository';
 import { OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-enable-paid-resource/organization-payment-plan-enable-paid-resource.typeorm.command.repository';
 import { PaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.command.repository';
+import { PaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.query.repository';
 import { PaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource.typeorm.command.repository';
 import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
 import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
@@ -155,6 +156,7 @@ export class TypeormIndex {
     PaymentPlanPaidResourceTypeormQueryRepository,
     OrganizationPaymentPlanTypeormCommandRepository,
     PaymentPlanTypeormCommandRepository,
+    PaymentPlanTypeormQueryRepository,
     PaymentPlanEnablePaidResourceTypeormCommandRepository,
     OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository,
     BankPaymentTypeormCommandRepository,
