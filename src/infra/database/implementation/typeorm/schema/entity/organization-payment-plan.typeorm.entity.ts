@@ -13,7 +13,7 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'description', type: 'varchar', length: 100 })
   public description: string;
 
-  @Column({ name: 'price', type: 'decimal' })
+  @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
   public price: string;
 
   @Column({ name: 'maxMemberCount', type: 'integer' })
