@@ -3,10 +3,11 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { CreatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/create-payment-plan.request.dto';
 import { UpdatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan.request.dto';
-import { ListPaymentPlansResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plans.response.dto';
 import { GetPaymentPlanResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan.response.dto';
+import { ListPaymentPlansResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plans.response.dto';
 import { CreatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/create-payment-plan.use-case';
 import { DeletePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/delete-payment-plan.use-case';
+import { GetPaymentPlanUseCase } from '@module/admin/payment-plan/use-case/get-payment-plan.use-case';
 import { ListPaymentPlansUseCase } from '@module/admin/payment-plan/use-case/list-payment-plans.use-case';
 import { UpdatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/update-payment-plan.use-case';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -25,6 +26,7 @@ export class PaymentPlanController {
     private readonly createPaymentPlanUseCase: CreatePaymentPlanUseCase,
     private readonly updatePaymentPlanUseCase: UpdatePaymentPlanUseCase,
     private readonly deletePaymentPlanUseCase: DeletePaymentPlanUseCase,
+    private readonly getPaymentPlanUseCase: GetPaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
   ) {}
 
@@ -93,6 +95,28 @@ export class PaymentPlanController {
     paymentPlanId: PaymentPlanId,
   ): Promise<void> {
     await this.deletePaymentPlanUseCase.execute(paymentPlanId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Buscar plano de pagamento por ID',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: ':paymentPlanId',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Plano de pagamento encontrado com sucesso.',
+      type: GetPaymentPlanResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getPaymentPlan(
+    @Param('paymentPlanId', new ParseValueObjectPipe(PaymentPlanId))
+    paymentPlanId: PaymentPlanId,
+  ): Promise<GetPaymentPlanResponseDto> {
+    return await this.getPaymentPlanUseCase.execute(paymentPlanId);
   }
 
   @BuildEndpointSpecification({
