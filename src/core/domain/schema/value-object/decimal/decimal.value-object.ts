@@ -23,8 +23,11 @@ export class DecimalValue extends BaseValueObject<DecimalValue> {
   }
 
   public static normalize(value: string): string {
-    const withoutThousandsSeparator = value.replace(/\./g, '');
-    return withoutThousandsSeparator.replace(',', '.');
+    let normalized = value.replace(/\./g, '');
+
+    normalized = normalized.replace(',', '.');
+
+    return normalized;
   }
 
   public static isValid(value: string): boolean {
