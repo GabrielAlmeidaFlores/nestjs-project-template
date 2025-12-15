@@ -2,7 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationPaymentPlanEntityPropsInterface } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity.props.interface';
-import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value.object';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-type.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';

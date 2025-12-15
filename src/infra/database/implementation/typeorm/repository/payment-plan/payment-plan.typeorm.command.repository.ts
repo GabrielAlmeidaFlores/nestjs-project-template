@@ -8,7 +8,7 @@ import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
-import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value.object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 
 @Injectable()
 export class PaymentPlanTypeormCommandRepository
