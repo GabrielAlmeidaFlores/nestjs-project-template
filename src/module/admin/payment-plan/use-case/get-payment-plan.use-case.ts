@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 
 import { GetPaymentPlanResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan.response.dto';
+import { PaymentPlanEnabledPaidResourceItemResponseDto } from '@module/admin/payment-plan/dto/response/payment-plan-enabled-paid-resource-item.response.dto';
 import { PaymentPlanNotFoundError } from '@module/admin/payment-plan/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -31,6 +32,14 @@ export class GetPaymentPlanUseCase {
       monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
       active: paymentPlan.active,
       cycle: paymentPlan.cycle,
+      enabledPaidResources: paymentPlan.enabledPaidResources.map((resource) =>
+        PaymentPlanEnabledPaidResourceItemResponseDto.build({
+          id: resource.id,
+          resource: resource.resource,
+          creditCost: parseFloat(resource.creditCost),
+          description: resource.description,
+        }),
+      ),
       createdAt: paymentPlan.createdAt,
       updatedAt: paymentPlan.updatedAt,
     });

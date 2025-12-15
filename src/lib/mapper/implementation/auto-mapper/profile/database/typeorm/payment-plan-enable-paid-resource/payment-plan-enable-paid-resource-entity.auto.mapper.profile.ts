@@ -61,14 +61,14 @@ export class PaymentPlanEnablePaidResourceEntityAutoMapperProfile {
     ): PaymentPlanEnablePaidResourceTypeormEntity => {
       const paymentPlan = this.mapper.map(
         source.paymentPlan,
-        PaymentPlanEntity, // ORIGEM
-        PaymentPlanTypeormEntity, // DESTINO
+        PaymentPlanEntity,
+        PaymentPlanTypeormEntity,
       );
 
       const paymentPlanPaidResource = this.mapper.map(
         source.paymentPlanPaidResource,
-        PaymentPlanPaidResourceEntity, // ORIGEM
-        PaymentPlanPaidResourceTypeormEntity, // DESTINO
+        PaymentPlanPaidResourceEntity,
+        PaymentPlanPaidResourceTypeormEntity,
       );
 
       return PaymentPlanEnablePaidResourceTypeormEntity.build({
@@ -85,8 +85,8 @@ export class PaymentPlanEnablePaidResourceEntityAutoMapperProfile {
 
     createMap(
       this.mapper,
-      PaymentPlanEnablePaidResourceEntity, // ORIGEM
-      PaymentPlanEnablePaidResourceTypeormEntity, // DESTINO
+      PaymentPlanEnablePaidResourceEntity,
+      PaymentPlanEnablePaidResourceTypeormEntity,
       mappingFunction,
     );
   }
