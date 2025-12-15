@@ -4,7 +4,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
-import { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-type.enum';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Entity('organization_payment_plan')
 export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
@@ -27,7 +27,7 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   public active: boolean;
 
   @Column({ name: 'cycle', type: 'varchar', length: 100 })
-  public cycle: PaymentPlanCycleTypeEnum;
+  public cycle: PaymentPlanCycleEnum;
 
   @ManyToOne(
     () => PaymentPlanTypeormEntity,

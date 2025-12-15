@@ -3,7 +3,7 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import type { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import type { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
-import type { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-type.enum';
+import type { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 export interface OrganizationPaymentPlanEntityPropsInterface
   extends BaseEntityPropsInterface<OrganizationPaymentPlanId> {
@@ -13,7 +13,7 @@ export interface OrganizationPaymentPlanEntityPropsInterface
   maxMemberCount: number;
   monthlyCreditAmount: number;
   active: boolean;
-  cycle: PaymentPlanCycleTypeEnum;
+  cycle: PaymentPlanCycleEnum;
   organization?: OrganizationEntity | null;
   paymentPlan?: PaymentPlanEntity | null;
 }
