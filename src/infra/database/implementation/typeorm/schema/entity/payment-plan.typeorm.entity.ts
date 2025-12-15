@@ -21,8 +21,8 @@ export class PaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'maxMemberCount', type: 'integer' })
   public maxMemberCount: number;
 
-  @Column({ name: 'mounthlyCreditAmount', type: 'integer' })
-  public mounthlyCreditAmount: number;
+  @Column({ name: 'monthlyCreditAmount', type: 'integer' })
+  public monthlyCreditAmount: number;
 
   @Column({ name: 'active', type: 'boolean' })
   public active: boolean;
