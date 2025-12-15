@@ -23,9 +23,13 @@ export class DecimalValue extends BaseValueObject<DecimalValue> {
   }
 
   public static normalize(value: string): string {
-    let normalized = value.replace(/\./g, '');
+    let normalized = value.trim();
 
-    normalized = normalized.replace(',', '.');
+    if (normalized.includes(',')) {
+      normalized = normalized.replace(/\./g, '');
+
+      normalized = normalized.replace(',', '.');
+    }
 
     return normalized;
   }
