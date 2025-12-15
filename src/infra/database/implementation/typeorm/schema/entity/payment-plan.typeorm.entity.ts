@@ -1,6 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enable-paid-resource.typeorm.entity';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
@@ -16,7 +15,7 @@ export class PaymentPlanTypeormEntity extends BaseTypeormEntity {
   public description: string;
 
   @Column({ name: 'price', type: 'decimal' })
-  public price: DecimalValue;
+  public price: string;
 
   @Column({ name: 'maxMemberCount', type: 'integer' })
   public maxMemberCount: number;
