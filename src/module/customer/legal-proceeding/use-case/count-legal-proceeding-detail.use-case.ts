@@ -53,6 +53,8 @@ export class CountLegalProceedingDetailUseCase {
         proceeding.detail,
       ) as LegalProceedingDetailDataResponseDto;
 
+      total += detailObject.data.count;
+
       detailObject.data.items.forEach((item) => {
         if (item.status === LegalProceedingDetailItemStatusEnum.P) {
           inProgress++;
@@ -60,7 +62,6 @@ export class CountLegalProceedingDetailUseCase {
         if (item.status === LegalProceedingDetailItemStatusEnum.C) {
           concluded++;
         }
-        total++;
       });
     });
 
