@@ -2,6 +2,7 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
@@ -31,7 +32,7 @@ export class PaymentPlanEntityAutoMapperProfile {
         id: new PaymentPlanId(source.id),
         name: source.name,
         description: source.description,
-        price: source.price,
+        price: new DecimalValue(source.price),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         active: source.active,
@@ -58,7 +59,7 @@ export class PaymentPlanEntityAutoMapperProfile {
         id: source.id.toString(),
         name: source.name,
         description: source.description,
-        price: source.price,
+        price: source.price.toString(),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         active: source.active,
@@ -84,7 +85,7 @@ export class PaymentPlanEntityAutoMapperProfile {
       result.id = new PaymentPlanId(source.id);
       result.name = source.name;
       result.description = source.description;
-      result.price = source.price;
+      result.price = new DecimalValue(source.price);
       result.maxMemberCount = source.maxMemberCount;
       result.monthlyCreditAmount = source.monthlyCreditAmount;
       result.active = source.active;

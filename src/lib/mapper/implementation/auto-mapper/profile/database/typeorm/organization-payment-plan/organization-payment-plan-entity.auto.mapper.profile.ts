@@ -2,6 +2,7 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
@@ -38,6 +39,7 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
 
       return new OrganizationPaymentPlanEntity({
         ...source,
+        price: new DecimalValue(source.price),
         id: new OrganizationPaymentPlanId(source.id),
         organization: new OrganizationId(source.organization.id),
         paymentPlan: new PaymentPlanId(source.paymentPlan.id),
@@ -71,7 +73,7 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
         id: source.id.toString(),
         name: source.name,
         description: source.description,
-        price: source.price,
+        price: source.price.toString(),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         active: source.active,
