@@ -4,10 +4,12 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import { CreatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/create-payment-plan.request.dto';
 import { UpdatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan.request.dto';
 import { GetPaymentPlanResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan.response.dto';
+import { ListPaymentPlanPaidResourcesResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plans.response.dto';
 import { CreatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/create-payment-plan.use-case';
 import { DeletePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/delete-payment-plan.use-case';
 import { GetPaymentPlanUseCase } from '@module/admin/payment-plan/use-case/get-payment-plan.use-case';
+import { ListPaymentPlanPaidResourcesUseCase } from '@module/admin/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/admin/payment-plan/use-case/list-payment-plans.use-case';
 import { UpdatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/update-payment-plan.use-case';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -28,6 +30,7 @@ export class PaymentPlanController {
     private readonly deletePaymentPlanUseCase: DeletePaymentPlanUseCase,
     private readonly getPaymentPlanUseCase: GetPaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
+    private readonly listPaymentPlanPaidResourcesUseCase: ListPaymentPlanPaidResourcesUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -138,6 +141,29 @@ export class PaymentPlanController {
     @Query() dto: ListDataRequestDto,
   ): Promise<ListPaymentPlansResponseDto> {
     return await this.listPaymentPlansUseCase.execute(
+      new ListDataInputModel(dto),
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar recursos pagos disponíveis',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'paid-resources',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de recursos pagos disponíveis.',
+      type: ListPaymentPlanPaidResourcesResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listPaymentPlanPaidResources(
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
+    return await this.listPaymentPlanPaidResourcesUseCase.execute(
       new ListDataInputModel(dto),
     );
   }

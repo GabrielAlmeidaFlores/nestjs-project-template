@@ -1,6 +1,5 @@
 import { Inject } from '@nestjs/common';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/command/payment-plan-paid-resource.command.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
@@ -56,46 +55,21 @@ export class PaymentPlanPaidResourceSeeder implements SeederInterface {
   public async execute(): Promise<Array<TransactionType>> {
     const transactions: Array<TransactionType> = [];
 
-    const listData = new ListDataInputModel({
-      page: 1,
-      limit: 10,
-      sortField: null,
-      field: null,
-      search: null,
-    });
-
-    const existingList =
-      await this.paymentPlanPaidResourceQueryRepositoryGateway.listPaymentPlanPaidResource(
-        listData,
-      );
-
     for (const resourceData of PAYMENT_PLAN_PAID_RESOURCE_SEED) {
-      const existing = existingList.resource.find(
-        (item) => item.resource === resourceData.resource,
-      );
-
-      if (!existing) {
-        const entity = new PaymentPlanPaidResourceEntity(resourceData);
-
-        transactions.push(
-          this.paymentPlanPaidResourceCommandRepositoryGateway.createPaymentPlanPaidResource(
-            entity,
-          ),
+      const existing =
+        await this.paymentPlanPaidResourceQueryRepositoryGateway.findOnePaymentPlanPaidResourceByResourceType(
+          resourceData.resource,
         );
 
+      if (existing) {
         continue;
       }
 
-      const update = new PaymentPlanPaidResourceEntity({
-        ...existing,
-        ...resourceData,
-        id: existing.id,
-      });
+      const entity = new PaymentPlanPaidResourceEntity(resourceData);
 
       transactions.push(
-        this.paymentPlanPaidResourceCommandRepositoryGateway.updatePaymentPlanPaidResource(
-          existing.id,
-          update,
+        this.paymentPlanPaidResourceCommandRepositoryGateway.createPaymentPlanPaidResource(
+          entity,
         ),
       );
     }

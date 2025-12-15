@@ -3,7 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.results';
 import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
@@ -19,6 +19,7 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
+    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -27,7 +28,7 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
     ): PaymentPlanPaidResourceEntity => {
       return new PaymentPlanPaidResourceEntity({
         id: new PaymentPlanPaidResourceId(source.id),
-        resource: source.resource as PaymentPlanPaidResourceTypeEnum,
+        resource: source.resource,
         creditCost: source.creditCost,
         description: source.description,
         createdAt: source.createdAt,
@@ -63,6 +64,28 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
       this.mapper,
       PaymentPlanPaidResourceEntity,
       PaymentPlanPaidResourceTypeormEntity,
+      mappingFunction,
+    );
+  }
+
+  private mapOrmEntityToQueryResult(): void {
+    const convertOrmEntityToQueryResult = (
+      source: PaymentPlanPaidResourceTypeormEntity,
+    ): GetPaymentPlanPaidResourceQueryResult => {
+      return GetPaymentPlanPaidResourceQueryResult.build({
+        id: new PaymentPlanPaidResourceId(source.id),
+        resource: source.resource,
+        creditCost: source.creditCost.toString(),
+        description: source.description,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
+
+    createMap(
+      this.mapper,
+      PaymentPlanPaidResourceTypeormEntity,
+      GetPaymentPlanPaidResourceQueryResult,
       mappingFunction,
     );
   }

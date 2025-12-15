@@ -11,6 +11,7 @@ import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementa
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.results';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
 @Injectable()
@@ -26,6 +27,27 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+  public async findOnePaymentPlanPaidResourceByResourceType(
+    resource: PaymentPlanPaidResourceTypeEnum,
+  ): Promise<GetPaymentPlanPaidResourceQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        resource,
+      },
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      PaymentPlanPaidResourceTypeormEntity,
+      GetPaymentPlanPaidResourceQueryResult,
+    );
+
+    return mappedData;
   }
 
   public async listPaymentPlanPaidResource(
