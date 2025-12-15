@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanEntityPropsInterface } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan-entity.props.interface';
-import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value.object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanCycleTypeEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-type.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
