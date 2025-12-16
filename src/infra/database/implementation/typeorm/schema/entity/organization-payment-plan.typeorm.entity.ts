@@ -10,7 +10,7 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
 
-  @Column({ name: 'description', type: 'varchar', length: 100 })
+  @Column({ name: 'description', type: 'varchar', length: 255 })
   public description: string;
 
   @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
@@ -27,6 +27,9 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
 
   @Column({ name: 'cycle', type: 'varchar', length: 100 })
   public cycle: PaymentPlanCycleEnum;
+
+  @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
+  public bankExternalId: string;
 
   @ManyToOne(
     () => PaymentPlanTypeormEntity,

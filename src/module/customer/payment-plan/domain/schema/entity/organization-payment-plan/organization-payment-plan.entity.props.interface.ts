@@ -13,6 +13,7 @@ export interface OrganizationPaymentPlanEntityPropsInterface
   maxMemberCount: number;
   monthlyCreditAmount: number;
   active: boolean;
+  bankExternalId: string;
   cycle: PaymentPlanCycleEnum;
   organization: OrganizationId;
   paymentPlan: PaymentPlanId;

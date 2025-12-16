@@ -14,7 +14,6 @@ export class GetBankPaymentQueryResult extends BaseBuildableObject {
   public readonly dueDate: Date;
   public readonly paymentDate: Date | null;
   public readonly installmentNumber: number | null;
-  public readonly pixQrCode: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 

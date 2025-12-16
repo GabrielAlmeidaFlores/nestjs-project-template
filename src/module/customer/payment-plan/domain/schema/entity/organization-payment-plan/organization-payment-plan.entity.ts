@@ -26,6 +26,9 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   @Description('Status do plano na plataforma')
   public readonly active: boolean;
 
+  @Description('ID externo do pagamento no banco')
+  public readonly bankExternalId: string;
+
   @Description('Tipo de assinatura contratada pelo cliente')
   public readonly cycle: PaymentPlanCycleEnum;
 
@@ -49,5 +52,6 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
     this.cycle = props.cycle;
     this.organization = props.organization;
     this.paymentPlan = props.paymentPlan;
+    this.bankExternalId = props.bankExternalId;
   }
 }

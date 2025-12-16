@@ -4,6 +4,7 @@ import { SeedService } from '@cli/seed/seed.service';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { PaymentPlanPaidResourceSeeder } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
+import { PaymentPlanSeeder } from '@cli/seed/seeder/payment-plan.seeder';
 import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { DatabaseModule } from '@infra/database/database.module';
     AdminSeeder,
     CustomerTermsSeeder,
     PaymentPlanPaidResourceSeeder,
+    PaymentPlanSeeder,
     Logger,
   ],
 })

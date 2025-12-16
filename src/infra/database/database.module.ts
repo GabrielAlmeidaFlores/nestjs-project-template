@@ -48,6 +48,7 @@ import { OrganizationPaymentPlanEnablePaidResourceTypeormCommandRepository } fro
 import { PaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.command.repository';
 import { PaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.query.repository';
 import { PaymentPlanEnablePaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource.typeorm.command.repository';
+import { PaymentPlanEnablePaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource.typeorm.query.repository';
 import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
 import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
 import { PaymentPlanPaidResourceIaConfigTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.typeorm.command.repository';
@@ -96,6 +97,7 @@ import { OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway } fro
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/command/payment-plan-enable-paid-resource.command.repository.gateway';
+import { PaymentPlanEnablePaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/query/payment-plan-enable-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/command/payment-plan-paid-resource.command.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
@@ -284,6 +286,10 @@ const classProvider: ClassProvider[] = [
   {
     provide: PaymentPlanEnablePaidResourceCommandRepositoryGateway,
     useClass: PaymentPlanEnablePaidResourceTypeormCommandRepository,
+  },
+  {
+    provide: PaymentPlanEnablePaidResourceQueryRepositoryGateway,
+    useClass: PaymentPlanEnablePaidResourceTypeormQueryRepository,
   },
   {
     provide: OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway,
