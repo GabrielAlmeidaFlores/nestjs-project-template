@@ -102,6 +102,16 @@ export class GetRetirementPlanningRppsUseCase {
       ...analysisToolRecordQueryResult.analysisToolClient,
     });
 
+    const legalProceedingNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding.map(
+        (entity) => entity.legalProceeding,
+      );
+
+    const inssBenefitNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit.map(
+        (entity) => entity.inssBenefitNumber,
+      );
+
     const response = GetRetirementPlanningRppsResponseDto.build({
       id: retirementPlanningRppsQueryResult.id,
       careerStartDate: retirementPlanningRppsQueryResult.careerStartDate,
@@ -110,6 +120,8 @@ export class GetRetirementPlanningRppsUseCase {
       createdAt: retirementPlanningRppsQueryResult.createdAt,
       updatedAt: retirementPlanningRppsQueryResult.updatedAt,
       analysisToolClient,
+      legalProceedingNumber,
+      inssBenefitNumber,
       retirementPlanningRppsResult:
         retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
           ? GetRetirementPlanningRppsResultResponseDto.build({

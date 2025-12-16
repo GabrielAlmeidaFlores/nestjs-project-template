@@ -175,6 +175,12 @@ export class GetRetirementPlanningRppsResponseDto extends BaseBuildableDtoObject
   @ResponseDtoDateProperty()
   public updatedAt: Date;
 
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
   @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto, {
     required: false,
   })
