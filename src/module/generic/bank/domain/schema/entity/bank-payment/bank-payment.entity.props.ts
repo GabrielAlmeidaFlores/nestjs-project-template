@@ -13,5 +13,4 @@ export interface BankPaymentEntityPropsInterface
   dueDate: Date;
   paymentDate?: Date | null;
   installmentNumber?: number | null;
-  pixQrCode?: string | null;
 }

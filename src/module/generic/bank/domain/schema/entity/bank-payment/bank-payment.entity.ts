@@ -29,9 +29,6 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
   @Description('Número da parcela, se aplicável')
   public readonly installmentNumber: number | null;
 
-  @Description('Código QR do Pix, se aplicável')
-  public readonly pixQrCode: string | null;
-
   protected readonly _type = BankPaymentEntity.name;
 
   public constructor(props: BankPaymentEntityPropsInterface) {
@@ -44,6 +41,5 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
     this.dueDate = props.dueDate;
     this.paymentDate = props.paymentDate ?? null;
     this.installmentNumber = props.installmentNumber ?? null;
-    this.pixQrCode = props.pixQrCode ?? null;
   }
 }

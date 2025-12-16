@@ -13,7 +13,6 @@ import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/e
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanEnablePaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity';
 import { PaymentPlanEnablePaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/value-object/payment-plan-enable-paid-resource-id/payment-plan-enable-paid-resource-id.value-object';
-import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
 
 export class UpdatePaymentPlanUseCase {
   protected readonly _type = UpdatePaymentPlanUseCase.name;
@@ -79,10 +78,8 @@ export class UpdatePaymentPlanUseCase {
         const paymentPlanEnablePaidResource =
           new PaymentPlanEnablePaidResourceEntity({
             id: new PaymentPlanEnablePaidResourceId(),
-            paymentPlan: updatedPaymentPlan,
-            paymentPlanPaidResource: {
-              id: paidResourceId,
-            } as PaymentPlanPaidResourceEntity,
+            paymentPlan: updatedPaymentPlan.id,
+            paymentPlanPaidResource: paidResourceId,
             createdAt: now,
             updatedAt: now,
           });

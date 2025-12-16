@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
-import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanEnablePaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity';
-import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
+import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
 @Injectable()
 export class PaymentPlanEnablePaidResourceEntityAutoMapperProfile {
@@ -27,21 +27,11 @@ export class PaymentPlanEnablePaidResourceEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: PaymentPlanEnablePaidResourceTypeormEntity,
     ): PaymentPlanEnablePaidResourceEntity => {
-      const paymentPlan = this.mapper.map(
-        source.paymentPlan,
-        PaymentPlanTypeormEntity,
-        PaymentPlanEntity,
-      );
-
-      const paymentPlanPaidResource = this.mapper.map(
-        source.paymentPlanPaidResource,
-        PaymentPlanPaidResourceTypeormEntity,
-        PaymentPlanPaidResourceEntity,
-      );
-
       return new PaymentPlanEnablePaidResourceEntity({
-        paymentPlan,
-        paymentPlanPaidResource,
+        paymentPlan: new PaymentPlanId(source.paymentPlan?.id),
+        paymentPlanPaidResource: new PaymentPlanPaidResourceId(
+          source.paymentPlanPaidResource?.id,
+        ),
       });
     };
 
@@ -59,17 +49,13 @@ export class PaymentPlanEnablePaidResourceEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: PaymentPlanEnablePaidResourceEntity,
     ): PaymentPlanEnablePaidResourceTypeormEntity => {
-      const paymentPlan = this.mapper.map(
-        source.paymentPlan,
-        PaymentPlanEntity,
-        PaymentPlanTypeormEntity,
-      );
+      const paymentPlan = {
+        id: source.paymentPlan.toString(),
+      } as PaymentPlanTypeormEntity;
 
-      const paymentPlanPaidResource = this.mapper.map(
-        source.paymentPlanPaidResource,
-        PaymentPlanPaidResourceEntity,
-        PaymentPlanPaidResourceTypeormEntity,
-      );
+      const paymentPlanPaidResource = {
+        id: source.paymentPlanPaidResource.toString(),
+      } as PaymentPlanPaidResourceTypeormEntity;
 
       return PaymentPlanEnablePaidResourceTypeormEntity.build({
         id: source.id.toString(),

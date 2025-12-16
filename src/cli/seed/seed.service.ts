@@ -4,6 +4,7 @@ import { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { PaymentPlanPaidResourceSeeder } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
+import { PaymentPlanSeeder } from '@cli/seed/seeder/payment-plan.seeder';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
@@ -18,6 +19,7 @@ export class SeedService {
     private readonly adminSeeder: AdminSeeder,
     private readonly customerTermsSeeder: CustomerTermsSeeder,
     private readonly paymentPlanPaidResourceSeeder: PaymentPlanPaidResourceSeeder,
+    private readonly paymentPlanSeeder: PaymentPlanSeeder,
   ) {}
 
   public async seed(): Promise<void> {
@@ -25,22 +27,21 @@ export class SeedService {
       this.adminSeeder,
       this.customerTermsSeeder,
       this.paymentPlanPaidResourceSeeder,
+      this.paymentPlanSeeder,
     ];
 
     const transactions: Array<TransactionType> = [];
 
-    await Promise.all(
-      seeders.map(async (seeder) => {
-        const seederTransactions = await seeder.execute();
+    for (const seeder of seeders) {
+      const seederTransactions = await seeder.execute();
 
-        this.logger.log(
-          `transactions to be executed: ${seederTransactions.length}`,
-          seeder.constructor.name,
-        );
+      this.logger.log(
+        `transactions to be executed: ${seederTransactions.length}`,
+        seeder.constructor.name,
+      );
 
-        transactions.push(...seederTransactions);
-      }),
-    );
+      transactions.push(...seederTransactions);
+    }
 
     const transaction =
       await this.baseTransactionRepositoryGateway.execute(transactions);

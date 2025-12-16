@@ -40,8 +40,6 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'installment_number', type: 'int', nullable: true })
   public installmentNumber: number | null;
 
-  @Column({ name: 'pix_qr_code', type: 'text', nullable: true })
-  public pixQrCode: string | null;
 
   protected override readonly _type = BankPaymentTypeormEntity.name;
 }
