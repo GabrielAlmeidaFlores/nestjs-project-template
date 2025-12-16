@@ -132,6 +132,7 @@ describe(DownloadLegalPleadingSimplifiedAnalysisUseCase.name, () => {
         customer: GetCustomerQueryResult.build({
           id: new CustomerId(),
           name: 'Test Customer',
+          bankExternalId: 'mock-bank-external-id',
           profilePicture: null,
           createdAt: new Date(),
           updatedAt: new Date(),
