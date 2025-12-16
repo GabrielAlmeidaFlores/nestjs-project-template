@@ -37,7 +37,7 @@ export class BankPaymentTypeormCommandRepository
 
   public updateBankPayment(
     id: BankPaymentId,
-    props: Partial<BankPaymentEntity>,
+    props: BankPaymentEntity,
   ): TransactionType {
     const mappedData = this.mapperGateway.map(
       props,

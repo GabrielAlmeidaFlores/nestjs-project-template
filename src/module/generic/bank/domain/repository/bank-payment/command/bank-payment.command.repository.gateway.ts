@@ -7,7 +7,7 @@ export abstract class BankPaymentCommandRepositoryGateway {
 
   public abstract updateBankPayment(
     id: BankPaymentId,
-    props: Partial<BankPaymentEntity>,
+    props: BankPaymentEntity,
   ): TransactionType;
 
   public abstract deleteBankPayment(id: BankPaymentId): TransactionType;
