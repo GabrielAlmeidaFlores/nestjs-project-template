@@ -1,8 +1,10 @@
 import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
 
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
+import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { SubscribePaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-payment-plan.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -22,6 +24,7 @@ export class PaymentPlanController {
   public constructor(
     private readonly subscribePaymentPlanUseCase: SubscribePaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
+    private readonly cancelPaymentPlanUseCase: CancelPaymentPlanUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -68,5 +71,27 @@ export class PaymentPlanController {
       sessionData,
       body,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Cancelar assinatura',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'cancel',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['payment-plan'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Assinatura(s) cancelada(s) com sucesso.',
+      type: CancelPaymentPlanResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async cancel(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<CancelPaymentPlanResponseDto> {
+    return this.cancelPaymentPlanUseCase.execute(organizationSessionData);
   }
 }
