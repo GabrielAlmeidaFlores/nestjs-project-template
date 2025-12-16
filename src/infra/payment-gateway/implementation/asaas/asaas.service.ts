@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosRequestConfig } from 'axios';
 
+import { PaymentNotApprovedError } from '@infra/payment-gateway/error/payment-not-approved.error';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
@@ -56,6 +57,10 @@ export class AsaasService extends PaymentGateway {
     });
   }
 
+  public async cancelSubscription(subscriptionId: string): Promise<void> {
+    await this.makeRequest(`subscriptions/${subscriptionId}`, 'delete');
+  }
+
   public async createSubscription(
     props: CreateSubscriptionInputModel,
   ): Promise<CreateSubscriptionOutputModel> {
@@ -88,20 +93,31 @@ export class AsaasService extends PaymentGateway {
       },
     };
 
-    const subscription = await this.makeRequest<
-      {
-        customer: string;
-        value: number;
-        nextDueDate: Date;
-        cycle: string;
-        description: string;
-      },
-      { id: string }
-    >('subscriptions', 'post', data);
+    try {
+      const subscription = await this.makeRequest<
+        {
+          customer: string;
+          value: number;
+          nextDueDate: Date;
+          cycle: string;
+          description: string;
+        },
+        { id: string }
+      >('subscriptions', 'post', data);
 
-    return CreateSubscriptionOutputModel.build({
-      id: subscription.id,
-    });
+      return CreateSubscriptionOutputModel.build({
+        id: subscription.id,
+      });
+    } catch (error) {
+      if (
+        error instanceof AxiosError &&
+        error.status?.toString().startsWith('4') === true
+      ) {
+        throw new PaymentNotApprovedError();
+      }
+
+      throw error;
+    }
   }
 
   private async makeRequest<RequestBody, ResponseBody>(

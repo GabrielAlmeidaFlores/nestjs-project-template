@@ -8,6 +8,7 @@ import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementa
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 
 @Injectable()
 export class OrganizationPaymentPlanTypeormCommandRepository
@@ -35,5 +36,11 @@ export class OrganizationPaymentPlanTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public deleteOrganizationPaymentPlan(
+    id: OrganizationPaymentPlanId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

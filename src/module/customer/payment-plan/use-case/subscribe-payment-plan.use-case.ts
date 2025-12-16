@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AxiosError } from 'axios';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -11,12 +10,12 @@ import {
   CreditCardInfoInputModel,
   CreateSubscriptionInputModel,
 } from '@infra/payment-gateway/model/input/create-subscription.input.model';
-import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
+import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enable-paid-resource/command/organization-payment-plan-enable-paid-resource.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
@@ -26,7 +25,6 @@ import { OrganizationPaymentPlanEnablePaidResourceEntity } from '@module/custome
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
-import { PaymentNotApprovedError } from '@module/customer/payment-plan/error/payment-not-approved.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -41,6 +39,8 @@ export class SubscribePaymentPlanUseCase {
     private readonly paymentPlanEnablePaidResourceQueryRepository: PaymentPlanEnablePaidResourceQueryRepositoryGateway,
     @Inject(OrganizationPaymentPlanCommandRepositoryGateway)
     private readonly organizationPaymentPlanCommandRepository: OrganizationPaymentPlanCommandRepositoryGateway,
+    @Inject(OrganizationPaymentPlanQueryRepositoryGateway)
+    private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
     @Inject(OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway)
     private readonly organizationPaymentPlanEnablePaidResourceCommandRepository: OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway,
     @Inject(PaymentGateway)
@@ -57,6 +57,27 @@ export class SubscribePaymentPlanUseCase {
     dto: SubscribePaymentPlanRequestDto,
   ): Promise<SubscribePaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
+
+    const existingSubscriptions =
+      await this.organizationPaymentPlanQueryRepository.findManyByOrganizationId(
+        new OrganizationId(organizationId),
+      );
+
+    for (const subscription of existingSubscriptions) {
+      await this.paymentGateway.cancelSubscription(subscription.bankExternalId);
+    }
+
+    const deleteTransactions = existingSubscriptions.map((subscription) =>
+      this.organizationPaymentPlanCommandRepository.deleteOrganizationPaymentPlan(
+        subscription.id,
+      ),
+    );
+
+    if (deleteTransactions.length > 0) {
+      const deleteTransaction =
+        await this.baseTransactionRepositoryGateway.execute(deleteTransactions);
+      await deleteTransaction.commit();
+    }
 
     const customer =
       await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
@@ -88,7 +109,7 @@ export class SubscribePaymentPlanUseCase {
       ),
       postalCode: new PostalCode(dto.creditCardHolderInfo.postalCode),
       addressNumber: dto.creditCardHolderInfo.addressNumber,
-      phone: new PhoneNumber(dto.creditCardHolderInfo.phone),
+      phone: new PhoneNumber(dto.creditCardHolderInfo.phoneNumber),
     });
 
     const subscriptionInput = CreateSubscriptionInputModel.build({
@@ -102,18 +123,8 @@ export class SubscribePaymentPlanUseCase {
       externalReference: `payment-plan-id:${paymentPlan.id.toString()}`,
     });
 
-    let bankSubscription: CreateSubscriptionOutputModel;
-
-    try {
-      bankSubscription =
-        await this.paymentGateway.createSubscription(subscriptionInput);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        throw new PaymentNotApprovedError();
-      }
-
-      throw error;
-    }
+    const bankSubscription =
+      await this.paymentGateway.createSubscription(subscriptionInput);
 
     const paymentPlanEnabledResources =
       await this.paymentPlanEnablePaidResourceQueryRepository.findManyByPaymentPlanId(
@@ -127,7 +138,6 @@ export class SubscribePaymentPlanUseCase {
       price: paymentPlan.price,
       maxMemberCount: paymentPlan.maxMemberCount,
       monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-      active: true,
       cycle: paymentPlan.cycle,
       organization: new OrganizationId(organizationId),
       paymentPlan: paymentPlan.id,
