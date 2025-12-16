@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { AxiosError } from 'axios';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -10,6 +11,7 @@ import {
   CreditCardInfoInputModel,
   CreateSubscriptionInputModel,
 } from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
@@ -24,6 +26,7 @@ import { OrganizationPaymentPlanEnablePaidResourceEntity } from '@module/custome
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { PaymentNotApprovedError } from '@module/customer/payment-plan/error/payment-not-approved.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -99,8 +102,18 @@ export class SubscribePaymentPlanUseCase {
       externalReference: `payment-plan-id:${paymentPlan.id.toString()}`,
     });
 
-    const subscription =
-      await this.paymentGateway.createSubscription(subscriptionInput);
+    let bankSubscription: CreateSubscriptionOutputModel;
+
+    try {
+      bankSubscription =
+        await this.paymentGateway.createSubscription(subscriptionInput);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new PaymentNotApprovedError();
+      }
+
+      throw error;
+    }
 
     const paymentPlanEnabledResources =
       await this.paymentPlanEnablePaidResourceQueryRepository.findManyByPaymentPlanId(
@@ -108,7 +121,7 @@ export class SubscribePaymentPlanUseCase {
       );
 
     const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-      bankExternalId: subscription.id,
+      bankExternalId: bankSubscription.id,
       name: paymentPlan.name,
       description: paymentPlan.description,
       price: paymentPlan.price,
@@ -145,8 +158,10 @@ export class SubscribePaymentPlanUseCase {
 
     await transaction.commit();
 
-    return SubscribePaymentPlanResponseDto.build({
-      subscriptionId: subscription.id,
+    const response = SubscribePaymentPlanResponseDto.build({
+      organizationPaymentPlanId: organizationPaymentPlan.id,
     });
+
+    return response;
   }
 }

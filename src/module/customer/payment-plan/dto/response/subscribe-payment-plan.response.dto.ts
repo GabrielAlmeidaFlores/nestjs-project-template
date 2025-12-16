@@ -1,11 +1,12 @@
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class SubscribePaymentPlanResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public subscriptionId: string;
+  @ResponseDtoValueObjectProperty(OrganizationPaymentPlanId)
+  public organizationPaymentPlanId: OrganizationPaymentPlanId;
 
   protected override readonly _type = SubscribePaymentPlanResponseDto.name;
 }

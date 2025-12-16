@@ -2,12 +2,12 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosRequestConfig } from 'axios';
 
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
 import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { PaymentGatewayApplicationVariable } from '@shared/system/constant/application-variable/source/payment-gateway.application-variable';
 
 @Injectable()
@@ -69,6 +69,7 @@ export class AsaasService extends PaymentGateway {
       nextDueDate: props.nextDueDate,
       cycle: cycleMap[props.cycle],
       description: props.description,
+      billingType: 'UNDEFINED',
       externalReference: props.externalReference,
       creditCard: {
         holderName: props.creditCardInfo.holderName,
