@@ -7,9 +7,11 @@ import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementa
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
 export class OrganizationPaymentPlanEntityAutoMapperProfile {
@@ -23,6 +25,7 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToMapOrmEntity();
+    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -76,7 +79,6 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
         price: source.price.toString(),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
-        active: source.active,
         cycle: source.cycle,
         organization,
         paymentPlan,
@@ -89,6 +91,34 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
       this.mapper,
       OrganizationPaymentPlanEntity,
       OrganizationPaymentPlanTypeormEntity,
+      mappingFunction,
+    );
+  }
+
+  private mapOrmEntityToQueryResult(): void {
+    const convertOrmEntityToQueryResult = (
+      source: OrganizationPaymentPlanTypeormEntity,
+    ): GetOrganizationPaymentPlanQueryResult => {
+      const result = new GetOrganizationPaymentPlanQueryResult();
+      result.id = new OrganizationPaymentPlanId(source.id);
+      result.bankExternalId = source.bankExternalId;
+      result.name = source.name;
+      result.description = source.description;
+      result.price = new DecimalValue(source.price);
+      result.maxMemberCount = source.maxMemberCount;
+      result.monthlyCreditAmount = source.monthlyCreditAmount;
+      result.cycle = source.cycle as PaymentPlanCycleEnum;
+      result.createdAt = source.createdAt;
+      result.updatedAt = source.updatedAt;
+      return result;
+    };
+
+    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
+
+    createMap(
+      this.mapper,
+      OrganizationPaymentPlanTypeormEntity,
+      GetOrganizationPaymentPlanQueryResult,
       mappingFunction,
     );
   }

@@ -40,6 +40,5 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'installment_number', type: 'int', nullable: true })
   public installmentNumber: number | null;
 
-
   protected override readonly _type = BankPaymentTypeormEntity.name;
 }

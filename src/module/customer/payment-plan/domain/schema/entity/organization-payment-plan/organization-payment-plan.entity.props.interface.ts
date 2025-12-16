@@ -12,7 +12,6 @@ export interface OrganizationPaymentPlanEntityPropsInterface
   price: DecimalValue;
   maxMemberCount: number;
   monthlyCreditAmount: number;
-  active: boolean;
   bankExternalId: string;
   cycle: PaymentPlanCycleEnum;
   organization: OrganizationId;

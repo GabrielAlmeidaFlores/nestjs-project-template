@@ -22,9 +22,6 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'monthlyCreditAmount', type: 'integer' })
   public monthlyCreditAmount: number;
 
-  @Column({ name: 'active', type: 'boolean' })
-  public active: boolean;
-
   @Column({ name: 'cycle', type: 'varchar', length: 100 })
   public cycle: PaymentPlanCycleEnum;
 

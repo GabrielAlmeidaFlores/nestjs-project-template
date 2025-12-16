@@ -41,7 +41,7 @@ export class CreditCardHolderInfoRequestDto extends BaseBuildableDtoObject {
   public addressNumber: string;
 
   @RequestDtoStringProperty()
-  public phone: string;
+  public phoneNumber: string;
 
   protected override readonly _type = CreditCardHolderInfoRequestDto.name;
 }

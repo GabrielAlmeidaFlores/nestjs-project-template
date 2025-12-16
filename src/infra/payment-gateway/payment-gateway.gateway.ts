@@ -8,6 +8,8 @@ export abstract class PaymentGateway {
     props: CreateSubscriptionInputModel,
   ): Promise<CreateSubscriptionOutputModel>;
 
+  public abstract cancelSubscription(subscriptionId: string): Promise<void>;
+
   public abstract createCustomer(
     props: CreateCustomerInputModel,
   ): Promise<CreateCustomerOutputModel>;
