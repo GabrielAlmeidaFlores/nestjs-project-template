@@ -15,6 +15,7 @@ import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/en
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
+import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
 import { CreateRetirementPlanningRgpsRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
@@ -27,6 +28,7 @@ import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-document-analysis.response.dto';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
+import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
 import { CreateRetirementPlanningRgpsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
@@ -48,6 +50,7 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps';
+import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
@@ -104,6 +107,7 @@ export class AnalysisToolController {
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly createRetirementPlanningRgpsUseCase: CreateRetirementPlanningRgpsUseCase,
+    private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -812,5 +816,33 @@ export class AnalysisToolController {
       organizationSessionData,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Adicionar documento CNIS ao planejamento previdenciário para o regime geral de previdência social (RGPS)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps-cnis',
+      method: RequestMethod.POST,
+      type: CreateRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Planejamento previdenciário para o regime RGPS com CNIS criado com sucesso.',
+      type: CreateRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createSocialSecurityPlanningCnis(
+    // @GetSessionData() sessionData: SessionDataModel,
+    // @GetOrganizationSessionData()
+    // organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: CreateRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<CreateRetirementPlanningRgpsCnisResponseDto> {
+    return await this.createRetirementPlanningRgpsCnisUseCase.execute(dto);
   }
 }
