@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
-import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
+import {
+  ListPaymentPlansResponseDto,
+  PaymentPlanPaidResourceDto,
+} from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
 
 @Injectable()
 export class ListPaymentPlansUseCase {
@@ -31,6 +34,14 @@ export class ListPaymentPlansUseCase {
         monthlyCreditAmount: plan.monthlyCreditAmount,
         active: plan.active,
         cycle: plan.cycle,
+        paidResources: plan.enabledPaidResources.map((resource) =>
+          PaymentPlanPaidResourceDto.build({
+            id: resource.id.toString(),
+            resource: resource.resource,
+            creditCost: resource.creditCost,
+            description: resource.description,
+          }),
+        ),
       });
     });
   }
