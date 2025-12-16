@@ -4,6 +4,6 @@ export class AdminNotFoundError extends NotFoundError {
   protected override readonly _type = AdminNotFoundError.name;
 
   public constructor() {
-    super('Admin nao encontrado');
+    super('O administrador não foi encontrado');
   }
 }
