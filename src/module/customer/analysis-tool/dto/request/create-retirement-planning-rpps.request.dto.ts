@@ -5,30 +5,28 @@ import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/an
 import { RetirementPlanningDisabilityCategoryEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-category.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
+import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
-import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
-import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-import { FileModel } from '@shared/system/model/generic/file.model';
 
-// @RequestDto()
-// export class CreateRetirementPlanningRppsPeriodDocumentRequestDto extends BaseBuildableDtoObject {
-//   @RequestDtoEnumProperty(RetirementPlanningDocumentTypeEnum, {
-//     required: true,
-//   })
-//   public readonly type: RetirementPlanningDocumentTypeEnum;
+@RequestDto()
+export class CreateRetirementPlanningRppsPeriodDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(RetirementPlanningDocumentTypeEnum, {
+    required: true,
+  })
+  public readonly type: RetirementPlanningDocumentTypeEnum;
 
-//   @RequestDtoFileProperty({
-//     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-//     required: true,
-//   })
-//   public readonly document: string;
-// }
+  @RequestDtoStringProperty({ required: true })
+  public readonly document: string;
+
+  protected override readonly _type =
+    CreateRetirementPlanningRppsPeriodDocumentRequestDto.name;
+}
 
 @RequestDto()
 export class CreateRetirementPlanningRppsPeriodDisabilityRequestDto extends BaseBuildableDtoObject {
@@ -62,6 +60,15 @@ export class CreateRetirementPlanningRppsPeriodDisabilityRequestDto extends Base
   @RequestDtoValueObjectProperty(CidTenId, { required: true })
   public readonly cidTenId: CidTenId;
 
+  @RequestDtoObjectProperty(
+    () => CreateRetirementPlanningRppsPeriodDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public readonly documents?: CreateRetirementPlanningRppsPeriodDocumentRequestDto[];
+
   protected override readonly _type =
     CreateRetirementPlanningRppsPeriodDisabilityRequestDto.name;
 }
@@ -78,6 +85,15 @@ export class CreateRetirementPlanningRppsPeriodSpecialTimeRequestDto extends Bas
 
   @RequestDtoDateProperty({ required: true })
   public readonly endDate: Date;
+
+  @RequestDtoObjectProperty(
+    () => CreateRetirementPlanningRppsPeriodDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public readonly documents?: CreateRetirementPlanningRppsPeriodDocumentRequestDto[];
 
   protected override readonly _type =
     CreateRetirementPlanningRppsPeriodSpecialTimeRequestDto.name;
@@ -135,6 +151,20 @@ export class CreateRetirementPlanningRppsPeriodRequestDto extends BaseBuildableD
 }
 
 @RequestDto()
+export class CreateRetirementPlanningRppsDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(RetirementPlanningDocumentTypeEnum, {
+    required: false,
+  })
+  public readonly type?: RetirementPlanningDocumentTypeEnum;
+
+  @RequestDtoStringProperty({ required: true })
+  public readonly document: string;
+
+  protected override readonly _type =
+    CreateRetirementPlanningRppsDocumentRequestDto.name;
+}
+
+@RequestDto()
 export class CreateRetirementPlanningRppsJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: true })
   public readonly careerStartDate: Date;
@@ -160,11 +190,14 @@ export class CreateRetirementPlanningRppsJsonRequestDto extends BaseBuildableDto
 
 @RequestDto()
 export class CreateRetirementPlanningRppsRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-    required: false,
-  })
-  public ctcDocument?: FileModel;
+  @RequestDtoObjectProperty(
+    () => CreateRetirementPlanningRppsDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public ctcDocuments?: CreateRetirementPlanningRppsDocumentRequestDto[];
 
   @RequestDtoObjectProperty(() => CreateRetirementPlanningRppsJsonRequestDto)
   public json: CreateRetirementPlanningRppsJsonRequestDto;

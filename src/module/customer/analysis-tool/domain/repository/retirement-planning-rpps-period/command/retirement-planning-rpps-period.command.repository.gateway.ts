@@ -11,4 +11,8 @@ export abstract class RetirementPlanningRppsPeriodCommandRepositoryGateway {
     id: RetirementPlanningRppsPeriodId,
     props: RetirementPlanningRppsPeriodEntity,
   ): TransactionType;
+
+  public abstract deleteRetirementPlanningRppsPeriod(
+    id: RetirementPlanningRppsPeriodId,
+  ): TransactionType;
 }

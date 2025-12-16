@@ -57,7 +57,7 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
     (entity) => entity.retirementPlanningRppsPeriod,
-    { nullable: true },
+    { onDelete: 'CASCADE' },
   )
   public specialTimePeriod?:
     | RetirementPlanningRppsPeriodSpecialTimeTypeormEntity
@@ -66,7 +66,7 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
     (entity) => entity.retirementPlanningRppsPeriod,
-    { nullable: true },
+    { onDelete: 'CASCADE' },
   )
   public disabilityPeriod?:
     | RetirementPlanningRppsPeriodDisabilityTypeormEntity

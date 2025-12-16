@@ -11,4 +11,8 @@ export abstract class RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGa
     id: RetirementPlanningRppsPeriodSpecialTimeId,
     props: RetirementPlanningRppsPeriodSpecialTimeEntity,
   ): TransactionType;
+
+  public abstract deleteRetirementPlanningRppsPeriodSpecialTime(
+    id: RetirementPlanningRppsPeriodSpecialTimeId,
+  ): TransactionType;
 }

@@ -47,6 +47,8 @@ export class RetirementPlanningRppsTypeormQueryRepository
         },
         relations: {
           retirementPlanningRppsResult: true,
+          retirementPlanningRppsInssBenefit: true,
+          retirementPlanningRppsLegalProceeding: true,
           remunerations: true,
           periods: {
             specialTimePeriod: true,

@@ -2,11 +2,16 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { RetirementPlanningRppsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-inss-benefit.typeorm.entity';
+import { RetirementPlanningRppsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-legal-proceeding.typeorm.entity';
 import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetRetirementPlanningRppsWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps-with-relations.query.result';
+import { GetRetirementPlanningRppsInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/query/result/get-retirement-planning-rpps-inss-benefit.query.result';
+import { GetRetirementPlanningRppsLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/query/result/get-retirement-planning-rpps-legal-proceeding.query.result';
 import { GetRetirementPlanningRppsPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/query/result/get-retirement-planning-rpps-period.query.result';
 import { GetRetirementPlanningRppsRemunerationQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/query/result/get-retirement-planning-rpps-remuneration.query.result';
 import { GetRetirementPlanningRppsResultQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/query/result/get-retirement-planning-rpps-result.query.result';
@@ -30,6 +35,16 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: RetirementPlanningRppsTypeormEntity,
     ): GetRetirementPlanningRppsWithRelationsQueryResult => {
+      if (
+        !source.retirementPlanningRppsInssBenefit ||
+        !source.retirementPlanningRppsLegalProceeding
+      ) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetRetirementPlanningRppsWithRelationsQueryResult.name,
+          sourceClass: RetirementPlanningRppsTypeormEntity.name,
+        });
+      }
       const retirementPlanningRppsResult = source.retirementPlanningRppsResult
         ? this.mapper.map(
             source.retirementPlanningRppsResult,
@@ -54,10 +69,28 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
           )
         : [];
 
+      const retirementPlanningRppsInssBenefit = this.mapper.mapArray(
+        source.retirementPlanningRppsInssBenefit,
+        RetirementPlanningRppsInssBenefitTypeormEntity,
+        GetRetirementPlanningRppsInssBenefitQueryResult,
+      );
+
+      const retirementPlanningRppsLegalProceeding = this.mapper.mapArray(
+        source.retirementPlanningRppsLegalProceeding,
+        RetirementPlanningRppsLegalProceedingTypeormEntity,
+        GetRetirementPlanningRppsLegalProceedingQueryResult,
+      );
+
       return GetRetirementPlanningRppsWithRelationsQueryResult.build({
-        ...source,
         id: new RetirementPlanningRppsId(source.id),
+        careerStartDate: source.careerStartDate,
+        publicServiceStartDate: source.publicServiceStartDate,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         retirementPlanningRppsResult,
+        retirementPlanningRppsInssBenefit,
+        retirementPlanningRppsLegalProceeding,
         remunerations,
         periods,
       });
@@ -97,10 +130,24 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
         RetirementPlanningRppsPeriodTypeormEntity,
       );
 
+      const retirementPlanningRppsInssBenefit = this.mapper.mapArray(
+        source.retirementPlanningRppsInssBenefit,
+        GetRetirementPlanningRppsInssBenefitQueryResult,
+        RetirementPlanningRppsInssBenefitTypeormEntity,
+      );
+
+      const retirementPlanningRppsLegalProceeding = this.mapper.mapArray(
+        source.retirementPlanningRppsLegalProceeding,
+        GetRetirementPlanningRppsLegalProceedingQueryResult,
+        RetirementPlanningRppsLegalProceedingTypeormEntity,
+      );
+
       return RetirementPlanningRppsTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         retirementPlanningRppsResult,
+        retirementPlanningRppsInssBenefit,
+        retirementPlanningRppsLegalProceeding,
         remunerations,
         periods,
       });

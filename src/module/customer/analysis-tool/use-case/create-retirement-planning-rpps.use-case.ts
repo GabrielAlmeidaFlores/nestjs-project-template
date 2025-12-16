@@ -10,6 +10,7 @@ import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/dom
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/command/retirement-planning-rpps-period.command.repository.gateway';
 import { RetirementPlanningRppsPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/command/retirement-planning-rpps-period-disability.command.repository.gateway';
+import { RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/command/retirement-planning-rpps-period-document.command.repository.gateway';
 import { RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-special-time/command/retirement-planning-rpps-period-special-time.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
@@ -21,6 +22,9 @@ import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-to
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
 import { RetirementPlanningRppsPeriodDisabilityId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/value-object/retirement-planning-rpps-period-disability-id.value-object';
+import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
+import { RetirementPlanningRppsPeriodDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/retirement-planning-rpps-period-document.entity';
+import { RetirementPlanningRppsPeriodDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/value-object/retirement-planning-rpps-period-document-id.value-object';
 import { RetirementPlanningRppsPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time.entity';
 import { RetirementPlanningRppsPeriodSpecialTimeId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/value-object/retirement-planning-rpps-period-special-time-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
@@ -60,6 +64,8 @@ export class CreateRetirementPlanningRppsUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway)
     private readonly retirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway: RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway)
+    private readonly retirementPlanningRppsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -90,18 +96,12 @@ export class CreateRetirementPlanningRppsUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
-    const ctcDocument =
-      dto.ctcDocument !== undefined
-        ? await this.fileProcessorGateway.uploadFile(dto.ctcDocument)
-        : null;
-
     const retirementPlanningRppsId = new RetirementPlanningRppsId();
 
     const retirementPlanningRpps = new RetirementPlanningRppsEntity({
       id: retirementPlanningRppsId,
       careerStartDate: dto.json.careerStartDate,
       publicServiceStartDate: dto.json.publicServiceStartDate,
-      ctcDocument,
     });
 
     const countRecords =
@@ -127,6 +127,32 @@ export class CreateRetirementPlanningRppsUseCase {
         retirementPlanningRpps,
       ),
     );
+
+    if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
+      for (const documentDto of dto.ctcDocuments) {
+        const document = await this.fileProcessorGateway.uploadBase64(
+          documentDto.document,
+        );
+
+        const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
+
+        const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
+          id: periodDocumentId,
+          documentType:
+            documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
+          document,
+          retirementPlanningRppsPeriodDisability: null,
+          retirementPlanningRppsPeriodSpecialTime: null,
+          retirementPlanningRpps,
+        });
+
+        transactionOperations.push(
+          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+            periodDocument,
+          ),
+        );
+      }
+    }
 
     for (const periodDto of dto.json.periods) {
       const periodId = new RetirementPlanningRppsPeriodId();
@@ -175,6 +201,36 @@ export class CreateRetirementPlanningRppsUseCase {
             disability,
           ),
         );
+
+        if (
+          periodDto.disability.documents &&
+          periodDto.disability.documents.length > 0
+        ) {
+          for (const documentDto of periodDto.disability.documents) {
+            const document = await this.fileProcessorGateway.uploadBase64(
+              documentDto.document,
+            );
+
+            const periodDocumentId =
+              new RetirementPlanningRppsPeriodDocumentId();
+
+            const periodDocument =
+              new RetirementPlanningRppsPeriodDocumentEntity({
+                id: periodDocumentId,
+                documentType: documentDto.type,
+                document,
+                retirementPlanningRppsPeriodDisability: disability,
+                retirementPlanningRppsPeriodSpecialTime: null,
+                retirementPlanningRpps: null,
+              });
+
+            transactionOperations.push(
+              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+                periodDocument,
+              ),
+            );
+          }
+        }
       }
 
       if (periodDto.specialTime) {
@@ -193,6 +249,36 @@ export class CreateRetirementPlanningRppsUseCase {
             specialTime,
           ),
         );
+
+        if (
+          periodDto.specialTime.documents &&
+          periodDto.specialTime.documents.length > 0
+        ) {
+          for (const documentDto of periodDto.specialTime.documents) {
+            const document = await this.fileProcessorGateway.uploadBase64(
+              documentDto.document,
+            );
+
+            const periodDocumentId =
+              new RetirementPlanningRppsPeriodDocumentId();
+
+            const periodDocument =
+              new RetirementPlanningRppsPeriodDocumentEntity({
+                id: periodDocumentId,
+                documentType: documentDto.type,
+                document,
+                retirementPlanningRppsPeriodDisability: null,
+                retirementPlanningRppsPeriodSpecialTime: specialTime,
+                retirementPlanningRpps: null,
+              });
+
+            transactionOperations.push(
+              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+                periodDocument,
+              ),
+            );
+          }
+        }
       }
     }
 

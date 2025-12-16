@@ -58,6 +58,10 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
 import { GetRetirementPlanningRppsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/get-retirement-planning-rpps-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/get-retirement-planning-rpps-with-relations-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/retirement-planning-rpps-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-inss-benefit/get-retirement-planning-rpps-inss-benefit-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-legal-proceeding/get-retirement-planning-rpps-legal-proceeding-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period/get-retirement-planning-rpps-period-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period/retirement-planning-rpps-period-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-disability/get-retirement-planning-rpps-period-disability-query-result.auto-mapper.profile';
@@ -144,6 +148,10 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile,
     CidTenEntityAutoMapperProfile,
     GetCidTenQueryResultAutoMapperProfile,
+    RetirementPlanningRppsInssBenefitEntityAutoMapperProfile,
+    GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile,
+    RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile,
+    GetRetirementPlanningRppsLegalProceedingQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

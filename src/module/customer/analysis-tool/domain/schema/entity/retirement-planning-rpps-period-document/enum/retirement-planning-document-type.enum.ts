@@ -1,4 +1,5 @@
 export enum RetirementPlanningDocumentTypeEnum {
+  CTC_DOCUMENT = 'ctc_document',
   PPP = 'ppp',
   CPTS = 'cpts',
   LTCAT = 'ltcat',
