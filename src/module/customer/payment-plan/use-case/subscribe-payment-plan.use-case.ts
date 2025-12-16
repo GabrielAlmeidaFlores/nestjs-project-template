@@ -25,6 +25,7 @@ import { OrganizationPaymentPlanEnablePaidResourceEntity } from '@module/custome
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { OrganizationOwnerRequiredError } from '@module/customer/payment-plan/error/organization-owner-required.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -56,6 +57,10 @@ export class SubscribePaymentPlanUseCase {
     sessionData: SessionDataModel,
     dto: SubscribePaymentPlanRequestDto,
   ): Promise<SubscribePaymentPlanResponseDto> {
+    if (!organizationSessionData.owner) {
+      throw new OrganizationOwnerRequiredError();
+    }
+
     const organizationId = organizationSessionData.organizationId.toString();
 
     const existingSubscriptions =
