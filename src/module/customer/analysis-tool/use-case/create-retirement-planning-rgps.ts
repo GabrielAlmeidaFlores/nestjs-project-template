@@ -71,8 +71,7 @@ export class CreateRetirementPlanningRgpsUseCase {
     );
 
     const retirementPlanningRgps = new RetirementPlanningRgpsEntity({
-      cnisDocument:
-        analysisToolClientQueryResult.federalDocument?.toString() ?? null,
+      cnisDocument: null,
       retirementPlanningRgpsResult,
     });
 
