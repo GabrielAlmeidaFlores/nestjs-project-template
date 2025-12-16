@@ -55,7 +55,6 @@ export class SubscribePaymentPlanUseCase {
   ): Promise<SubscribePaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
-    // Buscar o customer pelo authIdentityId para obter o bankExternalId
     const customer =
       await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
         sessionData.authIdentityId,
