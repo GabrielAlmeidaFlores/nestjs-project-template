@@ -6,6 +6,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
+import { OrganizationOwnerRequiredError } from '@module/customer/payment-plan/error/organization-owner-required.error';
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
@@ -27,6 +28,10 @@ export class CancelPaymentPlanUseCase {
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CancelPaymentPlanResponseDto> {
+    if (!organizationSessionData.owner) {
+      throw new OrganizationOwnerRequiredError();
+    }
+
     const organizationId = organizationSessionData.organizationId.toString();
 
     const existingSubscriptions =
