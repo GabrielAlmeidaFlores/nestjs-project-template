@@ -6,6 +6,11 @@ export abstract class FileProcessorGateway {
     documentLocation?: string,
   ): Promise<string>;
 
+  public abstract uploadBase64(
+    base64Content: string,
+    fileName?: string,
+  ): Promise<string>;
+
   public abstract getOriginalFileName(fileName: string): Promise<string>;
 
   public abstract getFileBuffer(fileName: string): Promise<Buffer>;

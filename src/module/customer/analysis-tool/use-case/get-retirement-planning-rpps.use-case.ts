@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import {
+  GetAnalysisToolClientResponseDto,
   GetRetirementPlanningRppsCidResponseDto,
   GetRetirementPlanningRppsPeriodDisabilityResponseDto,
   GetRetirementPlanningRppsPeriodResponseDto,
@@ -25,6 +27,8 @@ export class GetRetirementPlanningRppsUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RetirementPlanningRppsQueryRepositoryGateway)
     private readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -41,6 +45,14 @@ export class GetRetirementPlanningRppsUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
+
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        retirementPlanningRppsId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        RetirementPlanningRppsNotFoundError,
+      );
 
     const retirementPlanningRppsQueryResult =
       await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
@@ -86,14 +98,18 @@ export class GetRetirementPlanningRppsUseCase {
       });
     });
 
+    const analysisToolClient = GetAnalysisToolClientResponseDto.build({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+    });
+
     const response = GetRetirementPlanningRppsResponseDto.build({
       id: retirementPlanningRppsQueryResult.id,
-      ctcDocument: retirementPlanningRppsQueryResult.ctcDocument,
       careerStartDate: retirementPlanningRppsQueryResult.careerStartDate,
       publicServiceStartDate:
         retirementPlanningRppsQueryResult.publicServiceStartDate,
       createdAt: retirementPlanningRppsQueryResult.createdAt,
       updatedAt: retirementPlanningRppsQueryResult.updatedAt,
+      analysisToolClient,
       retirementPlanningRppsResult:
         retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
           ? GetRetirementPlanningRppsResultResponseDto.build({

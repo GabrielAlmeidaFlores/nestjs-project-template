@@ -6,8 +6,6 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RetirementPlanningRppsEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps.entity.props.interface';
 
 export class RetirementPlanningRppsEntity extends BaseEntity<RetirementPlanningRppsId> {
-  @Description('CTC do cliente')
-  public readonly ctcDocument: string | null;
   @Description('Data de início da carreira do cliente')
   public readonly careerStartDate: Date;
   @Description('Data de início do serviço público do cliente')
@@ -19,7 +17,6 @@ export class RetirementPlanningRppsEntity extends BaseEntity<RetirementPlanningR
 
   public constructor(props: RetirementPlanningRppsEntityPropsInterface) {
     super(RetirementPlanningRppsId, props);
-    this.ctcDocument = props.ctcDocument ?? null;
     this.careerStartDate = props.careerStartDate;
     this.publicServiceStartDate = props.publicServiceStartDate;
     this.retirementPlanningRppsResult =

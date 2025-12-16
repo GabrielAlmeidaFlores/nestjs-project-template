@@ -19,7 +19,7 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetRetirementPlanningRppsClientResponseDto extends BaseBuildableDtoObject {
+export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AnalysisToolClientId)
   public id: AnalysisToolClientId;
 
@@ -44,8 +44,7 @@ export class GetRetirementPlanningRppsClientResponseDto extends BaseBuildableDto
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
-  protected override readonly _type =
-    GetRetirementPlanningRppsClientResponseDto.name;
+  protected override readonly _type = GetAnalysisToolClientResponseDto.name;
 }
 
 @ResponseDto()
@@ -164,9 +163,6 @@ export class GetRetirementPlanningRppsResponseDto extends BaseBuildableDtoObject
   @ResponseDtoValueObjectProperty(RetirementPlanningRppsId)
   public id: RetirementPlanningRppsId;
 
-  @ResponseDtoStringProperty({ required: false })
-  public ctcDocument?: string;
-
   @ResponseDtoDateProperty()
   public careerStartDate: Date;
 
@@ -178,6 +174,11 @@ export class GetRetirementPlanningRppsResponseDto extends BaseBuildableDtoObject
 
   @ResponseDtoDateProperty()
   public updatedAt: Date;
+
+  @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto, {
+    required: false,
+  })
+  public analysisToolClient?: GetAnalysisToolClientResponseDto;
 
   @ResponseDtoObjectProperty(() => GetRetirementPlanningRppsResultResponseDto, {
     required: false,

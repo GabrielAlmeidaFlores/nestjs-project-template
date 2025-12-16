@@ -26,7 +26,6 @@ export class GetRetirementPlanningRppsQueryResultAutoMapperProfile {
     ): GetRetirementPlanningRppsQueryResult => {
       return GetRetirementPlanningRppsQueryResult.build({
         id: new RetirementPlanningRppsId(source.id),
-        ctcDocument: source.ctcDocument,
         careerStartDate: source.careerStartDate,
         publicServiceStartDate: source.publicServiceStartDate,
         createdAt: source.createdAt,
@@ -50,7 +49,6 @@ export class GetRetirementPlanningRppsQueryResultAutoMapperProfile {
       const entity = new RetirementPlanningRppsTypeormEntity();
 
       entity.id = source.id.toString();
-      entity.ctcDocument = source.ctcDocument;
       entity.careerStartDate = source.careerStartDate;
       entity.publicServiceStartDate = source.publicServiceStartDate;
       entity.createdAt = source.createdAt;

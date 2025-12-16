@@ -70,7 +70,6 @@ export class CreateRetirementPlanningRppsRemunerationUseCase {
 
     const retirementPlanningRppsEntity = new RetirementPlanningRppsEntity({
       id: retirementPlanningRpps.id,
-      ctcDocument: retirementPlanningRpps.ctcDocument,
       careerStartDate: retirementPlanningRpps.careerStartDate,
       publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
       retirementPlanningRppsResult: retirementPlanningRppsResultEntity,

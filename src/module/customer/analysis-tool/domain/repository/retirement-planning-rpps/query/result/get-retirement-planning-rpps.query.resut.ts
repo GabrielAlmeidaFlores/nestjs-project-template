@@ -4,7 +4,6 @@ import type { RetirementPlanningRppsId } from '@module/customer/analysis-tool/do
 
 export class GetRetirementPlanningRppsQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRppsId;
-  public readonly ctcDocument: string | null;
   public readonly careerStartDate: Date;
   public readonly publicServiceStartDate: Date;
   public readonly createdAt: Date;

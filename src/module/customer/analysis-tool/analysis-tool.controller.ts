@@ -24,6 +24,7 @@ import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/custom
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
+import { UpdateRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rpps.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
@@ -46,6 +47,7 @@ import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-t
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
+import { UpdateRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rpps.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
@@ -73,6 +75,7 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -116,6 +119,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
     private readonly getRetirementPlanningRppsUseCase: GetRetirementPlanningRppsUseCase,
     private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
+    private readonly updateRetirementPlanningRppsUseCase: UpdateRetirementPlanningRppsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -920,6 +924,41 @@ export class AnalysisToolController {
     @Query() dto: ListRetirementPlanningRppsRemunerationRequestDto,
   ): Promise<ListRetirementPlanningRppsRemunerationResponseDto> {
     return await this.listRetirementPlanningRppsRemunerationUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRppsId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar planejamento previdenciário RPPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      method: RequestMethod.PATCH,
+      path: 'retirement-planning-rpps/:retirementPlanningRppsId',
+      type: UpdateRetirementPlanningRppsRequestDto,
+    },
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Planejamento previdenciário RPPS atualizado com sucesso.',
+      type: UpdateRetirementPlanningRppsResponseDto,
+    },
+    tag: ['planejamento-previdenciario-rpps'],
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRetirementPlanningRpps(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRppsId',
+      new ParseValueObjectPipe(RetirementPlanningRppsId),
+    )
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+    @Body() dto: UpdateRetirementPlanningRppsRequestDto,
+  ): Promise<UpdateRetirementPlanningRppsResponseDto> {
+    return await this.updateRetirementPlanningRppsUseCase.execute(
       sessionData,
       organizationSessionData,
       retirementPlanningRppsId,
