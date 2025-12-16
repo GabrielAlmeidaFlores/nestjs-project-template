@@ -99,10 +99,6 @@ export class CreateCnisFastAnalysisUseCase {
 
     const cnisFastAnalysis = new CnisFastAnalysisEntity({
       cnisDocument,
-      analysisToolClient,
-      status: AnalysisStatusEnum.IN_PROGRESS,
-      createdBy: organizationMember.id,
-      updatedBy: organizationMember.id,
     });
 
     const cnisFastAnalysisInssBenefit =
@@ -135,6 +131,10 @@ export class CreateCnisFastAnalysisUseCase {
       code: new AnalysisToolRecordCode(countRecords + 1),
       type: AnalysisToolRecordTypeEnum.CNIS_FAST_ANALYSIS,
       cnisFastAnalysis,
+      analysisToolClient,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdBy: organizationMember.id,
+      updatedBy: organizationMember.id,
     });
 
     await this.createOnDatabase(

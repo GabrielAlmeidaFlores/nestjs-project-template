@@ -54,52 +54,50 @@ export class ListAnalysisToolRecordUseCase {
 
     await Promise.all(
       analysisToolRecordList.resource.map(async (analysisToolRecord) => {
-        const analysis = analysisToolRecord.cnisFastAnalysis;
-
-        if (!analysis) {
-          return;
-        }
-
         const createdBy = GetAnalysisToolRecordResponsibleResponseDto.build({
-          ...analysis.createdBy.customer,
+          ...analysisToolRecord.createdBy.customer,
         });
 
-        if (analysis.createdBy.customer.profilePicture !== null) {
+        if (analysisToolRecord.createdBy.customer.profilePicture !== null) {
           const profilePicture =
             await this.fileProcessorGateway.getFileSignedUrl(
-              analysis.createdBy.customer.profilePicture,
+              analysisToolRecord.createdBy.customer.profilePicture,
             );
 
           createdBy.profilePicture = profilePicture.toString();
         }
 
         const updatedBy = GetAnalysisToolRecordResponsibleResponseDto.build({
-          ...analysis.updatedBy.customer,
+          ...analysisToolRecord.updatedBy.customer,
         });
 
-        if (analysis.updatedBy.customer.profilePicture !== null) {
+        if (analysisToolRecord.updatedBy.customer.profilePicture !== null) {
           const profilePicture =
             await this.fileProcessorGateway.getFileSignedUrl(
-              analysis.updatedBy.customer.profilePicture,
+              analysisToolRecord.updatedBy.customer.profilePicture,
             );
 
           updatedBy.profilePicture = profilePicture.toString();
         }
 
         const client = GetAnalysisToolRecordClientResponseDto.build({
-          ...analysis.analysisToolClient,
+          ...analysisToolRecord.analysisToolClient,
         });
 
-        const data = GetAnalysisToolRecordResponseDto.build({
-          ...analysisToolRecord,
-          analysisId: analysis.id,
-          status: analysis.status,
-          analysisToolClient: client,
-          createdBy,
-          updatedBy,
-        });
+        const analysis = analysisToolRecord.cnisFastAnalysis;
 
-        resource.push(data);
+        if (analysis !== null) {
+          const data = GetAnalysisToolRecordResponseDto.build({
+            ...analysisToolRecord,
+            analysisId: analysis.id,
+            status: analysisToolRecord.status,
+            analysisToolClient: client,
+            createdBy,
+            updatedBy,
+          });
+
+          resource.push(data);
+        }
 
         return;
       }),

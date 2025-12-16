@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionOutputModel } from '@core/domain/repository/base/transaction/model/output/transaction.output.model';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { CnisOutputModel } from '@lib/cnis-processor/model/output/cnis.output.model';
+import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
@@ -185,7 +185,7 @@ describe(CreateLegalPleadingResultUseCase.name, () => {
     const queryResult = buildLegalPleadingQueryResult();
     const transaction = buildTransaction();
     const finalAnalysis = 'Final legal pleading analysis.';
-    const parsedCnisData = CnisOutputModel.build({
+    const parsedCnisData = CnisModel.build({
       socialSecurityRelations: [],
     });
 

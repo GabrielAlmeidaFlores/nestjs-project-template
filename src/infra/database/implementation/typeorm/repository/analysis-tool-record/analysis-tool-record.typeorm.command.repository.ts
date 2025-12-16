@@ -6,6 +6,7 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
@@ -37,7 +38,28 @@ export class AnalysisToolRecordTypeormCommandRepository
     return this.create(mappedData);
   }
 
-  public deleteAnalysisToolRecord(id: AnalysisToolRecordId): TransactionType {
-    return this.delete(id.toString());
+  public deleteAnalysisToolRecord(
+    id: AnalysisToolRecordId,
+    updatedBy: OrganizationMemberId,
+  ): TransactionType {
+    return this.update(id.toString(), {
+      deletedAt: new Date(),
+      updatedBy: {
+        id: updatedBy.toString(),
+      },
+    });
+  }
+
+  public updateAnalysisToolRecord(
+    id: AnalysisToolRecordId,
+    props: AnalysisToolRecordEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      AnalysisToolRecordEntity,
+      AnalysisToolRecordTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 }
