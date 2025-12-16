@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
@@ -40,11 +41,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FileProcessorModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    CnisAnalyzerModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
     CreateCnisFastAnalysisUseCase,
-    UpdateCnisFastAnalysisUseCase,
     CreateCnisFastAnalysisResultUseCase,
     GetCnisFastAnalysisUseCase,
     ListAnalysisToolClientUseCase,
@@ -67,6 +68,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteAnalysisToolRecordUseCase,
     DeleteLegalPleadingUseCase,
     GetAnalysisToolClientUseCase,
+    UpdateCnisFastAnalysisUseCase,
   ],
 })
 export class AnalysisToolModule {

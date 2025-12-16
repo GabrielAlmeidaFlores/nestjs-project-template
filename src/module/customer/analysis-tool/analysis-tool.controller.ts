@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
@@ -26,6 +27,7 @@ import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
+import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
@@ -44,6 +46,7 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
+import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
@@ -76,7 +79,6 @@ export class AnalysisToolController {
 
   public constructor(
     private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
-    private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
@@ -96,6 +98,8 @@ export class AnalysisToolController {
     private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
+    private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
+    private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -123,6 +127,38 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar registros de análises',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-record/:analysisToolRecordId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['registro-de-analises'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Registro de análise deletado com sucesso.',
+      type: DeleteAnalysisToolRecordResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteAnalysisToolRecord(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolRecordId',
+      new ParseValueObjectPipe(AnalysisToolRecordId),
+    )
+    analysisToolRecordId: AnalysisToolRecordId,
+  ): Promise<DeleteAnalysisToolRecordResponseDto> {
+    return await this.deleteAnalysisToolRecordUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      analysisToolRecordId,
     );
   }
 
@@ -460,6 +496,38 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Atualizar análise rápida de CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
+      method: RequestMethod.PATCH,
+      type: UpdateCnisFastAnalysisRequestDto,
+    },
+    tag: ['analise-rapida-cnis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise rápida de CNIS atualizada com sucesso.',
+      type: UpdateCnisFastAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateCnisFastAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: UpdateCnisFastAnalysisRequestDto,
+    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
+    cnisFastAnalysisId: CnisFastAnalysisId,
+  ): Promise<UpdateCnisFastAnalysisResponseDto> {
+    return await this.updateCnisFastAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      cnisFastAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Criar análise rápida de CNIS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -484,39 +552,6 @@ export class AnalysisToolController {
     return await this.createCnisFastAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
-      method: RequestMethod.PATCH,
-      type: UpdateCnisFastAnalysisRequestDto,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise rápida de CNIS atualizada com sucesso.',
-      type: UpdateCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-    @Body()
-    dto: UpdateCnisFastAnalysisRequestDto,
-  ): Promise<UpdateCnisFastAnalysisResponseDto> {
-    return await this.updateCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
       dto,
     );
   }
