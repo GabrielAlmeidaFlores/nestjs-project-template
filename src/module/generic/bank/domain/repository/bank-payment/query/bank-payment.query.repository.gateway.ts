@@ -18,4 +18,8 @@ export abstract class BankPaymentQueryRepositoryGateway {
   public abstract findOneBankPaymentByBankExternalId(
     bankExternalId: string,
   ): Promise<GetBankPaymentQueryResult | null>;
+
+  public abstract findManyBankPaymentByIds(
+    ids: BankPaymentId[],
+  ): Promise<GetBankPaymentQueryResult[]>;
 }

@@ -88,4 +88,24 @@ export class BankPaymentTypeormQueryRepository
 
     return resource;
   }
+
+  public async findManyBankPaymentByIds(
+    ids: BankPaymentId[],
+  ): Promise<GetBankPaymentQueryResult[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const data = await this.repository.findByIds(
+      ids.map((id) => id.toString()),
+    );
+
+    const resources = this.mapperGateway.mapArray(
+      data,
+      BankPaymentTypeormEntity,
+      GetBankPaymentQueryResult,
+    );
+
+    return resources;
+  }
 }
