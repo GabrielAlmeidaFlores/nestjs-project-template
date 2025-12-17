@@ -6,6 +6,10 @@ import type { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class PaymentPlanQueryRepositoryGateway {
+  public abstract listActivePaymentPlan(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>>;
+
   public abstract listPaymentPlan(
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>>;

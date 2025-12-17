@@ -20,7 +20,7 @@ export class ListPaymentPlansUseCase {
   public async execute(
     dto: ListDataRequestDto,
   ): Promise<ListPaymentPlansResponseDto[]> {
-    const result = await this.paymentPlanQueryRepository.listPaymentPlan(
+    const result = await this.paymentPlanQueryRepository.listActivePaymentPlan(
       new ListDataInputModel({
         ...dto,
       }),

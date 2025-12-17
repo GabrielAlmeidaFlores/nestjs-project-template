@@ -28,13 +28,35 @@ export class PaymentPlanTypeormQueryRepository
     super(repository);
   }
 
-  public async listPaymentPlan(
+  public async listActivePaymentPlan(
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
     const data = await this.list(listData, {
       where: {
         active: true,
       },
+      relations: [
+        'paymentPlanEnablePaidResource',
+        'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+      ],
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      PaymentPlanTypeormEntity,
+      GetPaymentPlanQueryResult,
+    );
+
+    return new ListDataOutputModel<GetPaymentPlanQueryResult>({
+      ...data,
+      resource: mappedData,
+    });
+  }
+
+  public async listPaymentPlan(
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
+    const data = await this.list(listData, {
       relations: [
         'paymentPlanEnablePaidResource',
         'paymentPlanEnablePaidResource.paymentPlanPaidResource',

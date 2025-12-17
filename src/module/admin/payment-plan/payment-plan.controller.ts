@@ -2,17 +2,22 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { CreatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/create-payment-plan.request.dto';
+import { UpdatePaymentPlanPaidResourceRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan-paid-resource.request.dto';
 import { UpdatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan.request.dto';
+import { GetPaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan-paid-resource.response.dto';
 import { GetPaymentPlanResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan.response.dto';
 import { ListPaymentPlanPaidResourcesResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plans.response.dto';
 import { CreatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/create-payment-plan.use-case';
 import { DeletePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/delete-payment-plan.use-case';
+import { GetPaymentPlanPaidResourceUseCase } from '@module/admin/payment-plan/use-case/get-payment-plan-paid-resource.use-case';
 import { GetPaymentPlanUseCase } from '@module/admin/payment-plan/use-case/get-payment-plan.use-case';
 import { ListPaymentPlanPaidResourcesUseCase } from '@module/admin/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/admin/payment-plan/use-case/list-payment-plans.use-case';
+import { UpdatePaymentPlanPaidResourceUseCase } from '@module/admin/payment-plan/use-case/update-payment-plan-paid-resource.use-case';
 import { UpdatePaymentPlanUseCase } from '@module/admin/payment-plan/use-case/update-payment-plan.use-case';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -31,6 +36,8 @@ export class PaymentPlanController {
     private readonly getPaymentPlanUseCase: GetPaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
     private readonly listPaymentPlanPaidResourcesUseCase: ListPaymentPlanPaidResourcesUseCase,
+    private readonly getPaymentPlanPaidResourceUseCase: GetPaymentPlanPaidResourceUseCase,
+    private readonly updatePaymentPlanPaidResourceUseCase: UpdatePaymentPlanPaidResourceUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -165,6 +172,63 @@ export class PaymentPlanController {
   ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
     return await this.listPaymentPlanPaidResourcesUseCase.execute(
       new ListDataInputModel(dto),
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter recurso pago por ID',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'paid-resources/:paidResourceId',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Recurso pago obtido com sucesso.',
+      type: GetPaymentPlanPaidResourceResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getPaymentPlanPaidResource(
+    @Param(
+      'paidResourceId',
+      new ParseValueObjectPipe(PaymentPlanPaidResourceId),
+    )
+    paidResourceId: PaymentPlanPaidResourceId,
+  ): Promise<GetPaymentPlanPaidResourceResponseDto> {
+    return await this.getPaymentPlanPaidResourceUseCase.execute(paidResourceId);
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar recurso pago e configuração de IA. Se o campo "prompt" for fornecido, cria ou atualiza automaticamente a configuração de IA vinculada ao recurso.',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'paid-resources/:paidResourceId',
+      method: RequestMethod.PATCH,
+      type: UpdatePaymentPlanPaidResourceRequestDto,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Recurso pago atualizado com sucesso. Configuração de IA criada ou atualizada se prompt foi fornecido.',
+      type: GetPaymentPlanPaidResourceResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async updatePaymentPlanPaidResource(
+    @Param(
+      'paidResourceId',
+      new ParseValueObjectPipe(PaymentPlanPaidResourceId),
+    )
+    paidResourceId: PaymentPlanPaidResourceId,
+    @Body() dto: UpdatePaymentPlanPaidResourceRequestDto,
+  ): Promise<GetPaymentPlanPaidResourceResponseDto> {
+    return await this.updatePaymentPlanPaidResourceUseCase.execute(
+      paidResourceId,
+      dto,
     );
   }
 }
