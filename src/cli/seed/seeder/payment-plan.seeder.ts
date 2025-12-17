@@ -39,7 +39,7 @@ export const PAYMENT_PLAN_SEED_DATA = [
     active: true,
     cycle: PaymentPlanCycleEnum.MONTHLY_RECURRING,
   }),
-   new PaymentPlanEntity({
+  new PaymentPlanEntity({
     id: new PaymentPlanId('4b03d7d5-078d-46c6-82b9-cf4998140156'),
     name: 'Plano Empresarial',
     description:
