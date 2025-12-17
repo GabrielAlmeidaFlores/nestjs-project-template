@@ -78,17 +78,15 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
 
     response.planName = organizationPaymentPlan.name;
     response.planDescription = organizationPaymentPlan.description;
-    response.planPrice = organizationPaymentPlan.price.toNumber();
+    response.planPrice = organizationPaymentPlan.price;
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
 
     if (bankPayments.length === 0) {
       response.isActive = false;
-      response.lastPaymentStatus = null;
-      response.lastPaymentDate = null;
-      response.nextDueDate = null;
       response.hasOverduePayments = false;
       response.overduePaymentsCount = 0;
+
       return response;
     }
 
@@ -120,29 +118,36 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       isActive = lastValidPayment.paymentDate >= oneMonthAgo;
     }
 
-    const overduePayments = bankPayments.filter(
-      (p) =>
-        p.status === PaymentStatusEnum.OVERDUE ||
-        (p.status === PaymentStatusEnum.PENDING && p.dueDate < now),
-    );
+    const overduePayments = bankPayments.filter((p) => {
+      if (p.status === PaymentStatusEnum.OVERDUE) {
+        return true;
+      }
+
+      if (p.status === PaymentStatusEnum.PENDING && p.dueDate < now) {
+        return true;
+      }
+      return false;
+    });
 
     const pendingPayments = bankPayments
-      .filter((p) => p.status === PaymentStatusEnum.PENDING)
+      .filter((p) => p.status === PaymentStatusEnum.PENDING && p.dueDate >= now)
       .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
     const nextPendingPayment = pendingPayments[0];
 
     response.isActive = isActive;
-    response.lastPaymentStatus = lastValidPayment
-      ? lastValidPayment.status
-      : null;
-    response.lastPaymentDate = lastValidPayment
-      ? lastValidPayment.paymentDate
-      : null;
-    response.nextDueDate = nextPendingPayment
-      ? nextPendingPayment.dueDate
-      : null;
     response.hasOverduePayments = overduePayments.length > 0;
     response.overduePaymentsCount = overduePayments.length;
+
+    if (lastValidPayment) {
+      response.lastPaymentStatus = lastValidPayment.status;
+      if (lastValidPayment.paymentDate) {
+        response.lastPaymentDate = lastValidPayment.paymentDate;
+      }
+    }
+
+    if (nextPendingPayment) {
+      response.nextDueDate = nextPendingPayment.dueDate;
+    }
 
     return response;
   }
