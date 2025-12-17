@@ -1,9 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { OrganizationOwnerRequiredError } from '@module/customer/payment-plan/error/organization-owner-required.error';
@@ -17,12 +15,8 @@ export class CancelPaymentPlanUseCase {
   public constructor(
     @Inject(OrganizationPaymentPlanQueryRepositoryGateway)
     private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
-    @Inject(OrganizationPaymentPlanCommandRepositoryGateway)
-    private readonly organizationPaymentPlanCommandRepository: OrganizationPaymentPlanCommandRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
-    @Inject(BaseTransactionRepositoryGateway)
-    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
 
   public async execute(
@@ -44,27 +38,8 @@ export class CancelPaymentPlanUseCase {
     }
 
     for (const subscription of existingSubscriptions) {
-      try {
-        await this.paymentGateway.cancelSubscription(
-          subscription.bankExternalId,
-        );
-      } catch (error) {
-        console.error(
-          `Erro ao cancelar assinatura ${subscription.bankExternalId}:`,
-          error,
-        );
-      }
+      await this.paymentGateway.cancelSubscription(subscription.bankExternalId);
     }
-
-    const deleteTransactions = existingSubscriptions.map((subscription) =>
-      this.organizationPaymentPlanCommandRepository.deleteOrganizationPaymentPlan(
-        subscription.id,
-      ),
-    );
-
-    const deleteTransaction =
-      await this.baseTransactionRepositoryGateway.execute(deleteTransactions);
-    await deleteTransaction.commit();
 
     return CancelPaymentPlanResponseDto.build({
       organizationPaymentPlanId: existingSubscriptions.map(

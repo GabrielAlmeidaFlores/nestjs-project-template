@@ -4,7 +4,9 @@ import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dt
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { ValidateOrganizationPaymentPlanStatusResponseDto } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
+import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { SubscribePaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-payment-plan.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -26,6 +28,7 @@ export class PaymentPlanController {
     private readonly subscribePaymentPlanUseCase: SubscribePaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
     private readonly cancelPaymentPlanUseCase: CancelPaymentPlanUseCase,
+    private readonly getOrganizationPaymentPlanStatusUseCase: GetOrganizationPaymentPlanStatusUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -96,5 +99,30 @@ export class PaymentPlanController {
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CancelPaymentPlanResponseDto> {
     return this.cancelPaymentPlanUseCase.execute(organizationSessionData);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Verificar status do plano de pagamento da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'status',
+      method: RequestMethod.GET,
+    },
+    tag: ['payment-plan'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Status do plano de pagamento da organização retornado com sucesso.',
+      type: ValidateOrganizationPaymentPlanStatusResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getStatus(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<ValidateOrganizationPaymentPlanStatusResponseDto> {
+    return this.getOrganizationPaymentPlanStatusUseCase.execute(
+      organizationSessionData,
+    );
   }
 }

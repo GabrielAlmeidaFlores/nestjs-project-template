@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { PaymentGatewayModule } from '@infra/payment-gateway/payment-gateway.module';
 import { PaymentPlanController } from '@module/customer/payment-plan/payment-plan.controller';
 import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
+import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { SubscribePaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-payment-plan.use-case';
 import { ValidateOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/validate-organization-payment-plan-status.use-case';
@@ -25,6 +26,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListPaymentPlansUseCase,
     CancelPaymentPlanUseCase,
     ValidateOrganizationPaymentPlanStatusUseCase,
+    GetOrganizationPaymentPlanStatusUseCase,
   ],
 })
 export class PaymentPlanModule {
