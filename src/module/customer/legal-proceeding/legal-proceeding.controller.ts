@@ -1,17 +1,17 @@
-import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
+import { HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
 import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
 import { ListLegalProceedingDetailByAnalysisToolClientRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-analysis-tool-client-id.request.dto';
-import { ListLegalProceedingDetailByLegalProceedingNumberRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-legal-proceeding-number.request.dto';
 import { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
 import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
+import { GetLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-relations.response.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
+import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
-import { ListLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -30,7 +30,7 @@ export class LegalProceedingController {
   public constructor(
     private readonly listLegalProceedingDetailUseCase: ListLegalProceedingDetailUseCase,
     private readonly getAnalysisToolClientLegalProceedingUseCaseGateway: GetAnalysisToolClientLegalProceedingUseCaseGateway,
-    private readonly listLegalProceedingDetailByLegalProceedingNumberUseCase: ListLegalProceedingDetailByLegalProceedingNumberUseCase,
+    private readonly getLegalProceedingDetailByLegalProceedingNumberUseCase: GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     private readonly countLegalProceedingDetailUseCase: CountLegalProceedingDetailUseCase,
     private readonly listLegalProceedingDetailByAnalysisToolClientIdUseCase: ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
     private readonly getAnalysisToolClientLegalProceedingActionUseCaseGateway: GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
@@ -134,7 +134,7 @@ export class LegalProceedingController {
       statusCode: HttpStatus.OK,
       description:
         'Listar registros detalhados sobre os processos judiciais conforme o numero do processo',
-      type: ListLegalProceedingDetailResponseDto,
+      type: GetLegalProceedingDetailWithRelationsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -142,12 +142,13 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListLegalProceedingDetailByLegalProceedingNumberRequestDto,
-  ): Promise<ListLegalProceedingDetailResponseDto> {
-    return this.listLegalProceedingDetailByLegalProceedingNumberUseCase.execute(
+    @Param('legalProceedingNumber')
+    legalProceedingNumber: string,
+  ): Promise<GetLegalProceedingDetailWithRelationsResponseDto> {
+    return this.getLegalProceedingDetailByLegalProceedingNumberUseCase.execute(
       organizationSessionData,
       sessionData,
-      dto,
+      legalProceedingNumber,
     );
   }
 

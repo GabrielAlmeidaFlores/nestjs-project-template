@@ -1,7 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
@@ -128,32 +127,27 @@ export class LegalProceedingDetailTypeormQueryRepository
     return mapped;
   }
 
-  public async listByLegalProceedingNumber(
+  public async getByLegalProceedingNumber(
     legalProceedingNumber: string,
-    listData: ListDataInputModel,
-  ): Promise<
-    ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>
-  > {
-    const data = await this.list(listData, {
+  ): Promise<GetLegalProceedingDetailWithRelationsQueryResult> {
+    const data = await this.findOne({
       where: {
         analysisToolClientLegalProceeding: {
           legalProceedingNumber,
         },
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
 
-    const mappedData = this.mapperGateway.mapArray(
-      data.resource,
+    const mappedData = this.mapperGateway.map(
+      data,
       LegalProceedingDetailTypeormEntity,
       GetLegalProceedingDetailWithRelationsQueryResult,
     );
 
-    return new ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>(
-      {
-        ...data,
-        resource: mappedData,
-      },
-    );
+    return mappedData;
   }
 
   public async listByOrganizationIdAndCreatedBy(
