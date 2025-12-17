@@ -7,6 +7,9 @@ export class GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResult extends 
   public readonly id: PaymentPlanPaidResourceIaConfigId;
   public readonly prompt: string;
   public readonly paymentPlanPaidResource: GetPaymentPlanPaidResourceQueryResult;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
 
   protected override readonly _type =
     GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResult.name;

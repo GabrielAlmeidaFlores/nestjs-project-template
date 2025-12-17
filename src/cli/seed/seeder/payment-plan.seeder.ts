@@ -39,6 +39,17 @@ export const PAYMENT_PLAN_SEED_DATA = [
     active: true,
     cycle: PaymentPlanCycleEnum.MONTHLY_RECURRING,
   }),
+   new PaymentPlanEntity({
+    id: new PaymentPlanId('4b03d7d5-078d-46c6-82b9-cf4998140156'),
+    name: 'Plano Empresarial',
+    description:
+      'Perfeito para grandes empresas. Análise completa e simplificada de CNIS e peças jurídicas com 500 créditos mensais.',
+    price: new DecimalValue('299.9'),
+    maxMemberCount: 10,
+    monthlyCreditAmount: 500,
+    active: true,
+    cycle: PaymentPlanCycleEnum.MONTHLY_RECURRING,
+  }),
 ];
 
 export class PaymentPlanSeeder implements SeederInterface {

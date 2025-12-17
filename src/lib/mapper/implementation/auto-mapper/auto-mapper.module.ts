@@ -63,6 +63,7 @@ import { PaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetPaymentPlanEnablePaidResourceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enable-paid-resource/get-payment-plan-enable-paid-resource-query-result.auto-mapper.profile';
 import { PaymentPlanEnablePaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity.auto-mapper.profile';
 import { PaymentPlanPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/payment-plan-paid-resource-entity.auto-mapper.profile';
+import { GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/get-payment-plan-paid-resource-ia-config-with-relations-query-result.auto-mapper.profile';
 import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config-entity.auto-mapper.profile';
 
 @Module({
@@ -129,6 +130,7 @@ import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/map
     PaymentPlanEnablePaidResourceEntityAutoMapperProfile,
     GetPaymentPlanEnablePaidResourceQueryResultAutoMapperProfile,
     OrganizationPaymentPlanEnablePaidResourceEntityAutoMapperProfile,
+    GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile,
     PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile,
     BankPaymentEntityAutoMapperProfile,
     GetBankPaymentQueryResultAutoMapperProfile,
