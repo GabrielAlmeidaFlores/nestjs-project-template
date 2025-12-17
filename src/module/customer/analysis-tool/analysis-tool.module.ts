@@ -20,6 +20,7 @@ import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-t
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
 import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
+import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetAnalysisToolClientLegalProceedingUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
@@ -32,6 +33,7 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -74,6 +76,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetAnalysisToolClientUseCase,
     UpdateCnisFastAnalysisUseCase,
     GetAnalysisToolClientLegalProceedingUseCase,
+    GetAnalysisToolClientLegalProceedingActionUseCase,
     {
       provide: ListAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: ListAnalysisToolClientLegalProceedingUseCase,
@@ -82,10 +85,15 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
       provide: GetAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: GetAnalysisToolClientLegalProceedingUseCase,
     },
+    {
+      provide: GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
+      useClass: GetAnalysisToolClientLegalProceedingActionUseCase,
+    },
   ],
   exports: [
     ListAnalysisToolClientLegalProceedingUseCaseGateway,
     GetAnalysisToolClientLegalProceedingUseCaseGateway,
+    GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
   ],
 })
 export class AnalysisToolModule {
