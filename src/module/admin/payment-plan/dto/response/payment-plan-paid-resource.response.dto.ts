@@ -21,5 +21,8 @@ export class PaymentPlanPaidResourceResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public description: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public prompt?: string | null;
+
   protected override readonly _type = PaymentPlanPaidResourceResponseDto.name;
 }
