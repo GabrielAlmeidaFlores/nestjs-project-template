@@ -15,6 +15,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
     AdminModule,
     GenericModule,
     CustomerModule,
+    AdminModule,
     NestjsFormDataModule.config({
       isGlobal: true,
       storage: MemoryStoredFile,
