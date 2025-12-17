@@ -6,6 +6,7 @@ import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @Controller('account')
 export class AccountController {
@@ -17,6 +18,7 @@ export class AccountController {
 
   @BuildEndpointSpecification({
     summary: 'Detalhes do administrador',
+    userLevel: [UserLevelEnum.ADMIN],
     http: {
       path: 'admin',
       method: RequestMethod.GET,
