@@ -53,16 +53,20 @@ export class CountLegalProceedingDetailUseCase {
         proceeding.detail,
       ) as LegalProceedingDetailDataResponseDto;
 
-      total += detailObject.data.count;
+      total++;
 
-      detailObject.data.items.forEach((item) => {
-        if (item.status === LegalProceedingDetailItemStatusEnum.P) {
-          inProgress++;
-        }
-        if (item.status === LegalProceedingDetailItemStatusEnum.C) {
-          concluded++;
-        }
-      });
+      if (
+        detailObject.data.items[0]?.status ===
+        LegalProceedingDetailItemStatusEnum.P
+      ) {
+        inProgress++;
+      }
+      if (
+        detailObject.data.items[0]?.status ===
+        LegalProceedingDetailItemStatusEnum.C
+      ) {
+        concluded++;
+      }
     });
 
     const response = CountLegalProceedingDetailResponseDto.build({
