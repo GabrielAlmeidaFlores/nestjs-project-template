@@ -61,6 +61,7 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
         where: {
           id: id.toString(),
         },
+        relations: ['organizationPaymentPlan', 'bankPayment'],
       },
       err,
     );
@@ -79,8 +80,11 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
   ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult | null> {
     const data = await this.findOne({
       where: {
-        organizationPaymentPlanId: organizationPaymentPlanId.toString(),
+        organizationPaymentPlan: {
+          id: organizationPaymentPlanId.toString(),
+        },
       },
+      relations: ['organizationPaymentPlan', 'bankPayment'],
     });
 
     if (!data) {
@@ -101,8 +105,11 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
   ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult | null> {
     const data = await this.findOne({
       where: {
-        bankPaymentId: bankPaymentId.toString(),
+        bankPayment: {
+          id: bankPaymentId.toString(),
+        },
       },
+      relations: ['organizationPaymentPlan', 'bankPayment'],
     });
 
     if (!data) {

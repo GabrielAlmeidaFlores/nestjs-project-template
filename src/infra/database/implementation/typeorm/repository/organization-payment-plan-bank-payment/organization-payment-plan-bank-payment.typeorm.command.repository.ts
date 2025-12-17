@@ -4,7 +4,9 @@ import { Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
+import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
+import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.entity';
@@ -35,7 +37,17 @@ export class OrganizationPaymentPlanBankPaymentTypeormCommandRepository
       OrganizationPaymentPlanBankPaymentTypeormEntity,
     );
 
-    return this.create(mappedData);
+    return this.create(
+      OrganizationPaymentPlanBankPaymentTypeormEntity.build({
+        ...mappedData,
+        organizationPaymentPlan: {
+          id: props.organizationPaymentPlan.toString(),
+        } as OrganizationPaymentPlanTypeormEntity,
+        bankPayment: {
+          id: props.bankPayment.toString(),
+        } as BankPaymentTypeormEntity,
+      }),
+    );
   }
 
   public updateOrganizationPaymentPlanBankPayment(

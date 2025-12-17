@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
@@ -41,6 +42,14 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'organization_id' })
   public organization: OrganizationTypeormEntity | undefined;
+
+  @OneToMany(
+    () => OrganizationPaymentPlanBankPaymentTypeormEntity,
+    (entity) => entity.organizationPaymentPlan,
+  )
+  public organizationPaymentPlanBankPayment?:
+    | OrganizationPaymentPlanBankPaymentTypeormEntity[]
+    | undefined;
 
   protected override readonly _type = OrganizationPaymentPlanTypeormEntity.name;
 }

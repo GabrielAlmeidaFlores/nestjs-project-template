@@ -32,6 +32,9 @@ export class PaymentPlanTypeormQueryRepository
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
     const data = await this.list(listData, {
+      where: {
+        active: true,
+      },
       relations: [
         'paymentPlanEnablePaidResource',
         'paymentPlanEnablePaidResource.paymentPlanPaidResource',

@@ -1,4 +1,4 @@
-import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
@@ -15,6 +15,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('payment-plan')
@@ -40,8 +41,10 @@ export class PaymentPlanController {
       type: ListPaymentPlansResponseDto,
     },
   })
-  public async list(): Promise<ListPaymentPlansResponseDto[]> {
-    return this.listPaymentPlansUseCase.execute();
+  public async list(
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListPaymentPlansResponseDto[]> {
+    return this.listPaymentPlansUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
