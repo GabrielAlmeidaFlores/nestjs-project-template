@@ -1,3 +1,4 @@
+import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
 import {
   Body,
   HttpStatus,
@@ -16,6 +17,7 @@ import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-to
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
+import { CreateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period.request.dto';
 import { CreateRetirementPlanningRgpsRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
@@ -49,8 +51,9 @@ import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
-import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps';
-import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis';
+import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
+import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
+import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
@@ -108,6 +111,7 @@ export class AnalysisToolController {
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly createRetirementPlanningRgpsUseCase: CreateRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
+    private readonly createRetirementPlanningRgpsPeriodUseCase: CreateRetirementPlanningRgpsPeriodUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -841,5 +845,29 @@ export class AnalysisToolController {
     dto: CreateRetirementPlanningRgpsCnisRequestDto,
   ): Promise<CreateRetirementPlanningRgpsCnisResponseDto> {
     return await this.createRetirementPlanningRgpsCnisUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Adicionar período para o regime geral de previdência social (RGPS)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps-period',
+      method: RequestMethod.POST,
+      type: CreateRetirementPlanningRgpsPeriodRequestDto,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Período para o regime RGPS criado com sucesso.',
+      type: CreateRetirementPlanningRgpsPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createSocialSecurityPlanningPeriod(
+    @Body()
+    dto: CreateRetirementPlanningRgpsPeriodRequestDto,
+  ): Promise<CreateRetirementPlanningRgpsPeriodResponseDto> {
+    return await this.createRetirementPlanningRgpsPeriodUseCase.execute(dto);
   }
 }

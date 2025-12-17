@@ -1,0 +1,71 @@
+import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { CreateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period.request.dto';
+import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
+
+@Injectable()
+export class CreateRetirementPlanningRgpsPeriodUseCase {
+  protected readonly _type = CreateRetirementPlanningRgpsPeriodUseCase.name;
+
+  public constructor(
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(RetirementPlanningRgpsQueryRepositoryGateway)
+    private readonly retirementPlanningRgpsQueryRepositoryGateway: RetirementPlanningRgpsQueryRepositoryGateway,
+    @Inject(RetirementPlanningRgpsPeriodCommandRepositoryGateway)
+    private readonly retirementPlanningRgpsPeriodCommandRepositoryGateway: RetirementPlanningRgpsPeriodCommandRepositoryGateway,
+  ) {}
+
+  public async execute(
+    dto: CreateRetirementPlanningRgpsPeriodRequestDto,
+  ): Promise<CreateRetirementPlanningRgpsPeriodResponseDto> {
+    const retirementPlanningRgps =
+      await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFail(
+        dto.json.retirementPlanningRgpsId,
+        RetirementPlanningRgpsNotFoundError,
+      );
+
+    const retirementPlanningRgpsEntity = new RetirementPlanningRgpsEntity({
+      ...retirementPlanningRgps,
+    });
+
+    const period = new RetirementPlanningRgpsPeriodEntity({
+      periodName: dto.json.periodName,
+      periodStart: dto.json.periodStart,
+      periodEnd: dto.json.periodEnd,
+      category: dto.json.category,
+      isPendency: dto.json.isPendency,
+      competenceBelowTheMinimum: dto.json.competenceBelowTheMinimum,
+      contributionAverage: dto.json.contributionAverage,
+      typeOfContribution: dto.json.typeOfContribution,
+      retirementPlanningRgps: retirementPlanningRgpsEntity,
+    });
+
+    await this.createOnDatabase(period);
+
+    return CreateRetirementPlanningRgpsPeriodResponseDto.build({
+      retirementPlanningRgpsPeriodId: period.id,
+    });
+  }
+
+  private async createOnDatabase(
+    retirementPlanningRgpsPeriod: RetirementPlanningRgpsPeriodEntity,
+  ): Promise<void> {
+    const retirementPlanningRgpsPeriodTransaction =
+      this.retirementPlanningRgpsPeriodCommandRepositoryGateway.createRetirementPlanningRgpsPeriod(
+        retirementPlanningRgpsPeriod,
+      );
+
+    const transactions = await this.baseTransactionRepositoryGateway.execute([
+      retirementPlanningRgpsPeriodTransaction,
+    ]);
+
+    await transactions.commit();
+  }
+}
