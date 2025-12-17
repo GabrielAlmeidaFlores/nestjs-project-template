@@ -837,9 +837,6 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createSocialSecurityPlanningCnis(
-    // @GetSessionData() sessionData: SessionDataModel,
-    // @GetOrganizationSessionData()
-    // organizationSessionData: OrganizationSessionDataModel,
     @Body()
     dto: CreateRetirementPlanningRgpsCnisRequestDto,
   ): Promise<CreateRetirementPlanningRgpsCnisResponseDto> {
