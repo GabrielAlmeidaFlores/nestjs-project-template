@@ -15,5 +15,11 @@ export class PaymentGatewayApplicationVariable {
       String,
     );
 
+  public static readonly BANK_WEBHOOK_ENDPOINT_ACCESS_TOKEN =
+    PaymentGatewayApplicationVariable.source.getValueOrThrow<string>(
+      'BANK_WEBHOOK_ENDPOINT_ACCESS_TOKEN',
+      String,
+    );
+
   protected readonly _type = PaymentGatewayApplicationVariable.name;
 }

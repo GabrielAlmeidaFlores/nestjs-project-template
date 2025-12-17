@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationPaymentPlanBankPaymentQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/result/get-organization-payment-plan-bank-payment.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { OrganizationPaymentPlanBankPaymentId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/value-object/organization-payment-plan-bank-payment-id/organization-payment-plan-bank-payment-id.value-object';
@@ -26,12 +27,20 @@ export class GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: OrganizationPaymentPlanBankPaymentTypeormEntity,
     ): GetOrganizationPaymentPlanBankPaymentQueryResult => {
+      if (!source.organizationPaymentPlan || !source.bankPayment) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetOrganizationPaymentPlanBankPaymentQueryResult.name,
+          sourceClass: OrganizationPaymentPlanBankPaymentTypeormEntity.name,
+        });
+      }
+
       return GetOrganizationPaymentPlanBankPaymentQueryResult.build({
         id: new OrganizationPaymentPlanBankPaymentId(source.id),
         organizationPaymentPlan: new OrganizationPaymentPlanId(
-          source.organizationPaymentPlanId,
+          source.organizationPaymentPlan.id,
         ),
-        bankPayment: new BankPaymentId(source.bankPaymentId),
+        bankPayment: new BankPaymentId(source.bankPayment.id),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -53,8 +62,6 @@ export class GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile {
     ): OrganizationPaymentPlanBankPaymentTypeormEntity => {
       return OrganizationPaymentPlanBankPaymentTypeormEntity.build({
         id: source.id.toString(),
-        organizationPaymentPlanId: source.organizationPaymentPlan.toString(),
-        bankPaymentId: source.bankPayment.toString(),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,

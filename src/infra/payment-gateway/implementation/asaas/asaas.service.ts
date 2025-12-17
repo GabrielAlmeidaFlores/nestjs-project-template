@@ -2,7 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
+import { InvalidBankCustomerDataError } from '@infra/payment-gateway/error/invalid-bank-customer-data.error';
 import { PaymentNotApprovedError } from '@infra/payment-gateway/error/payment-not-approved.error';
+import { AsaasApiErrorResponseType } from '@infra/payment-gateway/implementation/asaas/type/asaas-api-error-response.type';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
@@ -32,29 +34,36 @@ export class AsaasService extends PaymentGateway {
   public async createCustomer(
     props: CreateCustomerInputModel,
   ): Promise<CreateCustomerOutputModel> {
-    const data = {
-      name: props.name,
-      email: props.email.toString(),
-      mobilePhone: props.phoneNumber.toString(),
-      cpfCnpj: props.federalDocument.toString(),
-      externalReference: props.externalReference,
-      notificationDisabled: true,
-    };
+    try {
+      const data = {
+        name: props.name,
+        email: props.email.toString(),
+        mobilePhone: props.phoneNumber.toString(),
+        cpfCnpj: props.federalDocument.toString(),
+        externalReference: props.externalReference,
+        notificationDisabled: true,
+      };
 
-    const customer = await this.makeRequest<
-      {
-        name: string;
-        email: string;
-        mobilePhone: string;
-        cpfCnpj: string;
-        externalReference: string;
-      },
-      { id: string }
-    >('customers', 'post', data);
+      const customer = await this.makeRequest<
+        {
+          name: string;
+          email: string;
+          mobilePhone: string;
+          cpfCnpj: string;
+          externalReference: string;
+        },
+        { id: string }
+      >('customers', 'post', data);
 
-    return CreateCustomerOutputModel.build({
-      id: customer.id,
-    });
+      return CreateCustomerOutputModel.build({
+        id: customer.id,
+      });
+    } catch (error) {
+      this.handleAsaasApiError(
+        error,
+        (message) => new InvalidBankCustomerDataError({ message }),
+      );
+    }
   }
 
   public async cancelSubscription(subscriptionId: string): Promise<void> {
@@ -109,15 +118,35 @@ export class AsaasService extends PaymentGateway {
         id: subscription.id,
       });
     } catch (error) {
-      if (
-        error instanceof AxiosError &&
-        error.status?.toString().startsWith('4') === true
-      ) {
-        throw new PaymentNotApprovedError();
-      }
-
-      throw error;
+      this.handleAsaasApiError(
+        error,
+        (message) => new PaymentNotApprovedError({ message }),
+      );
     }
+  }
+
+  private handleAsaasApiError(
+    error: unknown,
+    errorFactory: (message: string) => Error,
+  ): never {
+    if (
+      error instanceof AxiosError &&
+      error.status?.toString().startsWith('4') === true
+    ) {
+      const apiError = error.response?.data as
+        | AsaasApiErrorResponseType
+        | undefined;
+
+      if (
+        apiError?.errors &&
+        apiError.errors.length > 0 &&
+        apiError.errors[0]?.description !== undefined
+      ) {
+        throw errorFactory(apiError.errors[0].description);
+      }
+    }
+
+    throw error;
   }
 
   private async makeRequest<RequestBody, ResponseBody>(

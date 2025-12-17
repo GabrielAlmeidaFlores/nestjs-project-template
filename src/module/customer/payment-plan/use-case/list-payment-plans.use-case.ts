@@ -6,6 +6,7 @@ import {
   ListPaymentPlansResponseDto,
   PaymentPlanPaidResourceDto,
 } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
 export class ListPaymentPlansUseCase {
@@ -16,11 +17,12 @@ export class ListPaymentPlansUseCase {
     private readonly paymentPlanQueryRepository: PaymentPlanQueryRepositoryGateway,
   ) {}
 
-  public async execute(): Promise<ListPaymentPlansResponseDto[]> {
+  public async execute(
+    dto: ListDataRequestDto,
+  ): Promise<ListPaymentPlansResponseDto[]> {
     const result = await this.paymentPlanQueryRepository.listPaymentPlan(
       new ListDataInputModel({
-        page: 1,
-        limit: 100,
+        ...dto,
       }),
     );
 

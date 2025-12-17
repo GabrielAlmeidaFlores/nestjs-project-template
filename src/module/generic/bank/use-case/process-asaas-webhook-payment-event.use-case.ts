@@ -2,6 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
+import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
+import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
+import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.entity';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
@@ -10,15 +14,9 @@ import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/ban
 import { AsaasWebhookPaymentEventRequestDto } from '@module/generic/bank/dto/request/asaas-webhook-payment-event.request.dto';
 import { AsaasWebhookPaymentEventResponseDto } from '@module/generic/bank/dto/response/asaas-webhook-payment-event.response.dto';
 
-type EventProcessorType = (
-  dto: AsaasWebhookPaymentEventRequestDto,
-) => Promise<void>;
-
 @Injectable()
 export class ProcessAsaasWebhookPaymentEventUseCase {
   protected readonly _type = ProcessAsaasWebhookPaymentEventUseCase.name;
-
-  private statusProcessorFactory: Record<string, EventProcessorType>;
 
   public constructor(
     @Inject(BankPaymentQueryRepositoryGateway)
@@ -27,20 +25,29 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly bankPaymentCommandRepository: BankPaymentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-  ) {
-    this.statusProcessorFactory = {
+    @Inject(OrganizationPaymentPlanQueryRepositoryGateway)
+    private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
+    @Inject(OrganizationPaymentPlanBankPaymentQueryRepositoryGateway)
+    private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
+    @Inject(OrganizationPaymentPlanBankPaymentCommandRepositoryGateway)
+    private readonly organizationPaymentPlanBankPaymentCommandRepository: OrganizationPaymentPlanBankPaymentCommandRepositoryGateway,
+  ) {}
+
+  public async execute(
+    dto: AsaasWebhookPaymentEventRequestDto,
+  ): Promise<AsaasWebhookPaymentEventResponseDto> {
+    const statusProcessorFactory: Record<
+      string,
+      (dto: AsaasWebhookPaymentEventRequestDto) => Promise<void>
+    > = {
       PENDING: this.processPaymentPending.bind(this),
       RECEIVED: this.processPaymentReceived.bind(this),
       CONFIRMED: this.processPaymentConfirmed.bind(this),
       OVERDUE: this.processPaymentOverdue.bind(this),
     };
-  }
 
-  public async execute(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<AsaasWebhookPaymentEventResponseDto> {
     const paymentStatus = dto.payment.status;
-    const processor = this.statusProcessorFactory[paymentStatus];
+    const processor = statusProcessorFactory[paymentStatus];
 
     if (!processor) {
       return AsaasWebhookPaymentEventResponseDto.build({
@@ -132,6 +139,41 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         createTransaction,
       ]);
       await transaction.commit();
+
+      if (
+        dto.payment.subscription !== null &&
+        dto.payment.subscription !== undefined
+      ) {
+        const organizationPaymentPlan =
+          await this.organizationPaymentPlanQueryRepository.findOneByBankExternalId(
+            dto.payment.subscription,
+          );
+
+        if (organizationPaymentPlan) {
+          const existingRelation =
+            await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+              newPayment.id,
+            );
+
+          if (!existingRelation) {
+            const relation = new OrganizationPaymentPlanBankPaymentEntity({
+              organizationPaymentPlan: organizationPaymentPlan.id,
+              bankPayment: newPayment.id,
+            });
+
+            const createRelationTransaction =
+              this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+                relation,
+              );
+
+            const relationTransaction =
+              await this.baseTransactionRepositoryGateway.execute([
+                createRelationTransaction,
+              ]);
+            await relationTransaction.commit();
+          }
+        }
+      }
     }
   }
 

@@ -5,4 +5,8 @@ export abstract class OrganizationPaymentPlanQueryRepositoryGateway {
   public abstract findManyByOrganizationId(
     organizationId: OrganizationId,
   ): Promise<GetOrganizationPaymentPlanQueryResult[]>;
+
+  public abstract findOneByBankExternalId(
+    bankExternalId: string,
+  ): Promise<GetOrganizationPaymentPlanQueryResult | null>;
 }

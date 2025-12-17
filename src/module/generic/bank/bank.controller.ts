@@ -3,6 +3,7 @@ import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
 import { AsaasWebhookPaymentEventRequestDto } from '@module/generic/bank/dto/request/asaas-webhook-payment-event.request.dto';
 import { AsaasWebhookPaymentEventResponseDto } from '@module/generic/bank/dto/response/asaas-webhook-payment-event.response.dto';
 import { ProcessAsaasWebhookPaymentEventUseCase } from '@module/generic/bank/use-case/process-asaas-webhook-payment-event.use-case';
+import { AsaasWebhookGuard } from '@shared/api/gateway/guard/asaas-webhook/asaas-webhook.guard';
 import { GenericControllerRoute } from '@shared/api/util/decorator/class/controller-route/generic-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 
@@ -22,6 +23,7 @@ export class BankController {
       type: AsaasWebhookPaymentEventRequestDto,
     },
     tag: ['webhook', 'pagamento-bancario'],
+    guard: [AsaasWebhookGuard],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Webhook de pagamento processado com sucesso.',
