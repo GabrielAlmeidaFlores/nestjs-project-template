@@ -5,6 +5,7 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { UpdatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan.request.dto';
 import { GetPaymentPlanResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan.response.dto';
 import { PaymentPlanEnabledPaidResourceItemResponseDto } from '@module/admin/payment-plan/dto/response/payment-plan-enabled-paid-resource-item.response.dto';
+import { MaxActivePaymentPlansReachedError } from '@module/admin/payment-plan/error/max-active-payment-plans-reached.error';
 import { PaymentPlanNotFoundError } from '@module/admin/payment-plan/error/payment-plan-not-found.error';
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
@@ -37,6 +38,19 @@ export class UpdatePaymentPlanUseCase {
         paymentPlanId,
         PaymentPlanNotFoundError,
       );
+
+    if (dto.active !== undefined && dto.active === true) {
+      if (!paymentPlan.active) {
+        const activeCount =
+          await this.paymentPlanQueryRepositoryGateway.countActivePaymentPlans();
+
+        const MAX_ACTIVE_PLANS = 3;
+
+        if (activeCount >= MAX_ACTIVE_PLANS) {
+          throw new MaxActivePaymentPlansReachedError();
+        }
+      }
+    }
 
     const updatedPaymentPlan = new PaymentPlanEntity({
       ...paymentPlan,

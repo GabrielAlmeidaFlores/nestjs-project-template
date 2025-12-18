@@ -18,4 +18,6 @@ export abstract class PaymentPlanQueryRepositoryGateway {
     id: PaymentPlanId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetPaymentPlanQueryResult>;
+
+  public abstract countActivePaymentPlans(): Promise<number>;
 }

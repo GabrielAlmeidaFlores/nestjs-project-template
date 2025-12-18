@@ -103,4 +103,12 @@ export class PaymentPlanTypeormQueryRepository
 
     return resource;
   }
+
+  public async countActivePaymentPlans(): Promise<number> {
+    return this.repository.count({
+      where: {
+        active: true,
+      },
+    });
+  }
 }
