@@ -23,14 +23,14 @@ import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/cu
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
-import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-to-monthly-recurring-payment-plan.request.dto';
+import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class SubscribePaymentPlanUseCase {
-  protected readonly _type = SubscribePaymentPlanUseCase.name;
+export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
+  protected readonly _type = SubscribeToMonthlyRecurringPaymentPlanUseCase.name;
 
   public constructor(
     @Inject(PaymentPlanQueryRepositoryGateway)
@@ -54,8 +54,8 @@ export class SubscribePaymentPlanUseCase {
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
-    dto: SubscribePaymentPlanRequestDto,
-  ): Promise<SubscribePaymentPlanResponseDto> {
+    dto: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
+  ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
     const existingSubscriptions =
@@ -168,7 +168,7 @@ export class SubscribePaymentPlanUseCase {
 
     await transaction.commit();
 
-    const response = SubscribePaymentPlanResponseDto.build({
+    const response = SubscribeToMonthlyRecurringPaymentPlanResponseDto.build({
       organizationPaymentPlanId: organizationPaymentPlan.id,
     });
 

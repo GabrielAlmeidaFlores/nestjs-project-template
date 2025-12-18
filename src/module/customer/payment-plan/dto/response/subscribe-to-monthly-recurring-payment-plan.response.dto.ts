@@ -4,9 +4,10 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class SubscribePaymentPlanResponseDto extends BaseBuildableDtoObject {
+export class SubscribeToMonthlyRecurringPaymentPlanResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(OrganizationPaymentPlanId)
   public organizationPaymentPlanId: OrganizationPaymentPlanId;
 
-  protected override readonly _type = SubscribePaymentPlanResponseDto.name;
+  protected override readonly _type =
+    SubscribeToMonthlyRecurringPaymentPlanResponseDto.name;
 }
