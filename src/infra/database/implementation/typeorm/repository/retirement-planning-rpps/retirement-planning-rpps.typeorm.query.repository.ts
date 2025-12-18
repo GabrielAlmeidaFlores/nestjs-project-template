@@ -49,9 +49,12 @@ export class RetirementPlanningRppsTypeormQueryRepository
           retirementPlanningRppsResult: true,
           retirementPlanningRppsInssBenefit: true,
           retirementPlanningRppsLegalProceeding: true,
+          documents: true,
           remunerations: true,
           periods: {
-            specialTimePeriod: true,
+            specialTimePeriod: {
+              specialTimeDocuments: true,
+            },
             disabilityPeriod: {
               cid: true,
               disabilityDocuments: true,

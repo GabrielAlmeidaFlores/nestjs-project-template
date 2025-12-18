@@ -34,6 +34,7 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps-remuneration.use-case';
 import { UpdateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -77,6 +78,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRetirementPlanningRppsRemunerationUseCase,
     GetRetirementPlanningRppsUseCase,
     ListRetirementPlanningRppsRemunerationUseCase,
+    UpdateRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsUseCase,
   ],
 })

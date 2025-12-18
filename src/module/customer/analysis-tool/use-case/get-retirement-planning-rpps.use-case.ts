@@ -8,6 +8,7 @@ import {
   GetAnalysisToolClientResponseDto,
   GetRetirementPlanningRppsCidResponseDto,
   GetRetirementPlanningRppsPeriodDisabilityResponseDto,
+  GetRetirementPlanningRppsPeriodDocumentResponseDto,
   GetRetirementPlanningRppsPeriodResponseDto,
   GetRetirementPlanningRppsPeriodSpecialTimeResponseDto,
   GetRetirementPlanningRppsResponseDto,
@@ -61,56 +62,78 @@ export class GetRetirementPlanningRppsUseCase {
         RetirementPlanningRppsNotFoundError,
       );
 
-    const periods = retirementPlanningRppsQueryResult.periods.map((period) => {
-      const specialTimePeriod = period.specialTimePeriod
-        ? GetRetirementPlanningRppsPeriodSpecialTimeResponseDto.build({
-            type: period.specialTimePeriod.type,
-            startDate: period.specialTimePeriod.startDate,
-            endDate: period.specialTimePeriod.endDate,
-          })
-        : null;
+    const periods = (retirementPlanningRppsQueryResult.periods ?? []).map(
+      (period) => {
+        const specialTimePeriod = period.specialTimePeriod
+          ? GetRetirementPlanningRppsPeriodSpecialTimeResponseDto.build({
+              type: period.specialTimePeriod.type,
+              startDate: period.specialTimePeriod.startDate,
+              endDate: period.specialTimePeriod.endDate,
+              documents: period.specialTimePeriod.documents.map((doc) =>
+                GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
+                  type: doc.documentType,
+                  document: doc.document,
+                }),
+              ),
+            })
+          : null;
 
-      const disabilityPeriod = period.disabilityPeriod
-        ? GetRetirementPlanningRppsPeriodDisabilityResponseDto.build({
-            type: period.disabilityPeriod.type,
-            degree: period.disabilityPeriod.degree,
-            startDate: period.disabilityPeriod.startDate,
-            endDate: period.disabilityPeriod.endDate,
-            category: period.disabilityPeriod.category,
-            description: period.disabilityPeriod.description,
-            dailyImpact: period.disabilityPeriod.dailyImpact,
-            cid: GetRetirementPlanningRppsCidResponseDto.build({
-              code: period.disabilityPeriod.cid.code,
-              description: period.disabilityPeriod.cid.description,
-            }),
-          })
-        : null;
+        const disabilityPeriod = period.disabilityPeriod
+          ? GetRetirementPlanningRppsPeriodDisabilityResponseDto.build({
+              type: period.disabilityPeriod.type,
+              degree: period.disabilityPeriod.degree,
+              startDate: period.disabilityPeriod.startDate,
+              endDate: period.disabilityPeriod.endDate,
+              category: period.disabilityPeriod.category,
+              description: period.disabilityPeriod.description,
+              dailyImpact: period.disabilityPeriod.dailyImpact,
+              cid: GetRetirementPlanningRppsCidResponseDto.build({
+                code: period.disabilityPeriod.cid.code,
+                description: period.disabilityPeriod.cid.description,
+              }),
+              documents: period.disabilityPeriod.documents.map((doc) =>
+                GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
+                  type: doc.documentType,
+                  document: doc.document,
+                }),
+              ),
+            })
+          : null;
 
-      return GetRetirementPlanningRppsPeriodResponseDto.build({
-        startDate: period.startDate,
-        endDate: period.endDate,
-        jobPosition: period.jobPosition,
-        career: period.career,
-        serviceType: period.serviceType,
-        department: period.department,
-        specialTimePeriod,
-        disabilityPeriod,
-      });
-    });
+        return GetRetirementPlanningRppsPeriodResponseDto.build({
+          startDate: period.startDate,
+          endDate: period.endDate,
+          jobPosition: period.jobPosition,
+          career: period.career,
+          serviceType: period.serviceType,
+          department: period.department,
+          specialTimePeriod,
+          disabilityPeriod,
+        });
+      },
+    );
 
     const analysisToolClient = GetAnalysisToolClientResponseDto.build({
       ...analysisToolRecordQueryResult.analysisToolClient,
     });
 
-    const legalProceedingNumber =
-      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding.map(
-        (entity) => entity.legalProceeding,
-      );
+    const legalProceedingNumber = (
+      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding ??
+      []
+    ).map((entity) => entity.legalProceeding);
 
-    const inssBenefitNumber =
-      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit.map(
-        (entity) => entity.inssBenefitNumber,
-      );
+    const inssBenefitNumber = (
+      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit ?? []
+    ).map((entity) => entity.inssBenefitNumber);
+
+    const ctcDocuments = (
+      retirementPlanningRppsQueryResult.ctcDocuments ?? []
+    ).map((doc) =>
+      GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
+        type: doc.documentType,
+        document: doc.document,
+      }),
+    );
 
     const response = GetRetirementPlanningRppsResponseDto.build({
       id: retirementPlanningRppsQueryResult.id,
@@ -122,6 +145,7 @@ export class GetRetirementPlanningRppsUseCase {
       analysisToolClient,
       legalProceedingNumber,
       inssBenefitNumber,
+      ctcDocuments,
       retirementPlanningRppsResult:
         retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
           ? GetRetirementPlanningRppsResultResponseDto.build({

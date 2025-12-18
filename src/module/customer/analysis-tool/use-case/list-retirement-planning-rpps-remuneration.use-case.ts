@@ -49,7 +49,7 @@ export class ListRetirementPlanningRppsRemunerationUseCase {
     );
 
     const remunerationList =
-      await this.retirementPlanningRppsRemunerationQueryRepositoryGateway.listByOrganizationIdAndAuthIdentityId(
+      await this.retirementPlanningRppsRemunerationQueryRepositoryGateway.listByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         retirementPlanningRppsId,

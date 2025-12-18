@@ -1,3 +1,4 @@
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
@@ -7,6 +8,7 @@ import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysi
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
+import { RequestDtoBase64FileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-base64-file-property/request-dto-base64-file-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
@@ -21,7 +23,9 @@ export class UpdateRetirementPlanningRppsPeriodDocumentRequestDto extends BaseBu
   })
   public readonly type: RetirementPlanningDocumentTypeEnum;
 
-  @RequestDtoStringProperty({ required: true })
+  @RequestDtoBase64FileProperty({
+    required: true,
+  })
   public readonly document: string;
 
   protected override readonly _type =
@@ -35,8 +39,8 @@ export class UpdateRetirementPlanningRppsDocumentRequestDto extends BaseBuildabl
   })
   public readonly type?: RetirementPlanningDocumentTypeEnum;
 
-  @RequestDtoStringProperty({ required: true })
-  public readonly document: string;
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly document: Base64;
 
   protected override readonly _type =
     UpdateRetirementPlanningRppsDocumentRequestDto.name;
@@ -151,21 +155,12 @@ export class UpdateRetirementPlanningRppsPeriodRequestDto extends BaseBuildableD
   )
   public readonly disability?: UpdateRetirementPlanningRppsPeriodDisabilityRequestDto | null;
 
-  // @RequestDtoObjectProperty(
-  //   () => CreateRetirementPlanningRppsPeriodDocumentRequestDto,
-  //   {
-  //     required: true,
-  //     isArray: true,
-  //   },
-  // )
-  // public readonly documents: CreateRetirementPlanningRppsPeriodDocumentRequestDto[];
-
   protected override readonly _type =
     UpdateRetirementPlanningRppsPeriodRequestDto.name;
 }
 
 @RequestDto()
-export class UpdateRetirementPlanningRppsJsonRequestDto extends BaseBuildableDtoObject {
+export class UpdateRetirementPlanningRppsRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: true })
   public readonly careerStartDate: Date;
 
@@ -176,21 +171,6 @@ export class UpdateRetirementPlanningRppsJsonRequestDto extends BaseBuildableDto
   public analysisToolClientId: AnalysisToolClientId;
 
   @RequestDtoObjectProperty(
-    () => UpdateRetirementPlanningRppsPeriodRequestDto,
-    {
-      required: true,
-      isArray: true,
-    },
-  )
-  public readonly periods: UpdateRetirementPlanningRppsPeriodRequestDto[];
-
-  protected override readonly _type =
-    UpdateRetirementPlanningRppsJsonRequestDto.name;
-}
-
-@RequestDto()
-export class UpdateRetirementPlanningRppsRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoObjectProperty(
     () => UpdateRetirementPlanningRppsDocumentRequestDto,
     {
       required: false,
@@ -199,8 +179,14 @@ export class UpdateRetirementPlanningRppsRequestDto extends BaseBuildableDtoObje
   )
   public ctcDocuments?: UpdateRetirementPlanningRppsDocumentRequestDto[];
 
-  @RequestDtoObjectProperty(() => UpdateRetirementPlanningRppsJsonRequestDto)
-  public json: UpdateRetirementPlanningRppsJsonRequestDto;
+  @RequestDtoObjectProperty(
+    () => UpdateRetirementPlanningRppsPeriodRequestDto,
+    {
+      required: true,
+      isArray: true,
+    },
+  )
+  public readonly periods: UpdateRetirementPlanningRppsPeriodRequestDto[];
 
   protected override readonly _type =
     UpdateRetirementPlanningRppsRequestDto.name;

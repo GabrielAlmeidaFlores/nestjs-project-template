@@ -37,7 +37,6 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
-import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -46,8 +45,6 @@ export class UpdateRetirementPlanningRppsUseCase {
   protected readonly _type = UpdateRetirementPlanningRppsUseCase.name;
 
   public constructor(
-    @Inject(FileProcessorGateway)
-    private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RetirementPlanningRppsQueryRepositoryGateway)
@@ -107,7 +104,7 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-        dto.json.analysisToolClientId,
+        dto.analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
@@ -120,8 +117,8 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     const retirementPlanningRpps = new RetirementPlanningRppsEntity({
       id: retirementPlanningRppsQueryResult.id,
-      careerStartDate: dto.json.careerStartDate,
-      publicServiceStartDate: dto.json.publicServiceStartDate,
+      careerStartDate: dto.careerStartDate,
+      publicServiceStartDate: dto.publicServiceStartDate,
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
@@ -138,17 +135,13 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
       for (const documentDto of dto.ctcDocuments) {
-        const document = await this.fileProcessorGateway.uploadBase64(
-          documentDto.document,
-        );
-
         const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
 
         const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
           id: periodDocumentId,
           documentType:
             documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document,
+          document: documentDto.document.toString(),
           retirementPlanningRppsPeriodDisability: null,
           retirementPlanningRppsPeriodSpecialTime: null,
           retirementPlanningRpps,
@@ -164,8 +157,8 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     const periodsTransactions = await this.updatePeriodsOnDatabase(
       retirementPlanningRpps,
-      retirementPlanningRppsQueryResult.periods,
-      dto.json.periods,
+      retirementPlanningRppsQueryResult.periods ?? [],
+      dto.periods,
     );
 
     transactionOperations.push(...periodsTransactions);
@@ -278,10 +271,6 @@ export class UpdateRetirementPlanningRppsUseCase {
           periodDto.disability.documents.length > 0
         ) {
           for (const documentDto of periodDto.disability.documents) {
-            const document = await this.fileProcessorGateway.uploadBase64(
-              documentDto.document,
-            );
-
             const periodDocumentId =
               new RetirementPlanningRppsPeriodDocumentId();
 
@@ -289,7 +278,7 @@ export class UpdateRetirementPlanningRppsUseCase {
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document,
+                document: documentDto.document.toString(),
                 retirementPlanningRppsPeriodDisability: disability,
                 retirementPlanningRppsPeriodSpecialTime: null,
                 retirementPlanningRpps: null,
@@ -326,10 +315,6 @@ export class UpdateRetirementPlanningRppsUseCase {
           periodDto.specialTime.documents.length > 0
         ) {
           for (const documentDto of periodDto.specialTime.documents) {
-            const document = await this.fileProcessorGateway.uploadBase64(
-              documentDto.document,
-            );
-
             const periodDocumentId =
               new RetirementPlanningRppsPeriodDocumentId();
 
@@ -337,7 +322,7 @@ export class UpdateRetirementPlanningRppsUseCase {
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document,
+                document: documentDto.document.toString(),
                 retirementPlanningRppsPeriodDisability: null,
                 retirementPlanningRppsPeriodSpecialTime: specialTime,
                 retirementPlanningRpps: null,

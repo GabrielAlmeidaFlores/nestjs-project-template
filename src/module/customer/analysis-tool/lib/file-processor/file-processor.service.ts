@@ -36,23 +36,4 @@ export class FileProcessorService implements FileProcessorGateway {
 
     return uploadCnisDocument;
   }
-
-  public async uploadBase64(
-    base64Content: string,
-    fileName = 'document.pdf',
-  ): Promise<string> {
-    // Remove data:*/*;base64, prefix if present
-    const base64Data = base64Content.replace(/^data:.*?;base64,/, '');
-    const buffer = Buffer.from(base64Data, 'base64');
-
-    const fileModel: FileModel = {
-      buffer,
-      originalName: fileName,
-      encoding: '7bit',
-      mimetype: 'application/pdf',
-      size: buffer.length,
-    } as FileModel;
-
-    return await this.bucketGateway.create(fileModel);
-  }
 }

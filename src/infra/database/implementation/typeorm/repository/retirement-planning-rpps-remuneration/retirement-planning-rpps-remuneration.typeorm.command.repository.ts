@@ -50,4 +50,10 @@ export class RetirementPlanningRppsRemunerationTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public deleteRetirementPlanningRppsRemuneration(
+    id: RetirementPlanningRppsRemunerationId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
 }
