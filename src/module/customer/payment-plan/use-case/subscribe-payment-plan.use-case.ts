@@ -6,11 +6,9 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import {
-  CreditCardHolderInfoInputModel,
-  CreditCardInfoInputModel,
-  CreateSubscriptionInputModel,
-} from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
+import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-info.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
