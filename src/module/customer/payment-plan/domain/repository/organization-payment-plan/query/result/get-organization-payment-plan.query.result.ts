@@ -1,8 +1,10 @@
+import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import type { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
-export class GetOrganizationPaymentPlanQueryResult {
+export class GetOrganizationPaymentPlanQueryResult extends BaseBuildableObject {
   public id: OrganizationPaymentPlanId;
   public bankExternalId: string;
   public name: string;
@@ -13,6 +15,8 @@ export class GetOrganizationPaymentPlanQueryResult {
   public cycle: PaymentPlanCycleEnum;
   public createdAt: Date;
   public updatedAt: Date;
+  public deletedAt: Date | null;
 
-  protected readonly _type = GetOrganizationPaymentPlanQueryResult.name;
+  protected override readonly _type =
+    GetOrganizationPaymentPlanQueryResult.name;
 }

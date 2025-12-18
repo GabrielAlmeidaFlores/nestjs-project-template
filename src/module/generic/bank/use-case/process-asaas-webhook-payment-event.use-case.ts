@@ -2,6 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
+import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
+import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/organization-credit-purchase.entity';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
@@ -31,6 +34,10 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
     @Inject(OrganizationPaymentPlanBankPaymentCommandRepositoryGateway)
     private readonly organizationPaymentPlanBankPaymentCommandRepository: OrganizationPaymentPlanBankPaymentCommandRepositoryGateway,
+    @Inject(OrganizationCreditPurchaseQueryRepositoryGateway)
+    private readonly organizationCreditPurchaseQueryRepository: OrganizationCreditPurchaseQueryRepositoryGateway,
+    @Inject(OrganizationCreditPurchaseCommandRepositoryGateway)
+    private readonly organizationCreditPurchaseCommandRepository: OrganizationCreditPurchaseCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -41,6 +48,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       (dto: AsaasWebhookPaymentEventRequestDto) => Promise<void>
     > = {
       PENDING: this.processPaymentPending.bind(this),
+      RECEIVED: this.processPaymentConfirmed.bind(this),
       CONFIRMED: this.processPaymentConfirmed.bind(this),
       OVERDUE: this.processPaymentOverdue.bind(this),
     };
@@ -92,6 +100,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       CONFIRMED: PaymentStatusEnum.CONFIRMED,
       OVERDUE: PaymentStatusEnum.OVERDUE,
       REFUNDED: PaymentStatusEnum.REFUNDED,
+      RECEIVED: PaymentStatusEnum.CONFIRMED,
     };
 
     const status = statusMap[dto.payment.status] ?? PaymentStatusEnum.PENDING;
@@ -186,6 +195,50 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
     await this.upsertBankPayment(dto);
+
+    if (
+      dto.payment.subscription !== null &&
+      dto.payment.subscription !== undefined
+    ) {
+      const organizationPaymentPlan =
+        await this.organizationPaymentPlanQueryRepository.findOneByBankExternalIdWithRelations(
+          dto.payment.subscription,
+        );
+
+      if (organizationPaymentPlan) {
+        const bankPayment =
+          await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
+            dto.payment.id,
+          );
+
+        if (bankPayment) {
+          const existingCreditPurchase =
+            await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+              bankPayment.id,
+            );
+
+          if (!existingCreditPurchase) {
+            const creditPurchase = new OrganizationCreditPurchaseEntity({
+              organization: organizationPaymentPlan.organization.id,
+              bankPayment: bankPayment.id,
+              creditAmount:
+                organizationPaymentPlan.paymentPlan.monthlyCreditAmount,
+            });
+
+            const createCreditPurchaseTransaction =
+              this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+                creditPurchase,
+              );
+
+            const transaction =
+              await this.baseTransactionRepositoryGateway.execute([
+                createCreditPurchaseTransaction,
+              ]);
+            await transaction.commit();
+          }
+        }
+      }
+    }
   }
 
   private async processPaymentOverdue(

@@ -9,8 +9,8 @@ import {
 
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enable-paid-resource.typeorm.entity';
-import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
+import { OrganizationPaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enabled-paid-resource.typeorm.entity';
+import { PaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enabled-paid-resource.typeorm.entity';
 import { PaymentPlanPaidResourceIaConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource-ia-config.typeorm.entity';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 
@@ -39,19 +39,19 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
   public updatedBy?: AdminTypeormEntity | undefined;
 
   @OneToMany(
-    () => PaymentPlanEnablePaidResourceTypeormEntity,
+    () => PaymentPlanEnabledPaidResourceTypeormEntity,
     (entity) => entity.paymentPlan,
   )
-  public paymentPlanEnablePaidResource?:
-    | PaymentPlanEnablePaidResourceTypeormEntity[]
+  public paymentPlanEnabledPaidResource?:
+    | PaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
 
   @OneToMany(
-    () => OrganizationPaymentPlanEnablePaidResourceTypeormEntity,
+    () => OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
     (entity) => entity.paymentPlan,
   )
-  public organizationPaymentPlanEnablePaidResource?:
-    | OrganizationPaymentPlanEnablePaidResourceTypeormEntity[]
+  public organizationPaymentPlanEnabledPaidResource?:
+    | OrganizationPaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
 
   @OneToOne(

@@ -1,10 +1,10 @@
-import { PaymentPlanPaidResourceNotFoundError } from '@module/admin/payment-plan/error/payment-plan-paid-resource-not-found.error';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { UpdatePaymentPlanPaidResourceRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan-paid-resource.request.dto';
 import { GetPaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan-paid-resource.response.dto';
+import { PaymentPlanPaidResourceNotFoundError } from '@module/admin/payment-plan/error/payment-plan-paid-resource-not-found.error';
 import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/command/payment-plan-paid-resource.command.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';

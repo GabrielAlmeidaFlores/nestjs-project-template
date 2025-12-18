@@ -34,10 +34,10 @@ export class GetPaymentPlanUseCase {
       cycle: paymentPlan.cycle,
       enabledPaidResources: paymentPlan.enabledPaidResources.map((resource) =>
         PaymentPlanEnabledPaidResourceItemResponseDto.build({
-          id: resource.id,
-          resource: resource.resource,
-          creditCost: parseFloat(resource.creditCost),
-          description: resource.description,
+          id: resource.paymentPlanPaidResource.id,
+          resource: resource.paymentPlanPaidResource.resource,
+          creditCost: parseFloat(resource.paymentPlanPaidResource.creditCost),
+          description: resource.paymentPlanPaidResource.description,
         }),
       ),
       createdAt: paymentPlan.createdAt,
