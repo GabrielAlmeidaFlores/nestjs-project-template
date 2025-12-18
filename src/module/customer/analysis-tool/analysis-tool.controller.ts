@@ -33,6 +33,7 @@ import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { CreateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-remuneration.response.dto';
+import { CreateRetirementPlanningRppsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-result.response.dto';
 import { CreateRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
@@ -58,6 +59,7 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { CreateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration.use-case';
+import { CreateRetirementPlanningRppsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-result.use-case';
 import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
@@ -120,6 +122,7 @@ export class AnalysisToolController {
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly createRetirementPlanningRppsUseCase: CreateRetirementPlanningRppsUseCase,
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
+    private readonly createRetirementPlanningRppsResultUseCase: CreateRetirementPlanningRppsResultUseCase,
     private readonly getRetirementPlanningRppsUseCase: GetRetirementPlanningRppsUseCase,
     private readonly updateRetirementPlanningRppsRemunerationUseCase: UpdateRetirementPlanningRppsRemunerationUseCase,
     private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
@@ -1002,6 +1005,39 @@ export class AnalysisToolController {
       organizationSessionData,
       retirementPlanningRppsId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar resultado do planejamento previdenciário RPPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      method: RequestMethod.POST,
+      path: 'retirement-planning-rpps/:retirementPlanningRppsId/result',
+    },
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Resultado do planejamento previdenciário RPPS criado com sucesso.',
+      type: CreateRetirementPlanningRppsResultResponseDto,
+    },
+    tag: ['planejamento-previdenciario-rpps'],
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRetirementPlanningRppsResult(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRppsId',
+      new ParseValueObjectPipe(RetirementPlanningRppsId),
+    )
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+  ): Promise<CreateRetirementPlanningRppsResultResponseDto> {
+    return await this.createRetirementPlanningRppsResultUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRppsId,
     );
   }
 }
