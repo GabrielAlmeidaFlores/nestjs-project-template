@@ -23,8 +23,10 @@ import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/cu
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-to-monthly-recurring-payment-plan.request.dto';
 import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
+import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/error/invalid-payment-plan-cycle.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -58,6 +60,16 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
   ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
+    const paymentPlan =
+      await this.paymentPlanQueryRepository.findOnePaymentPlanByIdOrFail(
+        new PaymentPlanId(dto.paymentPlanId),
+        PaymentPlanNotFoundError,
+      );
+
+    if (paymentPlan.cycle !== PaymentPlanCycleEnum.MONTHLY_RECURRING) {
+      throw new InvalidPaymentPlanCycleError();
+    }
+
     const existingSubscriptions =
       await this.organizationPaymentPlanQueryRepository.findManyByOrganizationId(
         new OrganizationId(organizationId),
@@ -83,12 +95,6 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
         sessionData.authIdentityId,
         CustomerNotFoundError,
-      );
-
-    const paymentPlan =
-      await this.paymentPlanQueryRepository.findOnePaymentPlanByIdOrFail(
-        new PaymentPlanId(dto.paymentPlanId),
-        PaymentPlanNotFoundError,
       );
 
     const nextDueDate = moment().startOf('day').toDate();

@@ -55,7 +55,7 @@ export class PaymentPlanController {
     summary: 'Assinar plano de pagamento',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'subscribe',
+      path: 'monthly-recurring/subscribe',
       method: RequestMethod.POST,
       type: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
     },
