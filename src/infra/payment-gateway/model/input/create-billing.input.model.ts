@@ -8,7 +8,7 @@ export class CreateBillingInputModel extends BaseBuildableObject {
   public readonly dueDate: Date;
   public readonly description: string;
   public readonly externalReference: string;
-  public readonly installmentCount: number;
+  public readonly installmentCount?: number;
 
   protected override readonly _type = CreateBillingInputModel.name;
 }

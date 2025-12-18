@@ -2,11 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
-import { InvalidBankCustomerDataError } from '@infra/payment-gateway/error/invalid-bank-customer-data.error';
-import { PaymentNotApprovedError } from '@infra/payment-gateway/error/payment-not-approved.error';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { InvalidBankCustomerDataError } from '@infra/payment-gateway/implementation/asaas/error/invalid-bank-customer-data.error';
+import { PaymentNotApprovedError } from '@infra/payment-gateway/implementation/asaas/error/payment-not-approved.error';
 import { AsaasApiErrorResponseType } from '@infra/payment-gateway/implementation/asaas/type/asaas-api-error-response.type';
+import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { CreateBillingOutputModel } from '@infra/payment-gateway/model/output/create-billing.output.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
 import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
@@ -45,13 +48,7 @@ export class AsaasService extends PaymentGateway {
       };
 
       const customer = await this.makeRequest<
-        {
-          name: string;
-          email: string;
-          mobilePhone: string;
-          cpfCnpj: string;
-          externalReference: string;
-        },
+        Record<string, unknown>,
         { id: string }
       >('customers', 'post', data);
 
@@ -68,6 +65,57 @@ export class AsaasService extends PaymentGateway {
 
   public async cancelSubscription(subscriptionId: string): Promise<void> {
     await this.makeRequest(`subscriptions/${subscriptionId}`, 'delete');
+  }
+
+  public async createBilling(
+    props: CreateBillingInputModel,
+  ): Promise<CreateBillingOutputModel> {
+    const data: Record<string, unknown> = {
+      customer: props.customerId,
+      value: props.value.toNumber(),
+      dueDate: props.dueDate,
+      description: props.description,
+      externalReference: props.externalReference,
+      installmentCount: props.installmentCount,
+    };
+
+    if (props.installmentCount !== undefined) {
+      data['totalValue'] = props.value.toNumber();
+    }
+
+    const billing = await this.makeRequest<
+      Record<string, unknown>,
+      { id: string }
+    >('payments', 'post', data);
+
+    let billingPixData:
+      | {
+          encodedImage: string;
+          payload: string;
+        }
+      | undefined = undefined;
+
+    try {
+      billingPixData = await this.makeRequest<
+        Record<string, unknown>,
+        { encodedImage: string; payload: string }
+      >(`payments/${billing.id}/pixQrCode`, 'get', data);
+    } catch {}
+
+    const outputData: {
+      id: string;
+      pixQrCode?: Base64;
+      pixCopyPaste?: string;
+    } = {
+      id: billing.id,
+    };
+
+    if (billingPixData !== undefined) {
+      outputData.pixQrCode = new Base64(billingPixData.encodedImage);
+      outputData.pixCopyPaste = billingPixData.payload;
+    }
+
+    return CreateBillingOutputModel.build(outputData);
   }
 
   public async createSubscription(
@@ -104,13 +152,7 @@ export class AsaasService extends PaymentGateway {
 
     try {
       const subscription = await this.makeRequest<
-        {
-          customer: string;
-          value: number;
-          nextDueDate: Date;
-          cycle: string;
-          description: string;
-        },
+        Record<string, unknown>,
         { id: string }
       >('subscriptions', 'post', data);
 
