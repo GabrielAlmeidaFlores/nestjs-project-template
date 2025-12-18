@@ -102,7 +102,9 @@ export class CreateRetirementPlanningRgpsUseCase {
       retirementPlanningRgpsResult,
     );
 
-    return new CreateRetirementPlanningRgpsResponseDto();
+    return CreateRetirementPlanningRgpsResponseDto.build({
+      retirementPlanningRgpsId: retirementPlanningRgps.id,
+    });
   }
 
   private async createOnDatabase(

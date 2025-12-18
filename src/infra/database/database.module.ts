@@ -41,6 +41,8 @@ import { OrganizationTypeormCommandRepository } from '@infra/database/implementa
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { RetirementPlanningRgpsInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-inss-benefit/retirement-planning-rgps-inss-benefit.typeorm.command.repository';
 import { RetirementPlanningRgpsLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-legal-proceeding/retirement-planning-rgps-legal-proceeding.typeorm.command.repository';
+import { RetirementPlanningRgpsPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.typeorm.command.repository';
+import { RetirementPlanningRgpsPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.typeorm.query.repository';
 import { RetirementPlanningRgpsPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period/retirement-planning-rgps-period.typeorm.command.repository';
 import { RetirementPlanningRgpsResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-result/retirement-planning-rgps-result.typeorm.command.repository';
 import { RetirementPlanningRgpsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.command.repository';
@@ -90,6 +92,8 @@ import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
+import { RetirementPlanningRgpsPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/query/retirement-planning-rgps-period-document.query.repository.gateway';
 
 const classProvider: ClassProvider[] = [
   {
@@ -257,6 +261,10 @@ const classProvider: ClassProvider[] = [
     useClass: RetirementPlanningRgpsResultTypeormCommandRepository,
   },
   {
+    provide: RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodDocumentTypeormCommandRepository,
+  },
+  {
     provide: RetirementPlanningRgpsPeriodCommandRepositoryGateway,
     useClass: RetirementPlanningRgpsPeriodTypeormCommandRepository,
   },
@@ -271,6 +279,10 @@ const classProvider: ClassProvider[] = [
   {
     provide: RetirementPlanningRgpsQueryRepositoryGateway,
     useClass: RetirementPlanningRgpsTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsPeriodDocumentQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodDocumentTypeormQueryRepository,
   },
 ];
 
