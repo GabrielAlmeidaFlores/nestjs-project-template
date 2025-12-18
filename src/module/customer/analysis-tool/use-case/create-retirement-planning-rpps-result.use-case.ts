@@ -9,6 +9,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/dom
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-result/retirement-planning-rpps-result.entity';
 import { CreateRetirementPlanningRppsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-result.response.dto';
+import { FailedToGenerateRetirementPlanningRppsAnalysisError } from '@module/customer/analysis-tool/error/failed-to-generate-retirement-planning-rpps-analysis.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -74,8 +75,11 @@ export class CreateRetirementPlanningRppsResultUseCase {
         documentsBuffer,
       );
 
-    if (!retirementPlanningRppsCompleteAnalysis) {
-      throw new Error('Failed to generate retirement planning analysis');
+    if (
+      retirementPlanningRppsCompleteAnalysis === null ||
+      retirementPlanningRppsCompleteAnalysis === undefined
+    ) {
+      throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
     }
 
     const retirementPlanningRppsResult = new RetirementPlanningRppsResultEntity(
