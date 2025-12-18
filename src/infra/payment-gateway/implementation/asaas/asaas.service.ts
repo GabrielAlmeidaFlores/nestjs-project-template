@@ -88,6 +88,10 @@ export class AsaasService extends PaymentGateway {
     });
   }
 
+  public async cancelBilling(billingId: string): Promise<void> {
+    await this.makeRequest(`payments/${billingId}`, 'delete');
+  }
+
   public async createBilling(
     props: CreateBillingInputModel,
   ): Promise<CreateBillingOutputModel> {

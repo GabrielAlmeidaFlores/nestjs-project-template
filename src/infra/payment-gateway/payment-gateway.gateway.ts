@@ -25,4 +25,6 @@ export abstract class PaymentGateway {
   public abstract createCustomer(
     props: CreateCustomerInputModel,
   ): Promise<CreateCustomerOutputModel>;
+
+  public abstract cancelBilling(billingId: string): Promise<void>;
 }
