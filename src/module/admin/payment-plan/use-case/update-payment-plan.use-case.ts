@@ -54,7 +54,7 @@ export class UpdatePaymentPlanUseCase {
 
     transactions.push(updatePaymentPlan);
 
-    if (dto.paidResourceIds !== undefined) {
+    if (dto.paidResourceId !== undefined) {
       const now = new Date();
 
       const deleteAllPaidResources =
@@ -65,7 +65,7 @@ export class UpdatePaymentPlanUseCase {
       transactions.push(deleteAllPaidResources);
 
       const seenIds = new Set<string>();
-      const uniquePaidResourceIds = dto.paidResourceIds.filter((id) => {
+      const uniquePaidResourceIds = dto.paidResourceId.filter((id) => {
         const idString = id.toString();
         if (seenIds.has(idString)) {
           return false;

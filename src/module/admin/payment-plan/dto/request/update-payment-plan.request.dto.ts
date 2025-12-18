@@ -36,7 +36,7 @@ export class UpdatePaymentPlanRequestDto extends BaseBuildableDtoObject {
     required: false,
     isArray: true,
   })
-  public paidResourceIds?: PaymentPlanPaidResourceId[];
+  public paidResourceId?: PaymentPlanPaidResourceId[];
 
   protected override readonly _type = UpdatePaymentPlanRequestDto.name;
 }
