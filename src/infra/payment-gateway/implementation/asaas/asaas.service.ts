@@ -9,9 +9,11 @@ import { AsaasApiErrorResponseType } from '@infra/payment-gateway/implementation
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { PayBillingInputModel } from '@infra/payment-gateway/model/input/pay-billing.input.model';
 import { CreateBillingOutputModel } from '@infra/payment-gateway/model/output/create-billing.output.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
 import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
+import { PayBillingOutputModel } from '@infra/payment-gateway/model/output/pay-billing.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { PaymentGatewayApplicationVariable } from '@shared/system/constant/application-variable/source/payment-gateway.application-variable';
@@ -65,6 +67,25 @@ export class AsaasService extends PaymentGateway {
 
   public async cancelSubscription(subscriptionId: string): Promise<void> {
     await this.makeRequest(`subscriptions/${subscriptionId}`, 'delete');
+  }
+
+  public async payBilling(
+    props: PayBillingInputModel,
+  ): Promise<PayBillingOutputModel> {
+    const data = {
+      creditCard: props.creditCardInfo,
+      creditCardHolderInfo: props.creditCardHolderInfo,
+    };
+
+    await this.makeRequest<Record<string, unknown>, { id: string }>(
+      `payments/${props.billingId}/payWithCreditCard`,
+      'post',
+      data,
+    );
+
+    return PayBillingOutputModel.build({
+      id: props.billingId,
+    });
   }
 
   public async createBilling(
