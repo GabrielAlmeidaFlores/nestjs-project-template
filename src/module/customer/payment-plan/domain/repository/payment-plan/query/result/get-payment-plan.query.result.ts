@@ -14,6 +14,7 @@ export class GetPaymentPlanQueryResult extends BaseBuildableObject {
   public monthlyCreditAmount: number;
   public active: boolean;
   public cycle: PaymentPlanCycleEnum;
+  public highlight: string | null;
   public enabledPaidResources: GetPaymentPlanEnabledPaidResourceQueryResult[];
   public createdAt: Date;
   public updatedAt: Date;

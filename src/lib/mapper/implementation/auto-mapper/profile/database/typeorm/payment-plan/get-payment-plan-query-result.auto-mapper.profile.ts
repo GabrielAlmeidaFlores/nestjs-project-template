@@ -9,7 +9,6 @@ import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplet
 import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { GetPaymentPlanEnabledPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/result/get-payment-plan-enabled-paid-resource.query.result';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
 export class GetPaymentPlanQueryResultAutoMapperProfile {
@@ -42,7 +41,8 @@ export class GetPaymentPlanQueryResultAutoMapperProfile {
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         active: source.active,
-        cycle: source.cycle as PaymentPlanCycleEnum,
+        cycle: source.cycle,
+        highlight: source.highlight,
         enabledPaidResources: this.mapper.mapArray(
           source.paymentPlanEnabledPaidResource,
           PaymentPlanEnabledPaidResourceTypeormEntity,

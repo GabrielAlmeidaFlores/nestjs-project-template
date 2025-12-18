@@ -29,6 +29,9 @@ export class PaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'cycle', type: 'varchar', length: 100 })
   public cycle: PaymentPlanCycleEnum;
 
+  @Column({ name: 'highlight', type: 'varchar', length: 255, nullable: true })
+  public highlight: string | null;
+
   @OneToMany(
     () => OrganizationPaymentPlanTypeormEntity,
     (entity) => entity.paymentPlan,

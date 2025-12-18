@@ -36,6 +36,7 @@ export class ListPaymentPlansUseCase {
         monthlyCreditAmount: plan.monthlyCreditAmount,
         active: plan.active,
         cycle: plan.cycle,
+        highlight: plan.highlight,
         paidResources: plan.enabledPaidResources.map((resource) =>
           PaymentPlanPaidResourceDto.build({
             id: resource.paymentPlanPaidResource.id.toString(),

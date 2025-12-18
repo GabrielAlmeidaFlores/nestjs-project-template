@@ -12,4 +12,5 @@ export interface PaymentPlanEntityPropsInterface
   monthlyCreditAmount: number;
   active: boolean;
   cycle: PaymentPlanCycleEnum;
+  highlight?: string | null;
 }

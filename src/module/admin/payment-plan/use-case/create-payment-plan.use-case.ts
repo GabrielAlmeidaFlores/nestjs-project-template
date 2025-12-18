@@ -10,7 +10,6 @@ import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-pl
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
-import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-entity';
 import { PaymentPlanEnabledPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/value-object/payment-plan-enabled-paid-resource-id/payment-plan-enabled-paid-resource-id.value-object';
 
@@ -31,10 +30,7 @@ export class CreatePaymentPlanUseCase {
   public async execute(
     dto: CreatePaymentPlanRequestDto,
   ): Promise<GetPaymentPlanResponseDto> {
-    const now = new Date();
-
     const paymentPlan = new PaymentPlanEntity({
-      id: new PaymentPlanId(),
       name: dto.name,
       description: dto.description,
       price: dto.price,
@@ -42,8 +38,7 @@ export class CreatePaymentPlanUseCase {
       monthlyCreditAmount: dto.monthlyCreditAmount,
       active: dto.active,
       cycle: dto.cycle,
-      createdAt: now,
-      updatedAt: now,
+      highlight: dto.highlight ?? null,
     });
 
     const transactions: TransactionType[] = [];
@@ -69,8 +64,6 @@ export class CreatePaymentPlanUseCase {
           id: new PaymentPlanEnabledPaidResourceId(),
           paymentPlan: paymentPlan.id,
           paymentPlanPaidResource: paidResourceId,
-          createdAt: now,
-          updatedAt: now,
         });
 
       const createPaymentPlanEnabledPaidResource =

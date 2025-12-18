@@ -32,6 +32,9 @@ export class UpdatePaymentPlanRequestDto extends BaseBuildableDtoObject {
   @RequestDtoEnumProperty(PaymentPlanCycleEnum, { required: false })
   public cycle?: PaymentPlanCycleEnum;
 
+  @RequestDtoStringProperty({ required: false })
+  public highlight?: string;
+
   @RequestDtoValueObjectProperty(PaymentPlanPaidResourceId, {
     required: false,
     isArray: true,
