@@ -37,7 +37,7 @@ export class PaymentPlanController {
       path: '',
       method: RequestMethod.GET,
     },
-    tag: ['payment-plan'],
+    tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Lista de planos de pagamento.',
@@ -58,7 +58,7 @@ export class PaymentPlanController {
       method: RequestMethod.POST,
       type: SubscribePaymentPlanRequestDto,
     },
-    tag: ['payment-plan'],
+    tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Assinatura criada com sucesso.',
@@ -86,7 +86,7 @@ export class PaymentPlanController {
       path: 'cancel',
       method: RequestMethod.DELETE,
     },
-    tag: ['payment-plan'],
+    tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Assinatura(s) cancelada(s) com sucesso.',
@@ -108,7 +108,7 @@ export class PaymentPlanController {
       path: 'status',
       method: RequestMethod.GET,
     },
-    tag: ['payment-plan'],
+    tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:

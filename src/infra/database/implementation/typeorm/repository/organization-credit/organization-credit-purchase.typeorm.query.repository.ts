@@ -122,4 +122,23 @@ export class OrganizationCreditPurchaseTypeormQueryRepository
 
     return resource;
   }
+
+  public async findManyOrganizationCreditPurchaseByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationCreditPurchaseQueryResult[]> {
+    const data = await this.repository.find({
+      where: {
+        organization: {
+          id: organizationId.toString(),
+        },
+      },
+      relations: ['organization', 'bankPayment'],
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationCreditPurchaseTypeormEntity,
+      GetOrganizationCreditPurchaseQueryResult,
+    );
+  }
 }
