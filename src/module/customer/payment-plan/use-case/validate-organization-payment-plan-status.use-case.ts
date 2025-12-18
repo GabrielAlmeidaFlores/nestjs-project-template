@@ -94,10 +94,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    const validStatuses = [
-      PaymentStatusEnum.RECEIVED,
-      PaymentStatusEnum.COMPLETED,
-    ];
+    const validStatuses = [PaymentStatusEnum.CONFIRMED];
     const validPayments = bankPayments.filter((p) =>
       validStatuses.includes(p.status),
     );

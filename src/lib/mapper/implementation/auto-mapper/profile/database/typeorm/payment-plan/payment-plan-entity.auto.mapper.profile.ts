@@ -4,12 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
-import { GetPaymentPlanEnabledPaidResourceQueryResultType } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan-enabled-paid-resource.query.result';
-import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
@@ -23,7 +19,6 @@ export class PaymentPlanEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -76,51 +71,6 @@ export class PaymentPlanEntityAutoMapperProfile {
       this.mapper,
       PaymentPlanEntity,
       PaymentPlanTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToQueryResult = (
-      source: PaymentPlanTypeormEntity,
-    ): GetPaymentPlanQueryResult => {
-      const result = new GetPaymentPlanQueryResult();
-      result.id = new PaymentPlanId(source.id);
-      result.name = source.name;
-      result.description = source.description;
-      result.price = new DecimalValue(source.price);
-      result.maxMemberCount = source.maxMemberCount;
-      result.monthlyCreditAmount = source.monthlyCreditAmount;
-      result.active = source.active;
-      result.cycle = source.cycle as PaymentPlanCycleEnum;
-      result.enabledPaidResources =
-        source.paymentPlanEnablePaidResource?.map(
-          (
-            enabledResource,
-          ): GetPaymentPlanEnabledPaidResourceQueryResultType => ({
-            id: new PaymentPlanPaidResourceId(
-              enabledResource.paymentPlanPaidResource?.id ?? '',
-            ),
-            resource: (enabledResource.paymentPlanPaidResource?.resource ??
-              '') as PaymentPlanPaidResourceTypeEnum,
-            creditCost:
-              enabledResource.paymentPlanPaidResource?.creditCost.toString() ??
-              '0',
-            description:
-              enabledResource.paymentPlanPaidResource?.description ?? '',
-          }),
-        ) ?? [];
-      result.createdAt = source.createdAt;
-      result.updatedAt = source.updatedAt;
-      return result;
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
-
-    createMap(
-      this.mapper,
-      PaymentPlanTypeormEntity,
-      GetPaymentPlanQueryResult,
       mappingFunction,
     );
   }

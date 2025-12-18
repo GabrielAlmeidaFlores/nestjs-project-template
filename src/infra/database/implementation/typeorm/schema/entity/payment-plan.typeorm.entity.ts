@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
-import { OrganizationPaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enable-paid-resource.typeorm.entity';
+import { OrganizationPaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enabled-paid-resource.typeorm.entity';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
-import { PaymentPlanEnablePaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enable-paid-resource.typeorm.entity';
+import { PaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-enabled-paid-resource.typeorm.entity';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Entity({ name: 'payment_plan' })
@@ -38,19 +38,19 @@ export class PaymentPlanTypeormEntity extends BaseTypeormEntity {
     | undefined;
 
   @OneToMany(
-    () => PaymentPlanEnablePaidResourceTypeormEntity,
+    () => PaymentPlanEnabledPaidResourceTypeormEntity,
     (entity) => entity.paymentPlan,
   )
-  public paymentPlanEnablePaidResource?:
-    | PaymentPlanEnablePaidResourceTypeormEntity[]
+  public paymentPlanEnabledPaidResource?:
+    | PaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
 
   @OneToMany(
-    () => OrganizationPaymentPlanEnablePaidResourceTypeormEntity,
+    () => OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
     (entity) => entity.paymentPlan,
   )
-  public organizationPaymentPlanEnablePaidResource?:
-    | OrganizationPaymentPlanEnablePaidResourceTypeormEntity[]
+  public organizationPaymentPlanEnabledPaidResource?:
+    | OrganizationPaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
 
   protected override readonly _type = PaymentPlanTypeormEntity.name;

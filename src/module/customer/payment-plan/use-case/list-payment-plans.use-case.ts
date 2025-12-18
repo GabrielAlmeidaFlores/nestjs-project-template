@@ -38,10 +38,10 @@ export class ListPaymentPlansUseCase {
         cycle: plan.cycle,
         paidResources: plan.enabledPaidResources.map((resource) =>
           PaymentPlanPaidResourceDto.build({
-            id: resource.id.toString(),
-            resource: resource.resource,
-            creditCost: resource.creditCost,
-            description: resource.description,
+            id: resource.paymentPlanPaidResource.id.toString(),
+            resource: resource.paymentPlanPaidResource.resource,
+            creditCost: resource.paymentPlanPaidResource.creditCost,
+            description: resource.paymentPlanPaidResource.description,
           }),
         ),
       });

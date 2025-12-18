@@ -8,11 +8,11 @@ import { PaymentPlanEnabledPaidResourceItemResponseDto } from '@module/admin/pay
 import { PaymentPlanNotFoundError } from '@module/admin/payment-plan/error/payment-plan-not-found.error';
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
-import { PaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/command/payment-plan-enable-paid-resource.command.repository.gateway';
+import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { PaymentPlanEnablePaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity';
-import { PaymentPlanEnablePaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/value-object/payment-plan-enable-paid-resource-id/payment-plan-enable-paid-resource-id.value-object';
+import { PaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-entity';
+import { PaymentPlanEnabledPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/value-object/payment-plan-enabled-paid-resource-id/payment-plan-enabled-paid-resource-id.value-object';
 
 export class CreatePaymentPlanUseCase {
   protected readonly _type = CreatePaymentPlanUseCase.name;
@@ -20,8 +20,8 @@ export class CreatePaymentPlanUseCase {
   public constructor(
     @Inject(PaymentPlanCommandRepositoryGateway)
     private readonly paymentPlanCommandRepositoryGateway: PaymentPlanCommandRepositoryGateway,
-    @Inject(PaymentPlanEnablePaidResourceCommandRepositoryGateway)
-    private readonly paymentPlanEnablePaidResourceCommandRepositoryGateway: PaymentPlanEnablePaidResourceCommandRepositoryGateway,
+    @Inject(PaymentPlanEnabledPaidResourceCommandRepositoryGateway)
+    private readonly paymentPlanEnabledPaidResourceCommandRepositoryGateway: PaymentPlanEnabledPaidResourceCommandRepositoryGateway,
     @Inject(PaymentPlanQueryRepositoryGateway)
     private readonly paymentPlanQueryRepositoryGateway: PaymentPlanQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -64,21 +64,21 @@ export class CreatePaymentPlanUseCase {
     });
 
     for (const paidResourceId of uniquePaidResourceIds) {
-      const paymentPlanEnablePaidResource =
-        new PaymentPlanEnablePaidResourceEntity({
-          id: new PaymentPlanEnablePaidResourceId(),
+      const paymentPlanEnabledPaidResource =
+        new PaymentPlanEnabledPaidResourceEntity({
+          id: new PaymentPlanEnabledPaidResourceId(),
           paymentPlan: paymentPlan.id,
           paymentPlanPaidResource: paidResourceId,
           createdAt: now,
           updatedAt: now,
         });
 
-      const createPaymentPlanEnablePaidResource =
-        this.paymentPlanEnablePaidResourceCommandRepositoryGateway.createPaymentPlanEnablePaidResource(
-          paymentPlanEnablePaidResource,
+      const createPaymentPlanEnabledPaidResource =
+        this.paymentPlanEnabledPaidResourceCommandRepositoryGateway.createPaymentPlanEnabledPaidResource(
+          paymentPlanEnabledPaidResource,
         );
 
-      transactions.push(createPaymentPlanEnablePaidResource);
+      transactions.push(createPaymentPlanEnabledPaidResource);
     }
 
     const execute =
@@ -97,10 +97,10 @@ export class CreatePaymentPlanUseCase {
       enabledPaidResources: createdPaymentPlan.enabledPaidResources.map(
         (resource) =>
           PaymentPlanEnabledPaidResourceItemResponseDto.build({
-            id: resource.id,
-            resource: resource.resource,
-            creditCost: parseFloat(resource.creditCost),
-            description: resource.description,
+            id: resource.paymentPlanPaidResource.id,
+            resource: resource.paymentPlanPaidResource.resource,
+            creditCost: parseFloat(resource.paymentPlanPaidResource.creditCost),
+            description: resource.paymentPlanPaidResource.description,
           }),
       ),
     });

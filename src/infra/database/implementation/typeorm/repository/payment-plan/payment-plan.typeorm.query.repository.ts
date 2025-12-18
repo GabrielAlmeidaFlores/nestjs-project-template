@@ -36,8 +36,9 @@ export class PaymentPlanTypeormQueryRepository
         active: true,
       },
       relations: [
-        'paymentPlanEnablePaidResource',
-        'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+        'paymentPlanEnabledPaidResource',
+        'paymentPlanEnabledPaidResource.paymentPlan',
+        'paymentPlanEnabledPaidResource.paymentPlanPaidResource',
       ],
     });
 
@@ -58,8 +59,9 @@ export class PaymentPlanTypeormQueryRepository
   ): Promise<ListDataOutputModel<GetPaymentPlanQueryResult>> {
     const data = await this.list(listData, {
       relations: [
-        'paymentPlanEnablePaidResource',
-        'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+        'paymentPlanEnabledPaidResource',
+        'paymentPlanEnabledPaidResource.paymentPlan',
+        'paymentPlanEnabledPaidResource.paymentPlanPaidResource',
       ],
     });
 
@@ -85,8 +87,9 @@ export class PaymentPlanTypeormQueryRepository
           id: id.toString(),
         },
         relations: [
-          'paymentPlanEnablePaidResource',
-          'paymentPlanEnablePaidResource.paymentPlanPaidResource',
+          'paymentPlanEnabledPaidResource',
+          'paymentPlanEnabledPaidResource.paymentPlan',
+          'paymentPlanEnabledPaidResource.paymentPlanPaidResource',
         ],
       },
       err,

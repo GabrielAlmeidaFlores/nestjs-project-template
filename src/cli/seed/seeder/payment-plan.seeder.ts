@@ -6,12 +6,12 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
-import { PaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/command/payment-plan-enable-paid-resource.command.repository.gateway';
+import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { PaymentPlanEnablePaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/payment-plan-enable-paid-resource-entity';
-import { PaymentPlanEnablePaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enable-paid-resource/value-object/payment-plan-enable-paid-resource-id/payment-plan-enable-paid-resource-id.value-object';
+import { PaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-entity';
+import { PaymentPlanEnabledPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-enabled-paid-resource/value-object/payment-plan-enabled-paid-resource-id/payment-plan-enabled-paid-resource-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
@@ -60,8 +60,8 @@ export class PaymentPlanSeeder implements SeederInterface {
     public readonly paymentPlanCommandRepositoryGateway: PaymentPlanCommandRepositoryGateway,
     @Inject(PaymentPlanQueryRepositoryGateway)
     public readonly paymentPlanQueryRepositoryGateway: PaymentPlanQueryRepositoryGateway,
-    @Inject(PaymentPlanEnablePaidResourceCommandRepositoryGateway)
-    public readonly paymentPlanEnablePaidResourceCommandRepositoryGateway: PaymentPlanEnablePaidResourceCommandRepositoryGateway,
+    @Inject(PaymentPlanEnabledPaidResourceCommandRepositoryGateway)
+    public readonly paymentPlanEnabledPaidResourceCommandRepositoryGateway: PaymentPlanEnabledPaidResourceCommandRepositoryGateway,
     @Inject(PaymentPlanPaidResourceQueryRepositoryGateway)
     public readonly paymentPlanPaidResourceQueryRepositoryGateway: PaymentPlanPaidResourceQueryRepositoryGateway,
   ) {}
@@ -86,8 +86,8 @@ export class PaymentPlanSeeder implements SeederInterface {
       );
 
       for (const paidResource of allPaidResources) {
-        const enablePaidResource = new PaymentPlanEnablePaidResourceEntity({
-          id: new PaymentPlanEnablePaidResourceId(),
+        const enablePaidResource = new PaymentPlanEnabledPaidResourceEntity({
+          id: new PaymentPlanEnabledPaidResourceId(),
           paymentPlan: planData.id,
           paymentPlanPaidResource: paidResource.id,
           createdAt: new Date(),
@@ -95,7 +95,7 @@ export class PaymentPlanSeeder implements SeederInterface {
         });
 
         transactions.push(
-          this.paymentPlanEnablePaidResourceCommandRepositoryGateway.createPaymentPlanEnablePaidResource(
+          this.paymentPlanEnabledPaidResourceCommandRepositoryGateway.createPaymentPlanEnabledPaidResource(
             enablePaidResource,
           ),
         );

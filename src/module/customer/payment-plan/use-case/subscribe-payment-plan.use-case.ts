@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
@@ -16,12 +17,12 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
-import { OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enable-paid-resource/command/organization-payment-plan-enable-paid-resource.repository.gateway';
+import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
-import { PaymentPlanEnablePaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enable-paid-resource/query/payment-plan-enable-paid-resource.query.repository.gateway';
+import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
-import { OrganizationPaymentPlanEnablePaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enable-paid-resource/organization-payment-plan-enable-paid-resource.entity';
+import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
 import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
@@ -36,14 +37,14 @@ export class SubscribePaymentPlanUseCase {
   public constructor(
     @Inject(PaymentPlanQueryRepositoryGateway)
     private readonly paymentPlanQueryRepository: PaymentPlanQueryRepositoryGateway,
-    @Inject(PaymentPlanEnablePaidResourceQueryRepositoryGateway)
-    private readonly paymentPlanEnablePaidResourceQueryRepository: PaymentPlanEnablePaidResourceQueryRepositoryGateway,
+    @Inject(PaymentPlanEnabledPaidResourceQueryRepositoryGateway)
+    private readonly paymentPlanEnabledPaidResourceQueryRepository: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
     @Inject(OrganizationPaymentPlanCommandRepositoryGateway)
     private readonly organizationPaymentPlanCommandRepository: OrganizationPaymentPlanCommandRepositoryGateway,
     @Inject(OrganizationPaymentPlanQueryRepositoryGateway)
     private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
-    @Inject(OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway)
-    private readonly organizationPaymentPlanEnablePaidResourceCommandRepository: OrganizationPaymentPlanEnablePaidResourceCommandRepositoryGateway,
+    @Inject(OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway)
+    private readonly organizationPaymentPlanEnabledPaidResourceCommandRepository: OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -96,7 +97,7 @@ export class SubscribePaymentPlanUseCase {
         PaymentPlanNotFoundError,
       );
 
-    const nextDueDate = new Date();
+    const nextDueDate = moment().startOf('day').toDate();
 
     const creditCardInfo = CreditCardInfoInputModel.build({
       holderName: dto.creditCardInfo.holderName,
@@ -132,7 +133,7 @@ export class SubscribePaymentPlanUseCase {
       await this.paymentGateway.createSubscription(subscriptionInput);
 
     const paymentPlanEnabledResources =
-      await this.paymentPlanEnablePaidResourceQueryRepository.findManyByPaymentPlanId(
+      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
         paymentPlan.id,
       );
 
@@ -153,22 +154,22 @@ export class SubscribePaymentPlanUseCase {
         organizationPaymentPlan,
       );
 
-    const organizationPaymentPlanEnablePaidResourceTransactions =
+    const organizationPaymentPlanEnabledPaidResourceTransactions =
       paymentPlanEnabledResources.map((enabledResource) => {
-        const organizationPaymentPlanEnablePaidResource =
-          new OrganizationPaymentPlanEnablePaidResourceEntity({
+        const organizationPaymentPlanEnabledPaidResource =
+          new OrganizationPaymentPlanEnabledPaidResourceEntity({
             paymentPlan: enabledResource.paymentPlanId,
             paymentPlanPaidResource: enabledResource.paymentPlanPaidResourceId,
           });
 
-        return this.organizationPaymentPlanEnablePaidResourceCommandRepository.createOrganizationPaymentPlanEnablePaidResource(
-          organizationPaymentPlanEnablePaidResource,
+        return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
+          organizationPaymentPlanEnabledPaidResource,
         );
       });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       organizationPaymentPlanTransaction,
-      ...organizationPaymentPlanEnablePaidResourceTransactions,
+      ...organizationPaymentPlanEnabledPaidResourceTransactions,
     ]);
 
     await transaction.commit();
