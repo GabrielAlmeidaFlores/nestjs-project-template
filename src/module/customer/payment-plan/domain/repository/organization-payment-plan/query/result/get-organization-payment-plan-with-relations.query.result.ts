@@ -15,6 +15,7 @@ export class GetOrganizationPaymentPlanWithRelationsQueryResult extends BaseBuil
   public maxMemberCount: number;
   public monthlyCreditAmount: number;
   public cycle: PaymentPlanCycleEnum;
+  public totalInstallments: number | null;
   public createdAt: Date;
   public updatedAt: Date;
   public organization: GetOrganizationQueryResult;

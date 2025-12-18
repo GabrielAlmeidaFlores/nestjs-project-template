@@ -17,14 +17,17 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
   public price: string;
 
-  @Column({ name: 'maxMemberCount', type: 'integer' })
+  @Column({ name: 'max_member_count', type: 'integer' })
   public maxMemberCount: number;
 
-  @Column({ name: 'monthlyCreditAmount', type: 'integer' })
+  @Column({ name: 'monthly_credit_amount', type: 'integer' })
   public monthlyCreditAmount: number;
 
   @Column({ name: 'cycle', type: 'varchar', length: 100 })
   public cycle: PaymentPlanCycleEnum;
+
+  @Column({ name: 'total_installments', type: 'integer', nullable: true })
+  public totalInstallments: number | null;
 
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;

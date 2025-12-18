@@ -6,7 +6,6 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
 export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
@@ -34,7 +33,8 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         price: new DecimalValue(source.price),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
-        cycle: source.cycle as PaymentPlanCycleEnum,
+        cycle: source.cycle,
+        totalInstallments: source.totalInstallments,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -64,6 +64,7 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         cycle: source.cycle,
+        totalInstallments: source.totalInstallments,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

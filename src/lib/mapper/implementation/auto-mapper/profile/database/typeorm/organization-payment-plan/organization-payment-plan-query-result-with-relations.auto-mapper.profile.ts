@@ -11,7 +11,6 @@ import { GetOrganizationQueryResult } from '@module/customer/account/domain/repo
 import { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
 import { GetPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan/query/result/get-payment-plan.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
 export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
@@ -59,7 +58,8 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         price: new DecimalValue(source.price),
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
-        cycle: source.cycle as PaymentPlanCycleEnum,
+        cycle: source.cycle,
+        totalInstallments: source.totalInstallments,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         organization,
@@ -104,6 +104,7 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         cycle: source.cycle,
+        totalInstallments: source.totalInstallments,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,

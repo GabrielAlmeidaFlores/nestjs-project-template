@@ -29,6 +29,9 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   @Description('Tipo de assinatura contratada pelo cliente')
   public readonly cycle: PaymentPlanCycleEnum;
 
+  @Description('Quantidade total de parcelas da assinatura')
+  public readonly totalInstallments: number | null;
+
   @Description('Organização pertencente ao plano de pagamento')
   public readonly organization: OrganizationId;
 
@@ -46,6 +49,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
     this.maxMemberCount = props.maxMemberCount;
     this.monthlyCreditAmount = props.monthlyCreditAmount;
     this.cycle = props.cycle;
+    this.totalInstallments = props.totalInstallments ?? null;
     this.organization = props.organization;
     this.paymentPlan = props.paymentPlan;
     this.bankExternalId = props.bankExternalId;
