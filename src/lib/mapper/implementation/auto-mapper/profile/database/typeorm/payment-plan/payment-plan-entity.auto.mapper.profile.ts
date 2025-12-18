@@ -6,7 +6,6 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
 @Injectable()
 export class PaymentPlanEntityAutoMapperProfile {
@@ -34,7 +33,7 @@ export class PaymentPlanEntityAutoMapperProfile {
         maxMemberCount: source.maxMemberCount,
         monthlyCreditAmount: source.monthlyCreditAmount,
         active: source.active,
-        cycle: source.cycle as PaymentPlanCycleEnum,
+        cycle: source.cycle,
       });
     };
 

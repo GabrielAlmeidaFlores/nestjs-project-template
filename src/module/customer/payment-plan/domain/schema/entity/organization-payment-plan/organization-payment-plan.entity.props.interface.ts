@@ -14,6 +14,7 @@ export interface OrganizationPaymentPlanEntityPropsInterface
   monthlyCreditAmount: number;
   bankExternalId: string;
   cycle: PaymentPlanCycleEnum;
+  totalInstallments?: number | null;
   organization: OrganizationId;
   paymentPlan: PaymentPlanId;
 }

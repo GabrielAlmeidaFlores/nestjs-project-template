@@ -13,6 +13,7 @@ export class GetOrganizationPaymentPlanQueryResult extends BaseBuildableObject {
   public maxMemberCount: number;
   public monthlyCreditAmount: number;
   public cycle: PaymentPlanCycleEnum;
+  public totalInstallments: number | null;
   public createdAt: Date;
   public updatedAt: Date;
   public deletedAt: Date | null;
