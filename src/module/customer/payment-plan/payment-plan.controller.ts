@@ -10,6 +10,7 @@ import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/paymen
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { SubscribePaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-payment-plan.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
+import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -64,7 +65,7 @@ export class PaymentPlanController {
       description: 'Assinatura criada com sucesso.',
       type: SubscribePaymentPlanResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
   })
   public async subscribe(
     @Body() body: SubscribePaymentPlanRequestDto,
@@ -92,7 +93,7 @@ export class PaymentPlanController {
       description: 'Assinatura(s) cancelada(s) com sucesso.',
       type: CancelPaymentPlanResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
   })
   public async cancel(
     @GetOrganizationSessionData()
@@ -115,7 +116,7 @@ export class PaymentPlanController {
         'Status do plano de pagamento da organização retornado com sucesso.',
       type: ValidateOrganizationPaymentPlanStatusResponseDto,
     },
-    guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
   })
   public async getStatus(
     @GetOrganizationSessionData()
