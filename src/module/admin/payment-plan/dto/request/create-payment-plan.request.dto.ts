@@ -33,7 +33,7 @@ export class CreatePaymentPlanRequestDto extends BaseBuildableDtoObject {
   public cycle: PaymentPlanCycleEnum;
 
   @RequestDtoValueObjectProperty(PaymentPlanPaidResourceId, { isArray: true })
-  public paidResource: PaymentPlanPaidResourceId[];
+  public paidResourceId: PaymentPlanPaidResourceId[];
 
   protected override readonly _type = CreatePaymentPlanRequestDto.name;
 }
