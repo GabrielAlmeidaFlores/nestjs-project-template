@@ -6,6 +6,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
+import { SubscriptionCycleEnum } from '@infra/payment-gateway/enum/subscription-cycle.enum';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
 import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-info.input.model';
@@ -115,7 +116,7 @@ export class SubscribePaymentPlanUseCase {
       customerId: customer.bankExternalId,
       value: paymentPlan.price,
       nextDueDate,
-      cycle: paymentPlan.cycle,
+      cycle: SubscriptionCycleEnum.MONTHLY_RECURRING,
       description: paymentPlan.name,
       creditCardInfo,
       creditCardHolderInfo,

@@ -38,6 +38,9 @@ export class GetPaymentPlanResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(PaymentPlanCycleEnum)
   public cycle: PaymentPlanCycleEnum;
 
+  @ResponseDtoStringProperty({ required: false })
+  public highlight?: string;
+
   @ResponseDtoObjectProperty(
     () => PaymentPlanEnabledPaidResourceItemResponseDto,
     {

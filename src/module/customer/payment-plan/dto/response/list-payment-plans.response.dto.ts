@@ -48,6 +48,9 @@ export class ListPaymentPlansResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public cycle: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public highlight?: string;
+
   @ResponseDtoObjectProperty(() => PaymentPlanPaidResourceDto, {
     isArray: true,
   })

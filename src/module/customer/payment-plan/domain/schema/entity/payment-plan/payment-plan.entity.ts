@@ -27,6 +27,9 @@ export class PaymentPlanEntity extends BaseEntity<PaymentPlanId> {
   @Description('Tipo de assinatura contratada pelo cliente')
   public readonly cycle: PaymentPlanCycleEnum;
 
+  @Description('Texto destacado sobre o plano')
+  public readonly highlight: string | null;
+
   protected readonly _type = PaymentPlanEntity.name;
 
   public constructor(props: PaymentPlanEntityPropsInterface) {
@@ -38,6 +41,7 @@ export class PaymentPlanEntity extends BaseEntity<PaymentPlanId> {
     this.maxMemberCount = props.maxMemberCount;
     this.monthlyCreditAmount = props.monthlyCreditAmount;
     this.active = props.active;
-    this.cycle = props.cycle as PaymentPlanCycleEnum;
+    this.cycle = props.cycle;
+    this.highlight = props.highlight ?? null;
   }
 }

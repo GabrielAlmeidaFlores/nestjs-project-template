@@ -24,14 +24,7 @@ export class GetPaymentPlanUseCase {
       );
 
     return GetPaymentPlanResponseDto.build({
-      id: paymentPlan.id,
-      name: paymentPlan.name,
-      description: paymentPlan.description,
-      price: paymentPlan.price,
-      maxMemberCount: paymentPlan.maxMemberCount,
-      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-      active: paymentPlan.active,
-      cycle: paymentPlan.cycle,
+      ...paymentPlan,
       enabledPaidResources: paymentPlan.enabledPaidResources.map((resource) =>
         PaymentPlanEnabledPaidResourceItemResponseDto.build({
           id: resource.paymentPlanPaidResource.id,
@@ -40,8 +33,6 @@ export class GetPaymentPlanUseCase {
           description: resource.paymentPlanPaidResource.description,
         }),
       ),
-      createdAt: paymentPlan.createdAt,
-      updatedAt: paymentPlan.updatedAt,
     });
   }
 }
