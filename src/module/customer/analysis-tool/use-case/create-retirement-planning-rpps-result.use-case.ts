@@ -75,10 +75,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
         documentsBuffer,
       );
 
-    if (
-      retirementPlanningRppsCompleteAnalysis === null ||
-      retirementPlanningRppsCompleteAnalysis === undefined
-    ) {
+    if (retirementPlanningRppsCompleteAnalysis === null) {
       throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
     }
 
