@@ -10,6 +10,7 @@ import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/an
 import { RetirementPlanningDisabilityCategoryEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-category.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
+import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -66,6 +67,18 @@ export class GetRetirementPlanningRppsResultResponseDto extends BaseBuildableDto
 }
 
 @ResponseDto()
+export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoEnumProperty(RetirementPlanningDocumentTypeEnum)
+  public type: RetirementPlanningDocumentTypeEnum;
+
+  @ResponseDtoStringProperty()
+  public document: string;
+
+  protected override readonly _type =
+    GetRetirementPlanningRppsPeriodDocumentResponseDto.name;
+}
+
+@ResponseDto()
 export class GetRetirementPlanningRppsCidResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public code: string;
@@ -87,6 +100,12 @@ export class GetRetirementPlanningRppsPeriodSpecialTimeResponseDto extends BaseB
 
   @ResponseDtoDateProperty()
   public endDate: Date;
+
+  @ResponseDtoObjectProperty(
+    () => GetRetirementPlanningRppsPeriodDocumentResponseDto,
+    { required: false, isArray: true },
+  )
+  public documents?: GetRetirementPlanningRppsPeriodDocumentResponseDto[];
 
   protected override readonly _type =
     GetRetirementPlanningRppsPeriodSpecialTimeResponseDto.name;
@@ -117,6 +136,12 @@ export class GetRetirementPlanningRppsPeriodDisabilityResponseDto extends BaseBu
 
   @ResponseDtoObjectProperty(() => GetRetirementPlanningRppsCidResponseDto)
   public cid: GetRetirementPlanningRppsCidResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () => GetRetirementPlanningRppsPeriodDocumentResponseDto,
+    { required: false, isArray: true },
+  )
+  public documents?: GetRetirementPlanningRppsPeriodDocumentResponseDto[];
 
   protected override readonly _type =
     GetRetirementPlanningRppsPeriodDisabilityResponseDto.name;
@@ -190,6 +215,12 @@ export class GetRetirementPlanningRppsResponseDto extends BaseBuildableDtoObject
     required: false,
   })
   public retirementPlanningRppsResult?: GetRetirementPlanningRppsResultResponseDto;
+
+  @ResponseDtoObjectProperty(
+    () => GetRetirementPlanningRppsPeriodDocumentResponseDto,
+    { required: false, isArray: true },
+  )
+  public ctcDocuments?: GetRetirementPlanningRppsPeriodDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(() => GetRetirementPlanningRppsPeriodResponseDto, {
     required: false,

@@ -6,7 +6,7 @@ import type { RetirementPlanningRppsId } from '@module/customer/analysis-tool/do
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 export abstract class RetirementPlanningRppsRemunerationQueryRepositoryGateway {
-  public abstract listByOrganizationIdAndAuthIdentityId(
+  public abstract listByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     retirementPlanningRppsId: RetirementPlanningRppsId,
@@ -14,4 +14,8 @@ export abstract class RetirementPlanningRppsRemunerationQueryRepositoryGateway {
   ): Promise<
     ListDataOutputModel<GetRetirementPlanningRppsRemunerationQueryResult>
   >;
+
+  public abstract findByRetirementPlanningRppsId(
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+  ): Promise<GetRetirementPlanningRppsRemunerationQueryResult[]>;
 }

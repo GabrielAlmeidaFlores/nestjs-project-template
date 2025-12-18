@@ -363,10 +363,15 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
           retirementPlanningRpps: {
+            retirementPlanningRppsInssBenefit: true,
+            retirementPlanningRppsLegalProceeding: true,
             retirementPlanningRppsResult: true,
+            documents: true,
             remunerations: true,
             periods: {
-              specialTimePeriod: true,
+              specialTimePeriod: {
+                specialTimeDocuments: true,
+              },
               disabilityPeriod: {
                 cid: true,
                 disabilityDocuments: true,

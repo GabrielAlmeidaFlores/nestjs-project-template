@@ -4,8 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten-typeorm.entity';
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
+import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { GetCidTenQueryResult } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/result/get-cid-ten.query.result';
 import { GetRetirementPlanningRppsPeriodDisabilityQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/query/result/get-retirement-planning-rpps-period-disability.query.result';
+import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
 import { RetirementPlanningRppsPeriodDisabilityId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/value-object/retirement-planning-rpps-period-disability-id.value-object';
 
 @Injectable()
@@ -32,10 +34,19 @@ export class GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfi
         GetCidTenQueryResult,
       );
 
+      const documents = source.disabilityDocuments
+        ? this.mapper.mapArray(
+            source.disabilityDocuments,
+            RetirementPlanningRppsPeriodDocumentTypeormEntity,
+            GetRetirementPlanningRppsPeriodDocumentQueryResult,
+          )
+        : [];
+
       return GetRetirementPlanningRppsPeriodDisabilityQueryResult.build({
         ...source,
         id: new RetirementPlanningRppsPeriodDisabilityId(source.id),
         cid,
+        documents,
       });
     };
 

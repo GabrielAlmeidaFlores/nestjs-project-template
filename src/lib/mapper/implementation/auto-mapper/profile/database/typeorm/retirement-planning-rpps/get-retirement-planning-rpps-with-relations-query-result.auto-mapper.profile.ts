@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RetirementPlanningRppsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-inss-benefit.typeorm.entity';
 import { RetirementPlanningRppsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-legal-proceeding.typeorm.entity';
+import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
@@ -13,6 +14,7 @@ import { GetRetirementPlanningRppsWithRelationsQueryResult } from '@module/custo
 import { GetRetirementPlanningRppsInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/query/result/get-retirement-planning-rpps-inss-benefit.query.result';
 import { GetRetirementPlanningRppsLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/query/result/get-retirement-planning-rpps-legal-proceeding.query.result';
 import { GetRetirementPlanningRppsPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/query/result/get-retirement-planning-rpps-period.query.result';
+import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
 import { GetRetirementPlanningRppsRemunerationQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/query/result/get-retirement-planning-rpps-remuneration.query.result';
 import { GetRetirementPlanningRppsResultQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/query/result/get-retirement-planning-rpps-result.query.result';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
@@ -81,6 +83,14 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
         GetRetirementPlanningRppsLegalProceedingQueryResult,
       );
 
+      const ctcDocuments = source.documents
+        ? this.mapper.mapArray(
+            source.documents,
+            RetirementPlanningRppsPeriodDocumentTypeormEntity,
+            GetRetirementPlanningRppsPeriodDocumentQueryResult,
+          )
+        : [];
+
       return GetRetirementPlanningRppsWithRelationsQueryResult.build({
         id: new RetirementPlanningRppsId(source.id),
         careerStartDate: source.careerStartDate,
@@ -91,6 +101,7 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
         retirementPlanningRppsResult,
         retirementPlanningRppsInssBenefit,
         retirementPlanningRppsLegalProceeding,
+        ctcDocuments,
         remunerations,
         periods,
       });
@@ -118,29 +129,39 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
           )
         : undefined;
 
-      const remunerations = this.mapper.mapArray(
-        source.remunerations,
-        GetRetirementPlanningRppsRemunerationQueryResult,
-        RetirementPlanningRppsRemunerationTypeormEntity,
-      );
+      const remunerations = source.remunerations
+        ? this.mapper.mapArray(
+            source.remunerations,
+            GetRetirementPlanningRppsRemunerationQueryResult,
+            RetirementPlanningRppsRemunerationTypeormEntity,
+          )
+        : undefined;
 
-      const periods = this.mapper.mapArray(
-        source.periods,
-        GetRetirementPlanningRppsPeriodQueryResult,
-        RetirementPlanningRppsPeriodTypeormEntity,
-      );
+      const periods = source.periods
+        ? this.mapper.mapArray(
+            source.periods,
+            GetRetirementPlanningRppsPeriodQueryResult,
+            RetirementPlanningRppsPeriodTypeormEntity,
+          )
+        : undefined;
 
-      const retirementPlanningRppsInssBenefit = this.mapper.mapArray(
-        source.retirementPlanningRppsInssBenefit,
-        GetRetirementPlanningRppsInssBenefitQueryResult,
-        RetirementPlanningRppsInssBenefitTypeormEntity,
-      );
+      const retirementPlanningRppsInssBenefit =
+        source.retirementPlanningRppsInssBenefit
+          ? this.mapper.mapArray(
+              source.retirementPlanningRppsInssBenefit,
+              GetRetirementPlanningRppsInssBenefitQueryResult,
+              RetirementPlanningRppsInssBenefitTypeormEntity,
+            )
+          : [];
 
-      const retirementPlanningRppsLegalProceeding = this.mapper.mapArray(
-        source.retirementPlanningRppsLegalProceeding,
-        GetRetirementPlanningRppsLegalProceedingQueryResult,
-        RetirementPlanningRppsLegalProceedingTypeormEntity,
-      );
+      const retirementPlanningRppsLegalProceeding =
+        source.retirementPlanningRppsLegalProceeding
+          ? this.mapper.mapArray(
+              source.retirementPlanningRppsLegalProceeding,
+              GetRetirementPlanningRppsLegalProceedingQueryResult,
+              RetirementPlanningRppsLegalProceedingTypeormEntity,
+            )
+          : [];
 
       return RetirementPlanningRppsTypeormEntity.build({
         ...source,

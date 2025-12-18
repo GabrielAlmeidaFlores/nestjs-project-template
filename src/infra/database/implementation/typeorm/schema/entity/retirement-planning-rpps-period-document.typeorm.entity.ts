@@ -19,8 +19,7 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
 
   @Column({
     name: 'document',
-    type: 'varchar',
-    length: 255,
+    type: 'text',
     nullable: false,
   })
   public document: string;

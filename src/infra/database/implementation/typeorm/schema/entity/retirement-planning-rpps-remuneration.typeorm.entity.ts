@@ -16,7 +16,7 @@ export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeorm
   @Column({
     name: 'remuneration_amount',
     type: 'decimal',
-    precision: 10,
+    precision: 15,
     scale: 2,
     nullable: false,
   })

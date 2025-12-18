@@ -29,7 +29,7 @@ export class RetirementPlanningRppsRemunerationTypeormQueryRepository
     super(repository);
   }
 
-  public async listByOrganizationIdAndAuthIdentityId(
+  public async listByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     retirementPlanningRppsId: RetirementPlanningRppsId,
@@ -70,6 +70,27 @@ export class RetirementPlanningRppsRemunerationTypeormQueryRepository
         ...data,
         resource: mappedData,
       },
+    );
+  }
+
+  public async findByRetirementPlanningRppsId(
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+  ): Promise<GetRetirementPlanningRppsRemunerationQueryResult[]> {
+    const data = await this.repository.find({
+      where: {
+        retirementPlanningRpps: {
+          id: retirementPlanningRppsId.toString(),
+        },
+      },
+      relations: {
+        retirementPlanningRpps: true,
+      },
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      RetirementPlanningRppsRemunerationTypeormEntity,
+      GetRetirementPlanningRppsRemunerationQueryResult,
     );
   }
 }
