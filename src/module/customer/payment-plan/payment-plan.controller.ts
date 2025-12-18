@@ -1,14 +1,14 @@
 import { Body, HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
-import { SubscribePaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-payment-plan.request.dto';
+import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-to-monthly-recurring-payment-plan.request.dto';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
-import { SubscribePaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-payment-plan.response.dto';
+import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
 import { ValidateOrganizationPaymentPlanStatusResponseDto } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
-import { SubscribePaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-payment-plan.use-case';
+import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -26,7 +26,7 @@ export class PaymentPlanController {
   protected readonly _type = PaymentPlanController.name;
 
   public constructor(
-    private readonly subscribePaymentPlanUseCase: SubscribePaymentPlanUseCase,
+    private readonly subscribePaymentPlanUseCase: SubscribeToMonthlyRecurringPaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
     private readonly cancelPaymentPlanUseCase: CancelPaymentPlanUseCase,
     private readonly getOrganizationPaymentPlanStatusUseCase: GetOrganizationPaymentPlanStatusUseCase,
@@ -57,22 +57,22 @@ export class PaymentPlanController {
     http: {
       path: 'subscribe',
       method: RequestMethod.POST,
-      type: SubscribePaymentPlanRequestDto,
+      type: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
     },
     tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Assinatura criada com sucesso.',
-      type: SubscribePaymentPlanResponseDto,
+      type: SubscribeToMonthlyRecurringPaymentPlanResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
   })
   public async subscribe(
-    @Body() body: SubscribePaymentPlanRequestDto,
+    @Body() body: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @GetSessionData() sessionData: SessionDataModel,
-  ): Promise<SubscribePaymentPlanResponseDto> {
+  ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     return this.subscribePaymentPlanUseCase.execute(
       organizationSessionData,
       sessionData,

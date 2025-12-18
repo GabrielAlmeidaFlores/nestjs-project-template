@@ -47,7 +47,7 @@ export class CreditCardHolderInfoRequestDto extends BaseBuildableDtoObject {
 }
 
 @RequestDto()
-export class SubscribePaymentPlanRequestDto extends BaseBuildableDtoObject {
+export class SubscribeToMonthlyRecurringPaymentPlanRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public paymentPlanId: string;
 
@@ -57,5 +57,6 @@ export class SubscribePaymentPlanRequestDto extends BaseBuildableDtoObject {
   @RequestDtoObjectProperty(() => CreditCardHolderInfoRequestDto)
   public creditCardHolderInfo: CreditCardHolderInfoRequestDto;
 
-  protected override readonly _type = SubscribePaymentPlanRequestDto.name;
+  protected override readonly _type =
+    SubscribeToMonthlyRecurringPaymentPlanRequestDto.name;
 }
