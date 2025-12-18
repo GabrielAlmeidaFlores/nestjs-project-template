@@ -52,7 +52,7 @@ export class PaymentPlanController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Assinar plano de pagamento',
+    summary: 'Assinar plano de pagamento mensal recorrente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'monthly-recurring/subscribe',
@@ -81,10 +81,10 @@ export class PaymentPlanController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Cancelar assinatura',
+    summary: 'Cancelar assinatura do plano de pagamento mensal recorrente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'cancel',
+      path: 'monthly-recurring/cancel',
       method: RequestMethod.DELETE,
     },
     tag: ['plano-de-pagamento'],
