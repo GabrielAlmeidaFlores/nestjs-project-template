@@ -58,6 +58,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-inss-benefit.typeorm.entity';
 import { RetirementPlanningRgpsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-legal-proceeding.typeorm.entity';
+import { RetirementPlanningRgpsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period-document.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-result.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
@@ -96,6 +97,7 @@ export class TypeormIndex {
     RetirementPlanningRgpsInssBenefitTypeormEntity,
     RetirementPlanningRgpsLegalProceedingTypeormEntity,
     RetirementPlanningRgpsPeriodTypeormEntity,
+    RetirementPlanningRgpsPeriodDocumentTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
