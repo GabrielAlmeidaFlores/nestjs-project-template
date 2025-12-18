@@ -24,4 +24,8 @@ export abstract class OrganizationCreditPurchaseQueryRepositoryGateway {
   public abstract findOneOrganizationCreditPurchaseByBankPaymentId(
     bankPaymentId: BankPaymentId,
   ): Promise<GetOrganizationCreditPurchaseQueryResult | null>;
+
+  public abstract findManyOrganizationCreditPurchaseByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationCreditPurchaseQueryResult[]>;
 }

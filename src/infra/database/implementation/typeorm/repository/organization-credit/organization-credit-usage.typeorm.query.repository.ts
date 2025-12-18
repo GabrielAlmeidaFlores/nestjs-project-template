@@ -8,6 +8,7 @@ import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { OrganizationCreditUsageQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/organization-credit-usage.query.repository.gateway';
 import { GetOrganizationCreditUsageQueryResult } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/result/get-organization-credit-usage.query.result';
@@ -112,5 +113,26 @@ export class OrganizationCreditUsageTypeormQueryRepository
     );
 
     return resource;
+  }
+
+  public async findManyOrganizationCreditUsageByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationCreditUsageQueryResult[]> {
+    const data = await this.repository.find({
+      where: {
+        createdBy: {
+          organization: {
+            id: organizationId.toString(),
+          },
+        },
+      },
+      relations: ['paymentPlanPaidResource', 'createdBy'],
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationCreditUsageTypeormEntity,
+      GetOrganizationCreditUsageQueryResult,
+    );
   }
 }

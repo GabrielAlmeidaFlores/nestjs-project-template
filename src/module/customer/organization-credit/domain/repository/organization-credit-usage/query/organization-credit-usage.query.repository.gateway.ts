@@ -1,6 +1,7 @@
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import type { NotFoundError } from '@core/error/not-found.error';
+import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { GetOrganizationCreditUsageQueryResult } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/result/get-organization-credit-usage.query.result';
 import type { OrganizationCreditUsageId } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/value-object/organization-credit-usage-id/organization-credit-usage-id.value-object';
@@ -23,5 +24,9 @@ export abstract class OrganizationCreditUsageQueryRepositoryGateway {
 
   public abstract findManyOrganizationCreditUsageByCreatedBy(
     createdBy: OrganizationMemberId,
+  ): Promise<GetOrganizationCreditUsageQueryResult[]>;
+
+  public abstract findManyOrganizationCreditUsageByOrganizationId(
+    organizationId: OrganizationId,
   ): Promise<GetOrganizationCreditUsageQueryResult[]>;
 }
