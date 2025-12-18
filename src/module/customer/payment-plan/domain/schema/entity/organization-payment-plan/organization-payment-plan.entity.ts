@@ -5,6 +5,7 @@ import { OrganizationPaymentPlanEntityPropsInterface } from '@module/customer/pa
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
+import { InvalidTotalInstallmentsError } from '@module/customer/payment-plan/error/invalid-total-installments.error';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymentPlanId> {
@@ -41,6 +42,10 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   protected readonly _type = OrganizationPaymentPlanEntity.name;
 
   public constructor(props: OrganizationPaymentPlanEntityPropsInterface) {
+    OrganizationPaymentPlanEntity.validateTotalInstallments(
+      props.totalInstallments,
+    );
+
     super(OrganizationPaymentPlanId, props);
 
     this.name = props.name;
@@ -53,5 +58,21 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
     this.organization = props.organization;
     this.paymentPlan = props.paymentPlan;
     this.bankExternalId = props.bankExternalId;
+  }
+
+  private static validateTotalInstallments(
+    totalInstallments: number | null | undefined,
+  ): void {
+    const MAX_INSTALLMENTS = 6;
+
+    if (
+      totalInstallments !== null &&
+      totalInstallments !== undefined &&
+      totalInstallments > MAX_INSTALLMENTS
+    ) {
+      throw new InvalidTotalInstallmentsError({
+        maxInstallments: MAX_INSTALLMENTS,
+      });
+    }
   }
 }
