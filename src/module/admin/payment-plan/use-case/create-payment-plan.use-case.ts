@@ -54,7 +54,7 @@ export class CreatePaymentPlanUseCase {
     transactions.push(createPaymentPlan);
 
     const seenIds = new Set<string>();
-    const uniquePaidResourceIds = dto.paidResource.filter((id) => {
+    const uniquePaidResourceIds = dto.paidResourceId.filter((id) => {
       const idString = id.toString();
       if (seenIds.has(idString)) {
         return false;
