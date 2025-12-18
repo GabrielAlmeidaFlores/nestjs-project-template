@@ -41,7 +41,6 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       (dto: AsaasWebhookPaymentEventRequestDto) => Promise<void>
     > = {
       PENDING: this.processPaymentPending.bind(this),
-      RECEIVED: this.processPaymentReceived.bind(this),
       CONFIRMED: this.processPaymentConfirmed.bind(this),
       OVERDUE: this.processPaymentOverdue.bind(this),
     };
@@ -90,9 +89,9 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
 
     const statusMap: Record<string, PaymentStatusEnum> = {
       PENDING: PaymentStatusEnum.PENDING,
-      RECEIVED: PaymentStatusEnum.RECEIVED,
-      CONFIRMED: PaymentStatusEnum.RECEIVED,
+      CONFIRMED: PaymentStatusEnum.CONFIRMED,
       OVERDUE: PaymentStatusEnum.OVERDUE,
+      REFUNDED: PaymentStatusEnum.REFUNDED,
     };
 
     const status = statusMap[dto.payment.status] ?? PaymentStatusEnum.PENDING;
@@ -178,12 +177,6 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
   }
 
   private async processPaymentPending(
-    dto: AsaasWebhookPaymentEventRequestDto,
-  ): Promise<void> {
-    await this.upsertBankPayment(dto);
-  }
-
-  private async processPaymentReceived(
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
     await this.upsertBankPayment(dto);
