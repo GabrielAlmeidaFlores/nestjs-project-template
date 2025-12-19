@@ -24,25 +24,27 @@ export class CancelPaymentPlanUseCase {
   ): Promise<CancelPaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
-    const existingPaymentPlans =
+    const existingOrganizationPaymentPlans =
       await this.organizationPaymentPlanQueryRepository.findManyByOrganizationId(
         new OrganizationId(organizationId),
       );
 
-    if (existingPaymentPlans.length === 0) {
+    if (existingOrganizationPaymentPlans.length === 0) {
       throw new OrganizationPaymentPlanNotFoundError();
     }
 
-    for (const subscription of existingPaymentPlans) {
-      if (subscription.cycle === PaymentPlanCycleEnum.MONTHLY_RECURRING) {
+    for (const organizationPaymentPlan of existingOrganizationPaymentPlans) {
+      if (
+        organizationPaymentPlan.cycle === PaymentPlanCycleEnum.MONTHLY_RECURRING
+      ) {
         await this.paymentGateway.cancelSubscription(
-          subscription.bankExternalId,
+          organizationPaymentPlan.bankExternalId,
         );
       }
     }
 
     return CancelPaymentPlanResponseDto.build({
-      organizationPaymentPlanId: existingPaymentPlans.map(
+      organizationPaymentPlanId: existingOrganizationPaymentPlans.map(
         (subscription) => subscription.id,
       ),
     });
