@@ -3,8 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
+import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
-import { ValidateOrganizationPaymentPlanStatusResponseDto } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
+import {
+  EnabledPaidResourceItemDto,
+  ValidateOrganizationPaymentPlanStatusResponseDto,
+} from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
@@ -20,6 +24,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
     private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
     private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
+    private readonly paymentPlanEnabledPaidResourceQueryRepository: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -40,6 +45,22 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       throw new OrganizationPaymentPlanNotFoundError();
     }
 
+    // Busca o organization-payment-plan completo com relações
+    const organizationPaymentPlanWithRelations =
+      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+        organizationPaymentPlan.id,
+      );
+
+    if (!organizationPaymentPlanWithRelations) {
+      throw new OrganizationPaymentPlanNotFoundError();
+    }
+
+    // Busca os recursos pagos habilitados do payment-plan
+    const enabledPaidResources =
+      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
+        organizationPaymentPlanWithRelations.paymentPlan.id,
+      );
+
     const paymentRelations =
       await this.organizationPaymentPlanBankPaymentQueryRepository.findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
         organizationPaymentPlan.id,
@@ -51,12 +72,26 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
         bankPaymentIds,
       );
 
-    return this.validateByCycle(organizationPaymentPlan, bankPayments);
+    return this.validateByCycle(
+      organizationPaymentPlan,
+      bankPayments,
+      enabledPaidResources.map((resource) => {
+        const dto = new EnabledPaidResourceItemDto();
+        dto.id = resource.paymentPlanPaidResource.id;
+        dto.resource = resource.paymentPlanPaidResource.resource;
+        dto.creditCost = Number.parseFloat(
+          resource.paymentPlanPaidResource.creditCost,
+        );
+        dto.description = resource.paymentPlanPaidResource.description;
+        return dto;
+      }),
+    );
   }
 
   private validateByCycle(
     organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
     bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
   ): ValidateOrganizationPaymentPlanStatusResponseDto {
     const cycleValue = organizationPaymentPlan.cycle as string;
 
@@ -64,15 +99,24 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       return this.validateMonthlyRecurring(
         organizationPaymentPlan,
         bankPayments,
+        enabledPaidResources,
       );
     }
 
     if (cycleValue === (PaymentPlanCycleEnum.MONTHLY as string)) {
-      return this.validateMonthly(organizationPaymentPlan, bankPayments);
+      return this.validateMonthly(
+        organizationPaymentPlan,
+        bankPayments,
+        enabledPaidResources,
+      );
     }
 
     if (cycleValue === (PaymentPlanCycleEnum.YEARLY as string)) {
-      return this.validateYearly(organizationPaymentPlan, bankPayments);
+      return this.validateYearly(
+        organizationPaymentPlan,
+        bankPayments,
+        enabledPaidResources,
+      );
     }
 
     throw new OrganizationPaymentPlanNotFoundError();
@@ -81,6 +125,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
   private validateMonthlyRecurring(
     organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
     bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
   ): ValidateOrganizationPaymentPlanStatusResponseDto {
     const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
 
@@ -89,6 +134,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     response.planPrice = organizationPaymentPlan.price;
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
 
     if (bankPayments.length === 0) {
       response.isActive = false;
@@ -160,6 +206,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
   private validateMonthly(
     organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
     bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
   ): ValidateOrganizationPaymentPlanStatusResponseDto {
     const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
 
@@ -168,6 +215,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     response.planPrice = organizationPaymentPlan.price;
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
 
     const confirmedPayments = bankPayments.filter(
       (p) => p.status === PaymentStatusEnum.CONFIRMED,
@@ -214,6 +262,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
   private validateYearly(
     organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
     bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
   ): ValidateOrganizationPaymentPlanStatusResponseDto {
     const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
 
@@ -222,6 +271,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     response.planPrice = organizationPaymentPlan.price;
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
 
     if (bankPayments.length === 0) {
       response.isActive = false;
