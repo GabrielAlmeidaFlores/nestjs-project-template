@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
@@ -67,6 +68,19 @@ export class GenerateYearlyPaymentBillingUseCase {
         PaymentPlanNotFoundError,
       );
 
+    let organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+      bankExternalId: Guid.toString(),
+      name: paymentPlan.name,
+      description: paymentPlan.description,
+      price: paymentPlan.price,
+      maxMemberCount: paymentPlan.maxMemberCount,
+      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
+      cycle: paymentPlan.cycle,
+      organization: new OrganizationId(organizationId),
+      paymentPlan: paymentPlan.id,
+      totalInstallments: dto.installments,
+    });
+
     if (paymentPlan.cycle !== PaymentPlanCycleEnum.YEARLY) {
       throw new InvalidPaymentPlanCycleError();
     }
@@ -94,6 +108,11 @@ export class GenerateYearlyPaymentBillingUseCase {
       }),
     );
 
+    organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+      ...organizationPaymentPlan,
+      bankExternalId: createBillingResult.id,
+    });
+
     const bankPayment = new BankPaymentEntity({
       bankExternalId: createBillingResult.id,
       paymentMethod: PaymentMethodEnum.UNDEFINED,
@@ -110,18 +129,6 @@ export class GenerateYearlyPaymentBillingUseCase {
       await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
         paymentPlan.id,
       );
-
-    const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-      bankExternalId: createBillingResult.id,
-      name: paymentPlan.name,
-      description: paymentPlan.description,
-      price: paymentPlan.price,
-      maxMemberCount: paymentPlan.maxMemberCount,
-      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-      cycle: paymentPlan.cycle,
-      organization: new OrganizationId(organizationId),
-      paymentPlan: paymentPlan.id,
-    });
 
     const organizationPaymentPlanBankPayment =
       new OrganizationPaymentPlanBankPaymentEntity({
