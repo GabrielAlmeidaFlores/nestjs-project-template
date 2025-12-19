@@ -72,8 +72,10 @@ import { GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile 
 import { RetirementPlanningRppsPeriodSpecialTimeEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration/get-retirement-planning-rpps-remuneration-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration-entity.auto-mapper.profile';
+import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/get-retirement-planning-rpps-remuneration-calculation-query-result.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -144,6 +146,8 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetRetirementPlanningRppsPeriodDocumentQueryResultAutoMapperProfile,
     RetirementPlanningRppsRemunerationEntityAutoMapperProfile,
     GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile,
+    RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile,
+    GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperProfile,
     RetirementPlanningRppsPeriodDisabilityEntityAutoMapperProfile,
     GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfile,
     RetirementPlanningRppsPeriodSpecialTimeEntityAutoMapperProfile,
