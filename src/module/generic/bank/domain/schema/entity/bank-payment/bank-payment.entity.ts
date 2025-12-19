@@ -2,6 +2,7 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
+import type { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { BankPaymentEntityPropsInterface } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity.props';
 import type { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
@@ -29,6 +30,12 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
   @Description('Número da parcela, se aplicável')
   public readonly installmentNumber: number | null;
 
+  @Description('QR Code PIX em Base64')
+  public readonly pixQrCode: Base64 | null;
+
+  @Description('Código copia e cola do PIX')
+  public readonly pixCopyPaste: string | null;
+
   protected readonly _type = BankPaymentEntity.name;
 
   public constructor(props: BankPaymentEntityPropsInterface) {
@@ -41,5 +48,7 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
     this.dueDate = props.dueDate;
     this.paymentDate = props.paymentDate ?? null;
     this.installmentNumber = props.installmentNumber ?? null;
+    this.pixQrCode = props.pixQrCode ?? null;
+    this.pixCopyPaste = props.pixCopyPaste ?? null;
   }
 }

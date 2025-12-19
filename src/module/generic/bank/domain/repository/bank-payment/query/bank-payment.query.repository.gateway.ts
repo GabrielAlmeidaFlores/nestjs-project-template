@@ -1,9 +1,9 @@
-import type { NotFound } from '@aws-sdk/client-s3';
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import type { NotFoundError } from '@core/error/not-found.error';
 import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 import type { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
-import type { Constructor } from 'type-fest';
+import type { ConstructorType } from '@shared/system/type/constructor.type';
 
 export abstract class BankPaymentQueryRepositoryGateway {
   public abstract listBankPayment(
@@ -12,7 +12,7 @@ export abstract class BankPaymentQueryRepositoryGateway {
 
   public abstract findOneBankPaymentByIdOrFail(
     id: BankPaymentId,
-    err: Constructor<NotFound>,
+    err: ConstructorType<NotFoundError>,
   ): Promise<GetBankPaymentQueryResult>;
 
   public abstract findOneBankPaymentByBankExternalId(

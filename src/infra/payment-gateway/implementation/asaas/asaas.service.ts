@@ -72,20 +72,40 @@ export class AsaasService extends PaymentGateway {
   public async payBilling(
     props: PayBillingInputModel,
   ): Promise<PayBillingOutputModel> {
-    const data = {
-      creditCard: props.creditCardInfo,
-      creditCardHolderInfo: props.creditCardHolderInfo,
-    };
+    try {
+      const data = {
+        creditCard: {
+          holderName: props.creditCardInfo.holderName,
+          number: props.creditCardInfo.number,
+          expiryMonth: props.creditCardInfo.expiryMonth,
+          expiryYear: props.creditCardInfo.expiryYear,
+          ccv: props.creditCardInfo.ccv,
+        },
+        creditCardHolderInfo: {
+          name: props.creditCardHolderInfo.name,
+          email: props.creditCardHolderInfo.email.toString(),
+          cpfCnpj: props.creditCardHolderInfo.federalDocument.toString(),
+          postalCode: props.creditCardHolderInfo.postalCode.toString(),
+          addressNumber: props.creditCardHolderInfo.addressNumber,
+          phone: props.creditCardHolderInfo.phone.toString(),
+        },
+      };
 
-    await this.makeRequest<Record<string, unknown>, { id: string }>(
-      `payments/${props.billingId}/payWithCreditCard`,
-      'post',
-      data,
-    );
+      await this.makeRequest<Record<string, unknown>, { id: string }>(
+        `payments/${props.billingId}/payWithCreditCard`,
+        'post',
+        data,
+      );
 
-    return PayBillingOutputModel.build({
-      id: props.billingId,
-    });
+      return PayBillingOutputModel.build({
+        id: props.billingId,
+      });
+    } catch (error) {
+      this.handleAsaasApiError(
+        error,
+        (message) => new PaymentNotApprovedError({ message }),
+      );
+    }
   }
 
   public async cancelBilling(billingId: string): Promise<void> {
@@ -102,6 +122,7 @@ export class AsaasService extends PaymentGateway {
       description: props.description,
       externalReference: props.externalReference,
       installmentCount: props.installmentCount,
+      billingType: 'UNDEFINED',
     };
 
     if (props.installmentCount !== undefined) {

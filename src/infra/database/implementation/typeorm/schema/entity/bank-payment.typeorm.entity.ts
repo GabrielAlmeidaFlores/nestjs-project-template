@@ -41,6 +41,12 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'installment_number', type: 'int', nullable: true })
   public installmentNumber: number | null;
 
+  @Column({ name: 'pix_qr_code', type: 'text', nullable: true })
+  public pixQrCode: string | null;
+
+  @Column({ name: 'pix_copy_paste', type: 'text', nullable: true })
+  public pixCopyPaste: string | null;
+
   @OneToMany(
     () => OrganizationPaymentPlanBankPaymentTypeormEntity,
     (entity) => entity.bankPayment,

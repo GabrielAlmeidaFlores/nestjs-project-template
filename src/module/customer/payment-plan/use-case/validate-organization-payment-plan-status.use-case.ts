@@ -67,6 +67,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       );
     }
 
+    if (cycleValue === (PaymentPlanCycleEnum.MONTHLY as string)) {
+      return this.validateMonthly(organizationPaymentPlan, bankPayments);
+    }
+
+    if (cycleValue === (PaymentPlanCycleEnum.YEARLY as string)) {
+      return this.validateYearly(organizationPaymentPlan, bankPayments);
+    }
+
     throw new OrganizationPaymentPlanNotFoundError();
   }
 
@@ -144,6 +152,159 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
 
     if (nextPendingPayment) {
       response.nextDueDate = nextPendingPayment.dueDate;
+    }
+
+    return response;
+  }
+
+  private validateMonthly(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
+
+    response.planName = organizationPaymentPlan.name;
+    response.planDescription = organizationPaymentPlan.description;
+    response.planPrice = organizationPaymentPlan.price;
+    response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
+    response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+
+    const confirmedPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.CONFIRMED,
+    );
+
+    if (confirmedPayments.length === 0) {
+      response.isActive = false;
+      response.hasOverduePayments = false;
+      response.overduePaymentsCount = 0;
+      return response;
+    }
+
+    const firstPayment = confirmedPayments.sort((a, b) => {
+      if (!a.paymentDate || !b.paymentDate) {
+        return 0;
+      }
+      return a.paymentDate.getTime() - b.paymentDate.getTime();
+    })[0];
+
+    const oneMonthAfterFirstPayment = new Date(
+      firstPayment?.paymentDate ?? new Date(),
+    );
+    oneMonthAfterFirstPayment.setMonth(
+      oneMonthAfterFirstPayment.getMonth() + 1,
+    );
+
+    const now = new Date();
+    const isActive = now < oneMonthAfterFirstPayment;
+
+    response.isActive = isActive;
+    response.hasOverduePayments = false;
+    response.overduePaymentsCount = 0;
+
+    if (firstPayment) {
+      response.lastPaymentStatus = firstPayment.status;
+      if (firstPayment.paymentDate) {
+        response.lastPaymentDate = firstPayment.paymentDate;
+      }
+    }
+
+    return response;
+  }
+
+  private validateYearly(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
+
+    response.planName = organizationPaymentPlan.name;
+    response.planDescription = organizationPaymentPlan.description;
+    response.planPrice = organizationPaymentPlan.price;
+    response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
+    response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+
+    if (bankPayments.length === 0) {
+      response.isActive = false;
+      response.hasOverduePayments = false;
+      response.overduePaymentsCount = 0;
+      return response;
+    }
+
+    const now = new Date();
+    const hoursInDay = 24;
+    const minutesInHour = 60;
+    const secondsInMinute = 60;
+    const millisecondsInSecond = 1000;
+    const twentyFourHoursInMs =
+      hoursInDay * minutesInHour * secondsInMinute * millisecondsInSecond;
+    const twentyFourHoursAgo = new Date(now.getTime() - twentyFourHoursInMs);
+
+    const sortedPayments = [...bankPayments].sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+
+    const lastPayment = sortedPayments[0];
+    const previousPayments = sortedPayments.slice(1);
+
+    const allPreviousConfirmed = previousPayments.every(
+      (p) => p.status === PaymentStatusEnum.CONFIRMED,
+    );
+
+    let lastPaymentValid = false;
+    if (lastPayment) {
+      if (lastPayment.status === PaymentStatusEnum.CONFIRMED) {
+        lastPaymentValid = true;
+      } else if (lastPayment.status === PaymentStatusEnum.PENDING) {
+        lastPaymentValid = lastPayment.createdAt >= twentyFourHoursAgo;
+      }
+    }
+
+    const confirmedPayments = bankPayments
+      .filter((p) => p.status === PaymentStatusEnum.CONFIRMED)
+      .sort((a, b) => {
+        if (!a.paymentDate || !b.paymentDate) {
+          return 0;
+        }
+        return a.paymentDate.getTime() - b.paymentDate.getTime();
+      });
+
+    const firstPayment = confirmedPayments[0];
+
+    let withinOneYear = false;
+    if (firstPayment?.paymentDate) {
+      const oneYearAfterFirstPayment = new Date(firstPayment.paymentDate);
+      oneYearAfterFirstPayment.setFullYear(
+        oneYearAfterFirstPayment.getFullYear() + 1,
+      );
+      withinOneYear = now < oneYearAfterFirstPayment;
+    }
+
+    response.isActive =
+      allPreviousConfirmed && lastPaymentValid && withinOneYear;
+    response.hasOverduePayments = false;
+    response.overduePaymentsCount = 0;
+
+    if (confirmedPayments.length > 0) {
+      const lastConfirmedPayment =
+        confirmedPayments[confirmedPayments.length - 1];
+      if (lastConfirmedPayment) {
+        response.lastPaymentStatus = lastConfirmedPayment.status;
+        if (lastConfirmedPayment.paymentDate) {
+          response.lastPaymentDate = lastConfirmedPayment.paymentDate;
+        }
+      }
+    }
+
+    const pendingPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.PENDING,
+    );
+    if (pendingPayments.length > 0) {
+      const nextPending = pendingPayments.sort(
+        (a, b) => a.dueDate.getTime() - b.dueDate.getTime(),
+      )[0];
+      if (nextPending) {
+        response.nextDueDate = nextPending.dueDate;
+      }
     }
 
     return response;

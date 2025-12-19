@@ -8,9 +8,9 @@ import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dt
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class SubscribeToMonthlyRecurringPaymentPlanRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public paymentPlanId: string;
+export class PayBillingRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoStringProperty({ description: 'ID do pagamento bancário' })
+  public bankPaymentId: string;
 
   @RequestDtoObjectProperty(() => CreditCardInfoRequestDto)
   public creditCardInfo: CreditCardInfoRequestDto;
@@ -18,6 +18,5 @@ export class SubscribeToMonthlyRecurringPaymentPlanRequestDto extends BaseBuilda
   @RequestDtoObjectProperty(() => CreditCardHolderInfoRequestDto)
   public creditCardHolderInfo: CreditCardHolderInfoRequestDto;
 
-  protected override readonly _type =
-    SubscribeToMonthlyRecurringPaymentPlanRequestDto.name;
+  protected override readonly _type = PayBillingRequestDto.name;
 }

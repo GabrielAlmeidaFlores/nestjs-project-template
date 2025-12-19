@@ -9,6 +9,7 @@ export class GetOrganizationCreditPurchaseQueryResult extends BaseBuildableObjec
   public readonly organization: OrganizationId;
   public readonly bankPayment: BankPaymentId;
   public readonly creditAmount: number;
+  public readonly validFrom: Date | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 
