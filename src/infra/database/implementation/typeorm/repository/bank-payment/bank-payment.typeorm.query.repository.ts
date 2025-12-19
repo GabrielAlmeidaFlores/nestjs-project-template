@@ -1,11 +1,11 @@
 import { Constructor } from '@automapper/core';
-import { NotFound } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -47,7 +47,7 @@ export class BankPaymentTypeormQueryRepository
 
   public async findOneBankPaymentByIdOrFail(
     id: BankPaymentId,
-    err: Constructor<NotFound>,
+    err: Constructor<NotFoundError>,
   ): Promise<GetBankPaymentQueryResult> {
     const data = await this.findOneOrFail(
       {

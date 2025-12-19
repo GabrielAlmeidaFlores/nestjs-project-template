@@ -29,7 +29,16 @@ export class GetOrganizationAvailableCreditsUseCase {
         organizationId,
       );
 
-    const totalPurchased = purchases.reduce(
+    const now = new Date();
+
+    const validPurchases = purchases.filter((purchase) => {
+      if (purchase.validFrom === null) {
+        return true;
+      }
+      return purchase.validFrom <= now;
+    });
+
+    const totalPurchased = validPurchases.reduce(
       (sum, purchase) => sum + purchase.creditAmount,
       0,
     );

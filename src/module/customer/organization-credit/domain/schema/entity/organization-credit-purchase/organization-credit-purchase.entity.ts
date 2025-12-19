@@ -16,6 +16,9 @@ export class OrganizationCreditPurchaseEntity extends BaseEntity<OrganizationCre
   @Description('Quantidade de crédito adquirida')
   public readonly creditAmount: number;
 
+  @Description('Data a partir da qual os créditos começam a ser válidos')
+  public readonly validFrom: Date | null;
+
   protected readonly _type = OrganizationCreditPurchaseEntity.name;
 
   public constructor(props: OrganizationCreditPurchaseEntityPropsInterface) {
@@ -24,5 +27,6 @@ export class OrganizationCreditPurchaseEntity extends BaseEntity<OrganizationCre
     this.organization = props.organization;
     this.bankPayment = props.bankPayment;
     this.creditAmount = props.creditAmount;
+    this.validFrom = props.validFrom ?? null;
   }
 }

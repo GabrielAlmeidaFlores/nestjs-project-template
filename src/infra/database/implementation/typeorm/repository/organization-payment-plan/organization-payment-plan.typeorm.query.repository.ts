@@ -9,6 +9,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
 import { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 
 @Injectable()
 export class OrganizationPaymentPlanTypeormQueryRepository
@@ -69,6 +70,33 @@ export class OrganizationPaymentPlanTypeormQueryRepository
     const data = await this.repository.findOne({
       where: {
         bankExternalId,
+      },
+      relations: [
+        'organization',
+        'paymentPlan',
+        'paymentPlan.paymentPlanEnabledPaidResource',
+        'paymentPlan.paymentPlanEnabledPaidResource.paymentPlan',
+        'paymentPlan.paymentPlanEnabledPaidResource.paymentPlanPaidResource',
+      ],
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      data,
+      OrganizationPaymentPlanTypeormEntity,
+      GetOrganizationPaymentPlanWithRelationsQueryResult,
+    );
+  }
+
+  public async findOneByIdWithRelations(
+    id: OrganizationPaymentPlanId,
+  ): Promise<GetOrganizationPaymentPlanWithRelationsQueryResult | null> {
+    const data = await this.repository.findOne({
+      where: {
+        id: id.toString(),
       },
       relations: [
         'organization',

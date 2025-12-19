@@ -2,6 +2,7 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
@@ -33,6 +34,11 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
         dueDate: source.dueDate,
         paymentDate: source.paymentDate,
         installmentNumber: source.installmentNumber,
+        pixQrCode:
+          source.pixQrCode !== null && source.pixQrCode !== ''
+            ? new Base64(source.pixQrCode)
+            : null,
+        pixCopyPaste: source.pixCopyPaste,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -61,6 +67,8 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
         dueDate: source.dueDate,
         paymentDate: source.paymentDate,
         installmentNumber: source.installmentNumber,
+        pixQrCode: source.pixQrCode?.toString() ?? null,
+        pixCopyPaste: source.pixCopyPaste,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,

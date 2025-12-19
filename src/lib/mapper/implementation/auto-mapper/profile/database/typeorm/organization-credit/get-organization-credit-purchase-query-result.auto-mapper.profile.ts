@@ -33,6 +33,7 @@ export class GetOrganizationCreditPurchaseQueryResultAutoMapperProfile {
         organization: new OrganizationId(source.organization?.id),
         bankPayment: new BankPaymentId(source.bankPayment?.id),
         creditAmount: source.creditAmount,
+        validFrom: source.validFrom,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -63,6 +64,7 @@ export class GetOrganizationCreditPurchaseQueryResultAutoMapperProfile {
       return OrganizationCreditPurchaseTypeormEntity.build({
         id: source.id.toString(),
         creditAmount: source.creditAmount,
+        validFrom: source.validFrom ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,

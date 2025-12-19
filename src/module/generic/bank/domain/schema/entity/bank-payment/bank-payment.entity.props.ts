@@ -1,4 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import type { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
@@ -13,4 +14,6 @@ export interface BankPaymentEntityPropsInterface
   dueDate: Date;
   paymentDate?: Date | null;
   installmentNumber?: number | null;
+  pixQrCode?: Base64 | null;
+  pixCopyPaste?: string | null;
 }

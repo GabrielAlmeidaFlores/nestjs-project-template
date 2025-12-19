@@ -8,4 +8,5 @@ export interface OrganizationCreditPurchaseEntityPropsInterface
   organization: OrganizationId;
   bankPayment: BankPaymentId;
   creditAmount: number;
+  validFrom?: Date | null;
 }

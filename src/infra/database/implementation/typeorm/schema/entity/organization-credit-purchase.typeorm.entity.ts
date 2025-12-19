@@ -9,6 +9,9 @@ export class OrganizationCreditPurchaseTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'credit_amount', type: 'integer' })
   public creditAmount: number;
 
+  @Column({ name: 'valid_from', type: 'date', nullable: true })
+  public validFrom: Date | null;
+
   @ManyToOne(() => OrganizationTypeormEntity)
   @JoinColumn({ name: 'organization_id' })
   public organization?: OrganizationTypeormEntity | undefined;

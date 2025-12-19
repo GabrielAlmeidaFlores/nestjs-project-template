@@ -1,5 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import type { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
@@ -14,6 +15,8 @@ export class GetBankPaymentQueryResult extends BaseBuildableObject {
   public readonly dueDate: Date;
   public readonly paymentDate: Date | null;
   public readonly installmentNumber: number | null;
+  public readonly pixQrCode: Base64 | null;
+  public readonly pixCopyPaste: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 

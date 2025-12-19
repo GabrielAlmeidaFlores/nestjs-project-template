@@ -26,7 +26,7 @@ export const PAYMENT_PLAN_SEED_DATA = [
     maxMemberCount: 1,
     monthlyCreditAmount: 50,
     active: true,
-    cycle: PaymentPlanCycleEnum.MONTHLY_RECURRING,
+    cycle: PaymentPlanCycleEnum.MONTHLY,
   }),
   new PaymentPlanEntity({
     id: new PaymentPlanId('4b03d7d5-078d-46c6-82b9-cf4998140155'),
@@ -48,7 +48,7 @@ export const PAYMENT_PLAN_SEED_DATA = [
     maxMemberCount: 10,
     monthlyCreditAmount: 500,
     active: true,
-    cycle: PaymentPlanCycleEnum.MONTHLY_RECURRING,
+    cycle: PaymentPlanCycleEnum.YEARLY,
   }),
 ];
 

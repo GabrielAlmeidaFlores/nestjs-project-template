@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -23,21 +24,25 @@ export class CancelPaymentPlanUseCase {
   ): Promise<CancelPaymentPlanResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
-    const existingSubscriptions =
+    const existingPaymentPlans =
       await this.organizationPaymentPlanQueryRepository.findManyByOrganizationId(
         new OrganizationId(organizationId),
       );
 
-    if (existingSubscriptions.length === 0) {
+    if (existingPaymentPlans.length === 0) {
       throw new OrganizationPaymentPlanNotFoundError();
     }
 
-    for (const subscription of existingSubscriptions) {
-      await this.paymentGateway.cancelSubscription(subscription.bankExternalId);
+    for (const subscription of existingPaymentPlans) {
+      if (subscription.cycle === PaymentPlanCycleEnum.MONTHLY_RECURRING) {
+        await this.paymentGateway.cancelSubscription(
+          subscription.bankExternalId,
+        );
+      }
     }
 
     return CancelPaymentPlanResponseDto.build({
-      organizationPaymentPlanId: existingSubscriptions.map(
+      organizationPaymentPlanId: existingPaymentPlans.map(
         (subscription) => subscription.id,
       ),
     });
