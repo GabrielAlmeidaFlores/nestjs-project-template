@@ -5,6 +5,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/command/retirement-planning-rpps-remuneration.command.repository.gateway';
+import { RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration-calculation/command/retirement-planning-rpps-remuneration-calculation.command.repository.gateway';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.entity';
@@ -14,7 +15,7 @@ import { CreateRetirementPlanningRppsRemunerationRequestDto } from '@module/cust
 import { CreateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-remuneration.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
-import { CreateRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration-calculation.use-case';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -30,8 +31,12 @@ export class CreateRetirementPlanningRppsRemunerationUseCase {
     private readonly retirementPlanningRppsRemunerationCommandRepositoryGateway: RetirementPlanningRppsRemunerationCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsCommandRepositoryGateway)
     private readonly retirementPlanningRppsCommandRepositoryGateway: RetirementPlanningRppsCommandRepositoryGateway,
-    @Inject(CreateRetirementPlanningRppsRemunerationCalculationUseCase)
-    private readonly createRetirementPlanningRppsRemunerationCalculationUseCase: CreateRetirementPlanningRppsRemunerationCalculationUseCase,
+    @Inject(
+      RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway,
+    )
+    private readonly retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway: RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway,
+    @Inject(RemunerationCalculatorGateway)
+    private readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -102,15 +107,14 @@ export class CreateRetirementPlanningRppsRemunerationUseCase {
       );
     }
 
-    const calculationOperations =
-      await this.createRetirementPlanningRppsRemunerationCalculationUseCase.execute(
-        dto.remunerations,
-        null,
-      );
-
-    transactionOperations.push(...calculationOperations.transactionOperations);
     const retirementPlanningRppsRemunerationCalculation =
-      calculationOperations.entity;
+      this.remunerationCalculatorGateway.calculate(dto.remunerations);
+
+    transactionOperations.push(
+      this.retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway.createRetirementPlanningRppsRemunerationCalculation(
+        retirementPlanningRppsRemunerationCalculation,
+      ),
+    );
 
     const updatedRetirementPlanningRppsEntity =
       new RetirementPlanningRppsEntity({

@@ -40,6 +40,7 @@ import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-t
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
+import { GetRetirementPlanningRppsRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps-remuneration-calculation.response.dto';
 import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
@@ -70,6 +71,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
@@ -124,6 +126,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
     private readonly createRetirementPlanningRppsResultUseCase: CreateRetirementPlanningRppsResultUseCase,
     private readonly getRetirementPlanningRppsUseCase: GetRetirementPlanningRppsUseCase,
+    private readonly getRetirementPlanningRppsRemunerationCalculationUseCase: GetRetirementPlanningRppsRemunerationCalculationUseCase,
     private readonly updateRetirementPlanningRppsRemunerationUseCase: UpdateRetirementPlanningRppsRemunerationUseCase,
     private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
     private readonly updateRetirementPlanningRppsUseCase: UpdateRetirementPlanningRppsUseCase,
@@ -932,6 +935,39 @@ export class AnalysisToolController {
     retirementPlanningRppsId: RetirementPlanningRppsId,
   ): Promise<GetRetirementPlanningRppsResponseDto> {
     return await this.getRetirementPlanningRppsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRppsId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Obter cálculo de remunerações do planejamento previdenciário RPPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rpps/:retirementPlanningRppsId/remuneration-calculation',
+      method: RequestMethod.GET,
+    },
+    tag: ['planejamento-previdenciario-rpps'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Cálculo de remunerações retornado com sucesso.',
+      type: GetRetirementPlanningRppsRemunerationCalculationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRppsRemunerationCalculation(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRppsId',
+      new ParseValueObjectPipe(RetirementPlanningRppsId),
+    )
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+  ): Promise<GetRetirementPlanningRppsRemunerationCalculationResponseDto> {
+    return await this.getRetirementPlanningRppsRemunerationCalculationUseCase.execute(
       sessionData,
       organizationSessionData,
       retirementPlanningRppsId,

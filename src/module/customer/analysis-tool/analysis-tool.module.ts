@@ -6,6 +6,7 @@ import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
@@ -13,7 +14,6 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { CreateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration.use-case';
-import { CreateRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration-calculation.use-case';
 import { CreateRetirementPlanningRppsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-result.use-case';
 import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -27,6 +27,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
@@ -48,6 +49,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FileProcessorModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    RemunerationCalculatorModule,
     CnisAnalyzerModule,
   ],
   controllers: [AnalysisToolController],
@@ -78,9 +80,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateCnisFastAnalysisUseCase,
     CreateRetirementPlanningRppsUseCase,
     CreateRetirementPlanningRppsRemunerationUseCase,
-    CreateRetirementPlanningRppsRemunerationCalculationUseCase,
     CreateRetirementPlanningRppsResultUseCase,
     GetRetirementPlanningRppsUseCase,
+    GetRetirementPlanningRppsRemunerationCalculationUseCase,
     ListRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsUseCase,
