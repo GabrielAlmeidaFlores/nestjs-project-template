@@ -5,29 +5,29 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class GetRetirementPlanningRppsRemunerationCalculationResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoNumberProperty()
-  public totalCompetencies: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public totalCompetencies?: number;
 
-  @ResponseDtoNumberProperty()
-  public totalAmount: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public totalAmount?: number;
 
-  @ResponseDtoNumberProperty()
-  public averageAmount: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public averageAmount?: number;
 
-  @ResponseDtoNumberProperty()
-  public topEightyPercentCompetencies: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public topEightyPercentCompetencies?: number;
 
-  @ResponseDtoNumberProperty()
-  public bottomTwentyPercentCompetencies: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public bottomTwentyPercentCompetencies?: number;
 
-  @ResponseDtoNumberProperty()
-  public topEightyPercentAverageAmount: number;
+  @ResponseDtoNumberProperty({ required: false })
+  public topEightyPercentAverageAmount?: number;
 
-  @ResponseDtoDateProperty()
-  public createdAt: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public createdAt?: Date;
 
-  @ResponseDtoDateProperty()
-  public updatedAt: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public updatedAt?: Date;
 
   protected override readonly _type =
     GetRetirementPlanningRppsRemunerationCalculationResponseDto.name;

@@ -8,50 +8,50 @@ export class RetirementPlanningRppsRemunerationCalculationTypeormEntity extends 
   @Column({
     name: 'total_competencies',
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
-  public totalCompetencies: number;
+  public totalCompetencies?: number | null;
 
   @Column({
     name: 'total_amount',
     type: 'decimal',
     precision: 15,
     scale: 2,
-    nullable: false,
+    nullable: true,
   })
-  public totalAmount: string;
+  public totalAmount?: string | null;
 
   @Column({
     name: 'average_amount',
     type: 'decimal',
     precision: 15,
     scale: 2,
-    nullable: false,
+    nullable: true,
   })
-  public averageAmount: string;
+  public averageAmount?: string | null;
 
   @Column({
     name: 'top_eighty_percent_competencies',
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
-  public topEightyPercentCompetencies: number;
+  public topEightyPercentCompetencies?: number | null;
 
   @Column({
     name: 'bottom_twenty_percent_competencies',
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
-  public bottomTwentyPercentCompetencies: number;
+  public bottomTwentyPercentCompetencies?: number | null;
 
   @Column({
     name: 'top_eighty_percent_average_amount',
     type: 'decimal',
     precision: 15,
     scale: 2,
-    nullable: false,
+    nullable: true,
   })
-  public topEightyPercentAverageAmount: string;
+  public topEightyPercentAverageAmount?: string | null;
 
   @OneToOne(
     () => RetirementPlanningRppsTypeormEntity,

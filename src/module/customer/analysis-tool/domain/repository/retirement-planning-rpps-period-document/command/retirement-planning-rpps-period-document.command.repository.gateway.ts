@@ -11,4 +11,8 @@ export abstract class RetirementPlanningRppsPeriodDocumentCommandRepositoryGatew
     id: RetirementPlanningRppsPeriodDocumentId,
     props: RetirementPlanningRppsPeriodDocumentEntity,
   ): TransactionType;
+
+  public abstract deleteRetirementPlanningRppsPeriodDocument(
+    id: RetirementPlanningRppsPeriodDocumentId,
+  ): TransactionType;
 }

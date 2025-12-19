@@ -18,7 +18,7 @@ import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
-import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-plannig-rpps-period.entity';
+import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity';
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
 import { RetirementPlanningRppsPeriodDisabilityId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/value-object/retirement-planning-rpps-period-disability-id.value-object';
@@ -132,6 +132,16 @@ export class UpdateRetirementPlanningRppsUseCase {
     });
 
     const transactionOperations: TransactionType[] = [];
+
+    if (retirementPlanningRppsQueryResult.ctcDocuments) {
+      for (const ctcDocument of retirementPlanningRppsQueryResult.ctcDocuments) {
+        transactionOperations.push(
+          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.deleteRetirementPlanningRppsPeriodDocument(
+            ctcDocument.id,
+          ),
+        );
+      }
+    }
 
     if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
       for (const documentDto of dto.ctcDocuments) {

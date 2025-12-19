@@ -3,10 +3,10 @@ import type { RetirementPlanningRppsRemunerationCalculationId } from '@module/cu
 
 export interface RetirementPlanningRppsRemunerationCalculationEntityPropsInterface
   extends BaseEntityPropsInterface<RetirementPlanningRppsRemunerationCalculationId> {
-  totalCompetencies: number;
-  totalAmount: number;
-  averageAmount: number;
-  topEightyPercentCompetencies: number;
-  bottomTwentyPercentCompetencies: number;
-  topEightyPercentAverageAmount: number;
+  totalCompetencies?: number | null;
+  totalAmount?: number | null;
+  averageAmount?: number | null;
+  topEightyPercentCompetencies?: number | null;
+  bottomTwentyPercentCompetencies?: number | null;
+  topEightyPercentAverageAmount?: number | null;
 }
