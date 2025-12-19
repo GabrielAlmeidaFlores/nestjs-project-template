@@ -45,7 +45,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       throw new OrganizationPaymentPlanNotFoundError();
     }
 
-    // Busca o organization-payment-plan completo com relações
     const organizationPaymentPlanWithRelations =
       await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
         organizationPaymentPlan.id,
@@ -55,7 +54,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       throw new OrganizationPaymentPlanNotFoundError();
     }
 
-    // Busca os recursos pagos habilitados do payment-plan
     const enabledPaidResources =
       await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
         organizationPaymentPlanWithRelations.paymentPlan.id,
@@ -281,33 +279,18 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
     }
 
     const now = new Date();
-    const hoursInDay = 24;
-    const minutesInHour = 60;
-    const secondsInMinute = 60;
-    const millisecondsInSecond = 1000;
-    const twentyFourHoursInMs =
-      hoursInDay * minutesInHour * secondsInMinute * millisecondsInSecond;
-    const twentyFourHoursAgo = new Date(now.getTime() - twentyFourHoursInMs);
 
     const sortedPayments = [...bankPayments].sort(
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
     );
 
-    const lastPayment = sortedPayments[0];
-    const previousPayments = sortedPayments.slice(1);
-
-    const allPreviousConfirmed = previousPayments.every(
-      (p) => p.status === PaymentStatusEnum.CONFIRMED,
-    );
-
-    let lastPaymentValid = false;
-    if (lastPayment) {
-      if (lastPayment.status === PaymentStatusEnum.CONFIRMED) {
-        lastPaymentValid = true;
-      } else if (lastPayment.status === PaymentStatusEnum.PENDING) {
-        lastPaymentValid = lastPayment.createdAt >= twentyFourHoursAgo;
+    const allPaymentsValid = sortedPayments.every((payment) => {
+      if (payment.dueDate < now) {
+        return payment.status === PaymentStatusEnum.CONFIRMED;
       }
-    }
+
+      return true;
+    });
 
     const confirmedPayments = bankPayments
       .filter((p) => p.status === PaymentStatusEnum.CONFIRMED)
@@ -329,8 +312,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase {
       withinOneYear = now < oneYearAfterFirstPayment;
     }
 
-    response.isActive =
-      allPreviousConfirmed && lastPaymentValid && withinOneYear;
+    response.isActive = allPaymentsValid && withinOneYear;
     response.hasOverduePayments = false;
     response.overduePaymentsCount = 0;
 
