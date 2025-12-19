@@ -253,30 +253,58 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       return;
     }
 
-    const organizationPaymentPlanBank =
-      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
-        bankPayment.id,
-      );
-
-    if (!organizationPaymentPlanBank) {
-      return;
-    }
-
     const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
-        organizationPaymentPlanBank.organizationPaymentPlan,
+      await this.organizationPaymentPlanQueryRepository.findOneByBankExternalIdWithRelations(
+        dto.payment.externalReference,
       );
 
     if (!organizationPaymentPlan) {
       return;
     }
 
-    const existingCreditPurchases =
-      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+    const organizationPaymentPlanBank =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
         bankPayment.id,
       );
 
-    if (existingCreditPurchases) {
+    if (!organizationPaymentPlanBank) {
+      const newRelation = new OrganizationPaymentPlanBankPaymentEntity({
+        organizationPaymentPlan: organizationPaymentPlan.id,
+        bankPayment: bankPayment.id,
+      });
+
+      const createRelationTransaction =
+        this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+          newRelation,
+        );
+
+      const relationTransaction =
+        await this.baseTransactionRepositoryGateway.execute([
+          createRelationTransaction,
+        ]);
+      await relationTransaction.commit();
+    }
+
+    const allPaymentRelations =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
+        organizationPaymentPlan.id,
+      );
+
+    const allBankPaymentIds = allPaymentRelations.map((pr) => pr.bankPayment);
+
+    let hasExistingCredits = false;
+    for (const paymentId of allBankPaymentIds) {
+      const existingCreditPurchase =
+        await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+          paymentId,
+        );
+      if (existingCreditPurchase) {
+        hasExistingCredits = true;
+        break;
+      }
+    }
+
+    if (hasExistingCredits) {
       return;
     }
 
@@ -305,9 +333,21 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       creditPurchaseTransactions.push(createCreditPurchaseTransaction);
     }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      creditPurchaseTransactions,
-    );
+    const updatedBankPayment = new BankPaymentEntity({
+      ...bankPayment,
+      status: PaymentStatusEnum.CONFIRMED,
+    });
+
+    const updateBankPaymentTransaction =
+      this.bankPaymentCommandRepository.updateBankPayment(
+        bankPayment.id,
+        updatedBankPayment,
+      );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      ...creditPurchaseTransactions,
+      updateBankPaymentTransaction,
+    ]);
     await transaction.commit();
   }
 
