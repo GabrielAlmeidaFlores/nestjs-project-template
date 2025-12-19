@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
@@ -45,6 +47,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisProcessorModule,
     ExportDocumentModule,
     CnisAnalyzerModule,
+    GenerativeIaModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
@@ -75,6 +78,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRetirementPlanningRgpsUseCase,
     CreateRetirementPlanningRgpsCnisUseCase,
     CreateRetirementPlanningRgpsPeriodUseCase,
+    CompareRetirementPlanningRgpsCnisCtpsUseCase,
   ],
 })
 export class AnalysisToolModule {

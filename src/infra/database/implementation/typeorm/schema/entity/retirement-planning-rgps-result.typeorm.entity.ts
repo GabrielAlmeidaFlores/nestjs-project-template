@@ -48,6 +48,20 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
     | RetirementPlanningRgpsTypeormEntity
     | undefined;
 
+  @Column({
+    name: 'compare_cnis_ctps',
+    type: 'longtext',
+    nullable: true,
+  })
+  public compareCnisCtps: string | null;
+
+  @Column({
+    name: 'compare_cnis_ctps_raw',
+    type: 'json',
+    nullable: true,
+  })
+  public compareCnisCtpsRaw: string | null;
+
   protected override readonly _type =
     RetirementPlanningRgpsResultTypeormEntity.name;
 }

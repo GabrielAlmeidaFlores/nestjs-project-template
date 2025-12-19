@@ -59,6 +59,7 @@ import { RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile } from '@li
 import { RetirementPlanningRgpsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/retirement-planning-rgps-period-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-result/retirement-planning-rgps-result-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
+import { GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-with-relations-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/retirement-planning-rgps-entity.auto-mapper.profile';
 
 @Module({
@@ -126,6 +127,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile,
     RetirementPlanningRgpsResultEntityAutoMapperProfile,
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
+    GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

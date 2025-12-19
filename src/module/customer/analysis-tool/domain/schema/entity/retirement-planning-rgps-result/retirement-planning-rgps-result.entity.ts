@@ -24,6 +24,12 @@ export class RetirementPlanningRgpsResultEntity extends BaseEntity<RetirementPla
   )
   public readonly clientLastAffiliationDate: Date | null;
 
+  @Description('Texto comparativo CNIS x CTPS.')
+  public readonly compareCnisCtps: string | null;
+
+  @Description('Resultado bruto do método compare CNIS x CTPS (JSON).')
+  public readonly compareCnisCtpsRaw: string | null;
+
   protected readonly _type = RetirementPlanningRgpsResultEntity.name;
 
   public constructor(props: RetirementPlanningRgpsResultEntityPropsInterface) {
@@ -33,5 +39,7 @@ export class RetirementPlanningRgpsResultEntity extends BaseEntity<RetirementPla
     this.clientFederalDocument = props.clientFederalDocument ?? null;
     this.clientBirthDate = props.clientBirthDate ?? null;
     this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
+    this.compareCnisCtps = props.compareCnisCtps ?? null;
+    this.compareCnisCtpsRaw = props.compareCnisCtpsRaw ?? null;
   }
 }

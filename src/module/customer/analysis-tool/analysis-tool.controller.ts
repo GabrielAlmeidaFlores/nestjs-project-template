@@ -1,4 +1,3 @@
-import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
 import {
   Body,
   HttpStatus,
@@ -13,6 +12,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { CompareRetirementPlanningRgpsCnisCtpsRequestDto } from '@module/customer/analysis-tool/dto/request/compare-retirement-planning-rgps-cnis-ctps.request.dto';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
@@ -24,6 +24,7 @@ import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
+import { CompareRetirementPlanningRgpsCnisCtpsResponseDto } from '@module/customer/analysis-tool/dto/response/compare-retirement-planning-rgps-cnis-ctps.response.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
@@ -31,6 +32,7 @@ import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
 import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
+import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
 import { CreateRetirementPlanningRgpsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
@@ -45,6 +47,7 @@ import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
@@ -112,6 +115,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsUseCase: CreateRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
     private readonly createRetirementPlanningRgpsPeriodUseCase: CreateRetirementPlanningRgpsPeriodUseCase,
+    private readonly compareRetirementPlanningRgpsCnisCtpsUseCase: CompareRetirementPlanningRgpsCnisCtpsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -869,5 +873,27 @@ export class AnalysisToolController {
     dto: CreateRetirementPlanningRgpsPeriodRequestDto,
   ): Promise<CreateRetirementPlanningRgpsPeriodResponseDto> {
     return await this.createRetirementPlanningRgpsPeriodUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Comparar CNIS e CTPS para planejamento previdenciário (RGPS)',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps-period/compare-cnis-ctps',
+      method: RequestMethod.POST,
+      type: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Resultado da comparação CNIS x CTPS criado com sucesso.',
+      type: CompareRetirementPlanningRgpsCnisCtpsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async compareCnisCtps(
+    @Body() dto: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
+  ): Promise<CompareRetirementPlanningRgpsCnisCtpsResponseDto> {
+    return await this.compareRetirementPlanningRgpsCnisCtpsUseCase.execute(dto);
   }
 }
