@@ -26,13 +26,11 @@ export class GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapp
       return GetRetirementPlanningRppsRemunerationCalculationQueryResult.build({
         ...source,
         id: new RetirementPlanningRppsRemunerationCalculationId(source.id),
-        totalAmount: source.totalAmount ? Number(source.totalAmount) : null,
-        averageAmount: source.averageAmount
-          ? Number(source.averageAmount)
-          : null,
-        topEightyPercentAverageAmount: source.topEightyPercentAverageAmount
-          ? Number(source.topEightyPercentAverageAmount)
-          : null,
+        totalAmount: Number(source.totalAmount),
+        averageAmount: Number(source.averageAmount),
+        topEightyPercentAverageAmount: Number(
+          source.topEightyPercentAverageAmount,
+        ),
       });
     };
 
