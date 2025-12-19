@@ -31,16 +31,12 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
   }
   public async findOnePaymentPlanPaidResourceByResourceType(
     resource: PaymentPlanPaidResourceTypeEnum,
-  ): Promise<GetPaymentPlanPaidResourceQueryResult | null> {
+  ): Promise<GetPaymentPlanPaidResourceQueryResult> {
     const data = await this.findOne({
       where: {
         resource,
       },
     });
-
-    if (!data) {
-      return null;
-    }
 
     const mappedData = this.mapperGateway.map(
       data,
