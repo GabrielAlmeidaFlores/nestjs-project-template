@@ -13,6 +13,7 @@ import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/ana
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
 import { CreateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration.use-case';
+import { CreateRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration-calculation.use-case';
 import { CreateRetirementPlanningRppsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-result.use-case';
 import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -77,6 +78,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateCnisFastAnalysisUseCase,
     CreateRetirementPlanningRppsUseCase,
     CreateRetirementPlanningRppsRemunerationUseCase,
+    CreateRetirementPlanningRppsRemunerationCalculationUseCase,
     CreateRetirementPlanningRppsResultUseCase,
     GetRetirementPlanningRppsUseCase,
     ListRetirementPlanningRppsRemunerationUseCase,
