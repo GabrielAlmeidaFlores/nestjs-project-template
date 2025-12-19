@@ -197,7 +197,7 @@ export class PaymentPlanController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Gerar cobrança para pagamento anual (YEARLY) com parcelas',
+    summary: 'Gerar cobrança para pagamento anual com parcelas',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'yearly/generate-billing',

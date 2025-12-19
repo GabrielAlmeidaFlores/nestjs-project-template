@@ -131,7 +131,7 @@ export class AsaasService extends PaymentGateway {
 
     const billing = await this.makeRequest<
       Record<string, unknown>,
-      { id: string }
+      { id: string; installment?: string }
     >('payments', 'post', data);
 
     let billingPixData:
@@ -152,6 +152,7 @@ export class AsaasService extends PaymentGateway {
       id: string;
       pixQrCode?: Base64;
       pixCopyPaste?: string;
+      installment?: string;
     } = {
       id: billing.id,
     };
@@ -159,6 +160,10 @@ export class AsaasService extends PaymentGateway {
     if (billingPixData !== undefined) {
       outputData.pixQrCode = new Base64(billingPixData.encodedImage);
       outputData.pixCopyPaste = billingPixData.payload;
+    }
+
+    if (billing.installment !== undefined) {
+      outputData.installment = billing.installment;
     }
 
     return CreateBillingOutputModel.build(outputData);

@@ -52,6 +52,31 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
     );
   }
 
+  public async findOneOrganizationPaymentPlanBankPaymentByBankExternalId(
+    bankExternalId: string,
+  ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        organizationPaymentPlan: {
+          bankExternalId: bankExternalId,
+        },
+      },
+      relations: ['organizationPaymentPlan', 'bankPayment'],
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    const resource = this.mapperGateway.map(
+      data,
+      OrganizationPaymentPlanBankPaymentTypeormEntity,
+      GetOrganizationPaymentPlanBankPaymentQueryResult,
+    );
+
+    return resource;
+  }
+
   public async findOneOrganizationPaymentPlanBankPaymentByIdOrFail(
     id: OrganizationPaymentPlanBankPaymentId,
     err: Constructor<NotFound>,

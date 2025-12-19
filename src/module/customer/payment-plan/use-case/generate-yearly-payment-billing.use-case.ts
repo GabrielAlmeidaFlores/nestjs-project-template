@@ -23,6 +23,7 @@ import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schem
 import { GenerateYearlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-yearly-payment-billing.request.dto';
 import { GenerateYearlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-yearly-payment-billing.response.dto';
 import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/error/invalid-payment-plan-cycle.error';
+import { MissingInstallmentInfoError } from '@module/customer/payment-plan/error/missing-installment-info.error';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
@@ -108,64 +109,72 @@ export class GenerateYearlyPaymentBillingUseCase {
       }),
     );
 
-    organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-      ...organizationPaymentPlan,
-      bankExternalId: createBillingResult.id,
-    });
-
-    const bankPayment = new BankPaymentEntity({
-      bankExternalId: createBillingResult.id,
-      paymentMethod: PaymentMethodEnum.UNDEFINED,
-      amount: new DecimalValue(paymentPlan.price.toString()),
-      status: PaymentStatusEnum.PENDING,
-      dueDate,
-      paymentDate: null,
-      installmentNumber: dto.installments,
-      pixQrCode: createBillingResult.pixQrCode ?? null,
-      pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
-    });
-
-    const paymentPlanEnabledResources =
-      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
-        paymentPlan.id,
-      );
-
-    const organizationPaymentPlanBankPayment =
-      new OrganizationPaymentPlanBankPaymentEntity({
-        organizationPaymentPlan: organizationPaymentPlan.id,
-        bankPayment: bankPayment.id,
+    if (typeof createBillingResult.installment !== 'string') {
+      throw new MissingInstallmentInfoError();
+    }
+    {
+      organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+        ...organizationPaymentPlan,
+        bankExternalId: createBillingResult.installment,
       });
 
-    const organizationPaymentPlanEnabledPaidResourceTransactions =
-      paymentPlanEnabledResources.map((enabledResource) => {
-        const organizationPaymentPlanEnabledPaidResource =
-          new OrganizationPaymentPlanEnabledPaidResourceEntity({
-            paymentPlan: enabledResource.paymentPlanId,
-            paymentPlanPaidResource: enabledResource.paymentPlanPaidResourceId,
-          });
+      const amount = paymentPlan.price.toNumber() / dto.installments;
 
-        return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
-          organizationPaymentPlanEnabledPaidResource,
+      const bankPayment = new BankPaymentEntity({
+        bankExternalId: createBillingResult.id,
+        paymentMethod: PaymentMethodEnum.UNDEFINED,
+        amount: new DecimalValue(amount.toFixed(2)),
+        status: PaymentStatusEnum.PENDING,
+        dueDate,
+        paymentDate: null,
+        installmentNumber: 1,
+        pixQrCode: createBillingResult.pixQrCode ?? null,
+        pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
+      });
+
+      const paymentPlanEnabledResources =
+        await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
+          paymentPlan.id,
         );
+
+      const organizationPaymentPlanBankPayment =
+        new OrganizationPaymentPlanBankPaymentEntity({
+          organizationPaymentPlan: organizationPaymentPlan.id,
+          bankPayment: bankPayment.id,
+        });
+
+      const organizationPaymentPlanEnabledPaidResourceTransactions =
+        paymentPlanEnabledResources.map((enabledResource) => {
+          const organizationPaymentPlanEnabledPaidResource =
+            new OrganizationPaymentPlanEnabledPaidResourceEntity({
+              paymentPlan: enabledResource.paymentPlanId,
+              paymentPlanPaidResource:
+                enabledResource.paymentPlanPaidResourceId,
+            });
+
+          return this.organizationPaymentPlanEnabledPaidResourceCommandRepository.createOrganizationPaymentPlanEnabledPaidResource(
+            organizationPaymentPlanEnabledPaidResource,
+          );
+        });
+
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        this.bankPaymentCommandRepository.createBankPayment(bankPayment),
+        this.organizationPaymentPlanCommandRepository.createOrganizationPaymentPlan(
+          organizationPaymentPlan,
+        ),
+        this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
+          organizationPaymentPlanBankPayment,
+        ),
+        ...organizationPaymentPlanEnabledPaidResourceTransactions,
+      ]);
+
+      await transaction.commit();
+
+      return GenerateYearlyPaymentBillingResponseDto.build({
+        bankPaymentId: bankPayment.id.toString(),
+        pixQrCode: bankPayment.pixQrCode?.toString() ?? null,
+        pixCopyPaste: bankPayment.pixCopyPaste ?? null,
       });
-
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      this.bankPaymentCommandRepository.createBankPayment(bankPayment),
-      this.organizationPaymentPlanCommandRepository.createOrganizationPaymentPlan(
-        organizationPaymentPlan,
-      ),
-      this.organizationPaymentPlanBankPaymentCommandRepository.createOrganizationPaymentPlanBankPayment(
-        organizationPaymentPlanBankPayment,
-      ),
-      ...organizationPaymentPlanEnabledPaidResourceTransactions,
-    ]);
-
-    await transaction.commit();
-
-    return GenerateYearlyPaymentBillingResponseDto.build({
-      bankPaymentId: bankPayment.id.toString(),
-      pixQrCode: bankPayment.pixQrCode?.toString() ?? null,
-      pixCopyPaste: bankPayment.pixCopyPaste ?? null,
-    });
+    }
   }
 }

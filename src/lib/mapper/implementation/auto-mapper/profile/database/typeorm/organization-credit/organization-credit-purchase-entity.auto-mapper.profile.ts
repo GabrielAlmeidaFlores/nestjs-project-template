@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/organization-credit-purchase.entity';
 import { OrganizationCreditPurchaseId } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/value-object/organization-credit-purchase-id/organization-credit-purchase-id.value-object';
@@ -28,10 +29,17 @@ export class OrganizationCreditPurchaseEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: OrganizationCreditPurchaseTypeormEntity,
     ): OrganizationCreditPurchaseEntity => {
+      if (!source.organization || !source.bankPayment) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: OrganizationCreditPurchaseEntity.name,
+          sourceClass: OrganizationCreditPurchaseTypeormEntity.name,
+        });
+      }
+
       return new OrganizationCreditPurchaseEntity({
         id: new OrganizationCreditPurchaseId(source.id),
-        organization: new OrganizationId(source.organization?.id),
-        bankPayment: new BankPaymentId(source.bankPayment?.id),
+        organization: new OrganizationId(source.organization.id),
+        bankPayment: new BankPaymentId(source.bankPayment.id),
         creditAmount: source.creditAmount,
         validFrom: source.validFrom,
         createdAt: source.createdAt,
