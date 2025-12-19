@@ -73,6 +73,9 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public customer: string;
 
   @RequestDtoStringProperty({ required: false })
+  public installment?: string | null;
+
+  @RequestDtoStringProperty({ required: false })
   public subscription?: string | null;
 
   @RequestDtoStringProperty({ required: false })

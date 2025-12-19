@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { OrganizationCreditUsageEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/organization-credit-usage.entity';
 import { OrganizationCreditUsageId } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/value-object/organization-credit-usage-id/organization-credit-usage-id.value-object';
@@ -28,13 +29,20 @@ export class OrganizationCreditUsageEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: OrganizationCreditUsageTypeormEntity,
     ): OrganizationCreditUsageEntity => {
+      if (!source.createdBy) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: OrganizationCreditUsageEntity.name,
+          sourceClass: OrganizationCreditUsageTypeormEntity.name,
+        });
+      }
+
       return new OrganizationCreditUsageEntity({
         id: new OrganizationCreditUsageId(source.id),
         creditAmount: source.creditAmount,
         paymentPlanPaidResource: new PaymentPlanPaidResourceId(
           source.paymentPlanPaidResource?.id,
         ),
-        createdBy: new OrganizationMemberId(source.createdBy?.id),
+        createdBy: new OrganizationMemberId(source.createdBy.id),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });

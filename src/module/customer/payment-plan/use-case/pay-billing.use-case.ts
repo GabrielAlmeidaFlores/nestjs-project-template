@@ -4,6 +4,7 @@ import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/inp
 import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-info.input.model';
 import { PayBillingInputModel } from '@infra/payment-gateway/model/input/pay-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
+import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
 import { PayBillingRequestDto } from '@module/customer/payment-plan/dto/request/pay-billing.request.dto';
 import { PayBillingResponseDto } from '@module/customer/payment-plan/dto/response/pay-billing.response.dto';
 import { BankPaymentNotFoundError } from '@module/customer/payment-plan/error/bank-payment-not-found.error';
@@ -19,6 +20,8 @@ export class PayBillingUseCase {
   public constructor(
     @Inject(BankPaymentQueryRepositoryGateway)
     private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
+    @Inject(OrganizationPaymentPlanBankPaymentQueryRepositoryGateway)
+    private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
     private readonly deleteOrganizationPaymentPlanUseCase: DeleteOrganizationPaymentPlanUseCase,
@@ -59,8 +62,14 @@ export class PayBillingUseCase {
       }),
     );
 
+    const organizationPaymentPlanBankPayment =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
+        bankPayment.id,
+      );
+
     await this.deleteOrganizationPaymentPlanUseCase.execute(
       organizationSessionData.organizationId,
+      organizationPaymentPlanBankPayment?.organizationPaymentPlan,
     );
 
     return PayBillingResponseDto.build({

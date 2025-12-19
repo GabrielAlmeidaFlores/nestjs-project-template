@@ -205,6 +205,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       return;
     }
 
+    if (typeof dto.payment.installment === 'string') {
+      await this.processPaymentFromYearlyPaymentPlan(dto);
+      return;
+    }
+
     const bankPayment =
       await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
         dto.payment.id,
@@ -229,17 +234,16 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         await this.processPaymentFromMonthlyPaymentPlan(dto);
         return;
       }
-
-      if (organizationPaymentPlan?.cycle === PaymentPlanCycleEnum.YEARLY) {
-        await this.processPaymentFromYearlyPaymentPlan(dto);
-        return;
-      }
     }
   }
 
   private async processPaymentFromYearlyPaymentPlan(
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
+    if (typeof dto.payment.installment !== 'string') {
+      return;
+    }
+
     const bankPayment =
       await this.bankPaymentQueryRepository.findOneBankPaymentByBankExternalId(
         dto.payment.id,
