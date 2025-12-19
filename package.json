@@ -34,8 +34,9 @@
     "@fastify/multipart": "7",
     "@fastify/static": "7.0.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
-    "@google/genai": "^1.22.0",
+    "@google/genai": "^1.34.0",
     "@huggingface/transformers": "^3.7.5",
+    "@modelcontextprotocol/sdk": "^1.25.1",
     "@nest-lab/throttler-storage-redis": "^1.1.0",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^10.0.0",
@@ -120,6 +121,6 @@
     "media-typer": "0.3.0",
     "statuses": "2.0.1",
     "reflect-metadata": "^0.2.1",
-    "@modelcontextprotocol/sdk": "^1.11.4"
+    "@modelcontextprotocol/sdk": "^1.25.1"
   }
 }

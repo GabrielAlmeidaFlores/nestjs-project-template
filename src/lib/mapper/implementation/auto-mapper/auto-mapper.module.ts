@@ -26,6 +26,14 @@ import { CnisFastAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/map
 import { GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-legal-proceeding/get-cnis-fast-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { CnisFastAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/cnis-fast-analysis-result-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/get-cnis-fast-analysis-result-query-result.auto-mapper.profile';
+import { ConversationEnitityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation/conversation-entity.auto.mapper.profile';
+import { GetConversationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation/get-conversation-query-result.auto-mapper.profile';
+import { GetConversationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation/get-conversation-with-relations-query-result.auto-mapper.profile';
+import { ConversationEventEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-event/conversation-event-entity.auto.mapper.profile';
+import { ConversationMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-message/conversation-message-entity.auto.mapper.profile';
+import { ConversationToolPolicyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/conversation-tool-policy-entity.auto.mapper.profile';
+import { GetConversationToolPolicyQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/get-conversation-tool-policy-query-result.auto-mapper.profile';
+import { GetConversationToolPolicyWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/get-conversation-tool-policy-with-relations-query-result.auto-mapper.profile';
 import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-auth-identity-relation-query-result.auto-mapper.profile';
@@ -112,6 +120,14 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
+    ConversationEnitityAutoMapperProfile,
+    GetConversationWithRelationsQueryResultAutoMapperProfile,
+    GetConversationQueryResultAutoMapperProfile,
+    ConversationMessageEntityAutoMapperProfile,
+    ConversationEventEntityAutoMapperProfile,
+    GetConversationToolPolicyWithRelationsQueryResultAutoMapperProfile,
+    GetConversationToolPolicyQueryResultAutoMapperProfile,
+    ConversationToolPolicyEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
