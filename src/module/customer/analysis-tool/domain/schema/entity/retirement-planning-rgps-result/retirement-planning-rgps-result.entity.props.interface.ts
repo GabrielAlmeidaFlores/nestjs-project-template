@@ -8,4 +8,6 @@ export interface RetirementPlanningRgpsResultEntityPropsInterface
   clientFederalDocument?: FederalDocument | null;
   clientBirthDate?: Date | null;
   clientLastAffiliationDate?: Date | null;
+  compareCnisCtps?: string | null;
+  compareCnisCtpsRaw?: string | null;
 }
