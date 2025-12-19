@@ -4,12 +4,12 @@ import type { RetirementPlanningRppsRemunerationCalculationId } from '@module/cu
 
 export class GetRetirementPlanningRppsRemunerationCalculationQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRppsRemunerationCalculationId;
-  public readonly totalCompetencies: number;
-  public readonly totalAmount: number;
-  public readonly averageAmount: number;
-  public readonly topEightyPercentCompetencies: number;
-  public readonly bottomTwentyPercentCompetencies: number;
-  public readonly topEightyPercentAverageAmount: number;
+  public readonly totalCompetencies?: number | null;
+  public readonly totalAmount?: number | null;
+  public readonly averageAmount?: number | null;
+  public readonly topEightyPercentCompetencies?: number | null;
+  public readonly bottomTwentyPercentCompetencies?: number | null;
+  public readonly topEightyPercentAverageAmount?: number | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

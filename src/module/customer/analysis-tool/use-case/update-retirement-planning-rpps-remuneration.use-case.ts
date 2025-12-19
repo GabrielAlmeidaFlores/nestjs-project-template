@@ -12,7 +12,6 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/dom
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.entity';
 import { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
-import { RetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-result/retirement-planning-rpps-result.entity';
 import { UpdateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rpps-remuneration.request.dto';
 import { UpdateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rpps-remuneration.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -85,22 +84,10 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
       );
     }
 
-    const retirementPlanningRppsResultEntity =
-      new RetirementPlanningRppsResultEntity({
-        id: retirementPlanningRpps.retirementPlanningRppsResult?.id ?? null,
-        retirementPlanningRppsCompleteAnalysis:
-          retirementPlanningRpps.retirementPlanningRppsResult
-            ?.retirementPlanningRppsCompleteAnalysis ?? null,
-        retirementPlanningRppsSimplifiedAnalysis:
-          retirementPlanningRpps.retirementPlanningRppsResult
-            ?.retirementPlanningRppsSimplifiedAnalysis ?? null,
-      });
-
     const retirementPlanningRppsEntity = new RetirementPlanningRppsEntity({
       id: retirementPlanningRpps.id,
       careerStartDate: retirementPlanningRpps.careerStartDate,
       publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
-      retirementPlanningRppsResult: retirementPlanningRppsResultEntity,
     });
 
     for (const remunerationDto of dto.remunerations) {
@@ -147,7 +134,6 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
         id: retirementPlanningRpps.id,
         careerStartDate: retirementPlanningRpps.careerStartDate,
         publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
-        retirementPlanningRppsResult: retirementPlanningRppsResultEntity,
         retirementPlanningRppsRemunerationCalculation,
       });
 

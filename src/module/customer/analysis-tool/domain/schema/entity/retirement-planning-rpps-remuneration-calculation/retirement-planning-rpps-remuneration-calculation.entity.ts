@@ -6,22 +6,22 @@ import type { RetirementPlanningRppsRemunerationCalculationEntityPropsInterface 
 
 export class RetirementPlanningRppsRemunerationCalculationEntity extends BaseEntity<RetirementPlanningRppsRemunerationCalculationId> {
   @Description('Total number of competencies')
-  public readonly totalCompetencies: number;
+  public readonly totalCompetencies?: number | null;
 
   @Description('Total amount of remunerations')
-  public readonly totalAmount: number;
+  public readonly totalAmount?: number | null;
 
   @Description('Average amount by number of competencies')
-  public readonly averageAmount: number;
+  public readonly averageAmount?: number | null;
 
   @Description('Number of competencies in the top 80% by value')
-  public readonly topEightyPercentCompetencies: number;
+  public readonly topEightyPercentCompetencies?: number | null;
 
   @Description('Remaining competencies (bottom 20%)')
-  public readonly bottomTwentyPercentCompetencies: number;
+  public readonly bottomTwentyPercentCompetencies?: number | null;
 
   @Description('Average amount of the top 80% highest values')
-  public readonly topEightyPercentAverageAmount: number;
+  public readonly topEightyPercentAverageAmount?: number | null;
 
   protected readonly _type =
     RetirementPlanningRppsRemunerationCalculationEntity.name;
@@ -30,12 +30,13 @@ export class RetirementPlanningRppsRemunerationCalculationEntity extends BaseEnt
     props: RetirementPlanningRppsRemunerationCalculationEntityPropsInterface,
   ) {
     super(RetirementPlanningRppsRemunerationCalculationId, props);
-    this.totalCompetencies = props.totalCompetencies;
-    this.totalAmount = props.totalAmount;
-    this.averageAmount = props.averageAmount;
-    this.topEightyPercentCompetencies = props.topEightyPercentCompetencies;
+    this.totalCompetencies = props.totalCompetencies ?? 0;
+    this.totalAmount = props.totalAmount ?? 0;
+    this.averageAmount = props.averageAmount ?? 0;
+    this.topEightyPercentCompetencies = props.topEightyPercentCompetencies ?? 0;
     this.bottomTwentyPercentCompetencies =
-      props.bottomTwentyPercentCompetencies;
-    this.topEightyPercentAverageAmount = props.topEightyPercentAverageAmount;
+      props.bottomTwentyPercentCompetencies ?? 0;
+    this.topEightyPercentAverageAmount =
+      props.topEightyPercentAverageAmount ?? 0;
   }
 }

@@ -50,4 +50,10 @@ export class RetirementPlanningRppsPeriodDocumentTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public deleteRetirementPlanningRppsPeriodDocument(
+    id: RetirementPlanningRppsPeriodDocumentId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
 }
