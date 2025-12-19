@@ -16,6 +16,13 @@ import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implemen
 import { CnisFastAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
+import { ConversationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.command.repository';
+import { ConversationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.query.repository';
+import { ConversationEventTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-event/conversation-event.typeorm.command.repository';
+import { ConversationMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.command.repository';
+import { ConversationMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.query.repository';
+import { ConversationToolPolicyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.command.repository';
+import { ConversationToolPolicyTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.query.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
 import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
@@ -45,6 +52,10 @@ import { CnisFastAnalysisInssBenefitTypeormEntity } from '@infra/database/implem
 import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-legal-proceeding.typeorm.entity';
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { ConversationEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-event.typeorm.entity';
+import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
+import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
@@ -86,6 +97,10 @@ export class TypeormIndex {
     CustomerTermsAcceptanceTypeormEntity,
     AnalysisToolClientLegalProceedingTypeormEntity,
     AdminTypeormEntity,
+    ConversationTypeormEntity,
+    ConversationMessageTypeormEntity,
+    ConversationEventTypeormEntity,
+    ConversationToolPolicyTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -125,6 +140,14 @@ export class TypeormIndex {
     AnalysisToolClientLegalProceedingTypeormCommandRepository,
     AdminTypeormCommandRepository,
     AdminTypeormQueryRepository,
+    ConversationTypeormQueryRepository,
+    ConversationTypeormCommandRepository,
+    ConversationEventTypeormCommandRepository,
+    ConversationTypeormQueryRepository,
+    ConversationMessageTypeormCommandRepository,
+    ConversationMessageTypeormQueryRepository,
+    ConversationToolPolicyTypeormQueryRepository,
+    ConversationToolPolicyTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(

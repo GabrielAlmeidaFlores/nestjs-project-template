@@ -17,6 +17,14 @@ import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implemen
 import { CnisFastAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
+import { ConversationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.command.repository';
+import { ConversationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.query.repository';
+import { ConversationEventTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-event/conversation-event.typeorm.command.repository';
+import { ConversationEventTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-event/conversation-event.typeorm.query.repository';
+import { ConversationMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.command.repository';
+import { ConversationMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.query.repository';
+import { ConversationToolPolicyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.command.repository';
+import { ConversationToolPolicyTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.query.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
 import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
@@ -43,6 +51,14 @@ import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.mo
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
 import { AdminQueryRepositoryGateway } from '@module/admin/account/domain/repository/admin/query/admin.query.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
+import { ConversationEventCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
+import { ConversationEventQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-event/query/conversation.query.repository.gateway';
+import { ConversationMessageCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-message/query/conversation.query.repository.gateway';
+import { ConversationToolPolicyCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-tool-policy/command/conversation-message.command.repository.gateway';
+import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -234,6 +250,38 @@ const classProvider: ClassProvider[] = [
   {
     provide: AdminQueryRepositoryGateway,
     useClass: AdminTypeormQueryRepository,
+  },
+  {
+    provide: ConversationQueryRepositoryGateway,
+    useClass: ConversationTypeormQueryRepository,
+  },
+  {
+    provide: ConversationCommandRepositoryGateway,
+    useClass: ConversationTypeormCommandRepository,
+  },
+  {
+    provide: ConversationEventQueryRepositoryGateway,
+    useClass: ConversationEventTypeormQueryRepository,
+  },
+  {
+    provide: ConversationEventCommandRepositoryGateway,
+    useClass: ConversationEventTypeormCommandRepository,
+  },
+  {
+    provide: ConversationMessageQueryRepositoryGateway,
+    useClass: ConversationMessageTypeormQueryRepository,
+  },
+  {
+    provide: ConversationMessageCommandRepositoryGateway,
+    useClass: ConversationMessageTypeormCommandRepository,
+  },
+  {
+    provide: ConversationToolPolicyQueryRepositoryGateway,
+    useClass: ConversationToolPolicyTypeormQueryRepository,
+  },
+  {
+    provide: ConversationToolPolicyCommandRepositoryGateway,
+    useClass: ConversationToolPolicyTypeormCommandRepository,
   },
 ];
 
