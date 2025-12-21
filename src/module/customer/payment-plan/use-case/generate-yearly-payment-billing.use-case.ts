@@ -103,7 +103,7 @@ export class GenerateYearlyPaymentBillingUseCase {
         customerId: customer.bankExternalId,
         value: paymentPlan.price,
         dueDate,
-        description: `Pagamento anual do plano ${paymentPlan.name} - ${dto.installments}x`,
+        description: paymentPlan.name,
         externalReference: organizationPaymentPlan.id.toString(),
         installmentCount: dto.installments,
       }),

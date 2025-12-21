@@ -88,7 +88,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
         customerId: customer.bankExternalId,
         value: paymentPlan.price,
         dueDate,
-        description: `Pagamento do plano ${paymentPlan.name}`,
+        description: paymentPlan.name,
         externalReference: `MONTHLY_${paymentPlan.id.toString()}_${Date.now()}`,
       }),
     );
