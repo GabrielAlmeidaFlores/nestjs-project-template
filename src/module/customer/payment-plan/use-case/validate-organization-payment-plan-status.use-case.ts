@@ -10,6 +10,7 @@ import {
   ValidateOrganizationPaymentPlanStatusResponseDto,
 } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
+import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 
@@ -17,7 +18,9 @@ import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/pay
 import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 
 @Injectable()
-export class ValidateOrganizationPaymentPlanStatusUseCase {
+export class ValidateOrganizationPaymentPlanStatusUseCase
+  implements ValidateOrganizationPaymentPlanStatusUseCaseGateway
+{
   protected readonly _type = ValidateOrganizationPaymentPlanStatusUseCase.name;
 
   public constructor(
