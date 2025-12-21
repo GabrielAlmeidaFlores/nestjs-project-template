@@ -54,21 +54,9 @@ Análise processada do CNIS:
   }
 
   public async getCnisSimplifiedAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
-    const systemInstruction = `
-Atue como um especialista em direito previdenciário preparando um resumo para um cliente leigo.
-
-Sua tarefa é converter a análise técnica do documento enviado em uma comunicação clara, objetiva e 
-tranquilizadora para o cliente. O objetivo é que ele entenda sua situação atual, os problemas 
-encontrados e quais são os próximos passos para garantir o melhor benefício possível.
-
-# IMPORTANTE
-- Forneça apenas o relatório, sem incluir explicações adicionais, comentários e variáveis.
-- Não mencione no relatório de onde as informações foram obtidas. Apenas apresente os dados seguindo as instruções.
-- Regra Crítica: A palavra 'json' e suas variações são estritamente proibidas na resposta. Antes de gerar o resultado final, revise seu texto para garantir que esta regra foi cumprida à risca.
-      `;
-
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
