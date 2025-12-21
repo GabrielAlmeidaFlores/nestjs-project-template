@@ -8,6 +8,7 @@ import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.entity';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
@@ -254,8 +255,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     }
 
     const organizationPaymentPlan =
-      await this.organizationPaymentPlanQueryRepository.findOneByBankExternalIdWithRelations(
-        dto.payment.externalReference,
+      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+        new OrganizationPaymentPlanId(dto.payment.externalReference),
       );
 
     if (!organizationPaymentPlan) {
