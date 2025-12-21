@@ -12,6 +12,7 @@ import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
 import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
 import { ValidateOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/validate-organization-payment-plan-status.use-case';
+import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { BankModule } from '@module/generic/bank/bank.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -30,12 +31,17 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListPaymentPlansUseCase,
     CancelPaymentPlanUseCase,
     ValidateOrganizationPaymentPlanStatusUseCase,
+    {
+      provide: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
+      useClass: ValidateOrganizationPaymentPlanStatusUseCase,
+    },
     GetOrganizationPaymentPlanStatusUseCase,
     GenerateMonthlyPaymentBillingUseCase,
     GenerateYearlyPaymentBillingUseCase,
     PayBillingUseCase,
     DeleteOrganizationPaymentPlanUseCase,
   ],
+  exports: [ValidateOrganizationPaymentPlanStatusUseCaseGateway],
 })
 export class PaymentPlanModule {
   protected readonly _type = PaymentPlanModule.name;
