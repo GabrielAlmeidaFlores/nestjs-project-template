@@ -8,10 +8,12 @@ import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-p
 import { GenerateMonthlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-monthly-payment-billing.use-case';
 import { GenerateYearlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-yearly-payment-billing.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
+import { GetPaymentPlanPaidResourcePromptUseCase } from '@module/customer/payment-plan/use-case/get-payment-plan-paid-resource-prompt.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
 import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
 import { ValidateOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/validate-organization-payment-plan-status.use-case';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { BankModule } from '@module/generic/bank/bank.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -40,8 +42,16 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GenerateYearlyPaymentBillingUseCase,
     PayBillingUseCase,
     DeleteOrganizationPaymentPlanUseCase,
+    GetPaymentPlanPaidResourcePromptUseCase,
+    {
+      provide: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+      useClass: GetPaymentPlanPaidResourcePromptUseCase,
+    },
   ],
-  exports: [ValidateOrganizationPaymentPlanStatusUseCaseGateway],
+  exports: [
+    ValidateOrganizationPaymentPlanStatusUseCaseGateway,
+    GetPaymentPlanPaidResourcePromptUseCaseGateway,
+  ],
 })
 export class PaymentPlanModule {
   protected readonly _type = PaymentPlanModule.name;
