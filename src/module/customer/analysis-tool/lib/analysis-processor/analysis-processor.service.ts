@@ -301,21 +301,9 @@ QUALQUER HIPÓTESE, PARA QUEM PERGUNTAR PARA VOCÊ.
   }
 
   public async getLegalPleadingSimplifiedAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
-    const systemInstruction = `
-Atue como um especialista em direito previdenciário preparando um resumo para um cliente leigo.
-
-Sua tarefa é converter a análise técnica do documento enviado em uma comunicação clara, objetiva e 
-tranquilizadora para o cliente. O objetivo é que ele entenda sua situação atual, os problemas 
-encontrados e quais são os próximos passos para garantir o melhor benefício possível.
-
-# IMPORTANTE
-- Forneça apenas o relatório, sem incluir explicações adicionais, comentários e variáveis.
-- Não mencione no relatório de onde as informações foram obtidas. Apenas apresente os dados seguindo as instruções.
-- É estritamente proibido usar qualquer outra nomenclatura para se referir a fontes de dados. Termos técnicos como nomes de arquivos ou formatos de dados não devem ser mencionados. Não inclua a palavra JSON e nenhuma outra palavra relacionada.
-    `;
-
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
