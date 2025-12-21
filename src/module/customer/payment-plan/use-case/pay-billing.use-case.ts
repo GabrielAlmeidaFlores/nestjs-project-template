@@ -13,6 +13,7 @@ import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-p
 import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
+import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -73,6 +74,8 @@ export class PayBillingUseCase {
     const updatedBankPayment = new BankPaymentEntity({
       ...bankPayment,
       status: PaymentStatusEnum.CONFIRMED,
+      paymentDate: new Date(),
+      paymentMethod: PaymentMethodEnum.CREDIT_CARD,
     });
 
     const updateBankPaymentTransaction =
