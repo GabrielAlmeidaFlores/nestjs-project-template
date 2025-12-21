@@ -38,11 +38,12 @@ export class PayBillingUseCase {
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
+    bankPaymentId: BankPaymentId,
     dto: PayBillingRequestDto,
   ): Promise<PayBillingResponseDto> {
     const bankPayment =
       await this.bankPaymentQueryRepository.findOneBankPaymentByIdOrFail(
-        new BankPaymentId(dto.bankPaymentId),
+        bankPaymentId,
         BankPaymentNotFoundError,
       );
 

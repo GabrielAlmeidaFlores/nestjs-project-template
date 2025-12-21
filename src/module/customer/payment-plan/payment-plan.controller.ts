@@ -1,4 +1,4 @@
-import { Body, HttpStatus, Query, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { GenerateMonthlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-monthly-payment-billing.request.dto';
 import { GenerateYearlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-yearly-payment-billing.request.dto';
@@ -18,6 +18,7 @@ import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/paymen
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
 import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
+import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -28,6 +29,7 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('payment-plan')
@@ -173,7 +175,7 @@ export class PaymentPlanController {
     summary: 'Pagar cobrança com cartão de crédito',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'pay/billing',
+      path: 'pay/billing/:bankPaymentId',
       method: RequestMethod.POST,
       type: PayBillingRequestDto,
     },
@@ -188,10 +190,13 @@ export class PaymentPlanController {
   public async payMonthlyBilling(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @Param('bankPaymentId', new ParseValueObjectPipe(BankPaymentId))
+    bankPaymentId: BankPaymentId,
     @Body() body: PayBillingRequestDto,
   ): Promise<PayBillingResponseDto> {
     return this.payMonthlyPaymentBillingUseCase.execute(
       organizationSessionData,
+      bankPaymentId,
       body,
     );
   }
