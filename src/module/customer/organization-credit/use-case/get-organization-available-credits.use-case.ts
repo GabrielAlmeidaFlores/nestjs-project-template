@@ -30,12 +30,15 @@ export class GetOrganizationAvailableCreditsUseCase {
       );
 
     const now = new Date();
+    now.setHours(0, 0, 0, 0);
 
     const validPurchases = purchases.filter((purchase) => {
       if (purchase.validFrom === null) {
         return true;
       }
-      return purchase.validFrom <= now;
+      const validFromDate = new Date(purchase.validFrom);
+      validFromDate.setHours(0, 0, 0, 0);
+      return validFromDate <= now;
     });
 
     const totalPurchased = validPurchases.reduce(
