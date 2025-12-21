@@ -8,6 +8,7 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getCnisSimplifiedAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
