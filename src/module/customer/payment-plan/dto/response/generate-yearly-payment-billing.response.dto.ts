@@ -9,18 +9,6 @@ export class GenerateYearlyPaymentBillingResponseDto extends BaseBuildableDtoObj
   })
   public bankPaymentId: string;
 
-  @ResponseDtoStringProperty({
-    description: 'QR Code PIX em Base64',
-    required: false,
-  })
-  public pixQrCode?: string;
-
-  @ResponseDtoStringProperty({
-    description: 'Código copia e cola do PIX',
-    required: false,
-  })
-  public pixCopyPaste?: string;
-
   protected override readonly _type =
     GenerateYearlyPaymentBillingResponseDto.name;
 }

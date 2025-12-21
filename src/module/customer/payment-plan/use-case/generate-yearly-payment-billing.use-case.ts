@@ -172,8 +172,6 @@ export class GenerateYearlyPaymentBillingUseCase {
 
       return GenerateYearlyPaymentBillingResponseDto.build({
         bankPaymentId: bankPayment.id.toString(),
-        pixQrCode: bankPayment.pixQrCode?.toString() ?? null,
-        pixCopyPaste: bankPayment.pixCopyPaste ?? null,
       });
     }
   }
