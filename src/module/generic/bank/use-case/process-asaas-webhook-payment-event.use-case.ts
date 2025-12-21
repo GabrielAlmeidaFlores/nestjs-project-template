@@ -77,6 +77,13 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     });
   }
 
+  private parseDateWithoutTimezoneAdjustment(dateString: string): Date {
+    const date = new Date(dateString);
+    const millisecondsInMinute = 60000;
+    const userTimezoneOffset = date.getTimezoneOffset() * millisecondsInMinute;
+    return new Date(date.getTime() + userTimezoneOffset);
+  }
+
   private async upsertBankPayment(
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
@@ -107,6 +114,17 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
 
     const status = statusMap[dto.payment.status] ?? PaymentStatusEnum.PENDING;
 
+    const paymentDate =
+      dto.payment.paymentDate !== null && dto.payment.paymentDate !== undefined
+        ? this.parseDateWithoutTimezoneAdjustment(dto.payment.paymentDate)
+        : null;
+
+    const clientPaymentDate =
+      dto.payment.clientPaymentDate !== null &&
+      dto.payment.clientPaymentDate !== undefined
+        ? this.parseDateWithoutTimezoneAdjustment(dto.payment.clientPaymentDate)
+        : null;
+
     if (existingPayment) {
       const updateTransaction =
         this.bankPaymentCommandRepository.updateBankPayment(
@@ -115,11 +133,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
             ...existingPayment,
             status,
             paymentMethod,
-            paymentDate:
-              dto.payment.paymentDate !== null &&
-              dto.payment.paymentDate !== undefined
-                ? new Date(dto.payment.paymentDate)
-                : null,
+            paymentDate: paymentDate ?? clientPaymentDate,
           }),
         );
 
@@ -133,12 +147,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         paymentMethod,
         amount: new DecimalValue(dto.payment.value),
         status,
-        dueDate: new Date(dto.payment.dueDate),
-        paymentDate:
-          dto.payment.paymentDate !== null &&
-          dto.payment.paymentDate !== undefined
-            ? new Date(dto.payment.paymentDate)
-            : null,
+        dueDate: this.parseDateWithoutTimezoneAdjustment(dto.payment.dueDate),
+        paymentDate: paymentDate ?? clientPaymentDate,
         installmentNumber: dto.payment.installmentNumber ?? null,
       });
 
