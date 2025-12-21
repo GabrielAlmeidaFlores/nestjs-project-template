@@ -316,7 +316,6 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     for (let month = 0; month < monthsInYear; month++) {
       const validFromDate = new Date(now);
       validFromDate.setMonth(now.getMonth() + month);
-      validFromDate.setDate(1);
       validFromDate.setHours(0, 0, 0, 0);
 
       const creditPurchase = new OrganizationCreditPurchaseEntity({
