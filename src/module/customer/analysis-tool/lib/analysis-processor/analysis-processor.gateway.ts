@@ -17,6 +17,7 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getLegalPleadingSimplifiedAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
