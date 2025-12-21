@@ -5,7 +5,7 @@ import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementa
 
 @Entity({ name: 'payment_plan_paid_resource_ia_config' })
 export class PaymentPlanPaidResourceIaConfigTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'prompt' })
+  @Column({ name: 'prompt', type: 'text' })
   public prompt: string;
 
   @OneToOne(
