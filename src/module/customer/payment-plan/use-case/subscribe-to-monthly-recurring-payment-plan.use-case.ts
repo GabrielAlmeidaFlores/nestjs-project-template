@@ -99,7 +99,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       description: paymentPlan.name,
       creditCardInfo,
       creditCardHolderInfo,
-      externalReference: `payment-plan-id:${paymentPlan.id.toString()}`,
+      externalReference: paymentPlan.id.toString(),
     });
 
     const bankSubscription =
