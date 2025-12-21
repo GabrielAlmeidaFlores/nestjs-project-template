@@ -18,5 +18,5 @@ export abstract class PaymentPlanPaidResourceQueryRepositoryGateway {
 
   public abstract findOnePaymentPlanPaidResourceByResourceType(
     resource: PaymentPlanPaidResourceTypeEnum,
-  ): Promise<GetPaymentPlanPaidResourceQueryResult>;
+  ): Promise<GetPaymentPlanPaidResourceQueryResult | null>;
 }

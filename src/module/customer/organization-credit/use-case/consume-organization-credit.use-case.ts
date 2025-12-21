@@ -8,10 +8,12 @@ import { OrganizationCreditUsageCommandRepositoryGateway } from '@module/custome
 import { OrganizationCreditUsageQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/organization-credit-usage.query.repository.gateway';
 import { OrganizationCreditUsageEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/organization-credit-usage.entity';
 import { InsufficientCreditsError } from '@module/customer/organization-credit/error/insufficient-credits.error';
+import { PaidResourceUnavailableError } from '@module/customer/organization-credit/error/paid-resource-unavailable.error';
 import { ResourceNotEnabledError } from '@module/customer/organization-credit/error/resource-not-enabled.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/payment-plan-inactive.error';
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 
 @Injectable()
@@ -43,6 +45,10 @@ export class ConsumeOrganizationCreditUseCase
         organizationId,
       );
 
+    if (!paymentPlanStatus.isActive) {
+      throw new PaymentPlanInactiveError();
+    }
+
     const isResourceEnabled = paymentPlanStatus.enabledPaidResources.some(
       (resource) => resource.resource === resourceType,
     );
@@ -55,6 +61,10 @@ export class ConsumeOrganizationCreditUseCase
       await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
         resourceType,
       );
+
+    if (!paidResource) {
+      throw new PaidResourceUnavailableError();
+    }
 
     const creditCost = Number.parseFloat(paidResource.creditCost);
 
