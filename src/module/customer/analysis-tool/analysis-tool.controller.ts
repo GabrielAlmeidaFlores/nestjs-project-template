@@ -12,6 +12,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { AnalyzeRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-cnis.request.dto';
 import { CompareRetirementPlanningRgpsCnisCtpsRequestDto } from '@module/customer/analysis-tool/dto/request/compare-retirement-planning-rgps-cnis-ctps.request.dto';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
@@ -24,6 +25,7 @@ import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
+import { AnalyzeRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/analyze-retirement-planning-rgps-cnis.response.dto';
 import { CompareRetirementPlanningRgpsCnisCtpsResponseDto } from '@module/customer/analysis-tool/dto/response/compare-retirement-planning-rgps-cnis-ctps.response.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
@@ -47,6 +49,13 @@ import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
+import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
+import { AnalyzeLaborCourtDecisionUseCase } from '@module/customer/analysis-tool/use-case/analyze-labor-court-decision.use-case';
+import { AnalyzeMilitaryServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-military-service.use-case';
+import { AnalyzePublicServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-public-service.use-case';
+import { AnalyzeRuralTimeUseCase } from '@module/customer/analysis-tool/use-case/analyze-rural-time.use-case';
+import { AnalyzeWorkAbroadUseCase } from '@module/customer/analysis-tool/use-case/analyze-work-abroad.use-case';
 import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
@@ -116,6 +125,14 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
     private readonly createRetirementPlanningRgpsPeriodUseCase: CreateRetirementPlanningRgpsPeriodUseCase,
     private readonly compareRetirementPlanningRgpsCnisCtpsUseCase: CompareRetirementPlanningRgpsCnisCtpsUseCase,
+    private readonly analyzeRuralTimeUseCase: AnalyzeRuralTimeUseCase,
+    private readonly analyzeApprenticeStudentUseCase: AnalyzeApprenticeStudentUseCase,
+    private readonly analyzeWorkAbroadUseCase: AnalyzeWorkAbroadUseCase,
+    private readonly analyzeInformalWorkUseCase: AnalyzeInformalWorkUseCase,
+    private readonly analyzeLaborCourtDecisionUseCase: AnalyzeLaborCourtDecisionUseCase,
+    private readonly analyzeMilitaryServiceUseCase: AnalyzeMilitaryServiceUseCase,
+    private readonly analyzePublicServiceUseCase: AnalyzePublicServiceUseCase,
+    private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeRuralTimeUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -895,5 +912,181 @@ export class AnalysisToolController {
     @Body() dto: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
   ): Promise<CompareRetirementPlanningRgpsCnisCtpsResponseDto> {
     return await this.compareRetirementPlanningRgpsCnisCtpsUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Tempo Rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'rural-time',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Tempo Rural realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeRuralTime(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeRuralTimeUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Serviço Militar',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'military-service',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Serviço Militar realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeMilitaryService(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeMilitaryServiceUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Serviço Público',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'public-service',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Serviço Público realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzePublicService(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzePublicServiceUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar CTPS fora do CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'ctps-outside-cnis',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de CTPS fora do CNIS realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeCtpsOutsideCnis(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeCtpsOutsideCnisUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Aluno-Aprendiz',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'apprentice-student',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Aluno-Aprendiz realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeApprenticeStudent(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeApprenticeStudentUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Trabalho no Exterior',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'work-abroad',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Trabalho no Exterior realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeWorkAbroad(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeWorkAbroadUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Trabalho Informal',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'informal-work',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Trabalho Informal realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeInformalWork(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeInformalWorkUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar Sentença Trabalhista',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'labor-court-decision',
+      method: RequestMethod.POST,
+      type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+    },
+    tag: ['acrescimo-tempo'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Análise de Sentença Trabalhista realizada com sucesso.',
+      type: AnalyzeRetirementPlanningRgpsCnisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeLaborCourtDecision(
+    @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
+  ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    return await this.analyzeLaborCourtDecisionUseCase.execute(dto);
   }
 }
