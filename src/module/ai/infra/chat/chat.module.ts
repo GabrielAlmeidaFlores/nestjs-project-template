@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { ChatController } from '@module/ai/infra/chat/chat.controller';
 import { ChatMessagesToConversationUseCase } from '@module/ai/infra/chat/use-case/chat-messages-to-conversation.use-case';
+import { HistoryConversationUseCase } from '@module/ai/infra/chat/use-case/history-conversation.use-case';
 import { SendMessageToConversationUseCase } from '@module/ai/infra/chat/use-case/send-message-to-conversation.use-case';
 import { StartChatUseCase } from '@module/ai/infra/chat/use-case/start-chat.use-case';
 import { GeminiModule } from '@module/ai/infra/gemini/gemini.module';
@@ -23,6 +24,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     StartChatUseCase,
     SendMessageToConversationUseCase,
     ChatMessagesToConversationUseCase,
+    HistoryConversationUseCase,
   ],
 })
 export class ChatModule {
