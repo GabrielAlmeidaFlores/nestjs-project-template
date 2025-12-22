@@ -36,6 +36,8 @@ import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/ana
 import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
+import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
+import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
@@ -44,6 +46,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AuthModule,
     DatabaseModule,
     OrganizationSessionModule,
+    OrganizationCreditModule,
+    PaymentPlanModule,
     FileProcessorModule,
     AnalysisProcessorModule,
     ExportDocumentModule,

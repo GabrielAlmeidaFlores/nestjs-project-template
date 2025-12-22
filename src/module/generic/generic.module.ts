@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 
 import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
+import { BankModule } from '@module/generic/bank/bank.module';
 
 @Module({
-  imports: [AuthIdentityModule],
+  imports: [AuthIdentityModule, BankModule],
   controllers: [],
   providers: [],
 })
