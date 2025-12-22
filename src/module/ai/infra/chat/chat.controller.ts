@@ -7,12 +7,15 @@ import {
 } from '@nestjs/common';
 
 import { ChatMessagesToConversationRequestDto } from '@module/ai/infra/chat/dto/request/chat-messages-to-conversation.request.dto';
+import { HistoryConversationRequestDto } from '@module/ai/infra/chat/dto/request/history-conversation.request.dto';
 import { SendMessageToConversationRequestDto } from '@module/ai/infra/chat/dto/request/send-message-to-conversation.request.dto';
 import { StartChatRequestDto } from '@module/ai/infra/chat/dto/request/start-chat.request.dto';
 import { ListConversationMessageResponseDto } from '@module/ai/infra/chat/dto/response/list-conversation-message.response.dto';
+import { ListConversationResponseDto } from '@module/ai/infra/chat/dto/response/list-conversation-response.dto';
 import { SendMessageToConversationResponseDto } from '@module/ai/infra/chat/dto/response/send-message-to-conversation.response.dto';
 import { StartChatResponseDto } from '@module/ai/infra/chat/dto/response/start-chat.response.dto';
 import { ChatMessagesToConversationUseCase } from '@module/ai/infra/chat/use-case/chat-messages-to-conversation.use-case';
+import { HistoryConversationUseCase } from '@module/ai/infra/chat/use-case/history-conversation.use-case';
 import { SendMessageToConversationUseCase } from '@module/ai/infra/chat/use-case/send-message-to-conversation.use-case';
 import { StartChatUseCase } from '@module/ai/infra/chat/use-case/start-chat.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -29,6 +32,7 @@ export class ChatController {
     private readonly startChatUseCase: StartChatUseCase,
     private readonly sendMessageToConversationUseCase: SendMessageToConversationUseCase,
     private readonly chatMessagesToConversationUseCase: ChatMessagesToConversationUseCase,
+    private readonly historyConversationUseCase: HistoryConversationUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -100,5 +104,27 @@ export class ChatController {
       sessionData,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar os chats em aberto usuário',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'history',
+      method: RequestMethod.GET,
+    },
+    tag: ['chat-ia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Chats de conversa com Eloy.',
+      type: ListConversationResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async historyConversation(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Query() dto: HistoryConversationRequestDto,
+  ): Promise<ListConversationResponseDto> {
+    return await this.historyConversationUseCase.execute(sessionData, dto);
   }
 }

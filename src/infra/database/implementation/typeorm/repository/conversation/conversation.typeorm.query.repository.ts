@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
+import { ConversationQueryParam } from '@module/ai/infra/chat/domain/repository/conversation/query/param/conversation.query.param';
 import { GetConversationWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
 import { GetConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation.query.result';
 import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
@@ -46,6 +48,29 @@ export class ConversationTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  public async listConversationById(
+    listData: ConversationQueryParam,
+  ): Promise<ListDataOutputModel<GetConversationQueryResult>> {
+    const data = await this.list(listData, {
+      where: {
+        customer: {
+          id: listData.customerId.toString(),
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      ConversationTypeormEntity,
+      GetConversationQueryResult,
+    );
+
+    return new ListDataOutputModel<GetConversationQueryResult>({
+      ...data,
+      resource: mappedData,
+    });
   }
 
   public async findByIdAndCustomerId(
