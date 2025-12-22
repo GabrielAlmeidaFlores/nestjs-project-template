@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
-import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding.query.param.gateway';
-import { GetAnalysisToolClientLegalProceedingRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding.request.dto';
+import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
+import { GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding-created-range.request.dto';
 import { GetAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding-client-detail.response.dto';
 import { GetAnalysisToolClientLegalProceedingClientDetailResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
@@ -28,7 +28,7 @@ export class GetAnalysisToolClientLegalProceedingUseCase {
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
-    dto: GetAnalysisToolClientLegalProceedingRequestDto,
+    dto: GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -43,7 +43,9 @@ export class GetAnalysisToolClientLegalProceedingUseCase {
     const analysisToolClientLegalProceedingList =
       await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listByOrganizationId(
         organizationSessionData.organizationId,
-        new ListAnalysisToolClientLegalProceedingQueryParamGateway(dto),
+        new ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway(
+          dto,
+        ),
       );
 
     const resource: GetAnalysisToolClientLegalProceedingDetailResponseDto[] =
