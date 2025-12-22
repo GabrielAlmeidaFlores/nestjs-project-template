@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
 import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-inss-benefit.typeorm.entity';
 import { RetirementPlanningRgpsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-legal-proceeding.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
@@ -48,6 +49,14 @@ export class RetirementPlanningRgpsTypeormEntity extends BaseTypeormEntity {
   )
   public retirementPlanningRgpsPeriod?:
     | RetirementPlanningRgpsPeriodTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RetirementPlanningRgpsAnalysisResultTypeormEntity,
+    (entity) => entity.retirementPlanningRgps,
+  )
+  public retirementPlanningRgpsAnalysisResult?:
+    | RetirementPlanningRgpsAnalysisResultTypeormEntity[]
     | undefined;
 
   protected override readonly _type = RetirementPlanningRgpsTypeormEntity.name;

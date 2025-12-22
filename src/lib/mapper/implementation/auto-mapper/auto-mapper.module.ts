@@ -53,6 +53,7 @@ import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile }
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
+import { RetirementPlanningRgpsAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-analysis/retirement-planning-rgps-analysis-result-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-inss-benefit/retirement-planning-rgps-inss-benefit-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-legal-proceeding/retirement-planning-rgps-legal-proceeding-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document-entity.auto-mapper.profile';
@@ -125,6 +126,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     RetirementPlanningRgpsEntityAutoMapperProfile,
     RetirementPlanningRgpsInssBenefitEntityAutoMapperProfile,
     RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile,
+    RetirementPlanningRgpsAnalysisResultEntityAutoMapperProfile,
     RetirementPlanningRgpsResultEntityAutoMapperProfile,
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
