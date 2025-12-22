@@ -5,9 +5,9 @@ import { Repository } from 'typeorm';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationMessageQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-message/query/conversation.query.repository.gateway';
-import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
-import { ListConversationMessageResponseDto } from '@module/ai/chat/dto/response/list-conversation-message.response.dto';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation.query.repository.gateway';
+import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ListConversationMessageResponseDto } from '@module/ai/infra/chat/dto/response/list-conversation-message.response.dto';
 
 @Injectable()
 export class ConversationMessageTypeormQueryRepository
