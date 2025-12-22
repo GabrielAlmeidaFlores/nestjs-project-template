@@ -47,7 +47,7 @@ export class UpdatePaymentPlanPaidResourceUseCase {
       const entity = new PaymentPlanPaidResourceEntity({
         id: paidResource.id,
         resource: paidResource.resource,
-        creditCost: dto.creditCost ?? parseFloat(paidResource.creditCost),
+        creditCost: dto.creditCost ?? paidResource.creditCost,
         description: dto.description ?? paidResource.description,
       });
 
@@ -69,7 +69,7 @@ export class UpdatePaymentPlanPaidResourceUseCase {
       const paidResourceEntity = new PaymentPlanPaidResourceEntity({
         id: paidResource.id,
         resource: paidResource.resource,
-        creditCost: dto.creditCost ?? parseFloat(paidResource.creditCost),
+        creditCost: dto.creditCost ?? paidResource.creditCost,
         description: dto.description ?? paidResource.description,
       });
 
@@ -119,7 +119,7 @@ export class UpdatePaymentPlanPaidResourceUseCase {
     const response = GetPaymentPlanPaidResourceResponseDto.build({
       id: paidResource.id.toString(),
       resource: paidResource.resource,
-      creditCost: dto.creditCost ?? parseFloat(paidResource.creditCost),
+      creditCost: dto.creditCost ?? paidResource.creditCost,
       description: dto.description ?? paidResource.description,
     });
 

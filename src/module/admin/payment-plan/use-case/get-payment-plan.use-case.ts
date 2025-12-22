@@ -29,7 +29,7 @@ export class GetPaymentPlanUseCase {
         PaymentPlanEnabledPaidResourceItemResponseDto.build({
           id: resource.paymentPlanPaidResource.id,
           resource: resource.paymentPlanPaidResource.resource,
-          creditCost: parseFloat(resource.paymentPlanPaidResource.creditCost),
+          creditCost: resource.paymentPlanPaidResource.creditCost,
           description: resource.paymentPlanPaidResource.description,
         }),
       ),

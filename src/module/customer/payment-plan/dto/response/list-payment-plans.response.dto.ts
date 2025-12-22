@@ -14,7 +14,7 @@ export class PaymentPlanPaidResourceDto extends BaseBuildableDtoObject {
   public resource: string;
 
   @ResponseDtoStringProperty()
-  public creditCost: string;
+  public creditCost: number;
 
   @ResponseDtoStringProperty()
   public description: string;

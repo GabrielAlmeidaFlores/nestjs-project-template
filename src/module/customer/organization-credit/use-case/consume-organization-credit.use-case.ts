@@ -66,7 +66,7 @@ export class ConsumeOrganizationCreditUseCase
       throw new PaidResourceUnavailableError();
     }
 
-    const creditCost = Number.parseFloat(paidResource.creditCost);
+    const creditCost = paidResource.creditCost;
 
     const purchases =
       await this.organizationCreditPurchaseQueryRepository.findManyOrganizationCreditPurchaseByOrganizationId(

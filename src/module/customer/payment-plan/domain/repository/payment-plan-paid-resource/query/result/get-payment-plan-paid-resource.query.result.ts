@@ -6,7 +6,7 @@ import type { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/do
 export class GetPaymentPlanPaidResourceQueryResult extends BaseBuildableObject {
   public readonly id: PaymentPlanPaidResourceId;
   public readonly resource: PaymentPlanPaidResourceTypeEnum;
-  public readonly creditCost: string;
+  public readonly creditCost: number;
   public readonly description: string;
 
   protected override readonly _type =
