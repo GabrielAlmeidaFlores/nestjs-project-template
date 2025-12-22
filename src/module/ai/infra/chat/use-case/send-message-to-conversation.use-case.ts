@@ -6,6 +6,9 @@ import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/doma
 import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
 import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
 import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
+import { ChatMessageToConversationQueryParam } from '@module/ai/infra/chat/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
+import { GetChatMessagesToConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
 import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
 import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
@@ -56,6 +59,8 @@ export class SendMessageToConversationUseCase {
     private readonly conversationToolPolicyQueryRepositoryGateway: ConversationToolPolicyQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(ConversationMessageQueryRepositoryGateway)
+    private readonly conversationMessageQueryRepositoryGateway: ConversationMessageQueryRepositoryGateway,
 
     private readonly gemini: GeminiClient,
     private readonly mcp: McpUseCase,
@@ -96,11 +101,35 @@ export class SendMessageToConversationUseCase {
     const toolResult: ListToolsResult = await this.mcp.listTools();
 
     const systemPrompt = this.buildSystemPromptFromPolicy(toolResult, policy);
+    type GeminiMsgType = { role: 'assistant' | 'user'; content: string };
 
-    const rawText = await this.gemini.chat([
-      { role: `assistant`, content: systemPrompt },
-      { role: 'user', content: dto.messge },
-    ]);
+    const history =
+      await this.conversationMessageQueryRepositoryGateway.listByConversationIdAndCustomerId(
+        new ChatMessageToConversationQueryParam(dto),
+      );
+
+    const geminiHistory: GeminiMsgType[] = history.resource
+      .filter(
+        (
+          m,
+        ): m is GetChatMessagesToConversationQueryResult & {
+          content: string;
+        } => typeof m.content === 'string' && m.content.trim().length > 0,
+      )
+      .map((m) => ({
+        role:
+          m.role === ConversationMessageRoleTypeEnum.USER
+            ? 'user'
+            : 'assistant',
+        content: m.content.trim(), // string garantida
+      }));
+
+    const geminiMessages: GeminiMsgType[] = [
+      { role: 'assistant', content: systemPrompt },
+      ...geminiHistory,
+    ];
+
+    const rawText = await this.gemini.chat(geminiMessages);
 
     const toolCall = this.tryParseToolCall(rawText);
 
