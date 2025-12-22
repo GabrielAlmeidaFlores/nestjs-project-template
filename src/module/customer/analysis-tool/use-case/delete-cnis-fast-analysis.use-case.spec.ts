@@ -91,6 +91,7 @@ describe(CreateCnisFastAnalysisUseCase.name, () => {
 
   const buildOrganizationSessionData = (): OrganizationSessionDataModel =>
     OrganizationSessionDataModel.build({
+      owner: true,
       organizationId: new OrganizationId(),
     });
 
