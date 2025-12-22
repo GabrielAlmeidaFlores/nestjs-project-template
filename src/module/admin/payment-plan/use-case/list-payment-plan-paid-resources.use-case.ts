@@ -39,7 +39,7 @@ export class ListPaymentPlanPaidResourcesUseCase {
       const response = PaymentPlanPaidResourceResponseDto.build({
         id: paidResource.id,
         resource: paidResource.resource,
-        creditCost: parseFloat(paidResource.creditCost),
+        creditCost: paidResource.creditCost,
         description: paidResource.description,
       });
 

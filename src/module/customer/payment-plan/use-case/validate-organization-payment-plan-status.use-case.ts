@@ -80,9 +80,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
         const dto = new EnabledPaidResourceItemDto();
         dto.id = resource.paymentPlanPaidResource.id;
         dto.resource = resource.paymentPlanPaidResource.resource;
-        dto.creditCost = Number.parseFloat(
-          resource.paymentPlanPaidResource.creditCost,
-        );
+        dto.creditCost = resource.paymentPlanPaidResource.creditCost;
         dto.description = resource.paymentPlanPaidResource.description;
         return dto;
       }),

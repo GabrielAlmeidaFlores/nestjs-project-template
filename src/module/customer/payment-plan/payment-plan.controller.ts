@@ -7,6 +7,7 @@ import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/custom
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { GenerateMonthlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-monthly-payment-billing.response.dto';
 import { GenerateYearlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-yearly-payment-billing.response.dto';
+import { ListPaymentPlanPaidResourcesResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
 import { PayBillingResponseDto } from '@module/customer/payment-plan/dto/response/pay-billing.response.dto';
 import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
@@ -15,6 +16,7 @@ import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case
 import { GenerateMonthlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-monthly-payment-billing.use-case';
 import { GenerateYearlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-yearly-payment-billing.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
+import { ListPaymentPlanPaidResourcesUseCase } from '@module/customer/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
 import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
@@ -39,6 +41,7 @@ export class PaymentPlanController {
   public constructor(
     private readonly subscribePaymentPlanUseCase: SubscribeToMonthlyRecurringPaymentPlanUseCase,
     private readonly listPaymentPlansUseCase: ListPaymentPlansUseCase,
+    private readonly listPaymentPlanPaidResourcesUseCase: ListPaymentPlanPaidResourcesUseCase,
     private readonly cancelPaymentPlanUseCase: CancelPaymentPlanUseCase,
     private readonly getOrganizationPaymentPlanStatusUseCase: GetOrganizationPaymentPlanStatusUseCase,
     private readonly generateMonthlyPaymentBillingUseCase: GenerateMonthlyPaymentBillingUseCase,
@@ -63,6 +66,25 @@ export class PaymentPlanController {
     @Query() dto: ListDataRequestDto,
   ): Promise<ListPaymentPlansResponseDto[]> {
     return this.listPaymentPlansUseCase.execute(dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar recursos pagos disponíveis',
+    http: {
+      path: 'paid-resources',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista paginada de recursos pagos disponíveis.',
+      type: ListPaymentPlanPaidResourcesResponseDto,
+    },
+  })
+  public async listPaidResources(
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
+    return this.listPaymentPlanPaidResourcesUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({

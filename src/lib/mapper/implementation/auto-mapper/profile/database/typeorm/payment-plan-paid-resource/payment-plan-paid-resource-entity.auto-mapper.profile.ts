@@ -75,7 +75,7 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
       return GetPaymentPlanPaidResourceQueryResult.build({
         id: new PaymentPlanPaidResourceId(source.id),
         resource: source.resource,
-        creditCost: source.creditCost.toString(),
+        creditCost: source.creditCost,
         description: source.description,
       });
     };
