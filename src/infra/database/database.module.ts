@@ -56,7 +56,7 @@ import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain
 import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
 import { ConversationEventQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/query/conversation.query.repository.gateway';
 import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
-import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation.query.repository.gateway';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
 import { ConversationToolPolicyCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/command/conversation-message.command.repository.gateway';
 import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';

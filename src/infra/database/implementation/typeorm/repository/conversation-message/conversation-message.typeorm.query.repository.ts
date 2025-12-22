@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation.query.repository.gateway';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
-import { ListConversationMessageResponseDto } from '@module/ai/infra/chat/dto/response/list-conversation-message.response.dto';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
+import { ChatMessageToConversationQueryParam } from '@module/ai/infra/chat/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
+import { GetChatMessagesToConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
 
 @Injectable()
 export class ConversationMessageTypeormQueryRepository
@@ -24,23 +25,35 @@ export class ConversationMessageTypeormQueryRepository
     super(repository);
   }
 
-  public async listByConversationId(
-    conversationId: ConversationId,
-  ): Promise<ListConversationMessageResponseDto> {
-    const data = await this.findOne({
+  public async listByConversationIdAndCustomerId(
+    listData: ChatMessageToConversationQueryParam,
+  ): Promise<ListDataOutputModel<GetChatMessagesToConversationQueryResult>> {
+    const data = await this.list(listData, {
       where: {
         conversation: {
-          id: conversationId.toString(),
+          id: listData.conversationId.toString(),
+          customer: {
+            id: listData.customerId.toString(),
+          },
         },
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+      relations: {
+        conversation: true,
       },
     });
 
-    const mappedData = this.mapperGateway.map(
-      data,
+    const mapped = this.mapperGateway.mapArray(
+      data.resource,
       ConversationMessageTypeormEntity,
-      ListConversationMessageResponseDto,
+      GetChatMessagesToConversationQueryResult,
     );
 
-    return mappedData;
+    return new ListDataOutputModel<GetChatMessagesToConversationQueryResult>({
+      ...data,
+      resource: mapped,
+    });
   }
 }
