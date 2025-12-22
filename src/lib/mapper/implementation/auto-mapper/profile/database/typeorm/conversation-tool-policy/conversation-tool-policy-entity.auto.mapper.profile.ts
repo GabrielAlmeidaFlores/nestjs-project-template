@@ -39,6 +39,8 @@ export class ConversationToolPolicyEntityAutoMapperProfile {
           archivedAt: source.conversation.archivedAt ?? null,
           createdAt: source.conversation.createdAt,
         }),
+        persona: source.persona ?? null,
+        personaPrompt: source.personaPrompt ?? null,
       });
     };
 
@@ -74,6 +76,9 @@ export class ConversationToolPolicyEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: new Date(),
         deletedAt: null,
+
+        persona: source.persona ?? null,
+        personaPrompt: source.personaPrompt ?? null,
 
         conversation,
       });

@@ -2,18 +2,11 @@ import { Injectable } from '@nestjs/common';
 
 import { GeminiChatRequestDto } from '@module/ai/gemini/dto/request/gemini-chat.request.dto';
 import { GeminiClient } from '@module/ai/gemini/gemini.service';
-import { AiToolCallType } from '@module/ai/gemini/types/tool-call.interface';
+import {
+  AiResponseInterface,
+  AiToolCallType,
+} from '@module/ai/gemini/types/tool-call.interface';
 import { McpUseCase } from '@module/ai/mcp/use-case/mcp.use-case';
-
-export interface AiTextContentInterface {
-  type: 'text';
-  text: string;
-}
-
-export interface AiResponseInterface {
-  content: AiTextContentInterface[];
-  isError?: boolean;
-}
 
 @Injectable()
 export class GeminiOrchestratorUseCase {
@@ -42,10 +35,6 @@ export class GeminiOrchestratorUseCase {
       content: [{ type: 'text', text: rawText }],
     };
   }
-
-  /* =====================================
-   * MÉTODOS PRIVADOS
-   * ===================================== */
 
   private buildSystemPrompt(): string {
     return `

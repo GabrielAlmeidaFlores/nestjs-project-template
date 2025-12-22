@@ -1,5 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
 import { ConversationToolPolicyId } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/value-object/conversation-tool-policy-id/conversation-tool-policy-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -32,6 +33,9 @@ export class ConversationToolPolicyEntity extends BaseEntity<ConversationToolPol
   )
   public override readonly updatedAt: Date;
 
+  public readonly persona: ChatPersonaTypeEnum | null;
+  public readonly personaPrompt: string | null;
+
   protected readonly _type = ConversationToolPolicyEntity.name;
 
   public constructor(props: ConversationToolPolicyEntityPropsInterface) {
@@ -41,6 +45,10 @@ export class ConversationToolPolicyEntity extends BaseEntity<ConversationToolPol
     this.toolsEnable = props.toolsEnable ?? null;
     this.toolPermission = props.toolPermission ?? null;
     this.defaultExecutionMode = props.defaultExecutionMode ?? null;
+
+    this.persona = props.persona ?? null;
+    this.personaPrompt = props.personaPrompt ?? null;
+
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }

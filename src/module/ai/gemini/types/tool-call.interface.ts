@@ -10,6 +10,16 @@ export interface ConsultarUsuariosToolCallInterface {
   arguments: Record<string, never>;
 }
 
+export interface AiTextContentInterface {
+  type: 'text';
+  text: string;
+}
+
+export interface AiResponseInterface {
+  content: AiTextContentInterface[];
+  isError?: boolean;
+}
+
 export type AiToolCallType =
   | ConsultarPjeToolCallInterface
   | ConsultarUsuariosToolCallInterface;
