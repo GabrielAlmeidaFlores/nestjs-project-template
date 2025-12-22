@@ -7,7 +7,7 @@ import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 import { CnisFastAnalysisDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-does-not-contain-complete-analysis.error';
-import { CnisFastAnalysisDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-does-not-contain-simplified-analysis.error copy';
+import { CnisFastAnalysisDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-does-not-contain-simplified-analysis.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
