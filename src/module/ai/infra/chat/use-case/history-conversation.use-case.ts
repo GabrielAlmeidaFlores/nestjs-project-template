@@ -41,6 +41,7 @@ export class HistoryConversationUseCase {
       );
 
     const resource = conversation.resource.map((item) => {
+      console.warn(item);
       return GetConversationResponseDto.build({
         ...item,
       });
