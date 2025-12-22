@@ -7,8 +7,11 @@ import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/convers
 import { ConversationStatusTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
 import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { ConversationToolPolicyEntity } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
 import { StartChatRequestDto } from '@module/ai/chat/dto/request/start-chat.request.dto';
 import { StartChatResponseDto } from '@module/ai/chat/dto/response/start-chat.response.dto';
+import { ChatPersonaNotFoundError } from '@module/ai/chat/error/chat-persona-found.erro copy';
+import { PERSONA_PROMPTS } from '@module/ai/chat/lib/persona-prompt';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
@@ -41,9 +44,17 @@ export class StartChatUseCase {
         CustomerNotFoundError,
       );
 
+    const persona: ChatPersonaTypeEnum | undefined = dto.assistantType;
+
+    if (persona === undefined) {
+      throw new ChatPersonaNotFoundError();
+    }
+
+    const personaPrompt = PERSONA_PROMPTS[persona];
+
     const conversation = new ConversationEntity({
       customerId: customer.id,
-      assistantType: dto.assistantType ?? null,
+      assistantType: persona,
       status: null,
       lastAIMessageAt: null,
       archivedAt: null,
@@ -55,6 +66,10 @@ export class StartChatUseCase {
       toolsEnable: true,
       toolPermission: null,
       defaultExecutionMode: null,
+
+      persona,
+      personaPrompt,
+
       createdAt: now,
       updatedAt: now,
     });

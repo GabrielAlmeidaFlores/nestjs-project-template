@@ -25,10 +25,19 @@ import {
 } from '@module/ai/chat/dto/response/send-message-to-conversation.response.dto';
 import { ConversationNotFoundError } from '@module/ai/chat/error/conversation-not-found.erro';
 import { GeminiClient } from '@module/ai/gemini/gemini.service';
-import { AiToolCallType } from '@module/ai/gemini/types/tool-call.interface';
-import { AiResponseInterface } from '@module/ai/gemini/use-case/orchestrator-use-case';
+import {
+  AiResponseInterface,
+  AiToolCallType,
+} from '@module/ai/gemini/types/tool-call.interface';
 import { McpUseCase } from '@module/ai/mcp/use-case/mcp.use-case';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+
+export type ConversationToolPolicySnapshotType = {
+  toolsEnable?: boolean | null;
+  personaPrompt?: string | null;
+  persona?: string | null;
+  toolPermission?: { toolName: string }[] | null;
+} | null;
 
 @Injectable()
 export class SendMessageToConversationUseCase {
@@ -241,27 +250,43 @@ export class SendMessageToConversationUseCase {
 
   private buildSystemPromptFromPolicy(
     tools: ListToolsResult,
-    policy: { toolsEnable?: boolean | null } | null,
+    policy: ConversationToolPolicySnapshotType,
   ): string {
-    const enabled = policy?.toolsEnable !== false;
+    const toolsEnabled = policy?.toolsEnable !== false;
 
-    const toolsText = enabled
-      ? tools.tools.map((t) => `- ${t.name}: ${t.description ?? ''}`).join('\n')
+    const permissions = policy?.toolPermission ?? null;
+    const hasPermissionList =
+      Array.isArray(permissions) && permissions.length > 0;
+
+    const allowedTools = hasPermissionList
+      ? tools.tools.filter((t) =>
+          permissions.some((p) => p.toolName === t.name),
+        )
+      : tools.tools;
+
+    const toolsText = toolsEnabled
+      ? allowedTools
+          .map((t) => `- ${t.name}: ${t.description ?? ''}`)
+          .join('\n')
       : 'Ferramentas desativadas para esta conversa.';
 
+    const personaPromptRaw = policy?.personaPrompt;
+    const personaPrompt =
+      typeof personaPromptRaw === 'string' && personaPromptRaw.trim().length > 0
+        ? personaPromptRaw.trim()
+        : '';
+
     return `
-Você é um assistente com acesso (condicional) a ferramentas.
+      ${personaPrompt}
 
-Ferramentas disponíveis:
-${toolsText}
+      Ferramentas disponíveis:
+      ${toolsText}
 
-REGRAS:
-- Se precisar usar ferramenta, responda APENAS com JSON puro (sem markdown, sem crase).
-- Formato:
-{"tool":"nome_da_ferramenta","arguments":{...}}
-
-- Caso não precise ferramenta, responda normalmente em texto.
-`;
+      REGRAS:
+      - Se precisar usar ferramenta, responda APENAS com JSON puro (sem markdown).
+      - Formato: {"tool":"nome_da_ferramenta","arguments":{...}}
+      - Caso não precise ferramenta, responda normalmente em texto.
+      `.trim();
   }
 
   private tryParseToolCall(text: string): AiToolCallType | null {
@@ -295,7 +320,6 @@ REGRAS:
       return false;
     }
 
-    // aqui você pode endurecer: tool deve ser um dos unions (consultar_pje | consultar_usuarios)
     return tool === 'consultar_pje' || tool === 'consultar_usuarios';
   }
 
@@ -310,18 +334,34 @@ REGRAS:
     return trimmed;
   }
 
+  private isToolAllowed(
+    toolName: string,
+    policy: ConversationToolPolicySnapshotType,
+  ): boolean {
+    if (policy?.toolsEnable === false) {
+      return false;
+    }
+
+    const permissions = policy?.toolPermission ?? null;
+    if (!Array.isArray(permissions) || permissions.length === 0) {
+      return true;
+    }
+
+    return permissions.some((p) => p.toolName === toolName);
+  }
+
   private async executeToolWithPolicyGuard(
     toolCall: AiToolCallType,
-    policy: { toolsEnable?: boolean | null } | null,
+    policy: ConversationToolPolicySnapshotType,
   ): Promise<
     Awaited<ReturnType<McpUseCase['consultarUsuarios']>> | AiResponseInterface
   > {
-    if (policy?.toolsEnable === false) {
+    if (!this.isToolAllowed(toolCall.tool, policy)) {
       return {
         content: [
           {
             type: 'text',
-            text: 'Ferramentas estão desativadas para esta conversa.',
+            text: 'Ferramenta não permitida para esta conversa.',
           },
         ],
         isError: true,
