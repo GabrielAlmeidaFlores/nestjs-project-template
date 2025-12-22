@@ -1,5 +1,6 @@
 import { HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
+import { GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding-created-range.request.dto';
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
 import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
@@ -85,7 +86,7 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
+    @Query() dto: GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
     return this.getAnalysisToolClientLegalProceedingUseCaseGateway.execute(
       organizationSessionData,

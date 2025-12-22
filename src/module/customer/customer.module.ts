@@ -10,12 +10,9 @@ import { TranscriptionModule } from '@module/customer/transcription/transcriptio
 @Module({
   imports: [
     AccountModule,
-
     AnalysisToolModule,
-
     TranscriptionModule,
     LegalProceedingModule,
-    ,
     PaymentPlanModule,
     OrganizationCreditModule,
   ],
