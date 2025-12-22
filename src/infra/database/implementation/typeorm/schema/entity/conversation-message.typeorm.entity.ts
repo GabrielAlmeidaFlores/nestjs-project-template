@@ -10,8 +10,9 @@ export class ConversationMessageTypeormEntity extends BaseTypeormEntity {
     name: 'role',
     type: 'simple-enum',
     enum: ConversationMessageRoleTypeEnum,
+    nullable: true,
   })
-  public role: ConversationMessageRoleTypeEnum;
+  public role?: ConversationMessageRoleTypeEnum | null;
 
   @Column({ name: 'content', type: 'text', nullable: true })
   public content?: string | null;

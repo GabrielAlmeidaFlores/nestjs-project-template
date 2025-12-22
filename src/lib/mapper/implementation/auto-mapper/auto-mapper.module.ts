@@ -31,6 +31,7 @@ import { GetConversationQueryResultAutoMapperProfile } from '@lib/mapper/impleme
 import { GetConversationWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation/get-conversation-with-relations-query-result.auto-mapper.profile';
 import { ConversationEventEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-event/conversation-event-entity.auto.mapper.profile';
 import { ConversationMessageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-message/conversation-message-entity.auto.mapper.profile';
+import { GetChatMessagesToConversationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-message/get-conversation-message-entity-with-relations-query-result.auto-mapper.profile';
 import { ConversationToolPolicyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/conversation-tool-policy-entity.auto.mapper.profile';
 import { GetConversationToolPolicyQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/get-conversation-tool-policy-query-result.auto-mapper.profile';
 import { GetConversationToolPolicyWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/conversation-tool-policy/get-conversation-tool-policy-with-relations-query-result.auto-mapper.profile';
@@ -128,6 +129,7 @@ import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implement
     GetConversationToolPolicyWithRelationsQueryResultAutoMapperProfile,
     GetConversationToolPolicyQueryResultAutoMapperProfile,
     ConversationToolPolicyEntityAutoMapperProfile,
+    GetChatMessagesToConversationQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
