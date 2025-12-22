@@ -1,0 +1,345 @@
+import { Injectable } from '@nestjs/common';
+
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
+import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
+import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
+import {
+  EnabledPaidResourceItemDto,
+  ValidateOrganizationPaymentPlanStatusResponseDto,
+} from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
+import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
+import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
+import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
+import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
+
+import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
+import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
+
+@Injectable()
+export class ValidateOrganizationPaymentPlanStatusUseCase
+  implements ValidateOrganizationPaymentPlanStatusUseCaseGateway
+{
+  protected readonly _type = ValidateOrganizationPaymentPlanStatusUseCase.name;
+
+  public constructor(
+    private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
+    private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
+    private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
+    private readonly paymentPlanEnabledPaidResourceQueryRepository: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
+  ) {}
+
+  public async execute(
+    organization: OrganizationId,
+  ): Promise<ValidateOrganizationPaymentPlanStatusResponseDto> {
+    const organizationPaymentPlans =
+      await this.organizationPaymentPlanQueryRepository.findManyByOrganizationId(
+        organization,
+      );
+
+    if (organizationPaymentPlans.length === 0) {
+      throw new OrganizationPaymentPlanNotFoundError();
+    }
+
+    const organizationPaymentPlan = organizationPaymentPlans[0];
+
+    if (!organizationPaymentPlan) {
+      throw new OrganizationPaymentPlanNotFoundError();
+    }
+
+    const organizationPaymentPlanWithRelations =
+      await this.organizationPaymentPlanQueryRepository.findOneByIdWithRelations(
+        organizationPaymentPlan.id,
+      );
+
+    if (!organizationPaymentPlanWithRelations) {
+      throw new OrganizationPaymentPlanNotFoundError();
+    }
+
+    const enabledPaidResources =
+      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
+        organizationPaymentPlanWithRelations.paymentPlan.id,
+      );
+
+    const paymentRelations =
+      await this.organizationPaymentPlanBankPaymentQueryRepository.findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
+        organizationPaymentPlan.id,
+      );
+
+    const bankPaymentIds = paymentRelations.map((pr) => pr.bankPayment);
+    const bankPayments =
+      await this.bankPaymentQueryRepository.findManyBankPaymentByIds(
+        bankPaymentIds,
+      );
+
+    return this.validateByCycle(
+      organizationPaymentPlan,
+      bankPayments,
+      enabledPaidResources.map((resource) => {
+        const dto = new EnabledPaidResourceItemDto();
+        dto.id = resource.paymentPlanPaidResource.id;
+        dto.resource = resource.paymentPlanPaidResource.resource;
+        dto.creditCost = resource.paymentPlanPaidResource.creditCost;
+        dto.description = resource.paymentPlanPaidResource.description;
+        return dto;
+      }),
+    );
+  }
+
+  private validateByCycle(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const cycleValue = organizationPaymentPlan.cycle as string;
+
+    if (cycleValue === (PaymentPlanCycleEnum.MONTHLY_RECURRING as string)) {
+      return this.validateMonthlyRecurring(
+        organizationPaymentPlan,
+        bankPayments,
+        enabledPaidResources,
+      );
+    }
+
+    if (cycleValue === (PaymentPlanCycleEnum.MONTHLY as string)) {
+      return this.validateMonthly(
+        organizationPaymentPlan,
+        bankPayments,
+        enabledPaidResources,
+      );
+    }
+
+    if (cycleValue === (PaymentPlanCycleEnum.YEARLY as string)) {
+      return this.validateYearly(
+        organizationPaymentPlan,
+        bankPayments,
+        enabledPaidResources,
+      );
+    }
+
+    throw new OrganizationPaymentPlanNotFoundError();
+  }
+
+  private validateMonthlyRecurring(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
+
+    response.planName = organizationPaymentPlan.name;
+    response.planDescription = organizationPaymentPlan.description;
+    response.planPrice = organizationPaymentPlan.price;
+    response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
+    response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
+
+    if (bankPayments.length === 0) {
+      response.isActive = false;
+      response.hasOverduePayments = false;
+      response.overduePaymentsCount = 0;
+
+      return response;
+    }
+
+    const now = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const validStatuses = [PaymentStatusEnum.CONFIRMED];
+    const validPayments = bankPayments.filter((p) =>
+      validStatuses.includes(p.status),
+    );
+
+    const sortedValidPayments = validPayments
+      .filter((p) => p.paymentDate !== null)
+      .sort((a, b) => {
+        if (!a.paymentDate || !b.paymentDate) {
+          return 0;
+        }
+        return b.paymentDate.getTime() - a.paymentDate.getTime();
+      });
+
+    const lastValidPayment = sortedValidPayments[0];
+
+    let isActive = false;
+    if (lastValidPayment?.paymentDate) {
+      isActive = lastValidPayment.paymentDate >= oneMonthAgo;
+    }
+
+    const overduePayments = bankPayments.filter((p) => {
+      if (p.status === PaymentStatusEnum.OVERDUE) {
+        return true;
+      }
+
+      if (p.status === PaymentStatusEnum.PENDING && p.dueDate < now) {
+        return true;
+      }
+      return false;
+    });
+
+    const pendingPayments = bankPayments
+      .filter((p) => p.status === PaymentStatusEnum.PENDING && p.dueDate >= now)
+      .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    const nextPendingPayment = pendingPayments[0];
+
+    response.isActive = isActive;
+    response.hasOverduePayments = overduePayments.length > 0;
+    response.overduePaymentsCount = overduePayments.length;
+
+    if (lastValidPayment) {
+      response.lastPaymentStatus = lastValidPayment.status;
+      if (lastValidPayment.paymentDate) {
+        response.lastPaymentDate = lastValidPayment.paymentDate;
+      }
+    }
+
+    if (nextPendingPayment) {
+      response.nextDueDate = nextPendingPayment.dueDate;
+    }
+
+    return response;
+  }
+
+  private validateMonthly(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
+
+    response.planName = organizationPaymentPlan.name;
+    response.planDescription = organizationPaymentPlan.description;
+    response.planPrice = organizationPaymentPlan.price;
+    response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
+    response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
+
+    const confirmedPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.CONFIRMED,
+    );
+
+    if (confirmedPayments.length === 0) {
+      response.isActive = false;
+      response.hasOverduePayments = false;
+      response.overduePaymentsCount = 0;
+      return response;
+    }
+
+    const firstPayment = confirmedPayments.sort((a, b) => {
+      if (!a.paymentDate || !b.paymentDate) {
+        return 0;
+      }
+      return a.paymentDate.getTime() - b.paymentDate.getTime();
+    })[0];
+
+    const oneMonthAfterFirstPayment = new Date(
+      firstPayment?.paymentDate ?? new Date(),
+    );
+    oneMonthAfterFirstPayment.setMonth(
+      oneMonthAfterFirstPayment.getMonth() + 1,
+    );
+
+    const now = new Date();
+    const isActive = now < oneMonthAfterFirstPayment;
+
+    response.isActive = isActive;
+    response.hasOverduePayments = false;
+    response.overduePaymentsCount = 0;
+
+    if (firstPayment) {
+      response.lastPaymentStatus = firstPayment.status;
+      if (firstPayment.paymentDate) {
+        response.lastPaymentDate = firstPayment.paymentDate;
+      }
+    }
+
+    return response;
+  }
+
+  private validateYearly(
+    organizationPaymentPlan: GetOrganizationPaymentPlanQueryResult,
+    bankPayments: GetBankPaymentQueryResult[],
+    enabledPaidResources: EnabledPaidResourceItemDto[],
+  ): ValidateOrganizationPaymentPlanStatusResponseDto {
+    const response = new ValidateOrganizationPaymentPlanStatusResponseDto();
+
+    response.planName = organizationPaymentPlan.name;
+    response.planDescription = organizationPaymentPlan.description;
+    response.planPrice = organizationPaymentPlan.price;
+    response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
+    response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
+    response.enabledPaidResources = enabledPaidResources;
+
+    if (bankPayments.length === 0) {
+      response.isActive = false;
+      response.hasOverduePayments = false;
+      response.overduePaymentsCount = 0;
+      return response;
+    }
+
+    const now = new Date();
+
+    const sortedPayments = [...bankPayments].sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+
+    const allPaymentsValid = sortedPayments.every((payment) => {
+      if (payment.dueDate < now) {
+        return payment.status === PaymentStatusEnum.CONFIRMED;
+      }
+
+      return true;
+    });
+
+    const confirmedPayments = bankPayments
+      .filter((p) => p.status === PaymentStatusEnum.CONFIRMED)
+      .sort((a, b) => {
+        if (!a.paymentDate || !b.paymentDate) {
+          return 0;
+        }
+        return a.paymentDate.getTime() - b.paymentDate.getTime();
+      });
+
+    const firstPayment = confirmedPayments[0];
+
+    let withinOneYear = false;
+    if (firstPayment?.paymentDate) {
+      const oneYearAfterFirstPayment = new Date(firstPayment.paymentDate);
+      oneYearAfterFirstPayment.setFullYear(
+        oneYearAfterFirstPayment.getFullYear() + 1,
+      );
+      withinOneYear = now < oneYearAfterFirstPayment;
+    }
+
+    response.isActive = allPaymentsValid && withinOneYear;
+    response.hasOverduePayments = false;
+    response.overduePaymentsCount = 0;
+
+    if (confirmedPayments.length > 0) {
+      const lastConfirmedPayment =
+        confirmedPayments[confirmedPayments.length - 1];
+      if (lastConfirmedPayment) {
+        response.lastPaymentStatus = lastConfirmedPayment.status;
+        if (lastConfirmedPayment.paymentDate) {
+          response.lastPaymentDate = lastConfirmedPayment.paymentDate;
+        }
+      }
+    }
+
+    const pendingPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.PENDING,
+    );
+    if (pendingPayments.length > 0) {
+      const nextPending = pendingPayments.sort(
+        (a, b) => a.dueDate.getTime() - b.dueDate.getTime(),
+      )[0];
+      if (nextPending) {
+        response.nextDueDate = nextPending.dueDate;
+      }
+    }
+
+    return response;
+  }
+}

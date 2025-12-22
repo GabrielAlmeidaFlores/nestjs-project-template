@@ -60,6 +60,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
       id: new CustomerId(),
       name: 'Test Customer',
       profilePicture: null,
+      bankExternalId: 'mock-bank-external-id',
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
@@ -129,6 +130,7 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
 
     expect(organizationSessionGateway.createSession).toHaveBeenCalledWith(
       dto.organizationId,
+      true,
     );
 
     expect(reply.setCookie).toHaveBeenCalledWith(
@@ -210,6 +212,10 @@ describe(SetOrganizationForCustomerUseCase.name, () => {
     );
 
     expect(result.owner).toBe(false);
+    expect(organizationSessionGateway.createSession).toHaveBeenCalledWith(
+      dto.organizationId,
+      false,
+    );
     expect(reply.setCookie).toHaveBeenCalledWith(
       ApiCookieEnum.ORGANIZATION,
       'jwt-org',
