@@ -58,13 +58,13 @@ export class PaymentPlanController {
     tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Lista de planos de pagamento.',
+      description: 'Lista paginada de planos de pagamento disponíveis.',
       type: ListPaymentPlansResponseDto,
     },
   })
   public async list(
     @Query() dto: ListDataRequestDto,
-  ): Promise<ListPaymentPlansResponseDto[]> {
+  ): Promise<ListPaymentPlansResponseDto> {
     return this.listPaymentPlansUseCase.execute(dto);
   }
 
