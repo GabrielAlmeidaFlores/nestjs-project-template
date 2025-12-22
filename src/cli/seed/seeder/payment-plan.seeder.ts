@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { PAYMENT_PLAN_PAID_RESOURCE_SEED } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository,gateway';
+import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
