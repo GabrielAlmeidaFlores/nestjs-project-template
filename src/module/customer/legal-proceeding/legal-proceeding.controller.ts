@@ -1,7 +1,10 @@
 import { HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding-created-range.request.dto';
+import { GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding.-by-legal-proceeding-number.request.dto';
+import { ListLegalProceedingItemActionResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
+import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action-by-legal-proceeding-number.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
@@ -36,6 +39,7 @@ export class LegalProceedingController {
     private readonly countLegalProceedingDetailUseCase: CountLegalProceedingDetailUseCase,
     private readonly listLegalProceedingDetailByAnalysisToolClientIdUseCase: ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
     private readonly getAnalysisToolClientLegalProceedingActionUseCaseGateway: GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
+    private readonly getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway: GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway,
   ) {}
 
   @BuildEndpointSpecification({
@@ -118,6 +122,36 @@ export class LegalProceedingController {
     @Query() dto: ListDataRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
     return this.getAnalysisToolClientLegalProceedingActionUseCaseGateway.execute(
+      organizationSessionData,
+      sessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar movimentações processuais pelo numero do processo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'action/legal-proceeding-number',
+      method: RequestMethod.GET,
+    },
+    tag: ['processos-juridicos'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Listar registro detalhado sobre as movimentações de um processo judicial',
+      type: ListLegalProceedingItemActionResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getLegalProceedingDetailActionByLegalProceedingNumber(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query()
+    dto: GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto,
+  ): Promise<ListLegalProceedingItemActionResponseDto> {
+    return this.getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway.execute(
       organizationSessionData,
       sessionData,
       dto,

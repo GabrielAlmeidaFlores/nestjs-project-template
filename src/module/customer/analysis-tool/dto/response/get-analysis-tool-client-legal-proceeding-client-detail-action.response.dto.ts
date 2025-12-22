@@ -12,7 +12,7 @@ export class LegalProceedingItemDestinatarioResponseDto extends BaseBuildableDto
   public polo: string;
 
   @ResponseDtoStringProperty()
-  public comunicacao_id: number;
+  public comunicacao_id: string;
 
   protected override readonly _type =
     LegalProceedingItemDestinatarioResponseDto.name;
@@ -21,7 +21,7 @@ export class LegalProceedingItemDestinatarioResponseDto extends BaseBuildableDto
 @ResponseDto()
 export class LegalProceedingItemAdvogadoDetailResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
-  public id: number;
+  public id: string;
 
   @ResponseDtoStringProperty()
   public nome: string;
@@ -39,13 +39,13 @@ export class LegalProceedingItemAdvogadoDetailResponseDto extends BaseBuildableD
 @ResponseDto()
 export class LegalProceedingItemAdvogadoResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
-  public id: number;
+  public id: string;
 
   @ResponseDtoStringProperty()
-  public comunicacao_id: number;
+  public comunicacao_id: string;
 
   @ResponseDtoStringProperty()
-  public advogado_id: number;
+  public advogado_id: string;
 
   @ResponseDtoStringProperty()
   public created_at: string;
@@ -54,7 +54,7 @@ export class LegalProceedingItemAdvogadoResponseDto extends BaseBuildableDtoObje
   public updated_at: string;
 
   @ResponseDtoObjectProperty(() => LegalProceedingItemAdvogadoDetailResponseDto)
-  public advogado: LegalProceedingItemAdvogadoDetailResponseDto[];
+  public advogado: LegalProceedingItemAdvogadoDetailResponseDto;
 
   protected override readonly _type =
     LegalProceedingItemAdvogadoResponseDto.name;
@@ -63,7 +63,7 @@ export class LegalProceedingItemAdvogadoResponseDto extends BaseBuildableDtoObje
 @ResponseDto()
 export class GetLegalProceedingItemActionResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
-  public id: number;
+  public id: string;
 
   @ResponseDtoStringProperty()
   public data_disponibilizacao: string;
@@ -99,10 +99,10 @@ export class GetLegalProceedingItemActionResponseDto extends BaseBuildableDtoObj
   public codigoClasse: string;
 
   @ResponseDtoStringProperty()
-  public numeroComunicacao: number;
+  public numeroComunicacao: string;
 
   @ResponseDtoStringProperty()
-  public ativo: boolean;
+  public ativo: string;
 
   @ResponseDtoStringProperty()
   public hash: string;
