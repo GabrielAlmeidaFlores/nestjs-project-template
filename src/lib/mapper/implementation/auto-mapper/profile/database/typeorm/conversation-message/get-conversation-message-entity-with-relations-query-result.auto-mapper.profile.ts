@@ -62,7 +62,7 @@ export class GetChatMessagesToConversationQueryResultAutoMapperProfile {
       }
 
       const conversation = this.mapper.map(
-        conversationSource, // agora é GetConversationQueryResult
+        conversationSource,
         GetConversationQueryResult,
         ConversationTypeormEntity,
       );

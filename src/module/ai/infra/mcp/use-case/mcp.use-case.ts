@@ -1,6 +1,8 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 
 import { McpClient } from '@module/ai/infra/mcp/lib/mcp.client';
+import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 
 import type { ListToolsResult } from '@modelcontextprotocol/sdk/types';
 
@@ -28,6 +30,17 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
     await this.client.close();
   }
 
+  public async listTools(): Promise<ListToolsResult> {
+    return this.client.listTools();
+  }
+
+  public async callTool(
+    toolName: string,
+    args: JsonObjectInterface,
+  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool(toolName, args);
+  }
+
   public async consultarPje(
     numeroProcesso: string,
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
@@ -42,14 +55,15 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
     return this.client.callTool('consultar_usuarios', {});
   }
 
-  public async listTools(): Promise<ListToolsResult> {
-    return this.client.listTools();
+  public async legalPleadingList(
+    dto: ListLegalPleadingRequestDto,
+  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('legal_pleading_list', { ...dto });
   }
 
-  public async callTool(
-    toolName: string,
-    args: JsonObjectInterface,
+  public async legalPleadingGet(
+    dto: LegalPleadingId,
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool(toolName, args);
+    return this.client.callTool('legal_pleading_get', { ...dto });
   }
 }

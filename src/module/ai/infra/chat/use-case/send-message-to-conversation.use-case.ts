@@ -32,7 +32,10 @@ import {
   AiToolCallType,
   AiResponseInterface,
 } from '@module/ai/infra/gemini/types/tool-call.interface';
-import { McpUseCase } from '@module/ai/infra/mcp/use-case/mcp.use-case';
+import {
+  JsonObjectInterface,
+  McpUseCase,
+} from '@module/ai/infra/mcp/use-case/mcp.use-case';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 export type ConversationToolPolicySnapshotType = {
@@ -108,6 +111,16 @@ export class SendMessageToConversationUseCase {
         new ChatMessageToConversationQueryParam(dto),
       );
 
+    const MAX_HISTORY = 10;
+
+    const looksLikeJson = (s: string): boolean => {
+      const t = s.trim();
+      return (
+        (t.startsWith('{') && t.endsWith('}')) ||
+        (t.startsWith('[') && t.endsWith(']'))
+      );
+    };
+
     const geminiHistory: GeminiMsgType[] = history.resource
       .filter(
         (
@@ -116,17 +129,22 @@ export class SendMessageToConversationUseCase {
           content: string;
         } => typeof m.content === 'string' && m.content.trim().length > 0,
       )
-      .map((m) => ({
-        role:
-          m.role === ConversationMessageRoleTypeEnum.USER
-            ? 'user'
-            : 'assistant',
-        content: m.content.trim(), // string garantida
-      }));
+      .map(
+        (m): GeminiMsgType => ({
+          role:
+            m.role === ConversationMessageRoleTypeEnum.USER
+              ? ('user' as const)
+              : ('assistant' as const),
+          content: m.content.trim(),
+        }),
+      )
+      .filter((m) => !(m.role === 'assistant' && looksLikeJson(m.content)))
+      .slice(-MAX_HISTORY);
 
     const geminiMessages: GeminiMsgType[] = [
       { role: 'assistant', content: systemPrompt },
       ...geminiHistory,
+      { role: 'user', content: dto.messge },
     ];
 
     const rawText = await this.gemini.chat(geminiMessages);
@@ -153,6 +171,7 @@ export class SendMessageToConversationUseCase {
       const toolResponse = await this.executeToolWithPolicyGuard(
         toolCall,
         policy,
+        toolResult,
       );
 
       const createToolResultEventTx =
@@ -169,7 +188,12 @@ export class SendMessageToConversationUseCase {
           }),
         );
 
-      const assistantText = JSON.stringify(toolResponse, null, 2);
+      let assistantText = JSON.stringify(toolResponse, null, 2);
+
+      if (this.isTextContentEnvelope(toolResponse)) {
+        const first = toolResponse.content[0];
+        assistantText = first.text;
+      }
 
       const createAssistantMessageTx =
         this.conversationMessageCommandRepositoryGateway.createConversationMessage(
@@ -235,6 +259,83 @@ export class SendMessageToConversationUseCase {
         AiConversationResponseDto.build({ type: 'text', text: rawText }),
       ],
     });
+  }
+
+  private toIntOrUndefined(value: unknown): number | undefined {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+
+    if (typeof value === 'number') {
+      return Number.isFinite(value) ? Math.trunc(value) : undefined;
+    }
+
+    if (typeof value === 'string') {
+      const s = value.trim();
+      if (!s) {
+        return undefined;
+      }
+      const n = Number(s);
+      return Number.isFinite(n) ? Math.trunc(n) : undefined;
+    }
+
+    return undefined;
+  }
+
+  private normalizePaginationArgs(
+    args: JsonObjectInterface,
+  ): JsonObjectInterface {
+    const out: Record<string, unknown> = { ...args };
+    const max = 100;
+    const min = 10;
+
+    const page = this.toIntOrUndefined(out['page']);
+    out['page'] = page !== undefined && page > 0 ? page : 1;
+
+    const limit = this.toIntOrUndefined(out['limit']);
+    const safe = limit !== undefined && limit > 0 ? Math.min(limit, max) : min;
+    out['limit'] = safe;
+
+    return out as JsonObjectInterface;
+  }
+
+  private isLikelyListTool(toolName: string): boolean {
+    const name = toolName.trim().toLowerCase();
+    return (
+      name.includes('list') ||
+      name.endsWith('_list') ||
+      name.startsWith('list_')
+    );
+  }
+
+  private isTextContentEnvelope(value: unknown): value is {
+    content: [
+      { type: 'text'; text: string },
+      ...Array<{ type: 'text'; text: string }>,
+    ];
+  } {
+    if (typeof value !== 'object' || value === null) {
+      return false;
+    }
+
+    const v: Record<string, unknown> = value as Record<string, unknown>;
+    const c: unknown = v['content'];
+
+    if (!Array.isArray(c) || c.length === 0) {
+      return false;
+    }
+
+    const first: unknown = c[0];
+
+    if (typeof first !== 'object' || first === null) {
+      return false;
+    }
+
+    const f: Record<string, unknown> = first as Record<string, unknown>;
+    const typeVal: unknown = f['type'];
+    const textVal: unknown = f['text'];
+
+    return typeVal === 'text' && typeof textVal === 'string';
   }
 
   private isNonEmptyString(value: unknown): value is string {
@@ -342,14 +443,36 @@ export class SendMessageToConversationUseCase {
     const tool = (value as { tool: unknown }).tool;
     const args = (value as { arguments: unknown }).arguments;
 
-    if (typeof tool !== 'string') {
+    if (typeof tool !== 'string' || tool.trim().length === 0) {
       return false;
     }
     if (typeof args !== 'object' || args === null) {
       return false;
     }
 
-    return tool === 'consultar_pje' || tool === 'consultar_usuarios';
+    return true;
+  }
+
+  private getAllowedToolNames(
+    tools: ListToolsResult,
+    policy: ConversationToolPolicySnapshotType,
+  ): Set<string> {
+    const toolsEnabled = policy?.toolsEnable !== false;
+    if (!toolsEnabled) {
+      return new Set();
+    }
+
+    const permissions = policy?.toolPermission ?? null;
+    const hasPermissionList =
+      Array.isArray(permissions) && permissions.length > 0;
+
+    const allowed = hasPermissionList
+      ? tools.tools.filter((t) =>
+          permissions.some((p) => p.toolName === t.name),
+        )
+      : tools.tools;
+
+    return new Set(allowed.map((t) => t.name));
   }
 
   private stripJsonCodeFence(text: string): string {
@@ -366,26 +489,20 @@ export class SendMessageToConversationUseCase {
   private isToolAllowed(
     toolName: string,
     policy: ConversationToolPolicySnapshotType,
+    tools: ListToolsResult,
   ): boolean {
-    if (policy?.toolsEnable === false) {
-      return false;
-    }
-
-    const permissions = policy?.toolPermission ?? null;
-    if (!Array.isArray(permissions) || permissions.length === 0) {
-      return true;
-    }
-
-    return permissions.some((p) => p.toolName === toolName);
+    const allowedNames = this.getAllowedToolNames(tools, policy);
+    return allowedNames.has(toolName);
   }
 
   private async executeToolWithPolicyGuard(
     toolCall: AiToolCallType,
     policy: ConversationToolPolicySnapshotType,
+    tools: ListToolsResult,
   ): Promise<
-    Awaited<ReturnType<McpUseCase['consultarUsuarios']>> | AiResponseInterface
+    Awaited<ReturnType<McpUseCase['callTool']>> | AiResponseInterface
   > {
-    if (!this.isToolAllowed(toolCall.tool, policy)) {
+    if (!this.isToolAllowed(toolCall.tool, policy, tools)) {
       return {
         content: [
           {
@@ -397,10 +514,12 @@ export class SendMessageToConversationUseCase {
       };
     }
 
-    if (toolCall.tool === 'consultar_pje') {
-      return this.mcp.consultarPje(toolCall.arguments.numeroProcesso);
-    }
+    const baseArgs = toolCall.arguments as JsonObjectInterface;
 
-    return this.mcp.consultarUsuarios();
+    const args = this.isLikelyListTool(toolCall.tool)
+      ? this.normalizePaginationArgs(baseArgs)
+      : baseArgs;
+
+    return this.mcp.callTool(toolCall.tool, args);
   }
 }
