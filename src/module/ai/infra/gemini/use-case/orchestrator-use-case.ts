@@ -7,6 +7,8 @@ import {
   AiToolCallType,
 } from '@module/ai/infra/gemini/types/tool-call.interface';
 import { McpUseCase } from '@module/ai/infra/mcp/use-case/mcp.use-case';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
+import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 
 @Injectable()
 export class GeminiOrchestratorUseCase {
@@ -40,18 +42,33 @@ export class GeminiOrchestratorUseCase {
     return `
 Você é um assistente com acesso às seguintes ferramentas:
 
-1. consultar_pje
-   - Descrição: Consulta um processo no sistema PJe
-   - Parâmetros:
-     - numeroProcesso (string, obrigatório)
+1. legal_pleading_list
+   - Descrição: Lista peças processuais (Legal Pleading) do usuário/organização autenticados.
+   - Use esta ferramenta SEMPRE que o usuário pedir:
+     - a peça mais recente
+     - a última peça
+     - listar peças
+     - buscar peças por nome, parte, termo ou contexto
+   - Parâmetros aceitos:
+     page, limit, search, sortField, field, status, searchBy
 
-2. consultar_usuarios
-   - Descrição: Lista usuários do banco interno
-   - Parâmetros: nenhum
+2. legal_pleading_get
+   - Descrição: Retorna os detalhes completos de uma peça processual.
+   - Use esta ferramenta SOMENTE quando você já tiver um legalPleadingId válido,
+     normalmente obtido a partir do resultado do legal_pleading_list.
 
-REGRAS:
-- Para usar ferramenta, responda APENAS em JSON puro
-- Formato:
+REGRAS IMPORTANTES:
+- Se o usuário pedir detalhes de uma peça SEM informar ID:
+  1) PRIMEIRO chame legal_pleading_list
+     - Use search quando houver nome ou termo
+     - Use limit = 1
+     - Use ordenação para obter a peça mais recente
+  2) DEPOIS chame legal_pleading_get com o ID retornado
+- NUNCA invente IDs.
+- NUNCA responda com dados detalhados sem antes chamar legal_pleading_get.
+- Para usar ferramentas, responda APENAS em JSON puro, sem texto adicional.
+
+Formato obrigatório para uso de ferramenta:
 {
   "tool": "nome_da_ferramenta",
   "arguments": { ... }
@@ -110,6 +127,37 @@ REGRAS:
 
       case 'consultar_usuarios': {
         const result = await this.mcp.consultarUsuarios();
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'legal_pleading_list': {
+        const page = Number(toolCall.arguments.page);
+        const limit = Number(toolCall.arguments.limit);
+
+        const result = await this.mcp.legalPleadingList(
+          ListLegalPleadingRequestDto.build({
+            page,
+            limit,
+            field: toolCall.arguments.field,
+            search: toolCall.arguments.search,
+            searchBy: toolCall.arguments.searchBy,
+            sortField: toolCall.arguments.sortField,
+            status: toolCall.arguments.status as AnalysisStatusEnum,
+          }),
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'legal_pleading_get': {
+        const result = await this.mcp.legalPleadingGet(
+          toolCall.arguments.legalPleadingId,
+        );
 
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
