@@ -18,9 +18,7 @@ import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/pay
 import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 
 @Injectable()
-export class ValidateOrganizationPaymentPlanStatusUseCase
-  implements ValidateOrganizationPaymentPlanStatusUseCaseGateway
-{
+export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrganizationPaymentPlanStatusUseCaseGateway {
   protected readonly _type = ValidateOrganizationPaymentPlanStatusUseCase.name;
 
   public constructor(
