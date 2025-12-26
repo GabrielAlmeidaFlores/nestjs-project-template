@@ -71,7 +71,7 @@ export class GenerateYearlyPaymentBillingUseCase {
     let organizationPaymentPlan = new OrganizationPaymentPlanEntity({
       bankExternalId: Guid.toString(),
       name: paymentPlan.name,
-      description: paymentPlan.description,
+      description: `Cobrança - ${paymentPlan.name}`,
       price: paymentPlan.price,
       maxMemberCount: paymentPlan.maxMemberCount,
       monthlyCreditAmount: paymentPlan.monthlyCreditAmount,

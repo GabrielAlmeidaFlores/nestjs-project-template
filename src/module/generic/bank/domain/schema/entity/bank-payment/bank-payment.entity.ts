@@ -36,6 +36,12 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
   @Description('Código copia e cola do PIX')
   public readonly pixCopyPaste: string | null;
 
+  @Description('Descrição do pagamento')
+  public readonly description: string | null;
+
+  @Description('Comprovante do pagamento')
+  public readonly paymentReceipt: string | null;
+
   protected readonly _type = BankPaymentEntity.name;
 
   public constructor(props: BankPaymentEntityPropsInterface) {
@@ -50,5 +56,7 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
     this.installmentNumber = props.installmentNumber ?? null;
     this.pixQrCode = props.pixQrCode ?? null;
     this.pixCopyPaste = props.pixCopyPaste ?? null;
+    this.description = props.description ?? null;
+    this.paymentReceipt = props.paymentReceipt ?? null;
   }
 }

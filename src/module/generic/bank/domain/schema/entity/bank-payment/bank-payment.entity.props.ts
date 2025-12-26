@@ -5,8 +5,7 @@ import type { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entit
 import type { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import type { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 
-export interface BankPaymentEntityPropsInterface
-  extends BaseEntityPropsInterface<BankPaymentId> {
+export interface BankPaymentEntityPropsInterface extends BaseEntityPropsInterface<BankPaymentId> {
   bankExternalId: string;
   paymentMethod: PaymentMethodEnum;
   amount: DecimalValue;
@@ -16,4 +15,6 @@ export interface BankPaymentEntityPropsInterface
   installmentNumber?: number | null;
   pixQrCode?: Base64 | null;
   pixCopyPaste?: string | null;
+  description?: string | null;
+  paymentReceipt?: string | null;
 }

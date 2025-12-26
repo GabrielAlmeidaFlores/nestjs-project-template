@@ -68,6 +68,8 @@ export class BankPaymentEntityAutoMapperProfile {
         paymentDate: source.paymentDate,
         installmentNumber: source.installmentNumber,
         pixQrCode: source.pixQrCode?.toString() ?? null,
+        description: source.description,
+        paymentReceipt: source.paymentReceipt,
         pixCopyPaste: source.pixCopyPaste,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
