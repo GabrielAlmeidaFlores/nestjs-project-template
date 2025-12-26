@@ -146,7 +146,7 @@ export class AsaasService extends PaymentGateway {
       billingPixData = await this.makeRequest<
         Record<string, unknown>,
         { encodedImage: string; payload: string }
-      >(`payments/${billing.id}/pixQrCode`, 'get', data);
+      >(`payments/${billing.id}/pixQrCode`, 'get');
     } catch {}
 
     const outputData: {
@@ -248,14 +248,15 @@ export class AsaasService extends PaymentGateway {
   private async makeRequest<RequestBody, ResponseBody>(
     path: string,
     method: 'get' | 'post' | 'put' | 'delete',
-    dto?: RequestBody,
+    data?: RequestBody,
   ): Promise<ResponseBody> {
     try {
+      const url = `${PaymentGatewayApplicationVariable.BANK_API_DOMAIN}/${path}`;
       const response = await this.httpService
         .request<ResponseBody>({
-          url: `${PaymentGatewayApplicationVariable.BANK_API_DOMAIN}/${path}`,
+          url,
           method,
-          data: dto,
+          data,
           ...this.config,
         })
         .toPromise();
