@@ -34,4 +34,8 @@ export abstract class OrganizationPaymentPlanBankPaymentQueryRepositoryGateway {
   public abstract findManyOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(
     organizationPaymentPlanId: OrganizationPaymentPlanId,
   ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult[]>;
+
+  public abstract findManyOrganizationPaymentPlanBankPaymentByBankPaymentId(
+    bankPayment: BankPaymentId,
+  ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult[]>;
 }
