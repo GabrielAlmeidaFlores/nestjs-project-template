@@ -44,6 +44,7 @@ import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/us
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
+import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
@@ -94,6 +95,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListRetirementPlanningRgpsPeriodUseCase,
     CompareRetirementPlanningRgpsCnisCtpsUseCase,
     CreateRetirementPlanningRgpsTimeAcceleratorUseCase,
+    ListRetirementPlanningRgpsTimeAcceleratorUseCase,
     DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
     AnalyzeRuralTimeUseCase,
     AnalyzeApprenticeStudentUseCase,
