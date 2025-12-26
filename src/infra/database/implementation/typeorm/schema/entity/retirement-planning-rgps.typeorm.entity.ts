@@ -6,6 +6,7 @@ import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/
 import { RetirementPlanningRgpsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-legal-proceeding.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-result.typeorm.entity';
+import { RetirementPlanningRgpsTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-time-accelerator.typeorm.entity';
 
 @Entity({ name: 'retirement_planning_rgps' })
 export class RetirementPlanningRgpsTypeormEntity extends BaseTypeormEntity {
@@ -57,6 +58,14 @@ export class RetirementPlanningRgpsTypeormEntity extends BaseTypeormEntity {
   )
   public retirementPlanningRgpsAnalysisResult?:
     | RetirementPlanningRgpsAnalysisResultTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RetirementPlanningRgpsTimeAcceleratorTypeormEntity,
+    (entity) => entity.retirementPlanningRgps,
+  )
+  public timeAccelerators?:
+    | RetirementPlanningRgpsTimeAcceleratorTypeormEntity[]
     | undefined;
 
   protected override readonly _type = RetirementPlanningRgpsTypeormEntity.name;

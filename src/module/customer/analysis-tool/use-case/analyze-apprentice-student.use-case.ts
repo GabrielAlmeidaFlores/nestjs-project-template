@@ -100,6 +100,21 @@ export class AnalyzeApprenticeStudentUseCase {
       INSTRUÇÕES DE TOM E COMPORTAMENTO
       Foco na Remuneração Indireta: Ao analisar certidões antigas, busque termos como "fardamento", "alimentação", "pecúlio", "encomendas". Se encontrar, destaque isso na conclusão como fundamento para a Viabilidade Alta.
       Rigor da TNU: Se o documento não mencionar bens/serviços para terceiros ou contrapartida orçamentária, alerte que a viabilidade é prejudicada pelo Tema 216 da TNU.
+    
+      Depois de processar os arquivos, responda no seguinte formato:
+      json {
+        tipo: "Tempo rural|Serviço Militar|Serviço Público|CTPS fora do CNIS|Aluno-Aprendiz|Trabalho no Exterior|Trabalho Informal|Sentença Trabalhista",
+        nome: "Maria Santos",
+        empresa: "Lotes LTDA",
+        periodoInicio:  "2024-10-15",
+        periodoFim: "2024-10-15",        
+        viabilidade: "Alta|Média|Baixa",
+        reconhecimentoINSS: "Provável|Parcial|Improvável",
+        impactoCarencia: "true|false",
+        reconhecimentoJudicial: "Favorável",
+        tempoContribuicao: "2 anos e 3 meses",
+        observacaoTecnica: "Tempo rural bem documentado, mas atenção à necessidade de indenização para período pós 31/10/1991."
+      }
     `;
 
     const files: Buffer[] = [];
