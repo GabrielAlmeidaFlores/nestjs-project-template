@@ -378,6 +378,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       )[0];
       if (nextPending) {
         response.nextDueDate = nextPending.dueDate;
+      } else if (
+        confirmedPayments[0]?.paymentDate &&
+        organizationPaymentPlan.totalInstallments !== null &&
+        bankPayments.length > organizationPaymentPlan.totalInstallments
+      ) {
+        response.nextDueDate = moment(confirmedPayments[0].paymentDate)
+          .add(1, 'month')
+          .toDate();
       }
     }
 
