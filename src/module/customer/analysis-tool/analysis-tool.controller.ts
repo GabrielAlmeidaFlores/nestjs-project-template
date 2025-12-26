@@ -12,6 +12,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
 import { AnalyzeRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-cnis.request.dto';
 import { CompareRetirementPlanningRgpsCnisCtpsRequestDto } from '@module/customer/analysis-tool/dto/request/compare-retirement-planning-rgps-cnis-ctps.request.dto';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
@@ -40,6 +41,7 @@ import { CreateRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/
 import { CreateRetirementPlanningRgpsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
+import { DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/dto/response/delete-retirement-planning-rgps-time-accelerator.response.dto';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
@@ -71,6 +73,7 @@ import { CreateRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/cust
 import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
+import { DeleteRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/delete-retirement-planning-rgps-time-accelerator.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
@@ -137,6 +140,7 @@ export class AnalysisToolController {
     private readonly analyzePublicServiceUseCase: AnalyzePublicServiceUseCase,
     private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeRuralTimeUseCase,
     private readonly createRetirementPlanningRgpsTimeAcceleratorUseCase: CreateRetirementPlanningRgpsTimeAcceleratorUseCase,
+    private readonly deleteRetirementPlanningRgpsTimeAcceleratorUseCase: DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1096,7 +1100,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Criar um registro na tabela de acelerador de tempo',
-    // userLevel: [UserLevelEnum.CUSTOMER],
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'retirement-planning-rgps-time-accelerator',
       method: RequestMethod.POST,
@@ -1109,13 +1113,41 @@ export class AnalysisToolController {
         'Registro na tabela de acelerador de tempo criado com sucesso.',
       type: CreateRetirementPlanningRgpsTimeAcceleratorResponseDto,
     },
-    // guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createRetirementPlanningRgpsTimeAccelerator(
     @Body() dto: CreateRetirementPlanningRgpsTimeAcceleratorRequestDto,
   ): Promise<CreateRetirementPlanningRgpsTimeAcceleratorResponseDto> {
     return await this.createRetirementPlanningRgpsTimeAcceleratorUseCase.execute(
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar um registro na tabela de acelerador de tempo',
+    // userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps-time-accelerator/:acceleratorId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Registro na tabela de acelerador de tempo deletado com sucesso.',
+      type: DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto,
+    },
+    // guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRetirementPlanningRgpsTimeAccelerator(
+    @Param(
+      'acceleratorId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsTimeAcceleratorId),
+    )
+    acceleratorId: RetirementPlanningRgpsTimeAcceleratorId,
+  ): Promise<DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto> {
+    return await this.deleteRetirementPlanningRgpsTimeAcceleratorUseCase.execute(
+      acceleratorId,
     );
   }
 }

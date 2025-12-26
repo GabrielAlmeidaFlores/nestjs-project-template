@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
@@ -34,7 +34,7 @@ export class RetirementPlanningRgpsTimeAcceleratorTypeormQueryRepository
   ): Promise<GetRetirementPlanningRgpsTimeAcceleratorQueryResult> {
     const data = await this.findOneOrFail(
       {
-        where: { id: id.toString() },
+        where: { id: id.toString(), deletedAt: IsNull() },
       },
       err,
     );
