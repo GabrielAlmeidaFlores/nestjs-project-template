@@ -540,6 +540,17 @@ export class SendMessageToConversationUseCase {
       }
     }
 
+    if (toolCall.tool === 'analysis_tool_client_get') {
+      const id =
+        baseArgs['analysisToolClientId'] ??
+        baseArgs['analysis_tool_client_id'] ??
+        baseArgs['id'];
+
+      if (typeof id === 'string') {
+        normalizedArgs = { analysisToolClientId: id };
+      }
+    }
+
     const args = this.isLikelyListTool(toolCall.tool)
       ? this.normalizePaginationArgs(normalizedArgs)
       : normalizedArgs;

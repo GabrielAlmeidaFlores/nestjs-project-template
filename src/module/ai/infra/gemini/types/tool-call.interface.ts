@@ -54,6 +54,13 @@ export interface AnalysisToolClientListToolCallInterface {
     status: string;
   };
 }
+
+export interface AnalysisToolClientGetToolCallInterface {
+  tool: 'analysis_tool_client_get';
+  arguments: {
+    analysisToolClientId: AnalysisToolClientId;
+  };
+}
 export interface AiTextContentInterface {
   type: 'text';
   text: string;
@@ -69,4 +76,5 @@ export type AiToolCallType =
   | LegalPleadingListToolCallInterface
   | AnalysisToolRecordListToolCallInterface
   | CnisFastAnalysisGetToolCallInterface
-  | AnalysisToolClientListToolCallInterface;
+  | AnalysisToolClientListToolCallInterface
+  | AnalysisToolClientGetToolCallInterface;
