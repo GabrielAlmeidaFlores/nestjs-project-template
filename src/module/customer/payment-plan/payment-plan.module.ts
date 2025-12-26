@@ -9,6 +9,7 @@ import { GenerateMonthlyPaymentBillingUseCase } from '@module/customer/payment-p
 import { GenerateYearlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-yearly-payment-billing.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
 import { GetPaymentPlanPaidResourcePromptUseCase } from '@module/customer/payment-plan/use-case/get-payment-plan-paid-resource-prompt.use-case';
+import { ListBankPaymentsByOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/list-bank-payments-by-organization-payment-plan.use-case';
 import { ListPaymentPlanPaidResourcesUseCase } from '@module/customer/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
@@ -49,6 +50,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
       provide: GetPaymentPlanPaidResourcePromptUseCaseGateway,
       useClass: GetPaymentPlanPaidResourcePromptUseCase,
     },
+    ListBankPaymentsByOrganizationPaymentPlanUseCase,
   ],
   exports: [
     ValidateOrganizationPaymentPlanStatusUseCaseGateway,

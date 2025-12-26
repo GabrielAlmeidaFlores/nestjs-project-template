@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import moment from 'moment';
 
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
@@ -18,9 +19,7 @@ import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/pay
 import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 
 @Injectable()
-export class ValidateOrganizationPaymentPlanStatusUseCase
-  implements ValidateOrganizationPaymentPlanStatusUseCaseGateway
-{
+export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrganizationPaymentPlanStatusUseCaseGateway {
   protected readonly _type = ValidateOrganizationPaymentPlanStatusUseCase.name;
 
   public constructor(
@@ -77,12 +76,12 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
       organizationPaymentPlan,
       bankPayments,
       enabledPaidResources.map((resource) => {
-        const dto = new EnabledPaidResourceItemDto();
-        dto.id = resource.paymentPlanPaidResource.id;
-        dto.resource = resource.paymentPlanPaidResource.resource;
-        dto.creditCost = resource.paymentPlanPaidResource.creditCost;
-        dto.description = resource.paymentPlanPaidResource.description;
-        return dto;
+        return EnabledPaidResourceItemDto.build({
+          id: resource.paymentPlanPaidResource.id,
+          resource: resource.paymentPlanPaidResource.resource,
+          creditCost: resource.paymentPlanPaidResource.creditCost,
+          description: resource.paymentPlanPaidResource.description,
+        });
       }),
     );
   }
@@ -135,6 +134,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
 
+    const firstBankPayment = bankPayments.sort(
+      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+    )[0];
+
+    if (firstBankPayment?.paymentDate) {
+      response.accessionDate = firstBankPayment.paymentDate;
+    }
+
     if (bankPayments.length === 0) {
       response.isActive = false;
       response.hasOverduePayments = false;
@@ -143,7 +150,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
       return response;
     }
 
-    const now = new Date();
+    const now = moment().startOf('day').toDate();
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
@@ -182,7 +189,21 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
     const pendingPayments = bankPayments
       .filter((p) => p.status === PaymentStatusEnum.PENDING && p.dueDate >= now)
       .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-    const nextPendingPayment = pendingPayments[0];
+    const lastPendingPayment = pendingPayments[0];
+
+    const confirmedPayments = bankPayments
+      .filter((p) => p.status === PaymentStatusEnum.CONFIRMED)
+      .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    const lastConfirmedPayment = confirmedPayments[0];
+
+    if (
+      bankPayments.length === 1 &&
+      bankPayments[0] &&
+      bankPayments[0].status === PaymentStatusEnum.PENDING
+    ) {
+      isActive = true;
+      response.accessionDate = bankPayments[0].createdAt;
+    }
 
     response.isActive = isActive;
     response.hasOverduePayments = overduePayments.length > 0;
@@ -195,8 +216,12 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
       }
     }
 
-    if (nextPendingPayment) {
-      response.nextDueDate = nextPendingPayment.dueDate;
+    if (lastPendingPayment) {
+      response.nextDueDate = lastPendingPayment.dueDate;
+    } else if (lastConfirmedPayment?.dueDate) {
+      response.nextDueDate = moment(lastConfirmedPayment.dueDate)
+        .add(1, 'month')
+        .toDate();
     }
 
     return response;
@@ -215,6 +240,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
+
+    const firstBankPayment = bankPayments.sort(
+      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+    )[0];
+
+    if (firstBankPayment?.paymentDate) {
+      response.accessionDate = firstBankPayment.paymentDate;
+    }
 
     const confirmedPayments = bankPayments.filter(
       (p) => p.status === PaymentStatusEnum.CONFIRMED,
@@ -271,6 +304,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
+
+    const firstBankPayment = bankPayments.sort(
+      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+    )[0];
+
+    if (firstBankPayment?.paymentDate) {
+      response.accessionDate = firstBankPayment.paymentDate;
+    }
 
     if (bankPayments.length === 0) {
       response.isActive = false;
@@ -337,6 +378,14 @@ export class ValidateOrganizationPaymentPlanStatusUseCase
       )[0];
       if (nextPending) {
         response.nextDueDate = nextPending.dueDate;
+      } else if (
+        confirmedPayments[0]?.paymentDate &&
+        organizationPaymentPlan.totalInstallments !== null &&
+        bankPayments.length > organizationPaymentPlan.totalInstallments
+      ) {
+        response.nextDueDate = moment(confirmedPayments[0].paymentDate)
+          .add(1, 'month')
+          .toDate();
       }
     }
 
