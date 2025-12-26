@@ -43,6 +43,7 @@ import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
+import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
@@ -90,6 +91,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRetirementPlanningRgpsUseCase,
     CreateRetirementPlanningRgpsCnisUseCase,
     CreateRetirementPlanningRgpsPeriodUseCase,
+    ListRetirementPlanningRgpsPeriodUseCase,
     CompareRetirementPlanningRgpsCnisCtpsUseCase,
     CreateRetirementPlanningRgpsTimeAcceleratorUseCase,
     DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
