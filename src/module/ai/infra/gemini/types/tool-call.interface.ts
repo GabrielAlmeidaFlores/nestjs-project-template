@@ -42,6 +42,18 @@ export interface CnisFastAnalysisGetToolCallInterface {
     cnisFastAnalysisId: CnisFastAnalysisId;
   };
 }
+
+export interface AnalysisToolClientListToolCallInterface {
+  tool: 'analysis_tool_client_list';
+  arguments: {
+    page: number;
+    limit: number;
+    search: string;
+    sortField: string;
+    field: string;
+    status: string;
+  };
+}
 export interface AiTextContentInterface {
   type: 'text';
   text: string;
@@ -56,4 +68,5 @@ export type AiToolCallType =
   | LegalPleadingGetToolCallInterface
   | LegalPleadingListToolCallInterface
   | AnalysisToolRecordListToolCallInterface
-  | CnisFastAnalysisGetToolCallInterface;
+  | CnisFastAnalysisGetToolCallInterface
+  | AnalysisToolClientListToolCallInterface;

@@ -5,6 +5,7 @@ import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 import type { ListToolsResult } from '@modelcontextprotocol/sdk/types';
 
@@ -65,5 +66,11 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
     dto: CnisFastAnalysisId,
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
     return this.client.callTool('cnis_fast_analysis_get', { ...dto });
+  }
+
+  public async analysisToolClientList(
+    dto: ListDataRequestDto,
+  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('analysis_tool_client_list', { ...dto });
   }
 }
