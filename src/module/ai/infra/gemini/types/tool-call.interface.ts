@@ -1,11 +1,7 @@
+import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-
-export interface ConsultarPjeToolCallInterface {
-  tool: 'consultar_pje';
-  arguments: {
-    numeroProcesso: string;
-  };
-}
+import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 export interface LegalPleadingListToolCallInterface {
   tool: 'legal_pleading_list';
@@ -15,8 +11,23 @@ export interface LegalPleadingListToolCallInterface {
     search: string;
     sortField: string;
     field: string;
+    status: AnalysisStatusEnum;
+    searchBy: string;
+  };
+}
+
+export interface AnalysisToolRecordListToolCallInterface {
+  tool: 'analysis_tool_record_list';
+  arguments: {
+    page: number;
+    limit: number;
+    search: string;
+    sortField: string;
+    field: string;
     status: string;
     searchBy: string;
+    type: AnalysisToolRecordTypeEnum;
+    analysisToolClientId: AnalysisToolClientId;
   };
 }
 
@@ -26,12 +37,6 @@ export interface LegalPleadingGetToolCallInterface {
     legalPleadingId: LegalPleadingId;
   };
 }
-
-export interface ConsultarUsuariosToolCallInterface {
-  tool: 'consultar_usuarios';
-  arguments: Record<string, never>;
-}
-
 export interface AiTextContentInterface {
   type: 'text';
   text: string;
@@ -43,7 +48,6 @@ export interface AiResponseInterface {
 }
 
 export type AiToolCallType =
-  | ConsultarPjeToolCallInterface
   | LegalPleadingGetToolCallInterface
   | LegalPleadingListToolCallInterface
-  | ConsultarUsuariosToolCallInterface;
+  | AnalysisToolRecordListToolCallInterface;

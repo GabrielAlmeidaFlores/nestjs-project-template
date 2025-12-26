@@ -7,7 +7,7 @@ import {
   AiToolCallType,
 } from '@module/ai/infra/gemini/types/tool-call.interface';
 import { McpUseCase } from '@module/ai/infra/mcp/use-case/mcp.use-case';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
+import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 
 @Injectable()
@@ -57,6 +57,33 @@ Você é um assistente com acesso às seguintes ferramentas:
    - Use esta ferramenta SOMENTE quando você já tiver um legalPleadingId válido,
      normalmente obtido a partir do resultado do legal_pleading_list.
 
+3. analysis_tool_record_list
+   - Descrição: Lista os registros de análises do usuário/organização autenticados (histórico de análises realizadas no sistema).
+   - Use esta ferramenta quando o usuário pedir:
+     - listar registros de análises / histórico de análises
+     - buscar análise por termo, filtro ou tipo
+     - ver as análises mais recentes
+     - localizar análises de um cliente específico (quando houver um analysisToolClientId)
+   - Parâmetros aceitos:
+     - page (number): página (padrão 1)
+     - limit (number): itens por página (padrão 10)
+     - search (string, opcional): termo livre de busca
+     - searchBy (string, opcional): campo/critério de busca suportado pela API
+     - sortField (string, opcional): ordenação (ex.: "-createdAt" para mais recentes primeiro)
+     - field (string, opcional): seleção de campos/visão (se suportado)
+     - type (AnalysisToolRecordTypeEnum, opcional): filtra pelo tipo de registro de análise
+     - analysisToolClientId (AnalysisToolClientId, opcional): filtra pelos registros vinculados a um cliente específico
+   - Observações:
+     - Para “mais recente”, use sortField = "-createdAt" e limit = 1.
+     - Se o usuário pedir detalhes de um registro específico, primeiro liste para obter o identificador adequado e então chame a ferramenta de detalhes (se existir).
+
+     Exemplo (mais recente):
+{
+  "tool": "analysis_tool_record_list",
+  "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
+}
+
+
 REGRAS IMPORTANTES:
 - Se o usuário pedir detalhes de uma peça SEM informar ID:
   1) PRIMEIRO chame legal_pleading_list
@@ -74,6 +101,61 @@ Formato obrigatório para uso de ferramenta:
   "arguments": { ... }
 }
 `;
+  }
+
+  private async executeTool(
+    toolCall: AiToolCallType,
+  ): Promise<AiResponseInterface> {
+    switch (toolCall.tool) {
+      case 'legal_pleading_list': {
+        const page = Number(toolCall.arguments.page);
+        const limit = Number(toolCall.arguments.limit);
+
+        const result = await this.mcp.legalPleadingList(
+          ListLegalPleadingRequestDto.build({
+            ...toolCall.arguments,
+            page,
+            limit,
+          }),
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'legal_pleading_get': {
+        const result = await this.mcp.legalPleadingGet(
+          toolCall.arguments.legalPleadingId,
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'analysis_tool_record_list': {
+        const page = Number(toolCall.arguments.page);
+        const limit = Number(toolCall.arguments.limit);
+
+        const type = toolCall.arguments.type;
+        const analysisToolClientId = toolCall.arguments.analysisToolClientId;
+
+        const result = await this.mcp.analysisToolRecordList(
+          ListAnalysisToolRecordRequestDto.build({
+            ...toolCall.arguments,
+            page,
+            limit,
+            type,
+            analysisToolClientId,
+          }),
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+    }
   }
 
   private isToolCall(value: unknown): value is AiToolCallType {
@@ -108,61 +190,6 @@ Formato obrigatório para uso de ferramenta:
       return null;
     } catch {
       return null;
-    }
-  }
-
-  private async executeTool(
-    toolCall: AiToolCallType,
-  ): Promise<AiResponseInterface> {
-    switch (toolCall.tool) {
-      case 'consultar_pje': {
-        const result = await this.mcp.consultarPje(
-          toolCall.arguments.numeroProcesso,
-        );
-
-        return {
-          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case 'consultar_usuarios': {
-        const result = await this.mcp.consultarUsuarios();
-
-        return {
-          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case 'legal_pleading_list': {
-        const page = Number(toolCall.arguments.page);
-        const limit = Number(toolCall.arguments.limit);
-
-        const result = await this.mcp.legalPleadingList(
-          ListLegalPleadingRequestDto.build({
-            page,
-            limit,
-            field: toolCall.arguments.field,
-            search: toolCall.arguments.search,
-            searchBy: toolCall.arguments.searchBy,
-            sortField: toolCall.arguments.sortField,
-            status: toolCall.arguments.status as AnalysisStatusEnum,
-          }),
-        );
-
-        return {
-          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case 'legal_pleading_get': {
-        const result = await this.mcp.legalPleadingGet(
-          toolCall.arguments.legalPleadingId,
-        );
-
-        return {
-          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-        };
-      }
     }
   }
 
