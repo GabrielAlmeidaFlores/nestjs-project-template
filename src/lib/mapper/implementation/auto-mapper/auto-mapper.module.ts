@@ -60,6 +60,8 @@ import { RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile } from '@l
 import { RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/retirement-planning-rgps-period-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-result/retirement-planning-rgps-result-entity.auto-mapper.profile';
+import { GetRetirementPlanningRgpsSpecialPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-special-period/get-retirement-planning-rgps-special-period-query-result.auto-mapper.profile';
+import { RetirementPlanningRgpsSpecialPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-special-period/retirement-planning-rgps-special-period-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-time-accelerator/get-retirement-planning-rgps-time-accelerator-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
@@ -125,6 +127,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
     RetirementPlanningRgpsPeriodEntityAutoMapperProfile,
+    RetirementPlanningRgpsSpecialPeriodEntityAutoMapperProfile,
     RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile,
     RetirementPlanningRgpsEntityAutoMapperProfile,
     RetirementPlanningRgpsInssBenefitEntityAutoMapperProfile,
@@ -133,6 +136,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     GetRetirementPlanningRgpsAnalysisResultQueryResultAutoMapperProfile,
     RetirementPlanningRgpsTimeAcceleratorEntityAutoMapperProfile,
     GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfile,
+    GetRetirementPlanningRgpsSpecialPeriodQueryResultAutoMapperProfile,
     RetirementPlanningRgpsResultEntityAutoMapperProfile,
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,

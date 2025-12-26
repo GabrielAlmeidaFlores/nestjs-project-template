@@ -6,6 +6,7 @@ import { RetirementPlanningRgpsInssBenefitTypeormEntity } from '@infra/database/
 import { RetirementPlanningRgpsLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-legal-proceeding.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-result.typeorm.entity';
+import { RetirementPlanningRgpsSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-special-period.typeorm.entity';
 import { RetirementPlanningRgpsTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-time-accelerator.typeorm.entity';
 
 @Entity({ name: 'retirement_planning_rgps' })
@@ -66,6 +67,14 @@ export class RetirementPlanningRgpsTypeormEntity extends BaseTypeormEntity {
   )
   public timeAccelerators?:
     | RetirementPlanningRgpsTimeAcceleratorTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RetirementPlanningRgpsSpecialPeriodTypeormEntity,
+    (entity) => entity.retirementPlanningRgps,
+  )
+  public specialTimePeriods?:
+    | RetirementPlanningRgpsSpecialPeriodTypeormEntity[]
     | undefined;
 
   protected override readonly _type = RetirementPlanningRgpsTypeormEntity.name;
