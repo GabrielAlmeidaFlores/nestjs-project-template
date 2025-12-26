@@ -103,6 +103,40 @@ Exemplo:
   "arguments": { "cnisFastAnalysisId": "..." }
 }
 
+5. analysis_tool_client_list
+   - Descrição: Lista os clientes do módulo Analysis Tool (AnalysisToolClient) vinculados ao usuário/organização autenticados.
+     Um "Analysis Tool Client" representa a entidade de cliente/pessoa/parte analisada no sistema, e é usada para
+     filtrar históricos e resultados de análises (por exemplo, usando analysisToolClientId em outras ferramentas).
+   - Use esta ferramenta quando o usuário pedir:
+     - listar clientes do analysis tool
+     - buscar um cliente por nome, CPF/CNPJ, e-mail, telefone, número de processo, ou termo livre
+     - “qual é o cliente X?”
+     - localizar o analysisToolClientId para então consultar análises/histórico de um cliente
+     - ver os clientes mais recentes cadastrados/criados (se a API suportar ordenação por createdAt)
+   - Parâmetros aceitos:
+     - page (number): página (padrão 1)
+     - limit (number): itens por página (padrão 10)
+     - search (string, opcional): termo livre de busca (ex.: nome, documento, parte, etc.)
+     - searchBy (string, opcional): critério/campo de busca suportado pela API (ex.: "name", "document", etc.)
+     - sortField (string, opcional): ordenação (ex.: "-createdAt" para mais recentes primeiro, se suportado)
+     - field (string, opcional): seleção de campos/visão (se suportado)
+     - status (string, opcional): filtro de status do cliente (se suportado)
+   - Observações:
+     - Se o usuário pedir “cliente mais recente”, use sortField = "-createdAt" e limit = 1 (se suportado).
+     - Se o usuário pedir detalhes de um cliente e existir uma ferramenta de detalhes (ex.: analysis_tool_client_get),
+       primeiro liste para obter o analysisToolClientId e então chame o get.
+
+Exemplo (buscar por nome):
+{
+  "tool": "analysis_tool_client_list",
+  "arguments": { "page": 1, "limit": 10, "search": "Maria Silva" }
+}
+
+Exemplo (mais recente):
+{
+  "tool": "analysis_tool_client_list",
+  "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
+}
 
 
 REGRAS IMPORTANTES:
@@ -180,6 +214,23 @@ Formato obrigatório para uso de ferramenta:
       case 'cnis_fast_analysis_get': {
         const result = await this.mcp.cnisFastAnalysisGet(
           toolCall.arguments.cnisFastAnalysisId,
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'analysis_tool_client_list': {
+        const page = Number(toolCall.arguments.page);
+        const limit = Number(toolCall.arguments.limit);
+
+        const result = await this.mcp.analysisToolClientList(
+          ListAnalysisToolRecordRequestDto.build({
+            ...toolCall.arguments,
+            page,
+            limit,
+          }),
         );
 
         return {
