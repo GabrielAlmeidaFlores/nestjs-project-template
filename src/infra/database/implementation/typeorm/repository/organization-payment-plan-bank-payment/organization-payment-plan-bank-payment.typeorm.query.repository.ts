@@ -178,4 +178,25 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
 
     return resources;
   }
+
+  public async findManyOrganizationPaymentPlanBankPaymentByBankPaymentId(
+    bankPaymentId: BankPaymentId,
+  ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult[]> {
+    const data = await this.repository.find({
+      where: {
+        bankPayment: {
+          id: bankPaymentId.toString(),
+        },
+      },
+      relations: ['organizationPaymentPlan', 'bankPayment'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationPaymentPlanBankPaymentTypeormEntity,
+      GetOrganizationPaymentPlanBankPaymentQueryResult,
+    );
+  }
 }
