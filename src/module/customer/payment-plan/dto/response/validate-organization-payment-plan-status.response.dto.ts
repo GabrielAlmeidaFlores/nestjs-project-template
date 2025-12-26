@@ -57,6 +57,13 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
   })
   public nextDueDate?: Date;
 
+  @ResponseDtoDateProperty({
+    required: false,
+    description:
+      'Data de adesão da organização ao plano de pagamento. Retorna undefined caso não haja data de adesão registrada.',
+  })
+  public accessionDate?: Date;
+
   @ResponseDtoStringProperty({
     description:
       'Nome do plano de pagamento contratado pela organização (ex: Plano Premium, Plano Básico, etc).',

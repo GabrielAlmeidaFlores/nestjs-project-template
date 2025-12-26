@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
@@ -13,10 +14,13 @@ import { CustomerAddressEntity } from '@module/customer/account/domain/schema/en
 import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
+import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
 import { ValidateAuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/validate-auth-identity-sign-up.request.dto';
 import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
+import { SetAuthTokenCookieUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/set-auth-token-cookie.use-case-gateway';
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
 
@@ -41,9 +45,14 @@ export class CustomerSignUpUseCase {
     private readonly authIdentitySignUpUseCasePort: AuthIdentitySignUpUseCaseGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
+    @Inject(SetOrganizationCookieUseCaseGateway)
+    private readonly setOrganizationCookieUseCaseGateway: SetOrganizationCookieUseCaseGateway,
+    @Inject(SetAuthTokenCookieUseCaseGateway)
+    private readonly setAuthTokenCookieUseCaseGateway: SetAuthTokenCookieUseCaseGateway,
   ) {}
 
   public async execute(
+    reply: FastifyReply,
     dto: CustomerSignUpRequestDto,
   ): Promise<CustomerSignUpResponseDto> {
     const customerAddress = new CustomerAddressEntity({
@@ -113,11 +122,24 @@ export class CustomerSignUpUseCase {
 
     await transaction.commit();
 
-    await this.authIdentitySignUpUseCasePort.execute(
-      AuthIdentitySignUpRequestDto.build({
-        ...dto,
-        customer: customer.id,
-      }),
+    const signupAsAuthIdentity =
+      await this.authIdentitySignUpUseCasePort.execute(
+        AuthIdentitySignUpRequestDto.build({
+          ...dto,
+          customer: customer.id,
+        }),
+      );
+
+    this.setOrganizationCookieUseCaseGateway.execute(
+      reply,
+      organization.id,
+      true,
+    );
+
+    await this.setAuthTokenCookieUseCaseGateway.execute(
+      reply,
+      signupAsAuthIdentity.authIdentityId,
+      UserLevelEnum.CUSTOMER,
     );
 
     return CustomerSignUpResponseDto.build({

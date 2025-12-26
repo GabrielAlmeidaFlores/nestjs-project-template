@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
@@ -118,12 +117,10 @@ export class GenerateYearlyPaymentBillingUseCase {
         bankExternalId: createBillingResult.installment,
       });
 
-      const amount = paymentPlan.price.toNumber() / dto.installments;
-
       const bankPayment = new BankPaymentEntity({
         bankExternalId: createBillingResult.id,
         paymentMethod: PaymentMethodEnum.UNDEFINED,
-        amount: new DecimalValue(amount.toFixed(2)),
+        amount: createBillingResult.value,
         status: PaymentStatusEnum.PENDING,
         dueDate,
         paymentDate: null,

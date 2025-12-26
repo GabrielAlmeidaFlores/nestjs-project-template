@@ -36,7 +36,12 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
   ): Promise<
     ListDataOutputModel<GetOrganizationPaymentPlanBankPaymentQueryResult>
   > {
-    const data = await this.list(listData);
+    const data = await this.list(listData, {
+      relations: {
+        bankPayment: true,
+        organizationPaymentPlan: true,
+      },
+    });
 
     const mappedData = this.mapperGateway.mapArray(
       data.resource,

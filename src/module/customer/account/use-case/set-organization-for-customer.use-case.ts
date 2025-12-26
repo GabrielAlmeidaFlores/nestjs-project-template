@@ -5,8 +5,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { OrganizationNotAvailableForCustomerError } from '@module/customer/account/error/organization-not-available-for-customer.error';
-import { OrganizationSessionGateway } from '@module/customer/account/lib/organization-session/organization-session.gateway';
-import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
+import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
 
 import type { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -16,12 +15,12 @@ export class SetOrganizationForCustomerUseCase {
   protected readonly _type = SetOrganizationForCustomerUseCase.name;
 
   public constructor(
-    @Inject(OrganizationSessionGateway)
-    private readonly organizationSessionGateway: OrganizationSessionGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(SetOrganizationCookieUseCaseGateway)
+    private readonly setOrganizationCookieUseCaseGateway: SetOrganizationCookieUseCaseGateway,
   ) {}
 
   public async execute(
@@ -45,21 +44,11 @@ export class SetOrganizationForCustomerUseCase {
       throw new OrganizationNotAvailableForCustomerError();
     }
 
-    const jwtOrganizationSession =
-      this.organizationSessionGateway.createSession(
-        dto.organizationId,
-        organizationMember.owner,
-      );
-
-    const sevenDaysInSeconds = 604800;
-
-    reply.setCookie(ApiCookieEnum.ORGANIZATION, jwtOrganizationSession, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: sevenDaysInSeconds,
-    });
+    this.setOrganizationCookieUseCaseGateway.execute(
+      reply,
+      dto.organizationId,
+      organizationMember.owner,
+    );
 
     return SetOrganizationForCustomerResponseDto.build({
       owner: organizationMember.owner,
