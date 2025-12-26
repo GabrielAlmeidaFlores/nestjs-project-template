@@ -60,6 +60,7 @@ import { RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile } from '@l
 import { RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/retirement-planning-rgps-period-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-result/retirement-planning-rgps-result-entity.auto-mapper.profile';
+import { GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-time-accelerator/get-retirement-planning-rgps-time-accelerator-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsTimeAcceleratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator-entity.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-with-relations-query-result.auto-mapper.profile';
@@ -131,6 +132,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     RetirementPlanningRgpsAnalysisResultEntityAutoMapperProfile,
     GetRetirementPlanningRgpsAnalysisResultQueryResultAutoMapperProfile,
     RetirementPlanningRgpsTimeAcceleratorEntityAutoMapperProfile,
+    GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfile,
     RetirementPlanningRgpsResultEntityAutoMapperProfile,
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
