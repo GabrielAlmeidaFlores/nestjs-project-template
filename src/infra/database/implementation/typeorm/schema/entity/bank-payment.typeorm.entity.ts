@@ -12,6 +12,7 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
 
   @Column({ name: 'payment_receipt', type: 'text', nullable: true })
   public paymentReceipt: string | null;
+
   @Column({
     name: 'bank_external_id',
     type: 'varchar',
