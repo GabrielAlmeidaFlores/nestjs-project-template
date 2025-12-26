@@ -71,6 +71,7 @@ import { DatabaseApplicationVariable } from '@shared/system/constant/application
 import type { Provider } from '@nestjs/common';
 import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import type { DataSourceOptions } from 'typeorm';
+import { RetirementPlanningRgpsSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-special-period.typeorm.entity';
 
 export class TypeormIndex {
   public static readonly entities: EntityClassOrSchema[] = [
@@ -104,6 +105,7 @@ export class TypeormIndex {
     RetirementPlanningRgpsPeriodDocumentTypeormEntity,
     RetirementPlanningRgpsAnalysisResultTypeormEntity,
     RetirementPlanningRgpsTimeAcceleratorTypeormEntity,
+    RetirementPlanningRgpsSpecialPeriodTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

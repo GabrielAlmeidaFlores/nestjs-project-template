@@ -13,9 +13,11 @@ import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-c
 import { AnalyzeLaborCourtDecisionUseCase } from '@module/customer/analysis-tool/use-case/analyze-labor-court-decision.use-case';
 import { AnalyzeMilitaryServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-military-service.use-case';
 import { AnalyzePublicServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-public-service.use-case';
+import { AnalyzeRetirementPlanningRgpsPppUseCase } from '@module/customer/analysis-tool/use-case/analyze-retirement-planning-rgps-ppp.use-case';
 import { AnalyzeRuralTimeUseCase } from '@module/customer/analysis-tool/use-case/analyze-rural-time.use-case';
 import { AnalyzeWorkAbroadUseCase } from '@module/customer/analysis-tool/use-case/analyze-work-abroad.use-case';
 import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
+import { ConvertRetirementPlanningRgpsSpecialPeriodUseCase } from '@module/customer/analysis-tool/use-case/convert-retirement-planning-rgps-special-period.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
@@ -94,6 +96,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalyzeRuralTimeUseCase,
     AnalyzeApprenticeStudentUseCase,
     AnalyzeWorkAbroadUseCase,
+    AnalyzeRetirementPlanningRgpsPppUseCase,
+    ConvertRetirementPlanningRgpsSpecialPeriodUseCase,
     AnalyzeInformalWorkUseCase,
     AnalyzeLaborCourtDecisionUseCase,
     AnalyzeMilitaryServiceUseCase,
