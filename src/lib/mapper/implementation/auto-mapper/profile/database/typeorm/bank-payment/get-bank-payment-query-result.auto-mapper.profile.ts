@@ -33,6 +33,8 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
         status: source.status,
         dueDate: source.dueDate,
         paymentDate: source.paymentDate,
+        description: source.description,
+        paymentReceipt: source.paymentReceipt,
         installmentNumber: source.installmentNumber,
         pixQrCode:
           source.pixQrCode !== null && source.pixQrCode !== ''
@@ -67,6 +69,8 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
         dueDate: source.dueDate,
         paymentDate: source.paymentDate,
         installmentNumber: source.installmentNumber,
+        description: source.description,
+        paymentReceipt: source.paymentReceipt,
         pixQrCode: source.pixQrCode?.toString() ?? null,
         pixCopyPaste: source.pixCopyPaste,
         createdAt: source.createdAt,

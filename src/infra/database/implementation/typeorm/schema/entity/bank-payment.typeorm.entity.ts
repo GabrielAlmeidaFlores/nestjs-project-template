@@ -7,6 +7,11 @@ import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/ban
 
 @Entity({ name: 'bank_payment' })
 export class BankPaymentTypeormEntity extends BaseTypeormEntity {
+  @Column({ name: 'description', type: 'text', nullable: true })
+  public description: string | null;
+
+  @Column({ name: 'payment_receipt', type: 'text', nullable: true })
+  public paymentReceipt: string | null;
   @Column({
     name: 'bank_external_id',
     type: 'varchar',
