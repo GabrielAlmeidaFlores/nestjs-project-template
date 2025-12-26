@@ -13,6 +13,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
 
 @Module({
   imports: [
+    AdminModule,
     GenericModule,
     CustomerModule,
     AdminModule,
