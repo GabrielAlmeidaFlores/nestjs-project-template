@@ -516,9 +516,22 @@ export class SendMessageToConversationUseCase {
 
     const baseArgs = toolCall.arguments as JsonObjectInterface;
 
+    let normalizedArgs: JsonObjectInterface = baseArgs;
+
+    if (toolCall.tool === 'legal_pleading_get') {
+      const id =
+        baseArgs['legalPleadingId'] ??
+        baseArgs['legal_pleading_id'] ??
+        baseArgs['id'];
+
+      if (typeof id === 'string') {
+        normalizedArgs = { legalPleadingId: id };
+      }
+    }
+
     const args = this.isLikelyListTool(toolCall.tool)
-      ? this.normalizePaginationArgs(baseArgs)
-      : baseArgs;
+      ? this.normalizePaginationArgs(normalizedArgs)
+      : normalizedArgs;
 
     return this.mcp.callTool(toolCall.tool, args);
   }
