@@ -16,6 +16,9 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
   @Description('Endereço do cliente.')
   public readonly customerAddress: CustomerAddressEntity;
 
+  @Description('ID externo do cliente no banco de pagamentos.')
+  public readonly bankExternalId: string;
+
   protected readonly _type = CustomerEntity.name;
 
   public constructor(props: CustomerEntityPropsInterface) {
@@ -25,6 +28,7 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
 
     this.name = props.name;
     this.customerAddress = props.customerAddress;
+    this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture ?? null;
   }
 
