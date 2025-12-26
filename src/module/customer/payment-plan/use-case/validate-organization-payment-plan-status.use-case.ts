@@ -170,6 +170,10 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
 
     const lastValidPayment = sortedValidPayments[0];
 
+    if (lastValidPayment?.paymentMethod !== undefined) {
+      response.paymentMethod = lastValidPayment.paymentMethod;
+    }
+
     let isActive = false;
     if (lastValidPayment?.paymentDate) {
       isActive = lastValidPayment.paymentDate >= oneMonthAgo;
@@ -267,6 +271,17 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       return a.paymentDate.getTime() - b.paymentDate.getTime();
     })[0];
 
+    const lastValidPayment = confirmedPayments.sort((a, b) => {
+      if (!a.paymentDate || !b.paymentDate) {
+        return 0;
+      }
+      return b.paymentDate.getTime() - a.paymentDate.getTime();
+    })[0];
+
+    if (lastValidPayment?.paymentMethod !== undefined) {
+      response.paymentMethod = lastValidPayment.paymentMethod;
+    }
+
     const oneMonthAfterFirstPayment = new Date(
       firstPayment?.paymentDate ?? new Date(),
     );
@@ -344,6 +359,10 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       });
 
     const firstPayment = confirmedPayments[0];
+
+    if (firstPayment?.paymentMethod !== undefined) {
+      response.paymentMethod = firstPayment.paymentMethod;
+    }
 
     let withinOneYear = false;
     if (firstPayment?.paymentDate) {
