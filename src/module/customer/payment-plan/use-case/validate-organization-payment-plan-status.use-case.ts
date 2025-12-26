@@ -75,12 +75,12 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       organizationPaymentPlan,
       bankPayments,
       enabledPaidResources.map((resource) => {
-        const dto = new EnabledPaidResourceItemDto();
-        dto.id = resource.paymentPlanPaidResource.id;
-        dto.resource = resource.paymentPlanPaidResource.resource;
-        dto.creditCost = resource.paymentPlanPaidResource.creditCost;
-        dto.description = resource.paymentPlanPaidResource.description;
-        return dto;
+        return EnabledPaidResourceItemDto.build({
+          id: resource.paymentPlanPaidResource.id,
+          resource: resource.paymentPlanPaidResource.resource,
+          creditCost: resource.paymentPlanPaidResource.creditCost,
+          description: resource.paymentPlanPaidResource.description,
+        });
       }),
     );
   }
