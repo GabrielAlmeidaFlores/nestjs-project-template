@@ -1,6 +1,7 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class GetRetirementPlanningRgpsAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsAnalysisResultId;
@@ -9,6 +10,8 @@ export class GetRetirementPlanningRgpsAnalysisResultQueryResult extends BaseBuil
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
+
+  public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity;
 
   protected override readonly _type =
     GetRetirementPlanningRgpsAnalysisResultQueryResult.name;

@@ -64,6 +64,7 @@ import { RetirementPlanningRgpsLegalProceedingTypeormEntity } from '@infra/datab
 import { RetirementPlanningRgpsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period-document.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-result.typeorm.entity';
+import { RetirementPlanningRgpsTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-time-accelerator.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
@@ -102,6 +103,7 @@ export class TypeormIndex {
     RetirementPlanningRgpsPeriodTypeormEntity,
     RetirementPlanningRgpsPeriodDocumentTypeormEntity,
     RetirementPlanningRgpsAnalysisResultTypeormEntity,
+    RetirementPlanningRgpsTimeAcceleratorTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [

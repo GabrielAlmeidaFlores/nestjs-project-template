@@ -101,7 +101,21 @@ export class AnalyzePublicServiceUseCase {
       Não invente leis: Use apenas o Decreto 3.048/99 e a IN 128/2022 fornecidos.
       Seja o Auditor: Se o documento tiver rasuras ou faltar assinaturas, aponte isso na tabela citando o Art. 130 § 3º ("sem rasuras").
       Foco no Anexo X: Se o período passar de Junho de 1994 e não tiver a planilha de salários, alerte o usuário na observação técnica.
-    `;
+      Depois de processar os arquivos, responda no seguinte formato:
+      json {
+        tipo: "Tempo rural|Serviço Militar|Serviço Público|CTPS fora do CNIS|Aluno-Aprendiz|Trabalho no Exterior|Trabalho Informal|Sentença Trabalhista",
+        nome: "Maria Santos",
+        empresa: "Lotes LTDA",
+        periodoInicio:  "2024-10-15",
+        periodoFim: "2024-10-15",        
+        viabilidade: "Alta|Média|Baixa",
+        reconhecimentoINSS: "Provável|Parcial|Improvável",
+        impactoCarencia: "true|false",
+        reconhecimentoJudicial: "Favorável",
+        tempoContribuicao: "2 anos e 3 meses",
+        observacaoTecnica: "Tempo rural bem documentado, mas atenção à necessidade de indenização para período pós 31/10/1991."
+      }    
+      `;
 
     const files: Buffer[] = [];
 

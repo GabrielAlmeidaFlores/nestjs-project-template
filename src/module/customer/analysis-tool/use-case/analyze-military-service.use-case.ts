@@ -93,7 +93,21 @@ export class AnalyzeMilitaryServiceUseCase {
       INSTRUÇÕES DE TOM
       Seja direto e técnico.
       Se o usuário não informar as datas exatas, solicite-as antes de gerar a tabela final, pois o cálculo de 18 meses e a regra de 2019 dependem da precisão das datas.
-    `;
+      Depois de processar os arquivos, responda no seguinte formato:
+      json {
+        tipo: "Tempo rural|Serviço Militar|Serviço Público|CTPS fora do CNIS|Aluno-Aprendiz|Trabalho no Exterior|Trabalho Informal|Sentença Trabalhista",
+        nome: "Maria Santos",
+        empresa: "Lotes LTDA",
+        periodoInicio:  "2024-10-15",
+        periodoFim: "2024-10-15",        
+        viabilidade: "Alta|Média|Baixa",
+        reconhecimentoINSS: "Provável|Parcial|Improvável",
+        impactoCarencia: "true|false",
+        reconhecimentoJudicial: "Favorável",
+        tempoContribuicao: "2 anos e 3 meses",
+        observacaoTecnica: "Tempo rural bem documentado, mas atenção à necessidade de indenização para período pós 31/10/1991."
+      }
+      `;
 
     const files: Buffer[] = [];
 

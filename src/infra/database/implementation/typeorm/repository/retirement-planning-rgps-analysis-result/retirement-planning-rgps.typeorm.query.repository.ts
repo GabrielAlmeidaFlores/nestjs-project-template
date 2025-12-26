@@ -32,6 +32,7 @@ export class RetirementPlanningRgpsAnalysisResultTypeormQueryRepository
   ): Promise<GetRetirementPlanningRgpsAnalysisResultQueryResult> {
     const data = await this.findOneOrFail(
       {
+        relations: { retirementPlanningRgps: true },
         where: {
           id: id.toString(),
         },
