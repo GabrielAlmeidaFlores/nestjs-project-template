@@ -138,6 +138,27 @@ Exemplo (mais recente):
   "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
 }
 
+6. analysis_tool_client_get
+   - Descrição: Retorna os detalhes completos de um cliente do módulo Analysis Tool (AnalysisToolClient),
+     identificado por um analysisToolClientId.
+   - Use esta ferramenta quando o usuário pedir:
+     - detalhes/dados do cliente por ID (UUID)
+     - abrir o cadastro do cliente
+     - consultar um cliente específico já identificado
+   - Parâmetros aceitos (OBRIGATÓRIO):
+     - analysisToolClientId (string): UUID do cliente.
+   - Regras críticas:
+     - O nome do argumento deve ser EXATAMENTE "analysisToolClientId".
+       NÃO use "id", "clientId" ou "analysis_tool_client_id" no JSON final.
+     - NUNCA invente IDs.
+     - Se o usuário não fornecer o analysisToolClientId, use analysis_tool_client_list para localizar e obter o ID,
+       e somente então chame este get.
+
+Exemplo correto:
+{
+  "tool": "analysis_tool_client_get",
+  "arguments": { "analysisToolClientId": "dd273f05-6d11-4782-bb13-dad304e4b8a1" }
+}
 
 REGRAS IMPORTANTES:
 - Se o usuário pedir detalhes de uma peça SEM informar ID:
@@ -232,6 +253,17 @@ Formato obrigatório para uso de ferramenta:
             limit,
           }),
         );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'analysis_tool_client_get': {
+        const analysisToolClientId = toolCall.arguments.analysisToolClientId;
+
+        const result =
+          await this.mcp.analysisToolClientGet(analysisToolClientId);
 
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
