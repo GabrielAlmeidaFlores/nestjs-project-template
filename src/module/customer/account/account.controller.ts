@@ -67,9 +67,10 @@ export class AccountController {
     },
   })
   public async customerSignUp(
+    @Res({ passthrough: true }) reply: FastifyReply,
     @Body() dto: CustomerSignUpRequestDto,
   ): Promise<CustomerSignUpResponseDto> {
-    return await this.customerSignUpUseCase.execute(dto);
+    return await this.customerSignUpUseCase.execute(reply, dto);
   }
 
   @BuildEndpointSpecification({
