@@ -125,6 +125,9 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         ? this.parseDateWithoutTimezoneAdjustment(dto.payment.clientPaymentDate)
         : null;
 
+    const paymentReceipt =
+      status === PaymentStatusEnum.CONFIRMED ? dto.payment.invoiceUrl : null;
+
     if (existingPayment) {
       const updateTransaction =
         this.bankPaymentCommandRepository.updateBankPayment(
@@ -133,6 +136,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
             ...existingPayment,
             status,
             paymentMethod,
+            paymentReceipt,
+            description: dto.payment.description,
             paymentDate: paymentDate ?? clientPaymentDate,
           }),
         );
@@ -145,11 +150,13 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       const newPayment = new BankPaymentEntity({
         bankExternalId,
         paymentMethod,
+        paymentReceipt,
         amount: new DecimalValue(dto.payment.value),
         status,
         dueDate: this.parseDateWithoutTimezoneAdjustment(dto.payment.dueDate),
         paymentDate: paymentDate ?? clientPaymentDate,
         installmentNumber: dto.payment.installmentNumber ?? null,
+        description: dto.payment.description,
       });
 
       const createTransaction =
