@@ -16,4 +16,6 @@ export interface BankPaymentEntityPropsInterface
   installmentNumber?: number | null;
   pixQrCode?: Base64 | null;
   pixCopyPaste?: string | null;
+  description?: string | null;
+  paymentReceipt?: string | null;
 }
