@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 
 import { McpClient } from '@module/ai/infra/mcp/lib/mcp.client';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
@@ -58,5 +59,11 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
     dto: ListAnalysisToolRecordRequestDto,
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
     return this.client.callTool('analysis_tool_record_list', { ...dto });
+  }
+
+  public async cnisFastAnalysisGet(
+    dto: CnisFastAnalysisId,
+  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('cnis_fast_analysis_get', { ...dto });
   }
 }

@@ -1,5 +1,6 @@
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
@@ -15,7 +16,12 @@ export interface LegalPleadingListToolCallInterface {
     searchBy: string;
   };
 }
-
+export interface LegalPleadingGetToolCallInterface {
+  tool: 'legal_pleading_get';
+  arguments: {
+    legalPleadingId: LegalPleadingId;
+  };
+}
 export interface AnalysisToolRecordListToolCallInterface {
   tool: 'analysis_tool_record_list';
   arguments: {
@@ -30,11 +36,10 @@ export interface AnalysisToolRecordListToolCallInterface {
     analysisToolClientId: AnalysisToolClientId;
   };
 }
-
-export interface LegalPleadingGetToolCallInterface {
-  tool: 'legal_pleading_get';
+export interface CnisFastAnalysisGetToolCallInterface {
+  tool: 'cnis_fast_analysis_get';
   arguments: {
-    legalPleadingId: LegalPleadingId;
+    cnisFastAnalysisId: CnisFastAnalysisId;
   };
 }
 export interface AiTextContentInterface {
@@ -50,4 +55,5 @@ export interface AiResponseInterface {
 export type AiToolCallType =
   | LegalPleadingGetToolCallInterface
   | LegalPleadingListToolCallInterface
-  | AnalysisToolRecordListToolCallInterface;
+  | AnalysisToolRecordListToolCallInterface
+  | CnisFastAnalysisGetToolCallInterface;

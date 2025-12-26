@@ -529,6 +529,17 @@ export class SendMessageToConversationUseCase {
       }
     }
 
+    if (toolCall.tool === 'cnis_fast_analysis_get') {
+      const id =
+        baseArgs['cnisFastAnalysisId'] ??
+        baseArgs['cnis_fast_analysis_id'] ??
+        baseArgs['id'];
+
+      if (typeof id === 'string') {
+        normalizedArgs = { cnisFastAnalysisId: id };
+      }
+    }
+
     const args = this.isLikelyListTool(toolCall.tool)
       ? this.normalizePaginationArgs(normalizedArgs)
       : normalizedArgs;

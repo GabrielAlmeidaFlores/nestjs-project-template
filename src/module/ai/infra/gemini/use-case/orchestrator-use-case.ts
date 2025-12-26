@@ -83,6 +83,27 @@ Você é um assistente com acesso às seguintes ferramentas:
   "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
 }
 
+4. cnis_fast_analysis_get
+   - Descrição: Retorna os detalhes completos de uma Análise Rápida do CNIS (resultado já processado no sistema),
+     identificada por um cnisFastAnalysisId.
+   - Use esta ferramenta quando o usuário pedir:
+     - ver detalhes de uma análise rápida do CNIS
+     - abrir / consultar / recuperar uma análise rápida do CNIS específica
+     - “me mostre o resultado da análise rápida do CNIS X” (onde X é um ID válido)
+   - Parâmetros aceitos:
+     - cnisFastAnalysisId (string): identificador da análise rápida do CNIS
+   - Regras:
+     - NUNCA invente cnisFastAnalysisId.
+     - Se o usuário não informar o cnisFastAnalysisId, peça o ID ou, se existir uma ferramenta de listagem
+       (ex.: cnis_fast_analysis_list), use-a primeiro para localizar o ID antes de chamar este get.
+
+Exemplo:
+{
+  "tool": "cnis_fast_analysis_get",
+  "arguments": { "cnisFastAnalysisId": "..." }
+}
+
+
 
 REGRAS IMPORTANTES:
 - Se o usuário pedir detalhes de uma peça SEM informar ID:
@@ -149,6 +170,16 @@ Formato obrigatório para uso de ferramenta:
             type,
             analysisToolClientId,
           }),
+        );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'cnis_fast_analysis_get': {
+        const result = await this.mcp.cnisFastAnalysisGet(
+          toolCall.arguments.cnisFastAnalysisId,
         );
 
         return {
