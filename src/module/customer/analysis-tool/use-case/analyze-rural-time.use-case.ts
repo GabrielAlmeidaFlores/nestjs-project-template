@@ -176,6 +176,8 @@ export class AnalyzeRuralTimeUseCase {
     await transactions.commit();
 
     return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
+      retirementPlanningRgpsAnalysisResultId:
+        retirementPlanningRgpsAnalysisResultEntity.id,
       result,
     });
   }
