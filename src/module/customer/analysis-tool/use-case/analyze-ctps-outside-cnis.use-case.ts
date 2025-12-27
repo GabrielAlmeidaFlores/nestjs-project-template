@@ -146,6 +146,10 @@ export class AnalyzeCtpsOutsideCnisUseCase {
 
     await transactions.commit();
 
-    return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({ result });
+    return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
+      retirementPlanningRgpsAnalysisResultId:
+        retirementPlanningRgpsAnalysisResultEntity.id,
+      result,
+    });
   }
 }

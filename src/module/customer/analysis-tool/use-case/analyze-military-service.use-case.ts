@@ -141,6 +141,10 @@ export class AnalyzeMilitaryServiceUseCase {
 
     await transactions.commit();
 
-    return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({ result });
+    return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
+      retirementPlanningRgpsAnalysisResultId:
+        retirementPlanningRgpsAnalysisResultEntity.id,
+      result,
+    });
   }
 }

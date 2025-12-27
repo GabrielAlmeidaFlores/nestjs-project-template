@@ -123,6 +123,8 @@ export class AnalyzeWorkAbroadUseCase {
     await transactions.commit();
 
     return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
+      retirementPlanningRgpsAnalysisResultId:
+        retirementPlanningRgpsAnalysisResultEntity.id,
       result,
     });
   }
