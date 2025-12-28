@@ -2,18 +2,10 @@ import { Module } from '@nestjs/common';
 
 import { AccountModule } from '@module/customer/account/account.module';
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
-import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
-import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { TranscriptionModule } from '@module/customer/transcription/transcription.module';
 
 @Module({
-  imports: [
-    AccountModule,
-    AnalysisToolModule,
-    TranscriptionModule,
-    PaymentPlanModule,
-    OrganizationCreditModule,
-  ],
+  imports: [AccountModule, AnalysisToolModule, TranscriptionModule],
   controllers: [],
   providers: [],
 })
