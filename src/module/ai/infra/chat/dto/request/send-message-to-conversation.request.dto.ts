@@ -14,7 +14,7 @@ export class SendMessageToConversationRequestDto extends BaseBuildableDtoObject 
   public readonly customerId: CustomerId;
 
   @RequestDtoStringProperty({ required: true })
-  public readonly messge: string;
+  public readonly message: string;
 
   protected override readonly _type = SendMessageToConversationRequestDto.name;
 }
