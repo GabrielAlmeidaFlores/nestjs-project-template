@@ -46,10 +46,7 @@ export class SetOrganizationForCustomerUseCase {
     }
 
     const jwtOrganizationSession =
-      this.organizationSessionGateway.createSession(
-        dto.organizationId,
-        organizationMember.owner,
-      );
+      this.organizationSessionGateway.createSession(dto.organizationId);
 
     const sevenDaysInSeconds = 604800;
 

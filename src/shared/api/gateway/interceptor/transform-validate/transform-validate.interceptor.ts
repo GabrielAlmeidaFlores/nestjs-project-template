@@ -87,7 +87,6 @@ export class TransformValidateInterceptor implements NestInterceptor {
     throw new ResponseValidationError({
       dtoName,
       dtoProperty,
-      errorMessage: firstError?.toString() ?? 'Validation error',
     });
   }
 }

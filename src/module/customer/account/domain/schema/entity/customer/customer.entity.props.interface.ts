@@ -6,6 +6,5 @@ export interface CustomerEntityPropsInterface
   extends BaseEntityPropsInterface<CustomerId> {
   name: string;
   customerAddress: CustomerAddressEntity;
-  bankExternalId: string;
   profilePicture?: string | null;
 }

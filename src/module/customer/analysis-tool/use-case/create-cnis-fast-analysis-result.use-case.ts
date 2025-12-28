@@ -20,9 +20,6 @@ import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/er
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 @Injectable()
@@ -48,10 +45,6 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
-    @Inject(ConsumeOrganizationCreditUseCaseGateway)
-    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
-    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
-    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
 
   public async execute(
@@ -68,18 +61,6 @@ export class CreateCnisFastAnalysisResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
-
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-      );
-
-    const consumeCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-        organizationMember.id,
-      );
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -124,9 +105,8 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const cnisCompleteAnalysis =
       await this.analysisProcessorGateway.getCnisCompleteAnalysis(
-        promptResponse.prompt,
-        jsonCnisAnalyzerResponse,
         [clientDataBuffer],
+        jsonCnisAnalyzerResponse,
       );
 
     let clientLastAffiliationDate: Date | null = null;
@@ -207,7 +187,6 @@ export class CreateCnisFastAnalysisResultUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
       createCnisFastAnalysisResultTransaction,
       updateCnisFastAnalysisTransaction,
       updateAnalysisToolRecordTransaction,

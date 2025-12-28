@@ -20,9 +20,6 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   })
   public profilePicture: string | null;
 
-  @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
-  public bankExternalId: string;
-
   @OneToOne(() => CustomerAddressTypeormEntity, (entity) => entity.customer, {
     nullable: false,
   })

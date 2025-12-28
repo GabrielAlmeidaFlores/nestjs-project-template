@@ -8,7 +8,6 @@ import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementatio
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
@@ -35,13 +34,6 @@ export class LegalPleadingEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: LegalPleadingTypeormEntity,
     ): LegalPleadingEntity => {
-      if (!source.createdBy || !source.updatedBy) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass: LegalPleadingEntity.name,
-          sourceClass: LegalPleadingTypeormEntity.name,
-        });
-      }
-
       const legalPleadingAddress = this.mapper.map(
         source.legalPleadingAddress,
         LegalPleadingAddressTypeormEntity,
@@ -76,8 +68,8 @@ export class LegalPleadingEntityAutoMapperProfile {
           source.benefitNumber !== null
             ? new BenefitNumber(source.benefitNumber)
             : null,
-        createdBy: new OrganizationMemberId(source.createdBy.id),
-        updatedBy: new OrganizationMemberId(source.updatedBy.id),
+        createdBy: new OrganizationMemberId(source.createdBy?.id),
+        updatedBy: new OrganizationMemberId(source.updatedBy?.id),
         legalPleadingAddress,
         legalPleadingResult,
         analysisToolClient,
