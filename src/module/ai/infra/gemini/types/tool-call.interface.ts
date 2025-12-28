@@ -1,3 +1,4 @@
+import type { JsonObjectInterface } from '@module/ai/infra/mcp/use-case/mcp.use-case';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import type { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -61,6 +62,23 @@ export interface AnalysisToolClientGetToolCallInterface {
     analysisToolClientId: AnalysisToolClientId;
   };
 }
+
+export interface CnisFastAnalysisPatchToolCallInterface {
+  tool: 'cnis_fast_analysis_patch';
+  arguments: {
+    cnisFastAnalysisId: string;
+    json?: JsonObjectInterface;
+    cnisDocumentPath?: string;
+  };
+}
+
+export interface CnisFastAnalysisPostToolCallInterface {
+  tool: 'cnis_fast_analysis_post';
+  arguments: {
+    cnisFastAnalysisId: CnisFastAnalysisId;
+  };
+}
+
 export interface AiTextContentInterface {
   type: 'text';
   text: string;
@@ -77,4 +95,6 @@ export type AiToolCallType =
   | AnalysisToolRecordListToolCallInterface
   | CnisFastAnalysisGetToolCallInterface
   | AnalysisToolClientListToolCallInterface
-  | AnalysisToolClientGetToolCallInterface;
+  | AnalysisToolClientGetToolCallInterface
+  | CnisFastAnalysisPatchToolCallInterface
+  | CnisFastAnalysisPostToolCallInterface;

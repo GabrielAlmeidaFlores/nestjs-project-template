@@ -6,9 +6,13 @@ import {
   AiResponseInterface,
   AiToolCallType,
 } from '@module/ai/infra/gemini/types/tool-call.interface';
-import { McpUseCase } from '@module/ai/infra/mcp/use-case/mcp.use-case';
+import {
+  JsonObjectInterface,
+  McpUseCase,
+} from '@module/ai/infra/mcp/use-case/mcp.use-case';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
 export class GeminiOrchestratorUseCase {
@@ -22,19 +26,48 @@ export class GeminiOrchestratorUseCase {
   public async execute(
     dto: GeminiChatRequestDto,
   ): Promise<AiResponseInterface> {
-    const rawText = await this.client.chat([
+    const MAX_TOOL_STEPS = 3;
+
+    const messages: Array<{ role: 'assistant' | 'user'; content: string }> = [
       { role: 'assistant', content: this.buildSystemPrompt() },
       { role: 'user', content: dto.message },
-    ]);
+    ];
 
-    const toolCall = this.tryParseToolCall(rawText);
+    for (let step = 0; step < MAX_TOOL_STEPS; step++) {
+      const rawText = await this.client.chat(messages);
 
-    if (toolCall) {
-      return this.executeTool(toolCall);
+      const toolCall = this.tryParseToolCall(rawText);
+
+      // Se o modelo não pediu ferramenta, devolve texto normal
+      if (!toolCall) {
+        return { content: [{ type: 'text', text: rawText }] };
+      }
+
+      const toolResult = await this.executeTool(toolCall);
+
+      // 1) Persistir o JSON da tool-call do modelo no histórico
+      messages.push({ role: 'assistant', content: rawText });
+
+      // 2) Persistir o resultado da tool no histórico para permitir próxima tool-call
+      messages.push({
+        role: 'user',
+        content: JSON.stringify(toolResult, null, 2),
+      });
+
+      // Se deu erro, encerra agora
+      if (toolResult.isError === true) {
+        return toolResult;
+      }
     }
 
     return {
-      content: [{ type: 'text', text: rawText }],
+      content: [
+        {
+          type: 'text',
+          text: `Limite de ${MAX_TOOL_STEPS} execuções de ferramentas atingido. Não foi possível concluir a operação.`,
+        },
+      ],
+      isError: true,
     };
   }
 
@@ -73,29 +106,17 @@ Você é um assistente com acesso às seguintes ferramentas:
      - field (string, opcional): seleção de campos/visão (se suportado)
      - type (AnalysisToolRecordTypeEnum, opcional): filtra pelo tipo de registro de análise
      - analysisToolClientId (AnalysisToolClientId, opcional): filtra pelos registros vinculados a um cliente específico
-   - Observações:
-     - Para “mais recente”, use sortField = "-createdAt" e limit = 1.
-     - Se o usuário pedir detalhes de um registro específico, primeiro liste para obter o identificador adequado e então chame a ferramenta de detalhes (se existir).
 
-     Exemplo (mais recente):
+Exemplo:
 {
   "tool": "analysis_tool_record_list",
   "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
 }
 
 4. cnis_fast_analysis_get
-   - Descrição: Retorna os detalhes completos de uma Análise Rápida do CNIS (resultado já processado no sistema),
-     identificada por um cnisFastAnalysisId.
-   - Use esta ferramenta quando o usuário pedir:
-     - ver detalhes de uma análise rápida do CNIS
-     - abrir / consultar / recuperar uma análise rápida do CNIS específica
-     - “me mostre o resultado da análise rápida do CNIS X” (onde X é um ID válido)
+   - Descrição: Retorna os detalhes completos de uma Análise Rápida do CNIS.
    - Parâmetros aceitos:
-     - cnisFastAnalysisId (string): identificador da análise rápida do CNIS
-   - Regras:
-     - NUNCA invente cnisFastAnalysisId.
-     - Se o usuário não informar o cnisFastAnalysisId, peça o ID ou, se existir uma ferramenta de listagem
-       (ex.: cnis_fast_analysis_list), use-a primeiro para localizar o ID antes de chamar este get.
+     - cnisFastAnalysisId (string)
 
 Exemplo:
 {
@@ -104,55 +125,20 @@ Exemplo:
 }
 
 5. analysis_tool_client_list
-   - Descrição: Lista os clientes do módulo Analysis Tool (AnalysisToolClient) vinculados ao usuário/organização autenticados.
-     Um "Analysis Tool Client" representa a entidade de cliente/pessoa/parte analisada no sistema, e é usada para
-     filtrar históricos e resultados de análises (por exemplo, usando analysisToolClientId em outras ferramentas).
-   - Use esta ferramenta quando o usuário pedir:
-     - listar clientes do analysis tool
-     - buscar um cliente por nome, CPF/CNPJ, e-mail, telefone, número de processo, ou termo livre
-     - “qual é o cliente X?”
-     - localizar o analysisToolClientId para então consultar análises/histórico de um cliente
-     - ver os clientes mais recentes cadastrados/criados (se a API suportar ordenação por createdAt)
+   - Descrição: Lista os clientes do módulo Analysis Tool.
    - Parâmetros aceitos:
-     - page (number): página (padrão 1)
-     - limit (number): itens por página (padrão 10)
-     - search (string, opcional): termo livre de busca (ex.: nome, documento, parte, etc.)
-     - searchBy (string, opcional): critério/campo de busca suportado pela API (ex.: "name", "document", etc.)
-     - sortField (string, opcional): ordenação (ex.: "-createdAt" para mais recentes primeiro, se suportado)
-     - field (string, opcional): seleção de campos/visão (se suportado)
-     - status (string, opcional): filtro de status do cliente (se suportado)
-   - Observações:
-     - Se o usuário pedir “cliente mais recente”, use sortField = "-createdAt" e limit = 1 (se suportado).
-     - Se o usuário pedir detalhes de um cliente e existir uma ferramenta de detalhes (ex.: analysis_tool_client_get),
-       primeiro liste para obter o analysisToolClientId e então chame o get.
+     - page, limit, search, searchBy, sortField, field, status
 
-Exemplo (buscar por nome):
+Exemplo:
 {
   "tool": "analysis_tool_client_list",
   "arguments": { "page": 1, "limit": 10, "search": "Maria Silva" }
 }
 
-Exemplo (mais recente):
-{
-  "tool": "analysis_tool_client_list",
-  "arguments": { "page": 1, "limit": 1, "sortField": "-createdAt" }
-}
-
 6. analysis_tool_client_get
-   - Descrição: Retorna os detalhes completos de um cliente do módulo Analysis Tool (AnalysisToolClient),
-     identificado por um analysisToolClientId.
-   - Use esta ferramenta quando o usuário pedir:
-     - detalhes/dados do cliente por ID (UUID)
-     - abrir o cadastro do cliente
-     - consultar um cliente específico já identificado
-   - Parâmetros aceitos (OBRIGATÓRIO):
-     - analysisToolClientId (string): UUID do cliente.
-   - Regras críticas:
-     - O nome do argumento deve ser EXATAMENTE "analysisToolClientId".
-       NÃO use "id", "clientId" ou "analysis_tool_client_id" no JSON final.
-     - NUNCA invente IDs.
-     - Se o usuário não fornecer o analysisToolClientId, use analysis_tool_client_list para localizar e obter o ID,
-       e somente então chame este get.
+   - Descrição: Retorna os detalhes completos de um cliente.
+   - Parâmetros aceitos:
+     - analysisToolClientId (string) OBRIGATÓRIO
 
 Exemplo correto:
 {
@@ -160,16 +146,37 @@ Exemplo correto:
   "arguments": { "analysisToolClientId": "dd273f05-6d11-4782-bb13-dad304e4b8a1" }
 }
 
+7. cnis_fast_analysis_patch
+   - Descrição: Atualiza uma Análise Rápida do CNIS via PATCH.
+   - Parâmetros aceitos:
+     - cnisFastAnalysisId (string, obrigatório)
+     - json (object, obrigatório): campos a atualizar
+     - cnisDocumentPath (string, opcional): caminho local do arquivo CNIS (se necessário)
+   - Regra para adicionar/remover legalProceedingNumber:
+     1) SEMPRE chame cnis_fast_analysis_get para obter os valores atuais
+     2) Em seguida chame cnis_fast_analysis_patch com o array atualizado (sem duplicar)
+
+Exemplo:
+{
+  "tool": "cnis_fast_analysis_patch",
+  "arguments": {
+    "cnisFastAnalysisId": "...",
+    "json": {
+      "analysisToolClientId": "...",
+      "legalProceedingNumber": ["...","..."],
+      "inssBenefitNumber": ["..."]
+    }
+  }
+}
+
 REGRAS IMPORTANTES:
-- Se o usuário pedir detalhes de uma peça SEM informar ID:
-  1) PRIMEIRO chame legal_pleading_list
-     - Use search quando houver nome ou termo
-     - Use limit = 1
-     - Use ordenação para obter a peça mais recente
-  2) DEPOIS chame legal_pleading_get com o ID retornado
 - NUNCA invente IDs.
-- NUNCA responda com dados detalhados sem antes chamar legal_pleading_get.
 - Para usar ferramentas, responda APENAS em JSON puro, sem texto adicional.
+- Qualquer solicitação que implique ALTERAR/ATUALIZAR dados (ex.: adicionar legalProceedingNumber)
+  DEVE resultar em chamada de ferramenta. NUNCA responda em texto explicativo nesses casos.
+- Para adicionar legalProceedingNumber no CNIS:
+  1) chame cnis_fast_analysis_get
+  2) depois chame cnis_fast_analysis_patch
 
 Formato obrigatório para uso de ferramenta:
 {
@@ -247,7 +254,7 @@ Formato obrigatório para uso de ferramenta:
         const limit = Number(toolCall.arguments.limit);
 
         const result = await this.mcp.analysisToolClientList(
-          ListAnalysisToolRecordRequestDto.build({
+          ListDataRequestDto.build({
             ...toolCall.arguments,
             page,
             limit,
@@ -264,6 +271,81 @@ Formato obrigatório para uso de ferramenta:
 
         const result =
           await this.mcp.analysisToolClientGet(analysisToolClientId);
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'cnis_fast_analysis_patch': {
+        const { cnisFastAnalysisId, json, cnisDocumentPath } =
+          toolCall.arguments;
+
+        if (
+          typeof cnisFastAnalysisId !== 'string' ||
+          cnisFastAnalysisId.length === 0
+        ) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'Parâmetro inválido: cnisFastAnalysisId é obrigatório.',
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        // Aceitar json como object OU como string JSON (robustez)
+        let parsedJson: unknown = json;
+
+        if (typeof parsedJson === 'string') {
+          try {
+            parsedJson = JSON.parse(parsedJson);
+          } catch {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: 'Parâmetro inválido: json string não é um JSON válido.',
+                },
+              ],
+              isError: true,
+            };
+          }
+        }
+
+        if (typeof parsedJson !== 'object' || parsedJson === null) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: 'Parâmetro inválido: json deve ser um objeto.',
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        const safeDocumentPath =
+          typeof cnisDocumentPath === 'string' ? cnisDocumentPath.trim() : '';
+        const hasDocumentPath = safeDocumentPath.length > 0;
+
+        const result = await this.mcp.cnisFastAnalysisPatch({
+          cnisFastAnalysisId,
+          json: parsedJson as JsonObjectInterface,
+          ...(hasDocumentPath ? { cnisDocumentPath: safeDocumentPath } : {}),
+        });
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'cnis_fast_analysis_post': {
+        const result = await this.mcp.cnisFastAnalysisPost(
+          toolCall.arguments.cnisFastAnalysisId,
+        );
 
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],

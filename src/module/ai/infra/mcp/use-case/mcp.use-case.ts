@@ -80,4 +80,18 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
     return this.client.callTool('analysis_tool_client_get', { ...dto });
   }
+
+  public async cnisFastAnalysisPatch(dto: {
+    cnisFastAnalysisId: string;
+    json?: JsonObjectInterface;
+    cnisDocumentPath?: string;
+  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('cnis_fast_analysis_patch', dto);
+  }
+
+  public async cnisFastAnalysisPost(
+    dto: CnisFastAnalysisId,
+  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('cnis_fast_analysis_post', { ...dto });
+  }
 }
