@@ -27,7 +27,6 @@ export class GetLegalProceedingDetailQueryResultAutoMapperProfile {
       return GetLegalProceedingDetailQueryResult.build({
         ...source,
         id: new LegalProceedingDetailId(source.id),
-        detail: source.detail,
       });
     };
 
@@ -44,11 +43,9 @@ export class GetLegalProceedingDetailQueryResultAutoMapperProfile {
       source: GetLegalProceedingDetailQueryResult,
     ): LegalProceedingDetailTypeormEntity => {
       return LegalProceedingDetailTypeormEntity.build({
+        ...source,
         id: source.id.toString(),
         detail: source.detail.toString(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
       });
     };
 
