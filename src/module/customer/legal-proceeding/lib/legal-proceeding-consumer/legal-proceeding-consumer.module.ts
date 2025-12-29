@@ -1,11 +1,18 @@
 import { Module } from '@nestjs/common';
 
 import { ComunicacaoPjeModule } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/comunicacao-pje.module';
+import { ComunicacaoPjeService } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/comunicacao-pje.service';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 
 @Module({
   imports: [ComunicacaoPjeModule],
-  providers: [LegalProceedingConsumerGateway],
+  providers: [
+    ComunicacaoPjeService,
+    {
+      provide: LegalProceedingConsumerGateway,
+      useClass: ComunicacaoPjeService,
+    },
+  ],
   exports: [LegalProceedingConsumerGateway],
 })
 export class LegalProceedingConsumerModule {
