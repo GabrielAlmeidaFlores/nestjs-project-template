@@ -4,7 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationNotFoundError } from '@module/customer/account/error/organization-not-found.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { GetLegalProceedingDetailLaywerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-laywer-with-relations.response.dto';
-import { DetailParsedType } from '@module/customer/legal-proceeding/type/legal-proceeding-detail.type';
+import { LegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/legal-proceeding-detail.model';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -43,7 +43,7 @@ export class GetLegalProceedingDetailByLegalProceedingNumberUseCase {
 
     const detailParsed = JSON.parse(
       legalProceedingDetail.detail,
-    ) as DetailParsedType;
+    ) as LegalProceedingDetailModel;
 
     const item = detailParsed.data?.items ?? [];
     const lastItem = item.length > 0 ? item[item.length - 1] : null;
