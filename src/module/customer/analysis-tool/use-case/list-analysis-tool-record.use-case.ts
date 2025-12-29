@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -50,6 +50,8 @@ export class ListAnalysisToolRecordUseCase {
         new ListAnalysisToolRecordQueryParam(dto),
       );
 
+    console.log(analysisToolRecordList);
+
     const resource: GetAnalysisToolRecordResponseDto[] = [];
 
     await Promise.all(
@@ -85,6 +87,22 @@ export class ListAnalysisToolRecordUseCase {
         });
 
         const analysis = analysisToolRecord.cnisFastAnalysis;
+
+        const retirementPlanningRgps =
+          analysisToolRecord.retirementPlanningRgps;
+
+        if (retirementPlanningRgps) {
+          const data = GetAnalysisToolRecordResponseDto.build({
+            ...analysisToolRecord,
+            analysisId: retirementPlanningRgps.id,
+            status: analysisToolRecord.status,
+            analysisToolClient: client,
+            createdBy,
+            updatedBy,
+          });
+
+          resource.push(data);
+        }
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({
