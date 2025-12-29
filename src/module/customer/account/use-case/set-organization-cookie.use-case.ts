@@ -29,7 +29,7 @@ export class SetOrganizationCookieUseCase implements SetOrganizationCookieUseCas
     reply.setCookie(ApiCookieEnum.ORGANIZATION, jwtOrganizationSession, {
       httpOnly: true,
       secure: false,
-      sameSite: 'lax',
+      sameSite: 'none',
       path: '/',
       maxAge: this.sevenDaysInSeconds,
     });
