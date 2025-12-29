@@ -6,6 +6,8 @@ export class GetLegalProceedingDetailQueryResult extends BaseBuildableDtoObject 
   public readonly id: LegalProceedingDetailId;
   public readonly detail: string;
   public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
 
   protected override readonly _type = GetLegalProceedingDetailQueryResult.name;
 }
