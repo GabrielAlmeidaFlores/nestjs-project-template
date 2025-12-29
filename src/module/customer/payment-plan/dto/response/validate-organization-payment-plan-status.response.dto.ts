@@ -1,6 +1,7 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
+import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -57,6 +58,13 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
   })
   public nextDueDate?: Date;
 
+  @ResponseDtoDateProperty({
+    required: false,
+    description:
+      'Data de adesão da organização ao plano de pagamento. Retorna undefined caso não haja data de adesão registrada.',
+  })
+  public accessionDate?: Date;
+
   @ResponseDtoStringProperty({
     description:
       'Nome do plano de pagamento contratado pela organização (ex: Plano Premium, Plano Básico, etc).',
@@ -105,6 +113,12 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
       'Lista de recursos pagos habilitados no plano de pagamento da organização. Cada recurso possui ID, tipo, custo em créditos e descrição.',
   })
   public enabledPaidResources: EnabledPaidResourceItemDto[];
+
+  @ResponseDtoEnumProperty(PaymentMethodEnum, {
+    description: 'Método de pagamento utilizado pela organização.',
+    required: false,
+  })
+  public paymentMethod?: PaymentMethodEnum;
 
   protected override readonly _type =
     ValidateOrganizationPaymentPlanStatusResponseDto.name;

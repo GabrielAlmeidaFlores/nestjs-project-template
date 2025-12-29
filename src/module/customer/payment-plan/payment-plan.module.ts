@@ -7,8 +7,10 @@ import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case
 import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/delete-organization-payment-plan.use-case';
 import { GenerateMonthlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-monthly-payment-billing.use-case';
 import { GenerateYearlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-yearly-payment-billing.use-case';
+import { GetBankPaymentDetailsUseCase } from '@module/customer/payment-plan/use-case/get-bank-payment-details.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
 import { GetPaymentPlanPaidResourcePromptUseCase } from '@module/customer/payment-plan/use-case/get-payment-plan-paid-resource-prompt.use-case';
+import { ListBankPaymentsByOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/list-bank-payments-by-organization-payment-plan.use-case';
 import { ListPaymentPlanPaidResourcesUseCase } from '@module/customer/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
@@ -35,16 +37,18 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListPaymentPlanPaidResourcesUseCase,
     CancelPaymentPlanUseCase,
     ValidateOrganizationPaymentPlanStatusUseCase,
-    {
-      provide: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
-      useClass: ValidateOrganizationPaymentPlanStatusUseCase,
-    },
     GetOrganizationPaymentPlanStatusUseCase,
     GenerateMonthlyPaymentBillingUseCase,
     GenerateYearlyPaymentBillingUseCase,
     PayBillingUseCase,
     DeleteOrganizationPaymentPlanUseCase,
     GetPaymentPlanPaidResourcePromptUseCase,
+    ListBankPaymentsByOrganizationPaymentPlanUseCase,
+    GetBankPaymentDetailsUseCase,
+    {
+      provide: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
+      useClass: ValidateOrganizationPaymentPlanStatusUseCase,
+    },
     {
       provide: GetPaymentPlanPaidResourcePromptUseCaseGateway,
       useClass: GetPaymentPlanPaidResourcePromptUseCase,

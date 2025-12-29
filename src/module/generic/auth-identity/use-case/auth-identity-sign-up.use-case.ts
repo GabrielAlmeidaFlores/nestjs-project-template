@@ -45,7 +45,7 @@ export class AuthIdentitySignUpUseCase
     await transaction.commit();
 
     return AuthIdentitySignUpResponseDto.build({
-      authIdentity: authIdentity.id,
+      authIdentityId: authIdentity.id,
     });
   }
 }

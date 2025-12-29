@@ -115,15 +115,17 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     const status = statusMap[dto.payment.status] ?? PaymentStatusEnum.PENDING;
 
     const paymentDate =
-      dto.payment.paymentDate !== null && dto.payment.paymentDate !== undefined
+      typeof dto.payment.paymentDate === 'string'
         ? this.parseDateWithoutTimezoneAdjustment(dto.payment.paymentDate)
         : null;
 
     const clientPaymentDate =
-      dto.payment.clientPaymentDate !== null &&
-      dto.payment.clientPaymentDate !== undefined
+      typeof dto.payment.clientPaymentDate === 'string'
         ? this.parseDateWithoutTimezoneAdjustment(dto.payment.clientPaymentDate)
         : null;
+
+    const paymentReceipt =
+      status === PaymentStatusEnum.CONFIRMED ? dto.payment.invoiceUrl : null;
 
     if (existingPayment) {
       const updateTransaction =
@@ -133,6 +135,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
             ...existingPayment,
             status,
             paymentMethod,
+            paymentReceipt,
+            description: dto.payment.description,
             paymentDate: paymentDate ?? clientPaymentDate,
           }),
         );
@@ -145,11 +149,13 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       const newPayment = new BankPaymentEntity({
         bankExternalId,
         paymentMethod,
+        paymentReceipt,
         amount: new DecimalValue(dto.payment.value),
         status,
         dueDate: this.parseDateWithoutTimezoneAdjustment(dto.payment.dueDate),
         paymentDate: paymentDate ?? clientPaymentDate,
         installmentNumber: dto.payment.installmentNumber ?? null,
+        description: dto.payment.description,
       });
 
       const createTransaction =
@@ -160,10 +166,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       ]);
       await transaction.commit();
 
-      if (
-        dto.payment.subscription !== null &&
-        dto.payment.subscription !== undefined
-      ) {
+      if (typeof dto.payment.subscription === 'string') {
         const organizationPaymentPlan =
           await this.organizationPaymentPlanQueryRepository.findOneByBankExternalId(
             dto.payment.subscription,
@@ -208,10 +211,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
   ): Promise<void> {
     await this.upsertBankPayment(dto);
 
-    if (
-      dto.payment.subscription !== null &&
-      dto.payment.subscription !== undefined
-    ) {
+    if (typeof dto.payment.subscription === 'string') {
       await this.processPaymentFromMonthlyRecurringPaymentPlan(dto);
       return;
     }
@@ -416,10 +416,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
   private async processPaymentFromMonthlyRecurringPaymentPlan(
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
-    if (
-      dto.payment.subscription === null ||
-      dto.payment.subscription === undefined
-    ) {
+    if (typeof dto.payment.subscription !== 'string') {
       return;
     }
 

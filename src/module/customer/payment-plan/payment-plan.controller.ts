@@ -7,15 +7,19 @@ import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/custom
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
 import { GenerateMonthlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-monthly-payment-billing.response.dto';
 import { GenerateYearlyPaymentBillingResponseDto } from '@module/customer/payment-plan/dto/response/generate-yearly-payment-billing.response.dto';
+import { GetBankPaymentResponseDto } from '@module/customer/payment-plan/dto/response/get-bank-payment.response.dto';
 import { ListPaymentPlanPaidResourcesResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
+import { PaginatedBankPaymentsResponseDto } from '@module/customer/payment-plan/dto/response/paginated-bank-payments.response.dto';
 import { PayBillingResponseDto } from '@module/customer/payment-plan/dto/response/pay-billing.response.dto';
 import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
 import { ValidateOrganizationPaymentPlanStatusResponseDto } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
 import { GenerateMonthlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-monthly-payment-billing.use-case';
 import { GenerateYearlyPaymentBillingUseCase } from '@module/customer/payment-plan/use-case/generate-yearly-payment-billing.use-case';
+import { GetBankPaymentDetailsUseCase } from '@module/customer/payment-plan/use-case/get-bank-payment-details.use-case';
 import { GetOrganizationPaymentPlanStatusUseCase } from '@module/customer/payment-plan/use-case/get-organization-payment-plan-status.use-case';
+import { ListBankPaymentsByOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/list-bank-payments-by-organization-payment-plan.use-case';
 import { ListPaymentPlanPaidResourcesUseCase } from '@module/customer/payment-plan/use-case/list-payment-plan-paid-resources.use-case';
 import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/list-payment-plans.use-case';
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
@@ -47,6 +51,8 @@ export class PaymentPlanController {
     private readonly generateMonthlyPaymentBillingUseCase: GenerateMonthlyPaymentBillingUseCase,
     private readonly generateYearlyPaymentBillingUseCase: GenerateYearlyPaymentBillingUseCase,
     private readonly payMonthlyPaymentBillingUseCase: PayBillingUseCase,
+    private readonly listBankPaymentsByOrganizationPaymentPlanUseCase: ListBankPaymentsByOrganizationPaymentPlanUseCase,
+    private readonly getBankPaymentDetailsUseCase: GetBankPaymentDetailsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -58,13 +64,13 @@ export class PaymentPlanController {
     tag: ['plano-de-pagamento'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Lista de planos de pagamento.',
+      description: 'Lista paginada de planos de pagamento disponíveis.',
       type: ListPaymentPlansResponseDto,
     },
   })
   public async list(
     @Query() dto: ListDataRequestDto,
-  ): Promise<ListPaymentPlansResponseDto[]> {
+  ): Promise<ListPaymentPlansResponseDto> {
     return this.listPaymentPlansUseCase.execute(dto);
   }
 
@@ -251,5 +257,53 @@ export class PaymentPlanController {
       sessionData,
       body,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar pagamentos do plano de pagamento da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'bank-payment',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista paginada de pagamentos do plano de pagamento.',
+      type: PaginatedBankPaymentsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async listBankPayments(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListDataRequestDto,
+  ): Promise<PaginatedBankPaymentsResponseDto> {
+    return this.listBankPaymentsByOrganizationPaymentPlanUseCase.execute(
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Buscar detalhes de um pagamento bancário por id',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'bank-payment/:bankPaymentId',
+      method: RequestMethod.GET,
+    },
+    tag: ['plano-de-pagamento'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Detalhes do pagamento bancário.',
+      type: GetBankPaymentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async getBankPaymentDetails(
+    @Param('bankPaymentId', new ParseValueObjectPipe(BankPaymentId))
+    bankPaymentId: BankPaymentId,
+  ): Promise<GetBankPaymentResponseDto> {
+    return this.getBankPaymentDetailsUseCase.execute(bankPaymentId);
   }
 }

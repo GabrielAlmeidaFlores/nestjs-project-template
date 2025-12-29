@@ -9,6 +9,7 @@ import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
@@ -107,5 +108,31 @@ export class BankPaymentTypeormQueryRepository
     );
 
     return resources;
+  }
+
+  public async listBankPaymentByOrganizationPaymentPlanId(
+    organizationPaymentPlanId: OrganizationPaymentPlanId,
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetBankPaymentQueryResult>> {
+    const data = await this.list(listData, {
+      where: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: {
+            id: organizationPaymentPlanId.toString(),
+          },
+        },
+      },
+    });
+
+    const resource = this.mapperGateway.mapArray(
+      data.resource,
+      BankPaymentTypeormEntity,
+      GetBankPaymentQueryResult,
+    );
+
+    return new ListDataOutputModel<GetBankPaymentQueryResult>({
+      ...data,
+      resource,
+    });
   }
 }
