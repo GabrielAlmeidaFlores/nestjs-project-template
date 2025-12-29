@@ -11,10 +11,12 @@ import { CustomerSignUpUseCase } from '@module/customer/account/use-case/custome
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
 import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
+import { SetOrganizationCookieUseCase } from '@module/customer/account/use-case/set-organization-cookie.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
 import { ValidateOrganizationSessionUseCase } from '@module/customer/account/use-case/validate-organization-session.use-case';
+import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
 import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
@@ -42,8 +44,16 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
       useClass: ValidateOrganizationSessionUseCase,
       provide: ValidateOrganizationSessionUseCaseGateway,
     },
+    SetOrganizationCookieUseCase,
+    {
+      useClass: SetOrganizationCookieUseCase,
+      provide: SetOrganizationCookieUseCaseGateway,
+    },
   ],
-  exports: [ValidateOrganizationSessionUseCaseGateway],
+  exports: [
+    ValidateOrganizationSessionUseCaseGateway,
+    SetOrganizationCookieUseCaseGateway,
+  ],
 })
 export class AccountModule {
   protected readonly _type = AccountModule.name;

@@ -1,60 +1,16 @@
+import { PaymentPlanItemResponseDto } from '@module/customer/payment-plan/dto/response/payment-plan-item.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
-import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { ListDataResponseDto } from '@shared/api/util/dto/response/list-data.response.dto';
 
 @ResponseDto()
-export class PaymentPlanPaidResourceDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
-
-  @ResponseDtoStringProperty()
-  public resource: string;
-
-  @ResponseDtoStringProperty()
-  public creditCost: number;
-
-  @ResponseDtoStringProperty()
-  public description: string;
-
-  protected override readonly _type = PaymentPlanPaidResourceDto.name;
-}
-
-@ResponseDto()
-export class ListPaymentPlansResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
-
-  @ResponseDtoStringProperty()
-  public name: string;
-
-  @ResponseDtoStringProperty()
-  public description: string;
-
-  @ResponseDtoNumberProperty()
-  public price: number;
-
-  @ResponseDtoNumberProperty()
-  public maxMemberCount: number;
-
-  @ResponseDtoNumberProperty()
-  public monthlyCreditAmount: number;
-
-  @ResponseDtoBooleanProperty()
-  public active: boolean;
-
-  @ResponseDtoStringProperty()
-  public cycle: string;
-
-  @ResponseDtoStringProperty({ required: false })
-  public highlight?: string;
-
-  @ResponseDtoObjectProperty(() => PaymentPlanPaidResourceDto, {
+export class ListPaymentPlansResponseDto extends ListDataResponseDto<PaymentPlanItemResponseDto> {
+  @ResponseDtoObjectProperty(() => PaymentPlanItemResponseDto, {
     isArray: true,
   })
-  public paidResources: PaymentPlanPaidResourceDto[];
+  public override resource: PaymentPlanItemResponseDto[];
 
   protected override readonly _type = ListPaymentPlansResponseDto.name;
 }
+
+export { PaymentPlanPaidResourceDto } from '@module/customer/payment-plan/dto/response/payment-plan-item.response.dto';

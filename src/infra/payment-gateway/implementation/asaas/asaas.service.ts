@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { InvalidBankCustomerDataError } from '@infra/payment-gateway/implementation/asaas/error/invalid-bank-customer-data.error';
 import { PaymentNotApprovedError } from '@infra/payment-gateway/implementation/asaas/error/payment-not-approved.error';
 import { AsaasApiErrorResponseType } from '@infra/payment-gateway/implementation/asaas/type/asaas-api-error-response.type';
@@ -91,14 +92,14 @@ export class AsaasService extends PaymentGateway {
         },
       };
 
-      await this.makeRequest<Record<string, unknown>, { id: string }>(
-        `payments/${props.billingId}/payWithCreditCard`,
-        'post',
-        data,
-      );
+      const response = await this.makeRequest<
+        Record<string, unknown>,
+        { id: string; value: number }
+      >(`payments/${props.billingId}/payWithCreditCard`, 'post', data);
 
       return PayBillingOutputModel.build({
         id: props.billingId,
+        value: new DecimalValue(response.value),
       });
     } catch (error) {
       this.handleAsaasApiError(
@@ -131,7 +132,7 @@ export class AsaasService extends PaymentGateway {
 
     const billing = await this.makeRequest<
       Record<string, unknown>,
-      { id: string; installment?: string }
+      { id: string; installment?: string; value: number }
     >('payments', 'post', data);
 
     let billingPixData:
@@ -145,16 +146,18 @@ export class AsaasService extends PaymentGateway {
       billingPixData = await this.makeRequest<
         Record<string, unknown>,
         { encodedImage: string; payload: string }
-      >(`payments/${billing.id}/pixQrCode`, 'get', data);
+      >(`payments/${billing.id}/pixQrCode`, 'get');
     } catch {}
 
     const outputData: {
       id: string;
+      value: DecimalValue;
       pixQrCode?: Base64;
       pixCopyPaste?: string;
       installment?: string;
     } = {
       id: billing.id,
+      value: new DecimalValue(billing.value),
     };
 
     if (billingPixData !== undefined) {
@@ -245,14 +248,15 @@ export class AsaasService extends PaymentGateway {
   private async makeRequest<RequestBody, ResponseBody>(
     path: string,
     method: 'get' | 'post' | 'put' | 'delete',
-    dto?: RequestBody,
+    data?: RequestBody,
   ): Promise<ResponseBody> {
     try {
+      const url = `${PaymentGatewayApplicationVariable.BANK_API_DOMAIN}/${path}`;
       const response = await this.httpService
         .request<ResponseBody>({
-          url: `${PaymentGatewayApplicationVariable.BANK_API_DOMAIN}/${path}`,
+          url,
           method,
-          data: dto,
+          data,
           ...this.config,
         })
         .toPromise();

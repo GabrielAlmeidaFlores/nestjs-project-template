@@ -13,11 +13,13 @@ import { AuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-cas
 import { AuthIdentitySignOutUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-out.use-case';
 import { AuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/auth-identity-sign-up.use-case';
 import { PreAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/pre-auth-identity-sign-in.use-case';
+import { SetAuthTokenCookieUseCase } from '@module/generic/auth-identity/use-case/set-auth-token-cookie.use-case';
 import { UpdateAuthIdentityPasswordUseCase } from '@module/generic/auth-identity/use-case/update-auth-identity-password.use-case';
 import { ValidateAuthIdentitySignInUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-in.use-case';
 import { ValidateAuthIdentitySignUpUseCase } from '@module/generic/auth-identity/use-case/validate-auth-identity-sign-up.use-case';
 import { AuthIdentityResetPasswordUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-reset-password.use-case-gateway';
 import { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
+import { SetAuthTokenCookieUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/set-auth-token-cookie.use-case-gateway';
 import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
 import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-up.use-case-gateway';
 
@@ -57,11 +59,17 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
     AuthIdentitySignInUseCase,
     UpdateAuthIdentityPasswordUseCase,
     AuthIdentitySignOutUseCase,
+    SetAuthTokenCookieUseCase,
+    {
+      provide: SetAuthTokenCookieUseCaseGateway,
+      useClass: SetAuthTokenCookieUseCase,
+    },
   ],
   exports: [
     ValidateAuthIdentitySignInUseCaseGateway,
     ValidateAuthIdentitySignUpUseCaseGateway,
     AuthIdentitySignUpUseCaseGateway,
+    SetAuthTokenCookieUseCaseGateway,
   ],
 })
 export class AuthIdentityModule {

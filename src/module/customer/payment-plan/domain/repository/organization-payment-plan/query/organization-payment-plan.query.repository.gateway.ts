@@ -19,4 +19,8 @@ export abstract class OrganizationPaymentPlanQueryRepositoryGateway {
   public abstract findOneByIdWithRelations(
     id: OrganizationPaymentPlanId,
   ): Promise<GetOrganizationPaymentPlanWithRelationsQueryResult | null>;
+
+  public abstract findOneByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationPaymentPlanQueryResult | null>;
 }
