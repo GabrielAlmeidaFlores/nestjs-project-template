@@ -14,10 +14,6 @@ import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/c
 import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
 import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { ConversationEventEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity';
-import {
-  ConversationEventPayloadType,
-  ConversationToolResultPayloadInterface,
-} from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity.props.interface';
 import { ConversationEventTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/enum/conversation-event-type.enum';
 import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
 import { ConversationMessageRoleTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/enum/conversation-message-role-type.enum';
@@ -155,6 +151,7 @@ export class SendMessageToConversationUseCase {
 
     let finalAssistantText: string | null = null;
 
+    // ...
     for (let step = 0; step < MAX_TOOL_STEPS; step++) {
       const rawText = await this.gemini.chat(toolLoopMessages);
       const toolCall = this.tryParseToolCall(rawText);
@@ -173,12 +170,11 @@ export class SendMessageToConversationUseCase {
             payload: {
               tool: toolCall.tool,
               arguments: toolCall.arguments,
-            } satisfies ConversationEventPayloadType,
+            },
             createdAt: new Date(),
           }),
         );
 
-      // Executa tool com policy
       const toolResponse = await this.executeToolWithPolicyGuard(
         toolCall,
         policy,
@@ -186,7 +182,6 @@ export class SendMessageToConversationUseCase {
         dto.message,
       );
 
-      // Log TOOL_RESULT
       const createToolResultEventTx =
         this.conversationEventCommandRepositoryGateway.createConversationEvent(
           new ConversationEventEntity({
@@ -196,43 +191,32 @@ export class SendMessageToConversationUseCase {
             payload: {
               tool: toolCall.tool,
               resultJson: JSON.stringify(toolResponse, null, 2),
-            } satisfies ConversationToolResultPayloadInterface,
+            },
             createdAt: new Date(),
           }),
         );
 
-      // Persistir eventos a cada iteração (mantém rastreabilidade)
       const txTool = await this.baseTransactionRepositoryGateway.execute([
         createToolCallEventTx,
         createToolResultEventTx,
       ]);
       await txTool.commit();
 
-      // Alimentar o Gemini para a próxima iteração:
-      // 1) registrar o JSON da tool-call como "assistant"
+      // mantém o raciocínio do modelo
       toolLoopMessages.push({ role: 'assistant', content: rawText });
 
-      // 2) registrar o resultado da tool como "user"
-      // IMPORTANTE: mandar só texto (e não envelope inteiro) quando for envelope
-      let toolText = JSON.stringify(toolResponse, null, 2);
-      if (this.isTextContentEnvelope(toolResponse)) {
-        toolText = toolResponse.content[0].text;
-      }
-
+      // 🔥 CORREÇÃO AQUI
+      const toolText = JSON.stringify(toolResponse, null, 2);
       toolLoopMessages.push({ role: 'user', content: toolText });
 
-      // Se a tool retornou erro, finaliza com o conteúdo do erro
       if (
         typeof toolResponse === 'object' &&
-        toolResponse !== null &&
         'isError' in toolResponse &&
         (toolResponse as AiResponseInterface).isError === true
       ) {
         finalAssistantText = toolText;
         break;
       }
-
-      // Continua loop: Gemini agora tem o estado atual + resultado e pode pedir a próxima tool (GET -> PATCH)
     }
 
     finalAssistantText ??= `Limite de ${MAX_TOOL_STEPS} execuções de ferramentas atingido.`;
@@ -574,7 +558,7 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
 
       const id = this.extractIdString(raw);
 
-      if (id) {
+      if (id !== undefined) {
         normalizedArgs = { legalPleadingId: id };
       } else {
         return {
@@ -597,7 +581,7 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
 
       id ??= this.extractUuidFromText(userMessage);
 
-      if (id) {
+      if (id !== undefined) {
         normalizedArgs = { cnisFastAnalysisId: id };
       } else {
         return {
@@ -621,7 +605,7 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
 
       const id = this.extractIdString(raw);
 
-      if (id) {
+      if (id !== undefined) {
         normalizedArgs = { analysisToolClientId: id };
       } else {
         return {
@@ -647,7 +631,7 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
       id ??= this.extractUuidFromText(userMessage);
 
       // (mantive seu comportamento atual)
-      if (!id) {
+      if (id === undefined) {
         return {
           content: [
             {
@@ -771,6 +755,41 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
       };
     }
 
+    if (toolCall.tool === 'legal_pleading_patch_complete_analysis') {
+      const raw =
+        baseArgs['legalPleadingId'] ??
+        baseArgs['legal_pleading_id'] ??
+        baseArgs['analysis_id'] ??
+        baseArgs['id'];
+
+      const id =
+        this.extractIdString(raw) ?? this.extractUuidFromText(userMessage);
+
+      if (id === undefined) {
+        return {
+          content: [
+            { type: 'text', text: 'Parâmetro inválido: legalPleadingId.' },
+          ],
+          isError: true,
+        };
+      }
+
+      /**
+       * ⚠️ AQUI NÃO VALIDAMOS O TEXTO
+       * Porque ele será CONSTRUÍDO pela IA
+       * após o legal_pleading_get
+       */
+      normalizedArgs = {
+        legalPleadingId: id,
+        ...(typeof baseArgs['legalPleadingCompleteAnalysis'] === 'string'
+          ? {
+              legalPleadingCompleteAnalysis:
+                baseArgs['legalPleadingCompleteAnalysis'].trim(),
+            }
+          : {}),
+      };
+    }
+
     const args: JsonObjectInterface = this.isLikelyListTool(toolCall.tool)
       ? this.normalizePaginationArgs(normalizedArgs)
       : normalizedArgs;
@@ -783,7 +802,6 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
 
       if (
         typeof patchResult === 'object' &&
-        patchResult !== null &&
         'isError' in patchResult &&
         (patchResult as { isError?: boolean }).isError === true
       ) {

@@ -38,23 +38,19 @@ export class GeminiOrchestratorUseCase {
 
       const toolCall = this.tryParseToolCall(rawText);
 
-      // Se o modelo não pediu ferramenta, devolve texto normal
       if (!toolCall) {
         return { content: [{ type: 'text', text: rawText }] };
       }
 
       const toolResult = await this.executeTool(toolCall);
 
-      // 1) Persistir o JSON da tool-call do modelo no histórico
       messages.push({ role: 'assistant', content: rawText });
 
-      // 2) Persistir o resultado da tool no histórico para permitir próxima tool-call
       messages.push({
         role: 'user',
         content: JSON.stringify(toolResult, null, 2),
       });
 
-      // Se deu erro, encerra agora
       if (toolResult.isError === true) {
         return toolResult;
       }
@@ -168,6 +164,63 @@ Exemplo:
     }
   }
 }
+
+8. legal_pleading_patch_complete_analysis
+   - Descrição: Atualiza o CONTEÚDO FINAL da análise da peça processual, no campo:
+     legalPleadingResult.legalPleadingCompleteAnalysis
+
+   - Objetivo: permitir editar/aprimorar o HTML/texto final SEM perder o restante do conteúdo.
+
+   - Parâmetros aceitos (OBRIGATÓRIOS):
+     - legalPleadingId (string)
+     - legalPleadingCompleteAnalysis (string)  <-- SEMPRE enviar o HTML/TEXTO COMPLETO final
+
+   - Processo obrigatório (edição correta e segura):
+     1) SEMPRE chame legal_pleading_get com o legalPleadingId para obter o JSON completo da peça.
+     2) Extraia o valor atual em:
+        legalPleadingResult.legalPleadingCompleteAnalysis
+     3) Aplique SOMENTE a alteração pedida pelo usuário (ex.: trocar apenas o título),
+        mantendo TODO o restante exatamente como está.
+     4) Chame legal_pleading_patch_complete_analysis passando:
+        - legalPleadingId
+        - legalPleadingCompleteAnalysis com o conteúdo COMPLETO já atualizado
+     5) Responda ao usuário com o JSON bruto retornado pela ferramenta (sem resumo, sem explicação).
+
+   - Regras:
+     - NUNCA peça para o usuário “informar o campo”.
+     - NUNCA invente conteúdo que não veio do GET.
+     - Se o usuário pedir “trocar apenas X e manter o resto”, no PATCH deve ir o texto inteiro,
+       só com X alterado.
+
+    SE o usuário pedir para alterar o conteúdo final da peça processual,
+VOCÊ É OBRIGADO a:
+
+1) Executar legal_pleading_get
+2) Ler legalPleadingResult.legalPleadingCompleteAnalysis
+3) Aplicar SOMENTE a alteração pedida
+4) Executar legal_pleading_patch_complete_analysis
+   SEMPRE com o HTML COMPLETO
+
+   NUNCA chame legal_pleading_patch_complete_analysis
+SEM ANTES ter feito legal_pleading_get
+
+
+Exemplo de fluxo correto:
+1) GET:
+{
+  "tool": "legal_pleading_get",
+  "arguments": { "legalPleadingId": "d29abac2-7060-4d56-9c76-d8c03d1a467b" }
+}
+
+2) PATCH (com HTML completo atualizado):
+{
+  "tool": "legal_pleading_patch_complete_analysis",
+  "arguments": {
+    "legalPleadingId": "d29abac2-7060-4d56-9c76-d8c03d1a467b",
+    "legalPleadingCompleteAnalysis": "<p># Santos Futebol Clube ...restante idêntico...</p>\n"
+  }
+}
+
 
 REGRAS IMPORTANTES:
 - NUNCA invente IDs.
@@ -346,6 +399,20 @@ Formato obrigatório para uso de ferramenta:
         const result = await this.mcp.cnisFastAnalysisPost(
           toolCall.arguments.cnisFastAnalysisId,
         );
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'legal_pleading_patch_complete_analysis': {
+        const { legalPleadingId, legalPleadingCompleteAnalysis } =
+          toolCall.arguments;
+
+        const result = await this.mcp.legalPleadingPatch({
+          legalPleadingId,
+          legalPleadingCompleteAnalysis,
+        });
 
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
