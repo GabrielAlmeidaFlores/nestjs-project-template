@@ -7,6 +7,9 @@ export class GetLegalProceedingDetailWithRelationsQueryResult extends BaseBuilda
   public readonly id: LegalProceedingDetailId;
   public readonly detail: string;
   public readonly analysisToolClientLegalProceeding: GetAnalysisToolClientLegalProceedingWithRelationsQueryResult;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
 
   protected override readonly _type =
     GetLegalProceedingDetailWithRelationsQueryResult.name;

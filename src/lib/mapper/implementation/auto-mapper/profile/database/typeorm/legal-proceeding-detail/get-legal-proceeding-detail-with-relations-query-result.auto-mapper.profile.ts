@@ -32,6 +32,7 @@ export class GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile {
         GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
       );
       return GetLegalProceedingDetailWithRelationsQueryResult.build({
+        ...source,
         id: new LegalProceedingDetailId(source.id),
         detail: source.detail,
         analysisToolClientLegalProceeding,
@@ -56,12 +57,10 @@ export class GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile {
         AnalysisToolClientLegalProceedingTypeormEntity,
       );
       return LegalProceedingDetailTypeormEntity.build({
+        ...source,
         id: source.id.toString(),
         detail: source.detail.toString(),
         analysisToolClientLegalProceeding,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
       });
     };
 
