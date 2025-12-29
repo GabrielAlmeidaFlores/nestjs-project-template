@@ -9,9 +9,9 @@ import { GetLegalProceedingDetailWithRelationsQueryResult } from '@module/custom
 import { LegalProceedingDetailId } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/value-object/analysis-tool-client-legal-proceeding-detail-id/legal-proceeding-detail-id.value-object';
 
 @Injectable()
-export class GetLegalProceedingDetailWithRelationsEntityAutoMapperProfile {
+export class GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetLegalProceedingDetailWithRelationsEntityAutoMapperProfile.name;
+    GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
