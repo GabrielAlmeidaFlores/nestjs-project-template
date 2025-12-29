@@ -12,9 +12,9 @@ import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-t
 import { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
 
 @Injectable()
-export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMapperProfile {
+export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
-    GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMapperProfile.name;
+    GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
