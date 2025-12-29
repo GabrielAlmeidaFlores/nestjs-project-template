@@ -56,6 +56,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
   > {
     const data = await this.list(listData, {
       relations: {
+        legalProceedingDetail: true,
         analysisToolClient: {
           createdBy: {
             customer: true,

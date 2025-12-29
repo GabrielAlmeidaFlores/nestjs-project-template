@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
@@ -28,6 +29,14 @@ export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMap
     const convertOrmEntityToDomainEntity = (
       source: AnalysisToolClientLegalProceedingTypeormEntity,
     ): GetAnalysisToolClientLegalProceedingWithRelationsQueryResult => {
+      if (!source.legalProceedingDetail) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetAnalysisToolClientLegalProceedingWithRelationsQueryResult.name,
+          sourceClass: AnalysisToolClientLegalProceedingTypeormEntity.name,
+        });
+      }
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -35,7 +44,7 @@ export class GetAnalysisToolClientLegalProceedingQueryResultWithRelationsAutoMap
       );
 
       const legalProceedingDetail = this.mapper.mapArray(
-        source.legalProceedingDetail ?? [],
+        source.legalProceedingDetail,
         LegalProceedingDetailTypeormEntity,
         GetLegalProceedingDetailQueryResult,
       );
