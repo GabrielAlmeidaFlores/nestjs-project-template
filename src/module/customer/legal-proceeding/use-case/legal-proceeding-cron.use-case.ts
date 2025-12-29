@@ -6,7 +6,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
-import { LegalProceedingDetailCoomandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
+import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { LegalProceedingDetailEntity } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/legal-proceeding-detail.entity';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
@@ -22,8 +22,8 @@ export class LegalProceedingCronUseCase {
     @Inject(ListAnalysisToolClientLegalProceedingUseCaseGateway)
     private readonly listAnalysisToolClientLegalProceedingUseCaseGateway: ListAnalysisToolClientLegalProceedingUseCaseGateway,
 
-    @Inject(LegalProceedingDetailCoomandRepositoryGateway)
-    private readonly legalProceedingDetailCoomandRepositoryGateway: LegalProceedingDetailCoomandRepositoryGateway,
+    @Inject(LegalProceedingDetailCommandRepositoryGateway)
+    private readonly legalProceedingDetailCommandRepositoryGateway: LegalProceedingDetailCommandRepositoryGateway,
 
     @Inject(LegalProceedingDetailQueryRepositoryGateway)
     private readonly legalProceedingDetailQueryRepositoryGateway: LegalProceedingDetailQueryRepositoryGateway,
@@ -91,7 +91,7 @@ export class LegalProceedingCronUseCase {
       }
 
       const tx =
-        this.legalProceedingDetailCoomandRepositoryGateway.createLegalProceedingDetail(
+        this.legalProceedingDetailCommandRepositoryGateway.createLegalProceedingDetail(
           legalProceedingDetail,
         );
 
