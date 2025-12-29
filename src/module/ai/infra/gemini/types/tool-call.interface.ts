@@ -79,6 +79,14 @@ export interface CnisFastAnalysisPostToolCallInterface {
   };
 }
 
+export interface LegalPleadingPatchToolCallInterface {
+  tool: 'legal_pleading_patch_complete_analysis';
+  arguments: {
+    legalPleadingId: LegalPleadingId;
+    legalPleadingCompleteAnalysis: string;
+  };
+}
+
 export interface AiTextContentInterface {
   type: 'text';
   text: string;
@@ -97,4 +105,5 @@ export type AiToolCallType =
   | AnalysisToolClientListToolCallInterface
   | AnalysisToolClientGetToolCallInterface
   | CnisFastAnalysisPatchToolCallInterface
-  | CnisFastAnalysisPostToolCallInterface;
+  | CnisFastAnalysisPostToolCallInterface
+  | LegalPleadingPatchToolCallInterface;

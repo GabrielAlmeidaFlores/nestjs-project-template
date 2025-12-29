@@ -94,4 +94,13 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
   ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
     return this.client.callTool('cnis_fast_analysis_post', { ...dto });
   }
+
+  public async legalPleadingPatch(dto: {
+    legalPleadingId: LegalPleadingId;
+    legalPleadingCompleteAnalysis: string;
+  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool('legal_pleading_patch_complete_analysis', {
+      ...dto,
+    });
+  }
 }
