@@ -11,7 +11,7 @@ export class AsaasWebhookDiscountRequestDto extends BaseBuildableDtoObject {
   public value: number;
 
   @RequestDtoStringProperty({ required: false })
-  public limitDate?: string | null;
+  public limitDate?: string;
 
   @RequestDtoNumberProperty()
   public dueDateLimitDays: number;
@@ -73,16 +73,16 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public customer: string;
 
   @RequestDtoStringProperty({ required: false })
-  public installment?: string | null;
+  public installment?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public subscription?: string | null;
+  public subscription?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public checkoutSession?: string | null;
+  public checkoutSession?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public paymentLink?: string | null;
+  public paymentLink?: string;
 
   @RequestDtoNumberProperty()
   public value: number;
@@ -91,10 +91,10 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public netValue: number;
 
   @RequestDtoNumberProperty({ required: false })
-  public originalValue?: number | null;
+  public originalValue?: number;
 
   @RequestDtoNumberProperty({ required: false })
-  public interestValue?: number | null;
+  public interestValue?: number;
 
   @RequestDtoStringProperty()
   public description: string;
@@ -103,15 +103,15 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public billingType: string;
 
   @RequestDtoStringProperty({ required: false })
-  public confirmedDate?: string | null;
+  public confirmedDate?: string;
 
   @RequestDtoObjectProperty(() => AsaasWebhookCreditCardRequestDto, {
     required: false,
   })
-  public creditCard?: AsaasWebhookCreditCardRequestDto | null;
+  public creditCard?: AsaasWebhookCreditCardRequestDto;
 
   @RequestDtoStringProperty({ required: false })
-  public pixTransaction?: string | null;
+  public pixTransaction?: string;
 
   @RequestDtoStringProperty()
   public status: string;
@@ -123,13 +123,13 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public originalDueDate: string;
 
   @RequestDtoStringProperty({ required: false })
-  public paymentDate?: string | null;
+  public paymentDate?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public clientPaymentDate?: string | null;
+  public clientPaymentDate?: string;
 
   @RequestDtoNumberProperty({ required: false })
-  public installmentNumber?: number | null;
+  public installmentNumber?: number;
 
   @RequestDtoStringProperty()
   public invoiceUrl: string;
@@ -150,25 +150,25 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public anticipable: boolean;
 
   @RequestDtoStringProperty({ required: false })
-  public creditDate?: string | null;
+  public creditDate?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public estimatedCreditDate?: string | null;
+  public estimatedCreditDate?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public transactionReceiptUrl?: string | null;
+  public transactionReceiptUrl?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public nossoNumero?: string | null;
+  public nossoNumero?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public bankSlipUrl?: string | null;
+  public bankSlipUrl?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public lastInvoiceViewedDate?: string | null;
+  public lastInvoiceViewedDate?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public lastBankSlipViewedDate?: string | null;
+  public lastBankSlipViewedDate?: string;
 
   @RequestDtoObjectProperty(() => AsaasWebhookDiscountRequestDto)
   public discount: AsaasWebhookDiscountRequestDto;
@@ -183,10 +183,10 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   public postalService: boolean;
 
   @RequestDtoStringProperty({ required: false })
-  public escrow?: string | null;
+  public escrow?: string;
 
   @RequestDtoStringProperty({ required: false })
-  public refunds?: string | null;
+  public refunds?: string;
 
   protected override readonly _type = AsaasWebhookPaymentRequestDto.name;
 }
