@@ -1,9 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
+import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
@@ -59,17 +61,17 @@ export class LegalProceedingDetailTypeormQueryRepository
     const where = {
       analysisToolClientLegalProceeding: {
         analysisToolClient: {
-          id: '',
           createdBy: {
             organization: { id: organizationId.toString() },
           },
-        },
+        } as FindOptionsWhere<AnalysisToolClientTypeormEntity>,
       },
     };
 
     if (listData.analysisToolClientId !== null) {
-      where.analysisToolClientLegalProceeding.analysisToolClient.id =
-        listData.analysisToolClientId.toString();
+      where.analysisToolClientLegalProceeding.analysisToolClient = {
+        id: listData.analysisToolClientId.toString(),
+      };
     }
 
     const data = await this.list(listData, {
@@ -161,17 +163,16 @@ export class LegalProceedingDetailTypeormQueryRepository
         analysisToolClient: {
           createdBy: {
             organization: { id: organizationId.toString() },
-            customer: {
-              id: '',
-            },
-          },
+          } as FindOptionsWhere<OrganizationMemberTypeormEntity>,
         },
       },
     };
 
     if (listData.customerId !== null) {
-      where.analysisToolClientLegalProceeding.analysisToolClient.createdBy.customer.id =
-        listData.customerId.toString();
+      where.analysisToolClientLegalProceeding.analysisToolClient.createdBy.customer =
+        {
+          id: listData.customerId.toString(),
+        };
     }
 
     const data = await this.list(listData, {
