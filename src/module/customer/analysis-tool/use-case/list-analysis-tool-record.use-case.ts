@@ -50,8 +50,6 @@ export class ListAnalysisToolRecordUseCase {
         new ListAnalysisToolRecordQueryParam(dto),
       );
 
-    console.log(analysisToolRecordList);
-
     const resource: GetAnalysisToolRecordResponseDto[] = [];
 
     await Promise.all(
