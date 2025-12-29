@@ -926,7 +926,7 @@ export class AnalysisToolController {
 
   @BuildEndpointSpecification({
     summary: 'Converter período especial (PPP) em período RGPS',
-    // userLevel: [UserLevelEnum.CUSTOMER],
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'retirement-planning-rgps-period/convert-from-special',
       method: RequestMethod.POST,
@@ -938,7 +938,7 @@ export class AnalysisToolController {
       description: 'Períodos convertidos e salvos com sucesso.',
       type: ConvertRetirementPlanningRgpsSpecialPeriodResponseDto,
     },
-    // guard: [AuthGuard, OrganizationSessionGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async convertSpecialPeriodToPeriod(
     @Body() dto: ConvertRetirementPlanningRgpsSpecialPeriodRequestDto,

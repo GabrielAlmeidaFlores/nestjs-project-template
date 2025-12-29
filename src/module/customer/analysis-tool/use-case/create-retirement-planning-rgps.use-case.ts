@@ -3,14 +3,21 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { RetirementPlanningRgpsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-inss-benefit/command/retirement-planning-rgps-inss-benefit.command.repository.gateway';
 import { RetirementPlanningRgpsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-legal-proceeding/command/retirement-planning-rgps-legal-proceeding.command.repository.gateway';
 import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { RetirementPlanningRgpsInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-benefit/retirement-planning-rgps-inss-benefit.entity';
 import { RetirementPlanningRgpsLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-legal-proceeding/retirement-planning-rgps-legal-proceeding.entity';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateRetirementPlanningRgpsRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps.request.dto';
 import { CreateRetirementPlanningRgpsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps.response.dto';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
@@ -37,6 +44,10 @@ export class CreateRetirementPlanningRgpsUseCase {
     private readonly retirementPlanningRgpsResultCommandRepositoryGateway: RetirementPlanningRgpsResultCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -102,6 +113,31 @@ export class CreateRetirementPlanningRgpsUseCase {
       retirementPlanningRgpsResult,
     );
 
+    const countRecords =
+      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolClientQueryResult,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
+      updatedBy: analysisToolClientQueryResult.updatedBy.id,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      code: new AnalysisToolRecordCode(countRecords + 1),
+      type: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING,
+      cnisFastAnalysis: null,
+      retirementPlanningRgps,
+      analysisToolClient,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdBy: organizationMember.id,
+      updatedBy: organizationMember.id,
+    });
+
+    await this.createAnalysisToolRecordOnDatabase(analysisToolRecord);
+
     return CreateRetirementPlanningRgpsResponseDto.build({
       retirementPlanningRgpsId: retirementPlanningRgps.id,
     });
@@ -137,12 +173,27 @@ export class CreateRetirementPlanningRgpsUseCase {
       );
 
     const transactions = await this.baseTransactionRepositoryGateway.execute([
-      ...retirementPlanningRgpsInssBenefitTransaction,
-      ...retirementPlanningRgpsLegalProceedingTransaction,
       retirementPlanningRgpsResultTransaction,
       retirementPlanningRgpsTransaction,
+      ...retirementPlanningRgpsInssBenefitTransaction,
+      ...retirementPlanningRgpsLegalProceedingTransaction,
     ]);
 
     await transactions.commit();
+  }
+
+  private async createAnalysisToolRecordOnDatabase(
+    analysisToolRecord: AnalysisToolRecordEntity,
+  ): Promise<void> {
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
+        analysisToolRecord,
+      );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      analysisToolRecordTransaction,
+    ]);
+
+    await transaction.commit();
   }
 }
