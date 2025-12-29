@@ -3,8 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
+import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
+
 @Injectable()
-export class ComunicacaoPjeService {
+export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
   protected readonly baseUrl: string;
 
   protected readonly _type = ComunicacaoPjeService.name;
@@ -13,9 +15,9 @@ export class ComunicacaoPjeService {
     this.baseUrl = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
   }
 
-  public async getLegalProceeding(
+  public async consumeByProcessNumber(
     legalProceedingNumber: string,
-  ): Promise<{ ok: true; data: object } | { ok: false; error: string }> {
+  ): Promise<object> {
     try {
       const response: AxiosResponse<object> = await firstValueFrom(
         this.httpService.get(this.baseUrl, {
