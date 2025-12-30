@@ -28,7 +28,7 @@ export class SetOrganizationCookieUseCase implements SetOrganizationCookieUseCas
       this.organizationSessionGateway.createSession(organizationId, owner);
     reply.setCookie(ApiCookieEnum.ORGANIZATION, jwtOrganizationSession, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       path: '/',
       maxAge: this.sevenDaysInSeconds,
