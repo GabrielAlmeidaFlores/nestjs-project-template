@@ -1,4 +1,4 @@
 export enum LegalProceedingDetailItemStatusEnum {
-  P = 'P',
-  C = 'C',
+  IN_PROGRESS = 'P',
+  COMPLETED = 'C',
 }

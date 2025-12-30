@@ -8,7 +8,7 @@ export class CountLegalProceedingDetailResponseDto extends BaseBuildableDtoObjec
   public readonly inProgress: number;
 
   @ResponseDtoNumberProperty()
-  public readonly concluded: number;
+  public readonly completed: number;
 
   @ResponseDtoNumberProperty()
   public readonly total: number;
