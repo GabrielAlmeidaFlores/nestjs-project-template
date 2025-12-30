@@ -24,17 +24,16 @@ export class GeminiClient {
       text: `${m.role}: ${m.content}`,
     }));
 
-    console.log(files);
-    // if (Array.isArray(files) && files.length > 0) {
-    //   for (const f of files) {
-    //     parts.push({
-    //       inlineData: {
-    //         mimeType: f.mimeType || 'application/octet-stream',
-    //         data: f.data.toString('base64'),
-    //       },
-    //     });
-    //   }
-    // }
+    if (Array.isArray(files) && files.length > 0) {
+      for (const f of files) {
+        parts.push({
+          inlineData: {
+            mimeType: f.mimeType || 'application/octet-stream',
+            data: f.data.toString('base64'),
+          },
+        });
+      }
+    }
 
     const contentConfig = {
       model: 'gemini-2.5-flash',
