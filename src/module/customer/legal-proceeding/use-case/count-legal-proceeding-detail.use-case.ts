@@ -6,8 +6,8 @@ import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/le
 import { CountLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/count-legal-proceeding-detail.query.param';
 import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
 import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
-import { LegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/legal-proceeding-detail-item-status.enum';
-import { LegalProceedingDetailDataModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/legal-proceeding-detail-item.model';
+import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
+import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -21,6 +21,9 @@ export class CountLegalProceedingDetailUseCase {
 
     @Inject(LegalProceedingDetailQueryRepositoryGateway)
     private readonly legalProceedingDetailQueryRepositoryGateway: LegalProceedingDetailQueryRepositoryGateway,
+
+    @Inject(LegalProceedingConsumerGateway)
+    private readonly legalProceedingConsumer: LegalProceedingConsumerGateway,
   ) {}
 
   public async execute(
@@ -49,22 +52,16 @@ export class CountLegalProceedingDetailUseCase {
     let total = 0;
 
     legalProceedingDetailList.resource.forEach((proceeding) => {
-      const detailObject = JSON.parse(
+      const status = this.legalProceedingConsumer.extractLastItemStatus(
         proceeding.detail,
-      ) as LegalProceedingDetailDataModel;
+      );
 
       total++;
 
-      if (
-        detailObject.data.items[0]?.status ===
-        LegalProceedingDetailItemStatusEnum.IN_PROGRESS
-      ) {
+      if (status === LegalProceedingStatusEnum.IN_PROGRESS) {
         inProgress++;
       }
-      if (
-        detailObject.data.items[0]?.status ===
-        LegalProceedingDetailItemStatusEnum.COMPLETED
-      ) {
+      if (status === LegalProceedingStatusEnum.COMPLETED) {
         completed++;
       }
     });

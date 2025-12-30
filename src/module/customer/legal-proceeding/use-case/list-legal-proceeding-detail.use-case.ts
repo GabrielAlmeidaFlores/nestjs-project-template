@@ -6,7 +6,7 @@ import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/le
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
 import { GetLegalProceedingDetailLawyerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-lawyer-with-relations.response.dto';
 import { ListLegalProceedingDetailLawyerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-lawyer.response.dto';
-import { LegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/legal-proceeding-detail.model';
+import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 
 import type { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
 import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -22,6 +22,9 @@ export class ListLegalProceedingDetailUseCase {
 
     @Inject(LegalProceedingDetailQueryRepositoryGateway)
     private readonly legalProceedingDetailQueryRepositoryGateway: LegalProceedingDetailQueryRepositoryGateway,
+
+    @Inject(LegalProceedingConsumerGateway)
+    private readonly legalProceedingConsumer: LegalProceedingConsumerGateway,
   ) {}
 
   public async execute(
@@ -47,21 +50,14 @@ export class ListLegalProceedingDetailUseCase {
 
     const resource: GetLegalProceedingDetailLawyerWithRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
-        const detailParsed = JSON.parse(
-          item.detail,
-        ) as LegalProceedingDetailModel;
-
-        const items = detailParsed.data?.items ?? [];
-        const lastItem = items.length > 0 ? items[items.length - 1] : null;
-
-        const recipient = lastItem?.destinatarios ?? [];
-        const recipientLawyer = lastItem?.destinatarioadvogados ?? [];
+        const extracted =
+          this.legalProceedingConsumer.extractLegalProceedingData(item.detail);
 
         return GetLegalProceedingDetailLawyerWithRelationsResponseDto.build({
           ...item,
           detail: JSON.parse(item.detail) as object,
-          recipient,
-          recipientLawyer,
+          recipient: extracted.recipient,
+          recipientLawyer: extracted.recipientLawyer,
         });
       });
 
