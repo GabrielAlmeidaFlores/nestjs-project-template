@@ -7,10 +7,9 @@ import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceedin
 @Module({
   imports: [ComunicacaoPjeModule],
   providers: [
-    ComunicacaoPjeService,
     {
       provide: LegalProceedingConsumerGateway,
-      useClass: ComunicacaoPjeService,
+      useExisting: ComunicacaoPjeService,
     },
   ],
   exports: [LegalProceedingConsumerGateway],
