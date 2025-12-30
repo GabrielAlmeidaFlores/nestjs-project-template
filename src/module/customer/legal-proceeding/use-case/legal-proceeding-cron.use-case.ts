@@ -16,7 +16,7 @@ import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.reque
 @Injectable()
 export class LegalProceedingCronUseCase {
   protected readonly _type = LegalProceedingCronUseCase.name;
-  private readonly logger!: Logger;
+  private readonly logger: Logger;
 
   public constructor(
     private readonly legalProceedingConsumerGateway: LegalProceedingConsumerGateway,
