@@ -1,11 +1,11 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
-import { GetConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation.query.result';
 import { GetChatMessagesToConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
+import { GetConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation.query.result';
 import { ConversationMessageId } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
 
 @Injectable()
@@ -36,6 +36,7 @@ export class GetChatMessagesToConversationQueryResultAutoMapperProfile {
         ...source,
         id: new ConversationMessageId(source.id),
         role: source.role ?? null,
+        title: source.title ?? null,
         content: source.content ?? null,
         conversation,
       });
@@ -71,6 +72,7 @@ export class GetChatMessagesToConversationQueryResultAutoMapperProfile {
         id: id.toString(),
         content: source.content ?? null,
         role: source.role ?? null,
+        title: source.title ?? null,
         conversation,
         createdAt: source.createdAt,
         updatedAt: new Date(),

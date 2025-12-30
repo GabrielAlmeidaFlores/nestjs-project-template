@@ -1,5 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 
+import type { GenerateContentParameters, Part } from '@google/genai';
+
 export class GeminiClient {
   protected readonly _type = GeminiClient.name;
   private readonly ai: GoogleGenAI;
@@ -16,13 +18,30 @@ export class GeminiClient {
 
   public async chat(
     messages: { role: 'user' | 'assistant'; content: string }[],
+    files?: Array<{ mimeType: string; data: Buffer }>,
   ): Promise<string> {
-    const contents = messages.map((m) => `${m.role}: ${m.content}`).join('\n');
+    const parts: Part[] = messages.map((m) => ({
+      text: `${m.role}: ${m.content}`,
+    }));
 
-    const response = await this.ai.models.generateContent({
+    console.log(files);
+    // if (Array.isArray(files) && files.length > 0) {
+    //   for (const f of files) {
+    //     parts.push({
+    //       inlineData: {
+    //         mimeType: f.mimeType || 'application/octet-stream',
+    //         data: f.data.toString('base64'),
+    //       },
+    //     });
+    //   }
+    // }
+
+    const contentConfig = {
       model: 'gemini-2.5-flash',
-      contents,
-    });
+      contents: parts,
+    } as GenerateContentParameters;
+
+    const response = await this.ai.models.generateContent(contentConfig);
 
     return response.text ?? '';
   }

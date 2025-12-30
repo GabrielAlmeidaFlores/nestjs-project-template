@@ -13,7 +13,7 @@ export class McpClient {
     this.transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/index.js'],
-      cwd: '/home/epiousion/Documents/Udemy/mcp-server',
+      cwd: process.env['CWD_PATH'] ?? '',
     });
 
     this.client = new Client({

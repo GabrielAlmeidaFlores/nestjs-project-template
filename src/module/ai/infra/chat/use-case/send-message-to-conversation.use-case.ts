@@ -2,31 +2,31 @@ import { ListToolsResult } from '@modelcontextprotocol/sdk/types';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
-import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
 import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
 import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
 import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
 import { ChatMessageToConversationQueryParam } from '@module/ai/infra/chat/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
 import { GetChatMessagesToConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
 import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
 import { ConversationEventEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity';
 import { ConversationEventTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/enum/conversation-event-type.enum';
 import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
 import { ConversationMessageRoleTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/enum/conversation-message-role-type.enum';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
+import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { SendMessageToConversationRequestDto } from '@module/ai/infra/chat/dto/request/send-message-to-conversation.request.dto';
 import {
-  SendMessageToConversationResponseDto,
   AiConversationResponseDto,
+  SendMessageToConversationResponseDto,
 } from '@module/ai/infra/chat/dto/response/send-message-to-conversation.response.dto';
 import { ConversationNotFoundError } from '@module/ai/infra/chat/error/conversation-not-found.erro';
 import { GeminiClient } from '@module/ai/infra/gemini/gemini.service';
 import {
-  AiToolCallType,
   AiResponseInterface,
+  AiToolCallType,
 } from '@module/ai/infra/gemini/types/tool-call.interface';
 import {
   JsonObjectInterface,
@@ -73,7 +73,7 @@ export class SendMessageToConversationUseCase {
     const now = new Date();
 
     const conversation = await this.conversationQueryRepositoryGateway.findById(
-      dto.conversationId,
+      dto.json.conversationId,
     );
 
     if (!conversation) {
@@ -85,7 +85,8 @@ export class SendMessageToConversationUseCase {
         new ConversationMessageEntity({
           conversation: this.toConversationRef(conversation),
           role: ConversationMessageRoleTypeEnum.USER,
-          content: dto.message,
+          content: dto.json.message,
+          title: (dto.json as any).title ?? null,
           createdAt: now,
         }),
       );
@@ -106,7 +107,7 @@ export class SendMessageToConversationUseCase {
 
     const history =
       await this.conversationMessageQueryRepositoryGateway.listByConversationIdAndCustomerId(
-        new ChatMessageToConversationQueryParam(dto),
+        new ChatMessageToConversationQueryParam(dto.json),
       );
 
     const MAX_HISTORY = 10;
@@ -142,8 +143,31 @@ export class SendMessageToConversationUseCase {
     const geminiMessages: GeminiMsgType[] = [
       { role: 'assistant', content: systemPrompt },
       ...geminiHistory,
-      { role: 'user', content: dto.message },
+      { role: 'user', content: dto.json.message },
     ];
+
+    // Collect files (support single or multiple possibilities coming from DTO)
+    const filesFromDto: Array<{ mimeType: string; data: Buffer }> = [];
+    const maybeFiles = (dto as any).files ?? [];
+
+    if (maybeFiles.length > 0) {
+      const arr = Array.isArray(maybeFiles) ? maybeFiles : [maybeFiles];
+      for (const f of arr) {
+        if (!f) {
+          continue;
+        }
+        // MemoryStoredFile from nestjs-form-data exposes `buffer` and `mimetype`
+        const buf: Buffer | undefined = f.buffer ?? f.data ?? undefined;
+        const mime: string | undefined =
+          f.mimetype ?? f.mimeType ?? f.mime ?? undefined;
+        if (buf && Buffer.isBuffer(buf)) {
+          filesFromDto.push({
+            mimeType: mime ?? 'application/octet-stream',
+            data: buf,
+          });
+        }
+      }
+    }
 
     const MAX_TOOL_STEPS = 8;
 
@@ -152,11 +176,14 @@ export class SendMessageToConversationUseCase {
     let finalAssistantText: string | null = null;
 
     for (let step = 0; step < MAX_TOOL_STEPS; step++) {
-      const rawText = await this.gemini.chat(toolLoopMessages);
+      const rawText = await this.gemini.chat(
+        toolLoopMessages,
+        step === 0 ? filesFromDto : undefined,
+      );
       const toolCall = this.tryParseToolCall(rawText);
 
       if (!toolCall) {
-        if (this.looksLikeUpdateRequest(dto.message)) {
+        if (this.looksLikeUpdateRequest(dto.json.message)) {
           toolLoopMessages.push({
             role: 'assistant',
             content: rawText,
@@ -197,7 +224,7 @@ export class SendMessageToConversationUseCase {
         toolCall,
         policy,
         toolResult,
-        dto.message,
+        dto.json.message,
       );
 
       const createToolResultEventTx =
@@ -258,13 +285,14 @@ export class SendMessageToConversationUseCase {
           conversation: this.toConversationRef(conversation),
           role: ConversationMessageRoleTypeEnum.ASSISTANT,
           content: finalAssistantText,
+          title: (dto.json as any).title ?? null,
           createdAt: new Date(),
         }),
       );
 
     const updateLastAiMessageAtTx =
       this.conversationCommandRepositoryGateway.updateLastAIMessageAt(
-        dto.conversationId,
+        dto.json.conversationId,
         new Date(),
       );
 

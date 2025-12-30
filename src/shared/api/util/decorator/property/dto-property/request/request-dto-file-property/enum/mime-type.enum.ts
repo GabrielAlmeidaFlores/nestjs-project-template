@@ -3,4 +3,5 @@ export enum MimeTypeEnum {
   IMAGE_PNG = 'image/png',
   APPLICATION_PDF = 'application/pdf',
   AUDIO_MPEG = 'audio/mpeg',
+  WORD = 'application/msword',
 }
