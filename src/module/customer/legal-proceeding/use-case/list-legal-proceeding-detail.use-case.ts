@@ -4,8 +4,8 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
-import { GetLegalProceedingDetailLaywerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-laywer-with-relations.response.dto';
-import { ListLegalProceedingDetailLaywerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-laywer.response.dto';
+import { GetLegalProceedingDetailLawyerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-lawyer-with-relations.response.dto';
+import { ListLegalProceedingDetailLawyerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-lawyer.response.dto';
 import { LegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/legal-proceeding-detail.model';
 
 import type { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
@@ -28,7 +28,7 @@ export class ListLegalProceedingDetailUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: ListLegalProceedingDetailRequestDto,
-  ): Promise<ListLegalProceedingDetailLaywerResponseDto> {
+  ): Promise<ListLegalProceedingDetailLawyerResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -45,7 +45,7 @@ export class ListLegalProceedingDetailUseCase {
         new ListLegalProceedingDetailQueryParam(dto),
       );
 
-    const resource: GetLegalProceedingDetailLaywerWithRelationsResponseDto[] =
+    const resource: GetLegalProceedingDetailLawyerWithRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
         const detailParsed = JSON.parse(
           item.detail,
@@ -57,7 +57,7 @@ export class ListLegalProceedingDetailUseCase {
         const recipient = lastItem?.destinatarios ?? [];
         const recipientLawyer = lastItem?.destinatarioadvogados ?? [];
 
-        return GetLegalProceedingDetailLaywerWithRelationsResponseDto.build({
+        return GetLegalProceedingDetailLawyerWithRelationsResponseDto.build({
           ...item,
           detail: JSON.parse(item.detail) as object,
           recipient,
@@ -65,7 +65,7 @@ export class ListLegalProceedingDetailUseCase {
         });
       });
 
-    return ListLegalProceedingDetailLaywerResponseDto.build({
+    return ListLegalProceedingDetailLawyerResponseDto.build({
       ...legalProceedingDetailList,
       resource,
     });
