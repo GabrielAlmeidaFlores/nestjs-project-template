@@ -41,7 +41,7 @@ export class LegalProceedingCronUseCase {
     this.logger = new Logger(LegalProceedingCronUseCase.name);
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
   public async execute(): Promise<void> {
     const limit = 50;
     let page = 1;
