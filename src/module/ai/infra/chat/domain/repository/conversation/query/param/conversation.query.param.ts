@@ -5,6 +5,8 @@ import type { CustomerId } from '@module/customer/account/domain/schema/entity/c
 export class ConversationQueryParam extends ListDataInputModel {
   public customerId: CustomerId;
 
+  public title?: string | null = null;
+
   protected override readonly _type = ConversationQueryParam.name;
 
   public constructor(props: Partial<ConversationQueryParam>) {
@@ -17,5 +19,6 @@ export class ConversationQueryParam extends ListDataInputModel {
     }
 
     this.customerId = customerId;
+    this.title = props.title ?? null;
   }
 }

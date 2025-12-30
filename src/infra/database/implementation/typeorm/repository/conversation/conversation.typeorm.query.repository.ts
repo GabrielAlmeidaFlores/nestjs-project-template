@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
@@ -53,12 +53,18 @@ export class ConversationTypeormQueryRepository
   public async listConversationById(
     listData: ConversationQueryParam,
   ): Promise<ListDataOutputModel<GetConversationQueryResult>> {
-    const data = await this.list(listData, {
-      where: {
-        customer: {
-          id: listData.customerId.toString(),
-        },
+    const where: FindOptionsWhere<ConversationTypeormEntity> = {
+      customer: {
+        id: listData.customerId.toString(),
       },
+    };
+
+    if (listData.title !== null && listData.title !== undefined) {
+      where.title = Like(`%${listData.title}%`);
+    }
+
+    const data = await this.list(listData, {
+      where,
     });
 
     const mappedData = this.mapperGateway.mapArray(

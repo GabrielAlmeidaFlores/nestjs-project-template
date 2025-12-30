@@ -15,6 +15,9 @@ export class GetConversationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public readonly assistantType?: string | null;
 
+  @ResponseDtoStringProperty({ required: false })
+  public readonly title?: string | null;
+
   @ResponseDtoEnumProperty(ConversationStatusTypeEnum, { required: false })
   public readonly status?: ConversationStatusTypeEnum | null;
 
