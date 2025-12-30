@@ -6,6 +6,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -13,6 +14,7 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -44,6 +46,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         CnisFastAnalysisEntity,
       );
 
+      const retirementPlanningRgps = this.mapper.map(
+        source.retirementPlanningRgps,
+        RetirementPlanningRgpsTypeormEntity,
+        RetirementPlanningRgpsEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -55,6 +63,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
         cnisFastAnalysis,
+        retirementPlanningRgps,
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
@@ -81,6 +90,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         CnisFastAnalysisTypeormEntity,
       );
 
+      const retirementPlanningRgps = this.mapper.map(
+        source.retirementPlanningRgps,
+        RetirementPlanningRgpsEntity,
+        RetirementPlanningRgpsTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
@@ -100,6 +115,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         id: source.id.toString(),
         code: source.code.toString(),
         cnisFastAnalysis,
+        retirementPlanningRgps,
         analysisToolClient,
         createdBy,
         updatedBy,
