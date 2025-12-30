@@ -30,6 +30,9 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
   )
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
+  @Description('Status do período de contribuição RGPS.')
+  public readonly status: boolean | null;
+
   protected readonly _type = RetirementPlanningRgpsPeriodEntity.name;
 
   public constructor(props: RetirementPlanningRgpsPeriodEntityPropsInterface) {
@@ -43,5 +46,6 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
     this.contributionAverage = props.contributionAverage ?? null;
     this.typeOfContribution = props.typeOfContribution ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
+    this.status = props.status ?? null;
   }
 }

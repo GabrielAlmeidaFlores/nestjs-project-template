@@ -49,6 +49,7 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
       contributionAverage: dto.json.contributionAverage,
       typeOfContribution: dto.json.typeOfContribution,
       retirementPlanningRgps: retirementPlanningRgpsEntity,
+      status: dto.json.status,
     });
 
     const documents =
