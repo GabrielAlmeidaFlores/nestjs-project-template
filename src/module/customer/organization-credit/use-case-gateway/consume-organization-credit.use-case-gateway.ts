@@ -10,6 +10,6 @@ export abstract class ConsumeOrganizationCreditUseCaseGateway {
   public abstract execute(
     organizationId: OrganizationId,
     resourceType: PaymentPlanPaidResourceTypeEnum,
-    createdBy: OrganizationMemberId,
+    createdBy: OrganizationMemberId | null,
   ): Promise<TransactionType>;
 }

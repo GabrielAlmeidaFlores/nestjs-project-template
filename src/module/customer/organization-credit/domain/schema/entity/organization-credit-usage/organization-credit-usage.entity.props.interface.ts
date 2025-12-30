@@ -3,9 +3,8 @@ import type { OrganizationMemberId } from '@module/customer/account/domain/schem
 import type { OrganizationCreditUsageId } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-usage/value-object/organization-credit-usage-id/organization-credit-usage-id.value-object';
 import type { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
-export interface OrganizationCreditUsageEntityPropsInterface
-  extends BaseEntityPropsInterface<OrganizationCreditUsageId> {
+export interface OrganizationCreditUsageEntityPropsInterface extends BaseEntityPropsInterface<OrganizationCreditUsageId> {
   creditAmount: number;
   paymentPlanPaidResource: PaymentPlanPaidResourceId;
-  createdBy: OrganizationMemberId;
+  createdBy?: OrganizationMemberId | null;
 }

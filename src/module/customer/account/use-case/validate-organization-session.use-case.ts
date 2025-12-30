@@ -8,9 +8,7 @@ import { OrganizationSessionGateway } from '@module/customer/account/lib/organiz
 import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 
 @Injectable()
-export class ValidateOrganizationSessionUseCase
-  implements ValidateOrganizationSessionUseCaseGateway
-{
+export class ValidateOrganizationSessionUseCase implements ValidateOrganizationSessionUseCaseGateway {
   protected readonly _type = ValidateOrganizationSessionUseCase.name;
 
   public constructor(

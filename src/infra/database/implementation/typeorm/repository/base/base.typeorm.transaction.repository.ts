@@ -6,9 +6,7 @@ import { TransactionOutputModel } from '@core/domain/repository/base/transaction
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 @Injectable()
-export class BaseTypeormTransactionRepository
-  implements BaseTransactionRepositoryGateway
-{
+export class BaseTypeormTransactionRepository implements BaseTransactionRepositoryGateway {
   protected readonly _type = BaseTypeormTransactionRepository.name;
 
   public constructor(private readonly dataSource: DataSource) {}

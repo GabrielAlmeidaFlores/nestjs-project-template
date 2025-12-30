@@ -7,9 +7,7 @@ import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/au
 import { ValidateAuthIdentitySignInUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/validate-auth-identity-sign-in.use-case-gateway';
 
 @Injectable()
-export class ValidateAuthIdentitySignInUseCase
-  implements ValidateAuthIdentitySignInUseCaseGateway
-{
+export class ValidateAuthIdentitySignInUseCase implements ValidateAuthIdentitySignInUseCaseGateway {
   protected readonly _type = ValidateAuthIdentitySignInUseCase.name;
 
   public constructor(

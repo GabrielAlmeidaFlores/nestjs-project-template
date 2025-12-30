@@ -12,6 +12,7 @@ import { AnalysisToolClientInssBenefitEntityAutoMapperProfile } from '@lib/mappe
 import { GetAnalysisToolClientInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-inss-benefit/get-analysis-tool-client-inss-benefit-query-result.auto-mapper.profile';
 import { AnalysisToolClientLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding-entity.auto-mapper.profile';
 import { GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-query-result.auto-mapper.profile';
+import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-with-relations-query-result.auto-mapper.profile';
 import { AnalysisToolRecordEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/analysis-tool-record-entity.auto-mapper.profile';
 import { GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-relations-query-result.auto-mapper.profile';
 import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
@@ -49,6 +50,9 @@ import { GetLegalPleadingDocumentAnalysisQueryResultAutoMapperProfile } from '@l
 import { LegalPleadingDocumentAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-document-analysis/legal-pleading-document-analysis-entity.auto-mapper.profile';
 import { GetLegalPleadingResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-result/get-legal-pleading-result-query-result.auto-mapper.profile';
 import { LegalPleadingResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-result/legal-pleading-result-entity.auto-mapper.profile';
+import { GetLegalProceedingDetailQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-query-result.auto-mapper.profile';
+import { GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-with-relations-query-result.auto-mapper.profile';
+import { LegalProceedingDetailEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/legal-proceeding-detail-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -132,6 +136,10 @@ import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/map
     GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
+    GetLegalProceedingDetailQueryResultAutoMapperProfile,
+    LegalProceedingDetailEntityAutoMapperProfile,
+    GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile,
+    GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile,
     PaymentPlanPaidResourceEntityAutoMapperProfile,
     PaymentPlanEntityAutoMapperProfile,
     GetPaymentPlanQueryResultAutoMapperProfile,

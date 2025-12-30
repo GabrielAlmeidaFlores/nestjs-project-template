@@ -33,6 +33,8 @@ import { LegalPleadingDocumentTypeormCommandRepository } from '@infra/database/i
 import { LegalPleadingDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document/legal-pleading-document.typeorm.query.repository';
 import { LegalPleadingDocumentAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document-analysis/legal-pleading-document-analysis.typeorm.command.repository';
 import { LegalPleadingDocumentAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document-analysis/legal-pleading-document-analysis.typeorm.query.repository';
+import { LegalProceedingDetailTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.command.repository';
+import { LegalProceedingDetailTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
 import { OrganizationCreditPurchaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-purchase.typeorm.command.repository';
@@ -70,6 +72,7 @@ import { LegalPleadingDocumentAnalysisTypeormEntity } from '@infra/database/impl
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
+import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { OrganizationCreditPurchaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-purchase.typeorm.entity';
 import { OrganizationCreditUsageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-credit-usage.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -113,6 +116,7 @@ export class TypeormIndex {
     CustomerTermsAcceptanceTypeormEntity,
     AnalysisToolClientLegalProceedingTypeormEntity,
     AdminTypeormEntity,
+    LegalProceedingDetailTypeormEntity,
     PaymentPlanTypeormEntity,
     PaymentPlanPaidResourceTypeormEntity,
     OrganizationPaymentPlanTypeormEntity,
@@ -164,6 +168,8 @@ export class TypeormIndex {
     AnalysisToolClientLegalProceedingTypeormCommandRepository,
     AdminTypeormCommandRepository,
     AdminTypeormQueryRepository,
+    LegalProceedingDetailTypeormCommandRepository,
+    LegalProceedingDetailTypeormQueryRepository,
     PaymentPlanPaidResourceTypeormCommandRepository,
     PaymentPlanPaidResourceTypeormQueryRepository,
     OrganizationPaymentPlanTypeormCommandRepository,

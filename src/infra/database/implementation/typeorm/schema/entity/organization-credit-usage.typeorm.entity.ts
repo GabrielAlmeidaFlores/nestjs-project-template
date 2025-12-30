@@ -15,7 +15,7 @@ export class OrganizationCreditUsageTypeormEntity extends BaseTypeormEntity {
     | PaymentPlanPaidResourceTypeormEntity
     | undefined;
 
-  @ManyToOne(() => OrganizationMemberTypeormEntity)
+  @ManyToOne(() => OrganizationMemberTypeormEntity, { nullable: true })
   @JoinColumn({ name: 'created_by_id' })
   public createdBy?: OrganizationMemberTypeormEntity | undefined;
 
