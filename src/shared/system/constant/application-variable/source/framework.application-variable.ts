@@ -7,6 +7,7 @@ export class FrameworkApplicationVariable {
   public static readonly defaultFrameworkHost = '127.0.0.1';
   public static readonly defaultFrameworkPort = 3000;
   public static readonly defaultFrameworkJwtExpiration = '7d';
+  public static readonly sevenDaysInSeconds = 604800;
 
   public static readonly FRAMEWORK_BASE_PATH =
     FrameworkApplicationVariable.source.getValueOrDefault(
@@ -42,16 +43,42 @@ export class FrameworkApplicationVariable {
       FrameworkApplicationVariable.defaultFrameworkJwtExpiration,
     );
 
+  public static readonly FRAMEWORK_ALLOWED_ORIGIN =
+    FrameworkApplicationVariable.source.getArrayOrThrow<string>(
+      'FRAMEWORK_ALLOWED_ORIGIN',
+      String,
+    );
+
   public static readonly FRAMEWORK_COOKIES_SECRET =
     FrameworkApplicationVariable.source.getValueOrThrow<string>(
       'FRAMEWORK_COOKIES_SECRET',
       String,
     );
 
-  public static readonly FRAMEWORK_ALLOWED_ORIGIN =
-    FrameworkApplicationVariable.source.getArrayOrThrow<string>(
-      'FRAMEWORK_ALLOWED_ORIGIN',
-      String,
+  public static readonly FRAMEWORK_COOKIES_CONFIG_SAME_SITE =
+    FrameworkApplicationVariable.source.getValueOrDefault<
+      'lax' | 'none' | 'strict'
+    >('FRAMEWORK_COOKIES_CONFIG_SAME_SITE', String, 'none');
+
+  public static readonly FRAMEWORK_COOKIES_CONFIG_SECURE =
+    FrameworkApplicationVariable.source.getValueOrDefault<boolean>(
+      'FRAMEWORK_COOKIES_CONFIG_SECURE',
+      Boolean,
+      true,
+    );
+
+  public static readonly FRAMEWORK_COOKIES_CONFIG_HTTP_ONLY =
+    FrameworkApplicationVariable.source.getValueOrDefault<boolean>(
+      'FRAMEWORK_COOKIES_CONFIG_HTTP_ONLY',
+      Boolean,
+      true,
+    );
+
+  public static readonly FRAMEWORK_COOKIES_CONFIG_MAX_AGE =
+    FrameworkApplicationVariable.source.getValueOrDefault<number>(
+      'FRAMEWORK_COOKIES_CONFIG_MAX_AGE',
+      Number,
+      FrameworkApplicationVariable.sevenDaysInSeconds,
     );
 
   protected readonly _type = FrameworkApplicationVariable.name;
