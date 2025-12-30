@@ -53,6 +53,7 @@ export class GetAnalysisToolClientLegalProceedingUseCase {
         const analysisToolClient =
           GetAnalysisToolClientLegalProceedingClientDetailResponseDto.build({
             ...item.analysisToolClient,
+            organizationId: item.analysisToolClient.createdBy.organizationId,
           });
 
         const latestDetailEntity = item.legalProceedingDetail

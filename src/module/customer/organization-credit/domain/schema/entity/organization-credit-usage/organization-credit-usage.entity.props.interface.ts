@@ -6,5 +6,5 @@ import type { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/do
 export interface OrganizationCreditUsageEntityPropsInterface extends BaseEntityPropsInterface<OrganizationCreditUsageId> {
   creditAmount: number;
   paymentPlanPaidResource: PaymentPlanPaidResourceId;
-  createdBy: OrganizationMemberId;
+  createdBy?: OrganizationMemberId | null;
 }
