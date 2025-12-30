@@ -45,7 +45,7 @@ export class CountLegalProceedingDetailUseCase {
       );
 
     let inProgress = 0;
-    let concluded = 0;
+    let completed = 0;
     let total = 0;
 
     legalProceedingDetailList.resource.forEach((proceeding) => {
@@ -57,21 +57,21 @@ export class CountLegalProceedingDetailUseCase {
 
       if (
         detailObject.data.items[0]?.status ===
-        LegalProceedingDetailItemStatusEnum.P
+        LegalProceedingDetailItemStatusEnum.IN_PROGRESS
       ) {
         inProgress++;
       }
       if (
         detailObject.data.items[0]?.status ===
-        LegalProceedingDetailItemStatusEnum.C
+        LegalProceedingDetailItemStatusEnum.COMPLETED
       ) {
-        concluded++;
+        completed++;
       }
     });
 
     const response = CountLegalProceedingDetailResponseDto.build({
       inProgress,
-      concluded,
+      completed,
       total,
     });
 
