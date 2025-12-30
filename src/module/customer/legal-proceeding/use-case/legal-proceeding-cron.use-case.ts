@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { isEqual } from 'lodash';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
@@ -30,76 +31,97 @@ export class LegalProceedingCronUseCase {
 
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+
+    private readonly logger: Logger,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
   public async execute(): Promise<void> {
     const limit = 50;
     let page = 1;
-
-    const allProceedings: GetAnalysisToolClientLegalProceedingResponseDto[] =
-      [];
-
     let hasNextPage: boolean;
 
+    let totalProcessed = 0;
+    let totalErrors = 0;
+
     do {
-      const dto = new ListDataRequestDto();
-      dto.page = page;
-      dto.limit = limit;
+      try {
+        const dto = new ListDataRequestDto();
+        dto.page = page;
+        dto.limit = limit;
 
-      const proceedingsPage =
-        await this.listAnalysisToolClientLegalProceedingUseCaseGateway.execute(
-          dto,
-        );
+        const proceedingsPage =
+          await this.listAnalysisToolClientLegalProceedingUseCaseGateway.execute(
+            dto,
+          );
 
-      const items = proceedingsPage.resource;
+        const items = proceedingsPage.resource;
+        const transactions: TransactionType[] = [];
 
-      allProceedings.push(...items);
+        for (const proceeding of items) {
+          const tx = await this.processProceeding(proceeding);
+          if (tx) {
+            transactions.push(tx);
+          }
+        }
 
-      hasNextPage = items.length === limit;
-      page++;
+        if (transactions.length > 0) {
+          const transaction =
+            await this.baseTransactionRepositoryGateway.execute(transactions);
+          await transaction.commit();
+          totalProcessed += transactions.length;
+        }
+
+        hasNextPage = items.length === limit;
+        page++;
+      } catch (error) {
+        this.logger.error(`Error processing page ${page}`, error);
+        totalErrors++;
+        hasNextPage = false;
+      }
     } while (hasNextPage);
 
-    const transactions = [];
+    this.logger.log(
+      `Cron completed: ${totalProcessed} processed, ${totalErrors} page(s) with errors`,
+      this.constructor.name,
+    );
+  }
 
-    for (const proceeding of allProceedings) {
-      const processNumber = proceeding.legalProceedingNumber;
+  private async processProceeding(
+    proceeding: GetAnalysisToolClientLegalProceedingResponseDto,
+  ): Promise<TransactionType | null> {
+    const processNumber = proceeding.legalProceedingNumber;
 
-      const response =
-        await this.legalProceedingConsumerGateway.consumeByProcessNumber(
-          processNumber,
-        );
+    const response =
+      await this.legalProceedingConsumerGateway.consumeByProcessNumber(
+        processNumber,
+      );
 
-      const safeDetail = JSON.stringify(response);
+    const safeDetail = JSON.stringify(response);
 
-      const legalProceedingDetail = new LegalProceedingDetailEntity({
-        detail: safeDetail,
-        analysisToolClientLegalProceeding:
-          new AnalysisToolClientLegalProceedingId(
-            proceeding.analysisToolClientLegalProceedingId.toString(),
-          ),
-      });
+    const legalProceedingDetail = new LegalProceedingDetailEntity({
+      detail: safeDetail,
+      analysisToolClientLegalProceeding:
+        new AnalysisToolClientLegalProceedingId(
+          proceeding.analysisToolClientLegalProceedingId.toString(),
+        ),
+    });
 
-      const proceedingsExist =
-        await this.legalProceedingDetailQueryRepositoryGateway.findLastCreated(
-          proceeding.analysisToolClientLegalProceedingId,
-          proceeding.legalProceedingNumber,
-        );
+    const proceedingsExist =
+      await this.legalProceedingDetailQueryRepositoryGateway.findLastCreated(
+        proceeding.analysisToolClientLegalProceedingId,
+        proceeding.legalProceedingNumber,
+      );
 
-      if (proceedingsExist && isEqual(proceedingsExist.detail, safeDetail)) {
-        continue;
-      }
-
-      const tx =
-        this.legalProceedingDetailCommandRepositoryGateway.createLegalProceedingDetail(
-          legalProceedingDetail,
-        );
-
-      transactions.push(tx);
+    if (proceedingsExist && isEqual(proceedingsExist.detail, safeDetail)) {
+      return null;
     }
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
-    await transaction.commit();
+    const tx =
+      this.legalProceedingDetailCommandRepositoryGateway.createLegalProceedingDetail(
+        legalProceedingDetail,
+      );
+
+    return tx;
   }
 }
