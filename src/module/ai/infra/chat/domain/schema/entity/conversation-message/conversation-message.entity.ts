@@ -1,8 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { ConversationMessageEntityInterface } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity.props.interface';
 import { ConversationMessageRoleTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/enum/conversation-message-role-type.enum';
 import { ConversationMessageId } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class ConversationMessageEntity extends BaseEntity<ConversationMessageId> {
@@ -15,6 +15,9 @@ export class ConversationMessageEntity extends BaseEntity<ConversationMessageId>
   @Description('Mensagem abordada na conversa')
   public readonly content: string | null;
 
+  @Description('Título/assunto da mensagem')
+  public readonly title: string | null;
+
   @Description('Data da mensagem enviada')
   public override readonly createdAt: Date;
 
@@ -26,6 +29,7 @@ export class ConversationMessageEntity extends BaseEntity<ConversationMessageId>
     this.conversation = props.conversation ?? null;
     this.role = props.role ?? null;
     this.content = props.content ?? null;
+    this.title = props.title ?? null;
     this.createdAt = props.createdAt;
   }
 }
