@@ -1,0 +1,41 @@
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
+import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
+import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@RequestDto()
+export class FileDocumentRetirementPlanningRgpsPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(Base64)
+  public file: Base64;
+
+  protected override readonly _type =
+    FileDocumentRetirementPlanningRgpsPeriodRequestDto.name;
+}
+
+@RequestDto()
+export class DataRetirementPlanningRgpsPeriodDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(RetirementPlanningRgpsPeriodId)
+  public retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId;
+
+  protected override readonly _type =
+    DataRetirementPlanningRgpsPeriodDocumentRequestDto.name;
+}
+
+@RequestDto()
+export class CreateRetirementPlanningRgpsPeriodDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoObjectProperty(
+    () => DataRetirementPlanningRgpsPeriodDocumentRequestDto,
+  )
+  public json: DataRetirementPlanningRgpsPeriodDocumentRequestDto;
+
+  @RequestDtoObjectProperty(
+    () => FileDocumentRetirementPlanningRgpsPeriodRequestDto,
+    { required: true, isArray: true },
+  )
+  public documents: FileDocumentRetirementPlanningRgpsPeriodRequestDto[];
+
+  protected override readonly _type =
+    CreateRetirementPlanningRgpsPeriodDocumentRequestDto.name;
+}

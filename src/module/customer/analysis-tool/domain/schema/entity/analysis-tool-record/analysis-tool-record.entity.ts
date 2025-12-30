@@ -9,6 +9,7 @@ import { Description } from '@shared/system/decorator/property/description/descr
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   @Description('Status do registro da ferramenta de análise')
@@ -24,6 +25,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Análise rápida do CNIS associada ao registro da ferramenta de análise',
   )
   public readonly cnisFastAnalysis: CnisFastAnalysisEntity | null;
+
+  @Description(
+    'Planejamento de aposentadoria RGPS associado ao registro da ferramenta de análise',
+  )
+  public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
   @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
@@ -48,6 +54,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.code = props.code;
     this.type = props.type;
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
+    this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
