@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
-import { LegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/legal-proceeding-detail-item-status.enum';
-import { LegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/legal-proceeding-detail.model';
+import { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
+import { ComunicacaoPjeLegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail.model';
 import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import { LegalProceedingDataOutputModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/model/output/legal-proceeding-data.output.model';
@@ -57,7 +57,9 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
   public extractLegalProceedingData(
     detailJson: string,
   ): LegalProceedingDataOutputModel {
-    const detailParsed = JSON.parse(detailJson) as LegalProceedingDetailModel;
+    const detailParsed = JSON.parse(
+      detailJson,
+    ) as ComunicacaoPjeLegalProceedingDetailModel;
 
     const items = detailParsed.data?.items ?? [];
     const lastItem = items.length > 0 ? items[items.length - 1] : null;
@@ -75,17 +77,23 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
   public extractLastItemStatus(
     detailJson: string,
   ): LegalProceedingStatusEnum | null {
-    const detailParsed = JSON.parse(detailJson) as LegalProceedingDetailModel;
+    const detailParsed = JSON.parse(
+      detailJson,
+    ) as ComunicacaoPjeLegalProceedingDetailModel;
 
     const items = detailParsed.data?.items ?? [];
     const firstItem = items.length > 0 ? items[0] : null;
     const status = (firstItem as { status?: string } | null)?.status;
 
-    if (status === LegalProceedingDetailItemStatusEnum.IN_PROGRESS) {
+    if (
+      status === ComunicacaoPjeLegalProceedingDetailItemStatusEnum.IN_PROGRESS
+    ) {
       return LegalProceedingStatusEnum.IN_PROGRESS;
     }
 
-    if (status === LegalProceedingDetailItemStatusEnum.COMPLETED) {
+    if (
+      status === ComunicacaoPjeLegalProceedingDetailItemStatusEnum.COMPLETED
+    ) {
       return LegalProceedingStatusEnum.COMPLETED;
     }
 
