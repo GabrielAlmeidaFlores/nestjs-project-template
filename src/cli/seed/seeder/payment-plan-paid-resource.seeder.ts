@@ -40,6 +40,12 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de peças jurídicas com parecer resumido.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
+      resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
+      creditCost: 0,
+      description: 'Monitoramento automático de processos jurídicos.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
