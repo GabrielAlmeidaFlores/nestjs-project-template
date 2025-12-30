@@ -74,6 +74,13 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
   @JoinColumn({ name: 'retirement_planning_rgps_id' })
   public retirementPlanningRgps?: RetirementPlanningRgpsTypeormEntity | null;
 
+  @Column({
+    name: 'status',
+    type: 'boolean',
+    nullable: true,
+  })
+  public status: boolean | null;
+
   protected override readonly _type =
     RetirementPlanningRgpsPeriodTypeormEntity.name;
 }
