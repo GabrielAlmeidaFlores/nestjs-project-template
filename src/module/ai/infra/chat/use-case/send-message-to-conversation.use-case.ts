@@ -34,6 +34,7 @@ import {
   McpUseCase,
 } from '@module/ai/infra/mcp/use-case/mcp.use-case';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 
 export type ConversationToolPolicySnapshotType = {
   toolsEnable?: boolean | null;
@@ -144,19 +145,36 @@ export class SendMessageToConversationUseCase {
       { role: 'user', content: dto.message },
     ];
 
-    const MAX_TOOL_STEPS = 3;
+    const MAX_TOOL_STEPS = 8;
 
-    // Vamos trabalhar sobre uma cópia mutável do histórico que será enviado ao Gemini
     const toolLoopMessages: GeminiMsgType[] = [...geminiMessages];
 
     let finalAssistantText: string | null = null;
 
-    // ...
     for (let step = 0; step < MAX_TOOL_STEPS; step++) {
       const rawText = await this.gemini.chat(toolLoopMessages);
       const toolCall = this.tryParseToolCall(rawText);
 
       if (!toolCall) {
+        if (this.looksLikeUpdateRequest(dto.message)) {
+          toolLoopMessages.push({
+            role: 'assistant',
+            content: rawText,
+          });
+
+          toolLoopMessages.push({
+            role: 'user',
+            content:
+              'ATENÇÃO: este pedido implica ALTERAÇÃO/ATUALIZAÇÃO. Responda APENAS com JSON puro de ferramenta no formato {"tool":"...","arguments":{...}}. ' +
+              'Se for CNIS Fast Analysis: siga obrigatoriamente cnis_fast_analysis_get -> cnis_fast_analysis_patch. ' +
+              'No PATCH, envie sempre arguments.cnisFastAnalysisId e arguments.json (objeto) com os campos editáveis. ' +
+              'Se o usuário pedir para ADICIONAR sem remover, faça merge: leia o array atual no GET e envie o array completo no PATCH. ' +
+              'Se for Legal Pleading: siga obrigatoriamente legal_pleading_get -> editar somente o pedido -> legal_pleading_patch_complete_analysis com o conteúdo COMPLETO.',
+          });
+
+          continue;
+        }
+
         finalAssistantText = rawText;
         break;
       }
@@ -202,11 +220,9 @@ export class SendMessageToConversationUseCase {
       ]);
       await txTool.commit();
 
-      // mantém o raciocínio do modelo
       toolLoopMessages.push({ role: 'assistant', content: rawText });
 
-      // 🔥 CORREÇÃO AQUI
-      const toolText = JSON.stringify(toolResponse, null, 2);
+      const toolText = this.formatToolResultForModel(toolResponse);
       toolLoopMessages.push({ role: 'user', content: toolText });
 
       if (
@@ -217,11 +233,20 @@ export class SendMessageToConversationUseCase {
         finalAssistantText = toolText;
         break;
       }
+
+      if (toolCall.tool === 'legal_pleading_patch_complete_analysis') {
+        finalAssistantText = toolText;
+        break;
+      }
+
+      if (toolCall.tool === 'cnis_fast_analysis_patch') {
+        finalAssistantText = toolText;
+        break;
+      }
     }
 
     finalAssistantText ??= `Limite de ${MAX_TOOL_STEPS} execuções de ferramentas atingido.`;
 
-    // Agora persiste a mensagem final do assistant
     const createAssistantMessageTx =
       this.conversationMessageCommandRepositoryGateway.createConversationMessage(
         new ConversationMessageEntity({
@@ -299,36 +324,6 @@ export class SendMessageToConversationUseCase {
       name.endsWith('_list') ||
       name.startsWith('list_')
     );
-  }
-
-  private isTextContentEnvelope(value: unknown): value is {
-    content: [
-      { type: 'text'; text: string },
-      ...Array<{ type: 'text'; text: string }>,
-    ];
-  } {
-    if (typeof value !== 'object' || value === null) {
-      return false;
-    }
-
-    const v: Record<string, unknown> = value as Record<string, unknown>;
-    const c: unknown = v['content'];
-
-    if (!Array.isArray(c) || c.length === 0) {
-      return false;
-    }
-
-    const first: unknown = c[0];
-
-    if (typeof first !== 'object' || first === null) {
-      return false;
-    }
-
-    const f: Record<string, unknown> = first as Record<string, unknown>;
-    const typeVal: unknown = f['type'];
-    const textVal: unknown = f['text'];
-
-    return typeVal === 'text' && typeof textVal === 'string';
   }
 
   private isNonEmptyString(value: unknown): value is string {
@@ -419,6 +414,30 @@ REGRA CNIS FAST ANALYSIS (OBRIGATÓRIA PARA QUALQUER UPDATE):
   - Todo campo editável deve ir dentro de arguments.json (objeto).
   - Se houver troca/reattach do documento CNIS, envie arguments.cnisDocumentPath (string path) além de arguments.json.
   - Nunca envie campos editáveis na raiz de arguments (ex.: NÃO enviar legalProceedingNumber direto; deve ser json.legalProceedingNumber).
+
+LEGAL PLEADING (OBRIGATÓRIO PARA QUALQUER UPDATE NA PEÇA PROCESSUAL):
+- Sempre que o usuário pedir para ALTERAR/ATUALIZAR o conteúdo final da peça processual
+  (ex.: trocar título, corrigir um trecho, ajustar formatação, substituir uma palavra, etc),
+  você DEVE executar EXATAMENTE este fluxo:
+
+  1) Chamar legal_pleading_get com o legalPleadingId
+  2) Ler o campo: legalPleadingResult.legalPleadingCompleteAnalysis
+  3) Aplicar SOMENTE a alteração solicitada, mantendo TODO o resto idêntico
+  4) Chamar legal_pleading_patch_complete_analysis com:
+     - legalPleadingId
+     - legalPleadingCompleteAnalysis (o conteúdo COMPLETO final, já atualizado)
+
+- Regras:
+  - NUNCA invente conteúdo que não veio do GET.
+  - NUNCA resuma. NUNCA explique. Em updates, sua resposta deve ser somente JSON de tool call.
+  - Se o usuário fornecer um UUID na mensagem, use esse UUID como legalPleadingId.
+  - Se o usuário não fornecer ID, use legal_pleading_list para localizar a peça e então legal_pleading_get.
+
+Exemplo de tool call (formato obrigatório, JSON puro):
+{"tool":"legal_pleading_get","arguments":{"legalPleadingId":"<UUID>"}}
+
+Depois do GET, exemplo de PATCH (com HTML/TEXTO COMPLETO):
+{"tool":"legal_pleading_patch_complete_analysis","arguments":{"legalPleadingId":"<UUID>","legalPleadingCompleteAnalysis":"<conteúdo completo com a alteração mínima>"}}
 
 POLÍTICA DE UPDATE (SEM REMOVER EXISTENTES):
 - Se o usuário disser "sem remover os existentes", você deve fazer merge:
@@ -556,7 +575,9 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
         baseArgs['analysis_id'] ??
         baseArgs['id'];
 
-      const id = this.extractIdString(raw);
+      let id = this.extractIdString(raw);
+
+      id ??= this.extractUuidFromText(userMessage);
 
       if (id !== undefined) {
         normalizedArgs = { legalPleadingId: id };
@@ -630,7 +651,6 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
       let id: string | undefined = this.extractIdString(raw);
       id ??= this.extractUuidFromText(userMessage);
 
-      // (mantive seu comportamento atual)
       if (id === undefined) {
         return {
           content: [
@@ -643,7 +663,34 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
         };
       }
 
-      // 1) cnisDocumentPath (opcional)
+      const current = await this.mcp.cnisFastAnalysisGet(
+        new CnisFastAnalysisId(id),
+      );
+      const currentObj = current as unknown as {
+        legalProceedingNumber?: unknown;
+        inssBenefitNumber?: unknown;
+      };
+
+      const currentLegalProceeding: string[] = Array.isArray(
+        currentObj.legalProceedingNumber,
+      )
+        ? (currentObj.legalProceedingNumber as unknown[])
+            .filter(
+              (v): v is string => typeof v === 'string' && v.trim().length > 0,
+            )
+            .map((v) => v.trim())
+        : [];
+
+      const currentInssBenefit: string[] = Array.isArray(
+        currentObj.inssBenefitNumber,
+      )
+        ? (currentObj.inssBenefitNumber as unknown[])
+            .filter(
+              (v): v is string => typeof v === 'string' && v.trim().length > 0,
+            )
+            .map((v) => v.trim())
+        : [];
+
       const cnisDocumentPathRaw: JsonValueType | undefined =
         baseArgs['cnisDocumentPath'];
 
@@ -654,7 +701,6 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
 
       const hasDocumentPath: boolean = cnisDocumentPath.length > 0;
 
-      // 2) json pode vir como object OU string
       const jsonRaw: JsonValueType | undefined = baseArgs['json'];
 
       let parsedJson: JsonObjectInterface | undefined;
@@ -703,7 +749,6 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
         parsedJson = jsonRaw;
       }
 
-      // 3) Campos "soltos" fora de json
       const rootLegalProceeding: JsonValueType | undefined =
         baseArgs['legalProceedingNumber'];
 
@@ -722,20 +767,68 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
       }
 
       if (Array.isArray(rootLegalProceeding)) {
-        const arr = rootLegalProceeding.filter(
-          (v): v is string => typeof v === 'string' && v.trim().length > 0,
-        );
+        const arr = rootLegalProceeding
+          .filter(
+            (v): v is string => typeof v === 'string' && v.trim().length > 0,
+          )
+          .map((v) => v.trim());
         if (arr.length > 0) {
           patchPayload['legalProceedingNumber'] = arr;
         }
       }
 
       if (Array.isArray(rootInssBenefit)) {
-        const arr = rootInssBenefit.filter(
-          (v): v is string => typeof v === 'string' && v.trim().length > 0,
-        );
+        const arr = rootInssBenefit
+          .filter(
+            (v): v is string => typeof v === 'string' && v.trim().length > 0,
+          )
+          .map((v) => v.trim());
         if (arr.length > 0) {
           patchPayload['inssBenefitNumber'] = arr;
+        }
+      }
+
+      const userWantsAdd = this.looksLikeAddRequest(userMessage);
+
+      const inferredLegalProceeding =
+        this.extractLegalProceedingNumbers(userMessage);
+      const inferredInssBenefit = this.extractInssBenefitNumbers(userMessage);
+
+      const mentionsBenefit = /(?:\bnb\b|\bbenef[ií]c|\binss\b)/i.test(
+        userMessage,
+      );
+
+      if (userWantsAdd) {
+        if (Array.isArray(patchPayload.legalProceedingNumber)) {
+          patchPayload.legalProceedingNumber = this.mergeUniqueStrings(
+            currentLegalProceeding,
+            patchPayload.legalProceedingNumber,
+          );
+        }
+        if (Array.isArray(patchPayload.inssBenefitNumber)) {
+          patchPayload.inssBenefitNumber = this.mergeUniqueStrings(
+            currentInssBenefit,
+            patchPayload.inssBenefitNumber,
+          );
+        }
+
+        const hasLegalInPayload = Array.isArray(
+          patchPayload.legalProceedingNumber,
+        );
+        const hasInssInPayload = Array.isArray(patchPayload.inssBenefitNumber);
+
+        if (!hasLegalInPayload && !hasInssInPayload) {
+          if (mentionsBenefit && inferredInssBenefit.length > 0) {
+            patchPayload.inssBenefitNumber = this.mergeUniqueStrings(
+              currentInssBenefit,
+              inferredInssBenefit,
+            );
+          } else if (inferredLegalProceeding.length > 0) {
+            patchPayload.legalProceedingNumber = this.mergeUniqueStrings(
+              currentLegalProceeding,
+              inferredLegalProceeding,
+            );
+          }
         }
       }
 
@@ -762,31 +855,39 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
         baseArgs['analysis_id'] ??
         baseArgs['id'];
 
-      const id =
-        this.extractIdString(raw) ?? this.extractUuidFromText(userMessage);
+      let id = this.extractIdString(raw);
+      id ??= this.extractUuidFromText(userMessage);
+
+      const contentRaw = baseArgs['legalPleadingCompleteAnalysis'];
+      const content = typeof contentRaw === 'string' ? contentRaw : undefined;
 
       if (id === undefined) {
         return {
           content: [
-            { type: 'text', text: 'Parâmetro inválido: legalPleadingId.' },
+            {
+              type: 'text',
+              text: 'Parâmetro inválido: legalPleadingId não foi informado corretamente.',
+            },
           ],
           isError: true,
         };
       }
 
-      /**
-       * ⚠️ AQUI NÃO VALIDAMOS O TEXTO
-       * Porque ele será CONSTRUÍDO pela IA
-       * após o legal_pleading_get
-       */
+      if (content === undefined) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Parâmetro inválido: legalPleadingCompleteAnalysis não foi informado corretamente.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
       normalizedArgs = {
         legalPleadingId: id,
-        ...(typeof baseArgs['legalPleadingCompleteAnalysis'] === 'string'
-          ? {
-              legalPleadingCompleteAnalysis:
-                baseArgs['legalPleadingCompleteAnalysis'].trim(),
-            }
-          : {}),
+        legalPleadingCompleteAnalysis: content,
       };
     }
 
@@ -823,33 +924,109 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
         };
       }
 
-      const postResult = await this.mcp.callTool('cnis_fast_analysis_post', {
-        cnisFastAnalysisId: id,
-      });
+      if ('cnisDocumentPath' in args) {
+        const postResult = await this.mcp.callTool('cnis_fast_analysis_post', {
+          cnisFastAnalysisId: id,
+        });
 
-      if (this.isTextContentEnvelope(postResult)) {
         return {
           content: [
             {
               type: 'text',
-              text: postResult.content[0].text,
+              text: JSON.stringify(postResult, null, 2),
             },
           ],
         };
       }
 
-      // fallback seguro
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(postResult, null, 2),
+            text: JSON.stringify(patchResult, null, 2),
           },
         ],
       };
     }
 
     return this.mcp.callTool(toolCall.tool, args);
+  }
+
+  private looksLikeUpdateRequest(message: string): boolean {
+    return /(?:atualiz|alter|troque|substitu|mude|edite|corrig|patch)/i.test(
+      message,
+    );
+  }
+
+  private looksLikeAddRequest(message: string): boolean {
+    return /(?:adicion|inclu|acresc|insir|coloque|append|somar|juntar)/i.test(
+      message,
+    );
+  }
+
+  private mergeUniqueStrings(base: string[], add: string[]): string[] {
+    const out: string[] = [];
+    const seen = new Set<string>();
+
+    for (const v of base) {
+      const s = typeof v === 'string' ? v.trim() : '';
+      if (!s) {
+        continue;
+      }
+      if (!seen.has(s)) {
+        seen.add(s);
+        out.push(s);
+      }
+    }
+
+    for (const v of add) {
+      const s = typeof v === 'string' ? v.trim() : '';
+      if (!s) {
+        continue;
+      }
+      if (!seen.has(s)) {
+        seen.add(s);
+        out.push(s);
+      }
+    }
+
+    return out;
+  }
+
+  private normalizeDigitsOnly(value: string): string {
+    return value.replace(/[^\d]/g, '');
+  }
+
+  private extractLegalProceedingNumbers(text: string): string[] {
+    const results: string[] = [];
+
+    const cnjMatches =
+      text.match(/\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/g) ?? [];
+    for (const m of cnjMatches) {
+      const digits = this.normalizeDigitsOnly(m);
+      if (digits.length === 20) {
+        results.push(digits);
+      }
+    }
+
+    const digitsMatches = text.match(/\b\d{20}\b/g) ?? [];
+    for (const m of digitsMatches) {
+      const digits = this.normalizeDigitsOnly(m);
+      if (digits.length === 20) {
+        results.push(digits);
+      }
+    }
+
+    return this.mergeUniqueStrings([], results);
+  }
+
+  private extractInssBenefitNumbers(text: string): string[] {
+    const matches = text.match(/\b\d{8,12}\b/g) ?? [];
+    const filtered = matches
+      .map((m) => this.normalizeDigitsOnly(m))
+      .filter((m) => m.length >= 8 && m.length <= 12);
+
+    return this.mergeUniqueStrings([], filtered);
   }
 
   private extractIdString(value: unknown): string | undefined {
@@ -877,5 +1054,33 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
     }
 
     return undefined;
+  }
+
+  private isTextContentEnvelope(
+    value: unknown,
+  ): value is { content: Array<{ type: 'text'; text: string }> } {
+    if (typeof value !== 'object' || value === null) {
+      return false;
+    }
+    const v = value as { content?: unknown };
+    if (!Array.isArray(v.content) || v.content.length === 0) {
+      return false;
+    }
+
+    return v.content.every((c: unknown) => {
+      if (typeof c !== 'object' || c === null) {
+        return false;
+      }
+      const cc = c as { type?: unknown; text?: unknown };
+      return cc.type === 'text' && typeof cc.text === 'string';
+    });
+  }
+
+  private formatToolResultForModel(value: unknown): string {
+    if (this.isTextContentEnvelope(value)) {
+      return value.content.map((c) => c.text).join('\n');
+    }
+
+    return JSON.stringify(value, null, 2);
   }
 }
