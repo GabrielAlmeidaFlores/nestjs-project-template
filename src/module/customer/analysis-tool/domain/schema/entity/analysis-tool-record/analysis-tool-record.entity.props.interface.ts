@@ -7,8 +7,7 @@ import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
-export interface AnalysisToolRecordEntityPropsInterface
-  extends BaseEntityPropsInterface<AnalysisToolRecordId> {
+export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
   type: AnalysisToolRecordTypeEnum;
   cnisFastAnalysis?: CnisFastAnalysisEntity | null;

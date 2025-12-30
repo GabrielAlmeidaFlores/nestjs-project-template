@@ -17,9 +17,7 @@ import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/pa
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 
 @Injectable()
-export class ConsumeOrganizationCreditUseCase
-  implements ConsumeOrganizationCreditUseCaseGateway
-{
+export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCreditUseCaseGateway {
   protected readonly _type = ConsumeOrganizationCreditUseCase.name;
 
   public constructor(

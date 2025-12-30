@@ -1,6 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { LegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/domain/schema/enum/legal-proceeding-detail-item-status.enum';
+import type { LegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/legal-proceeding-detail-item-status.enum';
 
 export class LegalProceedingDetailItemModel extends BaseBuildableObject {
   public readonly id: number;
