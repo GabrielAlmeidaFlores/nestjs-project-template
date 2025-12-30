@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
-import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
+import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 import { GetLegalProceedingDetailWithRelationsQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail-with-relations.query.result';
 import { LegalProceedingDetailId } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/value-object/analysis-tool-client-legal-proceeding-detail-id/legal-proceeding-detail-id.value-object';
 
@@ -29,7 +29,7 @@ export class GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile {
       const analysisToolClientLegalProceeding = this.mapper.map(
         source.analysisToolClientLegalProceeding,
         AnalysisToolClientLegalProceedingTypeormEntity,
-        GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
+        GetAnalysisToolClientLegalProceedingQueryResult,
       );
       return GetLegalProceedingDetailWithRelationsQueryResult.build({
         ...source,
@@ -53,7 +53,7 @@ export class GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile {
     ): LegalProceedingDetailTypeormEntity => {
       const analysisToolClientLegalProceeding = this.mapper.map(
         source.analysisToolClientLegalProceeding,
-        GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
+        GetAnalysisToolClientLegalProceedingQueryResult,
         AnalysisToolClientLegalProceedingTypeormEntity,
       );
       return LegalProceedingDetailTypeormEntity.build({

@@ -5,6 +5,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
 import { ListLegalProceedingDetailByAnalysisToolClientRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-analysis-tool-client-id.request.dto';
+import { GetAnalysisToolClientLegalProceedingSimpleResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding-simple.response.dto';
 import { GetLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-relations.response.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 
@@ -47,8 +48,16 @@ export class ListLegalProceedingDetailByAnalysisToolClientIdUseCase {
 
     const resource: GetLegalProceedingDetailWithRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
+        const analysisToolClientLegalProceeding =
+          GetAnalysisToolClientLegalProceedingSimpleResponseDto.build({
+            id: item.analysisToolClientLegalProceeding.id,
+            legalProceedingNumber:
+              item.analysisToolClientLegalProceeding.legalProceedingNumber,
+          });
+
         return GetLegalProceedingDetailWithRelationsResponseDto.build({
-          ...item,
+          id: item.id,
+          analysisToolClientLegalProceeding,
           detail: JSON.parse(item.detail) as object,
         });
       });
