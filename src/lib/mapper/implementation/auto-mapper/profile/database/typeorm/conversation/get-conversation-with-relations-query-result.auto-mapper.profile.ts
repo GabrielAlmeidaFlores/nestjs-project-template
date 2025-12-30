@@ -1,4 +1,4 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
@@ -7,8 +7,8 @@ import { ConversationMessageTypeormEntity } from '@infra/database/implementation
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { GetConversationWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
 import { GetConversationToolPolicyQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/result/get-conversation-tool-policy.query.result';
+import { GetConversationWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
 import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { GetConversationEventResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation-event.response.dto';
 import { GetConversationMessageResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation-message.response.dto';
@@ -62,6 +62,7 @@ export class GetConversationWithRelationsQueryResultAutoMapperProfile {
 
       return GetConversationWithRelationsQueryResult.build({
         id: new ConversationId(source.id),
+        title: source.title ?? null,
         assistantType: source.assistantType ?? null,
         status: source.status ?? null,
         lastAIMessageAt: source.lastAIMessageAt ?? null,
@@ -96,6 +97,7 @@ export class GetConversationWithRelationsQueryResultAutoMapperProfile {
 
       return ConversationTypeormEntity.build({
         id: source.id.toString(),
+        title: source.title ?? null,
         assistantType: source.assistantType ?? null,
         status: source.status ?? null,
         lastAIMessageAt: source.lastAIMessageAt ?? null,

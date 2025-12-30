@@ -8,7 +8,6 @@ export class GetChatMessagesToConversationQueryResult extends BaseBuildableObjec
   public readonly id: ConversationMessageId;
   public readonly conversation?: GetConversationQueryResult | null;
   public readonly role?: ConversationMessageRoleTypeEnum | null;
-  public readonly title?: string | null;
   public readonly content?: string | null;
   public readonly createdAt: Date;
 

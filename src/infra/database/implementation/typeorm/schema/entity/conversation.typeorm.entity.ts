@@ -24,6 +24,9 @@ export class ConversationTypeormEntity extends BaseTypeormEntity {
   })
   public assistantType?: string | null;
 
+  @Column({ name: 'title', type: 'varchar', length: 255, nullable: true })
+  public title?: string | null;
+
   @Column({
     name: 'status',
     type: 'simple-enum',

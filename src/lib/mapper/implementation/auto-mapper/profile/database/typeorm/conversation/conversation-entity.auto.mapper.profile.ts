@@ -1,4 +1,4 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
@@ -7,11 +7,11 @@ import { ConversationMessageTypeormEntity } from '@infra/database/implementation
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { ConversationEventEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity';
 import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
 import { ConversationToolPolicyEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()
@@ -59,6 +59,7 @@ export class ConversationEnitityAutoMapperProfile {
       return new ConversationEntity({
         ...source,
         id: new ConversationId(source.id),
+        title: source.title ?? null,
         conversationMessage,
         conversationEvent,
         conversationToolPolicy,
@@ -111,6 +112,7 @@ export class ConversationEnitityAutoMapperProfile {
       return ConversationTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        title: source.title ?? null,
         conversationMessage,
         conversationEvent,
         conversationToolPolicy,

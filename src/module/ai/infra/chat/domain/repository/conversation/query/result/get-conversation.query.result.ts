@@ -5,10 +5,12 @@ import type { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/
 
 export class GetConversationQueryResult extends BaseBuildableObject {
   public readonly id: ConversationId;
+  public readonly title?: string | null;
   public readonly assistantType: string | null;
   public readonly status: ConversationStatusTypeEnum | null;
   public readonly lastAIMessageAt: Date | null;
   public readonly archivedAt: Date | null;
+  public readonly createdAt: Date;
 
   protected override readonly _type = GetConversationQueryResult.name;
 }
