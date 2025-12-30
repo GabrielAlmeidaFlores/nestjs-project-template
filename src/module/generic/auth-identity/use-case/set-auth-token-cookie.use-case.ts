@@ -31,7 +31,7 @@ export class SetAuthTokenCookieUseCase implements SetAuthTokenCookieUseCaseGatew
     );
     reply.setCookie(ApiCookieEnum.AUTH_TOKEN, jwtSession, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       path: '/',
       maxAge: this.sevenDaysInSeconds,
