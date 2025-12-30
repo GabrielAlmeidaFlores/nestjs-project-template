@@ -29,4 +29,6 @@ export abstract class CustomerQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetCustomerWithCustomerAddressRelationQueryResult>;
+
+  public abstract listAll(): Promise<Array<GetCustomerQueryResult>>;
 }

@@ -76,4 +76,16 @@ export class OrganizationTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async listAll(): Promise<Array<GetOrganizationQueryResult>> {
+    const data = await this.find({});
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      OrganizationTypeormEntity,
+      GetOrganizationQueryResult,
+    );
+
+    return mappedData;
+  }
 }
