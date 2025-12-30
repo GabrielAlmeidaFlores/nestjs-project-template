@@ -38,6 +38,9 @@ export class DataRetirementPlanningRgpsPeriodRequestDto extends BaseBuildableDto
   @RequestDtoStringProperty({ example: 'Urbano' })
   public typeOfContribution: string;
 
+  @RequestDtoBooleanProperty({ example: true })
+  public status: boolean;
+
   protected override readonly _type =
     DataRetirementPlanningRgpsPeriodRequestDto.name;
 }

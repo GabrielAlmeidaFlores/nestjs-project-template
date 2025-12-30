@@ -2,8 +2,7 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
-export interface RetirementPlanningRgpsPeriodEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPlanningRgpsPeriodId> {
+export interface RetirementPlanningRgpsPeriodEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRgpsPeriodId> {
   periodName?: string | null;
   periodStart?: Date | null;
   periodEnd?: Date | null;
@@ -13,4 +12,5 @@ export interface RetirementPlanningRgpsPeriodEntityPropsInterface
   contributionAverage?: number | null;
   typeOfContribution?: string | null;
   retirementPlanningRgps?: RetirementPlanningRgpsEntity | null;
+  status?: boolean | null;
 }
