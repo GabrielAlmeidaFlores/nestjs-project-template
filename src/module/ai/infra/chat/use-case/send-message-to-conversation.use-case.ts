@@ -243,6 +243,11 @@ export class SendMessageToConversationUseCase {
         finalAssistantText = toolText;
         break;
       }
+
+      if (toolCall.tool === 'cnis_fast_analysis_patch_complete_analysis') {
+        finalAssistantText = toolText;
+        break;
+      }
     }
 
     finalAssistantText ??= `Limite de ${MAX_TOOL_STEPS} execuções de ferramentas atingido.`;
@@ -438,6 +443,23 @@ Exemplo de tool call (formato obrigatório, JSON puro):
 
 Depois do GET, exemplo de PATCH (com HTML/TEXTO COMPLETO):
 {"tool":"legal_pleading_patch_complete_analysis","arguments":{"legalPleadingId":"<UUID>","legalPleadingCompleteAnalysis":"<conteúdo completo com a alteração mínima>"}}
+
+REGRA CNIS FAST ANALYSIS - TEXTO COMPLETO (OBRIGATÓRIA PARA UPDATE DO TEXTO FINAL):
+- Sempre que o usuário pedir para ALTERAR/ATUALIZAR o conteúdo final do CNIS
+  (ex.: trocar título dentro do texto, corrigir um trecho, inserir informação no texto final, etc),
+  você DEVE executar EXATAMENTE este fluxo:
+
+  1) Chamar cnis_fast_analysis_get com o cnisFastAnalysisId
+  2) Ler o campo: cnisFastAnalysisResult.cnisCompleteAnalysis
+  3) Aplicar SOMENTE a alteração solicitada, mantendo TODO o resto idêntico
+  4) Chamar cnis_fast_analysis_patch_complete_analysis com:
+     - cnisFastAnalysisId
+     - cnisCompleteAnalysis (o conteúdo COMPLETO final, já atualizado)
+
+- Regras:
+  - NUNCA invente conteúdo que não veio do GET.
+  - NUNCA resuma. NUNCA explique. Em updates, sua resposta deve ser somente JSON de tool call.
+  - Se o usuário fornecer um UUID na mensagem, use esse UUID como cnisFastAnalysisId.
 
 POLÍTICA DE UPDATE (SEM REMOVER EXISTENTES):
 - Se o usuário disser "sem remover os existentes", você deve fazer merge:
@@ -888,6 +910,49 @@ EXEMPLOS (TODOS DEVEM SEGUIR GET -> PATCH):
       normalizedArgs = {
         legalPleadingId: id,
         legalPleadingCompleteAnalysis: content,
+      };
+    }
+
+    if (toolCall.tool === 'cnis_fast_analysis_patch_complete_analysis') {
+      const raw =
+        baseArgs['cnisFastAnalysisId'] ??
+        baseArgs['cnis_fast_analysis_id'] ??
+        baseArgs['analysis_id'] ??
+        baseArgs['id'];
+
+      let id = this.extractIdString(raw);
+      id ??= this.extractUuidFromText(userMessage);
+
+      const contentRaw = baseArgs['cnisCompleteAnalysis'];
+      const content = typeof contentRaw === 'string' ? contentRaw : undefined;
+
+      if (id === undefined) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Parâmetro inválido: cnisFastAnalysisId não foi informado corretamente.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (content === undefined || content.trim().length === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Parâmetro inválido: cnisCompleteAnalysis não foi informado corretamente.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      normalizedArgs = {
+        cnisFastAnalysisId: id,
+        cnisCompleteAnalysis: content,
       };
     }
 

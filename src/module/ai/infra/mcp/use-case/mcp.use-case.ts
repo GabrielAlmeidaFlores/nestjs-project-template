@@ -103,4 +103,14 @@ export class McpUseCase implements OnModuleInit, OnModuleDestroy {
       ...dto,
     });
   }
+
+  public async cnisFastAnalysisPatchCompleteAnalysis(dto: {
+    cnisFastAnalysisId: CnisFastAnalysisId;
+    cnisCompleteAnalysis: string;
+  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
+    return this.client.callTool(
+      'cnis_fast_analysis_patch_complete_analysis',
+      dto,
+    );
+  }
 }
