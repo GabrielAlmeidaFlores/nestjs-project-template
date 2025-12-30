@@ -221,6 +221,34 @@ Exemplo de fluxo correto:
   }
 }
 
+9. cnis_fast_analysis_patch_complete_analysis
+   - Descrição: Atualiza o TEXTO COMPLETO do resultado da análise rápida do CNIS, no campo:
+     cnisFastAnalysisResult.cnisCompleteAnalysis
+
+   - Objetivo: permitir editar/aprimorar o texto final do CNIS SEM perder o restante do conteúdo.
+
+   - Parâmetros aceitos (OBRIGATÓRIOS):
+     - cnisFastAnalysisId (string)
+     - cnisCompleteAnalysis (string)  <-- SEMPRE enviar o TEXTO COMPLETO final
+
+   - Processo obrigatório (edição correta e segura):
+     1) SEMPRE chame cnis_fast_analysis_get com o cnisFastAnalysisId para obter o JSON completo do CNIS.
+     2) Extraia o valor atual em:
+        cnisFastAnalysisResult.cnisCompleteAnalysis
+     3) Aplique SOMENTE a alteração pedida pelo usuário (ex.: inserir um número de processo, trocar um título, etc.)
+        sem reescrever/parafrasear o restante.
+     4) Envie o PATCH usando cnis_fast_analysis_patch_complete_analysis com:
+        - o cnisFastAnalysisId
+        - o cnisCompleteAnalysis COMPLETO atualizado
+
+Exemplo:
+{
+  "tool": "cnis_fast_analysis_patch_complete_analysis",
+  "arguments": {
+    "cnisFastAnalysisId": "...",
+    "cnisCompleteAnalysis": "texto completo atualizado aqui..."
+  }
+}
 
 REGRAS IMPORTANTES:
 - NUNCA invente IDs.
@@ -412,6 +440,19 @@ Formato obrigatório para uso de ferramenta:
         const result = await this.mcp.legalPleadingPatch({
           legalPleadingId,
           legalPleadingCompleteAnalysis,
+        });
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'cnis_fast_analysis_patch_complete_analysis': {
+        const { cnisFastAnalysisId, cnisCompleteAnalysis } = toolCall.arguments;
+
+        const result = await this.mcp.cnisFastAnalysisPatchCompleteAnalysis({
+          cnisFastAnalysisId,
+          cnisCompleteAnalysis,
         });
 
         return {
