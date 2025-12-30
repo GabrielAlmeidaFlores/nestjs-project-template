@@ -17,9 +17,6 @@ export class ConversationMessageTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'content', type: 'text', nullable: true })
   public content?: string | null;
 
-  @Column({ name: 'title', type: 'varchar', length: 255, nullable: true })
-  public title?: string | null;
-
   @ManyToOne(
     () => ConversationTypeormEntity,
     (entity) => entity.conversationMessage,

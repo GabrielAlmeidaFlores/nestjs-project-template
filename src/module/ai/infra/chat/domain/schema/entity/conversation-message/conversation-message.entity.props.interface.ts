@@ -6,7 +6,6 @@ import type { ConversationEntity } from '@module/ai/infra/chat/domain/schema/ent
 export interface ConversationMessageEntityInterface extends BaseEntityPropsInterface<ConversationMessageId> {
   conversation?: ConversationEntity | null;
   role?: ConversationMessageRoleTypeEnum | null;
-  title?: string | null;
   content?: string | null;
   createdAt: Date;
 }

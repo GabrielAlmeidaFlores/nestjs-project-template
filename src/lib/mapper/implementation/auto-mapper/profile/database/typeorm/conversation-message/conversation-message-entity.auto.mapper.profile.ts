@@ -39,7 +39,6 @@ export class ConversationMessageEntityAutoMapperProfile {
           archivedAt: source.conversation.archivedAt ?? null,
           createdAt: source.conversation.createdAt,
         }),
-        title: source.title ?? null,
       });
     };
 
@@ -73,7 +72,6 @@ export class ConversationMessageEntityAutoMapperProfile {
         id: source.id.toString(),
         role: source.role,
         content: source.content ?? null,
-        title: source.title ?? null,
 
         createdAt: source.createdAt,
         updatedAt: new Date(),

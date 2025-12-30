@@ -80,13 +80,28 @@ export class SendMessageToConversationUseCase {
       throw new ConversationNotFoundError();
     }
 
+    let conversationUpdated;
+    if (conversation.title !== null && conversation.title !== undefined) {
+      conversationUpdated = new ConversationEntity({
+        ...conversation,
+        title: dto.json.message,
+      });
+      const updateTx =
+        this.conversationCommandRepositoryGateway.updateConversation(
+          conversation.id,
+          conversationUpdated,
+        );
+      const updateConversation =
+        await this.baseTransactionRepositoryGateway.execute([updateTx]);
+      await updateConversation.commit();
+    }
+
     const createUserMessageTx =
       this.conversationMessageCommandRepositoryGateway.createConversationMessage(
         new ConversationMessageEntity({
           conversation: this.toConversationRef(conversation),
           role: ConversationMessageRoleTypeEnum.USER,
           content: dto.json.message,
-          title: (dto.json as any).title ?? null,
           createdAt: now,
         }),
       );
@@ -285,7 +300,6 @@ export class SendMessageToConversationUseCase {
           conversation: this.toConversationRef(conversation),
           role: ConversationMessageRoleTypeEnum.ASSISTANT,
           content: finalAssistantText,
-          title: (dto.json as any).title ?? null,
           createdAt: new Date(),
         }),
       );

@@ -1,4 +1,4 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
@@ -25,10 +25,12 @@ export class GetConversationQueryResultAutoMapperProfile {
     ): GetConversationQueryResult => {
       return GetConversationQueryResult.build({
         id: new ConversationId(source.id),
+        title: source.title ?? null,
         assistantType: source.assistantType ?? null,
         status: source.status ?? null,
         lastAIMessageAt: source.lastAIMessageAt ?? null,
         archivedAt: source.archivedAt ?? null,
+        createdAt: source.createdAt,
       });
     };
 
@@ -48,6 +50,7 @@ export class GetConversationQueryResultAutoMapperProfile {
     ): ConversationTypeormEntity => {
       return ConversationTypeormEntity.build({
         id: source.id.toString(),
+        title: source.title ?? null,
         assistantType: source.assistantType ?? null,
         status: source.status ?? null,
         lastAIMessageAt: source.lastAIMessageAt ?? null,

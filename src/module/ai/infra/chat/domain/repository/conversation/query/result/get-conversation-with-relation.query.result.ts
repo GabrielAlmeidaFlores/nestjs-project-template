@@ -11,6 +11,7 @@ export class GetConversationWithRelationsQueryResult extends BaseBuildableObject
   public readonly id: ConversationId;
   public readonly customer: GetCustomerQueryResult | null;
   public readonly assistantType: string | null;
+  public readonly title?: string | null;
   public readonly status: ConversationStatusTypeEnum | null;
   public readonly lastAIMessageAt: Date | null;
   public readonly archivedAt: Date | null;

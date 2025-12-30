@@ -36,7 +36,6 @@ export class GetChatMessagesToConversationQueryResultAutoMapperProfile {
         ...source,
         id: new ConversationMessageId(source.id),
         role: source.role ?? null,
-        title: source.title ?? null,
         content: source.content ?? null,
         conversation,
       });
@@ -72,7 +71,6 @@ export class GetChatMessagesToConversationQueryResultAutoMapperProfile {
         id: id.toString(),
         content: source.content ?? null,
         role: source.role ?? null,
-        title: source.title ?? null,
         conversation,
         createdAt: source.createdAt,
         updatedAt: new Date(),

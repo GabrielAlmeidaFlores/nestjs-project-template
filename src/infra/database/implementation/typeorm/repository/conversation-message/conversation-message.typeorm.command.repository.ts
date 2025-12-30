@@ -8,6 +8,7 @@ import { ConversationMessageTypeormEntity } from '@infra/database/implementation
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
 import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
+import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 
 @Injectable()
 export class ConversationMessageTypeormCommandRepository
@@ -34,5 +35,18 @@ export class ConversationMessageTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public updateConversationMessage(
+    id: ConversationId,
+    props: ConversationMessageEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      ConversationMessageEntity,
+      ConversationMessageTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
   }
 }
