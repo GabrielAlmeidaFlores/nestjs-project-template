@@ -60,9 +60,11 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         analysisToolClient: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
@@ -114,6 +116,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         legalProceedingDetail: true,
         analysisToolClient: {
           createdBy: {
+            customer: true,
             organization: true,
           },
           analysisToolClientInssBenefit: true,
@@ -165,6 +168,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         legalProceedingDetail: true,
         analysisToolClient: {
           createdBy: {
+            customer: true,
             organization: true,
           },
           analysisToolClientInssBenefit: true,

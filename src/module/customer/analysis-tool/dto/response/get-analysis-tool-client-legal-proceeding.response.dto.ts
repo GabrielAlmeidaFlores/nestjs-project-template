@@ -2,6 +2,7 @@ import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
@@ -17,6 +18,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 export class GetAnalysisToolClientLegalProceedingClientDetailResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AnalysisToolClientId)
   public id: AnalysisToolClientId;
+
+  @ResponseDtoValueObjectProperty(OrganizationId)
+  public organizationId: OrganizationId;
 
   @ResponseDtoStringProperty({ required: false })
   public name?: string;

@@ -11,6 +11,8 @@ import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { LegalProceedingDetailEntity } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/legal-proceeding-detail.entity';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
@@ -32,11 +34,14 @@ export class LegalProceedingCronUseCase {
 
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
   ) {
     this.logger = new Logger(LegalProceedingCronUseCase.name);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  @Cron(CronExpression.EVERY_MINUTE)
   public async execute(): Promise<void> {
     const limit = 50;
     let page = 1;
@@ -62,7 +67,7 @@ export class LegalProceedingCronUseCase {
         for (const proceeding of items) {
           const tx = await this.processProceeding(proceeding);
           if (tx) {
-            transactions.push(tx);
+            transactions.push(...tx);
           }
         }
 
@@ -89,7 +94,20 @@ export class LegalProceedingCronUseCase {
 
   private async processProceeding(
     proceeding: GetAnalysisToolClientLegalProceedingResponseDto,
-  ): Promise<TransactionType | null> {
+  ): Promise<TransactionType[] | null> {
+    let consumeCreditTransaction: TransactionType;
+
+    try {
+      consumeCreditTransaction =
+        await this.consumeOrganizationCreditUseCase.execute(
+          proceeding.analysisToolClient.organizationId,
+          PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
+          null,
+        );
+    } catch {
+      return null;
+    }
+
     const processNumber = proceeding.legalProceedingNumber;
 
     const response =
@@ -122,6 +140,6 @@ export class LegalProceedingCronUseCase {
         legalProceedingDetail,
       );
 
-    return tx;
+    return [tx, consumeCreditTransaction];
   }
 }

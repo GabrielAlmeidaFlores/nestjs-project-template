@@ -30,6 +30,7 @@ export class ListAnalysisToolClientLegalProceedingUseCase {
       const analysisToolClient =
         GetAnalysisToolClientLegalProceedingClientDetailResponseDto.build({
           ...item.analysisToolClient,
+          organizationId: item.analysisToolClient.createdBy.organizationId,
         });
 
       return GetAnalysisToolClientLegalProceedingResponseDto.build({

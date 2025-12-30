@@ -36,7 +36,7 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
   public async execute(
     organizationId: OrganizationId,
     resourceType: PaymentPlanPaidResourceTypeEnum,
-    createdBy: OrganizationMemberId,
+    createdBy: OrganizationMemberId | null,
   ): Promise<TransactionType> {
     const paymentPlanStatus =
       await this.validateOrganizationPaymentPlanStatusUseCase.execute(
