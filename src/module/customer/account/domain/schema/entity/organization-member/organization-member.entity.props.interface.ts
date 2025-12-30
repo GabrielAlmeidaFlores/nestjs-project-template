@@ -3,8 +3,7 @@ import type { CustomerEntity } from '@module/customer/account/domain/schema/enti
 import type { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 
-export interface OrganizationMemberEntityPropsInterface
-  extends BaseEntityPropsInterface<OrganizationMemberId> {
+export interface OrganizationMemberEntityPropsInterface extends BaseEntityPropsInterface<OrganizationMemberId> {
   organization: OrganizationEntity;
   customer: CustomerEntity;
   owner: boolean;

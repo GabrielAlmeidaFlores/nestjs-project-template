@@ -66,9 +66,11 @@ export class OrganizationCreditUsageEntityAutoMapperProfile {
         id: source.paymentPlanPaidResource.toString(),
       } as PaymentPlanPaidResourceTypeormEntity;
 
-      const createdBy = {
-        id: source.createdBy.toString(),
-      } as OrganizationMemberTypeormEntity;
+      const createdBy = source.createdBy
+        ? ({
+            id: source.createdBy.toString(),
+          } as OrganizationMemberTypeormEntity)
+        : undefined;
 
       return OrganizationCreditUsageTypeormEntity.build({
         id: source.id.toString(),

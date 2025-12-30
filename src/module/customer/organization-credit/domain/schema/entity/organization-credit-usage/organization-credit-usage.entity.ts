@@ -8,7 +8,7 @@ import type { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/do
 export class OrganizationCreditUsageEntity extends BaseEntity<OrganizationCreditUsageId> {
   public readonly creditAmount: number;
   public readonly paymentPlanPaidResource: PaymentPlanPaidResourceId;
-  public readonly createdBy: OrganizationMemberId;
+  public readonly createdBy: OrganizationMemberId | null;
 
   protected readonly _type = OrganizationCreditUsageEntity.name;
 
@@ -17,6 +17,6 @@ export class OrganizationCreditUsageEntity extends BaseEntity<OrganizationCredit
 
     this.creditAmount = props.creditAmount;
     this.paymentPlanPaidResource = props.paymentPlanPaidResource;
-    this.createdBy = props.createdBy;
+    this.createdBy = props.createdBy ?? null;
   }
 }
