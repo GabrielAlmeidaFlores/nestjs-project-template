@@ -52,6 +52,7 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
@@ -95,6 +96,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRetirementPlanningRgpsUseCase,
     CreateRetirementPlanningRgpsCnisUseCase,
     CreateRetirementPlanningRgpsPeriodUseCase,
+    UpdateRetirementPlanningRgpsPeriodUseCase,
     CreateRetirementPlanningRgpsPeriodDocumentUseCase,
     ListRetirementPlanningRgpsPeriodUseCase,
     GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,

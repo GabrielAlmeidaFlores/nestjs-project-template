@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundError } from 'rxjs';
+import { Constructor } from 'type-fest';
 import { Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -10,6 +12,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { ListRetirementPlanningRgpsPeriodQueryParam } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/param/list-retirement-planning-rgps-period.query.param';
 import { GetRetirementPlanningRgpsPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/result/get-retirement-planning-rgps-period-query.result';
 import { RetirementPlanningRgpsPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/retirement-planning-rgps-period.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
@@ -55,5 +58,23 @@ export class RetirementPlanningRgpsPeriodTypeormQueryRepository
       totalItems: result.totalItems,
       resource,
     });
+  }
+
+  public async findOneByRetirementPlanningRgpsPeriodIdOrFail(
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+    err: Constructor<NotFoundError>,
+  ): Promise<GetRetirementPlanningRgpsPeriodQueryResult> {
+    const result = await this.findOneOrFail(
+      {
+        where: { id: retirementPlanningRgpsPeriodId.toString() },
+      },
+      err,
+    );
+
+    return this.mapperGateway.map(
+      result,
+      RetirementPlanningRgpsPeriodTypeormEntity,
+      GetRetirementPlanningRgpsPeriodQueryResult,
+    );
   }
 }
