@@ -160,4 +160,21 @@ export class CustomerTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async listAll(): Promise<Array<GetCustomerQueryResult>> {
+    const data = await this.find({
+      relations: {
+        authIdentity: true,
+        customerAddress: true,
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      CustomerTypeormEntity,
+      GetCustomerQueryResult,
+    );
+
+    return mappedData;
+  }
 }

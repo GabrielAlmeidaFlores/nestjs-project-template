@@ -124,9 +124,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     await Promise.all(
       Object.keys(documentGroup).map(async (key) => {
         const documentType = key as LegalPleadingDocumentTypeEnum;
-        const documents = documentGroup[
-          documentType
-        ] as Buffer<ArrayBufferLike>[];
+        const documents = documentGroup[documentType] as Buffer[];
 
         const documentAnalysis =
           await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(

@@ -6,8 +6,7 @@ import type { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/an
 import type { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 import type { RetirementPlanningRppsPeriodDisabilityId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/value-object/retirement-planning-rpps-period-disability-id.value-object';
 
-export interface RetirementPlanningRppsPeriodDisabilityEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodDisabilityId> {
+export interface RetirementPlanningRppsPeriodDisabilityEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodDisabilityId> {
   type: RetirementPlanningDisabilityTimeTypeEnum;
   degree: RetirementPlanningDisabilityDegreeEnum;
   startDate: Date;

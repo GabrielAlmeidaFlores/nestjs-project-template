@@ -7,9 +7,7 @@ import {
 } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 
 @Injectable()
-export class RemunerationCalculatorService
-  implements RemunerationCalculatorGateway
-{
+export class RemunerationCalculatorService implements RemunerationCalculatorGateway {
   protected readonly _type = RemunerationCalculatorService.name;
 
   public calculate(
