@@ -81,7 +81,7 @@ export class SendMessageToConversationUseCase {
     }
 
     let conversationUpdated;
-    if (conversation.title !== null && conversation.title !== undefined) {
+    if (conversation.title === null || conversation.title === undefined) {
       conversationUpdated = new ConversationEntity({
         ...conversation,
         title: dto.json.message,
