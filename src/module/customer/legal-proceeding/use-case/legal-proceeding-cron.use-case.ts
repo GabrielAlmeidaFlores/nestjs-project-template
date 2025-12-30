@@ -16,6 +16,7 @@ import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.reque
 @Injectable()
 export class LegalProceedingCronUseCase {
   protected readonly _type = LegalProceedingCronUseCase.name;
+  private readonly logger!: Logger;
 
   public constructor(
     private readonly legalProceedingConsumerGateway: LegalProceedingConsumerGateway,
@@ -31,9 +32,9 @@ export class LegalProceedingCronUseCase {
 
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
-
-    private readonly logger: Logger,
-  ) {}
+  ) {
+    this.logger = new Logger(LegalProceedingCronUseCase.name);
+  }
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
   public async execute(): Promise<void> {
@@ -83,7 +84,6 @@ export class LegalProceedingCronUseCase {
 
     this.logger.log(
       `Cron completed: ${totalProcessed} processed, ${totalErrors} page(s) with errors`,
-      this.constructor.name,
     );
   }
 
