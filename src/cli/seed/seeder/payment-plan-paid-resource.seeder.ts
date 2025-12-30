@@ -68,6 +68,18 @@ export class PaymentPlanPaidResourceSeeder implements SeederInterface {
         );
 
       if (existing) {
+        const entity = new PaymentPlanPaidResourceEntity({
+          ...existing,
+          ...resourceData,
+        });
+
+        transactions.push(
+          this.paymentPlanPaidResourceCommandRepositoryGateway.updatePaymentPlanPaidResource(
+            existing.id,
+            entity,
+          ),
+        );
+
         continue;
       }
 
