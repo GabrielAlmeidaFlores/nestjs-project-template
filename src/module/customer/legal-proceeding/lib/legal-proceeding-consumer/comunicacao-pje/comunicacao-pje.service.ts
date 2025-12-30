@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
+import { LegalProceedingConsumerApplicationVariable } from '@shared/system/constant/application-variable/source/legal-proceeding-consumer.application-variable';
 
 @Injectable()
 export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
@@ -12,7 +13,8 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
   protected readonly _type = ComunicacaoPjeService.name;
 
   public constructor(private readonly httpService: HttpService) {
-    this.baseUrl = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+    this.baseUrl =
+      LegalProceedingConsumerApplicationVariable.LEGAL_PROCEEDING_CONSUMER_COMUNICACAO_PJE_API_URL;
   }
 
   public async consumeByProcessNumber(
