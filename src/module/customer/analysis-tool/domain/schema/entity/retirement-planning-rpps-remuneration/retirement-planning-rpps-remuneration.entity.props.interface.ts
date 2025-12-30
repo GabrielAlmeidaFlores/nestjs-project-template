@@ -2,8 +2,7 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 import type { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import type { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
 
-export interface RetirementPlanningRppsRemunerationEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPlanningRppsRemunerationId> {
+export interface RetirementPlanningRppsRemunerationEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRppsRemunerationId> {
   date: Date;
   amount: number;
   retirementPlanningRpps: RetirementPlanningRppsEntity;

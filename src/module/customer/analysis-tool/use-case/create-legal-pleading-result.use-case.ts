@@ -16,6 +16,9 @@ import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -38,6 +41,10 @@ export class CreateLegalPleadingResultUseCase {
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingResultCommandRepositoryGateway)
     private readonly legalPleadingResultCommandRepositoryGateway: LegalPleadingResultCommandRepositoryGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
 
   public async execute(
@@ -54,6 +61,18 @@ export class CreateLegalPleadingResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
+
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
+      );
+
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
+        organizationMember.id,
+      );
 
     const legalPleadingQueryResult =
       await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -98,6 +117,7 @@ export class CreateLegalPleadingResultUseCase {
 
     const legalPleadingCompleteAnalysis =
       await this.analysisProcessorGateway.getLegalPleadingCompleteAnalysis(
+        promptResponse.prompt,
         documentsBuffer,
       );
 
@@ -138,6 +158,7 @@ export class CreateLegalPleadingResultUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
+      consumeCreditTransaction,
       legalPleadingResultTransaction,
       legalPleadingTransaction,
     ]);

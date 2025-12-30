@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 
 @Entity({ name: 'analysis_tool_client_legal_proceeding' })
 export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormEntity {
@@ -18,6 +19,14 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
   )
   @JoinColumn({ name: 'analysis_tool_client_id' })
   public analysisToolClient: AnalysisToolClientTypeormEntity | undefined;
+
+  @OneToMany(
+    () => LegalProceedingDetailTypeormEntity,
+    (entity) => entity.analysisToolClientLegalProceeding,
+  )
+  public legalProceedingDetail?:
+    | LegalProceedingDetailTypeormEntity[]
+    | undefined;
 
   protected override readonly _type =
     AnalysisToolClientLegalProceedingTypeormEntity.name;

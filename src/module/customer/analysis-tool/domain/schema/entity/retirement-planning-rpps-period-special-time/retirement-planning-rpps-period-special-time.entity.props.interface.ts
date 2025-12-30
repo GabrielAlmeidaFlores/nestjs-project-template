@@ -3,8 +3,7 @@ import type { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/custom
 import type { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity';
 import type { RetirementPlanningRppsPeriodSpecialTimeId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/value-object/retirement-planning-rpps-period-special-time-id.value-object';
 
-export interface RetirementPlanningRppsPeriodSpecialTimeEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodSpecialTimeId> {
+export interface RetirementPlanningRppsPeriodSpecialTimeEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodSpecialTimeId> {
   type: RetirementPlanningPeriodSpecialTimeTypeEnum;
   startDate: Date;
   endDate: Date;

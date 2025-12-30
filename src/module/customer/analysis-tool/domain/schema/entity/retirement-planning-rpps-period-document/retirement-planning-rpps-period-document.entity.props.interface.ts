@@ -5,8 +5,7 @@ import type { RetirementPlanningDocumentTypeEnum } from '@module/customer/analys
 import type { RetirementPlanningRppsPeriodDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/value-object/retirement-planning-rpps-period-document-id.value-object';
 import type { RetirementPlanningRppsPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time.entity';
 
-export interface RetirementPlanningRppsPeriodDocumentEntityPropsInterface
-  extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodDocumentId> {
+export interface RetirementPlanningRppsPeriodDocumentEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRppsPeriodDocumentId> {
   document: string;
   documentType: RetirementPlanningDocumentTypeEnum;
   retirementPlanningRppsPeriodSpecialTime?: RetirementPlanningRppsPeriodSpecialTimeEntity | null;
