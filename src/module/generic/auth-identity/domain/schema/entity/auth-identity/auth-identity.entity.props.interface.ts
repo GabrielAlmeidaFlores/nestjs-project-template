@@ -6,8 +6,7 @@ import type { CustomerId } from '@module/customer/account/domain/schema/entity/c
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { HashedPassword } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/hashed-password/hashed-password.value-object';
 
-export interface AuthIdentityEntityPropsInterface
-  extends BaseEntityPropsInterface<AuthIdentityId> {
+export interface AuthIdentityEntityPropsInterface extends BaseEntityPropsInterface<AuthIdentityId> {
   email: Email;
   federalDocument: FederalDocument;
   password: string | HashedPassword;

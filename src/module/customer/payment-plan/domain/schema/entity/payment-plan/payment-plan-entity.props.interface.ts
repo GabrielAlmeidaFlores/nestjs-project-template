@@ -3,8 +3,7 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import type { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
-export interface PaymentPlanEntityPropsInterface
-  extends BaseEntityPropsInterface<PaymentPlanId> {
+export interface PaymentPlanEntityPropsInterface extends BaseEntityPropsInterface<PaymentPlanId> {
   name: string;
   description: string;
   price: DecimalValue;

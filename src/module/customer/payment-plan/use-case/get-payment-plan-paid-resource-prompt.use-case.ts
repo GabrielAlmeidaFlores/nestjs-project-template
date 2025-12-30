@@ -9,9 +9,7 @@ import { PaymentPlanPaidResourceIaConfigNotFoundError } from '@module/customer/p
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 
 @Injectable()
-export class GetPaymentPlanPaidResourcePromptUseCase
-  implements GetPaymentPlanPaidResourcePromptUseCaseGateway
-{
+export class GetPaymentPlanPaidResourcePromptUseCase implements GetPaymentPlanPaidResourcePromptUseCaseGateway {
   protected readonly _type = GetPaymentPlanPaidResourcePromptUseCase.name;
 
   public constructor(

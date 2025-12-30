@@ -5,8 +5,7 @@ import type { OrganizationPaymentPlanId } from '@module/customer/payment-plan/do
 import type { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import type { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 
-export interface OrganizationPaymentPlanEntityPropsInterface
-  extends BaseEntityPropsInterface<OrganizationPaymentPlanId> {
+export interface OrganizationPaymentPlanEntityPropsInterface extends BaseEntityPropsInterface<OrganizationPaymentPlanId> {
   name: string;
   description: string;
   price: DecimalValue;
