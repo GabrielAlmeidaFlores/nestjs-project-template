@@ -11,9 +11,7 @@ import type { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity
 import type { AuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-identity/use-case-gateway/auth-identity-sign-up.use-case-gateway';
 
 @Injectable()
-export class AuthIdentitySignUpUseCase
-  implements AuthIdentitySignUpUseCaseGateway
-{
+export class AuthIdentitySignUpUseCase implements AuthIdentitySignUpUseCaseGateway {
   protected readonly _type = AuthIdentitySignUpUseCase.name;
 
   public constructor(
