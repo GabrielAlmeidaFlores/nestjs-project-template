@@ -79,6 +79,14 @@ export class LegalProceedingDetailTypeormQueryRepository
       relations: {
         analysisToolClientLegalProceeding: {
           analysisToolClient: {
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
             analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             analysisToolRecord: true,
@@ -138,6 +146,23 @@ export class LegalProceedingDetailTypeormQueryRepository
           legalProceedingNumber,
         },
       },
+      relations: {
+        analysisToolClientLegalProceeding: {
+          analysisToolClient: {
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            analysisToolRecord: true,
+          },
+        },
+      },
       order: {
         createdAt: 'DESC',
       },
@@ -152,7 +177,7 @@ export class LegalProceedingDetailTypeormQueryRepository
     return mappedData;
   }
 
-  public async listByOrganizationIdAndCreatedBy(
+  public async listByOrganizationId(
     organizationId: OrganizationId,
     listData: CountLegalProceedingDetailQueryParam,
   ): Promise<
@@ -168,10 +193,12 @@ export class LegalProceedingDetailTypeormQueryRepository
       },
     };
 
-    if (listData.customerId !== null) {
+    if (listData.authIdentityId !== null) {
       where.analysisToolClientLegalProceeding.analysisToolClient.createdBy.customer =
         {
-          id: listData.customerId.toString(),
+          authIdentity: {
+            id: listData.authIdentityId.toString(),
+          },
         };
     }
 
@@ -180,6 +207,14 @@ export class LegalProceedingDetailTypeormQueryRepository
       relations: {
         analysisToolClientLegalProceeding: {
           analysisToolClient: {
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
             analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             analysisToolRecord: true,

@@ -27,7 +27,7 @@ export abstract class LegalProceedingDetailQueryRepositoryGateway {
     legalProceedingNumber: string,
   ): Promise<GetLegalProceedingDetailWithRelationsQueryResult>;
 
-  public abstract listByOrganizationIdAndCreatedBy(
+  public abstract listByOrganizationId(
     organizationId: OrganizationId,
     listData: CountLegalProceedingDetailQueryParam,
   ): Promise<

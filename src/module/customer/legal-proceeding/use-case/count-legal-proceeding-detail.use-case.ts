@@ -4,12 +4,12 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { CountLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/count-legal-proceeding-detail.query.param';
-import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
 import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
 import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
 export class CountLegalProceedingDetailUseCase {
@@ -29,7 +29,7 @@ export class CountLegalProceedingDetailUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-    dto: CountLegalProceedingDetailRequestDto,
+    dto: ListDataRequestDto,
   ): Promise<CountLegalProceedingDetailResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -42,9 +42,12 @@ export class CountLegalProceedingDetailUseCase {
     }
 
     const legalProceedingDetailList =
-      await this.legalProceedingDetailQueryRepositoryGateway.listByOrganizationIdAndCreatedBy(
+      await this.legalProceedingDetailQueryRepositoryGateway.listByOrganizationId(
         organizationSessionData.organizationId,
-        new CountLegalProceedingDetailQueryParam(dto),
+        new CountLegalProceedingDetailQueryParam({
+          ...dto,
+          authIdentityId: sessionData.authIdentityId,
+        }),
       );
 
     let inProgress = 0;

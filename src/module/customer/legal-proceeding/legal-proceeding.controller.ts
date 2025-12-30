@@ -7,7 +7,6 @@ import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/
 import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action-by-legal-proceeding-number.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
-import { CountLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/count-legal-proceeding-detail.request.dto';
 import { ListLegalProceedingDetailByAnalysisToolClientRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-analysis-tool-client-id.request.dto';
 import { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
 import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
@@ -207,7 +206,7 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: CountLegalProceedingDetailRequestDto,
+    @Query() dto: ListDataRequestDto,
   ): Promise<CountLegalProceedingDetailResponseDto> {
     return this.countLegalProceedingDetailUseCase.execute(
       sessionData,
@@ -220,7 +219,7 @@ export class LegalProceedingController {
     summary: 'Listar processos judiciais pelo ID do cliente',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'list-proceeding-detail-by-analysis-tool-client-id',
+      path: 'analysis-tool-client',
       method: RequestMethod.GET,
     },
     tag: ['processos-juridicos'],

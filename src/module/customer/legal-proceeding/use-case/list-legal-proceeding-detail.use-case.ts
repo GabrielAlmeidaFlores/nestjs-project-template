@@ -4,6 +4,7 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
+import { GetAnalysisToolClientLegalProceedingSimpleResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding-simple.response.dto';
 import { GetLegalProceedingDetailLawyerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-lawyer-with-relations.response.dto';
 import { ListLegalProceedingDetailLawyerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-lawyer.response.dto';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
@@ -53,8 +54,16 @@ export class ListLegalProceedingDetailUseCase {
         const extracted =
           this.legalProceedingConsumer.extractLegalProceedingData(item.detail);
 
+        const analysisToolClientLegalProceeding =
+          GetAnalysisToolClientLegalProceedingSimpleResponseDto.build({
+            id: item.analysisToolClientLegalProceeding.id,
+            legalProceedingNumber:
+              item.analysisToolClientLegalProceeding.legalProceedingNumber,
+          });
+
         return GetLegalProceedingDetailLawyerWithRelationsResponseDto.build({
-          ...item,
+          id: item.id,
+          analysisToolClientLegalProceeding,
           detail: JSON.parse(item.detail) as object,
           recipient: extracted.recipient,
           recipientLawyer: extracted.recipientLawyer,
