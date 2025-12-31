@@ -28,31 +28,39 @@ export class ConversationMessageTypeormQueryRepository
   public async listByConversationIdAndCustomerId(
     listData: ChatMessageToConversationQueryParam,
   ): Promise<ListDataOutputModel<GetChatMessagesToConversationQueryResult>> {
-    const data = await this.list(listData, {
-      where: {
-        conversation: {
-          id: listData.conversationId.toString(),
-          customer: {
-            id: listData.customerId.toString(),
-          },
-        },
-      },
-      order: {
-        createdAt: 'ASC',
-      },
-      relations: {
-        conversation: true,
-      },
-    });
+    const limit = Number(listData.limit);
+    const page = Number(listData.page);
+
+    const skip = (page - 1) * limit;
+
+    const qb = this.repository
+      .createQueryBuilder('m')
+      .innerJoin('m.conversation', 'c')
+      .innerJoin('c.customer', 'customer')
+      .where('c.id = :conversationId', {
+        conversationId: listData.conversationId.toString(),
+      })
+      .andWhere('customer.id = :customerId', {
+        customerId: listData.customerId.toString(),
+      })
+      .orderBy('m.createdAt', 'DESC')
+      .skip(skip)
+      .take(limit);
+
+    const [rowsDesc, totalItems] = await qb.getManyAndCount();
+
+    const rowsAsc = rowsDesc.slice().reverse();
 
     const mapped = this.mapperGateway.mapArray(
-      data.resource,
+      rowsAsc,
       ConversationMessageTypeormEntity,
       GetChatMessagesToConversationQueryResult,
     );
 
     return new ListDataOutputModel<GetChatMessagesToConversationQueryResult>({
-      ...data,
+      page,
+      limit,
+      totalItems,
       resource: mapped,
     });
   }
