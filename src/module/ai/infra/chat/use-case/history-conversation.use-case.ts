@@ -39,11 +39,17 @@ export class HistoryConversationUseCase {
       await this.conversationQueryRepositoryGateway.listConversationById(
         params,
       );
-    const resource = conversation.resource.map((item) => {
-      return GetConversationResponseDto.build({
+    const resource = conversation.resource.map((item) =>
+      GetConversationResponseDto.build({
         ...item,
-      });
-    });
+        assistantType: item.assistantType ?? null,
+        title: item.title ?? null,
+        status: item.status ?? null,
+        lastAIMessageAt: item.lastAIMessageAt ?? null,
+        archivedAt: item.archivedAt ?? null,
+        createdAt: item.createdAt,
+      }),
+    );
 
     return ListConversationResponseDto.build({
       ...conversation,
