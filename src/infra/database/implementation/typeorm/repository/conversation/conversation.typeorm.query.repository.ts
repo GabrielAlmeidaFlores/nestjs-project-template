@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
@@ -53,29 +53,45 @@ export class ConversationTypeormQueryRepository
   public async listConversationById(
     listData: ConversationQueryParam,
   ): Promise<ListDataOutputModel<GetConversationQueryResult>> {
-    const where: FindOptionsWhere<ConversationTypeormEntity> = {
-      customer: {
-        id: listData.customerId.toString(),
-      },
-    };
+    const limit = Number(listData.limit);
+    const page = Number(listData.page);
+    const skip = (page - 1) * limit;
+
+    const qb = this.repository
+      .createQueryBuilder('c')
+      .innerJoin('c.customer', 'customer')
+      .where('customer.id = :customerId', {
+        customerId: listData.customerId.toString(),
+      });
 
     if (listData.title !== null && listData.title !== undefined) {
-      where.title = Like(`%${listData.title}%`);
+      // Mantém mesma regra atual (LIKE), mas no QB
+      qb.andWhere('c.title LIKE :title', {
+        title: `%${listData.title}%`,
+      });
     }
 
-    const data = await this.list(listData, {
-      where,
-    });
+    // Se você quiser ordenar pelo "mais recente relevante" (atividade),
+    // troque createdAt por lastAIMessageAt (ou COALESCE).
+    // Por enquanto sigo seu padrão atual (sortField=createdAt).
+    qb.orderBy('c.createdAt', 'DESC').skip(skip).take(limit);
 
-    const mappedData = this.mapperGateway.mapArray(
-      data.resource,
+    const [rowsDesc, totalItems] = await qb.getManyAndCount();
+
+    // Devolve em ASC (mais antigo -> mais novo) para UI manter o "último por último"
+    const rowsAsc = rowsDesc.slice().reverse();
+
+    const mapped = this.mapperGateway.mapArray(
+      rowsAsc,
       ConversationTypeormEntity,
       GetConversationQueryResult,
     );
 
     return new ListDataOutputModel<GetConversationQueryResult>({
-      ...data,
-      resource: mappedData,
+      page,
+      limit,
+      totalItems,
+      resource: mapped,
     });
   }
 
