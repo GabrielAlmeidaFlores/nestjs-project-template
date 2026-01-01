@@ -1,4 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -8,14 +9,14 @@ import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/doma
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
-export interface AnalysisToolRecordEntityPropsInterface
-  extends BaseEntityPropsInterface<AnalysisToolRecordId> {
+export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
   type: AnalysisToolRecordTypeEnum;
   cnisFastAnalysis?: CnisFastAnalysisEntity | null;
   retirementPlanningRgps?: RetirementPlanningRgpsEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
+  conversation?: ConversationEntity | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }

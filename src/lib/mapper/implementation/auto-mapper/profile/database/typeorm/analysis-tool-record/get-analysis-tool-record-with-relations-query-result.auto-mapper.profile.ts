@@ -5,8 +5,10 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
+import { GetConversationWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -63,6 +65,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetAnalysisToolClientWithRelationsQueryResult,
       );
 
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationTypeormEntity,
+        GetConversationWithRelationsQueryResult,
+      );
+
       return GetAnalysisToolRecordWithRelationsQueryResult.build({
         ...source,
         id: new AnalysisToolRecordId(source.id),
@@ -70,6 +78,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRgps,
         analysisToolClient,
+        conversation,
         createdBy,
         updatedBy,
       });
@@ -119,6 +128,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
+      const conversation = this.mapper.map(
+        source.conversation,
+        GetConversationWithRelationsQueryResult,
+        ConversationTypeormEntity,
+      );
+
       return AnalysisToolRecordTypeormEntity.build({
         ...source,
         id: source.id.toString(),
@@ -126,6 +141,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRgps,
         analysisToolClient,
+        conversation,
         createdBy,
         updatedBy,
       });

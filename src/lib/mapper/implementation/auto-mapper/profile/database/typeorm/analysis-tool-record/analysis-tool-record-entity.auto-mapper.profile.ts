@@ -5,9 +5,11 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
@@ -58,6 +60,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientEntity,
       );
 
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationTypeormEntity,
+        ConversationEntity,
+      );
+
       return new AnalysisToolRecordEntity({
         ...source,
         id: new AnalysisToolRecordId(source.id),
@@ -67,6 +75,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
+        conversation,
       });
     };
 
@@ -102,6 +111,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationEntity,
+        ConversationTypeormEntity,
+      );
+
       const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;
@@ -117,6 +132,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRgps,
         analysisToolClient,
+        conversation,
         createdBy,
         updatedBy,
       });

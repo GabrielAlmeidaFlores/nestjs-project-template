@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -36,6 +37,9 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
 
+  @Description('')
+  public readonly conversation: ConversationEntity | null;
+
   @Description(
     'Membro da organização que criou o registro da ferramenta de análise.',
   )
@@ -57,6 +61,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
+    this.conversation = props.conversation ?? null;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }
