@@ -7,6 +7,7 @@ import {
   OneToOne,
 } from 'typeorm';
 
+import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { ConversationEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-event.typeorm.entity';
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
@@ -66,6 +67,12 @@ export class ConversationTypeormEntity extends BaseTypeormEntity {
   })
   @JoinColumn({ name: 'customer_id' })
   public customer?: CustomerTypeormEntity | undefined;
+
+  @OneToOne(
+    () => AnalysisToolRecordTypeormEntity,
+    (entity) => entity.conversation,
+  )
+  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
   protected override readonly _type = ConversationTypeormEntity.name;
 }

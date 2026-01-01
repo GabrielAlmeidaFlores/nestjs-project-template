@@ -1,5 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { GetConversationWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
 import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import type { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
@@ -21,6 +22,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
+  public readonly conversation: GetConversationWithRelationsQueryResult;
   public readonly retirementPlanningRgps: GetRetirementPlanningRgpsWithRelationsQueryResult | null;
 
   protected override readonly _type =

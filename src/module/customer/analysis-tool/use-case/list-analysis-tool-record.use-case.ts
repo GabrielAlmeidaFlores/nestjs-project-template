@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
@@ -84,6 +85,10 @@ export class ListAnalysisToolRecordUseCase {
           ...analysisToolRecord.analysisToolClient,
         });
 
+        const conversationResponseDto = GetConversationResponseDto.build({
+          ...analysisToolRecord.conversation,
+        });
+
         const analysis = analysisToolRecord.cnisFastAnalysis;
 
         const retirementPlanningRgps =
@@ -95,6 +100,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisId: retirementPlanningRgps.id,
             status: analysisToolRecord.status,
             analysisToolClient: client,
+            conversation: conversationResponseDto,
             createdBy,
             updatedBy,
           });
@@ -108,6 +114,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisId: analysis.id,
             status: analysisToolRecord.status,
             analysisToolClient: client,
+            conversation: conversationResponseDto,
             createdBy,
             updatedBy,
           });

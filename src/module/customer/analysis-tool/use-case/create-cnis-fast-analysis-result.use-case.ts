@@ -3,16 +3,23 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
-import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
+import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis-result/command/cnis-fast-analysis-result.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
-import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/error/cnis-document-required.error';
@@ -45,6 +52,10 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
+    @Inject(ConversationCommandRepositoryGateway)
+    private readonly conversationCommandRepositoryGateway: ConversationCommandRepositoryGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -61,6 +72,12 @@ export class CreateCnisFastAnalysisResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
+
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByCnisFastAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -161,6 +178,15 @@ export class CreateCnisFastAnalysisResultUseCase {
       updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
     });
 
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
     const analysisToolRecord = new AnalysisToolRecordEntity({
       ...analysisToolRecordQueryResult,
       status: AnalysisStatusEnum.COMPLETED,
@@ -169,7 +195,13 @@ export class CreateCnisFastAnalysisResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      conversation: conversationEntity,
     });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
 
     const updateAnalysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
@@ -189,13 +221,19 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       createCnisFastAnalysisResultTransaction,
+      createConversationTransaction,
       updateCnisFastAnalysisTransaction,
       updateAnalysisToolRecordTransaction,
     ]);
     await transaction.commit();
 
+    const conversationResponseDto = GetConversationResponseDto.build({
+      ...conversationEntity,
+    });
+
     return CreateCnisFastAnalysisResultResponseDto.build({
       ...cnisFastAnalysisResult,
+      conversation: conversationResponseDto,
     });
   }
 }

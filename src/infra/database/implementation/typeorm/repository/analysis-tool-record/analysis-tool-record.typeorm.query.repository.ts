@@ -346,6 +346,7 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientLegalProceeding: true,
           analysisToolClientInssBenefit: true,
         },
+        conversation: true,
       };
 
     for (const key of this.getEntityRelationsKey()) {
