@@ -1,7 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
@@ -38,6 +45,10 @@ export class CreateLegalPleadingResultUseCase {
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingResultCommandRepositoryGateway)
     private readonly legalPleadingResultCommandRepositoryGateway: LegalPleadingResultCommandRepositoryGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
+    @Inject(ConversationCommandRepositoryGateway)
+    private readonly conversationCommandRepositoryGateway: ConversationCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -45,6 +56,11 @@ export class CreateLegalPleadingResultUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     legalPleadingId: LegalPleadingId,
   ): Promise<CreateLegalPleadingResultResponseDto> {
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -126,6 +142,20 @@ export class CreateLegalPleadingResultUseCase {
       updatedBy: organizationMember.id,
     });
 
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
+
     const legalPleadingTransaction =
       this.legalPleadingCommandRepositoryGateway.updateLegalPleading(
         legalPleading.id,
@@ -139,12 +169,18 @@ export class CreateLegalPleadingResultUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       legalPleadingResultTransaction,
+      createConversationTransaction,
       legalPleadingTransaction,
     ]);
     await transaction.commit();
 
+    const conversationResponseDto = GetConversationResponseDto.build({
+      ...conversationEntity,
+    });
+
     return CreateLegalPleadingResultResponseDto.build({
       legalPleadingCompleteAnalysis,
+      conversation: conversationResponseDto,
     });
   }
 }

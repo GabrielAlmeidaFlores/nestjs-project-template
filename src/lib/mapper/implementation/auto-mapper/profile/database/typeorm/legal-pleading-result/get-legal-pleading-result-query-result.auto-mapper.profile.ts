@@ -2,7 +2,9 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
+import { GetConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation/query/result/get-conversation.query.result';
 import { GetLegalPleadingResultQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/result/get-legal-pleading-result.query.result';
 import { LegalPleadingResultId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/value-object/legal-pleading-result-id/legal-pleading-result-id.value-object';
 
@@ -24,9 +26,16 @@ export class GetLegalPleadingResultQueryResultAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: LegalPleadingResultTypeormEntity,
     ): GetLegalPleadingResultQueryResult => {
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationTypeormEntity,
+        GetConversationQueryResult,
+      );
+
       return GetLegalPleadingResultQueryResult.build({
         ...source,
         id: new LegalPleadingResultId(source.id),
+        conversation,
       });
     };
 
@@ -44,9 +53,16 @@ export class GetLegalPleadingResultQueryResultAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: GetLegalPleadingResultQueryResult,
     ): LegalPleadingResultTypeormEntity => {
+      const conversation = this.mapper.map(
+        source.conversation,
+        GetConversationQueryResult,
+        ConversationTypeormEntity,
+      );
+
       return LegalPleadingResultTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        conversation,
       });
     };
 
