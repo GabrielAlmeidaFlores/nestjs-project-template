@@ -87,9 +87,11 @@ export class AnalysisToolClientTypeormQueryRepository
       relations: {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClientInssBenefit: true,
         analysisToolClientLegalProceeding: true,
@@ -125,9 +127,11 @@ export class AnalysisToolClientTypeormQueryRepository
       relations: {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClientInssBenefit: true,
         analysisToolClientLegalProceeding: true,
