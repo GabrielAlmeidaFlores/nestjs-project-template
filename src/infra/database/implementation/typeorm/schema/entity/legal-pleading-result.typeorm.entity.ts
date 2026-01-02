@@ -29,6 +29,7 @@ export class LegalPleadingResultTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => ConversationTypeormEntity,
     (entity) => entity.legalPleadingResult,
+    { nullable: true },
   )
   @JoinColumn({ name: 'conversation_id' })
   public conversation?: ConversationTypeormEntity | undefined;

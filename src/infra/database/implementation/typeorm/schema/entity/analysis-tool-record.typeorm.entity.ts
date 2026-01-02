@@ -57,6 +57,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => ConversationTypeormEntity,
     (entity) => entity.analysisToolRecord,
+    { nullable: true },
   )
   @JoinColumn({ name: 'conversation_id' })
   public conversation?: ConversationTypeormEntity | undefined;
