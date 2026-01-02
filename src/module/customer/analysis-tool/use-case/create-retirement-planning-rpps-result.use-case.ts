@@ -134,7 +134,9 @@ export class CreateRetirementPlanningRppsResultUseCase {
     await transaction.commit();
 
     return CreateRetirementPlanningRppsResultResponseDto.build({
-      retirementPlanningRppsCompleteAnalysis,
+      retirementPlanningRppsCompleteAnalysis: JSON.parse(
+        retirementPlanningRppsCompleteAnalysis,
+      ) as object,
     });
   }
 }
