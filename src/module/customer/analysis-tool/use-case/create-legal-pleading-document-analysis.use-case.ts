@@ -23,6 +23,7 @@ import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -51,6 +52,8 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly legalPleadingDocumentQueryRepositoryGateway: LegalPleadingDocumentQueryRepositoryGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
   ) {}
 
   public async execute(
@@ -71,6 +74,13 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
+      );
+
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
+        organizationMember.id,
       );
 
     const legalPleadingQueryResult =
@@ -126,7 +136,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
       }),
     );
 
-    const transactions: TransactionType[] = [];
+    const transactions: TransactionType[] = [consumeCreditTransaction];
     const responseData: CreateLegalPleadingDocumentTypeAnalysisResponseDto[] =
       [];
 
