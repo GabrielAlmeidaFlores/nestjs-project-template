@@ -133,7 +133,7 @@ export class CreateRetirementPlanningRppsUseCase {
           id: periodDocumentId,
           documentType:
             documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document: documentDto.document.toString(),
+          document: documentDto.document,
           retirementPlanningRppsPeriodDisability: null,
           retirementPlanningRppsPeriodSpecialTime: null,
           retirementPlanningRpps,
@@ -207,7 +207,7 @@ export class CreateRetirementPlanningRppsUseCase {
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document: documentDto.document.toString(),
+                document: documentDto.document,
                 retirementPlanningRppsPeriodDisability: disability,
                 retirementPlanningRppsPeriodSpecialTime: null,
                 retirementPlanningRpps: null,
@@ -251,7 +251,7 @@ export class CreateRetirementPlanningRppsUseCase {
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document: documentDto.document.toString(),
+                document: documentDto.document,
                 retirementPlanningRppsPeriodDisability: null,
                 retirementPlanningRppsPeriodSpecialTime: specialTime,
                 retirementPlanningRpps: null,
