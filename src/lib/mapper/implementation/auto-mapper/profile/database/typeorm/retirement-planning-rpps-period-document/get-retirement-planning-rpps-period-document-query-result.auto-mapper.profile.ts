@@ -44,14 +44,14 @@ export class GetRetirementPlanningRppsPeriodDocumentQueryResultAutoMapperProfile
     const convertDomainEntityToOrmEntity = (
       source: GetRetirementPlanningRppsPeriodDocumentQueryResult,
     ): RetirementPlanningRppsPeriodDocumentTypeormEntity => {
-      return {
+      return RetirementPlanningRppsPeriodDocumentTypeormEntity.build({
         id: source.id.toString(),
         documentType: source.documentType,
         document: source.document,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
-      } as RetirementPlanningRppsPeriodDocumentTypeormEntity;
+      });
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
