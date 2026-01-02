@@ -5,6 +5,7 @@ import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/cu
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
+import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
@@ -37,7 +38,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
     dto: CreateRetirementPlanningRgpsCnisRequestDto,
   ): Promise<CreateRetirementPlanningRgpsCnisResponseDto> {
     const retirementPlanningRgps =
-      await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFail(
+      await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFailWithRelations(
         dto.json.retirementPlanningRgpsId,
         RetirementPlanningRgpsNotFoundError,
       );
@@ -57,8 +58,14 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
           ? await this.fileProcessorGateway.uploadFile(dto.cnisDocument)
           : null;
 
+      const retirementPlanningRgpsResult =
+        new RetirementPlanningRgpsResultEntity({
+          ...retirementPlanningRgps.retirementPlanningRgpsResult,
+        });
+
       const updatedRetirementPlanningRgps = new RetirementPlanningRgpsEntity({
         ...retirementPlanningRgps,
+        retirementPlanningRgpsResult,
         cnisDocument,
       });
 
