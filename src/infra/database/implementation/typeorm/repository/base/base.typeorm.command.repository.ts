@@ -51,4 +51,13 @@ export abstract class BaseTypeormCommandRepository<
       await repo.softDelete(id);
     };
   }
+
+  protected async _upsertWithNoTransaction(
+    data: DeepPartial<T>,
+    conflictPaths: string[],
+  ): Promise<void> {
+    await this.repository.upsert(data as QueryDeepPartialEntity<T>, {
+      conflictPaths,
+    });
+  }
 }
