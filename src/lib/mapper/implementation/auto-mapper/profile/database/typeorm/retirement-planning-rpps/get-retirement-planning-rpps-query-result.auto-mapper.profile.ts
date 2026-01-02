@@ -46,16 +46,10 @@ export class GetRetirementPlanningRppsQueryResultAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: GetRetirementPlanningRppsQueryResult,
     ): RetirementPlanningRppsTypeormEntity => {
-      const entity = new RetirementPlanningRppsTypeormEntity();
-
-      entity.id = source.id.toString();
-      entity.careerStartDate = source.careerStartDate;
-      entity.publicServiceStartDate = source.publicServiceStartDate;
-      entity.createdAt = source.createdAt;
-      entity.updatedAt = source.updatedAt;
-      entity.deletedAt = source.deletedAt;
-
-      return entity;
+      return RetirementPlanningRppsTypeormEntity.build({
+        ...source,
+        id: source.id.toString(),
+      });
     };
 
     createMap(
