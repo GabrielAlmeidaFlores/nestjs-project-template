@@ -29,6 +29,8 @@ export class GetRetirementPlanningRgpsPeriodQueryResult extends BaseBuildableObj
 
   public readonly deletedAt: Date | null;
 
+  public readonly reasonPendency: string | null;
+
   protected override readonly _type =
     GetRetirementPlanningRgpsPeriodQueryResult.name;
 }

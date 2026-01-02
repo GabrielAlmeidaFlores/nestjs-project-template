@@ -43,6 +43,13 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
   public isPendency: boolean | null;
 
   @Column({
+    name: 'reason_pendency',
+    type: 'longtext',
+    nullable: true,
+  })
+  public reasonPendency: string | null;
+
+  @Column({
     name: 'competence_below_the_minimum',
     type: 'boolean',
     nullable: true,
