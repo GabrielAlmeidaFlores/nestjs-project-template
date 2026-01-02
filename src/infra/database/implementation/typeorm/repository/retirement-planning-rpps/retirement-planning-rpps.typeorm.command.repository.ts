@@ -26,6 +26,12 @@ export class RetirementPlanningRppsTypeormCommandRepository
     super(repository);
   }
 
+  public deleteRetirementPlanningRpps(
+    id: RetirementPlanningRppsId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
+
   public updateRetirementPlanningRpps(
     id: RetirementPlanningRppsId,
     props: RetirementPlanningRppsEntity,
