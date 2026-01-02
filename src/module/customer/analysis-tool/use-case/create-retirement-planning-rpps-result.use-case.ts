@@ -13,6 +13,8 @@ import { FailedToGenerateRetirementPlanningRppsAnalysisError } from '@module/cus
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -33,6 +35,8 @@ export class CreateRetirementPlanningRppsResultUseCase {
     private readonly retirementPlanningRppsCommandRepositoryGateway: RetirementPlanningRppsCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsResultCommandRepositoryGateway)
     private readonly retirementPlanningRppsResultCommandRepositoryGateway: RetirementPlanningRppsResultCommandRepositoryGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
 
   public async execute(
@@ -57,6 +61,11 @@ export class CreateRetirementPlanningRppsResultUseCase {
         RetirementPlanningRppsNotFoundError,
       );
 
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
+      );
+
     const analysisData = {
       careerStartDate: retirementPlanningRppsQueryResult.careerStartDate,
       publicServiceStartDate:
@@ -72,6 +81,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
 
     const retirementPlanningRppsCompleteAnalysis =
       await this.analysisProcessorGateway.getRetirementPlanningRppsCompleteAnalysis(
+        promptResponse.prompt,
         documentsBuffer,
       );
 
