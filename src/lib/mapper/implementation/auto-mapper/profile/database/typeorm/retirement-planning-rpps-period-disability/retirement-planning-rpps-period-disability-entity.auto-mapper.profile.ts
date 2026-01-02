@@ -43,7 +43,6 @@ export class RetirementPlanningRppsPeriodDisabilityEntityAutoMapperProfile {
       return new RetirementPlanningRppsPeriodDisabilityEntity({
         ...source,
         id: new RetirementPlanningRppsPeriodDisabilityId(source.id),
-        description: '',
         cidTen,
         retirementPlanningRppsPeriod,
       });
