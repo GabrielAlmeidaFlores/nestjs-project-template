@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten-typeorm.entity';
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
 import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetCidTenQueryResult } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/result/get-cid-ten.query.result';
 import { GetRetirementPlanningRppsPeriodDisabilityQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/query/result/get-retirement-planning-rpps-period-disability.query.result';
 import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
@@ -28,19 +29,25 @@ export class GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfi
     const convertOrmEntityToDomainEntity = (
       source: RetirementPlanningRppsPeriodDisabilityTypeormEntity,
     ): GetRetirementPlanningRppsPeriodDisabilityQueryResult => {
+      if (!source.disabilityDocuments) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetRetirementPlanningRppsPeriodDisabilityQueryResult.name,
+          sourceClass: RetirementPlanningRppsPeriodDisabilityTypeormEntity.name,
+        });
+      }
+
       const cid = this.mapper.map(
         source.cid,
         CidTenTypeormEntity,
         GetCidTenQueryResult,
       );
 
-      const documents = source.disabilityDocuments
-        ? this.mapper.mapArray(
-            source.disabilityDocuments,
-            RetirementPlanningRppsPeriodDocumentTypeormEntity,
-            GetRetirementPlanningRppsPeriodDocumentQueryResult,
-          )
-        : [];
+      const documents = this.mapper.mapArray(
+        source.disabilityDocuments,
+        RetirementPlanningRppsPeriodDocumentTypeormEntity,
+        GetRetirementPlanningRppsPeriodDocumentQueryResult,
+      );
 
       return GetRetirementPlanningRppsPeriodDisabilityQueryResult.build({
         ...source,
