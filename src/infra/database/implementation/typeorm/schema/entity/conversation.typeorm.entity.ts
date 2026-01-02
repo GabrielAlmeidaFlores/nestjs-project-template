@@ -81,5 +81,12 @@ export class ConversationTypeormEntity extends BaseTypeormEntity {
   )
   public legalPleadingResult?: LegalPleadingResultTypeormEntity | undefined;
 
+  @Column({
+    name: 'context_prompt',
+    type: 'text',
+    nullable: true,
+  })
+  public contextPrompt?: string | null;
+
   protected override readonly _type = ConversationTypeormEntity.name;
 }

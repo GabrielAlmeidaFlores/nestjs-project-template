@@ -183,6 +183,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
       status: null,
       lastAIMessageAt: null,
+      contextPrompt: cnisFastAnalysisResult.cnisCompleteAnalysis,
       archivedAt: null,
       createdAt: new Date(),
     });

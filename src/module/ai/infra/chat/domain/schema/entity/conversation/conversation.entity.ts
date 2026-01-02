@@ -25,6 +25,11 @@ export class ConversationEntity extends BaseEntity<ConversationId> {
   @Description('Data da ultima resposta da IA')
   public readonly lastAIMessageAt: Date | null;
 
+  @Description(
+    'Contexto fixo da conversa (ex.: contexto da análise) para entrar no system prompt',
+  )
+  public readonly contextPrompt: string | null;
+
   @Description('Data da arquivação do chat por ausencia de uso')
   public readonly archivedAt: Date | null;
 
@@ -55,6 +60,7 @@ export class ConversationEntity extends BaseEntity<ConversationId> {
     this.conversationMessage = props.conversationMessage ?? null;
     this.conversationEvent = props.conversationEvent ?? null;
     this.conversationToolPolicy = props.conversationToolPolicy ?? null;
+    this.contextPrompt = props.contextPrompt ?? null;
   }
 
   public withLastAIMessageAt(date: Date): GetConversationQueryResult {
@@ -64,6 +70,7 @@ export class ConversationEntity extends BaseEntity<ConversationId> {
       assistantType: this.assistantType,
       status: this.status,
       lastAIMessageAt: date,
+      contextPrompt: this.contextPrompt,
       archivedAt: this.archivedAt,
       createdAt: this.createdAt,
     });

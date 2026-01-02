@@ -2,21 +2,21 @@ import { ListToolsResult } from '@modelcontextprotocol/sdk/types';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
 import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
 import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
 import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
 import { ChatMessageToConversationQueryParam } from '@module/ai/infra/chat/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
 import { GetChatMessagesToConversationQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
 import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
-import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
-import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
+import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { ConversationEventEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity';
 import { ConversationEventTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/enum/conversation-event-type.enum';
 import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
 import { ConversationMessageRoleTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/enum/conversation-message-role-type.enum';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationStatusTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation/enum/conversation-status-type-enum';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { SendMessageToConversationRequestDto } from '@module/ai/infra/chat/dto/request/send-message-to-conversation.request.dto';
 import {
   AiConversationResponseDto,
@@ -117,7 +117,11 @@ export class SendMessageToConversationUseCase {
       );
     const toolResult: ListToolsResult = await this.mcp.listTools();
 
-    const systemPrompt = this.buildSystemPromptFromPolicy(toolResult, policy);
+    const systemPrompt = this.buildSystemPromptFromPolicy(
+      toolResult,
+      policy,
+      conversation.contextPrompt ?? null,
+    );
     type GeminiMsgType = { role: 'assistant' | 'user'; content: string };
 
     const history =
@@ -416,6 +420,7 @@ export class SendMessageToConversationUseCase {
   private buildSystemPromptFromPolicy(
     tools: ListToolsResult,
     policy: ConversationToolPolicySnapshotType,
+    contextPrompt?: string | null,
   ): string {
     const toolsEnabled = policy?.toolsEnable !== false;
 
@@ -440,9 +445,25 @@ export class SendMessageToConversationUseCase {
       typeof personaPromptRaw === 'string' && personaPromptRaw.trim().length > 0
         ? personaPromptRaw.trim()
         : '';
+
+    const contextRaw =
+      typeof contextPrompt === 'string' ? contextPrompt.trim() : '';
+    const contextBlock =
+      contextRaw.length > 0
+        ? `
+CONTEXTO FIXO DA CONVERSA (FONTE DE VERDADE):
+${contextRaw}
+
+REGRAS DO CONTEXTO:
+- Use este contexto para responder dúvidas sobre a análise.
+- Se a pergunta depender de dados que NÃO estejam no contexto, peça o dado faltante ou use ferramentas GET para confirmar antes de afirmar.
+- Não invente fatos ou números que não estejam no contexto, no histórico ou no resultado de ferramentas.
+`
+        : '';
+
     return `
 ${personaPrompt}
-
+${contextBlock}
 Ferramentas disponíveis:
 ${toolsText}
 

@@ -9,6 +9,7 @@ export class GetConversationQueryResult extends BaseBuildableObject {
   public readonly assistantType: string | null;
   public readonly status: ConversationStatusTypeEnum | null;
   public readonly lastAIMessageAt: Date | null;
+  public readonly contextPrompt: string | null;
   public readonly archivedAt: Date | null;
   public readonly createdAt: Date;
 

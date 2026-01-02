@@ -147,6 +147,7 @@ export class CreateLegalPleadingResultUseCase {
       assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
       status: null,
       lastAIMessageAt: null,
+      contextPrompt: legalPleadingCompleteAnalysis,
       archivedAt: null,
       createdAt: new Date(),
     });
