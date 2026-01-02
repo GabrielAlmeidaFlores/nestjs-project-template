@@ -14,7 +14,7 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
     const totalCompetencies = remunerations.length;
 
     const totalAmount = remunerations.reduce(
-      (sum, remuneration) => sum + remuneration.remunerationAmount,
+      (sum, remuneration) => sum + remuneration.remunerationAmount.toNumber(),
       0,
     );
 
@@ -22,7 +22,8 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
       totalCompetencies > 0 ? totalAmount / totalCompetencies : 0;
 
     const sortedRemunerations = [...remunerations].sort(
-      (a, b) => b.remunerationAmount - a.remunerationAmount,
+      (a, b) =>
+        b.remunerationAmount.toNumber() - a.remunerationAmount.toNumber(),
     );
     const eightyPercent = 0.8;
     const topEightyPercentCompetencies = Math.ceil(
@@ -37,7 +38,7 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
     );
 
     const topEightyPercentTotalAmount = topEightyPercentRemunerations.reduce(
-      (sum, remuneration) => sum + remuneration.remunerationAmount,
+      (sum, remuneration) => sum + remuneration.remunerationAmount.toNumber(),
       0,
     );
     const topEightyPercentAverageAmount =
