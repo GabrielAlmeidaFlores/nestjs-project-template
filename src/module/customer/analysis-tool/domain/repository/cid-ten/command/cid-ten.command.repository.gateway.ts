@@ -9,4 +9,8 @@ export abstract class CidTenCommandRepositoryGateway {
     id: CidTenId,
     props: CidTenEntity,
   ): TransactionType;
+
+  public abstract _upsertCidTenWithNoTransaction(
+    props: CidTenEntity,
+  ): Promise<void>;
 }

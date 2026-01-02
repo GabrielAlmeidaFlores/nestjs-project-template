@@ -44,4 +44,16 @@ export class CidTenTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public async _upsertCidTenWithNoTransaction(
+    props: CidTenEntity,
+  ): Promise<void> {
+    const mappedData = this.mapperGateway.map(
+      props,
+      CidTenEntity,
+      CidTenTypeormEntity,
+    );
+
+    await this._upsertWithNoTransaction(mappedData, ['code']);
+  }
 }

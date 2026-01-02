@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
 
-@Entity({ name: 'cid' })
+@Entity({ name: 'cid_ten' })
 export class CidTenTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'code',
