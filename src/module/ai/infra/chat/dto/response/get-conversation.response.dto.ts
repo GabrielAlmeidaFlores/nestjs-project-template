@@ -36,5 +36,8 @@ export class GetConversationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty({ required: false })
   public readonly deletedAt?: Date | null;
 
+  @ResponseDtoStringProperty({ required: false })
+  public readonly contextPrompt?: string | null;
+
   protected override readonly _type = GetConversationResponseDto.name;
 }

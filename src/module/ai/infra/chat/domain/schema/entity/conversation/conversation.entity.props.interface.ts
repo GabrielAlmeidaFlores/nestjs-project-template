@@ -17,4 +17,5 @@ export interface ConversationEntityPropsInterface extends BaseEntityPropsInterfa
   conversationMessage?: ConversationMessageEntity[] | null;
   conversationEvent?: ConversationEventEntity[] | null;
   conversationToolPolicy?: ConversationToolPolicyEntity | null;
+  contextPrompt?: string | null;
 }

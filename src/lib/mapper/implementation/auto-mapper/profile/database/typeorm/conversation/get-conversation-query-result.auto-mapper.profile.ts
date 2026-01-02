@@ -29,6 +29,7 @@ export class GetConversationQueryResultAutoMapperProfile {
         assistantType: source.assistantType ?? null,
         status: source.status ?? null,
         lastAIMessageAt: source.lastAIMessageAt ?? null,
+        contextPrompt: source.contextPrompt ?? null,
         archivedAt: source.archivedAt ?? null,
         createdAt: source.createdAt,
       });
