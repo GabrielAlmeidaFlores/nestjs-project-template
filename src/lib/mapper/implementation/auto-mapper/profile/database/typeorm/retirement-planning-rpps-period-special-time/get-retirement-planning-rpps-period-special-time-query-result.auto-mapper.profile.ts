@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { RetirementPlanningRppsPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-special-time.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
 import { GetRetirementPlanningRppsPeriodSpecialTimeQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-special-time/query/result/get-retirement-planning-rpps-period-special-time.query.result';
 import { RetirementPlanningRppsPeriodSpecialTimeId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/value-object/retirement-planning-rpps-period-special-time-id.value-object';
@@ -26,13 +27,20 @@ export class GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProf
     const convertOrmEntityToDomainEntity = (
       source: RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
     ): GetRetirementPlanningRppsPeriodSpecialTimeQueryResult => {
-      const documents = source.specialTimeDocuments
-        ? this.mapper.mapArray(
-            source.specialTimeDocuments,
-            RetirementPlanningRppsPeriodDocumentTypeormEntity,
-            GetRetirementPlanningRppsPeriodDocumentQueryResult,
-          )
-        : [];
+      if (!source.specialTimeDocuments) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetRetirementPlanningRppsPeriodSpecialTimeQueryResult.name,
+          sourceClass:
+            RetirementPlanningRppsPeriodSpecialTimeTypeormEntity.name,
+        });
+      }
+
+      const documents = this.mapper.mapArray(
+        source.specialTimeDocuments,
+        RetirementPlanningRppsPeriodDocumentTypeormEntity,
+        GetRetirementPlanningRppsPeriodDocumentQueryResult,
+      );
 
       return GetRetirementPlanningRppsPeriodSpecialTimeQueryResult.build({
         ...source,
