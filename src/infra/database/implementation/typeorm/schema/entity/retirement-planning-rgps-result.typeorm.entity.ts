@@ -62,6 +62,13 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
   })
   public compareCnisCtpsRaw: string | null;
 
+  @Column({
+    name: 'result',
+    type: 'longtext',
+    nullable: true,
+  })
+  public result: string | null;
+
   protected override readonly _type =
     RetirementPlanningRgpsResultTypeormEntity.name;
 }

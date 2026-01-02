@@ -72,12 +72,53 @@ export class CreateRetirementPlanningRgpsUseCase {
         AnalysisToolClientNotFoundError,
       );
 
+    const result = `${JSON.stringify([
+      {
+        retirementRule: 'Lorem Ipsum',
+        result: 'Achieved',
+        entitlementDate: '2019-11-12',
+        expectedRMI: 3218.45,
+        bestRMI: false,
+        largestClaimValue: false,
+        detailedAnalysis: {
+          requirementsAnalyzed: {
+            minimumYears: {
+              value: 35,
+              met: true,
+            },
+            minimumAge: {
+              value: 65,
+              met: true,
+            },
+            minimumContributions: {
+              value: 180,
+              met: true,
+            },
+          },
+          rmiCalculation: {
+            averageSalary: 3500.0,
+            coefficient: 0.85,
+            coefficientPercent: '85%',
+            estimatedRMI: 2980.0,
+          },
+          claimValue: {
+            DIB: '2023-12-15',
+            DER: '2024-06-10',
+            monthsOfArrears: 6,
+            claimAmount: 17880.0,
+            currency: 'BRL',
+          },
+        },
+      },
+    ])}`;
+
     const retirementPlanningRgpsResult = new RetirementPlanningRgpsResultEntity(
       {
         clientName: analysisToolClientQueryResult.name,
         clientFederalDocument: analysisToolClientQueryResult.federalDocument,
         clientBirthDate: analysisToolClientQueryResult.birthDate,
         clientLastAffiliationDate: null,
+        result,
       },
     );
 
