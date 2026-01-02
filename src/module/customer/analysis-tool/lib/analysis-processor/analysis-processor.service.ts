@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import z from 'zod';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
@@ -108,6 +109,55 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseJsonSchema: z.object({
+          contributionTime: z
+            .string()
+            .describe('Tempo total de contribuição de serviço'),
+          publicServiceTime: z
+            .string()
+            .describe('Tempo total de contribuição em serviço público'),
+          timeInPosition: z.string().describe('Tempo total no cargo'),
+          clientAge: z.string().describe('Idade atual do segurado'),
+          clientProfession: z.string().describe('Profissão do segurado'),
+          careerTime: z.string().describe('Tempo total de carreira'),
+          publicServiceEntry: z
+            .date()
+            .describe('Data de ingresso no serviço público'),
+          retirementRules: z
+            .array(
+              z.object({
+                ruleName: z.string().describe('Nome da regra de aposentadoria'),
+                expectedInitialMonthlyIncome: z
+                  .number()
+                  .describe('Renda mensal inicial esperada'),
+                bestInitialMonthlyIncome: z
+                  .boolean()
+                  .describe(
+                    'Indica se a regra oferece a melhor renda mensal inicial',
+                  ),
+                greatestCaseValue: z
+                  .boolean()
+                  .describe(
+                    'Indica se a regra oferece o maior valor no caso mais vantajoso',
+                  ),
+                detailedAnalysis: z
+                  .string()
+                  .describe(
+                    'Análise detalhada da aposentadoria em formato markdown',
+                  ),
+                isEligible: z
+                  .boolean()
+                  .describe('Indica se o segurado é elegível para a regra'),
+                eligibilityDate: z
+                  .string()
+                  .describe(
+                    'Data em que o segurado se tornará elegível para a regra, se aplicável',
+                  )
+                  .nullable(),
+              }),
+            )
+            .describe('Regras de aposentadoria'),
+        }),
       }),
     );
   }
