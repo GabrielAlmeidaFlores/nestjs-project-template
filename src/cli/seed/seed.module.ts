@@ -2,6 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 
 import { SeedService } from '@cli/seed/seed.service';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
+import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { OrganizationMemberCrossJoinSeeder } from '@cli/seed/seeder/organization-member-cross-join.seeder';
 import { PaymentPlanPaidResourceIaConfigSeeder } from '@cli/seed/seeder/payment-plan-paid-resource-ia-config.seeder';
@@ -14,6 +15,7 @@ import { DatabaseModule } from '@infra/database/database.module';
   providers: [
     SeedService,
     AdminSeeder,
+    CidTenSeeder,
     CustomerTermsSeeder,
     OrganizationMemberCrossJoinSeeder,
     PaymentPlanPaidResourceSeeder,

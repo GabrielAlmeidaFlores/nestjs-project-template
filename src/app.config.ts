@@ -38,6 +38,16 @@ class AppConfigUtils {
 }
 
 export class AppConfig extends AppConfigUtils {
+  private static readonly BYTES_PER_KB = 1024;
+  private static readonly KB_PER_MB = 1024;
+  private static readonly MB_PER_GB = 1024;
+  private static readonly MAX_BODY_SIZE_GB = 10;
+  private static readonly MAX_BODY_SIZE_BYTES =
+    AppConfig.MAX_BODY_SIZE_GB *
+    AppConfig.MB_PER_GB *
+    AppConfig.KB_PER_MB *
+    AppConfig.BYTES_PER_KB;
+
   protected override readonly _type = AppConfig.name;
 
   public constructor(private readonly app: INestApplication) {
@@ -46,7 +56,16 @@ export class AppConfig extends AppConfigUtils {
 
   public applyMultipart(): this {
     const app = this.app as NestFastifyApplication<RawServerDefault>;
-    void app.register(multipart);
+    void app.register(multipart, {
+      limits: {
+        fieldNameSize: 100,
+        fieldSize: AppConfig.MAX_BODY_SIZE_BYTES,
+        fields: 100,
+        fileSize: AppConfig.MAX_BODY_SIZE_BYTES,
+        files: 50,
+        headerPairs: 5000,
+      },
+    });
     return this;
   }
 

@@ -20,6 +20,9 @@ import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/impleme
 import { GetAuthIdentityWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-with-relations-query-result.auto-mapper.profile';
 import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/bank-payment-entity.auto-mapper.profile';
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
+import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
+import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
+import { GetCidTenQueryResultAutoMapperProfile as GetCidTenQueryResultTypeormAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten.query.result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-query-result.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
@@ -77,6 +80,27 @@ import { PaymentPlanEnabledPaidResourceToEnabledQueryResultAutoMapperProfile } f
 import { PaymentPlanPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/payment-plan-paid-resource-entity.auto-mapper.profile';
 import { GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/get-payment-plan-paid-resource-ia-config-with-relations-query-result.auto-mapper.profile';
 import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/get-retirement-planning-rpps-query-result.auto-mapper.profile';
+import { GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/get-retirement-planning-rpps-with-relations-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps/retirement-planning-rpps-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-inss-benefit/get-retirement-planning-rpps-inss-benefit-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-legal-proceeding/get-retirement-planning-rpps-legal-proceeding-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period/get-retirement-planning-rpps-period-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period/retirement-planning-rpps-period-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-disability/get-retirement-planning-rpps-period-disability-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsPeriodDisabilityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsPeriodDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-document/get-retirement-planning-rpps-period-document-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-document/retirement-planning-rpps-period-document-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-special-time/get-retirement-planning-rpps-period-special-time-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsPeriodSpecialTimeEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration/get-retirement-planning-rpps-remuneration-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/get-retirement-planning-rpps-remuneration-calculation-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
+import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
+import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -160,6 +184,30 @@ import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/map
     GetBankPaymentQueryResultAutoMapperProfile,
     OrganizationPaymentPlanBankPaymentEntityAutoMapperProfile,
     GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile,
+    RetirementPlanningRppsResultEntityAutoMapperProfile,
+    GetRetirementPlanningRppsResultQueryResultAutoMapperProfile,
+    RetirementPlanningRppsEntityAutoMapperProfile,
+    GetRetirementPlanningRppsQueryResultAutoMapperProfile,
+    GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile,
+    RetirementPlanningRppsPeriodEntityAutoMapperProfile,
+    GetRetirementPlanningRppsPeriodQueryResultAutoMapperProfile,
+    RetirementPlanningRppsPeriodDocumentEntityAutoMapperProfile,
+    GetRetirementPlanningRppsPeriodDocumentQueryResultAutoMapperProfile,
+    RetirementPlanningRppsRemunerationEntityAutoMapperProfile,
+    GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile,
+    RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile,
+    GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperProfile,
+    RetirementPlanningRppsPeriodDisabilityEntityAutoMapperProfile,
+    GetRetirementPlanningRppsPeriodDisabilityQueryResultAutoMapperProfile,
+    RetirementPlanningRppsPeriodSpecialTimeEntityAutoMapperProfile,
+    GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile,
+    CidTenEntityAutoMapperProfile,
+    GetCidTenQueryResultAutoMapperProfile,
+    GetCidTenQueryResultTypeormAutoMapperProfile,
+    RetirementPlanningRppsInssBenefitEntityAutoMapperProfile,
+    GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile,
+    RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile,
+    GetRetirementPlanningRppsLegalProceedingQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

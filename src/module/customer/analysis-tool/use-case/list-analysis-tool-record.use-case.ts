@@ -84,7 +84,9 @@ export class ListAnalysisToolRecordUseCase {
           ...analysisToolRecord.analysisToolClient,
         });
 
-        const analysis = analysisToolRecord.cnisFastAnalysis;
+        const analysis =
+          analysisToolRecord.cnisFastAnalysis ??
+          analysisToolRecord.retirementPlanningRpps;
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({
