@@ -2,6 +2,7 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
 import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { RetirementPlanningRppsPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-special-time.typeorm.entity';
@@ -59,6 +60,7 @@ export class RetirementPlanningRppsPeriodDocumentEntityAutoMapperProfile {
       return new RetirementPlanningRppsPeriodDocumentEntity({
         ...source,
         id: new RetirementPlanningRppsPeriodDocumentId(source.id),
+        document: new Base64(source.document),
         retirementPlanningRppsPeriodSpecialTime,
         retirementPlanningRppsPeriodDisability,
         retirementPlanningRpps,
@@ -108,6 +110,7 @@ export class RetirementPlanningRppsPeriodDocumentEntityAutoMapperProfile {
       return RetirementPlanningRppsPeriodDocumentTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        document: source.document.toString(),
         retirementPlanningRppsPeriodSpecialTime,
         retirementPlanningRppsPeriodDisability,
         retirementPlanningRpps,

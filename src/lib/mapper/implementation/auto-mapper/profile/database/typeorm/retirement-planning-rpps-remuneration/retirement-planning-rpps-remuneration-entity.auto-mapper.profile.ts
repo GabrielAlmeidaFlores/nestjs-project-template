@@ -2,6 +2,7 @@ import { createMap, Mapper, constructUsing } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
@@ -35,7 +36,7 @@ export class RetirementPlanningRppsRemunerationEntityAutoMapperProfile {
       return new RetirementPlanningRppsRemunerationEntity({
         ...source,
         id: new RetirementPlanningRppsRemunerationId(source.id),
-        amount: Number(source.amount),
+        remunerationAmount: new DecimalValue(source.remunerationAmount),
         retirementPlanningRpps,
       });
     };
@@ -63,7 +64,7 @@ export class RetirementPlanningRppsRemunerationEntityAutoMapperProfile {
       return RetirementPlanningRppsRemunerationTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        amount: source.amount.toString(),
+        remunerationAmount: source.remunerationAmount.toString(),
         retirementPlanningRpps,
       });
     };

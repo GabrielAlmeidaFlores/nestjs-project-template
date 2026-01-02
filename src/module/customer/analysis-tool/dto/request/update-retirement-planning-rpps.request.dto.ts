@@ -26,7 +26,7 @@ export class UpdateRetirementPlanningRppsPeriodDocumentRequestDto extends BaseBu
   @RequestDtoBase64FileProperty({
     required: true,
   })
-  public readonly document: string;
+  public readonly document: Base64;
 
   protected override readonly _type =
     UpdateRetirementPlanningRppsPeriodDocumentRequestDto.name;

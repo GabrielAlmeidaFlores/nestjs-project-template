@@ -6,12 +6,11 @@ import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementat
 @Entity({ name: 'retirement_planning_rpps_remuneration' })
 export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeormEntity {
   @Column({
-    name: 'remuneration_type',
-    type: 'varchar',
-    length: 100,
+    name: 'remuneration_date',
+    type: 'date',
     nullable: false,
   })
-  public date: Date;
+  public remunerationDate: Date;
 
   @Column({
     name: 'remuneration_amount',
@@ -20,12 +19,11 @@ export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeorm
     scale: 2,
     nullable: false,
   })
-  public amount: string;
+  public remunerationAmount: string;
 
   @ManyToOne(
     () => RetirementPlanningRppsTypeormEntity,
     (entity) => entity.remunerations,
-    { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_id' })
   public retirementPlanningRpps?:
