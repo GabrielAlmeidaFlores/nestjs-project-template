@@ -4,8 +4,8 @@ import type { RetirementPlanningRppsRemunerationId } from '@module/customer/anal
 
 export class GetRetirementPlanningRppsRemunerationQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRppsRemunerationId;
-  public readonly date: Date;
-  public readonly amount: number;
+  public readonly remunerationDate: Date;
+  public readonly remunerationAmount: number;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

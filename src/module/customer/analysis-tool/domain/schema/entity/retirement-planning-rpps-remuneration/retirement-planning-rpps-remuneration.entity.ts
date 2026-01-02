@@ -6,9 +6,11 @@ import { Description } from '@shared/system/decorator/property/description/descr
 
 export class RetirementPlanningRppsRemunerationEntity extends BaseEntity<RetirementPlanningRppsRemunerationId> {
   @Description('Data da remuneração RPPS')
-  public readonly date: Date;
+  public readonly remunerationDate: Date;
+
   @Description('Valor da remuneração RPPS')
-  public readonly amount: number;
+  public readonly remunerationAmount: number;
+
   @Description(
     'Análise de planejamento previdenciário RPPS associada à remuneração',
   )
@@ -20,8 +22,8 @@ export class RetirementPlanningRppsRemunerationEntity extends BaseEntity<Retirem
     props: RetirementPlanningRppsRemunerationEntityPropsInterface,
   ) {
     super(RetirementPlanningRppsRemunerationId, props);
-    this.date = props.date;
-    this.amount = props.amount;
+    this.remunerationDate = props.remunerationDate;
+    this.remunerationAmount = props.remunerationAmount;
     this.retirementPlanningRpps = props.retirementPlanningRpps;
   }
 }

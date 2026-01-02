@@ -58,8 +58,8 @@ export class ListRetirementPlanningRppsRemunerationUseCase {
 
     const resource = remunerationList.resource.map((remuneration) =>
       GetRetirementPlanningRppsRemunerationResponseDto.build({
-        date: remuneration.date,
-        amount: remuneration.amount,
+        remunerationDate: remuneration.remunerationDate,
+        remunerationAmount: remuneration.remunerationAmount,
       }),
     );
 

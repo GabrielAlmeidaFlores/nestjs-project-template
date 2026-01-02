@@ -10,7 +10,7 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 
-@Entity('retirement_planning_rpps')
+@Entity({ name: 'retirement_planning_rpps' })
 export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'career_start_date',
@@ -29,6 +29,7 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => RetirementPlanningRppsResultTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
+    { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_result_id' })
   public retirementPlanningRppsResult?:

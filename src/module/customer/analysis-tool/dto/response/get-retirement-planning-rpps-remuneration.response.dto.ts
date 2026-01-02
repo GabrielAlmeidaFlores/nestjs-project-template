@@ -6,10 +6,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class GetRetirementPlanningRppsRemunerationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
-  public date: Date;
+  public remunerationDate: Date;
 
   @ResponseDtoNumberProperty()
-  public amount: number;
+  public remunerationAmount: number;
 
   protected override readonly _type =
     GetRetirementPlanningRppsRemunerationResponseDto.name;
