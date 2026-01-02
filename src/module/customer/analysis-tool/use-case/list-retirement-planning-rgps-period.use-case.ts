@@ -38,6 +38,7 @@ export class ListRetirementPlanningRgpsPeriodUseCase {
 
     const listParam = new ListRetirementPlanningRgpsPeriodQueryParam({
       ...dto,
+      retirementPlanningRgps: dto.retirementPlanningRgpsId,
     });
 
     const listQueryResult =
