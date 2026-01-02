@@ -3,9 +3,11 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { RetirementPlanningRgpsEarningsHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-earnings-history.typeorm.entity';
+import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRgpsEarningsHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.entity';
 import { RetirementPlanningRgpsEarningsHistoryId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/value-object/retirement-planning-rgps-earnings-history-id.value-object';
+import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 @Injectable()
@@ -32,10 +34,17 @@ export class RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile {
         RetirementPlanningRgpsEntity,
       );
 
+      const retirementPlanningRgpsPeriod = this.mapper.map(
+        source.retirementPlanningRgpsPeriod,
+        RetirementPlanningRgpsPeriodTypeormEntity,
+        RetirementPlanningRgpsPeriodEntity,
+      );
+
       return new RetirementPlanningRgpsEarningsHistoryEntity({
         ...source,
         id: new RetirementPlanningRgpsEarningsHistoryId(source.id),
         retirementPlanningRgps,
+        retirementPlanningRgpsPeriod,
       });
     };
 
@@ -58,11 +67,17 @@ export class RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile {
         RetirementPlanningRgpsEntity,
         RetirementPlanningRgpsTypeormEntity,
       );
+      const retirementPlanningRgpsPeriod = this.mapper.map(
+        source.retirementPlanningRgpsPeriod,
+        RetirementPlanningRgpsPeriodEntity,
+        RetirementPlanningRgpsPeriodTypeormEntity,
+      );
 
       return RetirementPlanningRgpsEarningsHistoryTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         retirementPlanningRgps,
+        retirementPlanningRgpsPeriod,
       });
     };
 

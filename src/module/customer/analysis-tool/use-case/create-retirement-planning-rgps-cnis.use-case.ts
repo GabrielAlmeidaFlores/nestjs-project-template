@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
-import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { RetirementPlanningRgpsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-earnings-history/command/retirement-planning-rgps-earnings-history.command.repository.gateway';
 import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
@@ -79,6 +78,9 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         dto.cnisDocument.buffer,
       );
 
+      const earningHistories: RetirementPlanningRgpsEarningsHistoryEntity[] =
+        [];
+
       const periods =
         cnis?.socialSecurityRelations !== undefined
           ? cnis?.socialSecurityRelations.map((relation) => {
@@ -147,7 +149,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                     ? 'Contribuições Abaixo do Mínimo'
                     : '';
 
-              return new RetirementPlanningRgpsPeriodEntity({
+              const period = new RetirementPlanningRgpsPeriodEntity({
                 periodName:
                   relation.socialSecurityAffiliationInfo.origemDoVinculo ??
                   null,
@@ -166,6 +168,62 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                 reasonPendency,
                 status: reasonPendency === '',
               });
+
+              const earnings =
+                relation.socialSecurityAffiliationEarningsHistory ?? [];
+
+              if (earnings.length > 0) {
+                earnings.map((e) => {
+                  const competenceBelowTheMinimumSalary =
+                    relation.socialSecurityAffiliationEarningsHistory.some(
+                      (earning) => {
+                        if (!e.competencia) {
+                          return false;
+                        }
+
+                        const year = e.competencia.getFullYear();
+
+                        const findSalary = TetoInssData.find((teto) => {
+                          return teto.ano === year;
+                        });
+
+                        if (!findSalary) {
+                          return false;
+                        }
+                        const salarioMinimo = findSalary.salarioMinimo;
+                        const remuneration = earning.remuneracao;
+                        if (!remuneration) {
+                          return false;
+                        }
+                        const salario = Number(
+                          remuneration.replace(/\./g, '').replace(',', '.'),
+                        );
+                        if (isNaN(salario)) {
+                          return false;
+                        }
+
+                        return salario < salarioMinimo;
+                      },
+                    );
+
+                  const earningEntity =
+                    new RetirementPlanningRgpsEarningsHistoryEntity({
+                      competence: e.competencia ?? null,
+                      remuneration: e.remuneracao ?? null,
+                      indicators: e.indicadores ?? null,
+                      paymentDate: e.dataPgto ?? null,
+                      contribution: e.contribuicao ?? null,
+                      contributionSalary: e.salarioContribuicao ?? null,
+                      retirementPlanningRgps: updatedRetirementPlanningRgps,
+                      retirementPlanningRgpsPeriod: period,
+                      competenceBelowTheMinimum:
+                        competenceBelowTheMinimumSalary,
+                    });
+                  earningHistories.push(earningEntity);
+                });
+              }
+
+              return period;
             })
           : [];
 
@@ -173,7 +231,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         retirementPlanningRgps.id,
         updatedRetirementPlanningRgps,
         periods,
-        cnis,
+        earningHistories,
       );
     }
 
@@ -186,7 +244,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
     id: RetirementPlanningRgpsId,
     retirementPlanningRgps: RetirementPlanningRgpsEntity,
     retirementPlanningRgpsPeriod?: RetirementPlanningRgpsPeriodEntity[],
-    cnis?: CnisModel | null,
+    earningHistories?: RetirementPlanningRgpsEarningsHistoryEntity[],
   ): Promise<void> {
     const retirementPlanningRgpsPeriodTransaction =
       retirementPlanningRgpsPeriod?.map((value) => {
@@ -200,55 +258,19 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         retirementPlanningRgps,
       );
 
+    const earningHistoriesTransaction =
+      earningHistories?.map((value) => {
+        return this.retirementPlanningRgpsEarningsHistoryCommandRepositoryGateway.createRetirementPlanningRgpsEarningsHistory(
+          value,
+        );
+      }) ?? [];
+
     const transactions = await this.baseTransactionRepositoryGateway.execute([
       ...retirementPlanningRgpsPeriodTransaction,
+      ...earningHistoriesTransaction,
       retirementPlanningRgpsTransaction,
     ]);
 
     await transactions.commit();
-
-    if (
-      cnis?.socialSecurityRelations &&
-      cnis.socialSecurityRelations.length > 0
-    ) {
-      const earningsTransactions = [] as any[];
-
-      for (const relation of cnis.socialSecurityRelations) {
-        const earnings =
-          relation.socialSecurityAffiliationEarningsHistory ?? [];
-
-        for (const earning of earnings) {
-          if (!earning.remuneracao) {
-            continue;
-          }
-
-          const earningEntity = new RetirementPlanningRgpsEarningsHistoryEntity(
-            {
-              competence: earning.competencia ?? null,
-              remuneration: earning.remuneracao ?? null,
-              indicators: earning.indicadores ?? null,
-              paymentDate: earning.dataPgto ?? null,
-              contribution: earning.contribuicao ?? null,
-              contributionSalary: earning.salarioContribuicao ?? null,
-              retirementPlanningRgps: retirementPlanningRgps,
-            },
-          );
-
-          earningsTransactions.push(
-            this.retirementPlanningRgpsEarningsHistoryCommandRepositoryGateway.createRetirementPlanningRgpsEarningsHistory(
-              earningEntity,
-            ),
-          );
-        }
-      }
-
-      if (earningsTransactions.length > 0) {
-        const earningsTx =
-          await this.baseTransactionRepositoryGateway.execute(
-            earningsTransactions,
-          );
-        await earningsTx.commit();
-      }
-    }
   }
 }

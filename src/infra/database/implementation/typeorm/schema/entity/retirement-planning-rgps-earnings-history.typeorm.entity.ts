@@ -63,6 +63,13 @@ export class RetirementPlanningRgpsEarningsHistoryTypeormEntity extends BaseType
   @JoinColumn({ name: 'retirement_planning_rgps_id' })
   public retirementPlanningRgps?: RetirementPlanningRgpsTypeormEntity | null;
 
+  @Column({
+    name: 'competence_below_the_minimum',
+    type: 'boolean',
+    nullable: true,
+  })
+  public competenceBelowTheMinimum: boolean | null;
+
   protected override readonly _type =
     RetirementPlanningRgpsEarningsHistoryTypeormEntity.name;
 }
