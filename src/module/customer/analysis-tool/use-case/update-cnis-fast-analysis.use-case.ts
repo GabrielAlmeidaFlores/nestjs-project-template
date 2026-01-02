@@ -134,6 +134,7 @@ export class UpdateCnisFastAnalysisUseCase {
       ...analysisToolRecordQueryResult,
       cnisFastAnalysis,
       analysisToolClient,
+      retirementPlanningRpps: null,
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
