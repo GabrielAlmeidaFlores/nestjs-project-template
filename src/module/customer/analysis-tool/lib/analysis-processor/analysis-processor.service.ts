@@ -41,9 +41,8 @@ Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
 3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56).
 
 Análise processada do CNIS:
- ${cnisAnalysisJson}
- 
- `;
+  ${cnisAnalysisJson}
+`;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
