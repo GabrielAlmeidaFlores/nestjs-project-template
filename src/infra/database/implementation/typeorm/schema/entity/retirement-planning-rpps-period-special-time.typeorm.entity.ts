@@ -40,7 +40,6 @@ export class RetirementPlanningRppsPeriodSpecialTimeTypeormEntity extends BaseTy
   @OneToOne(
     () => RetirementPlanningRppsPeriodTypeormEntity,
     (entity) => entity.specialTimePeriod,
-    { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_id' })
   public retirementPlanningRppsPeriod?:

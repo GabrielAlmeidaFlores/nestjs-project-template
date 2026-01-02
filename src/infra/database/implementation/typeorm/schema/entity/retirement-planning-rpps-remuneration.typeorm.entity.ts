@@ -7,8 +7,7 @@ import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementat
 export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'remuneration_date',
-    type: 'varchar',
-    length: 100,
+    type: 'date',
     nullable: false,
   })
   public remunerationDate: Date;

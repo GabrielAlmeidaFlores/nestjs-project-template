@@ -29,7 +29,6 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => RetirementPlanningRppsResultTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
-    { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_result_id' })
   public retirementPlanningRppsResult?:
@@ -39,6 +38,7 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => RetirementPlanningRppsRemunerationCalculationTypeormEntity,
     (entity) => entity.retirementPlanningRpps,
+    { nullable: true },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_remuneration_calculation_id' })
   public retirementPlanningRppsRemunerationCalculation?:
