@@ -1,4 +1,5 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -71,8 +72,8 @@ export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuil
   @ResponseDtoEnumProperty(RetirementPlanningDocumentTypeEnum)
   public type: RetirementPlanningDocumentTypeEnum;
 
-  @ResponseDtoStringProperty()
-  public document: string;
+  @ResponseDtoValueObjectProperty(Base64)
+  public document: Base64;
 
   protected override readonly _type =
     GetRetirementPlanningRppsPeriodDocumentResponseDto.name;
