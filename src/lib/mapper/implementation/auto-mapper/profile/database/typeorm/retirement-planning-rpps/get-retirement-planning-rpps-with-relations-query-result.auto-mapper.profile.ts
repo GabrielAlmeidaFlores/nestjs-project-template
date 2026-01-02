@@ -41,7 +41,10 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
     ): GetRetirementPlanningRppsWithRelationsQueryResult => {
       if (
         !source.retirementPlanningRppsInssBenefit ||
-        !source.retirementPlanningRppsLegalProceeding
+        !source.retirementPlanningRppsLegalProceeding ||
+        !source.documents ||
+        !source.periods ||
+        !source.remunerations
       ) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
@@ -66,21 +69,17 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
             )
           : null;
 
-      const remunerations = source.remunerations
-        ? this.mapper.mapArray(
-            source.remunerations,
-            RetirementPlanningRppsRemunerationTypeormEntity,
-            GetRetirementPlanningRppsRemunerationQueryResult,
-          )
-        : [];
+      const remunerations = this.mapper.mapArray(
+        source.remunerations,
+        RetirementPlanningRppsRemunerationTypeormEntity,
+        GetRetirementPlanningRppsRemunerationQueryResult,
+      );
 
-      const periods = source.periods
-        ? this.mapper.mapArray(
-            source.periods,
-            RetirementPlanningRppsPeriodTypeormEntity,
-            GetRetirementPlanningRppsPeriodQueryResult,
-          )
-        : [];
+      const periods = this.mapper.mapArray(
+        source.periods,
+        RetirementPlanningRppsPeriodTypeormEntity,
+        GetRetirementPlanningRppsPeriodQueryResult,
+      );
 
       const retirementPlanningRppsInssBenefit = this.mapper.mapArray(
         source.retirementPlanningRppsInssBenefit,
@@ -94,13 +93,11 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
         GetRetirementPlanningRppsLegalProceedingQueryResult,
       );
 
-      const ctcDocuments = source.documents
-        ? this.mapper.mapArray(
-            source.documents,
-            RetirementPlanningRppsPeriodDocumentTypeormEntity,
-            GetRetirementPlanningRppsPeriodDocumentQueryResult,
-          )
-        : [];
+      const ctcDocuments = this.mapper.mapArray(
+        source.documents,
+        RetirementPlanningRppsPeriodDocumentTypeormEntity,
+        GetRetirementPlanningRppsPeriodDocumentQueryResult,
+      );
 
       return GetRetirementPlanningRppsWithRelationsQueryResult.build({
         id: new RetirementPlanningRppsId(source.id),

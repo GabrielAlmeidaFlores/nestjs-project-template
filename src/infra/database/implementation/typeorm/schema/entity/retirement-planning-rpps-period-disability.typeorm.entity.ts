@@ -69,7 +69,7 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   })
   public description: string;
 
-  @ManyToOne(() => CidTenTypeormEntity, { nullable: false })
+  @ManyToOne(() => CidTenTypeormEntity)
   @JoinColumn({ name: 'cid_id' })
   public cid?: CidTenTypeormEntity | undefined;
 
@@ -84,7 +84,6 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   @OneToOne(
     () => RetirementPlanningRppsPeriodTypeormEntity,
     (entity) => entity.disabilityPeriod,
-    { nullable: false },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_id' })
   public retirementPlanningRppsPeriod?:

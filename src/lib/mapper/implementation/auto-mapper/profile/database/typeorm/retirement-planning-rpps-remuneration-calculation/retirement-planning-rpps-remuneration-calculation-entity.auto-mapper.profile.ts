@@ -27,14 +27,6 @@ export class RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfil
       return new RetirementPlanningRppsRemunerationCalculationEntity({
         ...source,
         id: new RetirementPlanningRppsRemunerationCalculationId(source.id),
-        totalAmount:
-          source.totalAmount !== null ? Number(source.totalAmount) : null,
-        averageAmount:
-          source.averageAmount !== null ? Number(source.averageAmount) : null,
-        topEightyPercentAverageAmount:
-          source.topEightyPercentAverageAmount !== null
-            ? Number(source.topEightyPercentAverageAmount)
-            : null,
       });
     };
 
@@ -55,16 +47,6 @@ export class RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfil
       return RetirementPlanningRppsRemunerationCalculationTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        totalAmount:
-          source.totalAmount !== null ? source.totalAmount.toString() : null,
-        averageAmount:
-          source.averageAmount !== null
-            ? source.averageAmount.toString()
-            : null,
-        topEightyPercentAverageAmount:
-          source.topEightyPercentAverageAmount !== null
-            ? source.topEightyPercentAverageAmount.toString()
-            : null,
       });
     };
 

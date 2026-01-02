@@ -57,7 +57,6 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
     (entity) => entity.retirementPlanningRppsPeriod,
-    { onDelete: 'CASCADE' },
   )
   public specialTimePeriod?:
     | RetirementPlanningRppsPeriodSpecialTimeTypeormEntity
@@ -66,7 +65,6 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
     (entity) => entity.retirementPlanningRppsPeriod,
-    { onDelete: 'CASCADE' },
   )
   public disabilityPeriod?:
     | RetirementPlanningRppsPeriodDisabilityTypeormEntity
@@ -74,8 +72,7 @@ export class RetirementPlanningRppsPeriodTypeormEntity extends BaseTypeormEntity
 
   @ManyToOne(
     () => RetirementPlanningRppsTypeormEntity,
-    (entity) => entity.remunerations,
-    { onDelete: 'CASCADE' },
+    (entity) => entity.periods,
   )
   @JoinColumn({ name: 'retirement_planning_rpps_id' })
   public retirementPlanningRpps?:

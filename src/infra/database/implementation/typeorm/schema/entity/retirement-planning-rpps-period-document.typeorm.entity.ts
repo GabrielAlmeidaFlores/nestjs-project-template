@@ -27,7 +27,7 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
   @ManyToOne(
     () => RetirementPlanningRppsPeriodSpecialTimeTypeormEntity,
     (entity) => entity.specialTimeDocuments,
-    { nullable: true, onDelete: 'SET NULL' },
+    { nullable: true },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_special_time_id' })
   public retirementPlanningRppsPeriodSpecialTime?:
@@ -37,7 +37,7 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
   @ManyToOne(
     () => RetirementPlanningRppsPeriodDisabilityTypeormEntity,
     (entity) => entity.disabilityDocuments,
-    { nullable: true, onDelete: 'SET NULL' },
+    { nullable: true },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_period_disability_id' })
   public retirementPlanningRppsPeriodDisability?:
@@ -47,7 +47,7 @@ export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeo
   @ManyToOne(
     () => RetirementPlanningRppsTypeormEntity,
     (entity) => entity.documents,
-    { nullable: true, onDelete: 'SET NULL' },
+    { nullable: true },
   )
   @JoinColumn({ name: 'retirement_planning_rpps_id' })
   public retirementPlanningRpps?:

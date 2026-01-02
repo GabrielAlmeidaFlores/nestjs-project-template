@@ -96,9 +96,11 @@ export class LegalPleadingTypeormQueryRepository
           analysisToolClientLegalProceeding: true,
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
         legalPleadingAddress: true,
@@ -108,9 +110,11 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingResult: true,
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
       },
     });
@@ -152,9 +156,11 @@ export class LegalPleadingTypeormQueryRepository
         analysisToolClient: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
@@ -166,9 +172,11 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingResult: true,
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
       },
     });
