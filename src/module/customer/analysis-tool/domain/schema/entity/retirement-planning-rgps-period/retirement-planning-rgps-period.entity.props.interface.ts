@@ -13,4 +13,5 @@ export interface RetirementPlanningRgpsPeriodEntityPropsInterface extends BaseEn
   typeOfContribution?: string | null;
   retirementPlanningRgps?: RetirementPlanningRgpsEntity | null;
   status?: boolean | null;
+  reasonPendency?: string | null;
 }

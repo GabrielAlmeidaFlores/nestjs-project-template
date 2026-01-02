@@ -33,6 +33,9 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
   @Description('Status do período de contribuição RGPS.')
   public readonly status: boolean | null;
 
+  @Description('Razão da pendência no período de contribuição RGPS.')
+  public readonly reasonPendency: string | null;
+
   protected readonly _type = RetirementPlanningRgpsPeriodEntity.name;
 
   public constructor(props: RetirementPlanningRgpsPeriodEntityPropsInterface) {
@@ -47,5 +50,6 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
     this.typeOfContribution = props.typeOfContribution ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
     this.status = props.status ?? null;
+    this.reasonPendency = props.reasonPendency ?? null;
   }
 }
