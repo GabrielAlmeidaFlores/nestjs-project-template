@@ -30,6 +30,9 @@ export class RetirementPlanningRgpsResultEntity extends BaseEntity<RetirementPla
   @Description('Resultado bruto do método compare CNIS x CTPS (JSON).')
   public readonly compareCnisCtpsRaw: string | null;
 
+  @Description('Resultado da análise de planejamento de aposentadoria RGPS.')
+  public readonly result: string | null;
+
   protected readonly _type = RetirementPlanningRgpsResultEntity.name;
 
   public constructor(props: RetirementPlanningRgpsResultEntityPropsInterface) {
@@ -41,5 +44,6 @@ export class RetirementPlanningRgpsResultEntity extends BaseEntity<RetirementPla
     this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
     this.compareCnisCtps = props.compareCnisCtps ?? null;
     this.compareCnisCtpsRaw = props.compareCnisCtpsRaw ?? null;
+    this.result = props.result ?? null;
   }
 }
