@@ -603,9 +603,27 @@ export class AnalyzeRetirementPlanningRgpsPppUseCase {
 
     await transactions.commit();
 
+    let jsonString = '';
+    const codeFenceMatch = result.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+
+    if (codeFenceMatch?.[1]) {
+      jsonString = codeFenceMatch[1].trim();
+    } else {
+      const objMatch = result.match(/\{[\s\S]*\}/);
+      jsonString = objMatch ? objMatch[0] : '{}';
+    }
+
+    let parsed: object;
+    try {
+      parsed = JSON.parse(jsonString) as object;
+    } catch {
+      parsed = {} as object;
+    }
+
     return AnalyzeRetirementPlanningRgpsPppResponseDto.build({
       retirementPlanningRgpsSpecialPeriodId:
         retirementPlanningRgpsSpecialPeriod.id,
+      analysis: JSON.stringify(parsed),
     });
   }
 }
