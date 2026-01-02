@@ -23,6 +23,7 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getRetirementPlanningRppsCompleteAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 
@@ -31,6 +32,7 @@ export abstract class AnalysisProcessorGateway {
   public abstract parseCnisDocument(cnisDocument: Buffer): Promise<CnisModel>;
 
   public abstract getLegalPleadingQuickDocumentAnalysis(
+    systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
 }
