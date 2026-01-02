@@ -44,6 +44,7 @@ import { GetRetirementPlanningRppsRemunerationCalculationResponseDto } from '@mo
 import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
+import { ListCidTenResponseDto } from '@module/customer/analysis-tool/dto/response/list-cid-ten.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
@@ -75,6 +76,7 @@ import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
+import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
@@ -130,6 +132,7 @@ export class AnalysisToolController {
     private readonly updateRetirementPlanningRppsRemunerationUseCase: UpdateRetirementPlanningRppsRemunerationUseCase,
     private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
     private readonly updateRetirementPlanningRppsUseCase: UpdateRetirementPlanningRppsUseCase,
+    private readonly listCidTenUseCase: ListCidTenUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1075,5 +1078,25 @@ export class AnalysisToolController {
       organizationSessionData,
       retirementPlanningRppsId,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar CID-10',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'cid-ten',
+      method: RequestMethod.GET,
+    },
+    tag: ['cid-ten'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de CID-10 retornada com sucesso.',
+      type: ListCidTenResponseDto,
+    },
+  })
+  public async listCidTen(
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListCidTenResponseDto> {
+    return await this.listCidTenUseCase.execute(dto);
   }
 }

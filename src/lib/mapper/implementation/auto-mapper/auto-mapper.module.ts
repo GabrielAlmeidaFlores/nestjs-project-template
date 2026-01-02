@@ -22,6 +22,7 @@ import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
+import { GetCidTenQueryResultAutoMapperProfile as GetCidTenQueryResultTypeormAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten.query.result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-query-result.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
@@ -202,6 +203,7 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile,
     CidTenEntityAutoMapperProfile,
     GetCidTenQueryResultAutoMapperProfile,
+    GetCidTenQueryResultTypeormAutoMapperProfile,
     RetirementPlanningRppsInssBenefitEntityAutoMapperProfile,
     GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile,
     RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile,

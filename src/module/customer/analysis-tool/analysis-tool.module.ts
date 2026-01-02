@@ -35,6 +35,7 @@ import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool
 import { ListAnalysisToolClientLegalProceedingUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client-legal-proceeding.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
+import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
@@ -100,6 +101,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsUseCase,
+    ListCidTenUseCase,
     {
       provide: ListAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: ListAnalysisToolClientLegalProceedingUseCase,
