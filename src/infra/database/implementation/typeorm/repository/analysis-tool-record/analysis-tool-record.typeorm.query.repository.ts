@@ -332,16 +332,20 @@ export class AnalysisToolRecordTypeormQueryRepository
       {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClient: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientLegalProceeding: true,
           analysisToolClientInssBenefit: true,
