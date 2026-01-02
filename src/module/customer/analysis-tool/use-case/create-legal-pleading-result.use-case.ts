@@ -146,6 +146,21 @@ export class CreateLegalPleadingResultUseCase {
       updatedBy: organizationMember.id,
     });
 
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      contextPrompt: legalPleadingCompleteAnalysis,
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
+
     const legalPleadingTransaction =
       this.legalPleadingCommandRepositoryGateway.updateLegalPleading(
         legalPleading.id,

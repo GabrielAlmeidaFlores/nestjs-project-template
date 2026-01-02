@@ -25,6 +25,8 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 @Injectable()
 export class CreateCnisFastAnalysisResultUseCase {
   protected readonly _type = CreateCnisFastAnalysisResultUseCase.name;
@@ -179,6 +181,16 @@ export class CreateCnisFastAnalysisResultUseCase {
       ...analysisToolRecordQueryResult.analysisToolClient,
       createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
       updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
+
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      contextPrompt: cnisFastAnalysisResult.cnisCompleteAnalysis,
+      archivedAt: null,
+      createdAt: new Date(),
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
