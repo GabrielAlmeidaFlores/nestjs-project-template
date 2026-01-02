@@ -36,6 +36,7 @@ import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-to
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
 import { UpdateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-period.request.dto';
+import { UpdateRetirementPlanningRgpsResultRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-result.request.dto';
 import { AnalyzeRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/analyze-retirement-planning-rgps-cnis.response.dto';
 import { AnalyzeRetirementPlanningRgpsPppResponseDto } from '@module/customer/analysis-tool/dto/response/analyze-retirement-planning-rgps-ppp.response.dto';
 import { CompareRetirementPlanningRgpsCnisCtpsResponseDto } from '@module/customer/analysis-tool/dto/response/compare-retirement-planning-rgps-cnis-ctps.response.dto';
@@ -69,6 +70,7 @@ import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { UpdateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-period.response.dto';
+import { UpdateRetirementPlanningRgpsResultResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-result.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
@@ -113,6 +115,7 @@ import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
+import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -156,6 +159,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
     private readonly createRetirementPlanningRgpsPeriodUseCase: CreateRetirementPlanningRgpsPeriodUseCase,
     private readonly updateRetirementPlanningRgpsPeriodUseCase: UpdateRetirementPlanningRgpsPeriodUseCase,
+    private readonly updateRetirementPlanningRgpsResultUseCase: UpdateRetirementPlanningRgpsResultUseCase,
     private readonly compareRetirementPlanningRgpsCnisCtpsUseCase: CompareRetirementPlanningRgpsCnisCtpsUseCase,
     private readonly analyzeRuralTimeUseCase: AnalyzeRuralTimeUseCase,
     private readonly analyzeApprenticeStudentUseCase: AnalyzeApprenticeStudentUseCase,
@@ -959,6 +963,37 @@ export class AnalysisToolController {
   ): Promise<UpdateRetirementPlanningRgpsPeriodResponseDto> {
     return await this.updateRetirementPlanningRgpsPeriodUseCase.execute(
       retirementPlanningRgpsPeriodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar resultado do planejamento previdenciário RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/:retirementPlanningRgpsId/result',
+      method: RequestMethod.PATCH,
+      type: UpdateRetirementPlanningRgpsResultRequestDto,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Resultado do planejamento previdenciário RGPS atualizado com sucesso.',
+      type: UpdateRetirementPlanningRgpsResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRetirementPlanningRgpsResult(
+    @Param(
+      'retirementPlanningRgpsId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsId),
+    )
+    retirementPlanningRgpsId: RetirementPlanningRgpsId,
+    @Body() dto: UpdateRetirementPlanningRgpsResultRequestDto,
+  ): Promise<UpdateRetirementPlanningRgpsResultResponseDto> {
+    return await this.updateRetirementPlanningRgpsResultUseCase.execute(
+      retirementPlanningRgpsId,
       dto,
     );
   }

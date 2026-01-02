@@ -55,6 +55,7 @@ import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/ana
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
 
 @Module({
   imports: [
@@ -93,6 +94,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteLegalPleadingUseCase,
     GetAnalysisToolClientUseCase,
     UpdateCnisFastAnalysisUseCase,
+    UpdateRetirementPlanningRgpsResultUseCase,
     CreateRetirementPlanningRgpsUseCase,
     CreateRetirementPlanningRgpsCnisUseCase,
     CreateRetirementPlanningRgpsPeriodUseCase,
