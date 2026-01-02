@@ -1,7 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -48,6 +53,8 @@ export class CreateRetirementPlanningRgpsUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -55,6 +62,11 @@ export class CreateRetirementPlanningRgpsUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     dto: CreateRetirementPlanningRgpsRequestDto,
   ): Promise<CreateRetirementPlanningRgpsResponseDto> {
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -125,6 +137,18 @@ export class CreateRetirementPlanningRgpsUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
+    const conversation = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      contextPrompt: JSON.stringify(
+        retirementPlanningRgps.retirementPlanningRgpsResult,
+      ),
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
       type: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING,
@@ -132,6 +156,7 @@ export class CreateRetirementPlanningRgpsUseCase {
       retirementPlanningRgps,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
+      conversation,
       createdBy: organizationMember.id,
       updatedBy: organizationMember.id,
     });
