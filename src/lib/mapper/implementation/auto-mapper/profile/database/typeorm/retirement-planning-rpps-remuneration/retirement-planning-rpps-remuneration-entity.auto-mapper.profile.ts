@@ -35,7 +35,7 @@ export class RetirementPlanningRppsRemunerationEntityAutoMapperProfile {
       return new RetirementPlanningRppsRemunerationEntity({
         ...source,
         id: new RetirementPlanningRppsRemunerationId(source.id),
-        amount: Number(source.amount),
+        remunerationAmount: Number(source.remunerationAmount),
         retirementPlanningRpps,
       });
     };
@@ -63,7 +63,7 @@ export class RetirementPlanningRppsRemunerationEntityAutoMapperProfile {
       return RetirementPlanningRppsRemunerationTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        amount: source.amount.toString(),
+        remunerationAmount: source.remunerationAmount.toString(),
         retirementPlanningRpps,
       });
     };

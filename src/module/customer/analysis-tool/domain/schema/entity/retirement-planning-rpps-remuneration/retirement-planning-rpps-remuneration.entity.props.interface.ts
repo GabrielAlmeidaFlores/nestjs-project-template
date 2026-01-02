@@ -3,7 +3,7 @@ import type { RetirementPlanningRppsEntity } from '@module/customer/analysis-too
 import type { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
 
 export interface RetirementPlanningRppsRemunerationEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRppsRemunerationId> {
-  date: Date;
-  amount: number;
+  remunerationDate: Date;
+  remunerationAmount: number;
   retirementPlanningRpps: RetirementPlanningRppsEntity;
 }

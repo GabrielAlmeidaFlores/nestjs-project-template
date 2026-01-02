@@ -1,22 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
 import { RetirementPlanningRppsRemunerationCalculationEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.entity';
-import {
-  RemunerationCalculatorGateway,
-  RemunerationDataInterface,
-} from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 
 @Injectable()
 export class RemunerationCalculatorService implements RemunerationCalculatorGateway {
   protected readonly _type = RemunerationCalculatorService.name;
 
   public calculate(
-    remunerations: RemunerationDataInterface[],
+    remunerations: RemunerationDataInputModel[],
   ): RetirementPlanningRppsRemunerationCalculationEntity {
     const totalCompetencies = remunerations.length;
 
     const totalAmount = remunerations.reduce(
-      (sum, remuneration) => sum + remuneration.amount,
+      (sum, remuneration) => sum + remuneration.remunerationAmount,
       0,
     );
 
@@ -24,7 +22,7 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
       totalCompetencies > 0 ? totalAmount / totalCompetencies : 0;
 
     const sortedRemunerations = [...remunerations].sort(
-      (a, b) => b.amount - a.amount,
+      (a, b) => b.remunerationAmount - a.remunerationAmount,
     );
     const eightyPercent = 0.8;
     const topEightyPercentCompetencies = Math.ceil(
@@ -39,7 +37,7 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
     );
 
     const topEightyPercentTotalAmount = topEightyPercentRemunerations.reduce(
-      (sum, remuneration) => sum + remuneration.amount,
+      (sum, remuneration) => sum + remuneration.remunerationAmount,
       0,
     );
     const topEightyPercentAverageAmount =
@@ -48,7 +46,6 @@ export class RemunerationCalculatorService implements RemunerationCalculatorGate
         : 0;
 
     return new RetirementPlanningRppsRemunerationCalculationEntity({
-      id: null,
       totalCompetencies,
       totalAmount,
       averageAmount,

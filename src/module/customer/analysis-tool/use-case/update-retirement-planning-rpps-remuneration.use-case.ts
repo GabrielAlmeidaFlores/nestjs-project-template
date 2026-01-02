@@ -16,6 +16,7 @@ import { UpdateRetirementPlanningRppsRemunerationRequestDto } from '@module/cust
 import { UpdateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rpps-remuneration.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
 import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -92,15 +93,15 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
 
     for (const remunerationDto of dto.remunerations) {
       const normalizedDateToDayOne = new Date(
-        remunerationDto.date.getFullYear(),
-        remunerationDto.date.getMonth(),
+        remunerationDto.remunerationDate.getFullYear(),
+        remunerationDto.remunerationDate.getMonth(),
         1,
       );
 
       const remunerationEntity = new RetirementPlanningRppsRemunerationEntity({
         id: new RetirementPlanningRppsRemunerationId(),
-        date: normalizedDateToDayOne,
-        amount: remunerationDto.amount,
+        remunerationDate: normalizedDateToDayOne,
+        remunerationAmount: remunerationDto.remunerationAmount,
         retirementPlanningRpps: retirementPlanningRppsEntity,
       });
 
@@ -121,7 +122,13 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
     }
 
     const retirementPlanningRppsRemunerationCalculation =
-      this.remunerationCalculatorGateway.calculate(dto.remunerations);
+      this.remunerationCalculatorGateway.calculate(
+        dto.remunerations.map((remunerationDto) =>
+          RemunerationDataInputModel.build({
+            remunerationAmount: remunerationDto.remunerationAmount,
+          }),
+        ),
+      );
 
     transactionOperations.push(
       this.retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway.createRetirementPlanningRppsRemunerationCalculation(

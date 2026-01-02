@@ -7,10 +7,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class CreateRetirementPlanningRppsRemunerationJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: true })
-  public readonly date: Date;
+  public readonly remunerationDate: Date;
 
   @RequestDtoNumberProperty({ required: true })
-  public readonly amount: number;
+  public readonly remunerationAmount: number;
 
   protected override readonly _type =
     CreateRetirementPlanningRppsRemunerationJsonRequestDto.name;

@@ -22,7 +22,6 @@ export class RetirementPlanningRppsResultTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => RetirementPlanningRppsTypeormEntity,
     (entity) => entity.retirementPlanningRppsResult,
-    { nullable: false },
   )
   public retirementPlanningRpps?:
     | RetirementPlanningRppsTypeormEntity

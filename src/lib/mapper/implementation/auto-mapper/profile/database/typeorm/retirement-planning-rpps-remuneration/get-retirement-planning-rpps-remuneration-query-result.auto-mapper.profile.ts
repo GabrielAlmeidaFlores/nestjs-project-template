@@ -27,7 +27,7 @@ export class GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile {
       return GetRetirementPlanningRppsRemunerationQueryResult.build({
         ...source,
         id: new RetirementPlanningRppsRemunerationId(source.id),
-        amount: Number(source.amount),
+        remunerationAmount: Number(source.remunerationAmount),
       });
     };
 
@@ -48,7 +48,7 @@ export class GetRetirementPlanningRppsRemunerationQueryResultAutoMapperProfile {
       return RetirementPlanningRppsRemunerationTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        amount: source.amount.toString(),
+        remunerationAmount: source.remunerationAmount.toString(),
       });
     };
 
