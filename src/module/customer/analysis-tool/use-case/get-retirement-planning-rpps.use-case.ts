@@ -135,6 +135,36 @@ export class GetRetirementPlanningRppsUseCase {
       }),
     );
 
+    const retirementPlanningRppsResult =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
+        ? GetRetirementPlanningRppsResultResponseDto.build({
+            retirementPlanningRppsCompleteAnalysis:
+              retirementPlanningRppsQueryResult.retirementPlanningRppsResult
+                .retirementPlanningRppsCompleteAnalysis !== null
+                ? (JSON.parse(
+                    retirementPlanningRppsQueryResult
+                      .retirementPlanningRppsResult
+                      .retirementPlanningRppsCompleteAnalysis,
+                  ) as object)
+                : null,
+            retirementPlanningRppsSimplifiedAnalysis:
+              retirementPlanningRppsQueryResult.retirementPlanningRppsResult
+                .retirementPlanningRppsSimplifiedAnalysis !== null
+                ? (JSON.parse(
+                    retirementPlanningRppsQueryResult
+                      .retirementPlanningRppsResult
+                      .retirementPlanningRppsSimplifiedAnalysis,
+                  ) as object)
+                : null,
+            createdAt:
+              retirementPlanningRppsQueryResult.retirementPlanningRppsResult
+                .createdAt,
+            updatedAt:
+              retirementPlanningRppsQueryResult.retirementPlanningRppsResult
+                .updatedAt,
+          })
+        : null;
+
     const response = GetRetirementPlanningRppsResponseDto.build({
       id: retirementPlanningRppsQueryResult.id,
       careerStartDate: retirementPlanningRppsQueryResult.careerStartDate,
@@ -146,12 +176,7 @@ export class GetRetirementPlanningRppsUseCase {
       legalProceedingNumber,
       inssBenefitNumber,
       ctcDocuments,
-      retirementPlanningRppsResult:
-        retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
-          ? GetRetirementPlanningRppsResultResponseDto.build({
-              ...retirementPlanningRppsQueryResult.retirementPlanningRppsResult,
-            })
-          : null,
+      retirementPlanningRppsResult,
       periods,
     });
 
