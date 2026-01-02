@@ -36,7 +36,6 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
-
     const listParam = new ListRetirementPlanningRgpsTimeAcceleratorQueryParam({
       ...dto,
     });
