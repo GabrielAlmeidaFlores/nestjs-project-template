@@ -184,11 +184,21 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
         }),
       )) ?? '';
 
+    let jsonString = '';
+    const codeFenceMatch = result.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+
+    if (codeFenceMatch?.[1]) {
+      jsonString = codeFenceMatch[1].trim();
+    } else {
+      const objMatch = result.match(/\{[\s\S]*\}/);
+      jsonString = objMatch ? objMatch[0] : '{}';
+    }
+
     const updatedRetirementPlanningRgpsResult =
       new RetirementPlanningRgpsResultEntity({
         ...retirementPlanningRgps.retirementPlanningRgpsResult,
         compareCnisCtps: result,
-        compareCnisCtpsRaw: result,
+        compareCnisCtpsRaw: jsonString,
       });
 
     if (!retirementPlanningRgps.retirementPlanningRgpsResult) {
@@ -209,6 +219,8 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
 
     return CompareRetirementPlanningRgpsCnisCtpsResponseDto.build({
       result,
+      compareCnisCtpsRaw:
+        updatedRetirementPlanningRgpsResult.compareCnisCtpsRaw ?? 'N/A',
     });
   }
 }
