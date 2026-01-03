@@ -176,7 +176,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                 earnings.map((e) => {
                   const competenceBelowTheMinimumSalary =
                     relation.socialSecurityAffiliationEarningsHistory.some(
-                      (earning) => {
+                      () => {
                         if (!e.competencia) {
                           return false;
                         }
@@ -191,18 +191,17 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                           return false;
                         }
                         const salarioMinimo = findSalary.salarioMinimo;
-                        const remuneration = earning.remuneracao;
-                        if (!remuneration) {
+                        const remuneration = this.parseRemunerationString(
+                          e.remuneracao,
+                        );
+                        if (remuneration === null) {
                           return false;
                         }
-                        const salario = Number(
-                          remuneration.replace(/\./g, '').replace(',', '.'),
-                        );
-                        if (isNaN(salario)) {
+                        if (isNaN(remuneration)) {
                           return false;
                         }
 
-                        return salario < salarioMinimo;
+                        return remuneration < salarioMinimo;
                       },
                     );
 
@@ -272,5 +271,46 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
     ]);
 
     await transactions.commit();
+  }
+
+  private parseRemunerationString(input?: string): number | null {
+    if (!input) {
+      return null;
+    }
+    const raw = input.trim();
+    if (!raw) {
+      return null;
+    }
+
+    let s = raw.replace(/[^\d.,-]/g, '').replace(/\s+/g, '');
+
+    const hasComma = s.includes(',');
+    const hasDot = s.includes('.');
+
+    const THOUSANDS_GROUP_LENGTH = 3;
+
+    if (hasComma && hasDot) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else if (hasComma) {
+      s = s.replace(',', '.');
+    } else if (hasDot) {
+      const parts = s.split('.');
+
+      if (!parts.length) {
+        return null;
+      }
+
+      const lastPart = parts[parts.length - 1];
+      if (
+        parts.length > 2 ||
+        (typeof lastPart === 'string' &&
+          lastPart.length === THOUSANDS_GROUP_LENGTH)
+      ) {
+        s = s.replace(/\./g, '');
+      }
+    }
+
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
   }
 }
