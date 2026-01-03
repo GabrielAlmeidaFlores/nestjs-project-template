@@ -124,7 +124,6 @@ export class AppConfig extends AppConfigUtils {
         forbidUnknownValues: false,
         transformOptions: {
           enableImplicitConversion: true,
-          exposeUnsetFields: false,
         },
         exceptionFactory: (errors: ValidationError[]): BadRequestException => {
           type FlatType = {

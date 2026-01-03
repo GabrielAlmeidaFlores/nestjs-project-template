@@ -11,4 +11,5 @@ export enum MimeTypeEnum {
   APPLICATION_OCTET_STREAM = 'application/octet-stream',
   VIDEO_WEBM = 'video/webm',
   AUDIO_OGG = 'audio/ogg',
+  WORD = 'application/msword',
 }

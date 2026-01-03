@@ -23,7 +23,7 @@ export class AccountController {
       path: 'admin',
       method: RequestMethod.GET,
     },
-    tag: ['conta-do-administrador'],
+    tag: ['detalhes-do-administrador'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Dados do administrador autenticado retornados com sucesso.',

@@ -138,6 +138,8 @@ export class UpdateCnisFastAnalysisUseCase {
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
+      conversation: null,
     });
 
     const transactions: TransactionType[] = [];

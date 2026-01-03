@@ -10,7 +10,6 @@ export const GetOrganizationSessionData = createParamDecorator(
     const internalRequest = request as unknown as {
       organizationSessionData: OrganizationSessionDataModel;
     };
-
     return internalRequest.organizationSessionData;
   },
 );

@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -35,6 +36,9 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
 
   @OneToMany(() => OrganizationMemberTypeormEntity, (entity) => entity.customer)
   public organizationMember?: OrganizationMemberTypeormEntity[] | undefined;
+
+  @OneToMany(() => ConversationTypeormEntity, (entity) => entity.customer)
+  public conversation?: ConversationTypeormEntity[] | undefined;
 
   @OneToMany(
     () => CustomerTermsAcceptanceTypeormEntity,

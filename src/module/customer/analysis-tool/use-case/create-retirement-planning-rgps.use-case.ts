@@ -151,7 +151,7 @@ export class CreateRetirementPlanningRgpsUseCase {
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING,
+      type: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RPPS,
       cnisFastAnalysis: null,
       retirementPlanningRgps,
       analysisToolClient,

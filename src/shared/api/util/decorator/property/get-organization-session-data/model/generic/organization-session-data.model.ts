@@ -4,6 +4,7 @@ import type { OrganizationId } from '@module/customer/account/domain/schema/enti
 
 export class OrganizationSessionDataModel extends BaseBuildableObject {
   public organizationId: OrganizationId;
+
   public owner: boolean;
 
   protected override readonly _type = OrganizationSessionDataModel.name;

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 
 import { BucketModule } from '@infra/bucket/bucket.module';
 import { DatabaseModule } from '@infra/database/database.module';
-import { PaymentGatewayModule } from '@infra/payment-gateway/payment-gateway.module';
 import { AccountController } from '@module/customer/account/account.controller';
 import { FileProcessorModule } from '@module/customer/account/lib/file-processor/file-processor.module';
 import { OrganizationSessionModule } from '@module/customer/account/lib/organization-session/organization-session.module';
@@ -27,7 +26,6 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     BucketModule,
     FileProcessorModule,
     OrganizationSessionModule,
-    PaymentGatewayModule,
   ],
   controllers: [AccountController],
   providers: [
