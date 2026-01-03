@@ -41,6 +41,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-time-accelerator-from-analysis.use-case';
 import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -53,9 +54,9 @@ import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
+import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
-import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/anal
     UpdateRetirementPlanningRgpsPeriodUseCase,
     CreateRetirementPlanningRgpsPeriodDocumentUseCase,
     ListRetirementPlanningRgpsPeriodUseCase,
+    GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase,
     GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,
     CompareRetirementPlanningRgpsCnisCtpsUseCase,
     CreateRetirementPlanningRgpsTimeAcceleratorUseCase,

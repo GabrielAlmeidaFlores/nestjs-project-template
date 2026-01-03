@@ -38,4 +38,25 @@ export class RetirementPlanningRgpsEarningsHistoryTypeormQueryRepository impleme
       ),
     );
   }
+
+  public async findByRetirementPlanningRgpsPeriodIdBelowMinimum(
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+  ): Promise<RetirementPlanningRgpsEarningsHistoryEntity[]> {
+    const results = await this.repository.find({
+      where: {
+        retirementPlanningRgpsPeriod: {
+          id: retirementPlanningRgpsPeriodId.toString(),
+        },
+        competenceBelowTheMinimum: true,
+      },
+    });
+
+    return results.map((r) =>
+      this.mapperGateway.map(
+        r,
+        RetirementPlanningRgpsEarningsHistoryTypeormEntity,
+        RetirementPlanningRgpsEarningsHistoryEntity,
+      ),
+    );
+  }
 }

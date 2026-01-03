@@ -5,4 +5,8 @@ export abstract class RetirementPlanningRgpsEarningsHistoryQueryRepositoryGatewa
   public abstract findByRetirementPlanningRgpsPeriodId(
     retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
   ): Promise<RetirementPlanningRgpsEarningsHistoryEntity[]>;
+
+  public abstract findByRetirementPlanningRgpsPeriodIdBelowMinimum(
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+  ): Promise<RetirementPlanningRgpsEarningsHistoryEntity[]>;
 }

@@ -58,6 +58,7 @@ import { DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
+import { GetRetirementPlanningRgpsPeriodEarningResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-period-earning.response.dto';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-time-accelerator-from-analysis.response.dto';
 import { GetRetirementPlanningRgpsResponse } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
@@ -103,6 +104,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-time-accelerator-from-analysis.use-case';
 import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -175,6 +177,7 @@ export class AnalysisToolController {
     private readonly deleteRetirementPlanningRgpsTimeAcceleratorUseCase: DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
     private readonly listRetirementPlanningRgpsTimeAcceleratorUseCase: ListRetirementPlanningRgpsTimeAcceleratorUseCase,
     private readonly listRetirementPlanningRgpsPeriodUseCase: ListRetirementPlanningRgpsPeriodUseCase,
+    private readonly getRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase: GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase,
     private readonly createRetirementPlanningRgpsPeriodDocumentUseCase: CreateRetirementPlanningRgpsPeriodDocumentUseCase,
     private readonly getRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase: GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,
     private readonly getRetirementPlanningRgpsUseCase: GetRetirementPlanningRgpsUseCase,
@@ -1432,6 +1435,39 @@ export class AnalysisToolController {
   ): Promise<CreateRetirementPlanningRgpsPeriodDocumentResponseDto> {
     return await this.createRetirementPlanningRgpsPeriodDocumentUseCase.execute(
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Listar ganhos abaixo do mínimo de um período do planejamento previdenciário RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/earnings/below-minimum',
+      method: RequestMethod.GET,
+    },
+    tag: ['retirement-planning-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Ganhos abaixo do mínimo retornados com sucesso.',
+      type: GetRetirementPlanningRgpsPeriodEarningResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRgpsPeriodEarningsBelowMinimum(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRgpsPeriodId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsPeriodId),
+    )
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+  ): Promise<GetRetirementPlanningRgpsPeriodEarningResponseDto[]> {
+    return await this.getRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRgpsPeriodId,
     );
   }
 }
