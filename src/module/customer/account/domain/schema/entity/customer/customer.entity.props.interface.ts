@@ -5,6 +5,5 @@ import type { CustomerAddressEntity } from '@module/customer/account/domain/sche
 export interface CustomerEntityPropsInterface extends BaseEntityPropsInterface<CustomerId> {
   name: string;
   customerAddress: CustomerAddressEntity;
-  bankExternalId: string;
   profilePicture?: string | null;
 }

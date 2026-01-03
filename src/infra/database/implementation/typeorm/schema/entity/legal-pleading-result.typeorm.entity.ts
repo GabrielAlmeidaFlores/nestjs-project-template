@@ -1,6 +1,7 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 
 @Entity({ name: 'legal_pleading_result' })
@@ -24,6 +25,14 @@ export class LegalPleadingResultTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.legalPleadingResult,
   )
   public legalPleading?: LegalPleadingTypeormEntity | undefined;
+
+  @OneToOne(
+    () => ConversationTypeormEntity,
+    (entity) => entity.legalPleadingResult,
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'conversation_id' })
+  public conversation?: ConversationTypeormEntity | undefined;
 
   protected override readonly _type = LegalPleadingResultTypeormEntity.name;
 }

@@ -70,18 +70,11 @@ export function BaseDtoProperty(
     propertyIsRequired,
   );
 
-  const apiPropertyConfig: Record<string, unknown> = {
+  const apiProperty = ApiProperty({
     required: propertyIsRequired,
     example: props?.example,
     isArray,
-  };
-
-  if (props?.description !== undefined) {
-    apiPropertyConfig['description'] = props.description;
-  }
-
-  const apiProperty = ApiProperty(apiPropertyConfig);
-
+  });
   const expose = Expose();
 
   return applyDecorators(storeMetadata, apiProperty, expose);

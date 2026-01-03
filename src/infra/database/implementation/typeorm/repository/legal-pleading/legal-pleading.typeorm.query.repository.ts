@@ -107,7 +107,9 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingDocument: {
           legalPleadingDocumentAnalysis: true,
         },
-        legalPleadingResult: true,
+        legalPleadingResult: {
+          conversation: true,
+        },
         createdBy: {
           customer: true,
           organization: true,

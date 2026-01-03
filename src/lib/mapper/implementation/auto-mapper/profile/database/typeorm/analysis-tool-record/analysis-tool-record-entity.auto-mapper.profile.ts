@@ -1,13 +1,17 @@
 import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Injectable } from '@nestjs/common';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
@@ -56,10 +60,22 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const retirementPlanningRgps = this.mapper.map(
+        source.retirementPlanningRgps,
+        RetirementPlanningRgpsTypeormEntity,
+        RetirementPlanningRgpsEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
         AnalysisToolClientEntity,
+      );
+
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationTypeormEntity,
+        ConversationEntity,
       );
 
       return new AnalysisToolRecordEntity({
@@ -67,10 +83,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
         cnisFastAnalysis,
+        retirementPlanningRgps,
         retirementPlanningRpps,
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
+        conversation,
       });
     };
 
@@ -104,10 +122,22 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const retirementPlanningRgps = this.mapper.map(
+        source.retirementPlanningRgps,
+        RetirementPlanningRgpsEntity,
+        RetirementPlanningRgpsTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
         AnalysisToolClientTypeormEntity,
+      );
+
+      const conversation = this.mapper.map(
+        source.conversation,
+        ConversationEntity,
+        ConversationTypeormEntity,
       );
 
       const createdBy = {
@@ -123,8 +153,10 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         id: source.id.toString(),
         code: source.code.toString(),
         cnisFastAnalysis,
+        retirementPlanningRgps,
         retirementPlanningRpps,
         analysisToolClient,
+        conversation,
         createdBy,
         updatedBy,
       });

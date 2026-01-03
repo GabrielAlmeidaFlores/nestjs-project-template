@@ -1,7 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
@@ -16,9 +23,6 @@ import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -41,10 +45,10 @@ export class CreateLegalPleadingResultUseCase {
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingResultCommandRepositoryGateway)
     private readonly legalPleadingResultCommandRepositoryGateway: LegalPleadingResultCommandRepositoryGateway,
-    @Inject(ConsumeOrganizationCreditUseCaseGateway)
-    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
-    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
-    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
+    @Inject(ConversationCommandRepositoryGateway)
+    private readonly conversationCommandRepositoryGateway: ConversationCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -52,6 +56,11 @@ export class CreateLegalPleadingResultUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     legalPleadingId: LegalPleadingId,
   ): Promise<CreateLegalPleadingResultResponseDto> {
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -61,18 +70,6 @@ export class CreateLegalPleadingResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
-
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
-      );
-
-    const consumeCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
-        organizationMember.id,
-      );
 
     const legalPleadingQueryResult =
       await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
@@ -117,7 +114,6 @@ export class CreateLegalPleadingResultUseCase {
 
     const legalPleadingCompleteAnalysis =
       await this.analysisProcessorGateway.getLegalPleadingCompleteAnalysis(
-        promptResponse.prompt,
         documentsBuffer,
       );
 
@@ -146,6 +142,21 @@ export class CreateLegalPleadingResultUseCase {
       updatedBy: organizationMember.id,
     });
 
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      contextPrompt: legalPleadingCompleteAnalysis,
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
+
     const legalPleadingTransaction =
       this.legalPleadingCommandRepositoryGateway.updateLegalPleading(
         legalPleading.id,
@@ -158,14 +169,19 @@ export class CreateLegalPleadingResultUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
       legalPleadingResultTransaction,
+      createConversationTransaction,
       legalPleadingTransaction,
     ]);
     await transaction.commit();
 
+    const conversationResponseDto = GetConversationResponseDto.build({
+      ...conversationEntity,
+    });
+
     return CreateLegalPleadingResultResponseDto.build({
       legalPleadingCompleteAnalysis,
+      conversation: conversationResponseDto,
     });
   }
 }

@@ -1,0 +1,10 @@
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+
+export interface RetirementPlanningRgpsAnalysisResultEntityPropsInterface
+  extends BaseEntityPropsInterface<RetirementPlanningRgpsAnalysisResultId> {
+  retirementPlanningRgps: RetirementPlanningRgpsEntity;
+  analysisType: string;
+  response: string;
+}
