@@ -1446,7 +1446,7 @@ export class AnalysisToolController {
       path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/earnings/below-minimum',
       method: RequestMethod.GET,
     },
-    tag: ['retirement-planning-rgps'],
+    tag: ['regime-geral-previdencia-social'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Ganhos abaixo do mínimo retornados com sucesso.',
