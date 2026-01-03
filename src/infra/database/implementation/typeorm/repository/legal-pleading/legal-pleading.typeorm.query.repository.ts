@@ -231,9 +231,11 @@ export class LegalPleadingTypeormQueryRepository
           legalPleadingResult: true,
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },

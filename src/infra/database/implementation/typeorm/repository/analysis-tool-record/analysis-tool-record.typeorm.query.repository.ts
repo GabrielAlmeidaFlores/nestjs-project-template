@@ -298,9 +298,11 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
           },
           cnisFastAnalysis: {
@@ -310,9 +312,11 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },
@@ -434,7 +438,12 @@ export class AnalysisToolRecordTypeormQueryRepository
   private getEntityRelationsKey(): (
     | 'cnisFastAnalysis'
     | 'retirementPlanningRpps'
+    | 'retirementPlanningRgps'
   )[] {
-    return ['cnisFastAnalysis', 'retirementPlanningRpps'];
+    return [
+      'cnisFastAnalysis',
+      'retirementPlanningRpps',
+      'retirementPlanningRgps',
+    ];
   }
 }

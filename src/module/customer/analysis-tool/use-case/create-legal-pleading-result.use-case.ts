@@ -61,6 +61,7 @@ export class CreateLegalPleadingResultUseCase {
         sessionData.authIdentityId,
         CustomerNotFoundError,
       );
+
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
