@@ -2,13 +2,15 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
-import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
-import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value.object';
-import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 
 @Injectable()
 export class OrganizationPaymentPlanEntityAutoMapperProfile {
@@ -21,36 +23,26 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
 
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
-    this.mapDomainEntityToMapOrmEntity();
+    this.mapDomainEntityToOrmEntity();
   }
 
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: OrganizationPaymentPlanTypeormEntity,
     ): OrganizationPaymentPlanEntity => {
-      const organization = this.mapper.map(
-        source.organization,
-        OrganizationTypeormEntity,
-        OrganizationEntity,
-      );
-
-      const paymentPlan = this.mapper.map(
-        source.paymentPlan,
-        PaymentPlanTypeormEntity,
-        PaymentPlanEntity,
-      );
+      if (!source.organization || !source.paymentPlan) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: OrganizationPaymentPlanEntity.name,
+          sourceClass: OrganizationPaymentPlanTypeormEntity.name,
+        });
+      }
 
       return new OrganizationPaymentPlanEntity({
         ...source,
+        price: new DecimalValue(source.price),
         id: new OrganizationPaymentPlanId(source.id),
-        description: source.description,
-        price: source.price,
-        maxMemberCount: source.maxMemberCount,
-        monthlyCreditAmount: source.mounthlyCreditAmount,
-        active: source.active,
-        cycle: source.cycle,
-        organization,
-        paymentPlan,
+        organization: new OrganizationId(source.organization.id),
+        paymentPlan: new PaymentPlanId(source.paymentPlan.id),
       });
     };
 
@@ -64,31 +56,26 @@ export class OrganizationPaymentPlanEntityAutoMapperProfile {
     );
   }
 
-  private mapDomainEntityToMapOrmEntity(): void {
+  private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
       source: OrganizationPaymentPlanEntity,
     ): OrganizationPaymentPlanTypeormEntity => {
-      const organization = this.mapper.map(
-        source.organization,
-        OrganizationEntity,
-        OrganizationTypeormEntity,
-      );
+      const organization = {
+        id: source.organization.toString(),
+      } as OrganizationTypeormEntity;
 
-      const paymentPlan = this.mapper.map(
-        source.paymentPlan,
-        PaymentPlanEntity,
-        PaymentPlanTypeormEntity,
-      );
+      const paymentPlan = {
+        id: source.paymentPlan.toString(),
+      } as PaymentPlanTypeormEntity;
 
       return OrganizationPaymentPlanTypeormEntity.build({
         ...source,
         id: source.id.toString(),
         name: source.name,
         description: source.description,
-        price: source.price,
+        price: source.price.toString(),
         maxMemberCount: source.maxMemberCount,
-        mounthlyCreditAmount: source.mounthlyCreditAmount,
-        active: source.active,
+        monthlyCreditAmount: source.monthlyCreditAmount,
         cycle: source.cycle,
         organization,
         paymentPlan,

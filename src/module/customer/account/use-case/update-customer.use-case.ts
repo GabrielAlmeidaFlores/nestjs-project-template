@@ -2,11 +2,11 @@ import { Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
+import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
 import { UpdateCustomerRequestDto } from '@module/customer/account/dto/request/update-customer.request.dto';
 import { UpdateCustomerResponseDto } from '@module/customer/account/dto/response/update-customer-response.dto';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
@@ -52,6 +52,7 @@ export class UpdateCustomerUseCase {
       createdAt: customer.createdAt,
       updatedAt: new Date(),
       customerAddress,
+      bankExternalId: customer.bankExternalId,
     });
 
     const updateCustomer = this.customerCommandRepositoryGateway.updateCustomer(

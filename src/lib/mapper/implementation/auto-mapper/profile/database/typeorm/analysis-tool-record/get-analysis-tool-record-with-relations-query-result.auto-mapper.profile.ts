@@ -61,6 +61,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetRetirementPlanningRgpsWithRelationsQueryResult,
       );
 
+      const retirementPlanningRpps = this.mapper.map(
+        source.retirementPlanningRpps,
+        RetirementPlanningRppsTypeormEntity,
+        GetRetirementPlanningRppsWithRelationsQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -83,6 +89,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         conversation,
         createdBy,
         updatedBy,
+        retirementPlanningRpps,
       });
     };
 

@@ -8,14 +8,14 @@ import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm
 export class PaymentPlanEnablePaidResourceTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(
     () => PaymentPlanTypeormEntity,
-    (entity) => entity.paymentPlanEnablePaidResource,
+    (entity) => entity.paymentPlanEnabledPaidResource,
   )
   @JoinColumn({ name: 'payment_plan_id' })
   public paymentPlan: PaymentPlanTypeormEntity | null;
 
   @ManyToOne(
     () => PaymentPlanPaidResourceTypeormEntity,
-    (entity) => entity.paymentPlanEnablePaidResource,
+    (entity) => entity.paymentPlanEnabledPaidResource,
   )
   @JoinColumn({ name: 'payment_plan_paid_resource_id' })
   public paymentPlanPaidResource: PaymentPlanPaidResourceTypeormEntity | null;
