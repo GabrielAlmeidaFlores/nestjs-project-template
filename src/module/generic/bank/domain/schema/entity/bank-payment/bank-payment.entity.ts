@@ -1,12 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
+import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { BankPaymentEntityPropsInterface } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity.props';
-import type { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
-import type { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 
 export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
   @Description('ID externo do pagamento no banco')
