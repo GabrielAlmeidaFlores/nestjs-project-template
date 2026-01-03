@@ -1,4 +1,9 @@
-import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
+import {
+  GenerateContentParameters,
+  GoogleGenAI,
+  Part,
+  SchemaUnion,
+} from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
 import jsPDF from 'jspdf';
@@ -19,6 +24,7 @@ export class GeminiService implements GenerativeIaGateway {
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
   }
+
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
@@ -40,6 +46,20 @@ export class GeminiService implements GenerativeIaGateway {
       props,
       'gemini-2.5-pro',
       maxOutputTokens,
+    );
+  }
+
+  public async generateHighQualityResponseFromPromptAndFilesWithContract(
+    props: GenerateResponseInputModel,
+    responseSchema?: SchemaUnion,
+  ): Promise<string | null> {
+    const maxOutputTokens = 1_000_000;
+
+    return await this.generateResponseFromPromptAndFilesWithContract(
+      props,
+      'gemini-2.5-pro',
+      maxOutputTokens,
+      responseSchema,
     );
   }
 
@@ -96,6 +116,73 @@ export class GeminiService implements GenerativeIaGateway {
       contentConfig.config.systemInstruction = {
         parts: systemInstructionParts,
       };
+    }
+
+    const result =
+      await this.googleGenerativeAI.models.generateContent(contentConfig);
+
+    return result.text ?? null;
+  }
+
+  private async generateResponseFromPromptAndFilesWithContract(
+    props: GenerateResponseInputModel,
+    model: string,
+    maxOutputTokens: number,
+    responseSchema?: SchemaUnion,
+  ): Promise<string | null> {
+    const promptPart: Part[] = [];
+    const systemInstructionParts: Part[] = [];
+
+    if (props.prompt !== undefined) {
+      promptPart.push({ text: props.prompt });
+    }
+
+    if (props.systemInstruction !== undefined) {
+      systemInstructionParts.push({ text: props.systemInstruction });
+    }
+
+    if (props.promptFiles !== undefined) {
+      const fileParts = await this.buildPartWithFileContent(props.promptFiles);
+      promptPart.push(...fileParts);
+    }
+
+    const contentConfig = {
+      model,
+      contents: {
+        role: 'user',
+      },
+      config: {
+        temperature: 0.3,
+        maxOutputTokens,
+      },
+    } as GenerateContentParameters;
+
+    const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;
+
+    const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
+    const hasUrl = URL_REGEX.test(unifiedInstruction);
+
+    if (hasUrl && contentConfig.config) {
+      contentConfig.config.tools = [
+        {
+          urlContext: {},
+        },
+      ];
+    }
+
+    if (promptPart.length > 0) {
+      contentConfig.contents = promptPart;
+    }
+
+    if (systemInstructionParts.length > 0 && contentConfig.config) {
+      contentConfig.config.systemInstruction = {
+        parts: systemInstructionParts,
+      };
+    }
+
+    if (responseSchema !== undefined && contentConfig.config) {
+      contentConfig.config.responseSchema = responseSchema;
+      contentConfig.config.responseMimeType = 'application/json';
     }
 
     const result =
