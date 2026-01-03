@@ -3,8 +3,8 @@ import { InvalidCustomerNameError } from '@module/customer/account/domain/schema
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { CustomerEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer/customer.entity.props.interface';
 import type { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
+import type { CustomerEntityPropsInterface } from '@module/customer/account/domain/schema/entity/customer/customer.entity.props.interface';
 
 export class CustomerEntity extends BaseEntity<CustomerId> {
   @Description('Nome do cliente.')
@@ -16,6 +16,9 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
   @Description('Endereço do cliente.')
   public readonly customerAddress: CustomerAddressEntity;
 
+  @Description('ID externo do cliente no banco de pagamentos.')
+  public readonly bankExternalId: string;
+
   protected readonly _type = CustomerEntity.name;
 
   public constructor(props: CustomerEntityPropsInterface) {
@@ -25,6 +28,7 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
 
     this.name = props.name;
     this.customerAddress = props.customerAddress;
+    this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture ?? null;
   }
 

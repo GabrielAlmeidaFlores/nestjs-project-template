@@ -79,16 +79,20 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
       );
 
       return new AnalysisToolRecordEntity({
-        ...source,
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
+        type: source.type,
+        status: source.status,
         cnisFastAnalysis,
         retirementPlanningRgps,
         retirementPlanningRpps,
-        createdBy: new OrganizationMemberId(source.createdBy.id),
-        updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
         conversation,
+        createdBy: new OrganizationMemberId(source.createdBy.id),
+        updatedBy: new OrganizationMemberId(source.updatedBy.id),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt ?? null,
       });
     };
 

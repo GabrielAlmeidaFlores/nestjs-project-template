@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
+import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
+import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
-import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
+import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
-import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { OrganizationCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization/command/organization.command.repository.gateway';
 import { CustomerAddressEntity } from '@module/customer/account/domain/schema/entity/customer-address/customer-address.entity';
-import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
+import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
+import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
 import { AuthIdentitySignUpRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-up.request.dto';
@@ -20,7 +23,6 @@ import { ValidateAuthIdentitySignUpUseCaseGateway } from '@module/generic/auth-i
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 import type { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
-import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 
 @Injectable()
 export class CustomerSignUpUseCase {
@@ -57,9 +59,23 @@ export class CustomerSignUpUseCase {
       ...dto.customerAddress,
     });
 
+    const customerId = new CustomerId();
+
+    const bankCustomer = await this.paymentGateway.createCustomer(
+      CreateCustomerInputModel.build({
+        name: dto.name,
+        email: dto.email,
+        phoneNumber: dto.phoneNumber,
+        federalDocument: dto.federalDocument,
+        externalReference: customerId.toString(),
+      }),
+    );
+
     const customer = new CustomerEntity({
+      id: customerId,
       name: dto.name,
       customerAddress,
+      bankExternalId: bankCustomer.id.toString(),
     });
 
     const organization = new OrganizationEntity({
