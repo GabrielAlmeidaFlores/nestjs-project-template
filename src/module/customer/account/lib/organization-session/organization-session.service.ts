@@ -15,10 +15,9 @@ export class OrganizationSessionService implements OrganizationSessionGateway {
     private readonly jwtService: JwtService,
   ) {}
 
-  public createSession(organizationId: OrganizationId, owner: boolean): string {
+  public createSession(organizationId: OrganizationId): string {
     const jwtContent = {
       organizationId: organizationId.toString(),
-      owner,
     } as OrganizationSessionJwtModel;
 
     return this.jwtService.sign(jwtContent);
@@ -35,7 +34,6 @@ export class OrganizationSessionService implements OrganizationSessionGateway {
 
     const jwtWithParsedContent = OrganizationSessionJwtOutputModel.build({
       organizationId: new OrganizationId(jwtContent.organizationId),
-      owner: jwtContent.owner,
     });
 
     return jwtWithParsedContent;

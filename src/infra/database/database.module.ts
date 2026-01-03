@@ -1,3 +1,6 @@
+import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
 import { ClassProvider, Module } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
@@ -12,8 +15,6 @@ import { AnalysisToolRecordTypeormCommandRepository } from '@infra/database/impl
 import { AnalysisToolRecordTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository';
 import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
-import { BankPaymentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/bank-payment/bank-payment.typeorm.command.repository';
-import { BankPaymentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/bank-payment/bank-payment.typeorm.query.repository';
 import { BaseTypeormTransactionRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.transaction.repository';
 import { CidTenTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.command.repository';
 import { CidTenTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/cid-ten/cid-ten.typeorm.query.repository';
@@ -22,6 +23,14 @@ import { CnisFastAnalysisTypeormQueryRepository } from '@infra/database/implemen
 import { CnisFastAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-inss-benefit/cnis-fast-analysis-inss-benefit.typeorm.command.repository';
 import { CnisFastAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-legal-proceeding/cnis-fast-analysis-legal-proceeding.typeorm.command.repository';
 import { CnisFastAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/cnis-fast-analysis-result/cnis-fast-analysis-result.typeorm.command.repository';
+import { ConversationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.command.repository';
+import { ConversationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation/conversation.typeorm.query.repository';
+import { ConversationEventTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-event/conversation-event.typeorm.command.repository';
+import { ConversationEventTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-event/conversation-event.typeorm.query.repository';
+import { ConversationMessageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.command.repository';
+import { ConversationMessageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-message/conversation-message.typeorm.query.repository';
+import { ConversationToolPolicyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.command.repository';
+import { ConversationToolPolicyTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/conversation-tool-policy/conversation-tool-policy.typeorm.query.repository';
 import { CustomerTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.command.repository';
 import { CustomerTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/customer/customer.typeorm.query.repository';
 import { CustomerAddressTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/customer-address/customer-address.typeorm.command.repository';
@@ -44,25 +53,23 @@ import { LegalProceedingDetailTypeormCommandRepository } from '@infra/database/i
 import { LegalProceedingDetailTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
 import { OrganizationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.query.repository';
-import { OrganizationCreditPurchaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-purchase.typeorm.command.repository';
-import { OrganizationCreditPurchaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-purchase.typeorm.query.repository';
-import { OrganizationCreditUsageTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-usage.typeorm.command.repository';
-import { OrganizationCreditUsageTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-credit/organization-credit-usage.typeorm.query.repository';
 import { OrganizationMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.command.repository';
 import { OrganizationMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-member/organization-member.typeorm.query.repository';
-import { OrganizationPaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan/organization-payment-plan.typeorm.command.repository';
-import { OrganizationPaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan/organization-payment-plan.typeorm.query.repository';
-import { OrganizationPaymentPlanBankPaymentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.typeorm.command.repository';
-import { OrganizationPaymentPlanBankPaymentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.typeorm.query.repository';
-import { OrganizationPaymentPlanEnabledPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.typeorm.command.repository';
-import { PaymentPlanTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.command.repository';
-import { PaymentPlanTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan/payment-plan.typeorm.query.repository';
-import { PaymentPlanEnabledPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource.typeorm.command.repository';
-import { PaymentPlanEnabledPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource.typeorm.query.repository';
-import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
-import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
-import { PaymentPlanPaidResourceIaConfigTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.typeorm.command.repository';
-import { PaymentPlanPaidResourceIaConfigTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.typeorm.query.repository';
+import { RetirementPlanningRgpsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.command.repository';
+import { RetirementPlanningRgpsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps/retirement-planning-rgps.typeorm.query.repository';
+import { RetirementPlanningRgpsAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.typeorm.command.repository';
+import { RetirementPlanningRgpsAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps.typeorm.query.repository';
+import { RetirementPlanningRgpsInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-inss-benefit/retirement-planning-rgps-inss-benefit.typeorm.command.repository';
+import { RetirementPlanningRgpsLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-legal-proceeding/retirement-planning-rgps-legal-proceeding.typeorm.command.repository';
+import { RetirementPlanningRgpsPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period/retirement-planning-rgps-period.typeorm.command.repository';
+import { RetirementPlanningRgpsPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period/retirement-planning-rgps-period.typeorm.query.repository';
+import { RetirementPlanningRgpsPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.typeorm.command.repository';
+import { RetirementPlanningRgpsPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.typeorm.query.repository';
+import { RetirementPlanningRgpsResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-result/retirement-planning-rgps-result.typeorm.command.repository';
+import { RetirementPlanningRgpsSpecialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-special-period/retirement-planning-rgps-special-period.typeorm.command.repository';
+import { RetirementPlanningRgpsSpecialPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-special-period/retirement-planning-rgps-special-period.typeorm.query.repository';
+import { RetirementPlanningRgpsTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator.typeorm.command.repository';
+import { RetirementPlanningRgpsTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator.typeorm.query.repository';
 import { RetirementPlanningRppsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps/retirement-planning-rpps.typeorm.command.repository';
 import { RetirementPlanningRppsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps/retirement-planning-rpps.typeorm.query.repository';
 import { RetirementPlanningRppsInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.typeorm.command.repository';
@@ -80,6 +87,14 @@ import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.mo
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
 import { AdminQueryRepositoryGateway } from '@module/admin/account/domain/repository/admin/query/admin.query.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
+import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
+import { ConversationEventQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/query/conversation.query.repository.gateway';
+import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
+import { ConversationToolPolicyCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/command/conversation-message.command.repository.gateway';
+import { ConversationToolPolicyQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/conversation.query.repository.gateway';
 import { CustomerCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer/command/customer.command.repository.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerAddressCommandRepositoryGateway } from '@module/customer/account/domain/repository/customer-address/command/customer-address.command.repository.gateway';
@@ -116,6 +131,11 @@ import { LegalPleadingDocumentAnalysisCommandRepositoryGateway } from '@module/c
 import { LegalPleadingDocumentAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-document-analysis/query/legal-pleading-document-analysis.query.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
 import { LegalPleadingResultQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/legal-pleading-result.query.repository.gateway';
+import { RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-analysis-result/command/retirement-planning-rgps-analysis-result.repository.gateway';
+import { RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-analysis-result/query/retirement-planning-rgps-analysis-result.query.repository.gateway.ts';
+import { RetirementPlanningRgpsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-inss-benefit/command/retirement-planning-rgps-inss-benefit.command.repository.gateway';
+import { RetirementPlanningRgpsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-legal-proceeding/command/retirement-planning-rgps-legal-proceeding.command.repository.gateway';
+import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/command/retirement-planning-rpps-inss-benefit.command.repository.gateway';
@@ -131,27 +151,15 @@ import { RetirementPlanningRppsRemunerationCalculationQueryRepositoryGateway } f
 import { RetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/command/retirement-planning-rpps-result.command.repository.gateway';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
-import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
-import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
-import { OrganizationCreditUsageCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/command/organization-credit-usage.command.repository.gateway';
-import { OrganizationCreditUsageQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/organization-credit-usage.query.repository.gateway';
-import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
-import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
-import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
-import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
-import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
-import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository.gateway';
-import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
-import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
-import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
-import { PaymentPlanPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/command/payment-plan-paid-resource.command.repository.gateway';
-import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
-import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
-import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/query/retirement-planning-rgps-period-document.query.repository.gateway';
+import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
+import { RetirementPlanningRgpsSpecialPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/command/retirement-planning-rgps-special-period.repository.gateway';
+import { RetirementPlanningRgpsSpecialPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/query/retirement-planning-rgps-special-period.query.repository.gateway';
+import { RetirementPlanningRgpsTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/command/retirement-planning-rgps-time-accelerator.repository.gateway';
+import { RetirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/retirement-planning-rgps-time-accelerator.query.repository.gateway';
 import { AuthIdentityCommandRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/command/auth-identity.command.repository.gateway';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
-import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/command/bank-payment.command.repository.gateway';
-import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/retirement-planning-rgps-period.query.repository.gateway';
 
 const classProvider: ClassProvider[] = [
   {
@@ -197,22 +205,6 @@ const classProvider: ClassProvider[] = [
   {
     provide: OrganizationMemberQueryRepositoryGateway,
     useClass: OrganizationMemberTypeormQueryRepository,
-  },
-  {
-    provide: OrganizationCreditPurchaseCommandRepositoryGateway,
-    useClass: OrganizationCreditPurchaseTypeormCommandRepository,
-  },
-  {
-    provide: OrganizationCreditPurchaseQueryRepositoryGateway,
-    useClass: OrganizationCreditPurchaseTypeormQueryRepository,
-  },
-  {
-    provide: OrganizationCreditUsageCommandRepositoryGateway,
-    useClass: OrganizationCreditUsageTypeormCommandRepository,
-  },
-  {
-    provide: OrganizationCreditUsageQueryRepositoryGateway,
-    useClass: OrganizationCreditUsageTypeormQueryRepository,
   },
   {
     provide: CnisFastAnalysisCommandRepositoryGateway,
@@ -346,65 +338,97 @@ const classProvider: ClassProvider[] = [
     useClass: LegalProceedingDetailTypeormQueryRepository,
   },
   {
-    provide: OrganizationPaymentPlanCommandRepositoryGateway,
-    useClass: OrganizationPaymentPlanTypeormCommandRepository,
+    provide: ConversationQueryRepositoryGateway,
+    useClass: ConversationTypeormQueryRepository,
   },
   {
-    provide: OrganizationPaymentPlanQueryRepositoryGateway,
-    useClass: OrganizationPaymentPlanTypeormQueryRepository,
+    provide: ConversationCommandRepositoryGateway,
+    useClass: ConversationTypeormCommandRepository,
   },
   {
-    provide: PaymentPlanCommandRepositoryGateway,
-    useClass: PaymentPlanTypeormCommandRepository,
+    provide: ConversationEventQueryRepositoryGateway,
+    useClass: ConversationEventTypeormQueryRepository,
   },
   {
-    provide: PaymentPlanQueryRepositoryGateway,
-    useClass: PaymentPlanTypeormQueryRepository,
+    provide: ConversationEventCommandRepositoryGateway,
+    useClass: ConversationEventTypeormCommandRepository,
   },
   {
-    provide: PaymentPlanPaidResourceCommandRepositoryGateway,
-    useClass: PaymentPlanPaidResourceTypeormCommandRepository,
+    provide: ConversationMessageQueryRepositoryGateway,
+    useClass: ConversationMessageTypeormQueryRepository,
   },
   {
-    provide: PaymentPlanPaidResourceQueryRepositoryGateway,
-    useClass: PaymentPlanPaidResourceTypeormQueryRepository,
+    provide: ConversationMessageCommandRepositoryGateway,
+    useClass: ConversationMessageTypeormCommandRepository,
   },
   {
-    provide: PaymentPlanEnabledPaidResourceCommandRepositoryGateway,
-    useClass: PaymentPlanEnabledPaidResourceTypeormCommandRepository,
+    provide: ConversationToolPolicyQueryRepositoryGateway,
+    useClass: ConversationToolPolicyTypeormQueryRepository,
   },
   {
-    provide: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
-    useClass: PaymentPlanEnabledPaidResourceTypeormQueryRepository,
+    provide: ConversationToolPolicyCommandRepositoryGateway,
+    useClass: ConversationToolPolicyTypeormCommandRepository,
+  },
+
+  {
+    provide: RetirementPlanningRgpsCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsTypeormCommandRepository,
   },
   {
-    provide: OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway,
-    useClass:
-      OrganizationPaymentPlanEnabledPaidResourceTypeormCommandRepository,
+    provide: RetirementPlanningRgpsResultCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsResultTypeormCommandRepository,
   },
   {
-    provide: PaymentPlanPaidResourceIaConfigCommandRepositoryGateway,
-    useClass: PaymentPlanPaidResourceIaConfigTypeormCommandRepository,
+    provide: RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsAnalysisResultTypeormCommandRepository,
   },
   {
-    provide: PaymentPlanPaidResourceIaConfigQueryRepositoryGateway,
-    useClass: PaymentPlanPaidResourceIaConfigTypeormQueryRepository,
+    provide: RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsAnalysisResultTypeormQueryRepository,
   },
   {
-    provide: BankPaymentCommandRepositoryGateway,
-    useClass: BankPaymentTypeormCommandRepository,
+    provide: RetirementPlanningRgpsTimeAcceleratorCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsTimeAcceleratorTypeormCommandRepository,
   },
   {
-    provide: BankPaymentQueryRepositoryGateway,
-    useClass: BankPaymentTypeormQueryRepository,
+    provide: RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodDocumentTypeormCommandRepository,
   },
   {
-    provide: OrganizationPaymentPlanBankPaymentCommandRepositoryGateway,
-    useClass: OrganizationPaymentPlanBankPaymentTypeormCommandRepository,
+    provide: RetirementPlanningRgpsPeriodCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodTypeormCommandRepository,
   },
   {
-    provide: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
-    useClass: OrganizationPaymentPlanBankPaymentTypeormQueryRepository,
+    provide: RetirementPlanningRgpsPeriodQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsInssBenefitCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsLegalProceedingCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsPeriodDocumentQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsPeriodDocumentTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsTimeAcceleratorTypeormQueryRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsSpecialPeriodCommandRepositoryGateway,
+    useClass: RetirementPlanningRgpsSpecialPeriodTypeormCommandRepository,
+  },
+  {
+    provide: RetirementPlanningRgpsSpecialPeriodQueryRepositoryGateway,
+    useClass: RetirementPlanningRgpsSpecialPeriodTypeormQueryRepository,
   },
   {
     provide: RetirementPlanningRppsCommandRepositoryGateway,

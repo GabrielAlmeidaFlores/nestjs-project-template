@@ -3,7 +3,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CnisFastAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/command/cnis-fast-analysis.command.repository.gateway';
@@ -20,9 +27,6 @@ import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/er
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
@@ -50,10 +54,10 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
-    @Inject(ConsumeOrganizationCreditUseCaseGateway)
-    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
-    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
-    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(ConversationCommandRepositoryGateway)
+    private readonly conversationCommandRepositoryGateway: ConversationCommandRepositoryGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -71,16 +75,10 @@ export class CreateCnisFastAnalysisResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-      );
-
-    const consumeCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-        organizationMember.id,
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
       );
 
     const analysisToolRecordQueryResult =
@@ -126,9 +124,8 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     const cnisCompleteAnalysis =
       await this.analysisProcessorGateway.getCnisCompleteAnalysis(
-        promptResponse.prompt,
-        jsonCnisAnalyzerResponse,
         [clientDataBuffer],
+        jsonCnisAnalyzerResponse,
       );
 
     let clientLastAffiliationDate: Date | null = null;
@@ -201,7 +198,14 @@ export class CreateCnisFastAnalysisResultUseCase {
       retirementPlanningRpps: null,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
+      conversation: conversationEntity,
     });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
 
     const updateAnalysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
@@ -220,15 +224,20 @@ export class CreateCnisFastAnalysisResultUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
       createCnisFastAnalysisResultTransaction,
+      createConversationTransaction,
       updateCnisFastAnalysisTransaction,
       updateAnalysisToolRecordTransaction,
     ]);
     await transaction.commit();
 
+    const conversationResponseDto = GetConversationResponseDto.build({
+      ...conversationEntity,
+    });
+
     return CreateCnisFastAnalysisResultResponseDto.build({
       ...cnisFastAnalysisResult,
+      conversation: conversationResponseDto,
     });
   }
 }

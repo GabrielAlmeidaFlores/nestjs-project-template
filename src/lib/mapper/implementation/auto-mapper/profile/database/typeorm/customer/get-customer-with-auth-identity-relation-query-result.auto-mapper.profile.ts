@@ -1,4 +1,4 @@
-import { createMap, Mapper, constructUsing } from '@automapper/core';
+import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 

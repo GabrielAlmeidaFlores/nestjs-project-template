@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { GetBankPaymentResponseDto } from '@module/customer/analysis-tool/dto/response/get-bank-payment.response.dto';
+import { PaginatedBankPaymentsResponseDto } from '@module/customer/analysis-tool/dto/response/paginated-bank-payments.response.dto';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
-import { GetBankPaymentResponseDto } from '@module/customer/payment-plan/dto/response/get-bank-payment.response.dto';
-import { PaginatedBankPaymentsResponseDto } from '@module/customer/payment-plan/dto/response/paginated-bank-payments.response.dto';
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
