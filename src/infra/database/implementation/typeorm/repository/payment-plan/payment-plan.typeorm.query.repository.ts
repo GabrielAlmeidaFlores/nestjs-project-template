@@ -77,6 +77,33 @@ export class PaymentPlanTypeormQueryRepository
     });
   }
 
+  public async findOnePaymentPlanById(
+    id: PaymentPlanId,
+  ): Promise<GetPaymentPlanQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        id: id.toString(),
+      },
+      relations: [
+        'paymentPlanEnabledPaidResource',
+        'paymentPlanEnabledPaidResource.paymentPlan',
+        'paymentPlanEnabledPaidResource.paymentPlanPaidResource',
+      ],
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    const resource = this.mapperGateway.map(
+      data,
+      PaymentPlanTypeormEntity,
+      GetPaymentPlanQueryResult,
+    );
+
+    return resource;
+  }
+
   public async findOnePaymentPlanByIdOrFail(
     id: PaymentPlanId,
     err: ConstructorType<NotFoundError>,
