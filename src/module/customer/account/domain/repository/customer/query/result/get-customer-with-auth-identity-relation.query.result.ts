@@ -7,7 +7,6 @@ export class GetCustomerWithAuthIdentityRelationQueryResult extends BaseBuildabl
   public readonly id: CustomerId;
   public readonly name: string;
   public readonly profilePicture: string | null;
-  public readonly bankExternalId: string;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

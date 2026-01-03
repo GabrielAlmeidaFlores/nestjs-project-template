@@ -2,10 +2,7 @@ import type { OrganizationId } from '@module/customer/account/domain/schema/enti
 import type { OrganizationSessionJwtOutputModel } from '@module/customer/account/lib/organization-session/model/output/organization-session-jwt.output.model';
 
 export abstract class OrganizationSessionGateway {
-  public abstract createSession(
-    organizationId: OrganizationId,
-    owner: boolean,
-  ): string;
+  public abstract createSession(organizationId: OrganizationId): string;
   public abstract getSessionDataFromJwt(
     jwt: string,
   ): OrganizationSessionJwtOutputModel | null;

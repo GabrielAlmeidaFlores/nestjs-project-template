@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import {
@@ -53,9 +54,17 @@ export class GetLegalPleadingUseCase {
         })
       : null;
 
+    const conversation = legalPleadingQueryResult.legalPleadingResult
+      ?.conversation
+      ? GetConversationResponseDto.build({
+          ...legalPleadingQueryResult.legalPleadingResult.conversation,
+        })
+      : null;
+
     const legalPleadingResult = legalPleadingQueryResult.legalPleadingAddress
       ? GetLegalPleadingResultResponseDto.build({
           ...legalPleadingQueryResult.legalPleadingResult,
+          conversation,
         })
       : null;
 

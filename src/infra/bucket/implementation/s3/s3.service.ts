@@ -108,7 +108,7 @@ export class S3Service implements BucketGateway {
     const response = await this.s3Client.send(command);
 
     const byteArray = await response.Body?.transformToByteArray();
-    return Buffer.from(byteArray as Uint8Array);
+    return Buffer.from(byteArray as Uint8Array<ArrayBufferLike>);
   }
 
   public async delete(fileName: string): Promise<void> {

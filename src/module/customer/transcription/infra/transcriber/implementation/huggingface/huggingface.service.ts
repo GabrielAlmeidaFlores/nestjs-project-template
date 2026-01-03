@@ -35,7 +35,7 @@ export class HuggingFaceService implements TranscriberGateway {
     audioBuffer: Buffer,
     language: TranscribeFromLanguageEnum,
   ): Promise<string> {
-    const wavBuffer = await this.decodeMp3ToWavBuffer(audioBuffer);
+    const wavBuffer = await this.decodeAnyAudioToWavBuffer(audioBuffer);
 
     const audio = await this.decodeAudioBufferToFloat32(wavBuffer);
 
@@ -52,22 +52,20 @@ export class HuggingFaceService implements TranscriberGateway {
       language,
     });
 
-    const resultIsNotArray = !Array.isArray(result);
-    if (resultIsNotArray) {
+    if (!Array.isArray(result)) {
       return result.text;
     }
 
-    return result
-      .map((resultPart) => {
-        return resultPart.text;
-      })
-      .join(' ');
+    return result.map((part) => part.text).join(' ');
   }
 
-  private async decodeMp3ToWavBuffer(mp3Buffer: Buffer): Promise<Buffer> {
+  private async decodeAnyAudioToWavBuffer(
+    inputBuffer: Buffer,
+  ): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
-      const readableStream = Readable.from(mp3Buffer);
+
+      const readableStream = Readable.from(inputBuffer);
       const passThrough = new PassThrough();
 
       const command = ffmpeg(readableStream)
@@ -111,11 +109,13 @@ export class HuggingFaceService implements TranscriberGateway {
         }
 
         const data = Buffer.concat(chunks);
-        const numSamples = data.length / (format.bitDepth / this.bitsInByte);
+        const bytesPerSample = format.bitDepth / this.bitsInByte;
+
+        const numSamples = data.length / bytesPerSample;
+
         const samples = new Float32Array(numSamples / format.channels);
 
         let sampleIndex = 0;
-        const bytesPerSample = format.bitDepth / this.bitsInByte;
 
         for (
           let i = 0;
@@ -144,6 +144,7 @@ export class HuggingFaceService implements TranscriberGateway {
                 new UnsupportedBitDepthError({ bitDepth: format.bitDepth }),
               );
             }
+
             channelSum += value;
           }
 

@@ -46,9 +46,11 @@ export class UpdateCustomerUseCase {
     const transactions: TransactionType[] = [];
 
     const customerUpdated = new CustomerEntity({
-      ...customer,
-      ...dto,
       id: customer.id,
+      name: dto.name ?? customer.name,
+      profilePicture: customer.profilePicture,
+      createdAt: customer.createdAt,
+      updatedAt: new Date(),
       customerAddress,
     });
 
