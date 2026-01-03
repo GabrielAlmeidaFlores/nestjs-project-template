@@ -56,18 +56,16 @@ export class CidTenSeeder implements SeederInterface {
         this._type,
       );
 
-      await Promise.all(
-        batch.map(async (cidTenData) => {
-          const cidTenEntity = new CidTenEntity({
-            code: cidTenData.code,
-            description: cidTenData.description,
-          });
+      for (const cidTenData of batch) {
+        const cidTenEntity = new CidTenEntity({
+          code: cidTenData.code,
+          description: cidTenData.description,
+        });
 
-          await this.cidTenCommandRepositoryGateway._upsertCidTenWithNoTransaction(
-            cidTenEntity,
-          );
-        }),
-      );
+        await this.cidTenCommandRepositoryGateway._upsertCidTenWithNoTransaction(
+          cidTenEntity,
+        );
+      }
 
       this.logger.log(
         `Batch ${batchNumber}/${totalBatches} completed`,

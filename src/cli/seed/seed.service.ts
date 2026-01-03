@@ -38,24 +38,22 @@ export class SeedService {
 
     const transactions: Array<TransactionType> = [];
 
-    await Promise.all(
-      seeders.map(async (seeder) => {
-        const seederTransactions = await seeder.execute();
+    for (const seeder of seeders) {
+      const seederResult = await seeder.execute();
 
-        if (Array.isArray(seederTransactions)) {
-          this.logger.log(
-            `transactions to be executed: ${seederTransactions.length}`,
-            seeder.constructor.name,
-          );
-          transactions.push(...seederTransactions);
-        } else {
-          this.logger.log(
-            `itens created: ${seederTransactions}`,
-            seeder.constructor.name,
-          );
-        }
-      }),
-    );
+      if (Array.isArray(seederResult)) {
+        this.logger.log(
+          `transactions to be executed: ${seederResult.length}`,
+          seeder.constructor.name,
+        );
+        transactions.push(...seederResult);
+      } else {
+        this.logger.log(
+          `itens created: ${seederResult}`,
+          seeder.constructor.name,
+        );
+      }
+    }
 
     const transaction =
       await this.baseTransactionRepositoryGateway.execute(transactions);
