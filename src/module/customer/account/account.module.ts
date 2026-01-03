@@ -2,9 +2,12 @@ import { Module } from '@nestjs/common';
 
 import { BucketModule } from '@infra/bucket/bucket.module';
 import { DatabaseModule } from '@infra/database/database.module';
+import { PaymentGatewayModule } from '@infra/payment-gateway/payment-gateway.module';
 import { AccountController } from '@module/customer/account/account.controller';
 import { FileProcessorModule } from '@module/customer/account/lib/file-processor/file-processor.module';
 import { OrganizationSessionModule } from '@module/customer/account/lib/organization-session/organization-session.module';
+import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
+import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
@@ -15,14 +18,13 @@ import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
 import { ValidateOrganizationSessionUseCase } from '@module/customer/account/use-case/validate-organization-session.use-case';
-import { SetOrganizationCookieUseCaseGateway } from '@module/customer/account/use-case-gateway/set-organization-cookie.use-case-gateway';
-import { ValidateOrganizationSessionUseCaseGateway } from '@module/customer/account/use-case-gateway/validate-organization-session.use-case-gateway';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
 @Module({
   imports: [
     AuthModule,
     DatabaseModule,
+    PaymentGatewayModule,
     BucketModule,
     FileProcessorModule,
     OrganizationSessionModule,
