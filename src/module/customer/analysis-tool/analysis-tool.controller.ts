@@ -89,6 +89,7 @@ import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
+import { CreateMultipleRetirementPlanningRgpsPeriodsUseCase } from '@module/customer/analysis-tool/use-case/create-multiple-retirement-planning-rgps-periods.use-case';
 import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
 import { CreateRetirementPlanningRgpsPeriodDocumentUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period-document.use-case';
 import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
@@ -129,6 +130,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+import { CreateMultipleRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-multiple-retirement-planning-rgps-period.request.dto';
+import { CreateMultipleRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-multiple-retirement-planning-rgps-period.response.dto';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -160,6 +163,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsUseCase: CreateRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsCnisUseCase: CreateRetirementPlanningRgpsCnisUseCase,
     private readonly createRetirementPlanningRgpsPeriodUseCase: CreateRetirementPlanningRgpsPeriodUseCase,
+    private readonly createMultipleRetirementPlanningRgpsPeriodsUseCase: CreateMultipleRetirementPlanningRgpsPeriodsUseCase,
     private readonly updateRetirementPlanningRgpsPeriodUseCase: UpdateRetirementPlanningRgpsPeriodUseCase,
     private readonly updateRetirementPlanningRgpsResultUseCase: UpdateRetirementPlanningRgpsResultUseCase,
     private readonly compareRetirementPlanningRgpsCnisCtpsUseCase: CompareRetirementPlanningRgpsCnisCtpsUseCase,
@@ -938,6 +942,29 @@ export class AnalysisToolController {
     dto: CreateRetirementPlanningRgpsPeriodRequestDto,
   ): Promise<CreateRetirementPlanningRgpsPeriodResponseDto> {
     return await this.createRetirementPlanningRgpsPeriodUseCase.execute(dto);
+  }
+  
+  @BuildEndpointSpecification({
+    summary: 'Adicionar múltiplos períodos ao planejamento RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps-period/bulk',
+      method: RequestMethod.POST,
+      type: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Períodos para o regime RGPS criados com sucesso.',
+      type: CreateMultipleRetirementPlanningRgpsPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createSocialSecurityPlanningPeriodsBulk(
+    @Body()
+    dto: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
+  ): Promise<CreateMultipleRetirementPlanningRgpsPeriodResponseDto> {
+    return await this.createMultipleRetirementPlanningRgpsPeriodsUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
