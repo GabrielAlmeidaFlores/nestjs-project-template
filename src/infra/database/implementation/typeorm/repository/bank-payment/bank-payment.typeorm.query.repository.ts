@@ -1,7 +1,7 @@
 import { Constructor } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -97,9 +97,11 @@ export class BankPaymentTypeormQueryRepository
       return [];
     }
 
-    const data = await this.repository.findByIds(
-      ids.map((id) => id.toString()),
-    );
+    const idStrings = ids.map((id) => id.toString());
+
+    const data = await this.repository.findBy({
+      id: In(idStrings),
+    });
 
     const resources = this.mapperGateway.mapArray(
       data,

@@ -33,31 +33,42 @@ export class Base64 extends BaseValueObject<Base64> {
       return false;
     }
 
-    const base64Regex = /^[A-Za-z0-9+/\-_]+=*$/;
+    // 1) Remove Data URI prefix (muito comum em uploads via front)
+    // 2) Remove whitespace (quebras de linha, espaços)
+    const cleaned = value
+      .trim()
+      .replace(/^data:.*;base64,/, '')
+      .replace(/\s/g, '');
 
-    if (!base64Regex.test(value)) {
+    // Permite base64 padrão e url-safe
+    const base64Regex = /^[A-Za-z0-9+/=_-]+$/;
+
+    if (!base64Regex.test(cleaned)) {
       return false;
     }
 
-    const withoutPadding = value.replace(/=+$/, '');
-    const paddingLength = value.length - withoutPadding.length;
+    // padding length check (após limpeza)
+    const withoutPadding = cleaned.replace(/=+$/, '');
+    const paddingLength = cleaned.length - withoutPadding.length;
 
     if (paddingLength > Base64.MAX_PADDING_LENGTH) {
       return false;
     }
 
     try {
-      const standardBase64 = value.replace(/-/g, '+').replace(/_/g, '/');
-
+      // normaliza url-safe -> padrão e garante padding
+      const standardBase64 = cleaned.replace(/-/g, '+').replace(/_/g, '/');
       const paddedBase64 = Base64.addPadding(standardBase64);
 
-      if (typeof Buffer !== 'undefined') {
-        Buffer.from(paddedBase64, 'base64').toString('utf-8');
-      } else {
-        atob(paddedBase64);
-      }
+      // Validação forte: decode e re-encode (não depende de UTF-8)
+      const buf = Buffer.from(paddedBase64, 'base64');
+      const reencoded = buf.toString('base64');
 
-      return true;
+      // compara sem padding para tolerar variações
+      const a = paddedBase64.replace(/=+$/, '');
+      const b = reencoded.replace(/=+$/, '');
+
+      return a === b;
     } catch {
       return false;
     }
@@ -71,7 +82,12 @@ export class Base64 extends BaseValueObject<Base64> {
   }
 
   private static normalizeToStandardBase64(value: string): string {
-    const standardBase64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    const cleaned = value
+      .trim()
+      .replace(/^data:.*;base64,/, '')
+      .replace(/\s/g, '');
+
+    const standardBase64 = cleaned.replace(/-/g, '+').replace(/_/g, '/');
     return Base64.addPadding(standardBase64);
   }
 
