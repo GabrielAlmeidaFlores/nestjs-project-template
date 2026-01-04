@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
+import { OrganizationPaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enabled-paid-resource.typeorm.entity';
 import { OrganizationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization.typeorm.entity';
 import { PaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan.typeorm.entity';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
@@ -52,6 +53,14 @@ export class OrganizationPaymentPlanTypeormEntity extends BaseTypeormEntity {
   )
   public organizationPaymentPlanBankPayment?:
     | OrganizationPaymentPlanBankPaymentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
+    (entity) => entity.organizationPaymentPlan,
+  )
+  public organizationPaymentPlanEnabledPaidResource?:
+    | OrganizationPaymentPlanEnabledPaidResourceTypeormEntity[]
     | undefined;
 
   protected override readonly _type = OrganizationPaymentPlanTypeormEntity.name;
