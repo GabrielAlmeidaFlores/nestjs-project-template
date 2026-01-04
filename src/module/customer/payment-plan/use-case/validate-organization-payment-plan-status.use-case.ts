@@ -4,7 +4,7 @@ import moment from 'moment';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/organization-payment-plan-bank-payment.query.repository.gateway';
-import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
+import { OrganizationPaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/query/organization-payment-plan-enabled-paid-resource.query.repository.gateway';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import {
   EnabledPaidResourceItemDto,
@@ -26,7 +26,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
     private readonly organizationPaymentPlanBankPaymentQueryRepository: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
     private readonly bankPaymentQueryRepository: BankPaymentQueryRepositoryGateway,
-    private readonly paymentPlanEnabledPaidResourceQueryRepository: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
+    private readonly organizationPaymentPlanEnabledPaidResourceQueryRepository: OrganizationPaymentPlanEnabledPaidResourceQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -57,8 +57,8 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     }
 
     const enabledPaidResources =
-      await this.paymentPlanEnabledPaidResourceQueryRepository.findManyByPaymentPlanId(
-        organizationPaymentPlanWithRelations.paymentPlan.id,
+      await this.organizationPaymentPlanEnabledPaidResourceQueryRepository.findManyByOrganizationPaymentPlanId(
+        organizationPaymentPlan.id,
       );
 
     const paymentRelations =
