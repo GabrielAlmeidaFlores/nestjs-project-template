@@ -24,6 +24,7 @@ import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/us
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
+import { CreateMultipleRetirementPlanningRgpsPeriodsUseCase } from '@module/customer/analysis-tool/use-case/create-multiple-retirement-planning-rgps-periods.use-case';
 import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
 import { CreateRetirementPlanningRgpsPeriodDocumentUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period-document.use-case';
 import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
@@ -119,6 +120,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalyzePublicServiceUseCase,
     AnalyzeCtpsOutsideCnisUseCase,
     GetRetirementPlanningRgpsUseCase,
+    CreateMultipleRetirementPlanningRgpsPeriodsUseCase,
   ],
 })
 export class AnalysisToolModule {
