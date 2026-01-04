@@ -92,8 +92,9 @@ export class UpdateLegalPleadingStatusToCompleteUseCase {
     ]);
     await transaction.commit();
 
-    return UpdateLegalPleadingStatusToCompleteResponseDto.build({
+    const response = UpdateLegalPleadingStatusToCompleteResponseDto.build({
       legalPleadingId: legalPleadingQueryResult.id,
     });
+    return response;
   }
 }
