@@ -52,6 +52,7 @@ import { CreateMultipleRetirementPlanningRgpsPeriodResponseDto } from '@module/c
 import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
 import { CreateRetirementPlanningRgpsPeriodDocumentResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period-document.response.dto';
 import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
+import { CreateRetirementPlanningRgpsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-result.response.dto';
 import { CreateRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-time-accelerator.response.dto';
 import { CreateRetirementPlanningRgpsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
@@ -95,6 +96,7 @@ import { CreateMultipleRetirementPlanningRgpsPeriodsUseCase } from '@module/cust
 import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
 import { CreateRetirementPlanningRgpsPeriodDocumentUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period-document.use-case';
 import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
+import { CreateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-result.use-case';
 import { CreateRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-time-accelerator.use-case';
 import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -185,6 +187,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsPeriodDocumentUseCase: CreateRetirementPlanningRgpsPeriodDocumentUseCase,
     private readonly getRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase: GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,
     private readonly getRetirementPlanningRgpsUseCase: GetRetirementPlanningRgpsUseCase,
+    private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -997,6 +1000,30 @@ export class AnalysisToolController {
       retirementPlanningRgpsPeriodId,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Cria e salva o resultado do planejamento previdenciário RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/:retirementPlanningRgpsId/result',
+      method: RequestMethod.POST,
+    },
+    tag: ['retirement-planning-rgps'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Resultado salvo com sucesso.',
+      type: CreateRetirementPlanningRgpsResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRetirementPlanningRgpsResult(
+    @Param('retirementPlanningRgpsId') retirementPlanningRgpsId: string,
+  ): Promise<CreateRetirementPlanningRgpsResultResponseDto> {
+    await this.createRetirementPlanningRgpsResultUseCase.execute(
+      retirementPlanningRgpsId,
+    );
+    return new CreateRetirementPlanningRgpsResultResponseDto(true);
   }
 
   @BuildEndpointSpecification({
