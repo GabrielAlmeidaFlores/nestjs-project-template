@@ -274,6 +274,11 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
                 description:
                   'Categoria do vínculo, que encontra-se no CTPS que não consta no CNIS.',
               },
+              carencia: {
+                type: 'string',
+                description:
+                  'Número de meses distinto de carência que o vínculo representa, retorne 0 se não houver. Considere carência como o número de meses que o vínculo contribui para a aposentadoria. Exemplo: Se o vínculo é de 6 meses, retorne 6.',
+              },
             },
             required: [
               'tipo',
@@ -291,6 +296,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
               'tipoDeTrabalho',
               'competenciaAbaixoDoMinimo',
               'categoria',
+              'carencia',
             ],
           },
         },
