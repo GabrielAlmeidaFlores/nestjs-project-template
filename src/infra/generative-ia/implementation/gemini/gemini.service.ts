@@ -64,11 +64,33 @@ export class GeminiService implements GenerativeIaGateway {
       promptPart.push(...fileParts);
     }
 
+    // Build contents array with conversation history
+    const contents: Array<{ role: string; parts: Part[] }> = [];
+
+    // Add conversation history if provided
+    if (
+      props.conversationHistory !== undefined &&
+      props.conversationHistory.length > 0
+    ) {
+      for (const msg of props.conversationHistory) {
+        contents.push({
+          role: msg.role,
+          parts: [{ text: msg.content }],
+        });
+      }
+    }
+
+    // Add current user prompt
+    if (promptPart.length > 0) {
+      contents.push({
+        role: 'user',
+        parts: promptPart,
+      });
+    }
+
     const contentConfig = {
       model,
-      contents: {
-        role: 'user',
-      },
+      contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
       config: {
         temperature: 0.3,
         maxOutputTokens,
@@ -85,16 +107,33 @@ export class GeminiService implements GenerativeIaGateway {
     const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
     const hasUrl = URL_REGEX.test(unifiedInstruction);
 
-    if (hasUrl && contentConfig.config) {
-      contentConfig.config.tools = [
-        {
-          urlContext: {},
-        },
-      ];
-    }
+    // Configure tools
+    if (contentConfig.config) {
+      const toolsList: Array<unknown> = [];
 
-    if (promptPart.length > 0) {
-      contentConfig.contents = promptPart;
+      // Add URL context tool if needed
+      if (hasUrl) {
+        toolsList.push({
+          urlContext: {},
+        });
+      }
+
+      // Add custom function declarations if provided
+      if (props.tools !== undefined && props.tools.length > 0) {
+        const functionDeclarations = props.tools.map((tool) => ({
+          name: tool.name,
+          description: tool.description,
+          parameters: tool.parameters,
+        }));
+
+        toolsList.push({
+          functionDeclarations,
+        });
+      }
+
+      if (toolsList.length > 0) {
+        contentConfig.config.tools = toolsList as never;
+      }
     }
 
     if (systemInstructionParts.length > 0 && contentConfig.config) {
@@ -103,10 +142,114 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
+    // If tools and toolHandlers are provided, use automatic function calling loop
+    if (
+      props.tools !== undefined &&
+      props.toolHandlers !== undefined &&
+      props.tools.length > 0
+    ) {
+      return await this.generateWithFunctionCalling(
+        contentConfig,
+        props.toolHandlers,
+      );
+    }
+
+    // Otherwise, simple generation
     const result =
       await this.googleGenerativeAI.models.generateContent(contentConfig);
 
     return result.text ?? null;
+  }
+
+  /**
+   * Handles automatic function calling loop with Gemini
+   */
+  private async generateWithFunctionCalling(
+    contentConfig: GenerateContentParameters,
+    toolHandlers: Record<
+      string,
+      (params: Record<string, unknown>) => Promise<unknown>
+    >,
+  ): Promise<string | null> {
+    const MAX_FUNCTION_CALLS = 10;
+    let callCount = 0;
+    const conversationHistory: Array<unknown> = Array.isArray(
+      contentConfig.contents,
+    )
+      ? [...contentConfig.contents]
+      : [contentConfig.contents];
+
+    while (callCount < MAX_FUNCTION_CALLS) {
+      // Generate response
+      const result = await this.googleGenerativeAI.models.generateContent({
+        ...contentConfig,
+        contents: conversationHistory as never,
+      });
+
+      // Check if there are function calls
+      const functionCalls = result.functionCalls;
+
+      if (functionCalls === undefined || functionCalls.length === 0) {
+        // No more function calls, return the text response
+        return result.text ?? null;
+      }
+
+      // Add AI's response with function calls to history
+      const candidates = result.candidates;
+      if (candidates?.[0]?.content !== undefined) {
+        conversationHistory.push(candidates[0].content);
+      }
+
+      // Execute all function calls
+      const functionResponses: Array<unknown> = [];
+
+      for (const functionCall of functionCalls) {
+        const functionName = functionCall.name ?? '';
+        const functionParams = functionCall.args ?? {};
+
+        try {
+          const handler = toolHandlers[functionName] as
+            | ((params: Record<string, unknown>) => Promise<unknown>)
+            | undefined;
+
+          if (handler === undefined) {
+            throw new Error(`Handler not found for function: ${functionName}`);
+          }
+
+          const functionResult = await handler(functionParams);
+
+          functionResponses.push({
+            functionResponse: {
+              name: functionName,
+              response: functionResult,
+            },
+          });
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof Error ? error.message : 'Unknown error';
+
+          functionResponses.push({
+            functionResponse: {
+              name: functionName,
+              response: {
+                error: errorMessage,
+              },
+            },
+          });
+        }
+      }
+
+      // Add function responses to history
+      conversationHistory.push({
+        role: 'user',
+        parts: functionResponses,
+      });
+
+      callCount++;
+    }
+
+    // Max calls reached, return last text response or error
+    return 'Maximum function call limit reached. Please try again with a simpler query.';
   }
 
   private async buildPartWithFileContent(
