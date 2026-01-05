@@ -100,21 +100,7 @@ export class AnalyzePublicServiceUseCase {
       INSTRUÇÕES DE TOM E COMPORTAMENTO
       Não invente leis: Use apenas o Decreto 3.048/99 e a IN 128/2022 fornecidos.
       Seja o Auditor: Se o documento tiver rasuras ou faltar assinaturas, aponte isso na tabela citando o Art. 130 § 3º ("sem rasuras").
-      Foco no Anexo X: Se o período passar de Junho de 1994 e não tiver a planilha de salários, alerte o usuário na observação técnica.
-      Depois de processar os arquivos, responda no seguinte formato:
-      json {
-        tipo: "Tempo rural|Serviço Militar|Serviço Público|CTPS fora do CNIS|Aluno-Aprendiz|Trabalho no Exterior|Trabalho Informal|Sentença Trabalhista",
-        nome: "Maria Santos",
-        empresa: "Lotes LTDA",
-        periodoInicio:  "2024-10-15",
-        periodoFim: "2024-10-15",        
-        viabilidade: "Alta|Média|Baixa",
-        reconhecimentoINSS: "Provável|Parcial|Improvável",
-        impactoCarencia: "true|false",
-        reconhecimentoJudicial: "Favorável",
-        tempoContribuicao: "2 anos e 3 meses",
-        observacaoTecnica: "Tempo rural bem documentado, mas atenção à necessidade de indenização para período pós 31/10/1991."
-      }    
+      Foco no Anexo X: Se o período passar de Junho de 1994 e não tiver a planilha de salários, alerte o usuário na observação técnica.  
       `;
 
     const files: Buffer[] = [];
@@ -124,11 +110,93 @@ export class AnalyzePublicServiceUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFilesWithContract(
         GenerateResponseInputModel.build({
           systemInstruction,
           promptFiles: files,
         }),
+        {
+          type: 'object',
+          properties: {
+            tipo: {
+              type: 'string',
+              enum: [
+                'Tempo rural',
+                'Serviço Militar',
+                'Serviço Público',
+                'CTPS fora do CNIS',
+                'Aluno-Aprendiz',
+                'Trabalho no Exterior',
+                'Trabalho Informal',
+                'Sentença Trabalhista',
+              ],
+              description: 'Tipo do período analisado.',
+            },
+            nome: {
+              type: 'string',
+              description: 'Nome do segurado, retorne vazio se não houver.',
+            },
+            empresa: {
+              type: 'string',
+              description:
+                'Nome da empresa ou instituição, retorne vazio se não houver.',
+            },
+            periodoInicio: {
+              type: 'string',
+              description:
+                'Data de início do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+            },
+            periodoFim: {
+              type: 'string',
+              description:
+                'Data de fim do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+            },
+            viabilidade: {
+              type: 'string',
+              enum: ['Alta', 'Média', 'Baixa'],
+              description: 'Viabilidade do reconhecimento.',
+            },
+            reconhecimentoINSS: {
+              type: 'string',
+              enum: ['Provável', 'Parcial', 'Improvável'],
+              description:
+                'Análise do INSS, se é provável, parcial ou improvável.',
+            },
+            impactoCarencia: {
+              type: 'boolean',
+              description:
+                'Indica se há impacto na carência. Será true ou false.',
+            },
+            reconhecimentoJudicial: {
+              type: 'string',
+              enum: ['Favorável', 'Desfavorável', 'Sim', 'Não'],
+              description: 'Análise judicial do vínculo.',
+            },
+            tempoContribuicao: {
+              type: 'string',
+              description:
+                'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+            },
+            observacaoTecnica: {
+              type: 'string',
+              description:
+                'Observações técnicas sobre a análise realizada com todos os detalhes.',
+            },
+          },
+          required: [
+            'tipo',
+            'nome',
+            'empresa',
+            'periodoInicio',
+            'periodoFim',
+            'viabilidade',
+            'reconhecimentoINSS',
+            'impactoCarencia',
+            'reconhecimentoJudicial',
+            'tempoContribuicao',
+            'observacaoTecnica',
+          ],
+        },
       )) ?? '';
 
     const retirementPlanningRgpsAnalysisResultEntity =
