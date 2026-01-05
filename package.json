@@ -83,7 +83,8 @@
     "type-fest": "^4.41.0",
     "typeorm": "^0.3.24",
     "wav": "^1.0.2",
-    "yarn": "^1.22.22"
+    "yarn": "^1.22.22",
+    "zod": "^4.3.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",

@@ -48,7 +48,7 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
 
   @OneToMany(
     () => OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
-    (entity) => entity.paymentPlan,
+    (entity) => entity.organizationPaymentPlan,
   )
   public organizationPaymentPlanEnabledPaidResource?:
     | OrganizationPaymentPlanEnabledPaidResourceTypeormEntity[]
