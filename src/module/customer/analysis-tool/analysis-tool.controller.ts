@@ -23,6 +23,7 @@ import { ConvertRetirementPlanningRgpsSpecialPeriodRequestDto } from '@module/cu
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
+import { CreateMultipleRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-multiple-retirement-planning-rgps-period.request.dto';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
 import { CreateRetirementPlanningRgpsPeriodDocumentRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period-document.request.dto';
 import { CreateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period.request.dto';
@@ -47,6 +48,7 @@ import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-too
 import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-document-analysis.response.dto';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
+import { CreateMultipleRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-multiple-retirement-planning-rgps-period.response.dto';
 import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
 import { CreateRetirementPlanningRgpsPeriodDocumentResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period-document.response.dto';
 import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
@@ -130,8 +132,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { CreateMultipleRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-multiple-retirement-planning-rgps-period.request.dto';
-import { CreateMultipleRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-multiple-retirement-planning-rgps-period.response.dto';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -943,12 +943,12 @@ export class AnalysisToolController {
   ): Promise<CreateRetirementPlanningRgpsPeriodResponseDto> {
     return await this.createRetirementPlanningRgpsPeriodUseCase.execute(dto);
   }
-  
+
   @BuildEndpointSpecification({
     summary: 'Adicionar múltiplos períodos ao planejamento RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period/bulk',
+      path: 'retirement-planning-rgps-period/many',
       method: RequestMethod.POST,
       type: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -964,7 +964,9 @@ export class AnalysisToolController {
     @Body()
     dto: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
   ): Promise<CreateMultipleRetirementPlanningRgpsPeriodResponseDto> {
-    return await this.createMultipleRetirementPlanningRgpsPeriodsUseCase.execute(dto);
+    return await this.createMultipleRetirementPlanningRgpsPeriodsUseCase.execute(
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
