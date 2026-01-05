@@ -1,6 +1,7 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 
-import { McpClient } from '@module/ai/infra/mcp/lib/mcp.client';
+import { McpClientProvider } from '@module/ai/infra/mcp/lib/mcp.client';
+import { McpAuthContextUseCase } from '@module/ai/infra/mcp/use-case/extract-tokens.use-case';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
@@ -15,102 +16,125 @@ export type JsonValueType =
   | JsonPrimitiveType
   | JsonObjectInterface
   | JsonArrayType;
+
 export interface JsonObjectInterface {
   [key: string]: JsonValueType;
 }
+
 export type JsonArrayType = Array<JsonValueType>;
 
-@Injectable()
-export class McpUseCase implements OnModuleInit, OnModuleDestroy {
+export type McpCallToolResultType = Awaited<
+  ReturnType<McpClientProvider['callTool']>
+>;
+
+@Injectable({ scope: Scope.REQUEST })
+export class McpUseCase {
   protected readonly _type: string = McpUseCase.name;
 
-  private readonly client: McpClient = new McpClient();
+  public constructor(
+    private readonly client: McpClientProvider,
+    private readonly authProvider: McpAuthContextUseCase,
+  ) {}
 
-  public async onModuleInit(): Promise<void> {
-    await this.client.connect();
-  }
-
-  public async onModuleDestroy(): Promise<void> {
-    await this.client.close();
-  }
-
-  public async listTools(): Promise<ListToolsResult> {
+  public listTools(): Promise<ListToolsResult> {
     return this.client.listTools();
   }
 
   public async callTool(
     toolName: string,
     args: JsonObjectInterface,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool(toolName, args);
+  ): Promise<McpCallToolResultType> {
+    const auth = this.authProvider.getAuth();
+
+    return this.client.callTool(toolName, {
+      ...args,
+      __auth: auth,
+    });
   }
 
   public async legalPleadingList(
     dto: ListLegalPleadingRequestDto,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('legal_pleading_list', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('legal_pleading_list', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async legalPleadingGet(
     dto: LegalPleadingId,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('legal_pleading_get', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('legal_pleading_get', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async analysisToolRecordList(
     dto: ListAnalysisToolRecordRequestDto,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('analysis_tool_record_list', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('analysis_tool_record_list', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async cnisFastAnalysisGet(
     dto: CnisFastAnalysisId,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('cnis_fast_analysis_get', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('cnis_fast_analysis_get', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async analysisToolClientList(
     dto: ListDataRequestDto,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('analysis_tool_client_list', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('analysis_tool_client_list', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async analysisToolClientGet(
     dto: AnalysisToolClientId,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('analysis_tool_client_get', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('analysis_tool_client_get', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async cnisFastAnalysisPatch(dto: {
     cnisFastAnalysisId: string;
     json?: JsonObjectInterface;
     cnisDocumentPath?: string;
-  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('cnis_fast_analysis_patch', dto);
+  }): Promise<McpCallToolResultType> {
+    return this.callTool(
+      'cnis_fast_analysis_patch',
+      dto as unknown as JsonObjectInterface,
+    );
   }
 
   public async cnisFastAnalysisPost(
     dto: CnisFastAnalysisId,
-  ): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('cnis_fast_analysis_post', { ...dto });
+  ): Promise<McpCallToolResultType> {
+    return this.callTool('cnis_fast_analysis_post', {
+      ...dto,
+    } as unknown as JsonObjectInterface);
   }
 
   public async legalPleadingPatch(dto: {
     legalPleadingId: LegalPleadingId;
     legalPleadingCompleteAnalysis: string;
-  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool('legal_pleading_patch_complete_analysis', {
+  }): Promise<McpCallToolResultType> {
+    return this.callTool('legal_pleading_patch_complete_analysis', {
       ...dto,
-    });
+    } as unknown as JsonObjectInterface);
   }
 
   public async cnisFastAnalysisPatchCompleteAnalysis(dto: {
     cnisFastAnalysisId: CnisFastAnalysisId;
     cnisCompleteAnalysis: string;
-  }): Promise<Awaited<ReturnType<McpClient['callTool']>>> {
-    return this.client.callTool(
+  }): Promise<McpCallToolResultType> {
+    return this.callTool(
       'cnis_fast_analysis_patch_complete_analysis',
-      dto,
+      dto as unknown as JsonObjectInterface,
     );
   }
 }
