@@ -1,7 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { ConversationCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/infra/chat/dto/response/get-conversation.response.dto';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/command/retirement-planning-rpps-result.command.repository.gateway';
@@ -40,6 +47,10 @@ export class CreateRetirementPlanningRppsResultUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
+    @Inject(ConversationCommandRepositoryGateway)
+    private readonly conversationCommandRepositoryGateway: ConversationCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -56,6 +67,12 @@ export class CreateRetirementPlanningRppsResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
+
+    const customer =
+      await this.customerQueryRepositoryGateway.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
 
     const retirementPlanningRppsQueryResult =
       await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
@@ -114,6 +131,22 @@ export class CreateRetirementPlanningRppsResultUseCase {
       retirementPlanningRppsResult,
     });
 
+    const conversationEntity = new ConversationEntity({
+      customerId: new CustomerId(customer.id.toString()),
+      assistantType: ChatPersonaTypeEnum.DUVIDAS_PREVIDENCIARIAS,
+      status: null,
+      lastAIMessageAt: null,
+      contextPrompt:
+        retirementPlanningRppsResult.retirementPlanningRppsCompleteAnalysis,
+      archivedAt: null,
+      createdAt: new Date(),
+    });
+
+    const createConversationTransaction =
+      this.conversationCommandRepositoryGateway.createConversation(
+        conversationEntity,
+      );
+
     const retirementPlanningRppsTransaction =
       this.retirementPlanningRppsCommandRepositoryGateway.updateRetirementPlanningRpps(
         retirementPlanningRpps.id,
@@ -128,15 +161,21 @@ export class CreateRetirementPlanningRppsResultUseCase {
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       retirementPlanningRppsResultTransaction,
+      createConversationTransaction,
       retirementPlanningRppsTransaction,
     ]);
 
     await transaction.commit();
 
+    const conversationResponseDto = GetConversationResponseDto.build({
+      ...conversationEntity,
+    });
+
     return CreateRetirementPlanningRppsResultResponseDto.build({
       retirementPlanningRppsCompleteAnalysis: JSON.parse(
         retirementPlanningRppsCompleteAnalysis,
       ) as object,
+      conversation: conversationResponseDto,
     });
   }
 }
