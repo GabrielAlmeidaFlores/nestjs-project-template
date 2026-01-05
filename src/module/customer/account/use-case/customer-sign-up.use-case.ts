@@ -74,6 +74,7 @@ export class CustomerSignUpUseCase {
     const customer = new CustomerEntity({
       id: customerId,
       name: dto.name,
+      phoneNumber: dto.phoneNumber,
       customerAddress,
       bankExternalId: bankCustomer.id.toString(),
     });

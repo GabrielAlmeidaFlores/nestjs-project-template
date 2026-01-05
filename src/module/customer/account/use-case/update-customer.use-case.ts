@@ -49,6 +49,7 @@ export class UpdateCustomerUseCase {
       ...customer,
       ...dto,
       id: customer.id,
+      phoneNumber: customer.phoneNumber,
       customerAddress,
     });
 

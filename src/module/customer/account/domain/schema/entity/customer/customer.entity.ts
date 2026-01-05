@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { InvalidCustomerNameError } from '@module/customer/account/domain/schema/entity/customer/error/invalid-customer-name.error';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -12,6 +13,9 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
 
   @Description('Foto de perfil do cliente.')
   public readonly profilePicture: string | null;
+
+  @Description('Número de telefone do cliente.')
+  public readonly phoneNumber: PhoneNumber;
 
   @Description('Endereço do cliente.')
   public readonly customerAddress: CustomerAddressEntity;
@@ -27,6 +31,7 @@ export class CustomerEntity extends BaseEntity<CustomerId> {
     super(CustomerId, props);
 
     this.name = props.name;
+    this.phoneNumber = props.phoneNumber;
     this.customerAddress = props.customerAddress;
     this.bankExternalId = props.bankExternalId;
     this.profilePicture = props.profilePicture ?? null;
