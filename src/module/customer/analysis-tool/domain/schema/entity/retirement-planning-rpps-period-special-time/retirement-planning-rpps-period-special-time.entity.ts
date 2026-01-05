@@ -8,10 +8,13 @@ import { Description } from '@shared/system/decorator/property/description/descr
 export class RetirementPlanningRppsPeriodSpecialTimeEntity extends BaseEntity<RetirementPlanningRppsPeriodSpecialTimeId> {
   @Description('Tipo de tempo especial')
   public readonly type: RetirementPlanningPeriodSpecialTimeTypeEnum;
+
   @Description('Data de início do tempo especial')
   public readonly startDate: Date;
+
   @Description('Data de término do tempo especial')
   public readonly endDate: Date;
+
   @Description('Período RPPS associado ao tempo especial')
   public readonly retirementPlanningRppsPeriod: RetirementPlanningRppsPeriodEntity | null;
 

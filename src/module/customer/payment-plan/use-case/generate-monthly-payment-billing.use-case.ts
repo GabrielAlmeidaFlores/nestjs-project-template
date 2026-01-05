@@ -132,7 +132,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       paymentPlanEnabledResources.map((enabledResource) => {
         const organizationPaymentPlanEnabledPaidResource =
           new OrganizationPaymentPlanEnabledPaidResourceEntity({
-            paymentPlan: enabledResource.paymentPlanId,
+            organizationPaymentPlan: organizationPaymentPlan.id,
             paymentPlanPaidResource: enabledResource.paymentPlanPaidResourceId,
           });
 

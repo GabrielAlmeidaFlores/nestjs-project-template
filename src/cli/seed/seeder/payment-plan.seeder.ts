@@ -4,9 +4,9 @@ import { PAYMENT_PLAN_PAID_RESOURCE_SEED } from '@cli/seed/seeder/payment-plan-p
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/command/payment-plan.command.repository.gateway';
-import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/command/payment-plan-enabled-paid-resource.command.repository.gateway';
+import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -62,6 +62,8 @@ export class PaymentPlanSeeder implements SeederInterface {
     public readonly paymentPlanQueryRepositoryGateway: PaymentPlanQueryRepositoryGateway,
     @Inject(PaymentPlanEnabledPaidResourceCommandRepositoryGateway)
     public readonly paymentPlanEnabledPaidResourceCommandRepositoryGateway: PaymentPlanEnabledPaidResourceCommandRepositoryGateway,
+    @Inject(PaymentPlanEnabledPaidResourceQueryRepositoryGateway)
+    public readonly paymentPlanEnabledPaidResourceQueryRepositoryGateway: PaymentPlanEnabledPaidResourceQueryRepositoryGateway,
     @Inject(PaymentPlanPaidResourceQueryRepositoryGateway)
     public readonly paymentPlanPaidResourceQueryRepositoryGateway: PaymentPlanPaidResourceQueryRepositoryGateway,
   ) {}
@@ -72,20 +74,35 @@ export class PaymentPlanSeeder implements SeederInterface {
     const allPaidResources = PAYMENT_PLAN_PAID_RESOURCE_SEED;
 
     for (const planData of PAYMENT_PLAN_SEED_DATA) {
-      try {
-        await this.paymentPlanQueryRepositoryGateway.findOnePaymentPlanByIdOrFail(
+      const existingPlan =
+        await this.paymentPlanQueryRepositoryGateway.findOnePaymentPlanById(
           planData.id,
-          PaymentPlanNotFoundError,
         );
 
-        continue;
-      } catch {}
+      if (!existingPlan) {
+        transactions.push(
+          this.paymentPlanCommandRepositoryGateway.createPaymentPlan(planData),
+        );
+      }
 
-      transactions.push(
-        this.paymentPlanCommandRepositoryGateway.createPaymentPlan(planData),
+      const existingEnabledResources =
+        await this.paymentPlanEnabledPaidResourceQueryRepositoryGateway.findManyByPaymentPlanId(
+          planData.id,
+        );
+
+      const existingResourceIds = new Set(
+        existingEnabledResources.map((resource) =>
+          resource.paymentPlanPaidResourceId.toString(),
+        ),
       );
 
       for (const paidResource of allPaidResources) {
+        const resourceIdString = paidResource.id.toString();
+
+        if (existingResourceIds.has(resourceIdString)) {
+          continue;
+        }
+
         const enablePaidResource = new PaymentPlanEnabledPaidResourceEntity({
           id: new PaymentPlanEnabledPaidResourceId(),
           paymentPlan: planData.id,

@@ -699,45 +699,60 @@ encontrados e quais são os próximos passos para garantir o melhor benefício p
         systemInstruction,
         promptFiles: files,
         responseJsonSchema: z.object({
-          contributionTime: z
+          totalContributionTime: z
             .string()
             .describe('Tempo total de contribuição de serviço'),
-          publicServiceTime: z
+
+          publicServiceContributionTime: z
             .string()
             .describe('Tempo total de contribuição em serviço público'),
-          timeInPosition: z.string().describe('Tempo total no cargo'),
-          clientAge: z.string().describe('Idade atual do segurado'),
-          clientProfession: z.string().describe('Profissão do segurado'),
-          careerTime: z.string().describe('Tempo total de carreira'),
-          publicServiceEntry: z
+
+          positionTenureTime: z.string().describe('Tempo total no cargo'),
+
+          insuredAge: z.string().describe('Idade atual do segurado'),
+
+          insuredProfession: z.string().describe('Profissão do segurado'),
+
+          totalCareerTime: z.string().describe('Tempo total de carreira'),
+
+          publicServiceStartDate: z
             .date()
             .describe('Data de ingresso no serviço público'),
-          retirementRules: z
+
+          retirementOptions: z
             .array(
               z.object({
-                ruleName: z.string().describe('Nome da regra de aposentadoria'),
-                expectedInitialMonthlyIncome: z
+                retirementRuleName: z
+                  .string()
+                  .describe('Nome da regra de aposentadoria'),
+
+                expectedMonthlyBenefit: z
                   .number()
                   .describe('Renda mensal inicial esperada'),
-                bestInitialMonthlyIncome: z
+
+                isBestMonthlyBenefit: z
                   .boolean()
                   .describe(
                     'Indica se a regra oferece a melhor renda mensal inicial',
                   ),
-                greatestCaseValue: z
+
+                hasHighestAdvantageValue: z
                   .boolean()
                   .describe(
-                    'Indica se a regra oferece o maior valor no caso mais vantajoso',
+                    'Indica se a regra oferece o maior valor no cenário mais vantajoso',
                   ),
-                detailedAnalysis: z
+
+                retirementAnalysis: z
                   .string()
                   .describe(
                     'Análise detalhada da aposentadoria em formato markdown',
                   ),
+
                 isEligible: z
                   .boolean()
                   .describe('Indica se o segurado é elegível para a regra'),
-                eligibilityDate: z
+
+                eligibilityAvailableAt: z
                   .string()
                   .describe(
                     'Data em que o segurado se tornará elegível para a regra, se aplicável',

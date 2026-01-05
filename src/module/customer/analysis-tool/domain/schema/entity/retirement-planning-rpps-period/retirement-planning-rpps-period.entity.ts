@@ -8,16 +8,22 @@ import { Description } from '@shared/system/decorator/property/description/descr
 export class RetirementPlanningRppsPeriodEntity extends BaseEntity<RetirementPlanningRppsPeriodId> {
   @Description('Data de início do período RPPS')
   public readonly startDate: Date;
+
   @Description('Data de término do período RPPS')
   public readonly endDate: Date;
+
   @Description('Cargo ocupado durante o período RPPS')
   public readonly jobPosition: string;
+
   @Description('Informações sobre a carreira durante o período RPPS')
   public readonly career: string;
+
   @Description('Tipo de serviço durante o período RPPS')
   public readonly serviceType: RetirementPlanningPeriodServiceTypeEnum;
+
   @Description('Departamento associado ao período RPPS')
   public readonly department: string;
+
   @Description(
     'Análise de planejamento previdenciário RPPS associada ao período',
   )

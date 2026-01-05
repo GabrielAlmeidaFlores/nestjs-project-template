@@ -11,20 +11,28 @@ import { Description } from '@shared/system/decorator/property/description/descr
 export class RetirementPlanningRppsPeriodDisabilityEntity extends BaseEntity<RetirementPlanningRppsPeriodDisabilityId> {
   @Description('Tipo de deficiência')
   public readonly type: RetirementPlanningDisabilityTimeTypeEnum;
+
   @Description('Grau de deficiência')
   public readonly degree: RetirementPlanningDisabilityDegreeEnum;
+
   @Description('Data de início da deficiência')
   public readonly startDate: Date;
+
   @Description('Data de término da deficiência')
   public readonly endDate: Date;
+
   @Description('Categoria da deficiência')
   public readonly category: RetirementPlanningDisabilityCategoryEnum;
+
   @Description('Descrição da deficiência')
   public readonly description: string;
+
   @Description('Impacto diário da deficiência')
   public readonly dailyImpact: string;
+
   @Description('CID-10 associado à deficiência')
   public readonly cidTen: CidTenEntity;
+
   @Description('Período RPPS associado à deficiência')
   public readonly retirementPlanningRppsPeriod: RetirementPlanningRppsPeriodEntity | null;
 
