@@ -126,21 +126,6 @@ export class AnalyzeRuralTimeUseCase {
       Seja técnico, mas claro.
       Não invente informações. Se o documento estiver ilegível, pergunte.
       Sempre verifique a data de corte de 31/10/1991 para indenização.
-
-      Depois de processar os arquivos, responda no seguinte formato:
-      json {
-        tipo: "Tempo rural|Serviço Militar|Serviço Público|CTPS fora do CNIS|Aluno-Aprendiz|Trabalho no Exterior|Trabalho Informal|Sentença Trabalhista",
-        nome: "Maria Santos",
-        empresa: "Lotes LTDA",
-        periodoInicio:  "2024-10-15",
-        periodoFim: "2024-10-15",        
-        viabilidade: "Alta|Média|Baixa",
-        reconhecimentoINSS: "Provável|Parcial|Improvável",
-        impactoCarencia: "true|false",
-        reconhecimentoJudicial: "Favorável",
-        tempoContribuicao: "2 anos e 3 meses",
-        observacaoTecnica: "Tempo rural bem documentado, mas atenção à necessidade de indenização para período pós 31/10/1991."
-      }
     `;
 
     const files: Buffer[] = [];
@@ -150,11 +135,93 @@ export class AnalyzeRuralTimeUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFilesWithContract(
         GenerateResponseInputModel.build({
           systemInstruction,
           promptFiles: files,
         }),
+        {
+          type: 'object',
+          properties: {
+            tipo: {
+              type: 'string',
+              enum: [
+                'Tempo rural',
+                'Serviço Militar',
+                'Serviço Público',
+                'CTPS fora do CNIS',
+                'Aluno-Aprendiz',
+                'Trabalho no Exterior',
+                'Trabalho Informal',
+                'Sentença Trabalhista',
+              ],
+              description: 'Tipo do período analisado.',
+            },
+            nome: {
+              type: 'string',
+              description: 'Nome do segurado, retorne vazio se não houver.',
+            },
+            empresa: {
+              type: 'string',
+              description:
+                'Nome da empresa ou instituição, retorne vazio se não houver.',
+            },
+            periodoInicio: {
+              type: 'string',
+              description:
+                'Data de início do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+            },
+            periodoFim: {
+              type: 'string',
+              description:
+                'Data de fim do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+            },
+            viabilidade: {
+              type: 'string',
+              enum: ['Alta', 'Média', 'Baixa'],
+              description: 'Viabilidade do reconhecimento.',
+            },
+            reconhecimentoINSS: {
+              type: 'string',
+              enum: ['Provável', 'Parcial', 'Improvável'],
+              description:
+                'Análise do INSS, se é provável, parcial ou improvável.',
+            },
+            impactoCarencia: {
+              type: 'boolean',
+              description:
+                'Indica se há impacto na carência. Será true ou false.',
+            },
+            reconhecimentoJudicial: {
+              type: 'string',
+              enum: ['Favorável', 'Desfavorável', 'Sim', 'Não'],
+              description: 'Análise judicial do vínculo.',
+            },
+            tempoContribuicao: {
+              type: 'string',
+              description:
+                'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+            },
+            observacaoTecnica: {
+              type: 'string',
+              description:
+                'Observações técnicas sobre a análise realizada com todos os detalhes.',
+            },
+          },
+          required: [
+            'tipo',
+            'nome',
+            'empresa',
+            'periodoInicio',
+            'periodoFim',
+            'viabilidade',
+            'reconhecimentoINSS',
+            'impactoCarencia',
+            'reconhecimentoJudicial',
+            'tempoContribuicao',
+            'observacaoTecnica',
+          ],
+        },
       )) ?? '';
 
     const retirementPlanningRgpsAnalysisResultEntity =
