@@ -28,6 +28,7 @@ import { CreateMultipleRetirementPlanningRgpsPeriodsUseCase } from '@module/cust
 import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
 import { CreateRetirementPlanningRgpsPeriodDocumentUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period-document.use-case';
 import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
+import { CreateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-result.use-case';
 import { CreateRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-time-accelerator.use-case';
 import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
@@ -72,6 +73,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   ],
   controllers: [AnalysisToolController],
   providers: [
+    CreateRetirementPlanningRgpsResultUseCase,
     CreateCnisFastAnalysisUseCase,
     CreateCnisFastAnalysisResultUseCase,
     GetCnisFastAnalysisUseCase,
