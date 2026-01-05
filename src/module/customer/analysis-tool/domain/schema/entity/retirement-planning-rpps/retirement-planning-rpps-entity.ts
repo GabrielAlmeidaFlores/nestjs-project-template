@@ -9,10 +9,13 @@ import type { RetirementPlanningRppsEntityPropsInterface } from '@module/custome
 export class RetirementPlanningRppsEntity extends BaseEntity<RetirementPlanningRppsId> {
   @Description('Data de início da carreira do cliente')
   public readonly careerStartDate: Date;
+
   @Description('Data de início do serviço público do cliente')
   public readonly publicServiceStartDate: Date;
+
   @Description('Resultado do planejamento de RPPS do cliente')
   public retirementPlanningRppsResult: RetirementPlanningRppsResultEntity | null;
+
   @Description('Cálculo de remuneração do planejamento de RPPS do cliente')
   public retirementPlanningRppsRemunerationCalculation: RetirementPlanningRppsRemunerationCalculationEntity | null;
 

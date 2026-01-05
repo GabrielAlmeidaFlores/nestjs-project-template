@@ -3,91 +3,91 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { OrganizationPaymentPlanEnabledPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-enabled-paid-resource.typeorm.entity';
-import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { GetOrganizationPaymentPlanEnabledPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/query/result/get-organization-payment-plan-enabled-paid-resource.query.result';
+import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
-import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/value-object/organization-payment-plan-enabled-paid-resource-id/organization-payment-plan-enabled-paid-resource-id.value-object';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
 @Injectable()
-export class OrganizationPaymentPlanEnabledPaidResourceEntityAutoMapperProfile {
+export class GetOrganizationPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile {
   protected readonly _type =
-    OrganizationPaymentPlanEnabledPaidResourceEntityAutoMapperProfile.name;
+    GetOrganizationPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
   }
 
   private createMappings(): void {
-    this.mapOrmEntityToDomainEntity();
-    this.mapDomainEntityToOrmEntity();
+    this.mapOrmEntityToQueryResult();
+    this.mapQueryResultToOrmEntity();
   }
 
-  private mapOrmEntityToDomainEntity(): void {
-    const convertOrmEntityToDomainEntity = (
+  private mapOrmEntityToQueryResult(): void {
+    const convertOrmEntityToQueryResult = (
       source: OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
-    ): OrganizationPaymentPlanEnabledPaidResourceEntity => {
-      if (!source.paymentPlanPaidResource || !source.organizationPaymentPlan) {
+    ): GetOrganizationPaymentPlanEnabledPaidResourceQueryResult => {
+      if (!source.organizationPaymentPlan || !source.paymentPlanPaidResource) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
-            OrganizationPaymentPlanEnabledPaidResourceEntity.name,
+            GetOrganizationPaymentPlanEnabledPaidResourceQueryResult.name,
           sourceClass:
             OrganizationPaymentPlanEnabledPaidResourceTypeormEntity.name,
         });
       }
 
-      return new OrganizationPaymentPlanEnabledPaidResourceEntity({
+      const paymentPlanPaidResource = this.mapper.map(
+        source.paymentPlanPaidResource,
+        PaymentPlanPaidResourceTypeormEntity,
+        GetPaymentPlanPaidResourceQueryResult,
+      );
+
+      return GetOrganizationPaymentPlanEnabledPaidResourceQueryResult.build({
         id: new OrganizationPaymentPlanEnabledPaidResourceId(source.id),
-        organizationPaymentPlan: new OrganizationPaymentPlanId(
+        organizationPaymentPlanId: new OrganizationPaymentPlanId(
           source.organizationPaymentPlan.id,
         ),
-        paymentPlanPaidResource: new PaymentPlanPaidResourceId(
+        paymentPlanPaidResourceId: new PaymentPlanPaidResourceId(
           source.paymentPlanPaidResource.id,
         ),
+        paymentPlanPaidResource,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
-    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
+    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
 
     createMap(
       this.mapper,
       OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
-      OrganizationPaymentPlanEnabledPaidResourceEntity,
+      GetOrganizationPaymentPlanEnabledPaidResourceQueryResult,
       mappingFunction,
     );
   }
 
-  private mapDomainEntityToOrmEntity(): void {
-    const convertDomainEntityToOrmEntity = (
-      source: OrganizationPaymentPlanEnabledPaidResourceEntity,
+  private mapQueryResultToOrmEntity(): void {
+    const convertQueryResultToOrmEntity = (
+      source: GetOrganizationPaymentPlanEnabledPaidResourceQueryResult,
     ): OrganizationPaymentPlanEnabledPaidResourceTypeormEntity => {
-      const organizationPaymentPlan = {
-        id: source.organizationPaymentPlan.toString(),
-      } as OrganizationPaymentPlanTypeormEntity;
-
-      const paymentPlanPaidResource = {
-        id: source.paymentPlanPaidResource.toString(),
-      } as PaymentPlanPaidResourceTypeormEntity;
-
       return OrganizationPaymentPlanEnabledPaidResourceTypeormEntity.build({
         id: source.id.toString(),
-        organizationPaymentPlan,
-        paymentPlanPaidResource,
+        organizationPaymentPlan: null,
+        paymentPlanPaidResource: null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
       });
     };
 
-    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
+    const mappingFunction = constructUsing(convertQueryResultToOrmEntity);
 
     createMap(
       this.mapper,
-      OrganizationPaymentPlanEnabledPaidResourceEntity,
+      GetOrganizationPaymentPlanEnabledPaidResourceQueryResult,
       OrganizationPaymentPlanEnabledPaidResourceTypeormEntity,
       mappingFunction,
     );

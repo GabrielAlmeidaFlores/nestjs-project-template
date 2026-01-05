@@ -75,6 +75,7 @@ import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile }
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 import { GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-bank-payment/get-organization-payment-plan-bank-payment-query-result.auto-mapper.profile';
 import { OrganizationPaymentPlanBankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment-entity.auto-mapper.profile';
+import { GetOrganizationPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-enabled-paid-resource/get-organization-payment-plan-enabled-paid-resource-query-result.auto-mapper.profile';
 import { OrganizationPaymentPlanEnabledPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource-entity.auto-mapper.profile';
 import { OrganizationPaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-entity.auto-mapper.profile';
 import { OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-query-result-with-relations.auto-mapper.profile';
@@ -214,6 +215,7 @@ import { RetirementPlanningRppsEntityAutoMapperProfile } from '@lib/mapper/imple
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
     RetirementPlanningRppsResultEntityAutoMapperProfile,
     GetRetirementPlanningRppsResultQueryResultAutoMapperProfile,
+    GetOrganizationPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile,
     GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile,
     PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile,
     PaymentPlanPaidResourceEntityAutoMapperProfile,
