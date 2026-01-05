@@ -6,6 +6,7 @@ export class GenerateResponseInputModel extends BaseBuildableDtoObject {
   public readonly prompt?: string;
   public readonly systemInstruction?: string;
   public readonly promptFiles?: GenerativeIaPartType[];
+  public readonly responseJsonSchema?: unknown;
 
   protected override readonly _type = GenerateResponseInputModel.name;
 }

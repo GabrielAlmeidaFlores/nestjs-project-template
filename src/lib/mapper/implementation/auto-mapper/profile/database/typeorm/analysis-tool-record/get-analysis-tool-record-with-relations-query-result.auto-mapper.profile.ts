@@ -6,10 +6,12 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
+import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 
@@ -49,6 +51,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetCnisFastAnalysisQueryResult,
       );
 
+      const retirementPlanningRpps = this.mapper.map(
+        source.retirementPlanningRpps,
+        RetirementPlanningRppsTypeormEntity,
+        GetRetirementPlanningRppsQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -60,6 +68,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
         cnisFastAnalysis,
+        retirementPlanningRpps,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -98,6 +107,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         CnisFastAnalysisTypeormEntity,
       );
 
+      const retirementPlanningRpps = this.mapper.map(
+        source.retirementPlanningRpps,
+        GetRetirementPlanningRppsQueryResult,
+        RetirementPlanningRppsTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -109,6 +124,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         id: source.id.toString(),
         code: source.code.toString(),
         cnisFastAnalysis,
+        retirementPlanningRpps,
         analysisToolClient,
         createdBy,
         updatedBy,

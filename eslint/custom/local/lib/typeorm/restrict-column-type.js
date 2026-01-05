@@ -75,16 +75,24 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
           const actualTypeNode = node.typeAnnotation.typeAnnotation;
 
-          const actualType =
-            actualTypeNode.type === 'TSUnionType'
-              ? actualTypeNode.types.map((t) => t.type).join('|')
-              : actualTypeNode.type;
+          let actualType;
+          if (actualTypeNode.type === 'TSUnionType') {
+            actualType = actualTypeNode.types.map((t) => t.type).join('|');
+          } else if (
+            actualTypeNode.type === 'TSTypeReference' &&
+            actualTypeNode.typeName.type === 'Identifier'
+          ) {
+            
+            actualType = actualTypeNode.typeName.name;
+          } else {
+            actualType = actualTypeNode.type;
+          }
 
           const tsToLiteralMap = {
             TSStringKeyword: 'string',
             TSNumberKeyword: 'number',
             TSBooleanKeyword: 'boolean',
-            TSDateKeyword: 'Date',
+            Date: 'Date', 
             TSObjectKeyword: 'object',
           };
 
