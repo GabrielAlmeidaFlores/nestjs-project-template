@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
@@ -23,6 +23,7 @@ import { PaymentGatewayApplicationVariable } from '@shared/system/constant/appli
 export class AsaasService extends PaymentGateway {
   protected readonly _type = AsaasService.name;
 
+  private readonly logger;
   private readonly config: AxiosRequestConfig;
 
   public constructor(private readonly httpService: HttpService) {
@@ -35,6 +36,8 @@ export class AsaasService extends PaymentGateway {
         access_token: PaymentGatewayApplicationVariable.BANK_ACCESS_TOKEN,
       },
     };
+
+    this.logger = new Logger(AsaasService.name);
   }
 
   public async createCustomer(
@@ -263,6 +266,9 @@ export class AsaasService extends PaymentGateway {
 
       return response?.data as ResponseBody;
     } catch (error) {
+      if (error instanceof Error) {
+        this.logger.error(error.message, error);
+      }
       throw error;
     }
   }
