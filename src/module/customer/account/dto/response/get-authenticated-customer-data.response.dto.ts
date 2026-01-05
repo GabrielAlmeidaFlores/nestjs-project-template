@@ -1,6 +1,7 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
@@ -48,6 +49,9 @@ export class GetCustomerDataResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoValueObjectProperty(FederalDocument)
   public federalDocument: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber)
+  public phoneNumber: PhoneNumber;
 
   @ResponseDtoStringProperty({ required: false })
   public profilePicture?: string;

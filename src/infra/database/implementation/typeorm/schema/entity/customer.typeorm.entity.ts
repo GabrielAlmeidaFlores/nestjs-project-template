@@ -19,6 +19,9 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   })
   public profilePicture: string | null;
 
+  @Column({ name: 'phone_number', type: 'varchar', length: 20 })
+  public phoneNumber: string;
+
   @Column({ name: 'bank_external_id', type: 'varchar', length: 100 })
   public bankExternalId: string;
 
