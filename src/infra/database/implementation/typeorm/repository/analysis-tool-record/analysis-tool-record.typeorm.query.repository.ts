@@ -298,9 +298,11 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
           },
           cnisFastAnalysis: {
@@ -310,9 +312,11 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },
@@ -357,9 +361,11 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
           },
           retirementPlanningRpps: {
@@ -380,9 +386,11 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },
