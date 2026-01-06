@@ -12,7 +12,7 @@ export class ListLegalProceedingDetailRequestDto extends ListDataRequestDto {
   @RequestDtoValueObjectProperty(AnalysisToolClientLegalProceedingId, {
     required: true,
   })
-  public readonly analysisToolClientlegalProceedingId: AnalysisToolClientLegalProceedingId;
+  public readonly analysisToolClientLegalProceedingId: AnalysisToolClientLegalProceedingId;
 
   protected override readonly _type = ListLegalProceedingDetailRequestDto.name;
 }
