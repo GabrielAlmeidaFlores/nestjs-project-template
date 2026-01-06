@@ -70,9 +70,9 @@ export class PeriodLeaveDateActionUseCase {
         : curr,
     );
 
-    const retirementPlanningRgps = new RetirementPlanningRgpsEntity(
-      period.retirementPlanningRgps,
-    );
+    const retirementPlanningRgps = new RetirementPlanningRgpsEntity({
+      ...period.retirementPlanningRgps,
+    });
 
     const updatedPeriod = new RetirementPlanningRgpsPeriodEntity({
       ...period,
