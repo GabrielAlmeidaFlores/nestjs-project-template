@@ -47,6 +47,12 @@ export class GetRetirementPlanningRgpsTimeAcceleratorResponseDto extends BaseBui
   @ResponseDtoStringProperty({ required: false })
   public technicalNote?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public recognitionInss?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public recognitionJudicial?: string;
+
   protected override readonly _type =
     GetRetirementPlanningRgpsTimeAcceleratorResponseDto.name;
 }
