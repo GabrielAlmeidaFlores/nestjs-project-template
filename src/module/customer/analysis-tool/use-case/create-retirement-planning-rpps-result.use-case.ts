@@ -167,15 +167,13 @@ export class CreateRetirementPlanningRppsResultUseCase {
 
     await transaction.commit();
 
-    const conversationResponseDto = GetConversationResponseDto.build({
+    const conversation = GetConversationResponseDto.build({
       ...conversationEntity,
     });
 
     return CreateRetirementPlanningRppsResultResponseDto.build({
-      retirementPlanningRppsCompleteAnalysis: JSON.parse(
-        retirementPlanningRppsCompleteAnalysis,
-      ) as object,
-      conversation: conversationResponseDto,
+      retirementPlanningRppsCompleteAnalysis,
+      conversation,
     });
   }
 }
