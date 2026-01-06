@@ -1,19 +1,20 @@
 import { HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { GetAnalysisToolClientLegalProceedingCreatedRangeRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding-created-range.request.dto';
-import { GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding.-by-legal-proceeding-number.request.dto';
-import { ListLegalProceedingItemActionResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
-import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action-by-legal-proceeding-number.use-case-gateway';
-import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
+import { GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto } from '@module/customer/legal-proceeding/dto/request/get-analysis-tool-client-legal-proceeding.-by-legal-proceeding-number.request.dto';
+import { GetAnalysisToolClientLegalProceedingRequestDto } from '@module/customer/legal-proceeding/dto/request/get-analysis-tool-client-legal-proceeding.request.dto';
 import { ListLegalProceedingDetailByAnalysisToolClientRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-analysis-tool-client-id.request.dto';
 import { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
 import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
 import { GetLegalProceedingDetailLawyerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-lawyer-with-relations.response.dto';
+import { ListLegalProceedingItemActionResponseDto } from '@module/customer/legal-proceeding/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { ListLegalProceedingDetailLawyerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-lawyer.response.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
+import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
+import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
@@ -25,7 +26,6 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 @CustomerControllerRoute('legal-proceeding')
 export class LegalProceedingController {
@@ -37,8 +37,8 @@ export class LegalProceedingController {
     private readonly getLegalProceedingDetailByLegalProceedingNumberUseCase: GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     private readonly countLegalProceedingDetailUseCase: CountLegalProceedingDetailUseCase,
     private readonly listLegalProceedingDetailByAnalysisToolClientIdUseCase: ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
-    private readonly getAnalysisToolClientLegalProceedingActionUseCaseGateway: GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
-    private readonly getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway: GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway,
+    private readonly getAnalysisToolClientLegalProceedingActionUseCase: GetAnalysisToolClientLegalProceedingActionUseCase,
+    private readonly getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase: GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -99,7 +99,7 @@ export class LegalProceedingController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar movimentações processuais pela organizacao',
+    summary: 'Listar movimentações processuais pela organização',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'action/organization',
@@ -109,7 +109,7 @@ export class LegalProceedingController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
-        'Listar registros detalhados sobre as movimentações processos judiciais da organizacao',
+        'Listar registros detalhados sobre as movimentações processos judiciais da organização',
       type: ListLegalProceedingDetailResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -118,9 +118,9 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
-  ): Promise<ListAnalysisToolClientLegalProceedingDetailResponseDto> {
-    return this.getAnalysisToolClientLegalProceedingActionUseCaseGateway.execute(
+    @Query() dto: GetAnalysisToolClientLegalProceedingRequestDto,
+  ): Promise<ListLegalProceedingItemActionResponseDto> {
+    return this.getAnalysisToolClientLegalProceedingActionUseCase.execute(
       organizationSessionData,
       sessionData,
       dto,
@@ -150,7 +150,7 @@ export class LegalProceedingController {
     @Query()
     dto: GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto,
   ): Promise<ListLegalProceedingItemActionResponseDto> {
-    return this.getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway.execute(
+    return this.getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase.execute(
       organizationSessionData,
       sessionData,
       dto,
@@ -206,12 +206,10 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
   ): Promise<CountLegalProceedingDetailResponseDto> {
     return this.countLegalProceedingDetailUseCase.execute(
       sessionData,
       organizationSessionData,
-      dto,
     );
   }
 
