@@ -154,12 +154,33 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    const validStatuses = [PaymentStatusEnum.CONFIRMED];
-    const validPayments = bankPayments.filter((p) =>
-      validStatuses.includes(p.status),
+    const confirmedPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.CONFIRMED,
     );
 
-    const sortedValidPayments = validPayments
+    const allPendingPayments = bankPayments.filter(
+      (p) => p.status === PaymentStatusEnum.PENDING,
+    );
+
+    const pendingNonOverduePayments = allPendingPayments.filter(
+      (p) => p.dueDate >= now,
+    );
+
+    const pendingOverduePayments = allPendingPayments.filter(
+      (p) => p.dueDate < now,
+    );
+
+    const overduePayments = bankPayments.filter((p) => {
+      if (p.status === PaymentStatusEnum.OVERDUE) {
+        return true;
+      }
+      if (p.status === PaymentStatusEnum.PENDING && p.dueDate < now) {
+        return true;
+      }
+      return false;
+    });
+
+    const sortedConfirmedPayments = confirmedPayments
       .filter((p) => p.paymentDate !== null)
       .sort((a, b) => {
         if (!a.paymentDate || !b.paymentDate) {
@@ -168,75 +189,49 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
         return b.paymentDate.getTime() - a.paymentDate.getTime();
       });
 
-    const lastValidPayment = sortedValidPayments[0];
+    const lastConfirmedPayment = sortedConfirmedPayments[0];
 
-    if (lastValidPayment?.paymentMethod !== undefined) {
-      response.paymentMethod = lastValidPayment.paymentMethod;
+    if (lastConfirmedPayment?.paymentMethod !== undefined) {
+      response.paymentMethod = lastConfirmedPayment.paymentMethod;
     }
 
     let isActive = false;
-    if (lastValidPayment?.paymentDate) {
-      isActive = lastValidPayment.paymentDate >= oneMonthAgo;
-    }
 
-    const overduePayments = bankPayments.filter((p) => {
-      if (p.status === PaymentStatusEnum.OVERDUE) {
-        return true;
-      }
-
-      if (p.status === PaymentStatusEnum.PENDING && p.dueDate < now) {
-        return true;
-      }
-      return false;
-    });
-
-    const pendingPayments = bankPayments
-      .filter((p) => p.status === PaymentStatusEnum.PENDING && p.dueDate >= now)
-      .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-    const lastPendingPayment = pendingPayments[0];
-
-    const confirmedPayments = bankPayments
-      .filter((p) => p.status === PaymentStatusEnum.CONFIRMED)
-      .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-    const lastConfirmedPayment = confirmedPayments[0];
-
-    if (
-      bankPayments.length === 1 &&
-      bankPayments[0] &&
-      bankPayments[0].status === PaymentStatusEnum.PENDING
+    if (bankPayments.length === 1 && allPendingPayments.length === 1) {
+      isActive = true;
+      response.accessionDate = bankPayments[0]?.createdAt ?? new Date();
+    } else if (
+      pendingNonOverduePayments.length === 1 &&
+      pendingOverduePayments.length === 0 &&
+      confirmedPayments.length === bankPayments.length - 1
     ) {
       isActive = true;
-      response.accessionDate = bankPayments[0].createdAt;
-    }
-
-    if (
-      !isActive &&
-      pendingPayments.length > 0 &&
-      overduePayments.length === 0
+    } else if (
+      pendingNonOverduePayments.length === 0 &&
+      pendingOverduePayments.length === 0 &&
+      lastConfirmedPayment?.paymentDate
     ) {
-      const allOtherPaymentsConfirmed = bankPayments.every(
-        (p) =>
-          p.status === PaymentStatusEnum.CONFIRMED ||
-          (p.status === PaymentStatusEnum.PENDING && p.dueDate >= now),
-      );
-      if (allOtherPaymentsConfirmed) {
-        isActive = true;
-      }
+      isActive = lastConfirmedPayment.paymentDate >= oneMonthAgo;
     }
 
     response.isActive = isActive;
     response.hasOverduePayments = overduePayments.length > 0;
     response.overduePaymentsCount = overduePayments.length;
 
-    if (lastValidPayment) {
-      response.lastPaymentStatus = lastValidPayment.status;
-      if (lastValidPayment.paymentDate) {
-        response.lastPaymentDate = lastValidPayment.paymentDate;
+    if (lastConfirmedPayment) {
+      response.lastPaymentStatus = lastConfirmedPayment.status;
+      if (lastConfirmedPayment.paymentDate) {
+        response.lastPaymentDate = lastConfirmedPayment.paymentDate;
       }
     }
 
-    if (lastPendingPayment) {
-      response.nextDueDate = lastPendingPayment.dueDate;
+    if (pendingNonOverduePayments.length > 0) {
+      const nextPending = pendingNonOverduePayments.sort(
+        (a, b) => a.dueDate.getTime() - b.dueDate.getTime(),
+      )[0];
+      if (nextPending) {
+        response.nextDueDate = nextPending.dueDate;
+      }
     } else if (lastConfirmedPayment?.dueDate) {
       response.nextDueDate = moment(lastConfirmedPayment.dueDate)
         .add(1, 'month')
