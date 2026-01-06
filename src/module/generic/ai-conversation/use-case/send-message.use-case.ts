@@ -70,7 +70,12 @@ export class SendMessageUseCase {
         SendMessageUseCase.MAX_HISTORY_MESSAGES,
       );
 
-      const aiResponse = await this.generateAiResponse(dto.message, history);
+      const aiResponse = await this.generateAiResponse(
+        dto.message,
+        history,
+        sessionData,
+        organizationSessionData,
+      );
 
       const assistantMessage = MessageModel.build({
         id: new Guid(),
@@ -104,6 +109,8 @@ export class SendMessageUseCase {
   private async generateAiResponse(
     userMessage: string,
     history: Array<{ content: string; role: string }>,
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
   ): Promise<string> {
     const mcpTools = await this.mcpToolsService.getAvailableTools();
 
@@ -116,13 +123,33 @@ export class SendMessageUseCase {
       toolHandlers[tool.name] = async (
         params: Record<string, unknown>,
       ): Promise<unknown> => {
-        return await this.mcpToolsService.executeToolCall(tool.name, params);
+        // Injeta automaticamente os IDs de sessão nos parâmetros das ferramentas
+        const enrichedParams = {
+          ...params,
+          auth_identity_id: sessionData.authIdentityId.toString(),
+          organization_id: organizationSessionData.organizationId.toString(),
+        };
+
+        return await this.mcpToolsService.executeToolCall(
+          tool.name,
+          enrichedParams,
+        );
       };
     }
 
     const systemPrompt = `Você é um assistente de IA especializado em análise de dados do sistema Agiliza Previ.
 
-Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco de dados MySQL.
+**CONTEXTO DO USUÁRIO ATUAL:**
+- ID do Usuário: ${sessionData.authIdentityId.toString()}
+- ID da Organização: ${organizationSessionData.organizationId.toString()}
+
+Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco de dados.
+
+**REGRAS DE SEGURANÇA (MUITO IMPORTANTE):**
+- TODAS as consultas já são automaticamente filtradas pela organização do usuário atual
+- Os parâmetros auth_identity_id e organization_id são injetados automaticamente
+- Usuários só podem ver dados da própria organização
+- Não é necessário incluir esses filtros manualmente nas queries
 
 **IMPORTANTE:**
 - Use as ferramentas disponíveis quando precisar acessar dados
@@ -130,7 +157,6 @@ Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco
 - Apenas queries SELECT são permitidas
 - Seja claro e objetivo nas respostas
 - Sempre explique os resultados de forma compreensível
-- PRECISO QUE A SEPARAÇÃO ENTRE ORGANIZAÇÕES E USUÁRIOS SEJA RESPEITADA. USUÁRIOS NÃO PODEM VER DADOS QUE FORAM CRIADOS POR OUTROS USUÁRIOS.
 
 Responda de forma profissional e útil aos usuários.`;
 
