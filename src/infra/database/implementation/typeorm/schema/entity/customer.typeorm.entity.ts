@@ -5,11 +5,20 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
 @Entity({ name: 'customer' })
 export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'name', type: 'varchar', length: 100 })
   public name: string;
+
+  @Column({
+    name: 'phone_number',
+    type: 'varchar',
+    length: 100,
+    transformer: CryptographyTransformer,
+  })
+  public phoneNumber: string;
 
   @Column({
     name: 'profile_picture',
