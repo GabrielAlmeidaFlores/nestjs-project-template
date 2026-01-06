@@ -15,7 +15,7 @@ export class CustomerTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'phone_number',
     type: 'varchar',
-    length: 100,
+    length: 255,
     transformer: CryptographyTransformer,
   })
   public phoneNumber: string;
