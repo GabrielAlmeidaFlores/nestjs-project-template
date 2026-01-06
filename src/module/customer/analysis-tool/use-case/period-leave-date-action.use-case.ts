@@ -11,6 +11,7 @@ import {
   PeriodLeaveDateActionEnum,
   PeriodLeaveDateActionRequestDto,
 } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
+import { DataLeaveIsEmptyError } from '@module/customer/analysis-tool/error/data-leave-is-empty.error';
 import { RetirementPlanningRgpsPeriodNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-period-not-found.error';
 
 @Injectable()
@@ -42,6 +43,31 @@ export class PeriodLeaveDateActionUseCase {
       const updatedPeriod = new RetirementPlanningRgpsPeriodEntity({
         ...period,
         deletedAt: new Date(),
+      });
+
+      const updateTransaction =
+        this.retirementPlanningRgpsPeriodCommandRepositoryGateway.updateRetirementPlanningRgpsPeriod(
+          retirementPlanningRgpsPeriodId,
+          updatedPeriod,
+        );
+      const transactions = await this.baseTransactionRepositoryGateway.execute([
+        updateTransaction,
+      ]);
+      await transactions.commit();
+
+      return;
+    }
+
+    if (dto.action === PeriodLeaveDateActionEnum.UPDATE_PERIOD) {
+      if (!dto.dataLeave) {
+        throw new DataLeaveIsEmptyError();
+      }
+
+      const updatedPeriod = new RetirementPlanningRgpsPeriodEntity({
+        ...period,
+        periodEnd: dto.dataLeave,
+        isPendency: false,
+        reasonPendency: null,
       });
 
       const updateTransaction =
