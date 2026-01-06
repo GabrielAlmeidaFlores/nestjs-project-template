@@ -32,6 +32,9 @@ export class GetRetirementPlanningRgpsPeriodEarningResponseDto extends BaseBuild
   @ResponseDtoBooleanProperty({ required: false })
   public competenceBelowTheMinimum?: boolean;
 
+  @ResponseDtoStringProperty({ required: false })
+  public impact?: string;
+
   protected override readonly _type =
     GetRetirementPlanningRgpsPeriodEarningResponseDto.name;
 }

@@ -13,11 +13,11 @@ import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/dom
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
 import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
+import ReasonPendencyEnum from '@module/customer/analysis-tool/enums/reason-pendency.enum';
 import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/error/cnis-document-is-not-valid.error';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import ReasonPendencyEnum from '@module/customer/analysis-tool/enums/reason-pendency.enum';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsCnisUseCase {
@@ -141,12 +141,26 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                   },
                 );
 
+              const indicadorPendencia = ['PEXT'];
+
+              const delayPayment =
+                relation.socialSecurityAffiliationEarningsHistory.some(
+                  (earning) => {
+                    if (!earning.indicadores) {
+                      return false;
+                    }
+                    return indicadorPendencia.includes(earning.indicadores);
+                  },
+                );
+
               const reasonPendency =
                 relation.socialSecurityAffiliationInfo.dataFim === null
                   ? ReasonPendencyEnum.LEAVE_DATE
                   : competenceBelowTheMinimum
                     ? ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
-                    : '';
+                    : delayPayment
+                      ? ReasonPendencyEnum.INCONSISTENT_COMPETENCE
+                      : '';
 
               const period = new RetirementPlanningRgpsPeriodEntity({
                 periodName:
