@@ -25,7 +25,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase {
     private readonly retirementPlanningRgpsPeriodQueryRepositoryGateway: RetirementPlanningRgpsPeriodQueryRepositoryGateway,
   ) {}
 
-  async execute(
+  public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,

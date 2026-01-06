@@ -43,6 +43,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRgpsDetailsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-details.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-overdue.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-without-leave-date.use-case';
@@ -131,6 +132,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     PeriodLeaveDateActionUseCase,
     PeriodConsiderationActionUseCase,
     GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase,
+    GetRetirementPlanningRgpsDetailsUseCase,
   ],
 })
 export class AnalysisToolModule {
