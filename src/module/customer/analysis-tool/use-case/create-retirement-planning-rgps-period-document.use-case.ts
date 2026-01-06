@@ -108,8 +108,8 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 
     const files: Buffer[] = [];
 
-    dto.documents.forEach((fileBuffer) => {
-      files.push(Buffer.from(fileBuffer as unknown as string, 'base64'));
+    dto.documents.forEach((doc) => {
+      files.push(Buffer.from(doc.file.toString(), 'base64'));
     });
 
     const result =
