@@ -1009,7 +1009,7 @@ export class AnalysisToolController {
       path: 'retirement-planning-rgps/:retirementPlanningRgpsId/result',
       method: RequestMethod.POST,
     },
-    tag: ['retirement-planning-rgps'],
+    tag: ['planejamento-previdenciario'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Resultado salvo com sucesso.',
@@ -1018,7 +1018,11 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createRetirementPlanningRgpsResult(
-    @Param('retirementPlanningRgpsId') retirementPlanningRgpsId: string,
+    @Param(
+      'retirementPlanningRgpsId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsId),
+    )
+    retirementPlanningRgpsId: RetirementPlanningRgpsId,
   ): Promise<CreateRetirementPlanningRgpsResultResponseDto> {
     await this.createRetirementPlanningRgpsResultUseCase.execute(
       retirementPlanningRgpsId,
