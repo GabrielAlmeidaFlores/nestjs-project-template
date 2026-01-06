@@ -18,6 +18,7 @@ import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rpps-remuneration-request.dto';
 import { CreateRetirementPlanningRppsRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rpps.request.dto';
+import { GetAnalysisToolRecordStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-record-statistics.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
@@ -38,6 +39,7 @@ import { CreateRetirementPlanningRppsResponseDto } from '@module/customer/analys
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
+import { GetAnalysisToolRecordStatisticsResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record-statistics.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { GetRetirementPlanningRppsRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps-remuneration-calculation.response.dto';
@@ -70,6 +72,7 @@ import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
 import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
+import { GetAnalysisToolRecordStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-record-statistics.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
@@ -133,6 +136,7 @@ export class AnalysisToolController {
     private readonly listRetirementPlanningRppsRemunerationUseCase: ListRetirementPlanningRppsRemunerationUseCase,
     private readonly updateRetirementPlanningRppsUseCase: UpdateRetirementPlanningRppsUseCase,
     private readonly listCidTenUseCase: ListCidTenUseCase,
+    private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -157,6 +161,34 @@ export class AnalysisToolController {
     @Query() dto: ListAnalysisToolRecordRequestDto,
   ): Promise<ListAnalysisToolRecordResponseDto> {
     return await this.listAnalysisToolRecordUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter estatísticas de registros de análises por período',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-record/statistics',
+      method: RequestMethod.GET,
+    },
+    tag: ['registro-de-analises'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Estatísticas retornadas com sucesso.',
+      type: GetAnalysisToolRecordStatisticsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getAnalysisToolRecordStatistics(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: GetAnalysisToolRecordStatisticsRequestDto,
+  ): Promise<GetAnalysisToolRecordStatisticsResponseDto> {
+    return await this.getAnalysisToolRecordStatisticsUseCase.execute(
       sessionData,
       organizationSessionData,
       dto,

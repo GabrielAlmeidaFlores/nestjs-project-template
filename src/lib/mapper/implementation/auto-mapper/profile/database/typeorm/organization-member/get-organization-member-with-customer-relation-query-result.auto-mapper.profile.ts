@@ -28,7 +28,7 @@ export class GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfi
     const convertOrmEntityToDomainEntity = (
       source: OrganizationMemberTypeormEntity,
     ): GetOrganizationMemberWithCustomerRelationQueryResult => {
-      if (!source.organization) {
+      if (!source.organization || !source.customer) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetOrganizationMemberWithCustomerRelationQueryResult.name,
