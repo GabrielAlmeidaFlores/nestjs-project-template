@@ -56,6 +56,11 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     return ListRetirementPlanningRgpsTimeAcceleratorResponseDto.build({
       ...listQueryResult,
       resource,
+      total: {
+        years: 10,
+        months: 5,
+        days: 2,
+      },
     });
   }
 }
