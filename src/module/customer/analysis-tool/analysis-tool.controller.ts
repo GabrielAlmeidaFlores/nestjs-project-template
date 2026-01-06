@@ -33,6 +33,7 @@ import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { ListRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rgps-period.request.dto';
 import { ListRetirementPlanningRgpsTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rgps-time-accelerator.request.dto';
+import { PeriodLeaveDateActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
@@ -118,6 +119,7 @@ import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/us
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
 import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
+import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use-case/period-leave-date-action.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
@@ -190,6 +192,7 @@ export class AnalysisToolController {
     private readonly getRetirementPlanningRgpsUseCase: GetRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
     private readonly getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase: GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
+    private readonly periodLeaveDateActionUseCase: PeriodLeaveDateActionUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1563,6 +1566,36 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       retirementPlanningRgpsPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Ação sobre período sem data de saída',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/leave-date-action',
+      method: RequestMethod.POST,
+      type: PeriodLeaveDateActionRequestDto,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description:
+        'Ação sobre período sem data de saída realizada com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async periodLeaveDateAction(
+    @Param(
+      'retirementPlanningRgpsPeriodId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsPeriodId),
+    )
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+    @Body() dto: PeriodLeaveDateActionRequestDto,
+  ): Promise<void> {
+    await this.periodLeaveDateActionUseCase.execute(
+      retirementPlanningRgpsPeriodId,
+      dto,
     );
   }
 }

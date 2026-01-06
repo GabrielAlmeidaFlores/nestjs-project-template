@@ -59,6 +59,7 @@ import { RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile } from '@l
 import { RetirementPlanningRgpsInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-inss-benefit/retirement-planning-rgps-inss-benefit-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-legal-proceeding/retirement-planning-rgps-legal-proceeding-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document-entity.auto-mapper.profile';
+import { GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/get-retirement-planning-rgps-period-query-result-with-relations.auto-mapper.profile';
 import { GetRetirementPlanningRgpsPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/get-retirement-planning-rgps-period-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-period/retirement-planning-rgps-period-entity.auto-mapper.profile';
 import { RetirementPlanningRgpsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps-result/retirement-planning-rgps-result-entity.auto-mapper.profile';
@@ -130,6 +131,7 @@ import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/imple
     GetAdminQueryResultAutoMapperProfile,
     RetirementPlanningRgpsPeriodEntityAutoMapperProfile,
     GetRetirementPlanningRgpsPeriodQueryResultAutoMapperProfile,
+    GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperProfile,
     RetirementPlanningRgpsSpecialPeriodEntityAutoMapperProfile,
     RetirementPlanningRgpsPeriodDocumentEntityAutoMapperProfile,
     RetirementPlanningRgpsEntityAutoMapperProfile,
