@@ -63,6 +63,7 @@ import { DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
+import { GetRetirementPlanningRgpsDetailsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-details.response.dto';
 import { GetRetirementPlanningRgpsPeriodEarningResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-period-earning.response.dto';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-time-accelerator-from-analysis.response.dto';
 import { GetRetirementPlanningRgpsResponse } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps.response.dto';
@@ -111,6 +112,7 @@ import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
+import { GetRetirementPlanningRgpsDetailsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-details.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-overdue.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-without-leave-date.use-case';
@@ -196,6 +198,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
     private readonly getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase: GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
     private readonly getRetirementPlanningRgpsPeriodEarningsOverdueUseCase: GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase,
+    private readonly getRetirementPlanningRgpsDetailsUseCase: GetRetirementPlanningRgpsDetailsUseCase,
     private readonly periodLeaveDateActionUseCase: PeriodLeaveDateActionUseCase,
     private readonly periodConsiderationActionUseCase: PeriodConsiderationActionUseCase,
   ) {}
@@ -1664,6 +1667,38 @@ export class AnalysisToolController {
     await this.periodConsiderationActionUseCase.execute(
       retirementPlanningRgpsPeriodId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter todos os detalhes do planejamento RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/:retirementPlanningRgpsId/details',
+      method: RequestMethod.GET,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Detalhes do planejamento RGPS retornados com sucesso.',
+      type: GetRetirementPlanningRgpsDetailsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRgpsDetails(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRgpsId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsId),
+    )
+    retirementPlanningRgpsId: RetirementPlanningRgpsId,
+  ): Promise<GetRetirementPlanningRgpsDetailsResponseDto> {
+    return await this.getRetirementPlanningRgpsDetailsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRgpsId,
     );
   }
 }

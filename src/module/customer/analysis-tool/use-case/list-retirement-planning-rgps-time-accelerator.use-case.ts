@@ -1,7 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { ListRetirementPlanningRgpsTimeAcceleratorQueryParam } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/param/list-retirement-planning-rgps-time-accelerator.query.param';
+import { GetRetirementPlanningRgpsTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/result/get-retirement-planning-rgps-time-accelerator.query.result';
 import { RetirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/retirement-planning-rgps-time-accelerator.query.repository.gateway';
 import { ListRetirementPlanningRgpsTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rgps-time-accelerator.request.dto';
 import { GetRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-time-accelerator.response.dto';
@@ -9,8 +11,6 @@ import { ListRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/cu
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-
-@Injectable()
 export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
   protected readonly _type =
     ListRetirementPlanningRgpsTimeAcceleratorUseCase.name;
@@ -38,6 +38,7 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     }
     const listParam = new ListRetirementPlanningRgpsTimeAcceleratorQueryParam({
       ...dto,
+      retirementPlanningRgps: dto.retirementPlanningRgpsId,
     });
 
     const listQueryResult =
@@ -52,15 +53,53 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
         ...item,
       }),
     );
+    const acceleratorTimes =
+      await this.retirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway.findByRetirementPlanningRgpsId(
+        dto.retirementPlanningRgpsId,
+      );
+    const { years, months, days } = this.totalWorkPeriod(acceleratorTimes);
 
     return ListRetirementPlanningRgpsTimeAcceleratorResponseDto.build({
       ...listQueryResult,
       resource,
       total: {
-        years: 10,
-        months: 5,
-        days: 2,
+        years,
+        months,
+        days,
       },
     });
+  }
+
+  private totalWorkPeriod(
+    periods: GetRetirementPlanningRgpsTimeAcceleratorQueryResult[],
+  ) {
+    let totalDays = 0;
+
+    periods.forEach((period) => {
+      if (period.periodStart === null || period.periodEnd === null) {
+        return;
+      }
+
+      const start = moment(period.periodStart);
+      const end = moment(period.periodEnd);
+
+      if (!start.isValid() || !end.isValid()) {
+        return;
+      }
+
+      if (end.isBefore(start)) {
+        return;
+      }
+
+      totalDays += end.diff(start, 'days');
+    });
+
+    const duration = moment.duration(totalDays, 'days');
+
+    return {
+      years: duration.years(),
+      months: duration.months(),
+      days: duration.days(),
+    };
   }
 }
