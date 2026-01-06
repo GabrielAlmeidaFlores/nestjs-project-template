@@ -64,10 +64,10 @@ export class GeminiService implements GenerativeIaGateway {
       promptPart.push(...fileParts);
     }
 
-    // Build contents array with conversation history
+    
     const contents: Array<{ role: string; parts: Part[] }> = [];
 
-    // Add conversation history if provided
+    
     if (
       props.conversationHistory !== undefined &&
       props.conversationHistory.length > 0
@@ -80,7 +80,7 @@ export class GeminiService implements GenerativeIaGateway {
       }
     }
 
-    // Add current user prompt
+    
     if (promptPart.length > 0) {
       contents.push({
         role: 'user',
@@ -107,18 +107,18 @@ export class GeminiService implements GenerativeIaGateway {
     const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
     const hasUrl = URL_REGEX.test(unifiedInstruction);
 
-    // Configure tools
+    
     if (contentConfig.config) {
       const toolsList: Array<unknown> = [];
 
-      // Add URL context tool if needed
+      
       if (hasUrl) {
         toolsList.push({
           urlContext: {},
         });
       }
 
-      // Add custom function declarations if provided
+      
       if (props.tools !== undefined && props.tools.length > 0) {
         const functionDeclarations = props.tools.map((tool) => ({
           name: tool.name,
@@ -142,7 +142,7 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
-    // If tools and toolHandlers are provided, use automatic function calling loop
+    
     if (
       props.tools !== undefined &&
       props.toolHandlers !== undefined &&
@@ -154,7 +154,7 @@ export class GeminiService implements GenerativeIaGateway {
       );
     }
 
-    // Otherwise, simple generation
+    
     const result =
       await this.googleGenerativeAI.models.generateContent(contentConfig);
 
@@ -180,27 +180,27 @@ export class GeminiService implements GenerativeIaGateway {
       : [contentConfig.contents];
 
     while (callCount < MAX_FUNCTION_CALLS) {
-      // Generate response
+      
       const result = await this.googleGenerativeAI.models.generateContent({
         ...contentConfig,
         contents: conversationHistory as never,
       });
 
-      // Check if there are function calls
+      
       const functionCalls = result.functionCalls;
 
       if (functionCalls === undefined || functionCalls.length === 0) {
-        // No more function calls, return the text response
+        
         return result.text ?? null;
       }
 
-      // Add AI's response with function calls to history
+      
       const candidates = result.candidates;
       if (candidates?.[0]?.content !== undefined) {
         conversationHistory.push(candidates[0].content);
       }
 
-      // Execute all function calls
+      
       const functionResponses: Array<unknown> = [];
 
       for (const functionCall of functionCalls) {
@@ -239,7 +239,7 @@ export class GeminiService implements GenerativeIaGateway {
         }
       }
 
-      // Add function responses to history
+      
       conversationHistory.push({
         role: 'user',
         parts: functionResponses,
@@ -248,7 +248,7 @@ export class GeminiService implements GenerativeIaGateway {
       callCount++;
     }
 
-    // Max calls reached, return last text response or error
+    
     return 'Maximum function call limit reached. Please try again with a simpler query.';
   }
 
