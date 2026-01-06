@@ -36,8 +36,22 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
     ): GetAnalysisToolClientWithRelationsQueryResult => {
       if (
         !source.analysisToolClientInssBenefit ||
-        !source.analysisToolClientLegalProceeding
+        !source.analysisToolClientLegalProceeding ||
+        !source.createdBy ||
+        !source.updatedBy
       ) {
+        console.error('Missing relations in AnalysisToolClient:', {
+          hasInssBenefit: !!source.analysisToolClientInssBenefit,
+          hasLegalProceeding: !!source.analysisToolClientLegalProceeding,
+          hasCreatedBy: !!source.createdBy,
+          hasUpdatedBy: !!source.updatedBy,
+          createdByHasOrg: source.createdBy
+            ? !!(source.createdBy as any).organization
+            : false,
+          updatedByHasOrg: source.updatedBy
+            ? !!(source.updatedBy as any).organization
+            : false,
+        });
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetAnalysisToolClientWithRelationsQueryResult.name,
           sourceClass: AnalysisToolClientTypeormEntity.name,

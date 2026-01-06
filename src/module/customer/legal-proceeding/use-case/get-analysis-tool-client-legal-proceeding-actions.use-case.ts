@@ -3,10 +3,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
-import { GetAnalysisToolClientLegalProceedingRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding.request.dto';
-import { GetLegalProceedingItemActionResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
-import { ListLegalProceedingItemActionResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { GetAnalysisToolClientLegalProceedingRequestDto } from '@module/customer/legal-proceeding/dto/request/get-analysis-tool-client-legal-proceeding.request.dto';
+import { ListLegalProceedingItemActionResponseDto } from '@module/customer/legal-proceeding/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { PublicPropertyType } from '@shared/system/type/public-property.type';
@@ -47,7 +46,7 @@ export class GetAnalysisToolClientLegalProceedingActionUseCase {
         ),
       );
 
-    const resource: GetLegalProceedingItemActionResponseDto[] =
+    const resource: object[] =
       analysisToolClientLegalProceedingList.resource.flatMap((item) => {
         const latestDetailEntity = item.legalProceedingDetail
           .slice()
@@ -63,13 +62,11 @@ export class GetAnalysisToolClientLegalProceedingActionUseCase {
         const parsed = JSON.parse(latestDetailEntity.detail) as {
           ok: boolean;
           data: {
-            items: PublicPropertyType<GetLegalProceedingItemActionResponseDto>[];
+            items: PublicPropertyType<object>[];
           };
         };
 
-        return parsed.data.items.map((rawItem) =>
-          GetLegalProceedingItemActionResponseDto.build(rawItem),
-        );
+        return parsed.data.items.map((rawItem) => Object.assign({}, rawItem));
       });
 
     return ListLegalProceedingItemActionResponseDto.build({

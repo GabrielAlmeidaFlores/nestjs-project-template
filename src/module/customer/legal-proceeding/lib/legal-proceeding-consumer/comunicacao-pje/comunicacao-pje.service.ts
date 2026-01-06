@@ -4,9 +4,16 @@ import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
 import { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
+import { ComunicacaoPjeLegalProceedingDetailDataModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail-item.model';
 import { ComunicacaoPjeLegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail.model';
 import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
+import {
+  LegalProceedingActionAdvogadoDetailOutputModel,
+  LegalProceedingActionAdvogadoOutputModel,
+  LegalProceedingActionDestinatarioOutputModel,
+  LegalProceedingActionOutputModel,
+} from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/model/output/legal-proceeding-action.output.model';
 import { LegalProceedingDataOutputModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/model/output/legal-proceeding-data.output.model';
 import { LegalProceedingConsumerApplicationVariable } from '@shared/system/constant/application-variable/source/legal-proceeding-consumer.application-variable';
 
@@ -98,5 +105,65 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
     }
 
     return null;
+  }
+
+  public extractActions(
+    detailJson: string,
+  ): LegalProceedingActionOutputModel[] {
+    const detailParsed = JSON.parse(
+      detailJson,
+    ) as ComunicacaoPjeLegalProceedingDetailDataModel;
+
+    const items = detailParsed.data.items;
+
+    return items.map((rawItem) =>
+      LegalProceedingActionOutputModel.build({
+        id: String(rawItem.id),
+        dataDisponibilizacao: rawItem.data_disponibilizacao,
+        siglaTribunal: rawItem.siglaTribunal,
+        tipoComunicacao: rawItem.tipoComunicacao,
+        nomeOrgao: rawItem.nomeOrgao,
+        texto: rawItem.texto,
+        numeroProcesso: rawItem.numero_processo,
+        meio: rawItem.meio,
+        link: rawItem.link,
+        tipoDocumento: rawItem.tipoDocumento,
+        nomeClasse: rawItem.nomeClasse,
+        codigoClasse: rawItem.codigoClasse,
+        numeroComunicacao: String(rawItem.numeroComunicacao),
+        ativo: String(rawItem.ativo),
+        hash: rawItem.hash,
+        datadisponibilizacao: rawItem.datadisponibilizacao,
+        meiocompleto: rawItem.meiocompleto,
+        numeroprocessocommascara: rawItem.numeroprocessocommascara,
+        destinatarios: (rawItem.destinatarios ?? []).map((d: unknown) => {
+          const dest = d as Record<string, unknown>;
+          return LegalProceedingActionDestinatarioOutputModel.build({
+            nome: dest['nome'] as string,
+            polo: dest['polo'] as string,
+            comunicacaoId: String(dest['comunicacao_id']),
+          });
+        }),
+        destinatarioadvogados: (rawItem.destinatarioadvogados ?? []).map(
+          (a: unknown) => {
+            const adv = a as Record<string, unknown>;
+            const advogado = adv['advogado'] as Record<string, unknown>;
+            return LegalProceedingActionAdvogadoOutputModel.build({
+              id: String(adv['id']),
+              comunicacaoId: String(adv['comunicacao_id']),
+              advogadoId: String(adv['advogado_id']),
+              createdAt: adv['created_at'] as string,
+              updatedAt: adv['updated_at'] as string,
+              advogado: LegalProceedingActionAdvogadoDetailOutputModel.build({
+                id: String(advogado['id']),
+                nome: advogado['nome'] as string,
+                numeroOab: advogado['numero_oab'] as string,
+                ufOab: advogado['uf_oab'] as string,
+              }),
+            });
+          },
+        ),
+      }),
+    );
   }
 }
