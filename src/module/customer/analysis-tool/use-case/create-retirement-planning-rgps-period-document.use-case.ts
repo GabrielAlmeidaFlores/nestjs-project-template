@@ -131,8 +131,17 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
               description:
                 'Observações técnicas sobre a análise realizada com todos os detalhes.',
             },
+            dataFinalDoVinculo: {
+              type: 'string',
+              description:
+                'Data final do vínculo trabalhista que foi analisado. Formato DD/MM/AAAA. Se não for possível determinar, retorne uma string vazia.',
+            },
           },
-          required: ['tempoContribuicao', 'observacaoTecnica'],
+          required: [
+            'tempoContribuicao',
+            'observacaoTecnica',
+            'dataFinalDoVinculo',
+          ],
         },
       )) ?? '';
 
