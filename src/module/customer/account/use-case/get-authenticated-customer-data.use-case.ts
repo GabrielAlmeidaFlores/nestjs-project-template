@@ -59,6 +59,7 @@ export class GetAuthenticatedCustomerDataUseCase {
         federalDocument:
           organizationMember.customer.authIdentity.federalDocument,
         name: organizationMember.customer.name,
+        phoneNumber: organizationMember.customer.phoneNumber,
         customerAddress: GetCustomerAddressResponseDto.build({
           city: customer.customerAddress.city,
           neighborhood: customer.customerAddress.neighborhood,
