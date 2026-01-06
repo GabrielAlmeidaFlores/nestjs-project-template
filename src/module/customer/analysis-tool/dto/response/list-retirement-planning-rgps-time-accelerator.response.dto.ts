@@ -13,6 +13,9 @@ export class ListRetirementPlanningRgpsTimeAcceleratorResponseDto extends ListDa
   )
   public override resource: GetRetirementPlanningRgpsTimeAcceleratorResponseDto[];
 
+  @ResponseDtoObjectProperty(() => Object)
+  public total: object;
+
   protected override readonly _type =
     ListRetirementPlanningRgpsTimeAcceleratorResponseDto.name;
 }
