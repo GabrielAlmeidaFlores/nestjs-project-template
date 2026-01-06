@@ -112,6 +112,7 @@ import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
+import { GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-overdue.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-without-leave-date.use-case';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-time-accelerator-from-analysis.use-case';
 import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
@@ -120,6 +121,7 @@ import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/us
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
 import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
+import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
 import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use-case/period-leave-date-action.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
@@ -138,7 +140,6 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -194,6 +195,7 @@ export class AnalysisToolController {
     private readonly getRetirementPlanningRgpsUseCase: GetRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
     private readonly getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase: GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
+    private readonly getRetirementPlanningRgpsPeriodEarningsOverdueUseCase: GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase,
     private readonly periodLeaveDateActionUseCase: PeriodLeaveDateActionUseCase,
     private readonly periodConsiderationActionUseCase: PeriodConsiderationActionUseCase,
   ) {}
@@ -1566,6 +1568,39 @@ export class AnalysisToolController {
     retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
   ): Promise<GetRetirementPlanningRgpsPeriodEarningResponseDto[]> {
     return await this.getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRgpsPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar ganhos de um período com competências em atraso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/earnings/overdue',
+      method: RequestMethod.GET,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Ganhos sem data de saída e competências em atraso retornados com sucesso.',
+      type: GetRetirementPlanningRgpsPeriodEarningResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateOverdue(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRgpsPeriodId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsPeriodId),
+    )
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+  ): Promise<GetRetirementPlanningRgpsPeriodEarningResponseDto[]> {
+    return await this.getRetirementPlanningRgpsPeriodEarningsOverdueUseCase.execute(
       sessionData,
       organizationSessionData,
       retirementPlanningRgpsPeriodId,
