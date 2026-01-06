@@ -135,27 +135,34 @@ export class GetRetirementPlanningRppsUseCase {
       }),
     );
 
+    const safeJsonParse = (raw: string | null): object | null => {
+      if (raw === null) {
+        return null;
+      }
+
+      const trimmed = raw.trim();
+      if (!(trimmed.startsWith('{') || trimmed.startsWith('['))) {
+        return null;
+      }
+
+      try {
+        return JSON.parse(trimmed) as object;
+      } catch {
+        return null;
+      }
+    };
+
     const retirementPlanningRppsResult =
       retirementPlanningRppsQueryResult.retirementPlanningRppsResult !== null
         ? GetRetirementPlanningRppsResultResponseDto.build({
-            retirementPlanningRppsCompleteAnalysis:
+            retirementPlanningRppsCompleteAnalysis: safeJsonParse(
               retirementPlanningRppsQueryResult.retirementPlanningRppsResult
-                .retirementPlanningRppsCompleteAnalysis !== null
-                ? (JSON.parse(
-                    retirementPlanningRppsQueryResult
-                      .retirementPlanningRppsResult
-                      .retirementPlanningRppsCompleteAnalysis,
-                  ) as object)
-                : null,
-            retirementPlanningRppsSimplifiedAnalysis:
+                .retirementPlanningRppsCompleteAnalysis,
+            ),
+            retirementPlanningRppsSimplifiedAnalysis: safeJsonParse(
               retirementPlanningRppsQueryResult.retirementPlanningRppsResult
-                .retirementPlanningRppsSimplifiedAnalysis !== null
-                ? (JSON.parse(
-                    retirementPlanningRppsQueryResult
-                      .retirementPlanningRppsResult
-                      .retirementPlanningRppsSimplifiedAnalysis,
-                  ) as object)
-                : null,
+                .retirementPlanningRppsSimplifiedAnalysis,
+            ),
             createdAt:
               retirementPlanningRppsQueryResult.retirementPlanningRppsResult
                 .createdAt,

@@ -53,31 +53,18 @@ export class RetirementPlanningRppsTypeormQueryRepository
           documents: true,
           remunerations: true,
           periods: {
-            specialTimePeriod: {
-              specialTimeDocuments: true,
-            },
-            disabilityPeriod: {
-              cid: true,
-              disabilityDocuments: true,
-            },
+            specialTimePeriod: { specialTimeDocuments: true },
+            disabilityPeriod: { cid: true, disabilityDocuments: true },
           },
           analysisToolRecord: {
             analysisToolClient: {
-              createdBy: {
-                customer: true,
-              },
-              updatedBy: {
-                customer: true,
-              },
+              createdBy: { customer: true, organization: true },
+              updatedBy: { customer: true, organization: true },
               analysisToolClientInssBenefit: true,
               analysisToolClientLegalProceeding: true,
             },
-            createdBy: {
-              customer: true,
-            },
-            updatedBy: {
-              customer: true,
-            },
+            createdBy: { customer: true, organization: true },
+            updatedBy: { customer: true, organization: true },
           },
         },
       },
