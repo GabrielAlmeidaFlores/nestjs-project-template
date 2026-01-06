@@ -25,8 +25,6 @@ import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-t
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
 import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
-import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
-import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetAnalysisToolClientLegalProceedingUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
@@ -45,8 +43,6 @@ import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/ana
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { UpdateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps-remuneration.use-case';
 import { UpdateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps.use-case';
-import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action-by-legal-proceeding-number.use-case-gateway';
-import { GetAnalysisToolClientLegalProceedingActionUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding-action.use-case-gateway';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -94,7 +90,6 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetAnalysisToolClientUseCase,
     UpdateCnisFastAnalysisUseCase,
     GetAnalysisToolClientLegalProceedingUseCase,
-    GetAnalysisToolClientLegalProceedingActionUseCase,
     CreateRetirementPlanningRppsUseCase,
     CreateRetirementPlanningRppsRemunerationUseCase,
     CreateRetirementPlanningRppsResultUseCase,
@@ -112,22 +107,11 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
       provide: GetAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: GetAnalysisToolClientLegalProceedingUseCase,
     },
-    {
-      provide: GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
-      useClass: GetAnalysisToolClientLegalProceedingActionUseCase,
-    },
-    {
-      provide:
-        GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway,
-      useClass:
-        GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
-    },
+
   ],
   exports: [
     ListAnalysisToolClientLegalProceedingUseCaseGateway,
     GetAnalysisToolClientLegalProceedingUseCaseGateway,
-    GetAnalysisToolClientLegalProceedingActionUseCaseGateway,
-    GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCaseGateway,
     CreateRetirementPlanningRppsUseCase,
     CreateRetirementPlanningRppsRemunerationUseCase,
     CreateRetirementPlanningRppsResultUseCase,

@@ -22,6 +22,8 @@ export class ComunicacaoPjeLegalProceedingDetailItemModel extends BaseBuildableO
   public readonly datadisponibilizacao: string;
   public readonly meiocompleto: string;
   public readonly numeroprocessocommascara: string;
+  public readonly destinatarios?: unknown[];
+  public readonly destinatarioadvogados?: unknown[];
   protected override readonly _type =
     ComunicacaoPjeLegalProceedingDetailItemModel.name;
 }

@@ -209,6 +209,21 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       response.accessionDate = bankPayments[0].createdAt;
     }
 
+    if (
+      !isActive &&
+      pendingPayments.length > 0 &&
+      overduePayments.length === 0
+    ) {
+      const allOtherPaymentsConfirmed = bankPayments.every(
+        (p) =>
+          p.status === PaymentStatusEnum.CONFIRMED ||
+          (p.status === PaymentStatusEnum.PENDING && p.dueDate >= now),
+      );
+      if (allOtherPaymentsConfirmed) {
+        isActive = true;
+      }
+    }
+
     response.isActive = isActive;
     response.hasOverduePayments = overduePayments.length > 0;
     response.overduePaymentsCount = overduePayments.length;

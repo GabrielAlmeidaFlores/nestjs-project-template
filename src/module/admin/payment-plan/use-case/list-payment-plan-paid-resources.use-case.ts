@@ -24,7 +24,6 @@ export class ListPaymentPlanPaidResourcesUseCase {
         listData,
       );
 
-    // Buscar todos os IA configs em paralelo
     const iaConfigsPromises = paidResources.resource.map((paidResource) =>
       this.paymentPlanPaidResourceIaConfigQueryRepositoryGateway.findOnePaymentPlanPaidResourceIaConfigByPaidResourceId(
         paidResource.id,
@@ -33,7 +32,6 @@ export class ListPaymentPlanPaidResourcesUseCase {
 
     const iaConfigs = await Promise.all(iaConfigsPromises);
 
-    // Mapear recursos com seus prompts
     const resources = paidResources.resource.map((paidResource, index) => {
       const iaConfig = iaConfigs[index];
       const response = PaymentPlanPaidResourceResponseDto.build({

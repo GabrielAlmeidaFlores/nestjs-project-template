@@ -266,8 +266,8 @@ export class AsaasService extends PaymentGateway {
 
       return response?.data as ResponseBody;
     } catch (error) {
-      if (error instanceof Error) {
-        this.logger.error(error.message, error);
+      if (error instanceof AxiosError) {
+        this.logger.error(error.message, error.stack);
       }
       throw error;
     }
