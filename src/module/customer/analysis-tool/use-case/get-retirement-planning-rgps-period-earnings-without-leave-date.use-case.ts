@@ -12,9 +12,9 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase {
+export class GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase {
   protected readonly _type =
-    GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase.name;
+    GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -49,7 +49,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase {
     if (
       retirementPlanningRgpsPeriod.isPendency &&
       retirementPlanningRgpsPeriod.reasonPendency !==
-        ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
+        ReasonPendencyEnum.LEAVE_DATE
     ) {
       return [];
     }
@@ -59,11 +59,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase {
         retirementPlanningRgpsPeriodId,
       );
 
-    const filtered = earnings.filter(
-      (e) => e.competenceBelowTheMinimum === true,
-    );
-
-    const resource = filtered.map((item) =>
+    const resource = earnings.map((item) =>
       GetRetirementPlanningRgpsPeriodEarningResponseDto.build({
         ...item,
       }),
