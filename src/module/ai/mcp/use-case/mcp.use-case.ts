@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 
-import { McpClientProvider } from '@module/ai/mcp/lib/mcp.client';
+import { McpClientGateway } from '@module/ai/mcp/lib/mcp-client/mcp-client.gateway';
 import { McpAuthContextUseCase } from '@module/ai/mcp/use-case/extract-tokens.use-case';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -24,7 +24,7 @@ export interface JsonObjectInterface {
 export type JsonArrayType = Array<JsonValueType>;
 
 export type McpCallToolResultType = Awaited<
-  ReturnType<McpClientProvider['callTool']>
+  ReturnType<McpClientGateway['callTool']>
 >;
 
 @Injectable({ scope: Scope.REQUEST })
@@ -32,7 +32,7 @@ export class McpUseCase {
   protected readonly _type: string = McpUseCase.name;
 
   public constructor(
-    private readonly client: McpClientProvider,
+    private readonly client: McpClientGateway,
     private readonly authProvider: McpAuthContextUseCase,
   ) {}
 
