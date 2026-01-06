@@ -107,7 +107,6 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
       provide: GetAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: GetAnalysisToolClientLegalProceedingUseCase,
     },
-
   ],
   exports: [
     ListAnalysisToolClientLegalProceedingUseCaseGateway,
