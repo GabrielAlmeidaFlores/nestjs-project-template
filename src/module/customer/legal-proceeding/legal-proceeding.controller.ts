@@ -99,7 +99,7 @@ export class LegalProceedingController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar movimentações processuais pela organizacao',
+    summary: 'Listar movimentações processuais pela organização',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'action/organization',
@@ -109,7 +109,7 @@ export class LegalProceedingController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
-        'Listar registros detalhados sobre as movimentações processos judiciais da organizacao',
+        'Listar registros detalhados sobre as movimentações processos judiciais da organização',
       type: ListLegalProceedingDetailResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -206,12 +206,10 @@ export class LegalProceedingController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Query() dto: ListDataRequestDto,
   ): Promise<CountLegalProceedingDetailResponseDto> {
     return this.countLegalProceedingDetailUseCase.execute(
       sessionData,
       organizationSessionData,
-      dto,
     );
   }
 
