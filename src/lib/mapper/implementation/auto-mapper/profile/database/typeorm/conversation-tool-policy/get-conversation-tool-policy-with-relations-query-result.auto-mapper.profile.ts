@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
-import { GetConversationToolPolicyWithRelationsQueryResult } from '@module/ai/infra/chat/domain/repository/conversation-tool-policy/query/result/get-conversation-tool-policy-with-relation.query.result';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationToolPolicyId } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/value-object/conversation-tool-policy-id/conversation-tool-policy-id.value-object';
+import { GetConversationToolPolicyWithRelationsQueryResult } from '@module/ai/chat/domain/repository/conversation-tool-policy/query/result/get-conversation-tool-policy-with-relation.query.result';
+import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/conversation/conversation.entity';
+import { ConversationToolPolicyId } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/value-object/conversation-tool-policy-id/conversation-tool-policy-id.value-object';
 
 @Injectable()
 export class GetConversationToolPolicyWithRelationsQueryResultAutoMapperProfile {

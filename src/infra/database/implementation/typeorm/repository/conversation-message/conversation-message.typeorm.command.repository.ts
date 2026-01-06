@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationMessageCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
-import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
+import { ConversationMessageCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-message/command/conversation-message.command.repository.gateway';
+import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationMessageEntity } from '@module/ai/chat/domain/schema/entity/conversation-message/conversation-message.entity';
 
 @Injectable()
 export class ConversationMessageTypeormCommandRepository

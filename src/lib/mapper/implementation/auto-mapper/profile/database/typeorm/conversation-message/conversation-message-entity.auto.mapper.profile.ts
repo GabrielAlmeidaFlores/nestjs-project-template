@@ -4,10 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
-import { ConversationMessageEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/conversation-message.entity';
-import { ConversationMessageId } from '@module/ai/infra/chat/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
-import { ConversationEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationMessageEntity } from '@module/ai/chat/domain/schema/entity/conversation-message/conversation-message.entity';
+import { ConversationMessageId } from '@module/ai/chat/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
+import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/conversation/conversation.entity';
+import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()

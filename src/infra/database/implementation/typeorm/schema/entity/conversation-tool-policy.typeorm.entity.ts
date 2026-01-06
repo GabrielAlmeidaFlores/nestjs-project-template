@@ -2,9 +2,9 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
-import { ToolPermissionInterface } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity.props.interface';
-import { ChatPersonaTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
-import { ConversationToolPolicyTypeEnum } from '@module/ai/infra/chat/domain/schema/entity/conversation-tool-policy/enum/conversation-tool-policy-type.enum';
+import { ToolPermissionInterface } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity.props.interface';
+import { ChatPersonaTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { ConversationToolPolicyTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/enum/conversation-tool-policy-type.enum';
 
 @Entity({ name: 'conversation_tool_policy' })
 export class ConversationToolPolicyTypeormEntity extends BaseTypeormEntity {
