@@ -46,6 +46,22 @@ export class GetOrganizationAvailableCreditsUseCase {
       0,
     );
 
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const monthlyPurchases = validPurchases.filter((purchase) => {
+      const purchaseDate = new Date(purchase.createdAt);
+      return (
+        purchaseDate.getMonth() === currentMonth &&
+        purchaseDate.getFullYear() === currentYear
+      );
+    });
+
+    const totalPurchasedThisMonth = monthlyPurchases.reduce(
+      (sum, purchase) => sum + purchase.creditAmount,
+      0,
+    );
+
     const totalUsed = usages.reduce(
       (sum, usage) => sum + usage.creditAmount,
       0,
@@ -56,6 +72,7 @@ export class GetOrganizationAvailableCreditsUseCase {
     return GetOrganizationAvailableCreditsResponseDto.build({
       organizationId: organizationId.toString(),
       totalPurchased,
+      totalPurchasedThisMonth,
       totalUsed,
       availableCredits,
     });
