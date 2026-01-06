@@ -113,11 +113,27 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFilesWithContract(
         GenerateResponseInputModel.build({
           systemInstruction,
           promptFiles: files,
         }),
+        {
+          type: 'object',
+          properties: {
+            tempoContribuicao: {
+              type: 'string',
+              description:
+                'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+            },
+            observacaoTecnica: {
+              type: 'string',
+              description:
+                'Observações técnicas sobre a análise realizada com todos os detalhes.',
+            },
+          },
+          required: ['tempoContribuicao', 'observacaoTecnica'],
+        },
       )) ?? '';
 
     return CreateRetirementPlanningRgpsPeriodDocumentResponseDto.build({
