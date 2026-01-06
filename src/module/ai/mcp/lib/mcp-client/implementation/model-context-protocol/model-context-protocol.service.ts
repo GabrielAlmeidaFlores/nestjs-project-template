@@ -1,12 +1,21 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { PackageJson } from 'type-fest';
+
+import { McpClientGateway } from '@module/ai/mcp/lib/mcp-client/mcp-client.gateway';
 
 import type { ListToolsResult } from '@modelcontextprotocol/sdk/types';
 
 @Injectable()
-export class McpClientProvider implements OnModuleInit, OnModuleDestroy {
-  protected readonly _type: string = McpClientProvider.name;
+export class ModelContextProtocolService
+  extends McpClientGateway
+  implements OnModuleInit, OnModuleDestroy
+{
+  protected readonly _type: string = ModelContextProtocolService.name;
 
   private readonly client: Client;
   private readonly transport: StdioClientTransport;
@@ -15,6 +24,13 @@ export class McpClientProvider implements OnModuleInit, OnModuleDestroy {
   private connectPromise: Promise<void> | null;
 
   public constructor() {
+    super();
+
+    const currentWorkingDir = process.cwd();
+    const packageJsonPath = join(currentWorkingDir, 'package.json');
+    const packageJsonAsString = readFileSync(packageJsonPath, 'utf-8');
+    const packageJson = JSON.parse(packageJsonAsString) as PackageJson;
+
     this.transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/index.js'],
@@ -22,8 +38,8 @@ export class McpClientProvider implements OnModuleInit, OnModuleDestroy {
     });
 
     this.client = new Client({
-      name: 'agiliza-previ-back',
-      version: '1.0.0',
+      name: packageJson.name ?? 'unknown-client',
+      version: packageJson.version ?? '0.0.0',
     });
 
     this.connected = false;

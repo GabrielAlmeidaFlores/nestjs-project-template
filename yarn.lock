@@ -587,10 +587,10 @@
     "@smithy/types" "^4.10.0"
     tslib "^2.6.2"
 
-"@aws-sdk/util-arn-parser@3.957.0":
-  version "3.957.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-arn-parser/-/util-arn-parser-3.957.0.tgz#8e5898230d5e41e097ad484a714a004a0555b0fe"
-  integrity sha512-Aj6m+AyrhWyg8YQ4LDPg2/gIfGHCEcoQdBt5DeSFogN5k9mmJPOJ+IAmNSWmWRjpOxEy6eY813RNDI6qS97M0g==
+"@aws-sdk/util-arn-parser@3.953.0":
+  version "3.953.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-arn-parser/-/util-arn-parser-3.953.0.tgz#a45aaa1d811715550f35e86ba190fd09a4abd5ca"
+  integrity sha512-9hqdKkn4OvYzzaLryq2xnwcrPc8ziY34i9szUdgBfSqEC6pBxbY9/lLXmrgzfwMSL2Z7/v2go4Od0p5eukKLMQ==
   dependencies:
     tslib "^2.6.2"
 
@@ -9673,15 +9673,15 @@ typeorm@^0.3.24:
     uuid "^11.1.0"
     yargs "^17.7.2"
 
+typescript@5.4.5:
+  version "5.4.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.5.tgz#42ccef2c571fdbd0f6718b1d1f5e6e5ef006f611"
+  integrity sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==
+
 typescript@5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
   integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
-
-typescript@^5.1.3:
-  version "5.9.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
-  integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
 uglify-js@^3.1.4:
   version "3.19.3"

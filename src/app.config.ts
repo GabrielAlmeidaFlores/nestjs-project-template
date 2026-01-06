@@ -26,7 +26,7 @@ import type { ValidationError } from 'class-validator';
 import type { RawServerDefault } from 'fastify';
 import type { PackageJson } from 'type-fest';
 
-class AppConfigUtils {
+export class AppConfigUtils {
   protected readonly _type = AppConfigUtils.name;
 
   protected loadPackageJson(): PackageJson {
