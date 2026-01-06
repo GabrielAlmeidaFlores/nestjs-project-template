@@ -17,6 +17,7 @@ import { CnisDocumentIsNotValidError } from '@module/customer/analysis-tool/erro
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import ReasonPendencyEnum from '@module/customer/analysis-tool/enums/reason-pendency.enum';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsCnisUseCase {
@@ -142,9 +143,9 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
 
               const reasonPendency =
                 relation.socialSecurityAffiliationInfo.dataFim === null
-                  ? 'Periodo sem Data de Saída'
+                  ? ReasonPendencyEnum.LEAVE_DATE
                   : competenceBelowTheMinimum
-                    ? 'Contribuições Abaixo do Mínimo'
+                    ? ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
                     : '';
 
               const period = new RetirementPlanningRgpsPeriodEntity({

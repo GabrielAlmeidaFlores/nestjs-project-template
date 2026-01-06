@@ -110,6 +110,7 @@ import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
+import { GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-without-leave-date.use-case';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-time-accelerator-from-analysis.use-case';
 import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
@@ -188,6 +189,7 @@ export class AnalysisToolController {
     private readonly getRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase: GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,
     private readonly getRetirementPlanningRgpsUseCase: GetRetirementPlanningRgpsUseCase,
     private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
+    private readonly getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase: GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1525,6 +1527,39 @@ export class AnalysisToolController {
     retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
   ): Promise<GetRetirementPlanningRgpsPeriodEarningResponseDto[]> {
     return await this.getRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      retirementPlanningRgpsPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Listar ganhos sem data de saída de um período do planejamento RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/earnings/without-leave-date',
+      method: RequestMethod.GET,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Ganhos sem data de saída retornados com sucesso.',
+      type: GetRetirementPlanningRgpsPeriodEarningResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDate(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRgpsPeriodId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsPeriodId),
+    )
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+  ): Promise<GetRetirementPlanningRgpsPeriodEarningResponseDto[]> {
+    return await this.getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase.execute(
       sessionData,
       organizationSessionData,
       retirementPlanningRgpsPeriodId,
