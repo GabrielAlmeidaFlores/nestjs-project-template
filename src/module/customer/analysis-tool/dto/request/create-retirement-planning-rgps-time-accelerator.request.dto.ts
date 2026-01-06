@@ -15,7 +15,9 @@ export class DataCreateRetirementPlanningRgpsTimeAcceleratorRequestDto extends B
 
 @RequestDto()
 export class CreateRetirementPlanningRgpsTimeAcceleratorRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoObjectProperty(() => DataCreateRetirementPlanningRgpsTimeAcceleratorRequestDto)
+  @RequestDtoObjectProperty(
+    () => DataCreateRetirementPlanningRgpsTimeAcceleratorRequestDto,
+  )
   public json: DataCreateRetirementPlanningRgpsTimeAcceleratorRequestDto;
 
   protected override readonly _type =

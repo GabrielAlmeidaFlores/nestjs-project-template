@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { ConversationCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation/command/conversation.command.repository.gateway';
-import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/conversation/conversation.entity';
-import { ChatPersonaTypeEnum } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
-import { GetConversationResponseDto } from '@module/ai/chat/dto/response/get-conversation.response.dto';
+import { ConversationCommandRepositoryGateway } from '@module/ai/domain/repository/conversation/command/conversation.command.repository.gateway';
+import { ConversationEntity } from '@module/ai/domain/schema/entity/conversation/conversation.entity';
+import { ChatPersonaTypeEnum } from '@module/ai/domain/schema/entity/conversation-tool-policy/enum/chat-persona-type.enum';
+import { GetConversationResponseDto } from '@module/ai/dto/response/get-conversation.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';

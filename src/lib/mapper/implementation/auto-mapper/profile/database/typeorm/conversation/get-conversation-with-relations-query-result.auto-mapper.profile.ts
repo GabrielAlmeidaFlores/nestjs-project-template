@@ -7,11 +7,11 @@ import { ConversationMessageTypeormEntity } from '@infra/database/implementation
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { GetConversationToolPolicyQueryResult } from '@module/ai/chat/domain/repository/conversation-tool-policy/query/result/get-conversation-tool-policy.query.result';
-import { GetConversationWithRelationsQueryResult } from '@module/ai/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
-import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
-import { GetConversationEventResponseDto } from '@module/ai/chat/dto/response/get-conversation-event.response.dto';
-import { GetConversationMessageResponseDto } from '@module/ai/chat/dto/response/get-conversation-message.response.dto';
+import { GetConversationWithRelationsQueryResult } from '@module/ai/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
+import { GetConversationToolPolicyQueryResult } from '@module/ai/domain/repository/conversation-tool-policy/query/result/get-conversation-tool-policy.query.result';
+import { ConversationId } from '@module/ai/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { GetConversationEventResponseDto } from '@module/ai/dto/response/get-conversation-event.response.dto';
+import { GetConversationMessageResponseDto } from '@module/ai/dto/response/get-conversation-message.response.dto';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 

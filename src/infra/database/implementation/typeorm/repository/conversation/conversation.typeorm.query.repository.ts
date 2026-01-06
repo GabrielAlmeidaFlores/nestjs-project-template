@@ -6,11 +6,11 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation/query/conversation.query.repository.gateway';
-import { ConversationQueryParam } from '@module/ai/chat/domain/repository/conversation/query/param/conversation.query.param';
-import { GetConversationWithRelationsQueryResult } from '@module/ai/chat/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
-import { GetConversationQueryResult } from '@module/ai/chat/domain/repository/conversation/query/result/get-conversation.query.result';
-import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationQueryRepositoryGateway } from '@module/ai/domain/repository/conversation/query/conversation.query.repository.gateway';
+import { ConversationQueryParam } from '@module/ai/domain/repository/conversation/query/param/conversation.query.param';
+import { GetConversationWithRelationsQueryResult } from '@module/ai/domain/repository/conversation/query/result/get-conversation-with-relation.query.result';
+import { GetConversationQueryResult } from '@module/ai/domain/repository/conversation/query/result/get-conversation.query.result';
+import { ConversationId } from '@module/ai/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()

@@ -3,7 +3,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { GetConversationResponseDto } from '@module/ai/chat/dto/response/get-conversation.response.dto';
+import { GetConversationResponseDto } from '@module/ai/dto/response/get-conversation.response.dto';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';

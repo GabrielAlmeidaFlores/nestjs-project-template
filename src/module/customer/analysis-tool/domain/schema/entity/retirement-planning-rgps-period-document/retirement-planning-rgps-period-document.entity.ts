@@ -12,7 +12,7 @@ export class RetirementPlanningRgpsPeriodDocumentEntity extends BaseEntity<Retir
   public readonly document: string;
 
   @Description('Período do planejamento RGPS relacionado ao documento.')
-  public readonly retirementPlanningRgpsPeriod?: RetirementPlanningRgpsPeriodEntity | null;
+  public readonly retirementPlanningRgpsPeriod: RetirementPlanningRgpsPeriodEntity | null;
 
   protected readonly _type = RetirementPlanningRgpsPeriodDocumentEntity.name;
 

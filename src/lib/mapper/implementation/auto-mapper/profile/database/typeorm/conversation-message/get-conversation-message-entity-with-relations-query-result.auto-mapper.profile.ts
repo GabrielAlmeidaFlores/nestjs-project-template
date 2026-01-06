@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
-import { GetChatMessagesToConversationQueryResult } from '@module/ai/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
-import { GetConversationQueryResult } from '@module/ai/chat/domain/repository/conversation/query/result/get-conversation.query.result';
-import { ConversationMessageId } from '@module/ai/chat/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
+import { GetConversationQueryResult } from '@module/ai/domain/repository/conversation/query/result/get-conversation.query.result';
+import { GetChatMessagesToConversationQueryResult } from '@module/ai/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
+import { ConversationMessageId } from '@module/ai/domain/schema/entity/conversation-message/value-object/conversation-message-id/conversation-message-id.value-object';
 
 @Injectable()
 export class GetChatMessagesToConversationQueryResultAutoMapperProfile {

@@ -87,7 +87,7 @@ export class ModelContextProtocolService
       return;
     }
 
-    this.connectPromise = (async () => {
+    this.connectPromise = (async (): Promise<void> => {
       await this.client.connect(this.transport);
       this.connected = true;
     })();

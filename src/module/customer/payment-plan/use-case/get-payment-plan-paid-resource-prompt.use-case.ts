@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
+import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
+import { GetPaymentPlanPaidResourcePromptResponseDto } from '@module/customer/payment-plan/dto/response/get-payment-plan-paid-resource-prompt.response.dto';
 import { PaymentPlanPaidResourceIaConfigNotFoundError } from '@module/customer/payment-plan/error/payment-plan-paid-resource-ia-config-not-found.error';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
-import { GetPaymentPlanPaidResourcePromptResponseDto } from '@module/customer/payment-plan/dto/response/get-payment-plan-paid-resource-prompt.response.dto';
 
 @Injectable()
 export class GetPaymentPlanPaidResourcePromptUseCase implements GetPaymentPlanPaidResourcePromptUseCaseGateway {

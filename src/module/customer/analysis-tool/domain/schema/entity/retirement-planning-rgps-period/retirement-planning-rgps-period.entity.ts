@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsPeriodEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity.props.interface';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPlanningRgpsPeriodId> {
