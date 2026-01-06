@@ -236,4 +236,47 @@ export class LegalProceedingDetailTypeormQueryRepository
       },
     );
   }
+
+  public async findAllByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetLegalProceedingDetailWithRelationsQueryResult[]> {
+    const where = {
+      analysisToolClientLegalProceeding: {
+        analysisToolClient: {
+          createdBy: {
+            organization: { id: organizationId.toString() },
+          } as FindOptionsWhere<OrganizationMemberTypeormEntity>,
+        },
+      },
+    };
+
+    const data = await this.find({
+      where,
+      relations: {
+        analysisToolClientLegalProceeding: {
+          analysisToolClient: {
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            analysisToolRecord: true,
+          },
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      LegalProceedingDetailTypeormEntity,
+      GetLegalProceedingDetailWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
 }
