@@ -95,17 +95,16 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
               const contributionTotal =
                 relation.socialSecurityAffiliationEarningsHistory
                   .map((earning) => {
-                    const remuneration = earning.remuneracao;
+                    const remuneration = this.parseRemunerationString(
+                      earning.remuneracao,
+                    );
                     if (!remuneration) {
                       return 0;
                     }
-                    const remunerationNumber = Number(
-                      remuneration.replace(',', '.'),
-                    );
-                    if (isNaN(remunerationNumber)) {
+                    if (isNaN(remuneration)) {
                       return 0;
                     }
-                    return remunerationNumber;
+                    return remuneration;
                   })
                   .reduce((acc, curr) => acc + curr, 0);
 
@@ -127,17 +126,16 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                       if (teto.ano !== competenciaYear) {
                         return false;
                       }
-                      const remuneration = earning.remuneracao;
+                      const remuneration = this.parseRemunerationString(
+                        earning.remuneracao,
+                      );
                       if (!remuneration) {
                         return false;
                       }
-                      const remunerationNumber = Number(
-                        remuneration.replace(',', '.'),
-                      );
-                      if (isNaN(remunerationNumber)) {
+                      if (isNaN(remuneration)) {
                         return false;
                       }
-                      return remunerationNumber < teto.salarioMinimo;
+                      return remuneration < teto.salarioMinimo;
                     });
                   },
                 );
