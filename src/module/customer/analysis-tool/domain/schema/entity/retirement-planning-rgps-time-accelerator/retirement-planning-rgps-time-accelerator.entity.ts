@@ -1,7 +1,6 @@
+import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { RetirementPlanningRgpsTimeAcceleratorEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator.entity.props.interface';
 import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
-
-import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -37,6 +36,12 @@ export class RetirementPlanningRgpsTimeAcceleratorEntity extends BaseEntity<Reti
   @Description('Observação técnica.')
   public readonly technicalNote: string | null;
 
+  @Description('Reconhecimento pelo INSS.')
+  public readonly recognitionInss: string;
+
+  @Description('Reconhecimento judicial.')
+  public readonly recognitionJudicial: string;
+
   @Description('Planejamento previdenciário RGPS associado.')
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
@@ -48,6 +53,8 @@ export class RetirementPlanningRgpsTimeAcceleratorEntity extends BaseEntity<Reti
     super(RetirementPlanningRgpsTimeAcceleratorId, props);
 
     this.timeType = props.timeType;
+    this.recognitionInss = props.recognitionInss;
+    this.recognitionJudicial = props.recognitionJudicial;
     this.name = props.name ?? null;
     this.institution = props.institution ?? null;
     this.periodStart = props.periodStart ?? null;

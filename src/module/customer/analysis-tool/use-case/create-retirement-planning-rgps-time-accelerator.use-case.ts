@@ -76,6 +76,8 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
       technicalNote: parsed.observacaoTecnica ?? 'N/A',
       affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
       timeGained: parsed.tempoContribuicao ?? 'N/A',
+      recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
+      recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',
       retirementPlanningRgps: analysisResult.retirementPlanningRgps,
     });
 

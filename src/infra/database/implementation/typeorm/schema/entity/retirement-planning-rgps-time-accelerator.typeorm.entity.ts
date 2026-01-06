@@ -8,6 +8,12 @@ export class RetirementPlanningRgpsTimeAcceleratorTypeormEntity extends BaseType
   @Column({ name: 'time_type', type: 'varchar', length: 100 })
   public timeType: string;
 
+  @Column({ name: 'recognition_inss', type: 'varchar', length: 255 })
+  public recognitionInss: string;
+
+  @Column({ name: 'recognition_judicial', type: 'varchar', length: 255 })
+  public recognitionJudicial: string;
+
   @Column({ name: 'name', type: 'varchar', length: 255, nullable: true })
   public name: string | null;
 
