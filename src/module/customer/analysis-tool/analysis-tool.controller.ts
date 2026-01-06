@@ -33,6 +33,7 @@ import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { ListRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rgps-period.request.dto';
 import { ListRetirementPlanningRgpsTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rgps-time-accelerator.request.dto';
+import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { PeriodLeaveDateActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
@@ -137,6 +138,7 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
+import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
 
 @CustomerControllerRoute('analysis-tool')
 export class AnalysisToolController {
@@ -193,6 +195,7 @@ export class AnalysisToolController {
     private readonly createRetirementPlanningRgpsResultUseCase: CreateRetirementPlanningRgpsResultUseCase,
     private readonly getRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase: GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
     private readonly periodLeaveDateActionUseCase: PeriodLeaveDateActionUseCase,
+    private readonly periodConsiderationActionUseCase: PeriodConsiderationActionUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1594,6 +1597,36 @@ export class AnalysisToolController {
     @Body() dto: PeriodLeaveDateActionRequestDto,
   ): Promise<void> {
     await this.periodLeaveDateActionUseCase.execute(
+      retirementPlanningRgpsPeriodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Considerar, desconsiderar ou considerar provisoriamente um período',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId/consideration-action',
+      method: RequestMethod.POST,
+      type: PeriodConsiderationActionRequestDto,
+    },
+    tag: ['regime-geral-previdencia-social'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Ação sobre consideração do período realizada com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async periodConsiderationAction(
+    @Param(
+      'retirementPlanningRgpsPeriodId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsPeriodId),
+    )
+    retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId,
+    @Body() dto: PeriodConsiderationActionRequestDto,
+  ): Promise<void> {
+    await this.periodConsiderationActionUseCase.execute(
       retirementPlanningRgpsPeriodId,
       dto,
     );
