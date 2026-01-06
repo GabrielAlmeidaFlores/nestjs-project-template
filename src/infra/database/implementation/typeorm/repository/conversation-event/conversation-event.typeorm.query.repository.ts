@@ -5,9 +5,9 @@ import { Repository } from 'typeorm';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-event.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationEventQueryRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/query/conversation.query.repository.gateway';
-import { ConversationId } from '@module/ai/infra/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
-import { ListConversationEventResponseDto } from '@module/ai/infra/chat/dto/response/list-conversation-event.response.dto';
+import { ConversationEventQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-event/query/conversation.query.repository.gateway';
+import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ListConversationEventResponseDto } from '@module/ai/chat/dto/response/list-conversation-event.response.dto';
 
 @Injectable()
 export class ConversationEventTypeormQueryRepository

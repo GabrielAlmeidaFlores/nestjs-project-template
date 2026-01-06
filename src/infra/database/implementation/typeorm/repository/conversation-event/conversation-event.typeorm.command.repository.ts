@@ -6,8 +6,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { ConversationEventTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-event.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationEventCommandRepositoryGateway } from '@module/ai/infra/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
-import { ConversationEventEntity } from '@module/ai/infra/chat/domain/schema/entity/conversation-event/conversation-event.entity';
+import { ConversationEventCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-event/command/conversation-message.command.repository.gateway';
+import { ConversationEventEntity } from '@module/ai/chat/domain/schema/entity/conversation-event/conversation-event.entity';
 
 @Injectable()
 export class ConversationEventTypeormCommandRepository
