@@ -1,5 +1,5 @@
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { GetConversationResponseDto } from '@module/ai/chat/dto/response/get-conversation.response.dto';
+import { GetConversationResponseDto } from '@module/ai/dto/response/get-conversation.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';

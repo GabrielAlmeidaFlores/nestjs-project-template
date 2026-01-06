@@ -3,8 +3,7 @@ import type { OrganizationPaymentPlanEnablePaidResourceId } from '@module/custom
 import type { PaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/payment-plan.entity';
 import type { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
 
-export interface OrganizationPaymentPlanEnablePaidResourceEntityPropsInterface
-  extends BaseEntityPropsInterface<OrganizationPaymentPlanEnablePaidResourceId> {
+export interface OrganizationPaymentPlanEnablePaidResourceEntityPropsInterface extends BaseEntityPropsInterface<OrganizationPaymentPlanEnablePaidResourceId> {
   paymentPlan?: PaymentPlanEntity | null;
   paymentPlanPaidResource?: PaymentPlanPaidResourceEntity | null;
 }

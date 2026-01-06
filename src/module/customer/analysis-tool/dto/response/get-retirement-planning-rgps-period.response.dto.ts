@@ -42,5 +42,6 @@ export class GetRetirementPlanningRgpsPeriodResponseDto extends BaseBuildableDto
   @ResponseDtoDateProperty()
   public updatedAt: Date;
 
-  protected override readonly _type = GetRetirementPlanningRgpsPeriodResponseDto.name;
+  protected override readonly _type =
+    GetRetirementPlanningRgpsPeriodResponseDto.name;
 }

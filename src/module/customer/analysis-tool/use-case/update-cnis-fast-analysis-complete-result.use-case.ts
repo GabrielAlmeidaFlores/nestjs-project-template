@@ -1,4 +1,3 @@
-import { UpdateCnisFastAnalysisCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis-complete-analysis.request.dto';
 import { Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
@@ -9,6 +8,7 @@ import { CnisFastAnalysisResultCommandRepositoryGateway } from '@module/customer
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/cnis-fast-analysis-result.entity';
 import { CnisFastAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis-result/value-object/cnis-fast-analysis-result-id/cnis-fast-analysis-result-id.value-object';
+import { UpdateCnisFastAnalysisCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis-complete-analysis.request.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/error/cnis-fast-analysis-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';

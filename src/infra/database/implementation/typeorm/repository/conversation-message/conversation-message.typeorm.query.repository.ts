@@ -6,9 +6,9 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { ConversationMessageTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-message.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationMessageQueryRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
-import { ChatMessageToConversationQueryParam } from '@module/ai/chat/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
-import { GetChatMessagesToConversationQueryResult } from '@module/ai/chat/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
+import { ConversationMessageQueryRepositoryGateway } from '@module/ai/domain/repository/conversation-message/query/conversation-message.query.repository.gateway';
+import { ChatMessageToConversationQueryParam } from '@module/ai/domain/repository/conversation-message/query/param/chat-message-to-conversation.query.param';
+import { GetChatMessagesToConversationQueryResult } from '@module/ai/domain/repository/conversation-message/query/result/get-chat-messages-to-conversation.query.result';
 
 @Injectable()
 export class ConversationMessageTypeormQueryRepository

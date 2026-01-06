@@ -42,7 +42,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         RetirementPlanningRgpsNotFoundError,
       );
 
-    if (dto.cnisDocument) {
+    if (dto.cnisDocument !== undefined && dto.cnisDocument !== null) {
       const validateCnisDocument =
         await this.analysisProcessorGateway.validateCnisDocument(
           dto.cnisDocument.buffer,
@@ -52,10 +52,9 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         throw new CnisDocumentIsNotValidError();
       }
 
-      const cnisDocument =
-        dto.cnisDocument !== undefined
-          ? await this.fileProcessorGateway.uploadFile(dto.cnisDocument)
-          : null;
+      const cnisDocument = await this.fileProcessorGateway.uploadFile(
+        dto.cnisDocument,
+      );
 
       const updatedRetirementPlanningRgps = new RetirementPlanningRgpsEntity({
         ...retirementPlanningRgps,
@@ -67,8 +66,8 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
       );
 
       const periods =
-        cnis?.socialSecurityRelations !== undefined
-          ? cnis?.socialSecurityRelations.map((relation) => {
+        cnis.socialSecurityRelations !== undefined
+          ? cnis.socialSecurityRelations.map((relation) => {
               return new RetirementPlanningRgpsPeriodEntity({
                 periodName:
                   relation.socialSecurityAffiliationInfo.origemDoVinculo ??

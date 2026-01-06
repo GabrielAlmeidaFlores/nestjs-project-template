@@ -7,11 +7,11 @@ import { ConversationMessageTypeormEntity } from '@infra/database/implementation
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { ConversationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { ConversationEventEntity } from '@module/ai/chat/domain/schema/entity/conversation-event/conversation-event.entity';
-import { ConversationMessageEntity } from '@module/ai/chat/domain/schema/entity/conversation-message/conversation-message.entity';
-import { ConversationToolPolicyEntity } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
-import { ConversationEntity } from '@module/ai/chat/domain/schema/entity/conversation/conversation.entity';
-import { ConversationId } from '@module/ai/chat/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationEntity } from '@module/ai/domain/schema/entity/conversation/conversation.entity';
+import { ConversationId } from '@module/ai/domain/schema/entity/conversation/value-object/conversation-id/conversation-id.value-object';
+import { ConversationEventEntity } from '@module/ai/domain/schema/entity/conversation-event/conversation-event.entity';
+import { ConversationMessageEntity } from '@module/ai/domain/schema/entity/conversation-message/conversation-message.entity';
+import { ConversationToolPolicyEntity } from '@module/ai/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()

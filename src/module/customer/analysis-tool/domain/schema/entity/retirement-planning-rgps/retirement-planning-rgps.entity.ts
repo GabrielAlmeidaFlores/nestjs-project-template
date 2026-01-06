@@ -2,8 +2,8 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import type { RetirementPlanningRgpsEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity.props.interface';
+import type { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 
 export class RetirementPlanningRgpsEntity extends BaseEntity<RetirementPlanningRgpsId> {
   @Description(

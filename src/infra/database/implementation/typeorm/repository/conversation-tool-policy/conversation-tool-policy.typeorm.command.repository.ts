@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { ConversationToolPolicyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/conversation-tool-policy.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { ConversationToolPolicyCommandRepositoryGateway } from '@module/ai/chat/domain/repository/conversation-tool-policy/command/conversation-message.command.repository.gateway';
-import { ConversationToolPolicyEntity } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
-import { ConversationToolPolicyId } from '@module/ai/chat/domain/schema/entity/conversation-tool-policy/value-object/conversation-tool-policy-id/conversation-tool-policy-id.value-object';
+import { ConversationToolPolicyCommandRepositoryGateway } from '@module/ai/domain/repository/conversation-tool-policy/command/conversation-message.command.repository.gateway';
+import { ConversationToolPolicyEntity } from '@module/ai/domain/schema/entity/conversation-tool-policy/conversation-tool-policy.entity';
+import { ConversationToolPolicyId } from '@module/ai/domain/schema/entity/conversation-tool-policy/value-object/conversation-tool-policy-id/conversation-tool-policy-id.value-object';
 
 @Injectable()
 export class ConversationToolPolicyTypeormCommandRepository
