@@ -33,4 +33,8 @@ export abstract class LegalProceedingDetailQueryRepositoryGateway {
   ): Promise<
     ListDataOutputModel<GetLegalProceedingDetailWithRelationsQueryResult>
   >;
+
+  public abstract findAllByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetLegalProceedingDetailWithRelationsQueryResult[]>;
 }

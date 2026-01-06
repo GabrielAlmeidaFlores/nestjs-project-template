@@ -41,7 +41,7 @@ export class LegalProceedingCronUseCase {
     this.logger = new Logger(LegalProceedingCronUseCase.name);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  @Cron(CronExpression.EVERY_5_HOURS)
   public async execute(): Promise<void> {
     const limit = 50;
     let page = 1;
@@ -81,7 +81,12 @@ export class LegalProceedingCronUseCase {
         hasNextPage = items.length === limit;
         page++;
       } catch (error) {
-        this.logger.error(`Error processing page ${page}`, error);
+        if (error instanceof Error) {
+          this.logger.error(
+            `Error processing page ${page}: ${error.message}`,
+            error.stack,
+          );
+        }
         totalErrors++;
         hasNextPage = false;
       }

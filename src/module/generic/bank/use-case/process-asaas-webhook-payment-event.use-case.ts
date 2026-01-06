@@ -204,6 +204,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     dto: AsaasWebhookPaymentEventRequestDto,
   ): Promise<void> {
     await this.upsertBankPayment(dto);
+
+    if (typeof dto.payment.subscription === 'string') {
+      await this.processPaymentFromMonthlyRecurringPaymentPlan(dto);
+      return;
+    }
   }
 
   private async processPaymentConfirmed(
