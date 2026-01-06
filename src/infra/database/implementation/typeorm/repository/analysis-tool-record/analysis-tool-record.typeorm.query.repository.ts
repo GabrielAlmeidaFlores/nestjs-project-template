@@ -405,31 +405,38 @@ export class AnalysisToolRecordTypeormQueryRepository
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
-        createdBy: {
-          customer: true,
-          organization: true,
-        },
-        updatedBy: {
-          customer: true,
-          organization: true,
-        },
+        createdBy: { customer: true, organization: true },
+        updatedBy: { customer: true, organization: true },
         analysisToolClient: {
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
+          createdBy: { customer: true, organization: true },
+          updatedBy: { customer: true, organization: true },
           analysisToolClientLegalProceeding: true,
           analysisToolClientInssBenefit: true,
         },
         conversation: true,
+
+        retirementPlanningRpps: {
+          retirementPlanningRppsInssBenefit: true,
+          retirementPlanningRppsLegalProceeding: true,
+          retirementPlanningRppsResult: true,
+          retirementPlanningRppsRemunerationCalculation: true,
+          documents: true,
+          remunerations: true,
+          periods: {
+            specialTimePeriod: { specialTimeDocuments: true },
+            disabilityPeriod: { cid: true, disabilityDocuments: true },
+          },
+        },
+
+        cnisFastAnalysis: {
+          cnisFastAnalysisResult: true,
+          cnisFastAnalysisInssBenefit: true,
+          cnisFastAnalysisLegalProceeding: true,
+        },
       };
 
     for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = true as never;
+      relationsClause[key] ??= true as never;
     }
 
     return relationsClause;
