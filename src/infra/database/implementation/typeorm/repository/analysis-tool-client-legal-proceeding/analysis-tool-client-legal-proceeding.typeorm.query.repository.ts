@@ -119,6 +119,10 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
             customer: true,
             organization: true,
           },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
           analysisToolRecord: true,
@@ -168,6 +172,10 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         legalProceedingDetail: true,
         analysisToolClient: {
           createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
             customer: true,
             organization: true,
           },

@@ -6,6 +6,8 @@ import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool
 import { LegalProceedingController } from '@module/customer/legal-proceeding/legal-proceeding.controller';
 import { LegalProceedingConsumerModule } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.module';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
+import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
+import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
@@ -31,6 +33,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     CountLegalProceedingDetailUseCase,
     ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
+    GetAnalysisToolClientLegalProceedingActionUseCase,
+    GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
   ],
 })
 export class LegalProceedingModule {

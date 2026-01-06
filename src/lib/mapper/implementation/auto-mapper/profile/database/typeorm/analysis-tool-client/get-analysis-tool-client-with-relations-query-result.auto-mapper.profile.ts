@@ -36,7 +36,9 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
     ): GetAnalysisToolClientWithRelationsQueryResult => {
       if (
         !source.analysisToolClientInssBenefit ||
-        !source.analysisToolClientLegalProceeding
+        !source.analysisToolClientLegalProceeding ||
+        !source.createdBy ||
+        !source.updatedBy
       ) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetAnalysisToolClientWithRelationsQueryResult.name,
