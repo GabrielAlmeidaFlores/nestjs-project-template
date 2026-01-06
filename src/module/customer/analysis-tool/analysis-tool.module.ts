@@ -52,6 +52,7 @@ import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/us
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
 import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
+import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
 import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use-case/period-leave-date-action.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
@@ -127,6 +128,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateMultipleRetirementPlanningRgpsPeriodsUseCase,
     GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
     PeriodLeaveDateActionUseCase,
+    PeriodConsiderationActionUseCase,
   ],
 })
 export class AnalysisToolModule {
