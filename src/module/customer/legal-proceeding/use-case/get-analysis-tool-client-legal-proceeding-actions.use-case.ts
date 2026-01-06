@@ -2,24 +2,18 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
-import { ListAnalysisToolClientLegalProceedingByLegalProceedingNumberQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-by-legal-proceeding-number.query.param.gateway';
-import { GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-client-legal-proceeding.-by-legal-proceeding-number.request.dto';
-import {
-  LegalProceedingItemDestinatarioResponseDto,
-  LegalProceedingItemAdvogadoResponseDto,
-  LegalProceedingItemAdvogadoDetailResponseDto,
-  GetLegalProceedingItemActionResponseDto,
-} from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
-import { ListLegalProceedingItemActionResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
+import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { GetLegalProceedingDetailActionByOrganizationRequestDto } from '@module/customer/legal-proceeding/dto/request/get-legal-proceeding-detail-action-by-organization.request.dto';
+import { ListLegalProceedingItemActionResponseDto } from '@module/customer/legal-proceeding/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { PublicPropertyType } from '@shared/system/type/public-property.type';
 
 @Injectable()
-export class GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase {
+export class GetAnalysisToolClientLegalProceedingActionUseCase {
   protected readonly _type =
-    GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase.name;
+    GetAnalysisToolClientLegalProceedingActionUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -32,7 +26,7 @@ export class GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUs
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
-    dto: GetAnalysisToolClientLegalProceedingByLegalProceedingNumberRequestDto,
+    dto: GetLegalProceedingDetailActionByOrganizationRequestDto,
   ): Promise<ListLegalProceedingItemActionResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -45,14 +39,14 @@ export class GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUs
     }
 
     const analysisToolClientLegalProceedingList =
-      await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listByLegalProceedingNumber(
+      await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listByOrganizationId(
         organizationSessionData.organizationId,
-        new ListAnalysisToolClientLegalProceedingByLegalProceedingNumberQueryParamGateway(
+        new ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway(
           dto,
         ),
       );
 
-    const resource: GetLegalProceedingItemActionResponseDto[] =
+    const resource: object[] =
       analysisToolClientLegalProceedingList.resource.flatMap((item) => {
         const latestDetailEntity = item.legalProceedingDetail
           .slice()
@@ -68,39 +62,11 @@ export class GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUs
         const parsed = JSON.parse(latestDetailEntity.detail) as {
           ok: boolean;
           data: {
-            items: PublicPropertyType<GetLegalProceedingItemActionResponseDto>[];
+            items: PublicPropertyType<object>[];
           };
         };
 
-        return parsed.data.items.map((rawItem) =>
-          GetLegalProceedingItemActionResponseDto.build({
-            ...rawItem,
-
-            id: String(rawItem.id),
-            numeroComunicacao: String(rawItem.numeroComunicacao),
-            ativo: String(rawItem.ativo),
-
-            destinatarios: rawItem.destinatarios.map((d) =>
-              LegalProceedingItemDestinatarioResponseDto.build({
-                ...d,
-                comunicacao_id: String(d.comunicacao_id),
-              }),
-            ),
-
-            destinatarioadvogados: rawItem.destinatarioadvogados.map((a) =>
-              LegalProceedingItemAdvogadoResponseDto.build({
-                ...a,
-                id: String(a.id),
-                comunicacao_id: String(a.comunicacao_id),
-                advogado_id: String(a.advogado_id),
-                advogado: LegalProceedingItemAdvogadoDetailResponseDto.build({
-                  ...a.advogado,
-                  id: String(a.advogado.id),
-                }),
-              }),
-            ),
-          }),
-        );
+        return parsed.data.items.map((rawItem) => Object.assign({}, rawItem));
       });
 
     return ListLegalProceedingItemActionResponseDto.build({
