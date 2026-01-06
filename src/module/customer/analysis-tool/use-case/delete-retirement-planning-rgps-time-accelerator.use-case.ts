@@ -43,6 +43,8 @@ export class DeleteRetirementPlanningRgpsTimeAcceleratorUseCase {
       timeGained: timeAcceleratorResult.timeGained ?? null,
       viability: timeAcceleratorResult.viability ?? null,
       technicalNote: timeAcceleratorResult.technicalNote ?? null,
+      recognitionInss: timeAcceleratorResult.recognitionInss,
+      recognitionJudicial: timeAcceleratorResult.recognitionJudicial,
       deletedAt: new Date(),
     });
 

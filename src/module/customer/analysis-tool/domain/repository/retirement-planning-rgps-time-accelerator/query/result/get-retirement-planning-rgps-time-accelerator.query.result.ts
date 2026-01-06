@@ -16,6 +16,8 @@ export class GetRetirementPlanningRgpsTimeAcceleratorQueryResult extends BaseBui
   public readonly timeGained: string | null;
   public readonly viability: string | null;
   public readonly technicalNote: string | null;
+  public readonly recognitionInss: string;
+  public readonly recognitionJudicial: string;
 
   protected override readonly _type =
     GetRetirementPlanningRgpsTimeAcceleratorQueryResult.name;
