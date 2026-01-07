@@ -64,10 +64,8 @@ export class GeminiService implements GenerativeIaGateway {
       promptPart.push(...fileParts);
     }
 
-    
     const contents: Array<{ role: string; parts: Part[] }> = [];
 
-    
     if (
       props.conversationHistory !== undefined &&
       props.conversationHistory.length > 0
@@ -80,7 +78,6 @@ export class GeminiService implements GenerativeIaGateway {
       }
     }
 
-    
     if (promptPart.length > 0) {
       contents.push({
         role: 'user',
@@ -107,18 +104,15 @@ export class GeminiService implements GenerativeIaGateway {
     const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
     const hasUrl = URL_REGEX.test(unifiedInstruction);
 
-    
     if (contentConfig.config) {
       const toolsList: Array<unknown> = [];
 
-      
       if (hasUrl) {
         toolsList.push({
           urlContext: {},
         });
       }
 
-      
       if (props.tools !== undefined && props.tools.length > 0) {
         const functionDeclarations = props.tools.map((tool) => ({
           name: tool.name,
@@ -142,7 +136,6 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
-    
     if (
       props.tools !== undefined &&
       props.toolHandlers !== undefined &&
@@ -154,7 +147,6 @@ export class GeminiService implements GenerativeIaGateway {
       );
     }
 
-    
     const result =
       await this.googleGenerativeAI.models.generateContent(contentConfig);
 
@@ -180,27 +172,22 @@ export class GeminiService implements GenerativeIaGateway {
       : [contentConfig.contents];
 
     while (callCount < MAX_FUNCTION_CALLS) {
-      
       const result = await this.googleGenerativeAI.models.generateContent({
         ...contentConfig,
         contents: conversationHistory as never,
       });
 
-      
       const functionCalls = result.functionCalls;
 
       if (functionCalls === undefined || functionCalls.length === 0) {
-        
         return result.text ?? null;
       }
 
-      
       const candidates = result.candidates;
       if (candidates?.[0]?.content !== undefined) {
         conversationHistory.push(candidates[0].content);
       }
 
-      
       const functionResponses: Array<unknown> = [];
 
       for (const functionCall of functionCalls) {
@@ -225,21 +212,30 @@ export class GeminiService implements GenerativeIaGateway {
             },
           });
         } catch (error: unknown) {
-          const errorMessage =
-            error instanceof Error ? error.message : 'Unknown error';
+          let errorMessage = 'Unknown error';
+          const MAX_ERROR_MESSAGE_LENGTH = 200;
+
+          if (error instanceof Error) {
+            errorMessage = error.message
+              .replace(/["']/g, '')
+              .replace(/\\/g, '/')
+              .substring(0, MAX_ERROR_MESSAGE_LENGTH);
+          }
 
           functionResponses.push({
             functionResponse: {
               name: functionName,
               response: {
+                success: false,
                 error: errorMessage,
+                message:
+                  'Erro ao executar a ferramenta. Por favor, tente novamente ou reformule sua pergunta.',
               },
             },
           });
         }
       }
 
-      
       conversationHistory.push({
         role: 'user',
         parts: functionResponses,
@@ -248,7 +244,6 @@ export class GeminiService implements GenerativeIaGateway {
       callCount++;
     }
 
-    
     return 'Maximum function call limit reached. Please try again with a simpler query.';
   }
 

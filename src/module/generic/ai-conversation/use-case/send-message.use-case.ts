@@ -123,35 +123,54 @@ export class SendMessageUseCase {
       toolHandlers[tool.name] = async (
         params: Record<string, unknown>,
       ): Promise<unknown> => {
-        // Injeta automaticamente os IDs de sessão nos parâmetros das ferramentas
-        const enrichedParams = {
-          ...params,
-          auth_identity_id: sessionData.authIdentityId.toString(),
-          organization_id: organizationSessionData.organizationId.toString(),
-        };
+        try {
+          const enrichedParams = {
+            ...params,
+            auth_identity_id: sessionData.authIdentityId.toString(),
+            organization_id: organizationSessionData.organizationId.toString(),
+          };
 
-        return await this.mcpToolsService.executeToolCall(
-          tool.name,
-          enrichedParams,
-        );
+          return await this.mcpToolsService.executeToolCall(
+            tool.name,
+            enrichedParams,
+          );
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof Error ? error.message : 'Erro desconhecido';
+
+          return {
+            success: false,
+            error: errorMessage,
+            message:
+              'Não foi possível executar a operação. Por favor, tente novamente.',
+          };
+        }
       };
     }
 
     const systemPrompt = `Você é um assistente de IA especializado em análise de dados do sistema Agiliza Previ.
 
 **CONTEXTO DO USUÁRIO ATUAL:**
-- ID do Usuário: ${sessionData.authIdentityId.toString()}
+- ID do Usuário Logado: ${sessionData.authIdentityId.toString()}
 - ID da Organização: ${organizationSessionData.organizationId.toString()}
 
 Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco de dados.
 
-**REGRAS DE SEGURANÇA (MUITO IMPORTANTE):**
-- TODAS as consultas já são automaticamente filtradas pela organização do usuário atual
-- Os parâmetros auth_identity_id e organization_id são injetados automaticamente
-- Usuários só podem ver dados da própria organização
-- Não é necessário incluir esses filtros manualmente nas queries
+**REGRAS IMPORTANTES:**
+1. **Contexto Automático**: Quando o usuário disser "minhas", "meus", "minha" ou perguntar sobre dados dele, use AUTOMATICAMENTE o auth_identity_id fornecido acima. NÃO peça o CPF, nome ou outros dados do usuário.
 
-**IMPORTANTE:**
+2. **Exemplos de Perguntas que NÃO precisam de dados adicionais:**
+   - "quais as minhas peças processuais" → Use auth_identity_id: ${sessionData.authIdentityId.toString()}
+   - "mostre minhas análises" → Use auth_identity_id: ${sessionData.authIdentityId.toString()}
+   - "qual meu status" → Use auth_identity_id: ${sessionData.authIdentityId.toString()}
+   - "meus processos" → Use auth_identity_id: ${sessionData.authIdentityId.toString()}
+
+3. **Segurança Automática**: 
+   - TODAS as consultas já são automaticamente filtradas pela organização do usuário atual
+   - Os parâmetros auth_identity_id e organization_id são injetados automaticamente nas ferramentas
+   - Usuários só podem ver dados da própria organização
+
+**COMO USAR AS FERRAMENTAS:**
 - Use as ferramentas disponíveis quando precisar acessar dados
 - As ferramentas são executadas automaticamente quando você as solicita
 - Apenas queries SELECT são permitidas
@@ -161,7 +180,7 @@ Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco
 Responda de forma profissional e útil aos usuários.`;
 
     const aiResponse =
-      await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           prompt: userMessage,
           promptFiles: [],

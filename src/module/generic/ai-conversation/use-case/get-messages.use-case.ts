@@ -26,7 +26,6 @@ export class GetMessagesUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     limit?: number,
   ): Promise<GetMessagesResponseDto> {
-    // Verificar se conversa existe
     const conversation =
       await this.conversationCacheRepository.getConversation(conversationId);
 
@@ -34,7 +33,6 @@ export class GetMessagesUseCase {
       throw new ConversationNotFoundError();
     }
 
-    // Verificar se pertence à organização/conta
     if (
       !conversation.organizationId.equals(
         organizationSessionData.organizationId,
