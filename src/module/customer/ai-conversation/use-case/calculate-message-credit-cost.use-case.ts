@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { CalculateMessageCreditCostRequestDto } from '@module/customer/ai-conversation/dto/request/calculate-message-credit-cost.request.dto';
+import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import { CalculateMessageCreditCostResponseDto } from '@module/customer/ai-conversation/dto/response/calculate-message-credit-cost.response.dto';
 import { PaidResourceUnavailableError } from '@module/customer/organization-credit/error/paid-resource-unavailable.error';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 
 @Injectable()
 export class CalculateMessageCreditCostUseCase {
@@ -15,20 +16,26 @@ export class CalculateMessageCreditCostUseCase {
   ) {}
 
   public async execute(
-    dto: CalculateMessageCreditCostRequestDto,
+    paymentPlanPaidResourceType: PaymentPlanPaidResourceTypeEnum,
+    dto: SendMessageRequestDto,
   ): Promise<CalculateMessageCreditCostResponseDto> {
     const paidResource =
       await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
-        dto.paymentPlanPaidResourceType,
+        paymentPlanPaidResourceType,
       );
 
     if (!paidResource) {
       throw new PaidResourceUnavailableError();
     }
 
-    const words = dto.message.trim().length;
+    const words = dto.json.message.trim().length;
 
-    const token = words / 2;
+    let token = words / 2;
+
+    if (dto.file) {
+      token = token + dto.file.length * 2;
+    }
+
     const creditCost = (words / 2) * paidResource.creditCost;
 
     return CalculateMessageCreditCostResponseDto.build({

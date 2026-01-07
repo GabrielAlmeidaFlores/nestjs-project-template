@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
-import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
+//import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { PaymentPlanPaidResourceIaConfigSeeder } from '@cli/seed/seeder/payment-plan-paid-resource-ia-config.seeder';
 import { PaymentPlanPaidResourceSeeder } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
@@ -19,7 +19,7 @@ export class SeedService {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     private readonly logger: Logger,
     private readonly adminSeeder: AdminSeeder,
-    private readonly cidTenSeeder: CidTenSeeder,
+    //private readonly cidTenSeeder: CidTenSeeder,
     private readonly customerTermsSeeder: CustomerTermsSeeder,
     private readonly paymentPlanPaidResourceSeeder: PaymentPlanPaidResourceSeeder,
     private readonly paymentPlanPaidResourceIaConfigSeeder: PaymentPlanPaidResourceIaConfigSeeder,
@@ -33,31 +33,40 @@ export class SeedService {
       this.paymentPlanPaidResourceSeeder,
       this.paymentPlanPaidResourceIaConfigSeeder,
       this.paymentPlanSeeder,
-      this.cidTenSeeder,
+      //this.cidTenSeeder,
     ];
 
     const transactions: Array<TransactionType> = [];
 
     for (const seeder of seeders) {
-      const seederTransactions = await seeder.execute();
+      try {
+        const seederTransactions = await seeder.execute();
 
-      if (Array.isArray(seederTransactions)) {
-        this.logger.log(
-          `transactions to be executed: ${seederTransactions.length}`,
-          seeder.constructor.name,
-        );
-        transactions.push(...seederTransactions);
-      } else {
-        this.logger.log(
-          `itens created: ${seederTransactions}`,
-          seeder.constructor.name,
-        );
+        if (Array.isArray(seederTransactions)) {
+          this.logger.log(
+            `transactions to be executed: ${seederTransactions.length}`,
+            seeder.constructor.name,
+          );
+          transactions.push(...seederTransactions);
+        } else {
+          this.logger.log(
+            `itens created: ${seederTransactions}`,
+            seeder.constructor.name,
+          );
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          this.logger.error(
+            `Error in seeder ${seeder.constructor.name}: ${error.message}`,
+            error.stack,
+          );
+        }
       }
+
+      const transaction =
+        await this.baseTransactionRepositoryGateway.execute(transactions);
+
+      await transaction.commit();
     }
-
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
-
-    await transaction.commit();
   }
 }
