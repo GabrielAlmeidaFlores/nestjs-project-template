@@ -5,9 +5,11 @@ import { CreateConversationRequestDto } from '@module/customer/ai-conversation/d
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import { CreateConversationResponseDto } from '@module/customer/ai-conversation/dto/response/create-conversation.response.dto';
 import { GetMessagesResponseDto } from '@module/customer/ai-conversation/dto/response/get-messages.response.dto';
+import { ListConversationsResponseDto } from '@module/customer/ai-conversation/dto/response/list-conversations.response.dto';
 import { SendMessageResponseDto } from '@module/customer/ai-conversation/dto/response/send-message.response.dto';
 import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
+import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
 import { SendMessageUseCase } from '@module/customer/ai-conversation/use-case/send-message.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -17,6 +19,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -28,6 +31,7 @@ export class AiConversationController {
     private readonly createConversationUseCase: CreateConversationUseCase,
     private readonly sendMessageUseCase: SendMessageUseCase,
     private readonly getMessagesUseCase: GetMessagesUseCase,
+    private readonly listConversationsUseCase: ListConversationsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -120,5 +124,27 @@ export class AiConversationController {
       organizationSessionData,
       limit,
     );
+  }
+
+  @BuildEndpointSpecification({
+    guard: [AuthGuard, OrganizationSessionGuard],
+    http: {
+      method: RequestMethod.GET,
+      path: '',
+    },
+    successResponse: {
+      description: 'Conversas listadas com sucesso',
+      statusCode: HttpStatus.OK,
+      type: ListConversationsResponseDto,
+    },
+    summary: 'Listar conversas do usuário',
+    tag: ['ai-conversation'],
+    userLevel: [UserLevelEnum.CUSTOMER],
+  })
+  public async listConversations(
+    @GetSessionData() sessionData: SessionDataModel,
+    @Query() dto: ListDataRequestDto,
+  ): Promise<ListConversationsResponseDto> {
+    return await this.listConversationsUseCase.execute(sessionData, dto);
   }
 }

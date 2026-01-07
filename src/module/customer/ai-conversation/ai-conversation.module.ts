@@ -10,6 +10,7 @@ import { ConversationCacheModule } from '@module/customer/ai-conversation/conver
 import { McpToolsModule } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.module';
 import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
+import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
 import { SendMessageUseCase } from '@module/customer/ai-conversation/use-case/send-message.use-case';
 import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
 
@@ -29,6 +30,7 @@ import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.
     CreateConversationUseCase,
     SendMessageUseCase,
     GetMessagesUseCase,
+    ListConversationsUseCase,
   ],
   exports: [],
 })
