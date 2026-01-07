@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { CreateConversationRequestDto } from '@module/customer/ai-conversation/dto/request/create-conversation.request.dto';
 import { CreateConversationResponseDto } from '@module/customer/ai-conversation/dto/response/create-conversation.response.dto';
-import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -11,8 +11,8 @@ export class CreateConversationUseCase {
   protected readonly _type = CreateConversationUseCase.name;
 
   public constructor(
-    @Inject(ConversationCacheRepository)
-    private readonly conversationCacheRepository: ConversationCacheRepository,
+    @Inject(ConversationCacheGateway)
+    private readonly conversationCacheGateway: ConversationCacheGateway,
   ) {}
 
   public async execute(
@@ -20,12 +20,11 @@ export class CreateConversationUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     dto: CreateConversationRequestDto,
   ): Promise<CreateConversationResponseDto> {
-    const conversation =
-      await this.conversationCacheRepository.createConversation(
-        organizationSessionData.organizationId,
-        sessionData.authIdentityId,
-        dto.title,
-      );
+    const conversation = await this.conversationCacheGateway.createConversation(
+      organizationSessionData.organizationId,
+      sessionData.authIdentityId,
+      dto.title,
+    );
 
     return CreateConversationResponseDto.build({
       conversationId: conversation.id,

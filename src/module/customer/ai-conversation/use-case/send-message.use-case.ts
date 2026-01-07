@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
   SendMessageResponseDto,
@@ -13,7 +14,6 @@ import { ConversationNotFoundError } from '@module/customer/ai-conversation/erro
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
 import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.gateway';
 import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
-import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -26,8 +26,8 @@ export class SendMessageUseCase {
   public constructor(
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
-    @Inject(ConversationCacheRepository)
-    private readonly conversationCacheRepository: ConversationCacheRepository,
+    @Inject(ConversationCacheGateway)
+    private readonly conversationCacheGateway: ConversationCacheGateway,
     @Inject(McpToolsGateway)
     private readonly mcpToolsGateway: McpToolsGateway,
   ) {}
@@ -40,7 +40,7 @@ export class SendMessageUseCase {
   ): Promise<SendMessageResponseDto> {
     try {
       const conversation =
-        await this.conversationCacheRepository.getConversation(conversationId);
+        await this.conversationCacheGateway.getConversation(conversationId);
 
       if (conversation === null) {
         throw new ConversationNotFoundError();
@@ -63,9 +63,9 @@ export class SendMessageUseCase {
         timestamp: new Date(),
       });
 
-      await this.conversationCacheRepository.addMessage(userMessage);
+      await this.conversationCacheGateway.addMessage(userMessage);
 
-      const history = await this.conversationCacheRepository.getMessageHistory(
+      const history = await this.conversationCacheGateway.getMessageHistory(
         conversationId,
         SendMessageUseCase.MAX_HISTORY_MESSAGES,
       );
@@ -85,7 +85,7 @@ export class SendMessageUseCase {
         timestamp: new Date(),
       });
 
-      await this.conversationCacheRepository.addMessage(assistantMessage);
+      await this.conversationCacheGateway.addMessage(assistantMessage);
 
       return SendMessageResponseDto.build({
         assistantMessage: MessageItemDto.build({

@@ -43,7 +43,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao executar query';
-      throw new McpExecuteQueryError(errorMessage);
+      throw new McpExecuteQueryError({ message: errorMessage });
     }
   }
 
@@ -80,7 +80,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar schema';
-      throw new McpGetDatabaseSchemaError(errorMessage);
+      throw new McpGetDatabaseSchemaError({ message: errorMessage });
     }
   }
 
@@ -102,7 +102,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar estatísticas';
-      throw new McpGetDatabaseStatsError(errorMessage);
+      throw new McpGetDatabaseStatsError({ message: errorMessage });
     }
   }
 
@@ -142,7 +142,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar ferramentas';
-      throw new McpGetAvailableToolsError(errorMessage);
+      throw new McpGetAvailableToolsError({ message: errorMessage });
     }
   }
 
@@ -170,7 +170,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao executar ferramenta';
-      throw new McpExecuteToolCallError(toolName, errorMessage);
+      throw new McpExecuteToolCallError({ toolName, message: errorMessage });
     }
   }
 }
