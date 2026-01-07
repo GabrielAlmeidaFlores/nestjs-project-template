@@ -27,6 +27,10 @@ export class GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile {
       return GetAnalysisToolClientLegalProceedingQueryResult.build({
         id: new AnalysisToolClientLegalProceedingId(source.id),
         legalProceedingNumber: source.legalProceedingNumber,
+        type: source.type ?? null,
+        status: source.status ?? null,
+        lastUpdated: source.lastUpdated ?? null,
+        deadline: source.deadline ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
