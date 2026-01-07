@@ -1,4 +1,11 @@
-import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  Query,
+  RequestMethod,
+} from '@nestjs/common';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateConversationRequestDto } from '@module/customer/ai-conversation/dto/request/create-conversation.request.dto';
@@ -11,6 +18,7 @@ import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
 import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
 import { SendMessageUseCase } from '@module/customer/ai-conversation/use-case/send-message.use-case';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -82,13 +90,20 @@ export class AiConversationController {
   public async sendMessage(
     @Param('conversationId', new ParseValueObjectPipe(Guid))
     conversationId: Guid,
-    @GetSessionData() sessionData: SessionDataModel,
+    @Param(
+      'paymentPlanPaidResourceType',
+      new ParseEnumPipe(PaymentPlanPaidResourceTypeEnum),
+    )
+    paymentPlanPaidResourceType: PaymentPlanPaidResourceTypeEnum,
+    @GetSessionData()
+    sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: SendMessageRequestDto,
   ): Promise<SendMessageResponseDto> {
     return await this.sendMessageUseCase.execute(
       conversationId,
+      paymentPlanPaidResourceType,
       sessionData,
       organizationSessionData,
       dto,

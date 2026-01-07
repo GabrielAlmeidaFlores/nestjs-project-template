@@ -9,6 +9,7 @@ import { AiConversationController } from '@module/customer/ai-conversation/ai-co
 import { ConversationCacheModule } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.module';
 import { MarkdownConverterModule } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.module';
 import { McpToolsModule } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.module';
+import { CalculateMessageCreditCostUseCase } from '@module/customer/ai-conversation/use-case/calculate-message-credit-cost.use-case';
 import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
 import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
@@ -33,6 +34,7 @@ import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.
     SendMessageUseCase,
     GetMessagesUseCase,
     ListConversationsUseCase,
+    CalculateMessageCreditCostUseCase,
   ],
   exports: [],
 })
