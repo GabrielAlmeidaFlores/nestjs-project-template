@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import {
   GetMessagesResponseDto,
   MessageDto,
 } from '@module/customer/ai-conversation/dto/response/get-messages.response.dto';
 import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
 import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
-import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -16,8 +16,8 @@ export class GetMessagesUseCase {
   protected readonly _type = GetMessagesUseCase.name;
 
   public constructor(
-    @Inject(ConversationCacheRepository)
-    private readonly conversationCacheRepository: ConversationCacheRepository,
+    @Inject(ConversationCacheGateway)
+    private readonly conversationCacheGateway: ConversationCacheGateway,
   ) {}
 
   public async execute(
@@ -27,7 +27,7 @@ export class GetMessagesUseCase {
     limit?: number,
   ): Promise<GetMessagesResponseDto> {
     const conversation =
-      await this.conversationCacheRepository.getConversation(conversationId);
+      await this.conversationCacheGateway.getConversation(conversationId);
 
     if (conversation === null) {
       throw new ConversationNotFoundError();
@@ -42,7 +42,7 @@ export class GetMessagesUseCase {
       throw new ConversationAccessDeniedError();
     }
 
-    const messages = await this.conversationCacheRepository.getMessages(
+    const messages = await this.conversationCacheGateway.getMessages(
       conversationId,
       limit,
     );

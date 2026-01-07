@@ -3,6 +3,8 @@ import Redis from 'ioredis';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
+import { MessageHistoryItemModel } from '@module/customer/ai-conversation/conversation-cache/model/generic/message-history-item.model';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
 import { ConversationModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/conversation.model';
 import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
@@ -14,8 +16,8 @@ const CONVERSATION_TTL_SECONDS = 86400;
 const MAX_MESSAGES_PER_CONVERSATION = 100;
 
 @Injectable()
-export class ConversationCacheRepository {
-  protected readonly _type = ConversationCacheRepository.name;
+export class RedisConversationCacheService implements ConversationCacheGateway {
+  protected readonly _type = RedisConversationCacheService.name;
 
   public constructor(
     @Inject('REDIS_CLIENT')
@@ -160,14 +162,16 @@ export class ConversationCacheRepository {
   public async getMessageHistory(
     conversationId: Guid,
     maxMessages = 10,
-  ): Promise<Array<{ role: string; content: string }>> {
+  ): Promise<MessageHistoryItemModel[]> {
     const messages = await this.getMessages(conversationId);
 
     const recentMessages = messages.slice(-maxMessages);
 
-    return recentMessages.map((msg) => ({
-      role: msg.role === MessageRoleEnum.USER ? 'user' : 'model',
-      content: msg.content,
-    }));
+    return recentMessages.map((msg) =>
+      MessageHistoryItemModel.build({
+        role: msg.role === MessageRoleEnum.USER ? 'user' : 'model',
+        content: msg.content,
+      }),
+    );
   }
 }
