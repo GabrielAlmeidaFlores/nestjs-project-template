@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
 import { OrganizationCreditUsageCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/command/organization-credit-usage.command.repository.gateway';
 import { OrganizationCreditUsageQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-usage/query/organization-credit-usage.query.repository.gateway';
@@ -15,12 +17,15 @@ import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/payment-plan-inactive.error';
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
+import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
 export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCreditUseCaseGateway {
   protected readonly _type = ConsumeOrganizationCreditUseCase.name;
 
   public constructor(
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(OrganizationCreditPurchaseQueryRepositoryGateway)
     private readonly organizationCreditPurchaseQueryRepository: OrganizationCreditPurchaseQueryRepositoryGateway,
     @Inject(OrganizationCreditUsageQueryRepositoryGateway)
@@ -36,7 +41,8 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
   public async execute(
     organizationId: OrganizationId,
     resourceType: PaymentPlanPaidResourceTypeEnum,
-    createdBy: OrganizationMemberId | null,
+    createdBy: AuthIdentityId | OrganizationMemberId | null,
+    multiplier = 1,
   ): Promise<TransactionType> {
     const paymentPlanStatus =
       await this.validateOrganizationPaymentPlanStatusUseCase.execute(
@@ -64,7 +70,7 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
       throw new PaidResourceUnavailableError();
     }
 
-    const creditCost = paidResource.creditCost;
+    const creditCost = paidResource.creditCost * multiplier;
 
     const purchases =
       await this.organizationCreditPurchaseQueryRepository.findManyOrganizationCreditPurchaseByOrganizationId(
@@ -102,6 +108,20 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
 
     if (availableCredits < creditCost) {
       throw new InsufficientCreditsError();
+    }
+
+    if (createdBy instanceof AuthIdentityId) {
+      const organizationMember =
+        await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+          createdBy,
+          organizationId,
+        );
+
+      if (organizationMember === null) {
+        throw new OrganizationMemberNotFoundError();
+      }
+
+      createdBy = organizationMember.id;
     }
 
     const creditUsage = new OrganizationCreditUsageEntity({
