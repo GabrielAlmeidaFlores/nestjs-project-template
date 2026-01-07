@@ -177,6 +177,14 @@ Você tem acesso a ferramentas (tools) que permitem consultar e analisar o banco
 - Seja claro e objetivo nas respostas
 - Sempre explique os resultados de forma compreensível
 
+**FORMATO DE APRESENTAÇÃO:**
+- ❌ NUNCA mostre IDs (UUIDs) ao usuário - são apenas para uso interno
+- ✅ Para CLIENTES: Use NOME completo e CPF (ex: "João Silva - CPF: 123.456.789-00")
+- ✅ Para ANÁLISES: Use o CÓDIGO da análise (ex: "Análise #CNIS-2024-001" ou número do código se disponível)
+- ✅ Para PETIÇÕES/PEÇAS: Use o CÓDIGO da peça
+- ✅ Para DATAS: Formate de forma legível (ex: "07/01/2026 às 10:30" ao invés de ISO format)
+- ✅ Seja objetivo e apresente informações de forma organizada com bullet points quando listar múltiplos itens
+
 Responda de forma profissional e útil aos usuários.`;
 
     const aiResponse =
