@@ -220,23 +220,29 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
           }
         : {};
 
+    if (listData.status !== null && listData.status !== '') {
+      Object.assign(where, { status: listData.status });
+    }
+
+    if (
+      listData.legalProceedingNumber !== null &&
+      listData.legalProceedingNumber !== ''
+    ) {
+      Object.assign(where, {
+        legalProceedingNumber: listData.legalProceedingNumber,
+      });
+    }
+
+    if (listData.startDate !== null && listData.endDate !== null) {
+      Object.assign(where, {
+        lastUpdated: Between(listData.startDate, listData.endDate),
+      });
+    }
+
     const data = await this.list(listData, {
       where,
       relations: {
         legalProceedingDetail: true,
-        analysisToolClient: {
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-          analysisToolRecord: true,
-        },
       },
       order: {
         legalProceedingDetail: {

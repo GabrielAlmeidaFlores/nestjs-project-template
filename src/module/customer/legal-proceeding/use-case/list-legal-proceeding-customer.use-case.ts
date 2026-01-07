@@ -51,6 +51,14 @@ export class ListLegalProceedingByCustomerUseCase {
       DataProceedingCustomerResponseDto.build({
         id: item.id,
         legalProceedingNumber: item.legalProceedingNumber,
+        status: item.status,
+        type: item.type,
+        lastUpdated: item.lastUpdated
+          ? item.lastUpdated instanceof Date
+            ? item.lastUpdated
+            : new Date(item.lastUpdated)
+          : null,
+        deadline: null,
       }),
     );
 
