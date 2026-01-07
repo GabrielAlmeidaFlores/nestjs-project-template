@@ -2,13 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
+import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.gateway';
 import { McpApiResponseModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
 import { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
 import { McpQueryResultModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
 import { McpApplicationVariable } from '@shared/system/constant/application-variable/source/mcp.application-variable';
 
 @Injectable()
-export class McpToolsService {
+export class McpToolsService implements McpToolsGateway {
   protected readonly _type = McpToolsService.name;
 
   private readonly mcpBaseUrl: string;
