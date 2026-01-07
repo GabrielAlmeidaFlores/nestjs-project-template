@@ -29,6 +29,7 @@ import { GetAnalysisToolClientLegalProceedingUseCase } from '@module/customer/an
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetAnalysisToolRecordStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-record-statistics.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
+import { GetLegalPleadingStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading-statistics.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
@@ -79,6 +80,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,
     GetAnalysisToolRecordStatisticsUseCase,
+    GetLegalPleadingStatisticsUseCase,
     ListLegalPleadingUseCase,
     CreateLegalPleadingDocumentAnalysisUseCase,
     DownloadLegalPleadingSimplifiedAnalysisUseCase,
