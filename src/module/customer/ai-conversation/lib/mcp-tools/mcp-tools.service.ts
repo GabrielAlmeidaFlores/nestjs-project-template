@@ -2,9 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
-import { McpApiResponseModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
-import { McpDatabaseStatsModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
-import { McpQueryResultModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
+import { McpApiResponseModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
+import { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
+import { McpQueryResultModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
 
 @Injectable()
 export class McpToolsService {

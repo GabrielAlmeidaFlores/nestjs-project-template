@@ -1,13 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import {
   GetMessagesResponseDto,
   MessageDto,
-} from '@module/generic/ai-conversation/dto/response/get-messages.response.dto';
-import { ConversationAccessDeniedError } from '@module/generic/ai-conversation/error/conversation-access-denied.error';
-import { ConversationNotFoundError } from '@module/generic/ai-conversation/error/conversation-not-found.error';
-import { ConversationCacheRepository } from '@module/generic/ai-conversation/repository/conversation-cache.repository';
+} from '@module/customer/ai-conversation/dto/response/get-messages.response.dto';
+import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
+import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
+import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 

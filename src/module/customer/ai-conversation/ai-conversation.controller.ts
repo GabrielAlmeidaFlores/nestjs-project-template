@@ -1,14 +1,14 @@
 import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import { CreateConversationRequestDto } from '@module/generic/ai-conversation/dto/request/create-conversation.request.dto';
-import { SendMessageRequestDto } from '@module/generic/ai-conversation/dto/request/send-message.request.dto';
-import { CreateConversationResponseDto } from '@module/generic/ai-conversation/dto/response/create-conversation.response.dto';
-import { GetMessagesResponseDto } from '@module/generic/ai-conversation/dto/response/get-messages.response.dto';
-import { SendMessageResponseDto } from '@module/generic/ai-conversation/dto/response/send-message.response.dto';
-import { CreateConversationUseCase } from '@module/generic/ai-conversation/use-case/create-conversation.use-case';
-import { GetMessagesUseCase } from '@module/generic/ai-conversation/use-case/get-messages.use-case';
-import { SendMessageUseCase } from '@module/generic/ai-conversation/use-case/send-message.use-case';
+import { CreateConversationRequestDto } from '@module/customer/ai-conversation/dto/request/create-conversation.request.dto';
+import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
+import { CreateConversationResponseDto } from '@module/customer/ai-conversation/dto/response/create-conversation.response.dto';
+import { GetMessagesResponseDto } from '@module/customer/ai-conversation/dto/response/get-messages.response.dto';
+import { SendMessageResponseDto } from '@module/customer/ai-conversation/dto/response/send-message.response.dto';
+import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
+import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
+import { SendMessageUseCase } from '@module/customer/ai-conversation/use-case/send-message.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';

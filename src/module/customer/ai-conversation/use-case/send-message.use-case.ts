@@ -3,17 +3,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
-import { SendMessageRequestDto } from '@module/generic/ai-conversation/dto/request/send-message.request.dto';
+import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
-  MessageItemDto,
   SendMessageResponseDto,
-} from '@module/generic/ai-conversation/dto/response/send-message.response.dto';
-import { ConversationAccessDeniedError } from '@module/generic/ai-conversation/error/conversation-access-denied.error';
-import { ConversationNotFoundError } from '@module/generic/ai-conversation/error/conversation-not-found.error';
-import { MessageRoleEnum } from '@module/generic/ai-conversation/lib/mcp-tools/enum/message-role.enum';
-import { McpToolsService } from '@module/generic/ai-conversation/lib/mcp-tools/mcp-tools.service';
-import { MessageModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/message.model';
-import { ConversationCacheRepository } from '@module/generic/ai-conversation/repository/conversation-cache.repository';
+  MessageItemDto,
+} from '@module/customer/ai-conversation/dto/response/send-message.response.dto';
+import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
+import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
+import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { McpToolsService } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.service';
+import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
+import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
