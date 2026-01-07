@@ -31,4 +31,9 @@ export abstract class ConversationCacheGateway {
     conversationId: Guid,
     maxMessages?: number,
   ): Promise<MessageHistoryItemModel[]>;
+
+  public abstract listConversationsByAuthIdentity(
+    authIdentityId: AuthIdentityId,
+    limit?: number,
+  ): Promise<ConversationModel[]>;
 }

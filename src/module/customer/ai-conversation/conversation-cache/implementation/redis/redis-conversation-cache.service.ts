@@ -174,4 +174,56 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
       }),
     );
   }
+
+  public async listConversationsByAuthIdentity(
+    authIdentityId: AuthIdentityId,
+    limit = 50,
+  ): Promise<ConversationModel[]> {
+    const pattern = `${CONVERSATION_KEY_PREFIX}*`;
+    const keys = await this.redis.keys(pattern);
+
+    if (keys.length === 0) {
+      return [];
+    }
+
+    const conversations: ConversationModel[] = [];
+
+    for (const key of keys) {
+      const data = await this.redis.get(key);
+      if (data === null) {
+        continue;
+      }
+
+      const parsed = JSON.parse(data) as {
+        id: string;
+        organizationId: string;
+        authIdentityId: string;
+        title: string;
+        createdAt: number;
+        updatedAt: number;
+      };
+
+      if (parsed.authIdentityId !== authIdentityId.toString()) {
+        continue;
+      }
+
+      const messages = await this.getMessages(new Guid(parsed.id));
+
+      conversations.push(
+        ConversationModel.build({
+          id: new Guid(parsed.id),
+          organizationId: new OrganizationId(parsed.organizationId),
+          authIdentityId: new AuthIdentityId(parsed.authIdentityId),
+          title: parsed.title,
+          messages,
+          createdAt: new Date(parsed.createdAt),
+          updatedAt: new Date(parsed.updatedAt),
+        }),
+      );
+    }
+
+    conversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+
+    return conversations.slice(0, limit);
+  }
 }
