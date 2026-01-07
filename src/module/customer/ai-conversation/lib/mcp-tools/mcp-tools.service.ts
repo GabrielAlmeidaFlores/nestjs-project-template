@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { McpApiResponseModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
 import { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
 import { McpQueryResultModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
+import { McpApplicationVariable } from '@shared/system/constant/application-variable/source/mcp.application-variable';
 
 @Injectable()
 export class McpToolsService {
@@ -13,7 +14,7 @@ export class McpToolsService {
   private readonly mcpBaseUrl: string;
 
   public constructor(private readonly httpService: HttpService) {
-    this.mcpBaseUrl = process.env['MCP_SERVER_URL'] ?? 'http://localhost:3001';
+    this.mcpBaseUrl = McpApplicationVariable.MCP_SERVER_URL;
   }
 
   public async executeQuery(query: string): Promise<McpQueryResultModel> {
