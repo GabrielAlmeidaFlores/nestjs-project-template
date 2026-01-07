@@ -2,10 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
-import { CalculateMessageCreditCostRequestDto } from '@module/customer/ai-conversation/dto/request/calculate-message-credit-cost.request.dto';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
   SendMessageResponseDto,
@@ -30,6 +30,8 @@ export class SendMessageUseCase {
   protected readonly _type = SendMessageUseCase.name;
 
   public constructor(
+    @Inject(BucketGateway)
+    private readonly bucketGateway: BucketGateway,
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
     @Inject(ConversationCacheGateway)
@@ -54,10 +56,8 @@ export class SendMessageUseCase {
   ): Promise<SendMessageResponseDto> {
     const costCalculation =
       await this.calculateMessageCreditCostUseCase.execute(
-        CalculateMessageCreditCostRequestDto.build({
-          message: dto.message,
-          paymentPlanPaidResourceType: paymentPlanPaidResourceType,
-        }),
+        paymentPlanPaidResourceType,
+        dto,
       );
 
     const consumeCreditTransaction =
@@ -88,9 +88,31 @@ export class SendMessageUseCase {
       id: new Guid(),
       conversationId,
       role: MessageRoleEnum.USER,
-      content: dto.message,
+      content: dto.json.message,
       timestamp: new Date(),
     });
+
+    // Processar arquivos enviados
+    const uploadedFiles: Array<{ fileName: string; url: URL }> = [];
+    if (dto.file !== undefined && dto.file.length > 0) {
+      for (const file of dto.file) {
+        const fileName = await this.bucketGateway.create(file);
+        const temporaryUrl = await this.bucketGateway.getSignedUrl(fileName);
+        uploadedFiles.push({ fileName, url: temporaryUrl });
+
+        const originalFileName =
+          await this.bucketGateway.getOriginalFileName(fileName);
+        const fileMessage = MessageModel.build({
+          id: new Guid(),
+          conversationId,
+          role: MessageRoleEnum.USER,
+          content: `<a href="${temporaryUrl.toString()}" mimetype="${file.mimeType}" target="_blank">${originalFileName}</a>`,
+          timestamp: new Date(),
+        });
+
+        await this.conversationCacheGateway.addMessage(fileMessage);
+      }
+    }
 
     await this.conversationCacheGateway.addMessage(userMessage);
 
@@ -100,7 +122,8 @@ export class SendMessageUseCase {
     );
 
     const aiResponse = await this.generateAiResponse(
-      dto.message,
+      dto,
+      uploadedFiles,
       history,
       sessionData,
       organizationSessionData,
@@ -139,7 +162,8 @@ export class SendMessageUseCase {
   }
 
   private async generateAiResponse(
-    userMessage: string,
+    dto: SendMessageRequestDto,
+    uploadedFiles: Array<{ fileName: string; url: URL }>,
     history: Array<{ content: string; role: string }>,
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
@@ -186,11 +210,20 @@ export class SendMessageUseCase {
         paymentPlanPaidResourceType,
       );
 
+    // Preparar arquivos para a IA (baixar buffers)
+    const promptFiles: Buffer[] = [];
+    for (const uploadedFile of uploadedFiles) {
+      const fileBuffer = await this.bucketGateway.getBuffer(
+        uploadedFile.fileName,
+      );
+      promptFiles.push(fileBuffer);
+    }
+
     const aiResponse =
       await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
-          prompt: userMessage,
-          promptFiles: [],
+          prompt: dto.json.message,
+          promptFiles: promptFiles,
           systemInstruction: systemPrompt.prompt,
           conversationHistory: history,
           tools: mcpTools,

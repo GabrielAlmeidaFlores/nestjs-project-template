@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { BucketModule } from '@infra/bucket/bucket.module';
 import { CacheStorageModule } from '@infra/cache-storage/cache-storage.module';
 import { RedisModule } from '@infra/cache-storage/implementation/redis/redis.module';
 import { DatabaseModule } from '@infra/database/database.module';
@@ -14,18 +15,23 @@ import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
 import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
 import { SendMessageUseCase } from '@module/customer/ai-conversation/use-case/send-message.use-case';
+import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
+import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.module';
 
 @Module({
   imports: [
     AccountModule,
     AuthIdentityModule,
+    BucketModule,
     CacheStorageModule,
     ConversationCacheModule,
     DatabaseModule,
     GenerativeIaModule,
     MarkdownConverterModule,
     McpToolsModule,
+    OrganizationCreditModule,
+    PaymentPlanModule,
     RedisModule,
   ],
   controllers: [AiConversationController],

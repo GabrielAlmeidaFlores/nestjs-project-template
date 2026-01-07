@@ -101,4 +101,19 @@ export class Base64 extends BaseValueObject<Base64> {
   public toString(): string {
     return this.value;
   }
+
+  public getBase64SizeInGigabytes(): number {
+    const BYTES_PER_KB = 1024;
+    const BYTES_PER_MB = BYTES_PER_KB * BYTES_PER_KB;
+    const BYTES_PER_GB = BYTES_PER_MB * BYTES_PER_KB;
+    const BASE64_CHARS_PER_BLOCK = 4;
+    const BASE64_BYTES_PER_BLOCK = 3;
+
+    const paddingLength = (this.value.match(/=+$/) ?? [''])[0].length;
+    const sizeInBytes =
+      (this.value.length * BASE64_BYTES_PER_BLOCK) / BASE64_CHARS_PER_BLOCK -
+      paddingLength;
+
+    return sizeInBytes / BYTES_PER_GB;
+  }
 }
