@@ -7,6 +7,7 @@ import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { AccountModule } from '@module/customer/account/account.module';
 import { AiConversationController } from '@module/customer/ai-conversation/ai-conversation.controller';
 import { ConversationCacheModule } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.module';
+import { MarkdownConverterModule } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.module';
 import { McpToolsModule } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.module';
 import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
@@ -22,6 +23,7 @@ import { AuthIdentityModule } from '@module/generic/auth-identity/auth-identity.
     ConversationCacheModule,
     DatabaseModule,
     GenerativeIaModule,
+    MarkdownConverterModule,
     McpToolsModule,
     RedisModule,
   ],
