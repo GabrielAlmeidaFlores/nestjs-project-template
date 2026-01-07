@@ -115,6 +115,33 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const acceleratorTimeString = `${finalYears} anos, ${finalMonths} meses e ${finalDays} dias`;
 
+    const carenciaTimeWithoutPendencyMonths = this.calculateCarenciaTotal(
+      periodWithoutPendencies.map((period) => ({
+        dataInicio: period.periodStart,
+        dataFim: period.periodEnd,
+      })),
+    );
+
+    const carenciaTimeWithoutPendencyMonthsString = `${carenciaTimeWithoutPendencyMonths} contribuições`;
+
+    const carenciaTimeWithPendencyMonths = this.calculateCarenciaTotal(
+      (periods ?? []).map((period) => ({
+        dataInicio: period.periodStart,
+        dataFim: period.periodEnd,
+      })),
+    );
+
+    const carenciaTimeWithPendencyMonthsString = `${carenciaTimeWithPendencyMonths} contribuições`;
+
+    const carenciaTimeWithAccelerationMonths = this.calculateCarenciaTotal(
+      acceleratorTimes.map((period) => ({
+        dataInicio: period.periodStart,
+        dataFim: period.periodEnd,
+      })),
+    );
+
+    const totalCarenciaTimeWithAccelerationMonthsString = `${carenciaTimeWithAccelerationMonths + carenciaTimeWithPendencyMonths} contribuições`;
+
     return GetRetirementPlanningRgpsDetailsResponseDto.build({
       id: retirementPlanningRgps.id,
       name: retirementPlanningRgps.cnisDocument,
@@ -140,9 +167,10 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       contributionTimeWithoutPendency: periodWithoutPendenciesString,
       contributionTimeWithPendency: periodTotalString,
       contributionTimeWithAcceleration: acceleratorTimeString,
-      carencyTimeWithoutPendency: '',
-      carencyTimeWithPendency: '',
-      carencyTimeWithAcceleration: '',
+      carencyTimeWithoutPendency: carenciaTimeWithoutPendencyMonthsString,
+      carencyTimeWithPendency: carenciaTimeWithPendencyMonthsString,
+      carencyTimeWithAcceleration:
+        totalCarenciaTimeWithAccelerationMonthsString,
     });
   }
 
@@ -188,5 +216,49 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       months: duration.months(),
       days: duration.days(),
     };
+  }
+
+  private calculateCarenciaTotal(
+    periods: {
+      dataInicio: Date | null;
+      dataFim: Date | null;
+    }[],
+  ): number {
+    const monthsAssigned = new Set<string>();
+
+    for (const item of periods) {
+      const startDate = this.toDate(item.dataInicio);
+      const endDate = this.toDate(item.dataFim);
+
+      if (!startDate || !endDate || startDate.getTime() > endDate.getTime()) {
+        continue;
+      }
+
+      const current = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        1,
+      );
+      const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+
+      while (current <= end) {
+        const monthKey = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}`;
+        monthsAssigned.add(monthKey);
+        current.setMonth(current.getMonth() + 1);
+      }
+    }
+
+    return monthsAssigned.size;
+  }
+
+  private toDate(value: Date | null | undefined): Date | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (value instanceof Date) {
+      return value;
+    }
+    const parsed = new Date(value);
+    return isNaN(parsed.getTime()) ? null : parsed;
   }
 }
