@@ -1,7 +1,7 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
-import type { MessageRoleEnum } from '@module/generic/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import type { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
 
 export class MessageModel extends BaseBuildableObject {
   public id: Guid;

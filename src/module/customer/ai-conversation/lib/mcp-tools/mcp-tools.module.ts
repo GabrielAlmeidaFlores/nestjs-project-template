@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 
-import { McpToolsService } from '@module/generic/ai-conversation/lib/mcp-tools/mcp-tools.service';
+import { McpToolsService } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.service';
 
 @Module({
   imports: [HttpModule],

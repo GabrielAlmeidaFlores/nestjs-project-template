@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { CreateConversationRequestDto } from '@module/generic/ai-conversation/dto/request/create-conversation.request.dto';
-import { CreateConversationResponseDto } from '@module/generic/ai-conversation/dto/response/create-conversation.response.dto';
-import { ConversationCacheRepository } from '@module/generic/ai-conversation/repository/conversation-cache.repository';
+import { CreateConversationRequestDto } from '@module/customer/ai-conversation/dto/request/create-conversation.request.dto';
+import { CreateConversationResponseDto } from '@module/customer/ai-conversation/dto/response/create-conversation.response.dto';
+import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 

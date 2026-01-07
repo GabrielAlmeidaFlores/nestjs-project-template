@@ -3,9 +3,9 @@ import Redis from 'ioredis';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { MessageRoleEnum } from '@module/generic/ai-conversation/lib/mcp-tools/enum/message-role.enum';
-import { ConversationModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/conversation.model';
-import { MessageModel } from '@module/generic/ai-conversation/lib/mcp-tools/model/generic/message.model';
+import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { ConversationModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/conversation.model';
+import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 const CONVERSATION_KEY_PREFIX = 'ai:conversation:';
