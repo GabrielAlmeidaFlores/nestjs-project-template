@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
+import { marked } from 'marked';
 
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
@@ -47,9 +48,26 @@ export class GetMessagesUseCase {
       limit,
     );
 
+    const messagesWithHtml = messages.map((msg) => {
+      const isHtml =
+        msg.content.includes('<strong>') ||
+        msg.content.includes('<em>') ||
+        msg.content.includes('<ul>') ||
+        msg.content.includes('<p>');
+
+      const htmlContent = isHtml
+        ? msg.content
+        : this.convertMarkdownToHtml(msg.content);
+
+      return {
+        ...msg,
+        content: htmlContent.trim(),
+      };
+    });
+
     return GetMessagesResponseDto.build({
       conversationId,
-      messages: messages.map((msg) =>
+      messages: messagesWithHtml.map((msg) =>
         MessageDto.build({
           content: msg.content,
           id: msg.id,
@@ -57,7 +75,70 @@ export class GetMessagesUseCase {
           timestamp: msg.timestamp,
         }),
       ),
-      total: messages.length,
+      total: messagesWithHtml.length,
     });
+  }
+
+  private convertMarkdownToHtml(markdown: string): string {
+    let html = marked.parse(markdown, {
+      breaks: true,
+      gfm: true,
+      async: false,
+    });
+
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+
+    const lines = html.split('\n');
+    let inList = false;
+    const processedLines: string[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      if (line === undefined) {
+        continue;
+      }
+
+      const trimmedLine = line.trim();
+
+      if (trimmedLine.startsWith('* ') || trimmedLine.startsWith('- ')) {
+        if (!inList) {
+          processedLines.push('<ul>');
+          inList = true;
+        }
+        const content = trimmedLine.substring(2);
+        processedLines.push(`<li>${content}</li>`);
+      } else {
+        if (inList) {
+          processedLines.push('</ul>');
+          inList = false;
+        }
+        if (trimmedLine === '') {
+          processedLines.push('<br>');
+        } else {
+          processedLines.push(line);
+        }
+      }
+    }
+
+    if (inList) {
+      processedLines.push('</ul>');
+    }
+
+    html = processedLines.join('\n');
+
+    html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+
+    html = html.replace(/\n\n/g, '</p><p>');
+
+    if (!html.startsWith('<')) {
+      html = `<p>${html}</p>`;
+    }
+
+    return html;
   }
 }
