@@ -11,7 +11,7 @@ import {
 import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
 import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
-import { McpToolsService } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.service';
+import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.gateway';
 import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
 import { ConversationCacheRepository } from '@module/customer/ai-conversation/repository/conversation-cache.repository';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -28,8 +28,8 @@ export class SendMessageUseCase {
     private readonly generativeIaGateway: GenerativeIaGateway,
     @Inject(ConversationCacheRepository)
     private readonly conversationCacheRepository: ConversationCacheRepository,
-    @Inject(McpToolsService)
-    private readonly mcpToolsService: McpToolsService,
+    @Inject(McpToolsGateway)
+    private readonly mcpToolsGateway: McpToolsGateway,
   ) {}
 
   public async execute(
@@ -112,7 +112,7 @@ export class SendMessageUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<string> {
-    const mcpTools = await this.mcpToolsService.getAvailableTools();
+    const mcpTools = await this.mcpToolsGateway.getAvailableTools();
 
     const toolHandlers: Record<
       string,
@@ -130,7 +130,7 @@ export class SendMessageUseCase {
             organization_id: organizationSessionData.organizationId.toString(),
           };
 
-          return await this.mcpToolsService.executeToolCall(
+          return await this.mcpToolsGateway.executeToolCall(
             tool.name,
             enrichedParams,
           );
