@@ -171,6 +171,13 @@ export class SendMessageUseCase {
   ): Promise<string> {
     const mcpTools = await this.mcpToolsGateway.getAvailableTools();
 
+    dto.json.message = `
+${dto.json.message}
+
+organizationId: ${organizationSessionData.organizationId.toString()}
+authIdentityId: ${sessionData.authIdentityId.toString()}
+`;
+
     const toolHandlers: Record<
       string,
       (params: Record<string, unknown>) => Promise<unknown>
@@ -210,7 +217,18 @@ export class SendMessageUseCase {
         paymentPlanPaidResourceType,
       );
 
-    // Preparar arquivos para a IA (baixar buffers)
+    const enhancedSystemPrompt = `${systemPrompt.prompt}
+
+**IMPORTANTE - FORMATO DE APRESENTAÇÃO DE DADOS:**
+- ❌ NUNCA mencione IDs técnicos (UUIDs) ao usuário - são apenas para uso interno nas ferramentas
+- ✅ Para CLIENTES: Use NOME completo e CPF (ex: "João Silva - CPF: 123.456.789-00")
+- ✅ Para ANÁLISES: Use o CÓDIGO da análise (ex: "Análise #CNIS-2024-001")
+- ✅ Para PETIÇÕES/PEÇAS: Use o CÓDIGO da peça
+- ✅ Para DATAS: Formate de forma legível (ex: "07/01/2026 às 10:30")
+- ✅ Seja objetivo e apresente informações de forma organizada com bullet points quando listar múltiplos itens
+- ✅ Quando pedir informações ao usuário, NUNCA peça IDs técnicos - peça nome, CPF ou código identificador amigável
+`;
+
     const promptFiles: Buffer[] = [];
     for (const uploadedFile of uploadedFiles) {
       const fileBuffer = await this.bucketGateway.getBuffer(
@@ -224,7 +242,7 @@ export class SendMessageUseCase {
         GenerateResponseInputModel.build({
           prompt: dto.json.message,
           promptFiles: promptFiles,
-          systemInstruction: systemPrompt.prompt,
+          systemInstruction: enhancedSystemPrompt,
           conversationHistory: history,
           tools: mcpTools,
           toolHandlers,
