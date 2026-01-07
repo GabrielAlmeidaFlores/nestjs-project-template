@@ -21,7 +21,7 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
   }
 
   public static isValid(value: string): boolean {
-    const phoneRegex = /^\d{12,13}$/;
+    const phoneRegex = /^\d{13}$/;
 
     return phoneRegex.test(value);
   }
