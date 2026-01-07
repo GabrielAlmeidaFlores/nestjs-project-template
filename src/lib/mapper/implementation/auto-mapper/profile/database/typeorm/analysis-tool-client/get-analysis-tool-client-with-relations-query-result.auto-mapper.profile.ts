@@ -122,7 +122,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
       );
 
       const createdBy = this.mapper.map(
-        source.updatedBy,
+        source.createdBy,
         GetOrganizationMemberWithCustomerRelationQueryResult,
         OrganizationMemberTypeormEntity,
       );
