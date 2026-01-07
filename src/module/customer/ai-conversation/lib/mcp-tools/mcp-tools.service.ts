@@ -6,6 +6,7 @@ import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/
 import { McpApiResponseModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
 import { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
 import { McpQueryResultModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
+import { McpToolModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-tool.model';
 import { McpApplicationVariable } from '@shared/system/constant/application-variable/source/mcp.application-variable';
 
 @Injectable()
@@ -112,13 +113,7 @@ export class McpToolsService implements McpToolsGateway {
     }
   }
 
-  public async getAvailableTools(): Promise<
-    Array<{
-      name: string;
-      description: string;
-      parameters: Record<string, unknown>;
-    }>
-  > {
+  public async getAvailableTools(): Promise<McpToolModel[]> {
     try {
       const response = await firstValueFrom(
         this.httpService.get<
@@ -136,7 +131,7 @@ export class McpToolsService implements McpToolsGateway {
         throw new Error('Erro ao buscar ferramentas');
       }
 
-      return response.data.data.tools;
+      return response.data.data.tools.map((tool) => McpToolModel.build(tool));
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error

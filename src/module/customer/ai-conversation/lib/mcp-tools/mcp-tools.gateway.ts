@@ -1,5 +1,6 @@
 import type { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
 import type { McpQueryResultModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-query-result.model';
+import type { McpToolModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-tool.model';
 
 export abstract class McpToolsGateway {
   public abstract executeQuery(query: string): Promise<McpQueryResultModel>;
@@ -12,13 +13,7 @@ export abstract class McpToolsGateway {
 
   public abstract healthCheck(): Promise<boolean>;
 
-  public abstract getAvailableTools(): Promise<
-    Array<{
-      name: string;
-      description: string;
-      parameters: Record<string, unknown>;
-    }>
-  >;
+  public abstract getAvailableTools(): Promise<McpToolModel[]>;
 
   public abstract executeToolCall(
     toolName: string,
