@@ -2,6 +2,11 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
+import { McpExecuteQueryError } from '@module/customer/ai-conversation/lib/mcp-tools/error/mcp-execute-query.error';
+import { McpExecuteToolCallError } from '@module/customer/ai-conversation/lib/mcp-tools/error/mcp-execute-tool-call.error';
+import { McpGetAvailableToolsError } from '@module/customer/ai-conversation/lib/mcp-tools/error/mcp-get-available-tools.error';
+import { McpGetDatabaseSchemaError } from '@module/customer/ai-conversation/lib/mcp-tools/error/mcp-get-database-schema.error';
+import { McpGetDatabaseStatsError } from '@module/customer/ai-conversation/lib/mcp-tools/error/mcp-get-database-stats.error';
 import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.gateway';
 import { McpApiResponseModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-api-response.model';
 import { McpDatabaseStatsModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/mcp-database-stats.model';
@@ -38,7 +43,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao executar query';
-      throw new Error(`Erro ao executar query no MCP: ${errorMessage}`);
+      throw new McpExecuteQueryError(errorMessage);
     }
   }
 
@@ -75,7 +80,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar schema';
-      throw new Error(`Erro ao buscar schema no MCP: ${errorMessage}`);
+      throw new McpGetDatabaseSchemaError(errorMessage);
     }
   }
 
@@ -97,7 +102,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar estatísticas';
-      throw new Error(`Erro ao buscar estatísticas no MCP: ${errorMessage}`);
+      throw new McpGetDatabaseStatsError(errorMessage);
     }
   }
 
@@ -137,7 +142,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao buscar ferramentas';
-      throw new Error(`Erro ao buscar ferramentas no MCP: ${errorMessage}`);
+      throw new McpGetAvailableToolsError(errorMessage);
     }
   }
 
@@ -165,9 +170,7 @@ export class McpToolsService implements McpToolsGateway {
         error instanceof Error
           ? error.message
           : 'Erro desconhecido ao executar ferramenta';
-      throw new Error(
-        `Erro ao executar ferramenta ${toolName} no MCP: ${errorMessage}`,
-      );
+      throw new McpExecuteToolCallError(toolName, errorMessage);
     }
   }
 }
