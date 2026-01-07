@@ -43,4 +43,17 @@ export class AnalysisToolClientLegalProceedingTypeormCommandRepository
 
     return this.create(mappedData);
   }
+
+  public updateAnalysisToolClientLegalProceeding(
+    id: AnalysisToolClientLegalProceedingId,
+    props: AnalysisToolClientLegalProceedingEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      AnalysisToolClientLegalProceedingEntity,
+      AnalysisToolClientLegalProceedingTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
+  }
 }
