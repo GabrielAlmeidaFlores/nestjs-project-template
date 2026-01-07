@@ -94,8 +94,23 @@ export class CreateRetirementPlanningRppsResultUseCase {
         promptResponse.prompt,
         documentsBuffer,
       );
-
+    console.log(retirementPlanningRppsCompleteAnalysis);
     if (retirementPlanningRppsCompleteAnalysis === null) {
+      throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
+    }
+
+    let parsedAnalysis: object;
+    try {
+      let cleanedJson = retirementPlanningRppsCompleteAnalysis;
+
+      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
+        cleanedJson = JSON.parse(cleanedJson);
+      }
+
+      parsedAnalysis = JSON.parse(cleanedJson);
+    } catch (error) {
+      console.error('Error parsing analysis JSON:', error);
+      console.error('Raw analysis:', retirementPlanningRppsCompleteAnalysis);
       throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
     }
 
@@ -134,9 +149,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
     await transaction.commit();
 
     return CreateRetirementPlanningRppsResultResponseDto.build({
-      retirementPlanningRppsCompleteAnalysis: JSON.parse(
-        retirementPlanningRppsCompleteAnalysis,
-      ) as object,
+      retirementPlanningRppsCompleteAnalysis: parsedAnalysis,
     });
   }
 }
