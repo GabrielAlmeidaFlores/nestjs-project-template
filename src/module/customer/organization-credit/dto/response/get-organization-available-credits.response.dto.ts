@@ -12,6 +12,9 @@ export class GetOrganizationAvailableCreditsResponseDto extends BaseBuildableDto
   public totalPurchased: number;
 
   @ResponseDtoNumberProperty()
+  public totalPurchasedThisMonth: number;
+
+  @ResponseDtoNumberProperty()
   public totalUsed: number;
 
   @ResponseDtoNumberProperty()
