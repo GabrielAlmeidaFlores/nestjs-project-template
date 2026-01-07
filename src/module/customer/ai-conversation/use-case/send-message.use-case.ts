@@ -92,7 +92,6 @@ export class SendMessageUseCase {
       timestamp: new Date(),
     });
 
-    // Processar arquivos enviados
     const uploadedFiles: Array<{ fileName: string; url: URL }> = [];
     if (dto.file !== undefined && dto.file.length > 0) {
       for (const file of dto.file) {
