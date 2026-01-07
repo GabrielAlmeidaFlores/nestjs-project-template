@@ -16,9 +16,6 @@ export class McpToolsService {
     this.mcpBaseUrl = process.env['MCP_SERVER_URL'] ?? 'http://localhost:3001';
   }
 
-  /**
-   * Executa uma query SQL via MCP Server
-   */
   public async executeQuery(query: string): Promise<McpQueryResultModel> {
     try {
       const response = await firstValueFrom(
@@ -42,9 +39,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Valida uma query SQL sem executá-la
-   */
   public async validateQuery(query: string): Promise<boolean> {
     try {
       const response = await firstValueFrom(
@@ -60,9 +54,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Obtém o schema do banco de dados
-   */
   public async getDatabaseSchema(): Promise<string> {
     try {
       const response = await firstValueFrom(
@@ -85,9 +76,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Obtém estatísticas do banco de dados
-   */
   public async getDatabaseStats(): Promise<McpDatabaseStatsModel> {
     try {
       const response = await firstValueFrom(
@@ -110,9 +98,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Testa conexão com o MCP Server
-   */
   public async healthCheck(): Promise<boolean> {
     try {
       const response = await firstValueFrom(
@@ -125,9 +110,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Obtém a lista de ferramentas (tools) disponíveis no MCP Server
-   */
   public async getAvailableTools(): Promise<
     Array<{
       name: string;
@@ -162,9 +144,6 @@ export class McpToolsService {
     }
   }
 
-  /**
-   * Executa uma chamada de função (tool call) no MCP Server
-   */
   public async executeToolCall(
     toolName: string,
     parameters: Record<string, unknown>,
