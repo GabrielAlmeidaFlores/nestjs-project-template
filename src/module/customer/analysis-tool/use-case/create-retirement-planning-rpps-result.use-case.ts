@@ -2,13 +2,19 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
 import { RetirementPlanningRppsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/command/retirement-planning-rpps-result.command.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { RetirementPlanningRppsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-result/retirement-planning-rpps-result.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { CreateRetirementPlanningRppsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps-result.response.dto';
+import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { FailedToGenerateRetirementPlanningRppsAnalysisError } from '@module/customer/analysis-tool/error/failed-to-generate-retirement-planning-rpps-analysis.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
@@ -28,6 +34,10 @@ export class CreateRetirementPlanningRppsResultUseCase {
     protected readonly analysisProcessorGateway: AnalysisProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsQueryRepositoryGateway)
     private readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -57,6 +67,14 @@ export class CreateRetirementPlanningRppsResultUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        retirementPlanningRppsId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        AnalysisToolRecordNotFoundError,
+      );
+
     const retirementPlanningRppsQueryResult =
       await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
         retirementPlanningRppsId,
@@ -77,6 +95,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       );
 
     const analysisData = {
+      analysisToolClient: analysisToolRecordQueryResult.analysisToolClient,
       careerStartDate: retirementPlanningRppsQueryResult.careerStartDate,
       publicServiceStartDate:
         retirementPlanningRppsQueryResult.publicServiceStartDate,
@@ -94,23 +113,21 @@ export class CreateRetirementPlanningRppsResultUseCase {
         promptResponse.prompt,
         documentsBuffer,
       );
-    console.log(retirementPlanningRppsCompleteAnalysis);
+
     if (retirementPlanningRppsCompleteAnalysis === null) {
       throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
     }
 
     let parsedAnalysis: object;
     try {
-      let cleanedJson = retirementPlanningRppsCompleteAnalysis;
+      let cleanedJson: string = retirementPlanningRppsCompleteAnalysis;
 
       if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
-        cleanedJson = JSON.parse(cleanedJson);
+        cleanedJson = JSON.parse(cleanedJson) as string;
       }
 
-      parsedAnalysis = JSON.parse(cleanedJson);
-    } catch (error) {
-      console.error('Error parsing analysis JSON:', error);
-      console.error('Raw analysis:', retirementPlanningRppsCompleteAnalysis);
+      parsedAnalysis = JSON.parse(cleanedJson) as object;
+    } catch {
       throw new FailedToGenerateRetirementPlanningRppsAnalysisError();
     }
 
@@ -140,10 +157,33 @@ export class CreateRetirementPlanningRppsResultUseCase {
         retirementPlanningRppsResult,
       );
 
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolRecordQueryResult.analysisToolClient,
+      createdBy: analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+      updatedBy: analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+    });
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      ...analysisToolRecordQueryResult,
+      status: AnalysisStatusEnum.COMPLETED,
+      analysisToolClient,
+      cnisFastAnalysis: null,
+      retirementPlanningRpps,
+      createdBy: analysisToolRecordQueryResult.createdBy.id,
+      updatedBy: organizationMember.id,
+    });
+
+    const updateAnalysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisToolRecord.id,
+        analysisToolRecord,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       retirementPlanningRppsResultTransaction,
       retirementPlanningRppsTransaction,
+      updateAnalysisToolRecordTransaction,
     ]);
 
     await transaction.commit();
