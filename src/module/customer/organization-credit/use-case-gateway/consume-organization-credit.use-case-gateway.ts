@@ -12,6 +12,8 @@ export abstract class ConsumeOrganizationCreditUseCaseGateway {
     organizationId: OrganizationId,
     resourceType: PaymentPlanPaidResourceTypeEnum,
     createdBy: OrganizationMemberId | AuthIdentityId | null,
-    multiplier?: number,
+    metadata?: {
+      explicitCreditCost?: number;
+    },
   ): Promise<TransactionType>;
 }
