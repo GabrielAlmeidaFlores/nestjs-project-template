@@ -36,7 +36,7 @@ export class CalculateMessageCreditCostUseCase {
       token = token + dto.file.length * 2;
     }
 
-    const creditCost = Math.ceil(token * paidResource.creditCost);
+    const creditCost = Math.ceil(token * paidResource.creditCost).toFixed(2);
 
     return CalculateMessageCreditCostResponseDto.build({
       creditCost,
