@@ -78,7 +78,7 @@ export class AiConversationController {
     guard: [AuthGuard, OrganizationSessionGuard],
     http: {
       method: RequestMethod.POST,
-      path: 'calculate-cost/:paymentPlanPaidResourceType',
+      path: 'calculate-cost/:paymentPlanPaidResourceType/message/calculate-cost',
       type: SendMessageRequestDto,
     },
     successResponse: {
