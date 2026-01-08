@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { marked } from 'marked';
 
 import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 
@@ -7,34 +8,35 @@ export class MarkdownConverterService extends MarkdownConverterGateway {
   protected override readonly _type = MarkdownConverterService.name;
 
   public convertToHtml(text: string): string {
-    // Sempre converter, pois pode ter conteúdo misto (HTML + markdown)
     return this.convertMarkdownToHtml(text);
   }
 
   private convertMarkdownToHtml(markdown: string): string {
-    let html = markdown;
+    let html = marked.parse(markdown, {
+      breaks: true,
+      gfm: true,
+      async: false,
+    });
 
-    // Converter bold: **texto** ou __texto__ para <strong>texto</strong>
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
 
-    // Converter italic: *texto* ou _texto_ para <em>texto</em>
     html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
     html = html.replace(/_(.+?)_/g, '<em>$1</em>');
 
-    // Converter links: [texto](url) para <a href="url">texto</a>
     html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
 
-    // Converter listas
     html = this.convertLists(html);
 
-    // Converter quebras de linha duplas em parágrafos
     html = html
       .split('\n\n')
       .map((paragraph) => `<p>${paragraph.trim()}</p>`)
       .join('');
 
-    // Converter quebras de linha simples em <br>
     html = html.replace(/\n/g, '<br>');
 
     return html.trim();
