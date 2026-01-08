@@ -66,7 +66,9 @@ export class SendMessageUseCase {
         organizationSessionData.organizationId,
         paymentPlanPaidResourceType,
         sessionData.authIdentityId,
-        costCalculation.token,
+        {
+          explicitCreditCost: costCalculation.creditCost,
+        },
       );
 
     const conversation =
