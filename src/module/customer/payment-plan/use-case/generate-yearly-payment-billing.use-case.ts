@@ -79,6 +79,7 @@ export class GenerateYearlyPaymentBillingUseCase {
       organization: new OrganizationId(organizationId),
       paymentPlan: paymentPlan.id,
       totalInstallments: dto.installments,
+      canceled: false,
     });
 
     if (paymentPlan.cycle !== PaymentPlanCycleEnum.YEARLY) {
