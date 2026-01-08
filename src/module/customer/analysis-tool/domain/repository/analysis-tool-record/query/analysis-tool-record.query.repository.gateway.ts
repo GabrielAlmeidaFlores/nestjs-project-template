@@ -68,7 +68,7 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     type?: AnalysisToolRecordTypeEnum,
   ): Promise<AnalysisToolRecordStatisticsQueryResult>;
 
-    public abstract findWithRelationsByRetirementPlanningRgpsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+  public abstract findWithRelationsByRetirementPlanningRgpsIdAndOrganizationIdAndAuthIdentityIdOrFail(
     retirementPlanningRgpsId: RetirementPlanningRgpsId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,

@@ -171,6 +171,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       retirementPlanningRpps,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
     });
 
     const updateAnalysisToolRecordTransaction =
