@@ -20,6 +20,7 @@ export class GetOrganizationPaymentPlanWithRelationsQueryResult extends BaseBuil
   public updatedAt: Date;
   public organization: GetOrganizationQueryResult;
   public paymentPlan: GetPaymentPlanQueryResult;
+  public canceled: boolean;
 
   protected override readonly _type =
     GetOrganizationPaymentPlanWithRelationsQueryResult.name;
