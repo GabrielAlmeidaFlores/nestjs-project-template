@@ -30,7 +30,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
       id: dto.json.retirementPlanningRgpsPeriodId,
     });
 
-    const documents = dto.documents?.map(
+    const documents = dto.documents.map(
       (d) =>
         new RetirementPlanningRgpsPeriodDocumentEntity({
           document: d.file.toString(),
@@ -38,7 +38,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
         }),
     );
 
-    const transactions = (documents ?? []).map((doc) =>
+    const transactions = documents.map((doc) =>
       this.retirementPlanningRgpsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRgpsPeriodDocument(
         doc,
       ),

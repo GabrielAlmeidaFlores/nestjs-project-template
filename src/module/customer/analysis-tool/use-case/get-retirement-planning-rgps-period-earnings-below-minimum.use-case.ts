@@ -47,7 +47,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase {
       );
 
     if (
-      retirementPlanningRgpsPeriod.isPendency &&
+      retirementPlanningRgpsPeriod.isPendency === true &&
       retirementPlanningRgpsPeriod.reasonPendency !==
         ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
     ) {

@@ -49,203 +49,191 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
         RetirementPlanningRgpsNotFoundError,
       );
 
-    if (dto.cnisDocument) {
-      const validateCnisDocument =
-        await this.analysisProcessorGateway.validateCnisDocument(
-          dto.cnisDocument.buffer,
-        );
-
-      if (validateCnisDocument === false) {
-        throw new CnisDocumentIsNotValidError();
-      }
-
-      const cnisDocument =
-        dto.cnisDocument !== undefined
-          ? await this.fileProcessorGateway.uploadFile(dto.cnisDocument)
-          : null;
-
-      const retirementPlanningRgpsResult =
-        new RetirementPlanningRgpsResultEntity({
-          ...retirementPlanningRgps.retirementPlanningRgpsResult,
-        });
-
-      const updatedRetirementPlanningRgps = new RetirementPlanningRgpsEntity({
-        ...retirementPlanningRgps,
-        retirementPlanningRgpsResult,
-        cnisDocument,
-      });
-
-      const cnis = await this.analysisProcessorGateway.parseCnisDocument(
+    const validateCnisDocument =
+      await this.analysisProcessorGateway.validateCnisDocument(
         dto.cnisDocument.buffer,
       );
 
-      const earningHistories: RetirementPlanningRgpsEarningsHistoryEntity[] =
-        [];
+    if (validateCnisDocument === false) {
+      throw new CnisDocumentIsNotValidError();
+    }
 
-      const periods =
-        cnis?.socialSecurityRelations !== undefined
-          ? cnis?.socialSecurityRelations.map((relation) => {
-              const typeOfContribution =
-                relation.socialSecurityAffiliationInfo.origemDoVinculo ===
-                  'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' ||
-                relation.socialSecurityAffiliationInfo.origemDoVinculo ===
-                  'SEGURADO ESPECIAL'
-                  ? 'Rural'
-                  : 'Urbano';
+    const cnisDocument = await this.fileProcessorGateway.uploadFile(
+      dto.cnisDocument,
+    );
 
-              const contributionTotal =
-                relation.socialSecurityAffiliationEarningsHistory
-                  .map((earning) => {
+    const retirementPlanningRgpsResult = new RetirementPlanningRgpsResultEntity(
+      {
+        ...retirementPlanningRgps.retirementPlanningRgpsResult,
+      },
+    );
+
+    const updatedRetirementPlanningRgps = new RetirementPlanningRgpsEntity({
+      ...retirementPlanningRgps,
+      retirementPlanningRgpsResult,
+      cnisDocument,
+    });
+
+    const cnis = await this.analysisProcessorGateway.parseCnisDocument(
+      dto.cnisDocument.buffer,
+    );
+
+    const earningHistories: RetirementPlanningRgpsEarningsHistoryEntity[] = [];
+
+    const periods =
+      cnis.socialSecurityRelations !== undefined
+        ? cnis.socialSecurityRelations.map((relation) => {
+            const typeOfContribution =
+              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
+                'PERÍODO DE ATIVIDADE DE SEGURADO ESPECIAL' ||
+              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
+                'SEGURADO ESPECIAL'
+                ? 'Rural'
+                : 'Urbano';
+
+            const contributionTotal =
+              relation.socialSecurityAffiliationEarningsHistory
+                .map((earning) => {
+                  const remuneration = this.parseRemunerationString(
+                    earning.remuneracao,
+                  );
+                  if (remuneration === null || isNaN(remuneration)) {
+                    return 0;
+                  }
+                  return remuneration;
+                })
+                .reduce((acc, curr) => acc + curr, 0);
+
+            const contributionAverage =
+              relation.socialSecurityAffiliationEarningsHistory.length > 0
+                ? contributionTotal /
+                  relation.socialSecurityAffiliationEarningsHistory.length
+                : 0;
+
+            const competenceBelowTheMinimum =
+              relation.socialSecurityAffiliationEarningsHistory.some(
+                (earning) => {
+                  return TetoInssData.some((teto) => {
+                    const competencia = earning.competencia;
+                    if (!competencia) {
+                      return false;
+                    }
+                    const competenciaYear = competencia.getFullYear();
+                    if (teto.ano !== competenciaYear) {
+                      return false;
+                    }
                     const remuneration = this.parseRemunerationString(
                       earning.remuneracao,
                     );
-                    if (!remuneration) {
-                      return 0;
-                    }
-                    if (isNaN(remuneration)) {
-                      return 0;
-                    }
-                    return remuneration;
-                  })
-                  .reduce((acc, curr) => acc + curr, 0);
-
-              const contributionAverage =
-                relation.socialSecurityAffiliationEarningsHistory.length > 0
-                  ? contributionTotal /
-                    relation.socialSecurityAffiliationEarningsHistory.length
-                  : 0;
-
-              const competenceBelowTheMinimum =
-                relation.socialSecurityAffiliationEarningsHistory.some(
-                  (earning) => {
-                    return TetoInssData.some((teto) => {
-                      const competencia = earning.competencia;
-                      if (!competencia) {
-                        return false;
-                      }
-                      const competenciaYear = competencia.getFullYear();
-                      if (teto.ano !== competenciaYear) {
-                        return false;
-                      }
-                      const remuneration = this.parseRemunerationString(
-                        earning.remuneracao,
-                      );
-                      if (!remuneration) {
-                        return false;
-                      }
-                      if (isNaN(remuneration)) {
-                        return false;
-                      }
-                      return remuneration < teto.salarioMinimo;
-                    });
-                  },
-                );
-
-              const indicadorPendencia = ['PEXT'];
-
-              const delayPayment =
-                relation.socialSecurityAffiliationEarningsHistory.some(
-                  (earning) => {
-                    if (!earning.indicadores) {
+                    if (remuneration === null || isNaN(remuneration)) {
                       return false;
                     }
-                    return indicadorPendencia.includes(earning.indicadores);
-                  },
-                );
+                    return remuneration < teto.salarioMinimo;
+                  });
+                },
+              );
 
-              const reasonPendency =
-                relation.socialSecurityAffiliationInfo.dataFim === null
-                  ? ReasonPendencyEnum.LEAVE_DATE
-                  : competenceBelowTheMinimum
-                    ? ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
-                    : delayPayment
-                      ? ReasonPendencyEnum.INCONSISTENT_COMPETENCE
-                      : '';
+            const indicadorPendencia = ['PEXT'];
 
-              const period = new RetirementPlanningRgpsPeriodEntity({
-                periodName:
-                  relation.socialSecurityAffiliationInfo.origemDoVinculo ??
-                  null,
-                periodStart:
-                  relation.socialSecurityAffiliationInfo.dataInicio ?? null,
-                periodEnd:
-                  relation.socialSecurityAffiliationInfo.dataFim ?? null,
-                category:
-                  relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ??
-                  null,
-                isPendency: reasonPendency !== '',
-                competenceBelowTheMinimum,
-                contributionAverage,
-                typeOfContribution,
-                retirementPlanningRgps: updatedRetirementPlanningRgps,
-                reasonPendency,
-                status: reasonPendency === '',
-              });
+            const delayPayment =
+              relation.socialSecurityAffiliationEarningsHistory.some(
+                (earning) => {
+                  if (
+                    earning.indicadores === undefined ||
+                    earning.indicadores === ''
+                  ) {
+                    return false;
+                  }
+                  return indicadorPendencia.includes(earning.indicadores);
+                },
+              );
 
-              const earnings =
-                relation.socialSecurityAffiliationEarningsHistory ?? [];
+            const reasonPendency =
+              relation.socialSecurityAffiliationInfo.dataFim === undefined
+                ? ReasonPendencyEnum.LEAVE_DATE
+                : competenceBelowTheMinimum
+                  ? ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
+                  : delayPayment
+                    ? ReasonPendencyEnum.INCONSISTENT_COMPETENCE
+                    : '';
 
-              if (earnings.length > 0) {
-                earnings.map((e) => {
-                  const competenceBelowTheMinimumSalary =
-                    relation.socialSecurityAffiliationEarningsHistory.some(
-                      () => {
-                        if (!e.competencia) {
-                          return false;
-                        }
+            const period = new RetirementPlanningRgpsPeriodEntity({
+              periodName:
+                relation.socialSecurityAffiliationInfo.origemDoVinculo ?? null,
+              periodStart:
+                relation.socialSecurityAffiliationInfo.dataInicio ?? null,
+              periodEnd: relation.socialSecurityAffiliationInfo.dataFim ?? null,
+              category:
+                relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ??
+                null,
+              isPendency: reasonPendency !== '',
+              competenceBelowTheMinimum,
+              contributionAverage,
+              typeOfContribution,
+              retirementPlanningRgps: updatedRetirementPlanningRgps,
+              reasonPendency,
+              status: reasonPendency === '',
+            });
 
-                        const year = e.competencia.getFullYear();
+            const earnings = relation.socialSecurityAffiliationEarningsHistory;
 
-                        const findSalary = TetoInssData.find((teto) => {
-                          return teto.ano === year;
-                        });
+            if (earnings.length > 0) {
+              earnings.map((e) => {
+                const competenceBelowTheMinimumSalary =
+                  relation.socialSecurityAffiliationEarningsHistory.some(() => {
+                    if (!e.competencia) {
+                      return false;
+                    }
 
-                        if (!findSalary) {
-                          return false;
-                        }
-                        const salarioMinimo = findSalary.salarioMinimo;
-                        const remuneration = this.parseRemunerationString(
-                          e.remuneracao,
-                        );
-                        if (remuneration === null) {
-                          return false;
-                        }
-                        if (isNaN(remuneration)) {
-                          return false;
-                        }
+                    const year = e.competencia.getFullYear();
 
-                        return remuneration < salarioMinimo;
-                      },
-                    );
-
-                  const earningEntity =
-                    new RetirementPlanningRgpsEarningsHistoryEntity({
-                      competence: e.competencia ?? null,
-                      remuneration: e.remuneracao ?? null,
-                      indicators: e.indicadores ?? null,
-                      paymentDate: e.dataPgto ?? null,
-                      contribution: e.contribuicao ?? null,
-                      contributionSalary: e.salarioContribuicao ?? null,
-                      retirementPlanningRgps: updatedRetirementPlanningRgps,
-                      retirementPlanningRgpsPeriod: period,
-                      competenceBelowTheMinimum:
-                        competenceBelowTheMinimumSalary,
+                    const findSalary = TetoInssData.find((teto) => {
+                      return teto.ano === year;
                     });
-                  earningHistories.push(earningEntity);
-                });
-              }
 
-              return period;
-            })
-          : [];
+                    if (!findSalary) {
+                      return false;
+                    }
+                    const salarioMinimo = findSalary.salarioMinimo;
+                    const remuneration = this.parseRemunerationString(
+                      e.remuneracao,
+                    );
+                    if (remuneration === null) {
+                      return false;
+                    }
+                    if (isNaN(remuneration)) {
+                      return false;
+                    }
 
-      await this.createOnDatabase(
-        retirementPlanningRgps.id,
-        updatedRetirementPlanningRgps,
-        periods,
-        earningHistories,
-      );
-    }
+                    return remuneration < salarioMinimo;
+                  });
+
+                const earningEntity =
+                  new RetirementPlanningRgpsEarningsHistoryEntity({
+                    competence: e.competencia ?? null,
+                    remuneration: e.remuneracao ?? null,
+                    indicators: e.indicadores ?? null,
+                    paymentDate: e.dataPgto ?? null,
+                    contribution: e.contribuicao ?? null,
+                    contributionSalary: e.salarioContribuicao ?? null,
+                    retirementPlanningRgps: updatedRetirementPlanningRgps,
+                    retirementPlanningRgpsPeriod: period,
+                    competenceBelowTheMinimum: competenceBelowTheMinimumSalary,
+                  });
+                earningHistories.push(earningEntity);
+              });
+            }
+
+            return period;
+          })
+        : [];
+
+    await this.createOnDatabase(
+      retirementPlanningRgps.id,
+      updatedRetirementPlanningRgps,
+      periods,
+      earningHistories,
+    );
 
     return CreateRetirementPlanningRgpsCnisResponseDto.build({
       retirementPlanningRgpsId: retirementPlanningRgps.id,
@@ -287,7 +275,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
   }
 
   private parseRemunerationString(input?: string): number | null {
-    if (!input) {
+    if (input === undefined) {
       return null;
     }
     const raw = input.trim();
