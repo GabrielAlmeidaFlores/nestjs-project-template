@@ -10,10 +10,12 @@ import {
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateConversationRequestDto } from '@module/customer/ai-conversation/dto/request/create-conversation.request.dto';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
+import { CalculateMessageCreditCostResponseDto } from '@module/customer/ai-conversation/dto/response/calculate-message-credit-cost.response.dto';
 import { CreateConversationResponseDto } from '@module/customer/ai-conversation/dto/response/create-conversation.response.dto';
 import { GetMessagesResponseDto } from '@module/customer/ai-conversation/dto/response/get-messages.response.dto';
 import { ListConversationsResponseDto } from '@module/customer/ai-conversation/dto/response/list-conversations.response.dto';
 import { SendMessageResponseDto } from '@module/customer/ai-conversation/dto/response/send-message.response.dto';
+import { CalculateMessageCreditCostUseCase } from '@module/customer/ai-conversation/use-case/calculate-message-credit-cost.use-case';
 import { CreateConversationUseCase } from '@module/customer/ai-conversation/use-case/create-conversation.use-case';
 import { GetMessagesUseCase } from '@module/customer/ai-conversation/use-case/get-messages.use-case';
 import { ListConversationsUseCase } from '@module/customer/ai-conversation/use-case/list-conversations.use-case';
@@ -40,6 +42,7 @@ export class AiConversationController {
     private readonly sendMessageUseCase: SendMessageUseCase,
     private readonly getMessagesUseCase: GetMessagesUseCase,
     private readonly listConversationsUseCase: ListConversationsUseCase,
+    private readonly calculateMessageCreditCostUseCase: CalculateMessageCreditCostUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -67,6 +70,36 @@ export class AiConversationController {
     return await this.createConversationUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    guard: [AuthGuard, OrganizationSessionGuard],
+    http: {
+      method: RequestMethod.POST,
+      path: 'calculate-cost/:paymentPlanPaidResourceType',
+      type: SendMessageRequestDto,
+    },
+    successResponse: {
+      description: 'Custo de créditos calculado com sucesso',
+      statusCode: HttpStatus.OK,
+      type: CalculateMessageCreditCostResponseDto,
+    },
+    summary: 'Calcular custo de créditos de uma mensagem',
+    tag: ['ai-conversation'],
+    userLevel: [UserLevelEnum.CUSTOMER],
+  })
+  public async calculateMessageCreditCost(
+    @Param(
+      'paymentPlanPaidResourceType',
+      new ParseEnumPipe(PaymentPlanPaidResourceTypeEnum),
+    )
+    paymentPlanPaidResourceType: PaymentPlanPaidResourceTypeEnum,
+    @Body() dto: SendMessageRequestDto,
+  ): Promise<CalculateMessageCreditCostResponseDto> {
+    return await this.calculateMessageCreditCostUseCase.execute(
+      paymentPlanPaidResourceType,
       dto,
     );
   }
