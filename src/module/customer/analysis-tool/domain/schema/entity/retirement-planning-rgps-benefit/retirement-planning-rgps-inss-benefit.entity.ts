@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsInssBenefitEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-benefit/retirement-planning-rgps-inss-benefit.entity.props.interface';
 import { RetirementPlanningRgpsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-benefit/value-object/retirement-planning-rgps-inss-benefit-id.value-object';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RetirementPlanningRgpsInssBenefitEntity extends BaseEntity<RetirementPlanningRgpsInssBenefitId> {

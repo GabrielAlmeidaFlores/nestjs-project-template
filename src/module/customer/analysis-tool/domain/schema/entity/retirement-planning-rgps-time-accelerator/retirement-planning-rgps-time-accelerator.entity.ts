@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsTimeAcceleratorEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator.entity.props.interface';
 import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RetirementPlanningRgpsTimeAcceleratorEntity extends BaseEntity<RetirementPlanningRgpsTimeAcceleratorId> {

@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { GetRetirementPlanningRgpsAnalysisResultQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-analysis-result/query/result/get-retirement-planning-rgps-analysis-result.query.result';
-import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 
 @Injectable()
 export class GetRetirementPlanningRgpsAnalysisResultQueryResultAutoMapperProfile {

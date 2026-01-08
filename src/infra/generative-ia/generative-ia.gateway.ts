@@ -13,5 +13,6 @@ export abstract class GenerativeIaGateway {
   public abstract generateHighQualityResponseFromPromptAndFilesWithContract(
     props: GenerateResponseInputModel,
     responseSchema?: SchemaUnion,
+    responseMimeType?: string,
   ): Promise<string | null>;
 }

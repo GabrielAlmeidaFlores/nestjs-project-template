@@ -37,7 +37,8 @@ export class DataRetirementPlanningRgpsPeriodBulkItemRequestDto extends BaseBuil
   @RequestDtoBooleanProperty({ example: true })
   public status: boolean;
 
-  protected override readonly _type = DataRetirementPlanningRgpsPeriodBulkItemRequestDto.name;
+  protected override readonly _type =
+    DataRetirementPlanningRgpsPeriodBulkItemRequestDto.name;
 }
 
 @RequestDto()
@@ -45,8 +46,12 @@ export class CreateMultipleRetirementPlanningRgpsPeriodRequestDto extends BaseBu
   @RequestDtoValueObjectProperty(RetirementPlanningRgpsId)
   public retirementPlanningRgpsId: RetirementPlanningRgpsId;
 
-  @RequestDtoObjectProperty(() => DataRetirementPlanningRgpsPeriodBulkItemRequestDto, { isArray: true })
+  @RequestDtoObjectProperty(
+    () => DataRetirementPlanningRgpsPeriodBulkItemRequestDto,
+    { isArray: true },
+  )
   public periods: DataRetirementPlanningRgpsPeriodBulkItemRequestDto[];
 
-  protected override readonly _type = CreateMultipleRetirementPlanningRgpsPeriodRequestDto.name;
+  protected override readonly _type =
+    CreateMultipleRetirementPlanningRgpsPeriodRequestDto.name;
 }

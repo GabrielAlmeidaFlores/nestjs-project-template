@@ -14,8 +14,7 @@ import type { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/
 import type { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
 import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
-export interface LegalPleadingEntityPropsInterface
-  extends BaseEntityPropsInterface<LegalPleadingId> {
+export interface LegalPleadingEntityPropsInterface extends BaseEntityPropsInterface<LegalPleadingId> {
   status: AnalysisStatusEnum;
   code: LegalPleadingCode;
   statementOfFacts?: string | null;
