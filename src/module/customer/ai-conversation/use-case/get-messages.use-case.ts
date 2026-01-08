@@ -64,6 +64,9 @@ export class GetMessagesUseCase {
           role: msg.role,
           timestamp: msg.timestamp,
           paymentPlanPaidResourceType: msg.paymentPlanPaidResourceType ?? null,
+          ...(msg.context !== undefined && msg.context !== ''
+            ? { context: msg.context }
+            : {}),
         }),
       ),
       total: messagesWithHtml.length,
