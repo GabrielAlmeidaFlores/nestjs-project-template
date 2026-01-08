@@ -92,6 +92,7 @@ export class SendMessageUseCase {
       content: dto.json.message,
       timestamp: new Date(),
       paymentPlanPaidResourceType,
+      ...(dto.json.context !== undefined ? { context: dto.json.context } : {}),
     });
 
     const uploadedFiles: Array<{
@@ -170,6 +171,9 @@ export class SendMessageUseCase {
         timestamp: userMessage.timestamp,
         paymentPlanPaidResourceType:
           userMessage.paymentPlanPaidResourceType ?? null,
+        ...(userMessage.context !== undefined
+          ? { context: userMessage.context }
+          : {}),
       }),
       ...(uploadedFiles.length > 0
         ? {
@@ -203,6 +207,7 @@ ${dto.json.message}
 
 organizationId: ${organizationSessionData.organizationId.toString()}
 authIdentityId: ${sessionData.authIdentityId.toString()}
+context: ${dto.json.context ?? 'N/A'}
 `;
 
     const toolHandlers: Record<

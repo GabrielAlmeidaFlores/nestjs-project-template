@@ -10,6 +10,9 @@ export class SendMessageJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: true })
   public message: string;
 
+  @RequestDtoStringProperty({ required: false })
+  public context?: string;
+
   protected override readonly _type = SendMessageJsonRequestDto.name;
 }
 

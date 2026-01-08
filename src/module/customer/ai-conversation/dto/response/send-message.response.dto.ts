@@ -26,6 +26,9 @@ export class MessageItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, { required: false })
   public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
 
+  @ResponseDtoStringProperty({ required: false })
+  public context?: string;
+
   protected override readonly _type = MessageItemResponseDto.name;
 }
 
@@ -45,6 +48,9 @@ export class FileItemResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, { required: false })
   public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public context?: string;
 
   protected override readonly _type = FileItemResponseDto.name;
 }
