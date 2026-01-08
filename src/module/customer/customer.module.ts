@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AccountModule } from '@module/customer/account/account.module';
+import { AiConversationModule } from '@module/customer/ai-conversation/ai-conversation.module';
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
 import { LegalProceedingModule } from '@module/customer/legal-proceeding/legal-proceeding.module';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -15,6 +16,7 @@ import { TranscriptionModule } from '@module/customer/transcription/transcriptio
     LegalProceedingModule,
     PaymentPlanModule,
     OrganizationCreditModule,
+    AiConversationModule,
   ],
   controllers: [],
   providers: [],
