@@ -67,7 +67,7 @@ Análise processada do CNIS:
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
-    return await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+    return await this.generativeIaGateway.generateFlashLiteResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
