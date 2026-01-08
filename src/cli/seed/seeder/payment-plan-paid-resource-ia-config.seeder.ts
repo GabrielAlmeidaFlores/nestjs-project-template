@@ -301,7 +301,9 @@ Analise criteriosamente:
 
 Forneça uma análise técnica completa, fundamentada na legislação do RPPS e nas Emendas Constitucionais 103/2019 e 20/1998. Use linguagem profissional clara. Apresente cálculos quando necessário. Destaque os pontos críticos e oportunidades. Seja preciso nas datas e prazos.
 
-A análise deve ser suficientemente detalhada para fundamentar decisões importantes sobre a aposentadoria do servidor.`,
+A análise deve ser suficientemente detalhada para fundamentar decisões importantes sobre a aposentadoria do servidor.
+
+**IMPORTANTE: Sua resposta DEVE ser retornada EXCLUSIVAMENTE em formato JSON seguindo o schema fornecido. Não retorne markdown, texto narrativo ou qualquer outro formato. Apenas JSON válido estruturado conforme o schema.**`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
