@@ -11,6 +11,7 @@ export class MessageModel extends BaseBuildableObject {
   public content: string;
   public timestamp: Date;
   public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
+  public context?: string;
 
   protected override readonly _type = MessageModel.name;
 }

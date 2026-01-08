@@ -27,6 +27,9 @@ export class MessageDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, { required: false })
   public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
 
+  @ResponseDtoStringProperty({ required: false })
+  public context?: string;
+
   protected override readonly _type = MessageDto.name;
 }
 
