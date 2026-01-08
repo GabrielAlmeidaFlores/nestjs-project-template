@@ -36,7 +36,9 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
     ): GetAnalysisToolClientWithRelationsQueryResult => {
       if (
         !source.analysisToolClientInssBenefit ||
-        !source.analysisToolClientLegalProceeding
+        !source.analysisToolClientLegalProceeding ||
+        !source.createdBy ||
+        !source.updatedBy
       ) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetAnalysisToolClientWithRelationsQueryResult.name,
@@ -61,7 +63,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
       );
 
       const createdBy = this.mapper.map(
-        source.updatedBy,
+        source.createdBy,
         OrganizationMemberTypeormEntity,
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );
@@ -120,7 +122,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
       );
 
       const createdBy = this.mapper.map(
-        source.updatedBy,
+        source.createdBy,
         GetOrganizationMemberWithCustomerRelationQueryResult,
         OrganizationMemberTypeormEntity,
       );

@@ -21,22 +21,23 @@ export class GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile {
   }
 
   private mapOrmEntityToDomainEntity(): void {
-    const convertOrmEntityToDomainEntity = (
+    const convert = (
       source: AnalysisToolClientLegalProceedingTypeormEntity,
     ): GetAnalysisToolClientLegalProceedingQueryResult => {
       return GetAnalysisToolClientLegalProceedingQueryResult.build({
-        ...source,
         id: new AnalysisToolClientLegalProceedingId(source.id),
+        legalProceedingNumber: source.legalProceedingNumber,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
-
-    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
 
     createMap(
       this.mapper,
       AnalysisToolClientLegalProceedingTypeormEntity,
       GetAnalysisToolClientLegalProceedingQueryResult,
-      mappingFunction,
+      constructUsing(convert),
     );
   }
 

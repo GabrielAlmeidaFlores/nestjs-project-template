@@ -6,7 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class AuthIdentitySignUpResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AuthIdentityId)
-  public authIdentity: AuthIdentityId;
+  public authIdentityId: AuthIdentityId;
 
   protected override readonly _type = AuthIdentitySignUpResponseDto.name;
 }

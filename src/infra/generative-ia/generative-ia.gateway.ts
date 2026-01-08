@@ -6,6 +6,10 @@ export abstract class GenerativeIaGateway {
     props: GenerateResponseInputModel,
   ): Promise<string | null>;
 
+  public abstract generateFlashLiteResponseFromPromptAndFiles(
+    props: GenerateResponseInputModel,
+  ): Promise<string | null>;
+
   public abstract generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null>;

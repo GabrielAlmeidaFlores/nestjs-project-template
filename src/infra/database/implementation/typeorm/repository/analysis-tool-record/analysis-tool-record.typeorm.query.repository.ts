@@ -17,11 +17,16 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
+import {
+  AnalysisToolRecordStatisticsQueryResult,
+  MonthlyStatisticsQueryResult,
+} from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -298,9 +303,11 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
           },
           cnisFastAnalysis: {
@@ -310,9 +317,11 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },
@@ -328,8 +337,8 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
-  public async findWithRelationsByRetirementPlanningRgpsIdAndOrganizationIdAndAuthIdentityIdOrFail(
-    retirementPlanningRgpsId: RetirementPlanningRgpsId,
+  public async findWithRelationsByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    retirementPlanningRppsId: RetirementPlanningRppsId,
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
@@ -337,8 +346,8 @@ export class AnalysisToolRecordTypeormQueryRepository
     const data = await this.findOneOrFail(
       {
         where: {
-          retirementPlanningRgps: {
-            id: retirementPlanningRgpsId.toString(),
+          retirementPlanningRpps: {
+            id: retirementPlanningRppsId.toString(),
           },
           createdBy: {
             organization: {
@@ -357,23 +366,37 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
           },
-          cnisFastAnalysis: {
-            cnisFastAnalysisResult: true,
-            cnisFastAnalysisInssBenefit: true,
-            cnisFastAnalysisLegalProceeding: true,
+          retirementPlanningRpps: {
+            retirementPlanningRppsInssBenefit: true,
+            retirementPlanningRppsLegalProceeding: true,
+            retirementPlanningRppsResult: true,
+            documents: true,
+            remunerations: true,
+            periods: {
+              specialTimePeriod: {
+                specialTimeDocuments: true,
+              },
+              disabilityPeriod: {
+                cid: true,
+                disabilityDocuments: true,
+              },
+            },
           },
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
-          retirementPlanningRgps: true,
         },
       },
       err,
@@ -388,21 +411,121 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async getStatisticsByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    startDate: Date,
+    endDate: Date,
+    type?: AnalysisToolRecordTypeEnum,
+  ): Promise<AnalysisToolRecordStatisticsQueryResult> {
+    const startDateNormalized = new Date(startDate);
+    startDateNormalized.setHours(0, 0, 0, 0);
+
+    const endDateNormalized = new Date(endDate);
+    const HOURS_IN_DAY = 23;
+    const MINUTES_IN_HOUR = 59;
+    const SECONDS_IN_MINUTE = 59;
+    const MILLISECONDS_IN_SECOND = 999;
+    endDateNormalized.setHours(
+      HOURS_IN_DAY,
+      MINUTES_IN_HOUR,
+      SECONDS_IN_MINUTE,
+      MILLISECONDS_IN_SECOND,
+    );
+
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdBy: {
+        customer: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
+        organization: {
+          id: organizationId.toString(),
+        },
+      },
+    };
+
+    if (typeof type !== 'undefined') {
+      whereClause.type = type;
+    }
+
+    const records = await this.find({
+      where: whereClause,
+      select: {
+        id: true,
+        createdAt: true,
+      },
+    });
+
+    const filteredRecords = records.filter(
+      (record) =>
+        record.createdAt >= startDateNormalized &&
+        record.createdAt <= endDateNormalized,
+    );
+
+    const monthlyStats = new Map<string, number>();
+    let totalCount = 0;
+
+    for (const record of filteredRecords) {
+      const date = new Date(record.createdAt);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      const currentCount = monthlyStats.get(monthKey) ?? 0;
+      monthlyStats.set(monthKey, currentCount + 1);
+      totalCount++;
+    }
+
+    const allMonths = new Set<string>();
+    const currentDate = new Date(startDateNormalized);
+    while (currentDate <= endDateNormalized) {
+      const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+      allMonths.add(monthKey);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+
+    for (const monthKey of allMonths) {
+      if (!monthlyStats.has(monthKey)) {
+        monthlyStats.set(monthKey, 0);
+      }
+    }
+
+    const monthlyStatistics = Array.from(monthlyStats.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([monthKey, count]) => {
+        const [yearStr = '0', monthStr = '00'] = monthKey.split('-');
+        return MonthlyStatisticsQueryResult.build({
+          year: parseInt(yearStr, 10),
+          month: monthStr,
+          count,
+        });
+      });
+
+    return AnalysisToolRecordStatisticsQueryResult.build({
+      totalCount,
+      monthlyStatistics,
+    });
+  }
+
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClient: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientLegalProceeding: true,
           analysisToolClientInssBenefit: true,
@@ -418,8 +541,8 @@ export class AnalysisToolRecordTypeormQueryRepository
 
   private getEntityRelationsKey(): (
     | 'cnisFastAnalysis'
-    | 'retirementPlanningRgps'
+    | 'retirementPlanningRpps'
   )[] {
-    return ['cnisFastAnalysis', 'retirementPlanningRgps'];
+    return ['cnisFastAnalysis', 'retirementPlanningRpps'];
   }
 }
