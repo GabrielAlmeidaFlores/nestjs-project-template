@@ -28,15 +28,15 @@ export class CalculateMessageCreditCostUseCase {
       throw new PaidResourceUnavailableError();
     }
 
-    const words = dto.json.message.trim().length;
+    const messageLength = dto.json.message.trim().length;
 
-    let token = words / 2;
+    let token = messageLength / 2;
 
     if (dto.file) {
       token = token + dto.file.length * 2;
     }
 
-    const creditCost = (words / 2) * paidResource.creditCost;
+    const creditCost = Math.ceil(token * paidResource.creditCost);
 
     return CalculateMessageCreditCostResponseDto.build({
       creditCost,
