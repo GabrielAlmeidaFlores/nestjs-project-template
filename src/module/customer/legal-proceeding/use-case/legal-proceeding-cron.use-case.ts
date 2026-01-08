@@ -5,64 +5,24 @@ import { isEqual } from 'lodash';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
-import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { LegalProceedingDetailEntity } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/legal-proceeding-detail.entity';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
+import {
+  ApiResponseInterface,
+  DestinatarioAdvogadoInterface,
+  DestinatarioInterface,
+  ItemInterface,
+} from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/model/output/comunicacao-pje-legal-proceeding-response.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
-
-export interface ApiResponseInterface {
-  status?: string | undefined;
-  message?: string | undefined;
-  count?: number | undefined;
-  items?: ItemInterface[] | undefined;
-}
-
-export interface ItemInterface {
-  id?: number | undefined;
-  data_disponibilizacao?: string | undefined;
-  siglaTribunal?: string | undefined;
-  tipoComunicacao?: string | undefined;
-  nomeOrgao?: string | undefined;
-  idOrgao?: number | undefined;
-  texto?: string | undefined;
-  numero_processo?: string | undefined;
-  meio?: string | undefined;
-  link?: string | undefined;
-  tipoDocumento?: string | undefined;
-  nomeClasse?: string | undefined;
-  codigoClasse?: string | undefined;
-  numeroComunicacao?: number | undefined;
-  ativo?: boolean | undefined;
-  hash?: string | undefined;
-  status?: string | undefined;
-  motivo_cancelamento?: string | null | undefined;
-  data_cancelamento?: string | null | undefined;
-  datadisponibilizacao?: string | undefined;
-  meiocompleto?: string | undefined;
-  numeroprocessocommascara?: string | undefined;
-  destinatarios?: DestinatarioInterface[] | undefined;
-  destinatarioadvogados?: DestinatarioAdvogadoInterface[] | undefined;
-}
-
-export interface DestinatarioInterface {
-  comunicacao_id?: number | undefined;
-  nome?: string | undefined;
-  polo?: string | undefined;
-}
-
-export interface DestinatarioAdvogadoInterface {
-  comunicacao_id?: number | undefined;
-  nome?: string | undefined;
-  polo?: string | undefined;
-}
 
 @Injectable()
 export class LegalProceedingCronUseCase {
@@ -186,7 +146,7 @@ export class LegalProceedingCronUseCase {
       proceeding.analysisToolClient as unknown as AnalysisToolClientEntity;
 
     const firstItem =
-      extractData?.items && extractData.items.length > 0
+      extractData.items && extractData.items.length > 0
         ? extractData.items[0]
         : null;
 
@@ -197,7 +157,10 @@ export class LegalProceedingCronUseCase {
         ),
         analysisToolClient,
         legalProceedingNumber: proceeding.legalProceedingNumber,
-        type: firstItem?.tipoComunicacao ?? 'N/A' ?? undefined,
+        type:
+          firstItem !== null && firstItem?.tipoComunicacao !== undefined
+            ? firstItem.tipoComunicacao
+            : 'Desconhecido',
         status:
           firstItem !== null && firstItem?.status !== undefined
             ? firstItem.status === 'P'
