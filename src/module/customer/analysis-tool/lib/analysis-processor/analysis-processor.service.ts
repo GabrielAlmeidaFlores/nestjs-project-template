@@ -112,19 +112,23 @@ Análise processada do CNIS:
           properties: {
             totalContributionTime: {
               type: 'string',
-              description: 'Tempo total de contribuição de serviço',
+              description:
+                'Tempo total de contribuição de serviço. Exemplo: 44 anos, 3 meses e 12 dias',
             },
             publicServiceContributionTime: {
               type: 'string',
-              description: 'Tempo total de contribuição em serviço público',
+              description:
+                'Tempo total de contribuição em serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
             },
             positionTenureTime: {
               type: 'string',
-              description: 'Tempo total no cargo',
+              description:
+                'Tempo total no cargo. Exemplo: 10 anos, 6 meses e 15 dias',
             },
             insuredAge: {
               type: 'string',
-              description: 'Idade atual do segurado',
+              description:
+                'Idade atual do segurado. Exemplo: 44 anos, 3 meses e 12 dias',
             },
             insuredProfession: {
               type: 'string',
@@ -132,7 +136,8 @@ Análise processada do CNIS:
             },
             totalCareerTime: {
               type: 'string',
-              description: 'Tempo total de carreira',
+              description:
+                'Tempo total de carreira. Exemplo: 50 anos, 1 mês e 20 dias',
             },
             publicServiceStartDate: {
               type: 'string',

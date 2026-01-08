@@ -4,7 +4,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class CreateRetirementPlanningRppsResultResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(Object)
+  @ResponseDtoObjectProperty(() => Object)
   public readonly retirementPlanningRppsCompleteAnalysis: object;
 
   protected override readonly _type =
