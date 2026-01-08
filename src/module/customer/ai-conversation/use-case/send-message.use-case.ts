@@ -91,6 +91,7 @@ export class SendMessageUseCase {
       role: MessageRoleEnum.USER,
       content: dto.json.message,
       timestamp: new Date(),
+      paymentPlanPaidResourceType,
     });
 
     const uploadedFiles: Array<{
@@ -112,6 +113,7 @@ export class SendMessageUseCase {
           role: MessageRoleEnum.USER,
           content,
           timestamp: new Date(),
+          paymentPlanPaidResourceType,
         });
 
         uploadedFiles.push({ fileName, fileMessage });
@@ -142,6 +144,7 @@ export class SendMessageUseCase {
       role: MessageRoleEnum.ASSISTANT,
       content: aiResponse,
       timestamp: new Date(),
+      paymentPlanPaidResourceType,
     });
 
     await this.conversationCacheGateway.addMessage(assistantMessage);

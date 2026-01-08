@@ -121,6 +121,7 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
         role: message.role,
         content: message.content,
         timestamp: message.timestamp.getTime(),
+        paymentPlanPaidResourceType: message.paymentPlanPaidResourceType,
       }),
     );
 
@@ -147,6 +148,7 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
         role: MessageRoleEnum;
         content: string;
         timestamp: number;
+        paymentPlanPaidResourceType?: string;
       };
 
       return MessageModel.build({
@@ -155,6 +157,8 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
         role: parsed.role,
         content: parsed.content,
         timestamp: new Date(parsed.timestamp),
+        paymentPlanPaidResourceType:
+          parsed.paymentPlanPaidResourceType as never,
       });
     });
   }
@@ -224,6 +228,6 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
 
     conversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 
-    return limit ? conversations.slice(0, limit) : conversations;
+    return limit !== undefined ? conversations.slice(0, limit) : conversations;
   }
 }
