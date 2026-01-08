@@ -35,5 +35,6 @@ export abstract class ConversationCacheGateway {
   public abstract listConversationsByAuthIdentity(
     authIdentityId: AuthIdentityId,
     limit?: number,
+    search?: string,
   ): Promise<ConversationModel[]>;
 }

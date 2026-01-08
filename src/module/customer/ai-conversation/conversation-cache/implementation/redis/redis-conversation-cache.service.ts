@@ -182,6 +182,7 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
   public async listConversationsByAuthIdentity(
     authIdentityId: AuthIdentityId,
     limit?: number,
+    search?: string,
   ): Promise<ConversationModel[]> {
     const pattern = `${CONVERSATION_KEY_PREFIX}*`;
     const keys = await this.redis.keys(pattern);
@@ -191,6 +192,7 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
     }
 
     const conversations: ConversationModel[] = [];
+    const searchLower = search?.toLowerCase().trim();
 
     for (const key of keys) {
       const data = await this.redis.get(key);
@@ -208,6 +210,15 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
       };
 
       if (parsed.authIdentityId !== authIdentityId.toString()) {
+        continue;
+      }
+
+      // Aplicar filtro de busca por título
+      if (
+        searchLower !== undefined &&
+        searchLower !== '' &&
+        !parsed.title.toLowerCase().includes(searchLower)
+      ) {
         continue;
       }
 
