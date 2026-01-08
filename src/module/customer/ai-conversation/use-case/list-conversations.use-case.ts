@@ -24,7 +24,6 @@ export class ListConversationsUseCase {
     const conversations =
       await this.conversationCacheGateway.listConversationsByAuthIdentity(
         sessionData.authIdentityId,
-        dto.limit * dto.page,
       );
 
     const startIndex = (dto.page - 1) * dto.limit;
