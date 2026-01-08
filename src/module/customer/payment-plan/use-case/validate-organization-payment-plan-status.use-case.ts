@@ -247,6 +247,17 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
         .toDate();
     }
 
+    if (response.nextDueDate) {
+      const nextDueDateNormalized = moment(response.nextDueDate).startOf('day');
+      const todayNormalized = moment().startOf('day');
+
+      if (nextDueDateNormalized.isSame(todayNormalized)) {
+        response.nextDueDate = moment(response.nextDueDate)
+          .add(1, 'month')
+          .toDate();
+      }
+    }
+
     return response;
   }
 
