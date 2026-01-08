@@ -10,7 +10,6 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { ListAnalysisToolClientLegalProceedingByLegalProceedingNumberQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-by-legal-proceeding-number.query.param.gateway';
 import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
-import { ListLegalProceedingCustomerQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-legal-proceeding-customer.query.param.gateway';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 
@@ -192,64 +191,6 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
       },
     });
 
-    const mappedData = this.mapperGateway.mapArray(
-      data.resource,
-      AnalysisToolClientLegalProceedingTypeormEntity,
-      GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
-    );
-
-    return new ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>(
-      {
-        ...data,
-        resource: mappedData,
-      },
-    );
-  }
-
-  public async listByAnalysisToolClientId(
-    listData: ListLegalProceedingCustomerQueryParamGateway,
-  ): Promise<
-    ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>
-  > {
-    const where =
-      listData.analysisToolClientId !== null
-        ? {
-            analysisToolClient: {
-              id: listData.analysisToolClientId.toString(),
-            },
-          }
-        : {};
-
-    if (listData.status !== null && listData.status !== '') {
-      Object.assign(where, { status: listData.status });
-    }
-
-    if (
-      listData.legalProceedingNumber !== null &&
-      listData.legalProceedingNumber !== ''
-    ) {
-      Object.assign(where, {
-        legalProceedingNumber: listData.legalProceedingNumber,
-      });
-    }
-
-    if (listData.startDate !== null && listData.endDate !== null) {
-      Object.assign(where, {
-        lastUpdated: Between(listData.startDate, listData.endDate),
-      });
-    }
-
-    const data = await this.list(listData, {
-      where,
-      relations: {
-        legalProceedingDetail: true,
-      },
-      order: {
-        legalProceedingDetail: {
-          createdAt: 'DESC',
-        },
-      },
-    });
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
       AnalysisToolClientLegalProceedingTypeormEntity,

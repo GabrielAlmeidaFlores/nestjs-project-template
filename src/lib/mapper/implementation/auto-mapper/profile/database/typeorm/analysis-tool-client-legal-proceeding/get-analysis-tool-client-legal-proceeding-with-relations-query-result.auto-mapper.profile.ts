@@ -55,10 +55,6 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMap
           id: new AnalysisToolClientLegalProceedingId(source.id),
           analysisToolClient,
           legalProceedingDetail,
-          type: source.type ?? null,
-          status: source.status ?? null,
-          lastUpdated: source.lastUpdated ?? null,
-          deadline: source.deadline ?? null,
         },
       );
     };
@@ -94,10 +90,6 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMap
         id: source.id.toString(),
         analysisToolClient,
         legalProceedingDetail,
-        type: source.type,
-        status: source.status,
-        lastUpdated: source.lastUpdated,
-        deadline: source.deadline,
       });
     };
 

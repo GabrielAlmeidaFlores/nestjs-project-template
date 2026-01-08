@@ -7,11 +7,6 @@ export abstract class AnalysisToolClientLegalProceedingCommandRepositoryGateway 
     props: AnalysisToolClientLegalProceedingEntity,
   ): TransactionType;
 
-  public abstract updateAnalysisToolClientLegalProceeding(
-    id: AnalysisToolClientLegalProceedingId,
-    props: AnalysisToolClientLegalProceedingEntity,
-  ): TransactionType;
-
   public abstract deleteAnalysisToolClientLegalProceeding(
     id: AnalysisToolClientLegalProceedingId,
   ): TransactionType;
