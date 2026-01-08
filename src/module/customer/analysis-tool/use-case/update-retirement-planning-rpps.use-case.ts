@@ -28,6 +28,7 @@ import { RetirementPlanningRppsPeriodDocumentEntity } from '@module/customer/ana
 import { RetirementPlanningRppsPeriodDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/value-object/retirement-planning-rpps-period-document-id.value-object';
 import { RetirementPlanningRppsPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time.entity';
 import { RetirementPlanningRppsPeriodSpecialTimeId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/value-object/retirement-planning-rpps-period-special-time-id.value-object';
+import { RetirementPlanningRppsRemunerationCalculationEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import {
   UpdateRetirementPlanningRppsPeriodRequestDto,
@@ -116,10 +117,18 @@ export class UpdateRetirementPlanningRppsUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
+    const retirementPlanningRppsRemunerationCalculation =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsRemunerationCalculation
+        ? new RetirementPlanningRppsRemunerationCalculationEntity({
+            ...retirementPlanningRppsQueryResult.retirementPlanningRppsRemunerationCalculation,
+          })
+        : null;
+
     const retirementPlanningRpps = new RetirementPlanningRppsEntity({
       id: retirementPlanningRppsQueryResult.id,
       careerStartDate: dto.careerStartDate,
       publicServiceStartDate: dto.publicServiceStartDate,
+      retirementPlanningRppsRemunerationCalculation,
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
