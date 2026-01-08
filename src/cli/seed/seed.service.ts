@@ -39,25 +39,34 @@ export class SeedService {
     const transactions: Array<TransactionType> = [];
 
     for (const seeder of seeders) {
-      const seederTransactions = await seeder.execute();
+      try {
+        const seederTransactions = await seeder.execute();
 
-      if (Array.isArray(seederTransactions)) {
-        this.logger.log(
-          `transactions to be executed: ${seederTransactions.length}`,
-          seeder.constructor.name,
-        );
-        transactions.push(...seederTransactions);
-      } else {
-        this.logger.log(
-          `itens created: ${seederTransactions}`,
-          seeder.constructor.name,
-        );
+        if (Array.isArray(seederTransactions)) {
+          this.logger.log(
+            `transactions to be executed: ${seederTransactions.length}`,
+            seeder.constructor.name,
+          );
+          transactions.push(...seederTransactions);
+        } else {
+          this.logger.log(
+            `itens created: ${seederTransactions}`,
+            seeder.constructor.name,
+          );
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          this.logger.error(
+            `Error in seeder ${seeder.constructor.name}: ${error.message}`,
+            error.stack,
+          );
+        }
       }
+
+      const transaction =
+        await this.baseTransactionRepositoryGateway.execute(transactions);
+
+      await transaction.commit();
     }
-
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
-
-    await transaction.commit();
   }
 }
