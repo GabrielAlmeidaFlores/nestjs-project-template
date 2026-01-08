@@ -7,4 +7,5 @@ export enum MimeTypeEnum {
   AUDIO_X_WAV = 'audio/x-wav',
   AUDIO_WAVE = 'audio/wave',
   AUDIO_VND_WAVE = 'audio/vnd.wave',
+  VIDEO_WEBM = 'video/webm',
 }

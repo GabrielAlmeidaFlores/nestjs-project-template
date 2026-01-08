@@ -64,6 +64,7 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         updatedAt: source.updatedAt,
         organization,
         paymentPlan,
+        canceled: source.canceled,
       });
     };
 
@@ -110,6 +111,7 @@ export class OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile {
         deletedAt: null,
         organization,
         paymentPlan,
+        canceled: source.canceled,
       });
     };
 

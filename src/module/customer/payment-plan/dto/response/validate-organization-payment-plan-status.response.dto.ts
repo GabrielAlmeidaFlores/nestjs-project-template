@@ -120,6 +120,12 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
   })
   public paymentMethod?: PaymentMethodEnum;
 
+  @ResponseDtoBooleanProperty({
+    description:
+      'Indica se o plano de pagamento foi cancelado. Quando true, o plano está cancelado e não deve mais cobrar ou prover benefícios.',
+  })
+  public canceled: boolean;
+
   protected override readonly _type =
     ValidateOrganizationPaymentPlanStatusResponseDto.name;
 }

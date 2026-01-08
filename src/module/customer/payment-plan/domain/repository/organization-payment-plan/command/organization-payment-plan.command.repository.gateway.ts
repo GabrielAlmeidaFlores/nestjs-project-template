@@ -7,6 +7,10 @@ export abstract class OrganizationPaymentPlanCommandRepositoryGateway {
     props: OrganizationPaymentPlanEntity,
   ): TransactionType;
 
+  public abstract updateOrganizationPaymentPlan(
+    props: OrganizationPaymentPlanEntity,
+  ): TransactionType;
+
   public abstract deleteOrganizationPaymentPlan(
     id: OrganizationPaymentPlanId,
   ): TransactionType;

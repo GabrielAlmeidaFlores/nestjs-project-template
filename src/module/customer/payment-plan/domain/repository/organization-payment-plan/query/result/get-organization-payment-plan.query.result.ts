@@ -17,6 +17,7 @@ export class GetOrganizationPaymentPlanQueryResult extends BaseBuildableObject {
   public createdAt: Date;
   public updatedAt: Date;
   public deletedAt: Date | null;
+  public canceled: boolean;
 
   protected override readonly _type =
     GetOrganizationPaymentPlanQueryResult.name;
