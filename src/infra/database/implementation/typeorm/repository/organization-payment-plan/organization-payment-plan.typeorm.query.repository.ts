@@ -53,7 +53,13 @@ export class OrganizationPaymentPlanTypeormQueryRepository
           id: organizationId.toString(),
         },
       },
-      relations: ['organization', 'paymentPlan'],
+      relations: [
+        'organization',
+        'paymentPlan',
+        'paymentPlan.paymentPlanEnabledPaidResource',
+        'paymentPlan.paymentPlanEnabledPaidResource.paymentPlan',
+        'paymentPlan.paymentPlanEnabledPaidResource.paymentPlanPaidResource',
+      ],
     });
 
     return this.mapperGateway.mapArray(
