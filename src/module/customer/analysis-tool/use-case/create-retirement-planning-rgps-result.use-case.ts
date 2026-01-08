@@ -3,11 +3,20 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { CreateRetirementPlanningRgpsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-result.response.dto';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsResultUseCase {
@@ -22,11 +31,33 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
+    @Inject(CnisAnalyzerGateway)
+    private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
   ) {}
 
   public async execute(
     retirementPlanningRgpsId: RetirementPlanningRgpsId,
-  ): Promise<void> {
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+  ): Promise<CreateRetirementPlanningRgpsResultResponseDto> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
     const retirementPlanningRgps =
       await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFailWithRelations(
         retirementPlanningRgpsId,
@@ -37,11 +68,38 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       throw new RetirementPlanningRgpsNotFoundError();
     }
 
+    const analysisRecord =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRetirementPlanningRgpsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        retirementPlanningRgpsId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        RetirementPlanningRgpsNotFoundError,
+      );
+
+    const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
+      retirementPlanningRgps.cnisDocument as unknown as string,
+    );
+    const cnisDocumentData =
+      await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
+
+    const cnisAnalyzerResponse =
+      await this.cnisAnalysisGateway.analyzeCnisDocument(
+        cnisDocumentData,
+        analysisRecord.analysisToolClient,
+      );
+
+    const jsonCnisAnalyzerResponse = JSON.stringify(
+      cnisAnalyzerResponse,
+      null,
+      2,
+    );
     const systemInstruction = `
         # PROMPT PARA GERAÇÃO DE PARECER TÉCNICO COMPLETO
         # Versão: 1.0.0
         # Modelo IA recomendado: Claude Sonnet 4 ou superior
         # Caso de uso: Parecer detalhado para entrega ao cliente
+
+        # RETORNO EM JSON
 
         ---
 
@@ -52,6 +110,39 @@ export class CreateRetirementPlanningRgpsResultUseCase {
         Sua missão é elaborar um **Parecer Técnico de Planejamento Previdenciário COMPLETO**, destinado ao cliente final do advogado contratante. Este parecer será impresso e entregue fisicamente ao segurado, servindo como guia completo para suas decisões previdenciárias.
 
         ---
+
+        Você deve calcular para todas essas aposentadorias, mesmo as que o segurado não é elegível, para fins de comparação.
+
+        REQUISITOS E REGRAS DE CÁLCULO DAS ESPÉCIES DE APOSENTADORIAS
+        #### Aposentadoria por Tempo de Contribuição com Direito Adquirido até a EC 103 (requisitos cumpridos até 13/11/2019): a) não exige idade mínima; b) tempo mínimo de contribuição de 35 anos para homens e 30 anos para mulheres; c) carência mínima de 180 meses para ambos os sexos. A RMI será de 100% do salário-de-benefício calculado na forma do art. 29, da Lei 8.231/91, com incidência do fator previdenciários, podendo esse ser dispensado se o filiado contar com o somatório de idade (em anos, meses e dias) e tempo de contribuição (em anos, meses e dias) de 86 pontos (mulheres) e 96 pontos (homens), em 13/11/2019. 
+          
+        #### Aposentadoria por Idade Urbana com Direito Adquirido até a EC 103 (requisitos cumpridos até 13/11/2019): a) idade mínima de 65 anos (homens) ou 60 anos (mulheres); b) não exige tempo de contribuição mínimo; c) carência mínima de 180 meses para ambos os sexos. A RMI será de 70% (setenta por cento) do salário de benefício, com acréscimo de 1% (um por cento) deste, a cada grupo de 12 (doze) contribuições, até o limite máximo de 100% (cem por cento).
+          
+        #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 15, da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; b) somatório da idade e do tempo de contribuição, incluídas as frações, equivalente a 86 (oitenta e seis) pontos, se mulher, e 96 (noventa e seis) pontos, se homem. A partir de 1º de janeiro de 2020, a pontuação a que se refere o inciso anterior será acrescida a cada ano de 1 (um) ponto, até atingir o limite de 100 (cem) pontos, se mulher, e de 105 (cento e cinco) pontos, se homem. A idade e o tempo de contribuição serão apurados em dias para o cálculo do somatório de pontos; c) carência de 180 meses, para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 16, da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; e b) idade de 56 (cinquenta e seis) anos, se mulher, e 61 (sessenta e um) anos, se homem. A partir de 1º de janeiro de 2020, a idade a que se refere o inciso II do caput será acrescida de 6 (seis) meses a cada ano, até atingir 62 (sessenta e dois) anos de idade, se mulher, e 65 (sessenta e cinco) anos de idade, se homem. c) carência de 180 meses, para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 17, da Emenda 103: a) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; e b) cumprimento de período adicional correspondente a 50% (cinquenta por cento) do tempo que, na data de entrada em vigor da Emenda Constitucional, faltaria para atingir 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; c) carência de 180 meses, para ambos os sexos. A RMI será de 100% (cem por cento) do salário de benefício, multiplicado pelo fator previdenciário.
+          
+        #### Aposentadoria por Tempo de Contribuição com base na Regra de Transição do art. 20, da Emenda 103: a) 57 (cinquenta e sete) anos de idade, se mulher, e 60 (sessenta) anos de idade, se homem; b) 30 (trinta) anos de contribuição, se mulher, e 35 (trinta e cinco) anos de contribuição, se homem; c) período adicional de contribuição correspondente a 100% (cem por cento) do tempo que, na data de entrada em vigor da Emenda Constitucional nº 103, de 2019, faltaria para atingir o tempo mínimo de contribuição referido na letra “b)”; d) carência de 180 meses, para ambos os sexos. A RMI será de 100% (cem por cento) do salário de benefício, multiplicado pelo fator previdenciário.
+          
+        #### Aposentadoria por Idade Híbrida com Direito Adquirido até a EC 103 (requisitos cumpridos até 13/11/2019): a) idade mínima de 65 anos (homens) ou 60 anos (mulheres); b) carência de 180 meses para ambos os sexos, derivada da soma dos períodos rurais e urbanos apurados no CNIS. A RMI será de 70% (setenta por cento) do salário de benefício, com acréscimo de 1% (um por cento) deste, a cada grupo de 12 (doze) contribuições, até o limite máximo de 100% (cem por cento).
+          
+        #### Aposentadoria por Idade Urbana prevista na regra de transição do art. 18 da EC 103: a) 65 (sessenta e cinco) anos de idade, se homem, e 60 (sessenta) anos, se mulher. A partir de 2020, deverá ser acrescido seis meses à idade exigida para mulher, até completar a idade de 62 (sessenta e dois) anos; b) 180 (cento e oitenta) meses de carência, computando-se os períodos de contribuição sob outras categorias, inclusive urbanas; c) 15 (quinze) anos de contribuição, para ambos os sexos, valendo como tempo de contribuição os períodos, também, de segurado especial que estiverem validados no CNIS. 
+          
+        #### Aposentadoria por Idade Híbrida prevista na regra de transição do art. 18 da EC 103: a) 65 (sessenta e cinco) anos de idade, se homem, e 60 (sessenta) anos, se mulher. A partir de 2020, deverá ser acrescido seis meses à idade exigida para mulher, até completar a idade de 62 (sessenta e dois) anos; b) 180 (cento e oitenta) meses de carência, computando-se os períodos de contribuição sob outras categorias, inclusive urbanas; c) 15 (quinze) anos de contribuição, para ambos os sexos, valendo como tempo de contribuição os períodos, também, de segurado especial que estiverem validados no CNIS. 
+          
+        #### Aposentadoria Programada Comum prevista no art. 19, caput, da EC 103: a) aos 62 (sessenta e dois) anos de idade, se mulher, e aos 65 (sessenta e cinco) anos de idade, se homem; e b) 15 (quinze) anos de tempo de contribuição, se mulher, e 20 (vinte) anos de tempo de contribuição, se homem; c) 180 (cento e oitenta) meses de carência, para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria Programada do Professor prevista no art. 19, inciso II, da EC 103: a) 57 (cinquenta e sete) anos de idade, se mulher, e 60 (sessenta) anos de idade, se homem; b) 25 (vinte e cinco) anos de tempo de contribuição exclusivamente em função de magistério em estabelecimento de educação básica; c) 180 meses de carência para ambos os sexos. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria Programada do Professor com base em Direito Adquirido até a EC 103 (requisitos cumpridos até 13/11/2019): a) não exigência de idade mínima; b) tempo mínimo de contribuição de 30 anos para homens e 25 anos para mulheres, exclusivamente em função de magistério em estabelecimento de educação básica; c) carência mínima de 180 meses para ambos os sexos. A RMI será de 100% do salário-de-benefício, multiplicado pelo fator previdenciário, podendo esse ser dispensado se o filiado contar com o somatório de idade (em anos, meses e dias) e tempo de contribuição (em anos, meses e dias) de 86 pontos (mulheres) e 96 pontos (homens) em 13/11/2019. 
+          
+        #### Aposentadoria Programada Especial prevista no art. 19, inciso I, da EC 103: a) 55 (cinquenta e cinco) anos de idade, quando se tratar de atividade especial de 15 (quinze) anos de contribuição; ou b) 58 (cinquenta e oito) anos de idade, quando se tratar de atividade especial de 20 (vinte) anos de contribuição; ou c) 60 (sessenta anos) de idade, quando se tratar de atividade especial de 25 (vinte e cinco) anos de contribuição; d) carência de 180 meses para ambos os sexos e para quaisquer situações de tempo especial. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria Programada Especial com base na Regra de Transição prevista no art. 21, da EC 103: a) o somatório da idade e do tempo de contribuição, incluídas as frações, for equivalente a 66 (sessenta e seis) pontos e comprovar 15 (quinze) anos de efetiva exposição; ou b) o somatório da idade e do tempo de contribuição, incluídas as frações, for equivalente a 76 (setenta e seis) pontos e comprovar 20 (vinte) anos de efetiva exposição; ou c) o somatório da idade e do tempo de contribuição, incluídas as frações, for equivalente a 86 (oitenta e seis) pontos e comprovar 25 (vinte e cinco) anos de efetiva exposição. Para obtenção da pontuação será considerado todo o tempo de contribuição, inclusive aquele não exercido em efetiva exposição a agentes nocivos. d) carência de 180 meses para ambos os sexos e para quaisquer situações de tempo especial. A RMI será de 60% (sessenta por cento) do salário de benefício, com acréscimo de 2 (dois) pontos percentuais para cada ano de contribuição que exceder o tempo de 20 (vinte) anos de contribuição, se homem, e o que exceder o tempo de 15 (quinze) anos de contribuição, se mulher.
+          
+        #### Aposentadoria Programada Especial com base em Direito Adquirido até a EC 103 (requisitos cumpridos até 13/11/2019): a) não exigência de idade mínima; b) 15, 20 ou 25 anos de comprovação de atividade especial, conforme o caso; c) carência de 180 meses para ambos os sexos e para quaisquer situações de tempo especial. A RMI será de 100% (cem por cento) do salário de benefício.
 
         ## DADOS DE ENTRADA
 
@@ -772,18 +863,79 @@ export class CreateRetirementPlanningRgpsResultUseCase {
 
         ## OUTPUT ESPERADO
 
-        Retorne APENAS o parecer técnico formatado em texto puro (markdown), sem:
-        - Preâmbulos como "Aqui está o parecer..."
-        - Comentários meta sobre o processo de criação
-        - Observações ao desenvolvedor
-        - Tags XML ou JSON
-
         O output deve começar diretamente com:
-
-
-        PARECER TÉCNICO
-        PLANEJAMENTO PREVIDENCIÁRIO
-
+        {
+                {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              regraDeAposentadoria: {
+                type: 'string',
+                description:
+                  'Aposentadoria por tempo de contribuiçãos, aposentadoria por idade, etc.',
+                  enum: [
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_IDADE_URBANA_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART15_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART16_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART17_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART20_EC103',
+                  'APOSENTADORIA_IDADE_HIBRIDA_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_IDADE_URBANA_TRANSICAO_ART18_EC103',
+                  'APOSENTADORIA_IDADE_HIBRIDA_TRANSICAO_ART18_EC103',
+                  'APOSENTADORIA_PROGRAMADA_COMUM_ART19_EC103',
+                  'APOSENTADORIA_PROGRAMADA_PROFESSOR_ART19_II_EC103',
+                  'APOSENTADORIA_PROGRAMADA_PROFESSOR_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_ART19_I_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_TRANSICAO_ART21_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_DIREITO_ADQUIRIDO_EC103',
+                ],
+              },
+              resultado: {
+                type: 'string',
+                enum: ['Atingido', 'Aguardando'],
+                description:
+                  'Indica se o cliente já atingiu os requisitos para essa aposentadoria ou se ainda está aguardando.',
+              },
+              dataDoDireito: {
+                type: 'string',
+                description:
+                  'Data em que o cliente atingiu ou atingirá os requisitos para essa aposentadoria, formatada como "DD de mês de AAAA".',
+              },
+              rmiPrevista: {
+                type: 'string',
+                description:
+                  'Valor da Renda Mensal Inicial (RMI) prevista para essa aposentadoria, formatada como moeda brasileira (R$ X.XXX,XX).',
+              },
+              melhorRmi: {
+                type: 'boolean',
+                description:
+                  'Indica se essa aposentadoria oferece a melhor RMI entre todas as opções disponíveis.',
+              },
+              maiorValorCausa: {
+                type: 'boolean',
+                description:
+                  'Indica se essa aposentadoria oferece o maior valor de causa entre todas as opções disponíveis.',
+              },
+              detalhes: {
+                type: 'string',
+                description:
+                  'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00',
+              },
+            },
+            required: [
+              'regraDeAposentadoria',
+              'resultado',
+              'dataDoDireito',
+              'rmiPrevista',
+              'melhorRmi',
+              'maiorValorCausa',
+              'detalhes',
+            ],
+          },
+        },
+        
 
 
         E terminar com a assinatura do advogado.
@@ -800,7 +952,10 @@ export class CreateRetirementPlanningRgpsResultUseCase {
         GenerateResponseInputModel.build({
           systemInstruction,
           promptFiles: [],
-          prompt: JSON.stringify(retirementPlanningRgps),
+          prompt: [
+            JSON.stringify(retirementPlanningRgps.retirementPlanningRgpsPeriod),
+            jsonCnisAnalyzerResponse,
+          ].join('\n\n'),
         }),
         {
           type: 'array',
@@ -811,6 +966,23 @@ export class CreateRetirementPlanningRgpsResultUseCase {
                 type: 'string',
                 description:
                   'Aposentadoria por tempo de contribuiçãos, aposentadoria por idade, etc.',
+                enum: [
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_IDADE_URBANA_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART15_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART16_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART17_EC103',
+                  'APOSENTADORIA_TEMPO_CONTRIBUICAO_TRANSICAO_ART20_EC103',
+                  'APOSENTADORIA_IDADE_HIBRIDA_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_IDADE_URBANA_TRANSICAO_ART18_EC103',
+                  'APOSENTADORIA_IDADE_HIBRIDA_TRANSICAO_ART18_EC103',
+                  'APOSENTADORIA_PROGRAMADA_COMUM_ART19_EC103',
+                  'APOSENTADORIA_PROGRAMADA_PROFESSOR_ART19_II_EC103',
+                  'APOSENTADORIA_PROGRAMADA_PROFESSOR_DIREITO_ADQUIRIDO_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_ART19_I_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_TRANSICAO_ART21_EC103',
+                  'APOSENTADORIA_PROGRAMADA_ESPECIAL_DIREITO_ADQUIRIDO_EC103',
+                ],
               },
               resultado: {
                 type: 'string',
@@ -860,7 +1032,7 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     const retirementPlanningRgpsResult = new RetirementPlanningRgpsResultEntity(
       {
         ...retirementPlanningRgps.retirementPlanningRgpsResult,
-        result: JSON.stringify(result),
+        result,
       },
     );
 
@@ -875,5 +1047,9 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     ]);
 
     await transactions.commit();
+
+    return CreateRetirementPlanningRgpsResultResponseDto.build({
+      response: result,
+    });
   }
 }
