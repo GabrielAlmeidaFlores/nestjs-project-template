@@ -25,8 +25,7 @@ export class TranscribeAudioUseCase {
   ): Promise<TranscribeAudioResponseDto> {
     let audioBuffer = dto.audio.buffer;
 
-    // Se for WAV, converter para MP3
-    const isWavFile = dto.audio.mimeType?.includes('wav');
+    const isWavFile = dto.audio.mimeType.includes('wav');
     if (isWavFile) {
       audioBuffer = await this.convertWavToMp3(audioBuffer);
     }
