@@ -55,7 +55,7 @@ export class AuthIdentityController {
       type: PreAuthIdentitySignInResponseDto,
     },
     throttle: {
-      limit: 10,
+      limit: 20,
       ttlInMinutes: 2,
     },
   })

@@ -84,7 +84,9 @@ export class ListAnalysisToolRecordUseCase {
           ...analysisToolRecord.analysisToolClient,
         });
 
-        const analysis = analysisToolRecord.cnisFastAnalysis;
+        const analysis =
+          analysisToolRecord.cnisFastAnalysis ??
+          analysisToolRecord.retirementPlanningRpps;
 
         const retirementPlanningRgps =
           analysisToolRecord.retirementPlanningRgps;

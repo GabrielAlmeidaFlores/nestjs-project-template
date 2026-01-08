@@ -43,7 +43,7 @@ export class AuthIdentitySignUpUseCase implements AuthIdentitySignUpUseCaseGatew
     await transaction.commit();
 
     return AuthIdentitySignUpResponseDto.build({
-      authIdentity: authIdentity.id,
+      authIdentityId: authIdentity.id,
     });
   }
 }
