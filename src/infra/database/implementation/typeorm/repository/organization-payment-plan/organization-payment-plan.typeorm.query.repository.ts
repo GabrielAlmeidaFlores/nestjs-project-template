@@ -44,6 +44,25 @@ export class OrganizationPaymentPlanTypeormQueryRepository
     );
   }
 
+  public async findManyByOrganizationIdWithRelations(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationPaymentPlanWithRelationsQueryResult[]> {
+    const data = await this.repository.find({
+      where: {
+        organization: {
+          id: organizationId.toString(),
+        },
+      },
+      relations: ['organization', 'paymentPlan'],
+    });
+
+    return this.mapperGateway.mapArray(
+      data,
+      OrganizationPaymentPlanTypeormEntity,
+      GetOrganizationPaymentPlanWithRelationsQueryResult,
+    );
+  }
+
   public async findOneByOrganizationId(
     organizationId: OrganizationId,
   ): Promise<GetOrganizationPaymentPlanQueryResult | null> {

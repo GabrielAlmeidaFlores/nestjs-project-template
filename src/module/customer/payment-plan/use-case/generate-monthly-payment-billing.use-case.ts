@@ -120,6 +120,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       cycle: paymentPlan.cycle,
       organization: new OrganizationId(organizationId),
       paymentPlan: paymentPlan.id,
+      canceled: false,
     });
 
     const organizationPaymentPlanBankPayment =
