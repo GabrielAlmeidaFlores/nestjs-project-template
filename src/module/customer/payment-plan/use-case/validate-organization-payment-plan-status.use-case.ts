@@ -73,7 +73,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
         bankPaymentIds,
       );
 
-    return this.validateByCycle(
+    const response = this.validateByCycle(
       organizationPaymentPlan,
       bankPayments,
       enabledPaidResources.map((resource) => {
@@ -85,6 +85,8 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
         });
       }),
     );
+
+    return response;
   }
 
   private validateByCycle(
