@@ -10,6 +10,7 @@ import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCas
 import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
+import { ListLegalProceedingByCustomerUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-customer.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -35,6 +36,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
     GetAnalysisToolClientLegalProceedingActionUseCase,
     GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
+    ListLegalProceedingByCustomerUseCase,
   ],
 })
 export class LegalProceedingModule {

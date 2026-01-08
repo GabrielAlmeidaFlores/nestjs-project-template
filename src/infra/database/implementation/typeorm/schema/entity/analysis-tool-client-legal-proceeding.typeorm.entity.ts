@@ -20,6 +20,28 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
   @JoinColumn({ name: 'analysis_tool_client_id' })
   public analysisToolClient: AnalysisToolClientTypeormEntity | undefined;
 
+  @Column({
+    name: 'type',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  public type?: string | null;
+
+  @Column({
+    name: 'status',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  public status?: string | null;
+
+  @Column({ name: 'last_updated', type: 'timestamp', nullable: true })
+  public lastUpdated: Date | null;
+
+  @Column({ name: 'deadline', type: 'timestamp', nullable: true })
+  public deadline: Date | null;
+
   @OneToMany(
     () => LegalProceedingDetailTypeormEntity,
     (entity) => entity.analysisToolClientLegalProceeding,

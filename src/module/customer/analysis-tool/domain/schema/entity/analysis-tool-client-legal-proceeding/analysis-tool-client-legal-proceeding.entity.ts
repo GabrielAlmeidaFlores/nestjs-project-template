@@ -13,6 +13,18 @@ export class AnalysisToolClientLegalProceedingEntity extends BaseEntity<Analysis
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
 
+  @Description('Tipo do processo judicial.')
+  public readonly type: string | null;
+
+  @Description('Status do processo judicial.')
+  public readonly status: string | null;
+
+  @Description('Data da última atualização do processo judicial.')
+  public readonly lastUpdated: Date | null;
+
+  @Description('Data do prazo do processo judicial.')
+  public readonly deadline: Date | null;
+
   protected readonly _type = AnalysisToolClientLegalProceedingEntity.name;
 
   public constructor(
@@ -22,5 +34,9 @@ export class AnalysisToolClientLegalProceedingEntity extends BaseEntity<Analysis
 
     this.legalProceedingNumber = props.legalProceedingNumber;
     this.analysisToolClient = props.analysisToolClient;
+    this.type = props.type ?? null;
+    this.status = props.status ?? null;
+    this.lastUpdated = props.lastUpdated ?? null;
+    this.deadline = props.deadline ?? null;
   }
 }
