@@ -177,7 +177,7 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
 
   public async listConversationsByAuthIdentity(
     authIdentityId: AuthIdentityId,
-    limit = 50,
+    limit?: number,
   ): Promise<ConversationModel[]> {
     const pattern = `${CONVERSATION_KEY_PREFIX}*`;
     const keys = await this.redis.keys(pattern);
@@ -224,6 +224,6 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
 
     conversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 
-    return conversations.slice(0, limit);
+    return limit ? conversations.slice(0, limit) : conversations;
   }
 }
