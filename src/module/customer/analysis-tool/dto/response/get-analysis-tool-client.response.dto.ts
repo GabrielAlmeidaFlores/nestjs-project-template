@@ -40,6 +40,9 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public inssPassword?: string;
+
   @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
   public federalDocument?: FederalDocument;
 
