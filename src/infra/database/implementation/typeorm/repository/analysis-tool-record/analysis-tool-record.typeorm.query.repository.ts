@@ -373,6 +373,7 @@ export class AnalysisToolRecordTypeormQueryRepository
           updatedBy: {
             customer: true,
           },
+          retirementPlanningRgps: true,
         },
       },
       err,

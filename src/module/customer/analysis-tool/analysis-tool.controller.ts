@@ -129,6 +129,7 @@ import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -176,6 +177,7 @@ export class AnalysisToolController {
     private readonly createMultipleRetirementPlanningRgpsPeriodsUseCase: CreateMultipleRetirementPlanningRgpsPeriodsUseCase,
     private readonly updateRetirementPlanningRgpsPeriodUseCase: UpdateRetirementPlanningRgpsPeriodUseCase,
     private readonly updateRetirementPlanningRgpsResultUseCase: UpdateRetirementPlanningRgpsResultUseCase,
+    private readonly updateRetirementPlanningRgpsClientUseCase: UpdateRetirementPlanningRgpsClientUseCase,
     private readonly compareRetirementPlanningRgpsCnisCtpsUseCase: CompareRetirementPlanningRgpsCnisCtpsUseCase,
     private readonly analyzeRuralTimeUseCase: AnalyzeRuralTimeUseCase,
     private readonly analyzeApprenticeStudentUseCase: AnalyzeApprenticeStudentUseCase,
@@ -1075,6 +1077,45 @@ export class AnalysisToolController {
     return await this.updateRetirementPlanningRgpsResultUseCase.execute(
       retirementPlanningRgpsId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Alterar cliente do planejamento previdenciário RGPS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'retirement-planning-rgps/:retirementPlanningRgpsId/client/:analysisToolClientId',
+      method: RequestMethod.PATCH,
+    },
+    tag: ['planejamento-previdenciario'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Cliente do planejamento previdenciário RGPS atualizado com sucesso.',
+      type: UpdateRetirementPlanningRgpsResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRetirementPlanningRgpsClient(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'retirementPlanningRgpsId',
+      new ParseValueObjectPipe(RetirementPlanningRgpsId),
+    )
+    retirementPlanningRgpsId: RetirementPlanningRgpsId,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<UpdateRetirementPlanningRgpsResultResponseDto> {
+    return await this.updateRetirementPlanningRgpsClientUseCase.execute(
+      retirementPlanningRgpsId,
+      analysisToolClientId,
+      sessionData,
+      organizationSessionData,
     );
   }
 
