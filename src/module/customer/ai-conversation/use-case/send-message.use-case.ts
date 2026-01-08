@@ -160,12 +160,16 @@ export class SendMessageUseCase {
         id: assistantMessage.id,
         role: assistantMessage.role,
         timestamp: assistantMessage.timestamp,
+        paymentPlanPaidResourceType:
+          assistantMessage.paymentPlanPaidResourceType ?? null,
       }),
       userMessage: MessageItemResponseDto.build({
         content: userMessage.content,
         id: userMessage.id,
         role: userMessage.role,
         timestamp: userMessage.timestamp,
+        paymentPlanPaidResourceType:
+          userMessage.paymentPlanPaidResourceType ?? null,
       }),
       ...(uploadedFiles.length > 0
         ? {
@@ -175,6 +179,8 @@ export class SendMessageUseCase {
                 role: file.fileMessage.role,
                 content: file.fileMessage.content,
                 timestamp: file.fileMessage.timestamp,
+                paymentPlanPaidResourceType:
+                  file.fileMessage.paymentPlanPaidResourceType ?? null,
               }),
             ),
           }

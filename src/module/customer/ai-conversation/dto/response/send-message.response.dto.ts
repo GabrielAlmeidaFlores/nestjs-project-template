@@ -1,5 +1,6 @@
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -22,6 +23,9 @@ export class MessageItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public timestamp: Date;
 
+  @ResponseDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, { required: false })
+  public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
+
   protected override readonly _type = MessageItemResponseDto.name;
 }
 
@@ -38,6 +42,9 @@ export class FileItemResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoDateProperty()
   public timestamp: Date;
+
+  @ResponseDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, { required: false })
+  public paymentPlanPaidResourceType?: PaymentPlanPaidResourceTypeEnum;
 
   protected override readonly _type = FileItemResponseDto.name;
 }
