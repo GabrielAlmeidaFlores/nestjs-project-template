@@ -39,6 +39,7 @@ import { CreateRetirementPlanningRppsResultResponseDto } from '@module/customer/
 import { CreateRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rpps.response.dto';
 import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
+import { DeleteLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/delete-legal-pleading.response';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetAnalysisToolRecordStatisticsResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record-statistics.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
@@ -69,6 +70,7 @@ import { CreateRetirementPlanningRppsResultUseCase } from '@module/customer/anal
 import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
+import { DeleteLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/delete-legal-pleading.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
@@ -141,6 +143,7 @@ export class AnalysisToolController {
     private readonly listCidTenUseCase: ListCidTenUseCase,
     private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
     private readonly getLegalPleadingStatisticsUseCase: GetLegalPleadingStatisticsUseCase,
+    private readonly deleteLegalPleadingUseCase: DeleteLegalPleadingUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -589,6 +592,35 @@ export class AnalysisToolController {
       organizationSessionData,
       legalPleadingId,
       sessionData,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'legal-pleading/:legalPleadingId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Peça processual deletada com sucesso.',
+      type: DeleteLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteLegalPleading(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+  ): Promise<DeleteLegalPleadingResponseDto> {
+    return await this.deleteLegalPleadingUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
     );
   }
 
