@@ -24,6 +24,7 @@ export class TranscribeAudioRequestDto extends BaseBuildableDtoObject {
       MimeTypeEnum.AUDIO_X_WAV,
       MimeTypeEnum.AUDIO_WAVE,
       MimeTypeEnum.AUDIO_VND_WAVE,
+      MimeTypeEnum.VIDEO_WEBM,
     ],
   })
   public audio: FileModel;

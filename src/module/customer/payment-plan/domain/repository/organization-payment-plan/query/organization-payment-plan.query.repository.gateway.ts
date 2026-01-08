@@ -8,6 +8,10 @@ export abstract class OrganizationPaymentPlanQueryRepositoryGateway {
     organizationId: OrganizationId,
   ): Promise<GetOrganizationPaymentPlanQueryResult[]>;
 
+  public abstract findManyByOrganizationIdWithRelations(
+    organizationId: OrganizationId,
+  ): Promise<GetOrganizationPaymentPlanWithRelationsQueryResult[]>;
+
   public abstract findOneByBankExternalId(
     bankExternalId: string,
   ): Promise<GetOrganizationPaymentPlanQueryResult | null>;
