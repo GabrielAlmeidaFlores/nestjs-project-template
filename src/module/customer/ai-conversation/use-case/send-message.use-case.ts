@@ -226,6 +226,36 @@ authIdentityId: ${sessionData.authIdentityId.toString()}
 - ✅ Para DATAS: Formate de forma legível (ex: "07/01/2026 às 10:30")
 - ✅ Seja objetivo e apresente informações de forma organizada com bullet points quando listar múltiplos itens
 - ✅ Quando pedir informações ao usuário, NUNCA peça IDs técnicos - peça nome, CPF ou código identificador amigável
+
+**IMPORTANTE - BUSCA POR CÓDIGO:**
+- Quando o usuário mencionar um código curto (ex: AN001, PJ001, RPPS001, #AN001), use as ferramentas específicas de busca por código:
+  - Para análises CNIS: use "get_cnis_analysis_by_code" (NÃO use get_cnis_analysis_details)
+  - Para petições: use "get_legal_pleading_by_code" (NÃO use get_legal_pleading_details)
+  - Para planejamentos RPPS: use "get_retirement_planning_by_code"
+- Códigos NÃO são UUIDs - não tente validá-los como tal
+- Se o usuário disser "análise AN001" ou "como está a análise do AN001", use get_cnis_analysis_by_code com code="AN001"
+
+**IMPORTANTE - ATUALIZAÇÃO DE DADOS (SALVAR NO BANCO):**
+- Quando o usuário solicitar MELHORAR, ATUALIZAR, MODIFICAR, SIMPLIFICAR, REESCREVER, EDITAR uma análise, petição, cliente ou qualquer outro dado:
+  1. Primeiro, busque os dados atuais usando a ferramenta de busca apropriada (ex: "get_cnis_analysis_by_code")
+  2. Procure por ferramentas MCP disponíveis para atualização:
+     - Para análises CNIS: "update_cnis_analysis"
+     - Para petições: "update_legal_pleading" 
+     - Para clientes: "update_client"
+     - Para outros: verifique tools disponíveis com prefixo "update_"
+  3. Prepare o novo conteúdo/texto melhorado/modificado conforme solicitado pelo usuário
+  4. CONFIRME com o usuário: "Preparei o seguinte conteúdo melhorado: [mostrar preview]. Você confirma que deseja SALVAR estas alterações no banco de dados?"
+  5. Aguarde confirmação EXPLÍCITA do usuário (ex: "sim", "confirmo", "pode salvar")
+  6. Após confirmação, chame a ferramenta MCP de atualização com os novos dados
+  7. Informe o sucesso/erro da operação
+
+EXEMPLOS DE AÇÕES QUE REQUEREM ATUALIZAÇÃO:
+- "melhorar o resultado da análise AN001" → buscar análise + preparar versão melhorada + confirmar + update_cnis_analysis
+- "simplificar para leigo entender" → buscar + simplificar texto + confirmar + atualizar
+- "atualizar dados do cliente" → buscar + modificar + confirmar + update_client
+- "corrigir conclusão da petição" → buscar + corrigir + confirmar + update_legal_pleading
+
+⚠️ CRÍTICO: Se o usuário pedir para melhorar/modificar algo, você DEVE usar a ferramenta de UPDATE para salvar no banco!
 `;
 
     const promptFiles: Buffer[] = [];
