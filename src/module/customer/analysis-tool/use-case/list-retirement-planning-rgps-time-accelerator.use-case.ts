@@ -72,7 +72,7 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
 
   private totalWorkPeriod(
     periods: GetRetirementPlanningRgpsTimeAcceleratorQueryResult[],
-  ) {
+  ): { years: number; months: number; days: number } {
     let totalDays = 0;
 
     periods.forEach((period) => {

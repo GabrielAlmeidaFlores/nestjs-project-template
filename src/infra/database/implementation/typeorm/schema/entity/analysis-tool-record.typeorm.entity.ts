@@ -4,6 +4,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
@@ -49,8 +50,11 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
       nullable: true,
     },
   )
-  @JoinColumn({ name: 'retirement_planning_rpps_id' })
   public retirementPlanningRpps?: RetirementPlanningRppsTypeormEntity | null;
+
+  @ManyToOne(() => RetirementPlanningRgpsTypeormEntity)
+  @JoinColumn({ name: 'retirement_planning_rgps_id' })
+  public retirementPlanningRgps?: RetirementPlanningRgpsTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
