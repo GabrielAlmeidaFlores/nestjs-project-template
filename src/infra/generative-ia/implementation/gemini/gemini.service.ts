@@ -19,10 +19,23 @@ export class GeminiService implements GenerativeIaGateway {
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
   }
-  public async generateFlashResponseFromPromptAndFiles(
+
+  public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
     const maxOutputTokens = 10_000;
+
+    return await this.generateResponseFromPromptAndFiles(
+      props,
+      'gemini-2.5-flash',
+      maxOutputTokens,
+    );
+  }
+
+  public async generateFlashResponseFromPromptAndFiles(
+    props: GenerateResponseInputModel,
+  ): Promise<string | null> {
+    const maxOutputTokens = 50_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
