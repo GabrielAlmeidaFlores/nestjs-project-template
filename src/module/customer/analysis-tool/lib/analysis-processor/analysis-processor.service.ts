@@ -1,12 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import z from 'zod';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
-
 @Injectable()
 export class AnalysisProcessorService implements AnalysisProcessorGateway {
   protected readonly _type = AnalysisProcessorService.name;
@@ -109,70 +107,104 @@ Análise processada do CNIS:
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
-        responseJsonSchema: z.object({
-          totalContributionTime: z
-            .string()
-            .describe('Tempo total de contribuição de serviço'),
-
-          publicServiceContributionTime: z
-            .string()
-            .describe('Tempo total de contribuição em serviço público'),
-
-          positionTenureTime: z.string().describe('Tempo total no cargo'),
-
-          insuredAge: z.string().describe('Idade atual do segurado'),
-
-          insuredProfession: z.string().describe('Profissão do segurado'),
-
-          totalCareerTime: z.string().describe('Tempo total de carreira'),
-
-          publicServiceStartDate: z
-            .date()
-            .describe('Data de ingresso no serviço público'),
-
-          retirementOptions: z
-            .array(
-              z.object({
-                retirementRuleName: z
-                  .string()
-                  .describe('Nome da regra de aposentadoria'),
-
-                expectedMonthlyBenefit: z
-                  .number()
-                  .describe('Renda mensal inicial esperada'),
-
-                isBestMonthlyBenefit: z
-                  .boolean()
-                  .describe(
-                    'Indica se a regra oferece a melhor renda mensal inicial',
-                  ),
-
-                hasHighestAdvantageValue: z
-                  .boolean()
-                  .describe(
-                    'Indica se a regra oferece o maior valor no cenário mais vantajoso',
-                  ),
-
-                retirementAnalysis: z
-                  .string()
-                  .describe(
-                    'Análise detalhada da aposentadoria em formato markdown',
-                  ),
-
-                isEligible: z
-                  .boolean()
-                  .describe('Indica se o segurado é elegível para a regra'),
-
-                eligibilityAvailableAt: z
-                  .string()
-                  .describe(
-                    'Data em que o segurado se tornará elegível para a regra, se aplicável',
-                  )
-                  .nullable(),
-              }),
-            )
-            .describe('Regras de aposentadoria'),
-        }),
+        responseJsonSchema: {
+          type: 'object',
+          properties: {
+            totalContributionTime: {
+              type: 'string',
+              description:
+                'Tempo total de contribuição de serviço. Exemplo: 44 anos, 3 meses e 12 dias',
+            },
+            publicServiceContributionTime: {
+              type: 'string',
+              description:
+                'Tempo total de contribuição em serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
+            },
+            positionTenureTime: {
+              type: 'string',
+              description:
+                'Tempo total no cargo. Exemplo: 10 anos, 6 meses e 15 dias',
+            },
+            insuredAge: {
+              type: 'string',
+              description:
+                'Idade atual do segurado. Exemplo: 44 anos, 3 meses e 12 dias',
+            },
+            insuredProfession: {
+              type: 'string',
+              description: 'Profissão do segurado',
+            },
+            totalCareerTime: {
+              type: 'string',
+              description:
+                'Tempo total de carreira. Exemplo: 50 anos, 1 mês e 20 dias',
+            },
+            publicServiceStartDate: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Data de ingresso no serviço público',
+            },
+            retirementOptions: {
+              type: 'array',
+              description: 'Regras de aposentadoria',
+              items: {
+                type: 'object',
+                properties: {
+                  retirementRuleName: {
+                    type: 'string',
+                    description: 'Nome da regra de aposentadoria',
+                  },
+                  expectedMonthlyBenefit: {
+                    type: 'number',
+                    description: 'Renda mensal inicial esperada',
+                  },
+                  isBestMonthlyBenefit: {
+                    type: 'boolean',
+                    description:
+                      'Indica se a regra oferece a melhor renda mensal inicial',
+                  },
+                  hasHighestAdvantageValue: {
+                    type: 'boolean',
+                    description:
+                      'Indica se a regra oferece o maior valor no cenário mais vantajoso',
+                  },
+                  retirementAnalysis: {
+                    type: 'string',
+                    description:
+                      'Análise detalhada da aposentadoria em formato markdown',
+                  },
+                  isEligible: {
+                    type: 'boolean',
+                    description: 'Indica se o segurado é elegível para a regra',
+                  },
+                  eligibilityAvailableAt: {
+                    type: 'string',
+                    description:
+                      'Data em que o segurado se tornará elegível para a regra, se aplicável',
+                  },
+                },
+                required: [
+                  'retirementRuleName',
+                  'expectedMonthlyBenefit',
+                  'isBestMonthlyBenefit',
+                  'hasHighestAdvantageValue',
+                  'retirementAnalysis',
+                  'isEligible',
+                ],
+              },
+            },
+          },
+          required: [
+            'totalContributionTime',
+            'publicServiceContributionTime',
+            'positionTenureTime',
+            'insuredAge',
+            'insuredProfession',
+            'totalCareerTime',
+            'publicServiceStartDate',
+            'retirementOptions',
+          ],
+        },
       }),
     );
   }
