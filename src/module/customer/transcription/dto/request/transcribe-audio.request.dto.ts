@@ -18,7 +18,13 @@ export class TranscribeAudioJsonRequestDto extends BaseBuildableDtoObject {
 @RequestDto()
 export class TranscribeAudioRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.AUDIO_MPEG],
+    allowedMimeType: [
+      MimeTypeEnum.AUDIO_MPEG,
+      MimeTypeEnum.AUDIO_WAV,
+      MimeTypeEnum.AUDIO_X_WAV,
+      MimeTypeEnum.AUDIO_WAVE,
+      MimeTypeEnum.AUDIO_VND_WAVE,
+    ],
   })
   public audio: FileModel;
 
