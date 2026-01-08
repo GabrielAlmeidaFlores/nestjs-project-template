@@ -4,8 +4,7 @@ import type { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-to
 import type { LegalPleadingDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/value-object/legal-pleading-document/legal-pleading-document-id.value-object';
 import type { LegalPleadingDocumentAnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document-analysis/legal-pleading-document-analysis.entity';
 
-export interface LegalPleadingDocumentEntityPropsInterface
-  extends BaseEntityPropsInterface<LegalPleadingDocumentId> {
+export interface LegalPleadingDocumentEntityPropsInterface extends BaseEntityPropsInterface<LegalPleadingDocumentId> {
   type: LegalPleadingDocumentTypeEnum;
   document: string;
   legalPleading: LegalPleadingEntity;

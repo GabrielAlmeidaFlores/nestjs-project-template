@@ -1,15 +1,14 @@
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRgpsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-benefit/value-object/retirement-planning-rgps-inss-benefit-id.value-object';
+import { RetirementPlanningRgpsLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-legal-proceeding/value-object/retirement-planning-rgps-legal-proceeding-id.value-object';
+import { GetRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-period.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-
-import { RetirementPlanningRgpsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-benefit/value-object/retirement-planning-rgps-inss-benefit-id.value-object';
-import { RetirementPlanningRgpsLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-legal-proceeding/value-object/retirement-planning-rgps-legal-proceeding-id.value-object';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
-import { GetRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-period.response.dto';
 
 @ResponseDto()
 export class GetRetirementPlanningRgpsInssBenefitResponseDto extends BaseBuildableDtoObject {
@@ -79,10 +78,13 @@ export class GetRetirementPlanningRgpsResponse extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public cnisDocument?: string;
 
-  @ResponseDtoObjectProperty(() => GetRetirementPlanningRgpsInssBenefitResponseDto, {
-    isArray: true,
-    required: false,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetRetirementPlanningRgpsInssBenefitResponseDto,
+    {
+      isArray: true,
+      required: false,
+    },
+  )
   public retirementPlanningRgpsBenefit?: GetRetirementPlanningRgpsInssBenefitResponseDto[];
 
   @ResponseDtoObjectProperty(() => GetRetirementPlanningRgpsResultResponseDto, {
@@ -90,10 +92,13 @@ export class GetRetirementPlanningRgpsResponse extends BaseBuildableDtoObject {
   })
   public retirementPlanningRgpsResult?: GetRetirementPlanningRgpsResultResponseDto;
 
-  @ResponseDtoObjectProperty(() => GetRetirementPlanningRgpsLegalProceedingResponseDto, {
-    isArray: true,
-    required: false,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetRetirementPlanningRgpsLegalProceedingResponseDto,
+    {
+      isArray: true,
+      required: false,
+    },
+  )
   public retirementPlanningRgpsLegalProceeding?: GetRetirementPlanningRgpsLegalProceedingResponseDto[];
 
   @ResponseDtoObjectProperty(() => GetRetirementPlanningRgpsPeriodResponseDto, {

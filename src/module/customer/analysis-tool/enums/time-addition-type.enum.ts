@@ -1,4 +1,4 @@
-export enum TimeAdditionType {
+export enum TimeAdditionTypeEnum {
   RURAL = 'Tempo Rural',
   MILITARY_SERVICE = 'Serviço Militar',
   PUBLIC_SERVICE = 'Serviço Público',
@@ -9,4 +9,4 @@ export enum TimeAdditionType {
   LABOR_JUDGMENT = 'Sentença Trabalhista',
 }
 
-export default TimeAdditionType;
+export default TimeAdditionTypeEnum;

@@ -52,6 +52,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateHighQualityResponseFromPromptAndFilesWithContract(
     props: GenerateResponseInputModel,
     responseSchema?: SchemaUnion,
+    responseMimeType?: string,
   ): Promise<string | null> {
     const maxOutputTokens = 1_000_000;
 
@@ -60,6 +61,7 @@ export class GeminiService implements GenerativeIaGateway {
       'gemini-2.5-pro',
       maxOutputTokens,
       responseSchema,
+      responseMimeType,
     );
   }
 
@@ -129,6 +131,7 @@ export class GeminiService implements GenerativeIaGateway {
     model: string,
     maxOutputTokens: number,
     responseSchema?: SchemaUnion,
+    responseMimeType?: string,
   ): Promise<string | null> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
@@ -182,7 +185,10 @@ export class GeminiService implements GenerativeIaGateway {
 
     if (responseSchema !== undefined && contentConfig.config) {
       contentConfig.config.responseSchema = responseSchema;
-      contentConfig.config.responseMimeType = 'application/json';
+    }
+
+    if (responseMimeType !== undefined && contentConfig.config) {
+      contentConfig.config.responseMimeType = responseMimeType;
     }
 
     const result =

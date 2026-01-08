@@ -4,10 +4,10 @@ import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/a
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { GetRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-period.response.dto';
 import {
-    GetRetirementPlanningRgpsInssBenefitResponseDto,
-    GetRetirementPlanningRgpsLegalProceedingResponseDto,
-    GetRetirementPlanningRgpsResponse,
-    GetRetirementPlanningRgpsResultResponseDto,
+  GetRetirementPlanningRgpsInssBenefitResponseDto,
+  GetRetirementPlanningRgpsLegalProceedingResponseDto,
+  GetRetirementPlanningRgpsResponse,
+  GetRetirementPlanningRgpsResultResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps.response.dto';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
 

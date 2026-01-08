@@ -8,8 +8,7 @@ import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/doma
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
-export interface AnalysisToolRecordEntityPropsInterface
-  extends BaseEntityPropsInterface<AnalysisToolRecordId> {
+export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
   type: AnalysisToolRecordTypeEnum;
   cnisFastAnalysis?: CnisFastAnalysisEntity | null;
