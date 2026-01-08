@@ -63,6 +63,7 @@ export class GetMessagesUseCase {
           id: msg.id,
           role: msg.role,
           timestamp: msg.timestamp,
+          paymentPlanPaidResourceType: msg.paymentPlanPaidResourceType ?? null,
         }),
       ),
       total: messagesWithHtml.length,
