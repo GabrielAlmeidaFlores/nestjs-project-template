@@ -47,7 +47,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase {
       );
 
     if (
-      retirementPlanningRgpsPeriod?.isPendency &&
+      retirementPlanningRgpsPeriod.isPendency === true &&
       retirementPlanningRgpsPeriod.reasonPendency !==
         ReasonPendencyEnum.INCONSISTENT_COMPETENCE
     ) {

@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
 import { GetRetirementPlanningRgpsSpecialPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/query/result/get-retirement-planning-rgps-special-period.query.result';
 import { RetirementPlanningRgpsSpecialPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/query/retirement-planning-rgps-special-period.query.repository.gateway';
-import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
-import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
-import { RetirementPlanningRgpsSpecialPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-special-period/value-object/retirement-planning-rgps-special-period-id.value-object';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
+import { RetirementPlanningRgpsSpecialPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-special-period/value-object/retirement-planning-rgps-special-period-id.value-object';
 import { ConvertRetirementPlanningRgpsSpecialPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/convert-retirement-planning-rgps-special-period-response.response.dto';
 import { RetirementPlanningRgpsSpecialPeriodNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-special-period-not-found.error';
 
@@ -38,7 +38,6 @@ export interface RetirementPlanningSpecialPeriodAnalysisInterface {
     reconhecimentoJudicial: string;
     tempoContribuicao: string;
     observacaoTecnica: string;
-    [key: string]: unknown;
   };
   documentos_analisados: DocumentAnalyzedInterface[];
 }
@@ -50,7 +49,6 @@ export interface DocumentAnalyzedInterface {
   periodos?: PeriodInterface[];
   responsaveis_tecnicos?: ResponsibleTechnicalInterface[];
   representante_legal?: Record<string, unknown>;
-  [key: string]: unknown;
 }
 
 export interface PeriodInterface {
@@ -75,7 +73,6 @@ export interface PeriodInterface {
       }
     | string
   >;
-  [key: string]: unknown;
 }
 
 export interface ResponsibleTechnicalInterface {
@@ -84,7 +81,6 @@ export interface ResponsibleTechnicalInterface {
   registro?: string;
   conselho?: string;
   assinatura?: string;
-  [key: string]: unknown;
 }
 
 @Injectable()
@@ -123,14 +119,18 @@ export class ConvertRetirementPlanningRgpsSpecialPeriodUseCase {
         RetirementPlanningRgpsSpecialPeriodNotFoundError,
       );
 
-    const rawResponse = specialPeriod.response ?? '';
+    const rawResponse = specialPeriod.response;
 
     let jsonString = '';
     const codeFenceMatch = rawResponse.match(
       /```(?:json)?\s*([\s\S]*?)\s*```/i,
     );
 
-    if (codeFenceMatch?.[1]) {
+    if (
+      codeFenceMatch &&
+      typeof codeFenceMatch[1] === 'string' &&
+      codeFenceMatch[1].trim() !== ''
+    ) {
       jsonString = codeFenceMatch[1].trim();
     } else {
       const objMatch = rawResponse.match(/\{[\s\S]*\}/);
@@ -148,14 +148,8 @@ export class ConvertRetirementPlanningRgpsSpecialPeriodUseCase {
 
     const periodEntity = new RetirementPlanningRgpsPeriodEntity({
       periodName: parsed.resumo_executivo.nome,
-      periodStart:
-        parsed.resumo_executivo.periodoInicio !== null
-          ? new Date(parsed.resumo_executivo.periodoInicio)
-          : null,
-      periodEnd:
-        parsed.resumo_executivo.periodoFim !== null
-          ? new Date(parsed.resumo_executivo.periodoFim)
-          : null,
+      periodStart: new Date(parsed.resumo_executivo.periodoInicio),
+      periodEnd: new Date(parsed.resumo_executivo.periodoFim),
       category: 'Especial',
       isPendency: false,
       competenceBelowTheMinimum: true,

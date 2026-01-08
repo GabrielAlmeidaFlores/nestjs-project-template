@@ -71,11 +71,11 @@ export class GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase {
         name: parsed.nome as string,
         institution: parsed.empresa as string,
         periodStart:
-          typeof parsed.periodoInicio === 'string' && parsed.periodoInicio
+          typeof parsed.periodoInicio === 'string'
             ? new Date(parsed.periodoInicio)
             : null,
         periodEnd:
-          typeof parsed.periodoFim === 'string' && parsed.periodoFim
+          typeof parsed.periodoFim === 'string'
             ? new Date(parsed.periodoFim)
             : null,
         viability: parsed.viabilidade as string,

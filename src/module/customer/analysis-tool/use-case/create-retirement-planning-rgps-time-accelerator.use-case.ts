@@ -52,7 +52,11 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
       /```(?:json)?\s*([\s\S]*?)\s*```/i,
     );
 
-    if (codeFenceMatch?.[1]) {
+    if (
+      codeFenceMatch !== null &&
+      typeof codeFenceMatch[1] === 'string' &&
+      codeFenceMatch[1].trim() !== ''
+    ) {
       jsonString = codeFenceMatch[1].trim();
     } else {
       const objMatch = rawResponse.match(/\{[\s\S]*\}/);

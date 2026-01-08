@@ -62,9 +62,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const periodWithoutPendencies =
       periods && Array.isArray(periods)
-        ? periods.filter(
-            (period) => period !== null && period.isPendency === false,
-          )
+        ? periods.filter((period) => period.isPendency === false)
         : [];
 
     const {
@@ -179,7 +177,11 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       | GetRetirementPlanningRgpsTimeAcceleratorQueryResult[]
       | RetirementPlanningRgpsPeriodEntity[]
       | null,
-  ) {
+  ): {
+    years: number;
+    months: number;
+    days: number;
+  } {
     let totalDays = 0;
 
     if (periods === null) {

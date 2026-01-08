@@ -47,7 +47,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase {
       );
 
     if (
-      retirementPlanningRgpsPeriod.isPendency &&
+      retirementPlanningRgpsPeriod.isPendency === true &&
       retirementPlanningRgpsPeriod.reasonPendency !==
         ReasonPendencyEnum.LEAVE_DATE
     ) {
