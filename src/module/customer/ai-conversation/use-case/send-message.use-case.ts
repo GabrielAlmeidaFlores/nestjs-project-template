@@ -8,8 +8,9 @@ import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
+  MessageItemResponseDto,
   SendMessageResponseDto,
-  MessageItemDto,
+  FileItemResponseDto,
 } from '@module/customer/ai-conversation/dto/response/send-message.response.dto';
 import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
 import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
@@ -92,22 +93,28 @@ export class SendMessageUseCase {
       timestamp: new Date(),
     });
 
-    const uploadedFiles: Array<{ fileName: string; url: URL }> = [];
+    const uploadedFiles: Array<{
+      fileName: string;
+      fileMessage: MessageModel;
+    }> = [];
     if (dto.file !== undefined && dto.file.length > 0) {
       for (const file of dto.file) {
         const fileName = await this.bucketGateway.create(file);
         const temporaryUrl = await this.bucketGateway.getSignedUrl(fileName);
-        uploadedFiles.push({ fileName, url: temporaryUrl });
 
         const originalFileName =
           await this.bucketGateway.getOriginalFileName(fileName);
+        const content = `<a href="${temporaryUrl.toString()}" mimetype="${file.mimeType}" target="_blank">${originalFileName}</a>`;
+
         const fileMessage = MessageModel.build({
           id: new Guid(),
           conversationId,
           role: MessageRoleEnum.USER,
-          content: `<a href="${temporaryUrl.toString()}" mimetype="${file.mimeType}" target="_blank">${originalFileName}</a>`,
+          content,
           timestamp: new Date(),
         });
+
+        uploadedFiles.push({ fileName, fileMessage });
 
         await this.conversationCacheGateway.addMessage(fileMessage);
       }
@@ -145,24 +152,36 @@ export class SendMessageUseCase {
     await transaction.commit();
 
     return SendMessageResponseDto.build({
-      assistantMessage: MessageItemDto.build({
+      assistantMessage: MessageItemResponseDto.build({
         content: assistantMessage.content,
         id: assistantMessage.id,
         role: assistantMessage.role,
         timestamp: assistantMessage.timestamp,
       }),
-      userMessage: MessageItemDto.build({
+      userMessage: MessageItemResponseDto.build({
         content: userMessage.content,
         id: userMessage.id,
         role: userMessage.role,
         timestamp: userMessage.timestamp,
       }),
+      ...(uploadedFiles.length > 0
+        ? {
+            files: uploadedFiles.map((file) =>
+              FileItemResponseDto.build({
+                id: file.fileMessage.id,
+                role: file.fileMessage.role,
+                content: file.fileMessage.content,
+                timestamp: file.fileMessage.timestamp,
+              }),
+            ),
+          }
+        : {}),
     });
   }
 
   private async generateAiResponse(
     dto: SendMessageRequestDto,
-    uploadedFiles: Array<{ fileName: string; url: URL }>,
+    uploadedFiles: Array<{ fileName: string; fileMessage: MessageModel }>,
     history: Array<{ content: string; role: string }>,
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,

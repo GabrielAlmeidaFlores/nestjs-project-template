@@ -9,7 +9,7 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class MessageItemDto extends BaseBuildableDtoObject {
+export class MessageItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(Guid)
   public id: Guid;
 
@@ -22,16 +22,39 @@ export class MessageItemDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public timestamp: Date;
 
-  protected override readonly _type = MessageItemDto.name;
+  protected override readonly _type = MessageItemResponseDto.name;
+}
+
+@ResponseDto()
+export class FileItemResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(Guid)
+  public id: Guid;
+
+  @ResponseDtoEnumProperty(MessageRoleEnum)
+  public role: MessageRoleEnum;
+
+  @ResponseDtoStringProperty()
+  public content: string;
+
+  @ResponseDtoDateProperty()
+  public timestamp: Date;
+
+  protected override readonly _type = FileItemResponseDto.name;
 }
 
 @ResponseDto()
 export class SendMessageResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(() => MessageItemDto)
-  public userMessage: MessageItemDto;
+  @ResponseDtoObjectProperty(() => MessageItemResponseDto)
+  public userMessage: MessageItemResponseDto;
 
-  @ResponseDtoObjectProperty(() => MessageItemDto)
-  public assistantMessage: MessageItemDto;
+  @ResponseDtoObjectProperty(() => MessageItemResponseDto)
+  public assistantMessage: MessageItemResponseDto;
+
+  @ResponseDtoObjectProperty(() => FileItemResponseDto, {
+    isArray: true,
+    required: false,
+  })
+  public files?: FileItemResponseDto[];
 
   protected override readonly _type = SendMessageResponseDto.name;
 }
