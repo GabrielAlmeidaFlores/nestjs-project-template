@@ -1,4 +1,3 @@
-import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
@@ -6,15 +5,12 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetAuthenticatedAdminDataResponseDto extends BaseBuildableDtoObject {
+export class UpdateAdminResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public name: string;
-
-  @ResponseDtoValueObjectProperty(Email)
-  public email: Email;
 
   @ResponseDtoValueObjectProperty(FederalDocument)
   public federalDocument: FederalDocument;
 
-  protected override readonly _type = GetAuthenticatedAdminDataResponseDto.name;
+  protected override readonly _type = UpdateAdminResponseDto.name;
 }
