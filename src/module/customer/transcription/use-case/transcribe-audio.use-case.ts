@@ -25,9 +25,11 @@ export class TranscribeAudioUseCase {
   ): Promise<TranscribeAudioResponseDto> {
     let audioBuffer = dto.audio.buffer;
 
-    const isWavFile = dto.audio.mimeType.includes('wav');
-    if (isWavFile) {
-      audioBuffer = await this.convertWavToMp3(audioBuffer);
+    const isWavFile = dto.audio.mimeType?.includes('wav');
+    const isWebmFile = dto.audio.mimeType?.includes('webm');
+    
+    if (isWavFile || isWebmFile) {
+      audioBuffer = await this.convertToMp3(audioBuffer);
     }
 
     const transcribeAudio = await this.transcriberGateway.transcribe(
@@ -40,10 +42,10 @@ export class TranscribeAudioUseCase {
     });
   }
 
-  private async convertWavToMp3(wavBuffer: Buffer): Promise<Buffer> {
+  private async convertToMp3(audioBuffer: Buffer): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
-      const readableStream = Readable.from(wavBuffer);
+      const readableStream = Readable.from(audioBuffer);
       const passThrough = new PassThrough();
 
       const command = ffmpeg(readableStream)
