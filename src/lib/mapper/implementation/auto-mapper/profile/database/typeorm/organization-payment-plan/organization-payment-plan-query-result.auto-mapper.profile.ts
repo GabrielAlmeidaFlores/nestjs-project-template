@@ -38,6 +38,7 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
+        canceled: source.canceled,
       });
     };
 
@@ -70,6 +71,7 @@ export class OrganizationPaymentPlanQueryResultAutoMapperProfile {
         deletedAt: source.deletedAt,
         organization: undefined,
         paymentPlan: undefined,
+        canceled: source.canceled,
       });
     };
 

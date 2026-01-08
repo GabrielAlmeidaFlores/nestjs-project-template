@@ -16,4 +16,5 @@ export interface OrganizationPaymentPlanEntityPropsInterface extends BaseEntityP
   totalInstallments?: number | null;
   organization: OrganizationId;
   paymentPlan: PaymentPlanId;
+  canceled: boolean;
 }

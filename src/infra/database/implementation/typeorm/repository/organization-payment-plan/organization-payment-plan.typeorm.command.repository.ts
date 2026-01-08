@@ -38,6 +38,18 @@ export class OrganizationPaymentPlanTypeormCommandRepository
     return this.create(mappedData);
   }
 
+  public updateOrganizationPaymentPlan(
+    props: OrganizationPaymentPlanEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      OrganizationPaymentPlanEntity,
+      OrganizationPaymentPlanTypeormEntity,
+    );
+
+    return this.update(props.id.toString(), mappedData);
+  }
+
   public deleteOrganizationPaymentPlan(
     id: OrganizationPaymentPlanId,
   ): TransactionType {

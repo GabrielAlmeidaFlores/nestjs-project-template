@@ -39,6 +39,9 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   @Description('Identificador do plano de pagamento')
   public readonly paymentPlan: PaymentPlanId;
 
+  @Description('Indica se o plano foi cancelado')
+  public readonly canceled: boolean;
+
   protected readonly _type = OrganizationPaymentPlanEntity.name;
 
   public constructor(props: OrganizationPaymentPlanEntityPropsInterface) {
@@ -58,6 +61,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
     this.organization = props.organization;
     this.paymentPlan = props.paymentPlan;
     this.bankExternalId = props.bankExternalId;
+    this.canceled = props.canceled;
   }
 
   private static validateTotalInstallments(

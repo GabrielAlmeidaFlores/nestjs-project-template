@@ -120,6 +120,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       cycle: paymentPlan.cycle,
       organization: organizationSessionData.organizationId,
       paymentPlan: paymentPlan.id,
+      canceled: false,
     });
 
     const organizationPaymentPlanTransaction =

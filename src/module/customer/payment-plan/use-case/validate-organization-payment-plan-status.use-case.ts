@@ -13,6 +13,7 @@ import {
 import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-plan/error/organization-payment-plan-not-found.error';
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
+import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 
 import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
@@ -133,6 +134,8 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
+    response.canceled = organizationPaymentPlan.canceled;
+    response.paymentMethod = PaymentMethodEnum.CREDIT_CARD;
 
     const firstBankPayment = bankPayments.sort(
       (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
@@ -258,6 +261,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
+    response.canceled = organizationPaymentPlan.canceled;
 
     const firstBankPayment = bankPayments.sort(
       (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
@@ -333,6 +337,7 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     response.maxMemberCount = organizationPaymentPlan.maxMemberCount;
     response.monthlyCreditAmount = organizationPaymentPlan.monthlyCreditAmount;
     response.enabledPaidResources = enabledPaidResources;
+    response.canceled = organizationPaymentPlan.canceled;
 
     const firstBankPayment = bankPayments.sort(
       (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
