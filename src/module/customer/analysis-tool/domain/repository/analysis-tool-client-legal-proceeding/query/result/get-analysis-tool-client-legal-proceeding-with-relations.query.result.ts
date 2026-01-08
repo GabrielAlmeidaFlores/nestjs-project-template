@@ -9,6 +9,10 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResult extend
   public readonly legalProceedingNumber: string;
   public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
   public readonly legalProceedingDetail: GetLegalProceedingDetailQueryResult[];
+  public readonly type: string | null;
+  public readonly status: string | null;
+  public readonly lastUpdated: Date | null;
+  public readonly deadline: Date | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

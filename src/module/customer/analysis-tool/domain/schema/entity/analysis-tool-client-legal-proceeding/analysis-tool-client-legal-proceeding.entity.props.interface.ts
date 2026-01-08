@@ -5,4 +5,8 @@ import type { AnalysisToolClientLegalProceedingId } from '@module/customer/analy
 export interface AnalysisToolClientLegalProceedingEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolClientLegalProceedingId> {
   legalProceedingNumber: string;
   analysisToolClient: AnalysisToolClientEntity;
+  type?: string | null;
+  status?: string | null;
+  lastUpdated?: Date | null;
+  deadline?: Date | null;
 }
