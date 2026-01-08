@@ -7,30 +7,8 @@ export class MarkdownConverterService extends MarkdownConverterGateway {
   protected override readonly _type = MarkdownConverterService.name;
 
   public convertToHtml(text: string): string {
-    if (this.isAlreadyHtml(text)) {
-      return text;
-    }
-
+    // Sempre converter, pois pode ter conteúdo misto (HTML + markdown)
     return this.convertMarkdownToHtml(text);
-  }
-
-  public isAlreadyHtml(text: string): boolean {
-    const htmlTags = [
-      '<strong>',
-      '<em>',
-      '<ul>',
-      '<li>',
-      '<p>',
-      '<br>',
-      '<a ',
-      '<div>',
-      '<span>',
-      '<h1>',
-      '<h2>',
-      '<h3>',
-    ];
-
-    return htmlTags.some((tag) => text.includes(tag));
   }
 
   private convertMarkdownToHtml(markdown: string): string {
