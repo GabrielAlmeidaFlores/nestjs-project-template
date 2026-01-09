@@ -50,10 +50,12 @@ export class GetMessagesUseCase {
       limit,
     );
 
-    const messagesWithHtml = messages.map((msg) => ({
-      ...msg,
-      content: this.markdownConverterGateway.convertToHtml(msg.content),
-    }));
+    const messagesWithHtml = await Promise.all(
+      messages.map(async (msg) => ({
+        ...msg,
+        content: await this.markdownConverterGateway.convertToHtml(msg.content),
+      })),
+    );
 
     return GetMessagesResponseDto.build({
       conversationId,
@@ -62,11 +64,15 @@ export class GetMessagesUseCase {
           content: msg.content,
           id: msg.id,
           role: msg.role,
+          type: msg.type,
           timestamp: msg.timestamp,
-          paymentPlanPaidResourceType: msg.paymentPlanPaidResourceType ?? null,
-          ...(msg.context !== undefined && msg.context !== ''
-            ? { context: msg.context }
+          ...(msg.paymentPlanPaidResourceType !== undefined
+            ? { paymentPlanPaidResourceType: msg.paymentPlanPaidResourceType }
             : {}),
+          ...(msg.creditCost !== undefined
+            ? { creditCost: msg.creditCost }
+            : {}),
+          ...(msg.context !== undefined ? { context: msg.context } : {}),
         }),
       ),
       total: messagesWithHtml.length,

@@ -15,6 +15,7 @@ import {
 import { ConversationAccessDeniedError } from '@module/customer/ai-conversation/error/conversation-access-denied.error';
 import { ConversationNotFoundError } from '@module/customer/ai-conversation/error/conversation-not-found.error';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { MessageTypeEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-type.enum';
 import { McpToolsGateway } from '@module/customer/ai-conversation/lib/mcp-tools/mcp-tools.gateway';
 import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
 import { CalculateMessageCreditCostUseCase } from '@module/customer/ai-conversation/use-case/calculate-message-credit-cost.use-case';
@@ -91,6 +92,7 @@ export class SendMessageUseCase {
       id: new Guid(),
       conversationId,
       role: MessageRoleEnum.USER,
+      type: MessageTypeEnum.MESSAGE,
       content: dto.json.message,
       timestamp: new Date(),
       paymentPlanPaidResourceType,
@@ -114,6 +116,7 @@ export class SendMessageUseCase {
           id: new Guid(),
           conversationId,
           role: MessageRoleEnum.USER,
+          type: MessageTypeEnum.FILE,
           content,
           timestamp: new Date(),
           paymentPlanPaidResourceType,
@@ -145,9 +148,11 @@ export class SendMessageUseCase {
       id: new Guid(),
       conversationId,
       role: MessageRoleEnum.ASSISTANT,
+      type: MessageTypeEnum.MESSAGE,
       content: aiResponse,
       timestamp: new Date(),
       paymentPlanPaidResourceType,
+      creditCost: costCalculation.creditCost,
     });
 
     await this.conversationCacheGateway.addMessage(assistantMessage);
@@ -162,19 +167,27 @@ export class SendMessageUseCase {
         content: assistantMessage.content,
         id: assistantMessage.id,
         role: assistantMessage.role,
+        type: assistantMessage.type,
         timestamp: assistantMessage.timestamp,
-        paymentPlanPaidResourceType:
-          assistantMessage.paymentPlanPaidResourceType ?? null,
+        creditCost: assistantMessage.creditCost ?? 0,
+        ...(assistantMessage.paymentPlanPaidResourceType !== undefined
+          ? {
+              paymentPlanPaidResourceType:
+                assistantMessage.paymentPlanPaidResourceType,
+            }
+          : {}),
       }),
       userMessage: MessageItemResponseDto.build({
         content: userMessage.content,
         id: userMessage.id,
         role: userMessage.role,
+        type: userMessage.type,
         timestamp: userMessage.timestamp,
-        paymentPlanPaidResourceType:
-          userMessage.paymentPlanPaidResourceType ?? null,
-        ...(userMessage.context !== undefined
-          ? { context: userMessage.context }
+        ...(userMessage.paymentPlanPaidResourceType !== undefined
+          ? {
+              paymentPlanPaidResourceType:
+                userMessage.paymentPlanPaidResourceType,
+            }
           : {}),
       }),
       ...(uploadedFiles.length > 0
@@ -183,10 +196,15 @@ export class SendMessageUseCase {
               FileItemResponseDto.build({
                 id: file.fileMessage.id,
                 role: file.fileMessage.role,
+                type: file.fileMessage.type,
                 content: file.fileMessage.content,
                 timestamp: file.fileMessage.timestamp,
-                paymentPlanPaidResourceType:
-                  file.fileMessage.paymentPlanPaidResourceType ?? null,
+                ...(file.fileMessage.paymentPlanPaidResourceType !== undefined
+                  ? {
+                      paymentPlanPaidResourceType:
+                        file.fileMessage.paymentPlanPaidResourceType,
+                    }
+                  : {}),
               }),
             ),
           }
