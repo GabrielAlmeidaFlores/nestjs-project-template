@@ -12,10 +12,10 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { AnalyzeRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-cnis.request.dto';
 import { AnalyzeRetirementPlanningRgpsPppRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-ppp.request.dto';
@@ -100,6 +100,7 @@ import { UpdateRetirementPlanningRppsRemunerationResponseDto } from '@module/cus
 import { UpdateRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rpps.response.dto';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
+import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
 import { AnalyzeLaborCourtDecisionUseCase } from '@module/customer/analysis-tool/use-case/analyze-labor-court-decision.use-case';
 import { AnalyzeMilitaryServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-military-service.use-case';
@@ -232,7 +233,7 @@ export class AnalysisToolController {
     private readonly analyzeLaborCourtDecisionUseCase: AnalyzeLaborCourtDecisionUseCase,
     private readonly analyzeMilitaryServiceUseCase: AnalyzeMilitaryServiceUseCase,
     private readonly analyzePublicServiceUseCase: AnalyzePublicServiceUseCase,
-    private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeRuralTimeUseCase,
+    private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeCtpsOutsideCnisUseCase,
     private readonly createRetirementPlanningRgpsTimeAcceleratorUseCase: CreateRetirementPlanningRgpsTimeAcceleratorUseCase,
     private readonly deleteRetirementPlanningRgpsTimeAcceleratorUseCase: DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
     private readonly listRetirementPlanningRgpsTimeAcceleratorUseCase: ListRetirementPlanningRgpsTimeAcceleratorUseCase,
@@ -1350,10 +1351,17 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createSocialSecurityPlanningCnis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body()
     dto: CreateRetirementPlanningRgpsCnisRequestDto,
   ): Promise<CreateRetirementPlanningRgpsCnisResponseDto> {
-    return await this.createRetirementPlanningRgpsCnisUseCase.execute(dto);
+    return await this.createRetirementPlanningRgpsCnisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1579,9 +1587,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async compareCnisCtps(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
   ): Promise<CompareRetirementPlanningRgpsCnisCtpsResponseDto> {
-    return await this.compareRetirementPlanningRgpsCnisCtpsUseCase.execute(dto);
+    return await this.compareRetirementPlanningRgpsCnisCtpsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1601,9 +1616,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeRuralTime(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeRuralTimeUseCase.execute(dto);
+    return await this.analyzeRuralTimeUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1623,9 +1645,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeMilitaryService(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeMilitaryServiceUseCase.execute(dto);
+    return await this.analyzeMilitaryServiceUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1645,9 +1674,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzePublicService(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzePublicServiceUseCase.execute(dto);
+    return await this.analyzePublicServiceUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1667,9 +1703,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeCtpsOutsideCnis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeCtpsOutsideCnisUseCase.execute(dto);
+    return await this.analyzeCtpsOutsideCnisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1689,9 +1732,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeApprenticeStudent(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeApprenticeStudentUseCase.execute(dto);
+    return await this.analyzeApprenticeStudentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1711,9 +1761,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeWorkAbroad(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeWorkAbroadUseCase.execute(dto);
+    return await this.analyzeWorkAbroadUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1733,9 +1790,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzePpp(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsPppRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsPppResponseDto> {
-    return await this.analyzeRetirementPlanningRgpsPppUseCase.execute(dto);
+    return await this.analyzeRetirementPlanningRgpsPppUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1755,9 +1819,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeInformalWork(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeInformalWorkUseCase.execute(dto);
+    return await this.analyzeInformalWorkUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1777,9 +1848,16 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async analyzeLaborCourtDecision(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
-    return await this.analyzeLaborCourtDecisionUseCase.execute(dto);
+    return await this.analyzeLaborCourtDecisionUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -1967,9 +2045,14 @@ export class AnalysisToolController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createRetirementPlanningRgpsPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
     @Body() dto: CreateRetirementPlanningRgpsPeriodDocumentRequestDto,
   ): Promise<CreateRetirementPlanningRgpsPeriodDocumentResponseDto> {
     return await this.createRetirementPlanningRgpsPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
       dto,
     );
   }

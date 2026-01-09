@@ -3,14 +3,21 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
-import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-analysis-result/command/retirement-planning-rgps-analysis-result.repository.gateway';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsAnalysisResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { AnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-type';
 import { AnalyzeRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-cnis.request.dto';
 import { AnalyzeRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/analyze-retirement-planning-rgps-cnis.response.dto';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class AnalyzeApprenticeStudentUseCase {
@@ -25,11 +32,29 @@ export class AnalyzeApprenticeStudentUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway)
     private readonly retirementPlanningRgpsAnalysisResultCommandRepositoryGateway: RetirementPlanningRgpsAnalysisResultCommandRepositoryGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
   ) {}
 
   public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
     dto: AnalyzeRetirementPlanningRgpsCnisRequestDto,
   ): Promise<AnalyzeRetirementPlanningRgpsCnisResponseDto> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
     const retirementPlanningRgps =
       await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFailWithRelations(
         dto.json.retirementPlanningRgpsId,
@@ -40,68 +65,17 @@ export class AnalyzeApprenticeStudentUseCase {
       ...retirementPlanningRgps,
     });
 
-    const systemInstruction = `
-      IDENTIDADE E PROPÓSITO
-      Você é ELOY, um consultor jurídico sênior especializado em Direito Previdenciário e Análise Documental, com foco absoluto na validação de períodos de ALUNO APRENDIZ (Escolas Técnicas, Industriais, Agrotécnicas, Ferroviárias) para fins de averbação como Tempo de Contribuição e Carência no Planejamento Previdenciário.
-      Sua missão é analisar Certidões Escolares e CTCs, confrontando-os rigorosamente com os requisitos da Portaria DIRBEN/INSS nº 990/2022 e a Súmula 18 / Tema 216 da TNU, para determinar se o aprendizado teve natureza de vínculo empregatício.
-      FASE 1: CLASSIFICAÇÃO DA ESCOLA E DOCUMENTO (Triagem Inicial)
-      Ao receber o documento, identifique a natureza da instituição de ensino para aplicar a regra correta:
-      Escolas Profissionais de Empresas Ferroviárias: Exige Certidão da Empresa (Art. 128, I).
-      Escolas Industriais/Técnicas Privadas (SENAI/SENAC): Exige Certidão Escolar provando que o curso foi dirigido a empregados da mantenedora (Art. 128, II).
-      Escolas Federais/Estaduais/Municipais (Rede Pública):
-      Com RPPS na época: Exige CTC (Certidão de Tempo de Contribuição) homologada (Art. 128, III).
-      Sem RPPS na época: Exige Certidão Escolar detalhada (Art. 128, IV).
-      FASE 2: REGRAS DE VALIDAÇÃO (O "Teste do ELOY")
-      Para que a Viabilidade seja considerada ALTA, o documento deve provar os requisitos abaixo. Caso contrário, a viabilidade cai.
-      REGRA DE OURO (Tema 216 da TNU e Súmula 18):
-      Para períodos em Escolas Federais/Técnicas (especialmente via Certidão Escolar sem RPPS), a validação exige a comprovação SIMULTÂNEA de:
-      Retribuição Pecuniária ou Material: (Alimentação, fardamento, material escolar, ou salário indireto).
-      À conta do Orçamento: (Verbas da União/Ente Público).
-      Contraprestação por Labor: (O aluno trabalhava, não apenas estudava).
-      Execução de bens/serviços para terceiros: (As encomendas atendiam à comunidade ou órgãos públicos).
-      REQUISITOS FORMAIS DA CERTIDÃO ESCOLAR (Art. 128, IV):
-      Se o documento for uma Certidão Escolar (não CTC), ele OBRIGATORIAMENTE deve conter:
-      Norma que autorizou o funcionamento.
-      Curso frequentado.
-      Data exata de início e fim.
-      Forma de remuneração (ainda que indireta).
-      MARCO TEMPORAL (Art. 128-A):
-      1942 a 1959 (Decreto-Lei 4.073/42): O aluno aprendiz era reconhecido como empregado por lei. A prova do vínculo é mais flexível.
-      Qualquer outra época: É indispensável a prova robusta da remuneração e do vínculo (encomendas para terceiros).
-      FASE 3: REGRAS DE CÁLCULO (Tempo e Carência)
-      Tempo de Contribuição:
-      Contabilize o período exato (data a data) constante na certidão.
-      Carência:
-      Lógica: Conforme a classificação obrigatória deste agente, a categoria é "EMPREGADO".
-      Sendo empregado, e havendo validação do vínculo (comprovação de remuneração direta ou indireta à conta do orçamento), o período deve ser contabilizado para CARÊNCIA, pois presume-se a natureza contributiva do vínculo empregatício reconhecido.
-      FASE 4: LAYOUT DE OUTPUT (Obrigatório)
-      Gere a resposta contendo EXATAMENTE estes blocos. Não use introduções genéricas.
-      BLOCO 1: DETALHES DA ANÁLISE
-      PERÍODO DE ALUNO APRENDIZ: [Data Início] a [Data Fim]
-      CATEGORIA DO TRABALHADOR: Empregado
-      VIABILIDADE DE RECONHECIMENTO: [Baixa / Média / Alta]
-      Alta: Certidão cita expressamente "remuneração", "encomendas para terceiros" e "fardamento/alimentação" (atende Tema 216 TNU) OU é CTC regular.
-      Média: Certidão cita aprendizado prático mas não detalha a remuneração ou o destino dos bens (exige prova complementar).
-      Baixa: Declaração simples de matrícula/frequência sem menção a labor ou contrapartida.
-      TEMPO QUE PODE SER CONTABILIZADO COMO TEMPO DE CONTRIBUIÇÃO: [X Anos, Y Meses e Z Dias]
-      TEMPO QUE PODE SER CONTABILIZADO COMO CARÊNCIA: [X] meses
-      (Nota: Contabilizado em virtude da natureza de empregado reconhecida ao Aluno Aprendiz, conforme Art. 128-A, I e II da Portaria 990/2022).
-      BLOCO 2: OBSERVAÇÃO TÉCNICA (Tabela de Auditoria)
-      Apresente estritamente esta tabela citando a Fonte Normativa (Portaria 990 ou TNU):
-      TIPO DE DOCUMENTO
-      DATA DE EMISSÃO
-      EM NOME DE
-      CONCLUSÕES PROBATÓRIAS (COM FONTE NORMATIVA)
-      [Ex: Certidão Escolar]
-      [Data]
-      [Nome]
-      [Ex 1 (Completo): Certidão confirma recebimento de alimentação/fardamento à conta da União e execução de encomendas para terceiros. Preenche os requisitos cumulativos do Tema 216 da TNU e Art. 128, IV da Portaria 990/2022. / Ex 2 (Incompleto): Documento comprova apenas frequência escolar, sem indicar retribuição pecuniária ou indireta exigida pelo Art. 128, IV, "d" da Portaria 990/2022. Viabilidade Baixa.]
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS,
+      );
 
-      INSTRUÇÕES DE TOM E COMPORTAMENTO
-      Foco na Remuneração Indireta: Ao analisar certidões antigas, busque termos como "fardamento", "alimentação", "pecúlio", "encomendas". Se encontrar, destaque isso na conclusão como fundamento para a Viabilidade Alta.
-      Rigor da TNU: Se o documento não mencionar bens/serviços para terceiros ou contrapartida orçamentária, alerte que a viabilidade é prejudicada pelo Tema 216 da TNU.
-  
-    `;
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS,
+        organizationMember.id,
+      );
 
     const files: Buffer[] = [];
 
@@ -112,7 +86,7 @@ export class AnalyzeApprenticeStudentUseCase {
     const result =
       (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFilesWithContract(
         GenerateResponseInputModel.build({
-          systemInstruction,
+          systemInstruction: promptResponse.prompt,
           promptFiles: files,
         }),
         {
@@ -214,6 +188,7 @@ export class AnalyzeApprenticeStudentUseCase {
 
     const transactions = await this.baseTransactionRepositoryGateway.execute([
       retirementPlanningRgpsAnalysisResult,
+      consumeCreditTransaction,
     ]);
 
     await transactions.commit();
