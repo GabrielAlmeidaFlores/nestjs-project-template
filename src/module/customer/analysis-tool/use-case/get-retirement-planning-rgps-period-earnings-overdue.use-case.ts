@@ -62,8 +62,7 @@ export class GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase {
     const resource = earnings.map((item) =>
       GetRetirementPlanningRgpsPeriodEarningResponseDto.build({
         ...item,
-        impact:
-          'Consta para tempo de contribuição: true , Não consta para carência: false',
+        impact: item.analysis,
       }),
     );
 
