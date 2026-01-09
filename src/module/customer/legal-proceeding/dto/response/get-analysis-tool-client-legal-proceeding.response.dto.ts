@@ -5,7 +5,7 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class GetAnalysisToolClientLegalProceedingSimpleResponseDto extends BaseBuildableDtoObject {
+export class GetAnalysisToolClientLegalProceedingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AnalysisToolClientLegalProceedingId)
   public id: AnalysisToolClientLegalProceedingId;
 
@@ -13,5 +13,5 @@ export class GetAnalysisToolClientLegalProceedingSimpleResponseDto extends BaseB
   public legalProceedingNumber: string;
 
   protected override readonly _type =
-    GetAnalysisToolClientLegalProceedingSimpleResponseDto.name;
+    GetAnalysisToolClientLegalProceedingResponseDto.name;
 }

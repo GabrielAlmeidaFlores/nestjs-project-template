@@ -7,6 +7,10 @@ import type { GetLegalProceedingDetailQueryResult } from '@module/customer/legal
 export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolClientLegalProceedingId;
   public readonly legalProceedingNumber: string;
+  public readonly type: string | null;
+  public readonly status: string | null;
+  public readonly lastUpdated: Date | null;
+  public readonly deadline: Date | null;
   public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
   public readonly legalProceedingDetail: GetLegalProceedingDetailQueryResult[];
   public readonly createdAt: Date;

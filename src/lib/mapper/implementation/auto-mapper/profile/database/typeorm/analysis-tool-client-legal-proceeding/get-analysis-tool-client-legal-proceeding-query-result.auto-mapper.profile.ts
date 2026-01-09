@@ -25,11 +25,8 @@ export class GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile {
       source: AnalysisToolClientLegalProceedingTypeormEntity,
     ): GetAnalysisToolClientLegalProceedingQueryResult => {
       return GetAnalysisToolClientLegalProceedingQueryResult.build({
+        ...source,
         id: new AnalysisToolClientLegalProceedingId(source.id),
-        legalProceedingNumber: source.legalProceedingNumber,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
       });
     };
 
