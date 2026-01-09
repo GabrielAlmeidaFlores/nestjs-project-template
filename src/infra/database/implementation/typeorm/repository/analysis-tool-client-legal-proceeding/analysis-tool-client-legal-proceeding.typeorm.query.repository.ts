@@ -273,6 +273,19 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
       where,
       relations: {
         legalProceedingDetail: true,
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+          analysisToolRecord: true,
+        },
       },
       order: {
         legalProceedingDetail: {
