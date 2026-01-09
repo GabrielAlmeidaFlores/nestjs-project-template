@@ -5,9 +5,9 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
 import { ListLegalProceedingDetailByAnalysisToolClientRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-analysis-tool-client-id.request.dto';
-import { GetAnalysisToolClientLegalProceedingSimpleResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding-simple.response.dto';
+import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { GetLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-relations.response.dto';
-import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
+import { ListLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-with-relations.response.dto';
 
 import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -29,7 +29,7 @@ export class ListLegalProceedingDetailByAnalysisToolClientIdUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: ListLegalProceedingDetailByAnalysisToolClientRequestDto,
-  ): Promise<ListLegalProceedingDetailResponseDto> {
+  ): Promise<ListLegalProceedingDetailWithRelationsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -49,7 +49,7 @@ export class ListLegalProceedingDetailByAnalysisToolClientIdUseCase {
     const resource: GetLegalProceedingDetailWithRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
         const analysisToolClientLegalProceeding =
-          GetAnalysisToolClientLegalProceedingSimpleResponseDto.build({
+          GetAnalysisToolClientLegalProceedingResponseDto.build({
             id: item.analysisToolClientLegalProceeding.id,
             legalProceedingNumber:
               item.analysisToolClientLegalProceeding.legalProceedingNumber,
@@ -62,7 +62,7 @@ export class ListLegalProceedingDetailByAnalysisToolClientIdUseCase {
         });
       });
 
-    return ListLegalProceedingDetailResponseDto.build({
+    return ListLegalProceedingDetailWithRelationsResponseDto.build({
       ...legalProceedingDetailList,
       resource,
     });

@@ -3,6 +3,7 @@ import { Email } from '@core/domain/schema/value-object/email/email.value-object
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
@@ -49,6 +50,12 @@ export class GetAnalysisToolClientLegalProceedingClientDetailResponseDto extends
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
+  @ResponseDtoValueObjectProperty(OrganizationMemberId)
+  public createdBy: OrganizationMemberId;
+
+  @ResponseDtoValueObjectProperty(OrganizationMemberId)
+  public updatedBy: OrganizationMemberId;
+
   protected override readonly _type =
     GetAnalysisToolClientLegalProceedingClientDetailResponseDto.name;
 }
@@ -60,6 +67,18 @@ export class GetAnalysisToolClientLegalProceedingResponseDto extends BaseBuildab
 
   @ResponseDtoStringProperty()
   public legalProceedingNumber: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public status?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public type?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public lastUpdated?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public deadline?: Date;
 
   @ResponseDtoObjectProperty(
     () => GetAnalysisToolClientLegalProceedingClientDetailResponseDto,
