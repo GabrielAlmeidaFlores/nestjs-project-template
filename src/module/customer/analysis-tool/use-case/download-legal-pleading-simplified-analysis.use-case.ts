@@ -108,6 +108,7 @@ export class DownloadLegalPleadingSimplifiedAnalysisUseCase {
 
       const legalPleadingResult = new LegalPleadingResultEntity({
         ...legalPleadingAnalysisQueryResult.legalPleadingResult,
+        legalPleadingSimplifiedAnalysis,
       });
 
       const legalPleadingResultTransaction =

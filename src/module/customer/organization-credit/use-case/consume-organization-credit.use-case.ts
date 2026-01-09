@@ -42,7 +42,9 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
     organizationId: OrganizationId,
     resourceType: PaymentPlanPaidResourceTypeEnum,
     createdBy: AuthIdentityId | OrganizationMemberId | null,
-    multiplier = 1,
+    metadata?: {
+      explicitCreditCost?: number;
+    },
   ): Promise<TransactionType> {
     const paymentPlanStatus =
       await this.validateOrganizationPaymentPlanStatusUseCase.execute(
@@ -61,16 +63,22 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
       throw new ResourceNotEnabledError();
     }
 
-    const paidResource =
-      await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
-        resourceType,
-      );
+    let creditCost: number;
 
-    if (!paidResource) {
-      throw new PaidResourceUnavailableError();
+    if (metadata?.explicitCreditCost !== undefined) {
+      creditCost = metadata.explicitCreditCost;
+    } else {
+      const paidResource =
+        await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
+          resourceType,
+        );
+
+      if (!paidResource) {
+        throw new PaidResourceUnavailableError();
+      }
+
+      creditCost = paidResource.creditCost;
     }
-
-    const creditCost = paidResource.creditCost * multiplier;
 
     const purchases =
       await this.organizationCreditPurchaseQueryRepository.findManyOrganizationCreditPurchaseByOrganizationId(
@@ -108,6 +116,15 @@ export class ConsumeOrganizationCreditUseCase implements ConsumeOrganizationCred
 
     if (availableCredits < creditCost) {
       throw new InsufficientCreditsError();
+    }
+
+    const paidResource =
+      await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
+        resourceType,
+      );
+
+    if (!paidResource) {
+      throw new PaidResourceUnavailableError();
     }
 
     if (createdBy instanceof AuthIdentityId) {
