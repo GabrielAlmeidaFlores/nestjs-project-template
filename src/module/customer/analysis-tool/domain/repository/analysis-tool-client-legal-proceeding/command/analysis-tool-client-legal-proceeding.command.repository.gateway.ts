@@ -10,4 +10,9 @@ export abstract class AnalysisToolClientLegalProceedingCommandRepositoryGateway 
   public abstract deleteAnalysisToolClientLegalProceeding(
     id: AnalysisToolClientLegalProceedingId,
   ): TransactionType;
+
+  public abstract updateAnalysisToolClientLegalProceeding(
+    id: AnalysisToolClientLegalProceedingId,
+    props: AnalysisToolClientLegalProceedingEntity,
+  ): TransactionType;
 }

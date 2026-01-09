@@ -4,6 +4,11 @@ import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain
 
 export class ListAnalysisToolClientLegalProceedingQueryParamGateway extends ListDataInputModel {
   public readonly analysisToolClientId: AnalysisToolClientId | null;
+  public readonly status: string | null;
+  public readonly legalProceedingNumber: string | null;
+  public readonly startDate: Date | null;
+  public readonly endDate: Date | null;
+
   protected override readonly _type =
     ListAnalysisToolClientLegalProceedingQueryParamGateway.name;
 
@@ -13,5 +18,9 @@ export class ListAnalysisToolClientLegalProceedingQueryParamGateway extends List
     super(props);
 
     this.analysisToolClientId = props.analysisToolClientId ?? null;
+    this.status = props.status ?? null;
+    this.legalProceedingNumber = props.legalProceedingNumber ?? null;
+    this.startDate = props.startDate ?? null;
+    this.endDate = props.endDate ?? null;
   }
 }

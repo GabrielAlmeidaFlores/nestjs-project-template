@@ -3,6 +3,7 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 export class ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway extends ListDataInputModel {
   public readonly createdAtStart: Date | null;
   public readonly createdAtEnd: Date | null;
+  public readonly status: string | null;
 
   protected override readonly _type =
     ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway.name;
@@ -14,5 +15,6 @@ export class ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway 
 
     this.createdAtStart = props.createdAtStart ?? null;
     this.createdAtEnd = props.createdAtEnd ?? null;
+    this.status = props.status ?? null;
   }
 }
