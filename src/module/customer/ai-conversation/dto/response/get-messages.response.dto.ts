@@ -1,5 +1,6 @@
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { MessageTypeEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-type.enum';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -18,6 +19,9 @@ export class MessageDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(MessageRoleEnum)
   public role: MessageRoleEnum;
 
+  @ResponseDtoEnumProperty(MessageTypeEnum)
+  public type: MessageTypeEnum;
+
   @ResponseDtoStringProperty()
   public content: string;
 
@@ -29,6 +33,9 @@ export class MessageDto extends BaseBuildableDtoObject {
 
   @ResponseDtoStringProperty({ required: false })
   public context?: string;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public creditCost?: number;
 
   protected override readonly _type = MessageDto.name;
 }
