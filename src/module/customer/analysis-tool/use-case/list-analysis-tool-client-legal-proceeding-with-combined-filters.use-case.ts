@@ -11,8 +11,9 @@ import {
 import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding.response.dto';
 
 @Injectable()
-export class ListAnalysisToolClientLegalProceedingUseCase {
-  protected readonly _type = ListAnalysisToolClientLegalProceedingUseCase.name;
+export class ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase {
+  protected readonly _type =
+    ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase.name;
 
   public constructor(
     @Inject(AnalysisToolClientLegalProceedingQueryRepositoryGateway)
