@@ -6,13 +6,15 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { MessageHistoryItemModel } from '@module/customer/ai-conversation/conversation-cache/model/generic/message-history-item.model';
 import { MessageRoleEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-role.enum';
+import { MessageTypeEnum } from '@module/customer/ai-conversation/lib/mcp-tools/enum/message-type.enum';
 import { ConversationModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/conversation.model';
 import { MessageModel } from '@module/customer/ai-conversation/lib/mcp-tools/model/generic/message.model';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 const CONVERSATION_KEY_PREFIX = 'ai:conversation:';
 const MESSAGES_KEY_PREFIX = 'ai:messages:';
-const CONVERSATION_TTL_SECONDS = 86400;
+const CONVERSATION_TTL_SECONDS = 60_4800;
 const MAX_MESSAGES_PER_CONVERSATION = 100;
 
 @Injectable()
@@ -116,12 +118,10 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
     await this.redis.rpush(
       key,
       JSON.stringify({
+        ...message,
+        timestamp: message.timestamp.getTime(),
         id: message.id.toString(),
         conversationId: message.conversationId.toString(),
-        role: message.role,
-        content: message.content,
-        timestamp: message.timestamp.getTime(),
-        paymentPlanPaidResourceType: message.paymentPlanPaidResourceType,
       }),
     );
 
@@ -145,21 +145,38 @@ export class RedisConversationCacheService implements ConversationCacheGateway {
       const parsed = JSON.parse(data) as {
         id: string;
         conversationId: string;
-        role: MessageRoleEnum;
+        role: string;
+        type: string;
         content: string;
-        timestamp: number;
+        timestamp: Date;
         paymentPlanPaidResourceType?: string;
+        context?: string;
+        creditCost?: number;
       };
 
-      return MessageModel.build({
+      const response = MessageModel.build({
         id: new Guid(parsed.id),
         conversationId: new Guid(parsed.conversationId),
-        role: parsed.role,
+        role: parsed.role as MessageRoleEnum,
+        type: parsed.type as MessageTypeEnum,
         content: parsed.content,
         timestamp: new Date(parsed.timestamp),
-        paymentPlanPaidResourceType:
-          parsed.paymentPlanPaidResourceType as never,
       });
+
+      if (parsed.paymentPlanPaidResourceType !== undefined) {
+        response.paymentPlanPaidResourceType =
+          parsed.paymentPlanPaidResourceType as PaymentPlanPaidResourceTypeEnum;
+      }
+
+      if (parsed.context !== undefined) {
+        response.context = parsed.context;
+      }
+
+      if (parsed.creditCost !== undefined) {
+        response.creditCost = parsed.creditCost;
+      }
+
+      return response;
     });
   }
 
