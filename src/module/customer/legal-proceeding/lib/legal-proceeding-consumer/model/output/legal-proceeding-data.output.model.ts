@@ -1,9 +1,14 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-export class LegalProceedingDataOutputModel extends BaseBuildableObject {
-  public readonly recipient: string[];
+import type { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
 
-  public readonly recipientLawyer: string[];
+export class LegalProceedingDataOutputModel extends BaseBuildableObject {
+  public recipient: string[];
+  public recipientLawyer: string[];
+  public status?: LegalProceedingStatusEnum;
+  public type?: string;
+  public lastUpdated?: Date;
+  public deadline?: Date;
 
   protected override readonly _type = LegalProceedingDataOutputModel.name;
 }

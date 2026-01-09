@@ -22,6 +22,7 @@ import { GetAnalysisToolRecordStatisticsRequestDto } from '@module/customer/anal
 import { GetLegalPleadingStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-legal-pleading-statistics.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
+import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
 import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
@@ -47,6 +48,7 @@ import { GetLegalPleadingStatisticsResponseDto } from '@module/customer/analysis
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { GetRetirementPlanningRppsRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps-remuneration-calculation.response.dto';
 import { GetRetirementPlanningRppsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
+import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCidTenResponseDto } from '@module/customer/analysis-tool/dto/response/list-cid-ten.response.dto';
@@ -82,6 +84,7 @@ import { GetLegalPleadingStatisticsUseCase } from '@module/customer/analysis-too
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
+import { ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client-legal-proceeding-with-combined-filters.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
@@ -144,6 +147,7 @@ export class AnalysisToolController {
     private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
     private readonly getLegalPleadingStatisticsUseCase: GetLegalPleadingStatisticsUseCase,
     private readonly deleteLegalPleadingUseCase: DeleteLegalPleadingUseCase,
+    private readonly listAnalysisToolClientLegalProceedingUseCase: ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1173,6 +1177,32 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       retirementPlanningRppsId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar processos jurídicos vinculados aos clientes',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client-legal-proceeding',
+      method: RequestMethod.GET,
+    },
+    tag: ['cliente-da-analise'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Lista de processos jurídicos retornada com sucesso.',
+      type: ListAnalysisToolClientLegalProceedingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listAnalysisToolClientLegalProceeding(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListLegalProceedingDetailWithCombinedFiltersRequestDto,
+  ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
+    return await this.listAnalysisToolClientLegalProceedingUseCase.execute(
+      organizationSessionData,
+      dto,
     );
   }
 
