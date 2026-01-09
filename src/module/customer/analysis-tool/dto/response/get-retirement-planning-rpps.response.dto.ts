@@ -52,10 +52,10 @@ export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
 
 @ResponseDto()
 export class GetRetirementPlanningRppsResultResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(Object, { required: false })
+  @ResponseDtoObjectProperty(() => Object, { required: false })
   public retirementPlanningRppsCompleteAnalysis?: object;
 
-  @ResponseDtoObjectProperty(Object, { required: false })
+  @ResponseDtoObjectProperty(() => Object, { required: false })
   public retirementPlanningRppsSimplifiedAnalysis?: object;
 
   @ResponseDtoDateProperty()
