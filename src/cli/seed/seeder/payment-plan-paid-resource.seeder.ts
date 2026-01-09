@@ -66,28 +66,28 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('bd9b379c-0e54-4ede-a3da-476185e69f8e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS,
-      creditCost: 1,
+      creditCost: 0.3,
       description:
         'Chat Eloy para perguntas sobre questões previdenciárias gerais.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('056fa86a-6a7e-49fc-941a-477ec9a28f56'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_LEGISLATION_QUESTIONS,
-      creditCost: 1,
+      creditCost: 0.3,
       description: 'Chat Eloy para perguntas sobre legislação previdenciária.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('98ce2c1e-52f3-4dbd-a2f9-9a7972db4c17'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH,
-      creditCost: 2,
+      creditCost: 0.3,
       description:
         'Chat Eloy para pesquisa de teses jurídicas vencedoras em direito previdenciário.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('d146fdb8-8511-472e-9f0c-dc9d5fb0d2ad'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_ANALYSIS,
-      creditCost: 3,
+      creditCost: 0.3,
       description:
         'Chat Eloy para análise de documentos e casos previdenciários.',
     }),
