@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
   FindOptionsWhere,
+  IsNull,
   LessThanOrEqual,
   MoreThanOrEqual,
   Repository,
@@ -290,6 +291,46 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
       order: {
         legalProceedingDetail: {
           createdAt: 'DESC',
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      AnalysisToolClientLegalProceedingTypeormEntity,
+      GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
+  }
+
+  public async listAnalysisToolClientLegalProceeding(
+    listData: ListDataInputModel,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>
+  > {
+    const data = await this.list(listData, {
+      where: {
+        analysisToolClient: {
+          deletedAt: IsNull(),
+        },
+      },
+      relations: {
+        legalProceedingDetail: true,
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
         },
       },
     });
