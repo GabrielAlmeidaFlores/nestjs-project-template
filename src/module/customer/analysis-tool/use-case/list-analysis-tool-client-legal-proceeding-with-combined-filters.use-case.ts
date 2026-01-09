@@ -54,6 +54,10 @@ export class ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase {
 
         return GetAnalysisToolClientLegalProceedingResponseDto.build({
           legalProceedingNumber: item.legalProceedingNumber,
+          status: item.status,
+          type: item.type,
+          lastUpdated: item.lastUpdated,
+          deadline: item.deadline,
           analysisToolClientLegalProceedingId: item.id,
           analysisToolClient: analysisToolClientResponse,
         });

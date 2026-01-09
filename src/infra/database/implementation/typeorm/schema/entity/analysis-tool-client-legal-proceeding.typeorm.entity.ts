@@ -32,7 +32,7 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
 
   @Column({
     name: 'last_updated',
-    type: 'timestamp',
+    type: 'date',
     nullable: true,
     transformer: DateTransformer,
   })
@@ -40,7 +40,7 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
 
   @Column({
     name: 'deadline',
-    type: 'timestamp',
+    type: 'date',
     nullable: true,
     transformer: DateTransformer,
   })
