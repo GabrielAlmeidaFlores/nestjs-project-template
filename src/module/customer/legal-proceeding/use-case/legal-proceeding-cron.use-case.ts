@@ -4,6 +4,9 @@ import { isEqual } from 'lodash';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
@@ -37,6 +40,9 @@ export class LegalProceedingCronUseCase {
 
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+
+    @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
   ) {
     this.logger = new Logger(LegalProceedingCronUseCase.name);
   }
@@ -52,9 +58,10 @@ export class LegalProceedingCronUseCase {
 
     do {
       try {
-        const dto = new ListDataRequestDto();
-        dto.page = page;
-        dto.limit = limit;
+        const dto = ListDataRequestDto.build({
+          page,
+          limit,
+        });
 
         const proceedingsPage =
           await this.listAnalysisToolClientLegalProceedingUseCaseGateway.execute(
@@ -122,6 +129,11 @@ export class LegalProceedingCronUseCase {
 
     const safeDetail = JSON.stringify(response);
 
+    const responseDetails =
+      this.legalProceedingConsumerGateway.extractLegalProceedingData(
+        safeDetail,
+      );
+
     const legalProceedingDetail = new LegalProceedingDetailEntity({
       detail: safeDetail,
       analysisToolClientLegalProceeding:
@@ -140,11 +152,32 @@ export class LegalProceedingCronUseCase {
       return null;
     }
 
-    const tx =
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...proceeding.analysisToolClient,
+    });
+
+    const analysisToolClientLegalProceeding =
+      new AnalysisToolClientLegalProceedingEntity({
+        ...proceeding,
+        analysisToolClient,
+        ...responseDetails,
+      });
+
+    const updateLegalProceeding =
+      this.analysisToolClientLegalProceedingCommandRepositoryGateway.updateAnalysisToolClientLegalProceeding(
+        analysisToolClientLegalProceeding.id,
+        analysisToolClientLegalProceeding,
+      );
+
+    const createLegalProceedingDetail =
       this.legalProceedingDetailCommandRepositoryGateway.createLegalProceedingDetail(
         legalProceedingDetail,
       );
 
-    return [tx, consumeCreditTransaction];
+    return [
+      createLegalProceedingDetail,
+      consumeCreditTransaction,
+      updateLegalProceeding,
+    ];
   }
 }

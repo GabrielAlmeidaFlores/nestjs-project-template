@@ -41,7 +41,10 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
         }),
       );
 
-      return { ok: true, data: response.data };
+      return {
+        ok: true,
+        data: response.data,
+      } as ComunicacaoPjeLegalProceedingDetailDataModel;
     } catch (error: unknown) {
       let message = 'Erro desconhecido ao consultar o PJe';
 
@@ -66,7 +69,7 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
   ): LegalProceedingDataOutputModel {
     const detailParsed = JSON.parse(
       detailJson,
-    ) as ComunicacaoPjeLegalProceedingDetailModel;
+    ) as ComunicacaoPjeLegalProceedingDetailDataModel;
 
     const items = detailParsed.data?.items ?? [];
     const lastItem = items.length > 0 ? items[items.length - 1] : null;
@@ -75,10 +78,34 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
     const recipientLawyer = (lastItem?.destinatarioadvogados ??
       []) as unknown as string[];
 
-    return LegalProceedingDataOutputModel.build({
+    const latestItem = detailParsed.data.items[0];
+
+    const status =
+      lastItem?.status ===
+      ComunicacaoPjeLegalProceedingDetailItemStatusEnum.COMPLETED
+        ? LegalProceedingStatusEnum.COMPLETED
+        : LegalProceedingStatusEnum.IN_PROGRESS;
+
+    const type = latestItem?.tipoComunicacao ?? undefined;
+    const lastUpdated =
+      latestItem?.datadisponibilizacao !== undefined
+        ? new Date(latestItem.datadisponibilizacao)
+        : undefined;
+
+    const response = LegalProceedingDataOutputModel.build({
       recipient,
       recipientLawyer,
+      status,
     });
+
+    if (type !== undefined) {
+      response.type = type;
+    }
+    if (lastUpdated !== undefined) {
+      response.lastUpdated = lastUpdated;
+    }
+
+    return response;
   }
 
   public extractLastItemStatus(
