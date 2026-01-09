@@ -4,8 +4,8 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { GetLegalProceedingDetailActionByOrganizationRequestDto } from '@module/customer/legal-proceeding/dto/request/get-legal-proceeding-detail-action-by-organization.request.dto';
-import { ListLegalProceedingItemActionResponseDto } from '@module/customer/legal-proceeding/dto/response/list-analysis-tool-client-legal-proceeding-client-detail-action.response.dto';
+import { ListLegalProceedingDetailByDateRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-date.request.dto';
+import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { PublicPropertyType } from '@shared/system/type/public-property.type';
@@ -26,8 +26,8 @@ export class GetAnalysisToolClientLegalProceedingActionUseCase {
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
-    dto: GetLegalProceedingDetailActionByOrganizationRequestDto,
-  ): Promise<ListLegalProceedingItemActionResponseDto> {
+    dto: ListLegalProceedingDetailByDateRequestDto,
+  ): Promise<ListLegalProceedingDetailResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -69,7 +69,7 @@ export class GetAnalysisToolClientLegalProceedingActionUseCase {
         return parsed.data.items.map((rawItem) => Object.assign({}, rawItem));
       });
 
-    return ListLegalProceedingItemActionResponseDto.build({
+    return ListLegalProceedingDetailResponseDto.build({
       ...analysisToolClientLegalProceedingList,
       resource,
     });

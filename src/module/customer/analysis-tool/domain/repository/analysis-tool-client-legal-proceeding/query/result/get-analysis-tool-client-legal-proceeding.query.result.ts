@@ -5,6 +5,10 @@ import type { AnalysisToolClientLegalProceedingId } from '@module/customer/analy
 export class GetAnalysisToolClientLegalProceedingQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolClientLegalProceedingId;
   public readonly legalProceedingNumber: string;
+  public readonly type: string | null;
+  public readonly status: string | null;
+  public readonly lastUpdated: Date | null;
+  public readonly deadline: Date | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

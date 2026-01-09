@@ -22,9 +22,9 @@ export class GetLegalPleadingWithRelationsQueryResult extends BaseBuildableObjec
   public readonly status: AnalysisStatusEnum;
   public readonly statementOfFacts: string | null;
   public readonly additionalComments: string | null;
-  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
-  public readonly benefitType: LegalPleadingBenefitTypeEnum;
-  public readonly petitionType: LegalPleadingPetitionTypeEnum;
+  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum | null;
+  public readonly benefitType: LegalPleadingBenefitTypeEnum | null;
+  public readonly petitionType: LegalPleadingPetitionTypeEnum | null;
   public readonly benefitNumber: BenefitNumber | null;
   public readonly applicationSubmissionDate: Date | null;
   public readonly benefitTerminationDate: Date | null;
