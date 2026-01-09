@@ -112,6 +112,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
     const data = await this.list(listData, {
       where: {
         ...(createdAtFilter ? { createdAt: createdAtFilter } : undefined),
+        ...(listData.status !== null ? { status: listData.status } : undefined),
         analysisToolClient: {
           createdBy: {
             organization: {
