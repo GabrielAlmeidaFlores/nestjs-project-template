@@ -71,7 +71,7 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
       detailJson,
     ) as ComunicacaoPjeLegalProceedingDetailDataModel;
 
-    const items = detailParsed.data?.items ?? [];
+    const items = detailParsed.data.items;
     const lastItem = items.length > 0 ? items[items.length - 1] : null;
 
     const recipient = (lastItem?.destinatarios ?? []) as unknown as string[];
