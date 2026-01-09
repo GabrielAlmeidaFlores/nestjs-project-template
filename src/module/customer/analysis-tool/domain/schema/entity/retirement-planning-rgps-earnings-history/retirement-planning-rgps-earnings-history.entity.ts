@@ -1,8 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsEarningsHistoryEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.entity.props.interface';
 import { RetirementPlanningRgpsEarningsHistoryId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/value-object/retirement-planning-rgps-earnings-history-id.value-object';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RetirementPlanningRgpsEarningsHistoryEntity extends BaseEntity<RetirementPlanningRgpsEarningsHistoryId> {
@@ -32,6 +32,9 @@ export class RetirementPlanningRgpsEarningsHistoryEntity extends BaseEntity<Reti
 
   @Description('Competencia abaixo do minimo')
   public readonly competenceBelowTheMinimum: boolean | null;
+
+  @Description('Análise do histórico de remunerações do RGPS.')
+  public readonly analysis: string | null;
 
   protected readonly _type = RetirementPlanningRgpsEarningsHistoryEntity.name;
 

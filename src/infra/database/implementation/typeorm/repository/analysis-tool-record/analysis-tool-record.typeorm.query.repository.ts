@@ -441,9 +441,15 @@ export class AnalysisToolRecordTypeormQueryRepository
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
+              organization: {
+                organizationMember: true,
+              },
             },
             updatedBy: {
               customer: true,
+              organization: {
+                organizationMember: true,
+              },
             },
           },
           cnisFastAnalysis: {
@@ -453,9 +459,15 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           createdBy: {
             customer: true,
+            organization: {
+              organizationMember: true,
+            },
           },
           updatedBy: {
             customer: true,
+            organization: {
+              organizationMember: true,
+            },
           },
           retirementPlanningRgps: true,
         },

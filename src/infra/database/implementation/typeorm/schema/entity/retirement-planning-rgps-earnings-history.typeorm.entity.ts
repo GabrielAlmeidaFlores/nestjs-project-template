@@ -51,6 +51,13 @@ export class RetirementPlanningRgpsEarningsHistoryTypeormEntity extends BaseType
   })
   public contributionSalary: string | null;
 
+  @Column({
+    name: 'analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public analysis: string | null;
+
   @ManyToOne(() => RetirementPlanningRgpsPeriodTypeormEntity, {
     nullable: true,
   })

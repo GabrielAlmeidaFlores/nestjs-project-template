@@ -2,15 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
-import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
-import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-earnings-history/command/retirement-planning-rgps-earnings-history.command.repository.gateway';
 import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
-import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsEarningsHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.entity';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
 import { CreateRetirementPlanningRgpsCnisResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-cnis.response.dto';
 import ReasonPendencyEnum from '@module/customer/analysis-tool/enums/reason-pendency.enum';
@@ -79,6 +79,11 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
     );
 
     const earningHistories: RetirementPlanningRgpsEarningsHistoryEntity[] = [];
+
+    interface PeriodWithFlagsInterface extends RetirementPlanningRgpsPeriodEntity {
+      __carenciaDestravada: boolean;
+      __contaTempo: boolean;
+    }
 
     const periods =
       cnis.socialSecurityRelations !== undefined
@@ -173,12 +178,14 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
               retirementPlanningRgps: updatedRetirementPlanningRgps,
               reasonPendency,
               status: reasonPendency === '',
-            });
+            }) as PeriodWithFlagsInterface;
 
             const earnings = relation.socialSecurityAffiliationEarningsHistory;
 
+            const MESES_PARA_PERDA_CI = 15;
+
             if (earnings.length > 0) {
-              earnings.map((e) => {
+              earnings.forEach((e, index) => {
                 const competenceBelowTheMinimumSalary =
                   relation.socialSecurityAffiliationEarningsHistory.some(() => {
                     if (!e.competencia) {
@@ -207,6 +214,128 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
 
                     return remuneration < salarioMinimo;
                   });
+                const data = e.competencia ?? new Date();
+                const ano = data.getFullYear();
+                const mes = data.getMonth() + 1;
+
+                const dataVencimento = this.calcularDataVencimento(mes, ano);
+
+                const paymentDate = e.dataPgto ?? new Date();
+
+                const pagamentoEmDia = this.checkPaymentOnTime(
+                  paymentDate,
+                  dataVencimento,
+                );
+                const tipoUpper = (
+                  relation.socialSecurityAffiliationInfo.origemDoVinculo ?? ''
+                ).toUpperCase();
+
+                const isEmpregado =
+                  tipoUpper.includes('EMPREGADO') ||
+                  tipoUpper.includes('DOMÉSTICO') ||
+                  tipoUpper.includes('DOMESTICO') ||
+                  tipoUpper.includes('AVULSO') ||
+                  tipoUpper.includes('PÚBLICO') ||
+                  tipoUpper.includes('PUBLICO');
+
+                if (index === 0) {
+                  period.__carenciaDestravada = false;
+                  period.__contaTempo = true;
+                }
+
+                let carenciaDestravada = period.__carenciaDestravada;
+                let contaCarencia = false;
+                let valida = false;
+                let contribuicaoEmDia = false;
+                let contaTempo = period.__contaTempo;
+
+                const isContribuinteIndividual =
+                  tipoUpper.includes('CONTRIBUINTE') ||
+                  tipoUpper.includes('INDIVIDUAL');
+                const isFacultativo = tipoUpper.includes('FACULTATIVO');
+
+                const indicadores =
+                  relation.socialSecurityAffiliationInfo.indicadores ?? '';
+
+                const possuiIndicadorImped =
+                  indicadores.includes('PEXT') ||
+                  indicadores.includes('PREM-EXT');
+
+                if (possuiIndicadorImped) {
+                  valida = false;
+                  contaCarencia = false;
+                  contaTempo = false;
+                } else {
+                  if (isEmpregado) {
+                    contribuicaoEmDia = true;
+                    carenciaDestravada = true;
+                    contaCarencia = true;
+                    valida = true;
+                  } else {
+                    const fatalLimit = this.calcularLimiteFatal(
+                      dataVencimento,
+                      MESES_PARA_PERDA_CI,
+                    );
+
+                    if (pagamentoEmDia) {
+                      carenciaDestravada = true;
+                      contaCarencia = true;
+                      valida = true;
+                    } else {
+                      if (!carenciaDestravada) {
+                        if (isContribuinteIndividual) {
+                          contaCarencia = false;
+                          valida = true;
+                        } else if (isFacultativo) {
+                          contaCarencia = false;
+                          valida = false;
+                          contaTempo = false;
+                        } else {
+                          contaCarencia = false;
+                          valida = false;
+                        }
+                      } else {
+                        if (paymentDate <= fatalLimit) {
+                          contaCarencia = true;
+                          valida = true;
+                        } else {
+                          contaCarencia = false;
+                          valida = false;
+                          contaTempo = false;
+                          carenciaDestravada = false;
+                        }
+                      }
+                    }
+                  }
+                }
+
+                period.__carenciaDestravada = carenciaDestravada;
+                period.__contaTempo = contaTempo;
+
+                const analysisTextParts: string[] = [];
+                analysisTextParts.push(
+                  pagamentoEmDia ? 'Pagamento em dia' : 'Pagamento em atraso',
+                );
+                analysisTextParts.push(
+                  contaCarencia
+                    ? 'Conta para carência'
+                    : 'Não conta para carência',
+                );
+                analysisTextParts.push(
+                  valida ? 'Competência válida' : 'Competência inválida',
+                );
+                analysisTextParts.push(
+                  contribuicaoEmDia
+                    ? 'Contribuição considerada em dia'
+                    : 'Contribuição não considerada em dia',
+                );
+                analysisTextParts.push(
+                  contaTempo
+                    ? 'Conta para tempo de contribuição'
+                    : 'Não conta para tempo de contribuição',
+                );
+
+                const analysisText = analysisTextParts.join('. ') + '.';
 
                 const earningEntity =
                   new RetirementPlanningRgpsEarningsHistoryEntity({
@@ -219,6 +348,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                     retirementPlanningRgps: updatedRetirementPlanningRgps,
                     retirementPlanningRgpsPeriod: period,
                     competenceBelowTheMinimum: competenceBelowTheMinimumSalary,
+                    analysis: analysisText,
                   });
                 earningHistories.push(earningEntity);
               });
@@ -313,5 +443,87 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
 
     const n = Number(s);
     return Number.isFinite(n) ? n : null;
+  }
+
+  private calcularDataVencimento(month: number, year: number): Date {
+    const DAY_15 = 15;
+    const MONTHS_IN_YEAR = 12;
+    let mesVencimento = month + 1;
+    let anoVencimento = year;
+    if (mesVencimento > MONTHS_IN_YEAR) {
+      mesVencimento = 1;
+      anoVencimento++;
+    }
+    const dataBase = new Date(anoVencimento, mesVencimento - 1, DAY_15);
+    return this.nextBusinessDay(dataBase);
+  }
+
+  private nextBusinessDay(data: Date): Date {
+    const novaData = new Date(data);
+    while (!this.isDayUtil(novaData)) {
+      novaData.setDate(novaData.getDate() + 1);
+    }
+    return novaData;
+  }
+
+  private isDayUtil(data: Date): boolean {
+    const DAY_WEEKEND_SATURDAY = 6;
+    const DAY_WEEKEND_SUNDAY = 0;
+    const FERIADOS_NACIONAIS = [
+      '01/01', // Ano Novo
+      '21/04', // Tiradentes
+      '01/05', // Dia do Trabalho
+      '07/09', // Independência
+      '12/10', // Nossa Senhora Aparecida
+      '02/11', // Finados
+      '15/11', // Proclamação da República
+      '20/11', // Consciência Negra
+      '25/12', // Natal
+    ];
+
+    const diaSemana = data.getDay();
+    if (
+      diaSemana === DAY_WEEKEND_SUNDAY ||
+      diaSemana === DAY_WEEKEND_SATURDAY
+    ) {
+      return false;
+    }
+
+    const diaFormatado = `${String(data.getDate()).padStart(2, '0')}/${String(data.getMonth() + 1).padStart(2, '0')}`;
+    if (FERIADOS_NACIONAIS.includes(diaFormatado)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private checkPaymentOnTime(paymentDate: Date, dueDate: Date): boolean {
+    const pag = new Date(
+      paymentDate.getFullYear(),
+      paymentDate.getMonth(),
+      paymentDate.getDate(),
+    );
+    const venc = new Date(
+      dueDate.getFullYear(),
+      dueDate.getMonth(),
+      dueDate.getDate(),
+    );
+    return pag <= venc;
+  }
+
+  private calcularLimiteFatal(dataBase: Date, mesesPeriodoGraca: number): Date {
+    const fimPeriodoGraca = new Date(
+      dataBase.getFullYear(),
+      dataBase.getMonth() + mesesPeriodoGraca,
+      1,
+    );
+
+    const DAY_16 = 16;
+
+    return new Date(
+      fimPeriodoGraca.getFullYear(),
+      fimPeriodoGraca.getMonth() + 1,
+      DAY_16,
+    );
   }
 }
