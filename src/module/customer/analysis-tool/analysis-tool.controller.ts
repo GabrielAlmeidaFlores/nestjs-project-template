@@ -149,6 +149,7 @@ import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@mo
 import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
 import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
 import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
+import { ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client-legal-proceeding-with-combined-filters.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
@@ -250,6 +251,7 @@ export class AnalysisToolController {
     private readonly getRetirementPlanningRgpsDetailsUseCase: GetRetirementPlanningRgpsDetailsUseCase,
     private readonly periodLeaveDateActionUseCase: PeriodLeaveDateActionUseCase,
     private readonly periodConsiderationActionUseCase: PeriodConsiderationActionUseCase,
+    private readonly listAnalysisToolClientLegalProceedingUseCase: ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
   ) {}
 
   @BuildEndpointSpecification({
