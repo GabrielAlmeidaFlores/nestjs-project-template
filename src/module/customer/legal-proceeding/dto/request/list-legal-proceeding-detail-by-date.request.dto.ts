@@ -3,7 +3,7 @@ import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @RequestDto()
-export class GetLegalProceedingDetailActionByOrganizationRequestDto extends ListDataRequestDto {
+export class ListLegalProceedingDetailByDateRequestDto extends ListDataRequestDto {
   @RequestDtoDateProperty({ required: false })
   public readonly createdAtStart?: Date;
 
@@ -11,5 +11,5 @@ export class GetLegalProceedingDetailActionByOrganizationRequestDto extends List
   public readonly createdAtEnd?: Date;
 
   protected override readonly _type =
-    GetLegalProceedingDetailActionByOrganizationRequestDto.name;
+    ListLegalProceedingDetailByDateRequestDto.name;
 }

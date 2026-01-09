@@ -4,9 +4,9 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { ListLegalProceedingDetailQueryParam } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/param/list-legal-proceeding-detail.query.param';
-import { GetAnalysisToolClientLegalProceedingSimpleResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding-simple.response.dto';
-import { GetLegalProceedingDetailLawyerWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-lawyer-with-relations.response.dto';
-import { ListLegalProceedingDetailLawyerResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-lawyer.response.dto';
+import { GetAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/legal-proceeding/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
+import { GetLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-lawyer-and-recipient-relations.response.dto';
+import { ListLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-with-lawyer-and-recipient-relations.response';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 
 import type { ListLegalProceedingDetailRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail.request.dto';
@@ -32,7 +32,7 @@ export class ListLegalProceedingDetailUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     dto: ListLegalProceedingDetailRequestDto,
-  ): Promise<ListLegalProceedingDetailLawyerResponseDto> {
+  ): Promise<ListLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -49,30 +49,34 @@ export class ListLegalProceedingDetailUseCase {
         new ListLegalProceedingDetailQueryParam(dto),
       );
 
-    const resource: GetLegalProceedingDetailLawyerWithRelationsResponseDto[] =
+    const resource: GetLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto[] =
       legalProceedingDetailList.resource.map((item) => {
         const extracted =
           this.legalProceedingConsumer.extractLegalProceedingData(item.detail);
 
         const analysisToolClientLegalProceeding =
-          GetAnalysisToolClientLegalProceedingSimpleResponseDto.build({
+          GetAnalysisToolClientLegalProceedingResponseDto.build({
             id: item.analysisToolClientLegalProceeding.id,
             legalProceedingNumber:
               item.analysisToolClientLegalProceeding.legalProceedingNumber,
           });
 
-        return GetLegalProceedingDetailLawyerWithRelationsResponseDto.build({
-          id: item.id,
-          analysisToolClientLegalProceeding,
-          detail: JSON.parse(item.detail) as object,
-          recipient: extracted.recipient,
-          recipientLawyer: extracted.recipientLawyer,
-        });
+        return GetLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto.build(
+          {
+            id: item.id,
+            analysisToolClientLegalProceeding,
+            detail: JSON.parse(item.detail) as object,
+            recipient: extracted.recipient,
+            recipientLawyer: extracted.recipientLawyer,
+          },
+        );
       });
 
-    return ListLegalProceedingDetailLawyerResponseDto.build({
-      ...legalProceedingDetailList,
-      resource,
-    });
+    return ListLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto.build(
+      {
+        ...legalProceedingDetailList,
+        resource,
+      },
+    );
   }
 }

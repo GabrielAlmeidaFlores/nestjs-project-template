@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
-import { CountLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail.reponse.dto';
+import { CountLegalProceedingDetailStatusResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail-status.reponse.dto';
 import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -27,7 +27,7 @@ export class CountLegalProceedingDetailUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
-  ): Promise<CountLegalProceedingDetailResponseDto> {
+  ): Promise<CountLegalProceedingDetailStatusResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
         sessionData.authIdentityId,
@@ -80,7 +80,7 @@ export class CountLegalProceedingDetailUseCase {
       }
     });
 
-    const response = CountLegalProceedingDetailResponseDto.build({
+    const response = CountLegalProceedingDetailStatusResponseDto.build({
       inProgress,
       completed,
       total,
