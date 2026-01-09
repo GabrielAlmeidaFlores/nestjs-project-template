@@ -40,4 +40,10 @@ export abstract class AnalysisToolClientLegalProceedingQueryRepositoryGateway {
   ): Promise<
     ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>
   >;
+
+  public abstract listAnalysisToolClientLegalProceeding(
+    listData: ListDataInputModel,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>
+  >;
 }

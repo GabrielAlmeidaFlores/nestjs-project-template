@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding.query.param.gateway';
 import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
@@ -9,6 +9,8 @@ import {
   GetAnalysisToolClientLegalProceedingResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding.response.dto';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
 @Injectable()
 export class ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase {
@@ -16,35 +18,47 @@ export class ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase {
     ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase.name;
 
   public constructor(
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+
     @Inject(AnalysisToolClientLegalProceedingQueryRepositoryGateway)
     private readonly analysisToolClientLegalProceedingQueryRepositoryGateway: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
   ) {}
 
   public async execute(
-    organizationId: OrganizationId,
+    organizationSessionData: OrganizationSessionDataModel,
     dto: ListLegalProceedingDetailWithCombinedFiltersRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
     const queryResult =
       await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listByOrganizationIdWithCombinedFilters(
-        organizationId,
+        organizationSessionData.organizationId,
         new ListAnalysisToolClientLegalProceedingQueryParamGateway(dto),
       );
 
-    const resource = queryResult.resource.map((item) => {
-      const analysisToolClient =
-        GetAnalysisToolClientLegalProceedingClientDetailResponseDto.build({
-          ...item.analysisToolClient,
-          organizationId: item.analysisToolClient.createdBy.organizationId,
-          createdBy: item.analysisToolClient.createdBy.id,
-          updatedBy: item.analysisToolClient.updatedBy.id,
-        });
+    const resource = await Promise.all(
+      queryResult.resource.map(async (item) => {
+        const analysisToolClientQuery =
+          await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+            item.analysisToolClient.id,
+            organizationSessionData.organizationId,
+            AnalysisToolClientNotFoundError,
+          );
 
-      return GetAnalysisToolClientLegalProceedingResponseDto.build({
-        legalProceedingNumber: item.legalProceedingNumber,
-        analysisToolClientLegalProceedingId: item.id,
-        analysisToolClient,
-      });
-    });
+        const analysisToolClientResponse =
+          GetAnalysisToolClientLegalProceedingClientDetailResponseDto.build({
+            ...item.analysisToolClient,
+            organizationId: analysisToolClientQuery.createdBy.organizationId,
+            createdBy: analysisToolClientQuery.createdBy.id,
+            updatedBy: analysisToolClientQuery.updatedBy.id,
+          });
+
+        return GetAnalysisToolClientLegalProceedingResponseDto.build({
+          legalProceedingNumber: item.legalProceedingNumber,
+          analysisToolClientLegalProceedingId: item.id,
+          analysisToolClient: analysisToolClientResponse,
+        });
+      }),
+    );
 
     return ListAnalysisToolClientLegalProceedingResponseDto.build({
       ...queryResult,

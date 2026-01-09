@@ -1201,7 +1201,7 @@ export class AnalysisToolController {
     @Query() dto: ListLegalProceedingDetailWithCombinedFiltersRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
     return await this.listAnalysisToolClientLegalProceedingUseCase.execute(
-      organizationSessionData.organizationId,
+      organizationSessionData,
       dto,
     );
   }
