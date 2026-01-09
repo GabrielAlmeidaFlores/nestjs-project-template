@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
+import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding.query.param.gateway';
+import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
 import {
   GetAnalysisToolClientLegalProceedingClientDetailResponseDto,
   GetAnalysisToolClientLegalProceedingResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding.response.dto';
-import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
-import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
-export class ListAnalysisToolClientLegalProceedingUseCase implements ListAnalysisToolClientLegalProceedingUseCaseGateway {
+export class ListAnalysisToolClientLegalProceedingUseCase {
   protected readonly _type = ListAnalysisToolClientLegalProceedingUseCase.name;
 
   public constructor(
@@ -20,11 +20,13 @@ export class ListAnalysisToolClientLegalProceedingUseCase implements ListAnalysi
   ) {}
 
   public async execute(
-    dto: ListDataRequestDto,
+    organizationId: OrganizationId,
+    dto: ListLegalProceedingDetailWithCombinedFiltersRequestDto,
   ): Promise<ListAnalysisToolClientLegalProceedingResponseDto> {
     const queryResult =
-      await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listAnalysisToolClientWithRelations(
-        new ListDataInputModel(dto),
+      await this.analysisToolClientLegalProceedingQueryRepositoryGateway.listByOrganizationIdWithCombinedFilters(
+        organizationId,
+        new ListAnalysisToolClientLegalProceedingQueryParamGateway(dto),
       );
 
     const resource = queryResult.resource.map((item) => {

@@ -8,13 +8,14 @@ import { GetAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/c
 import { GetAnalysisToolClientLegalProceedingClientDetailResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client-legal-proceeding.response.dto';
 import { ListAnalysisToolClientLegalProceedingDetailResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client-legal-proceeding-detail.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { LegalProceedingDetailId } from '@module/customer/legal-proceeding/domain/schema/entity/legal-proceeding-detail/value-object/analysis-tool-client-legal-proceeding-detail-id/legal-proceeding-detail-id.value-object';
 import { GetLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class GetAnalysisToolClientLegalProceedingUseCase {
+export class GetAnalysisToolClientLegalProceedingUseCase implements GetAnalysisToolClientLegalProceedingUseCaseGateway {
   protected readonly _type = GetAnalysisToolClientLegalProceedingUseCase.name;
 
   public constructor(
@@ -54,6 +55,8 @@ export class GetAnalysisToolClientLegalProceedingUseCase {
           GetAnalysisToolClientLegalProceedingClientDetailResponseDto.build({
             ...item.analysisToolClient,
             organizationId: item.analysisToolClient.createdBy.organizationId,
+            createdBy: item.analysisToolClient.createdBy.id,
+            updatedBy: item.analysisToolClient.updatedBy.id,
           });
 
         const latestDetailEntity = item.legalProceedingDetail

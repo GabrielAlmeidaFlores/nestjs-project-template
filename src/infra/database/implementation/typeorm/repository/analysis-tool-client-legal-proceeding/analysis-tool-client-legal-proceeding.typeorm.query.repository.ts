@@ -1,5 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  FindOptionsWhere,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -10,6 +16,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { ListAnalysisToolClientLegalProceedingByLegalProceedingNumberQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-by-legal-proceeding-number.query.param.gateway';
 import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
+import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding.query.param.gateway';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 
@@ -183,6 +190,89 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
           analysisToolClientLegalProceeding: true,
           analysisToolRecord: true,
         },
+      },
+      order: {
+        legalProceedingDetail: {
+          createdAt: 'DESC',
+        },
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data.resource,
+      AnalysisToolClientLegalProceedingTypeormEntity,
+      GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
+  }
+
+  public async listByOrganizationIdWithCombinedFilters(
+    organizationId: OrganizationId,
+    listData: ListAnalysisToolClientLegalProceedingQueryParamGateway,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult>
+  > {
+    const where: FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity> =
+      listData.analysisToolClientId !== null
+        ? {
+            analysisToolClient: {
+              id: listData.analysisToolClientId.toString(),
+              createdBy: {
+                organization: {
+                  id: organizationId.toString(),
+                },
+              },
+            },
+          }
+        : {
+            analysisToolClient: {
+              createdBy: {
+                organization: {
+                  id: organizationId.toString(),
+                },
+              },
+            },
+          };
+
+    if (listData.status !== null && listData.status !== '') {
+      Object.assign(where, {
+        status: listData.status,
+      } as FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity>);
+    }
+
+    if (
+      listData.legalProceedingNumber !== null &&
+      listData.legalProceedingNumber !== ''
+    ) {
+      Object.assign(where, {
+        legalProceedingNumber: listData.legalProceedingNumber,
+      } as FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity>);
+    }
+
+    if (listData.startDate !== null && listData.endDate !== null) {
+      Object.assign(where, {
+        lastUpdated: Between(listData.startDate, listData.endDate),
+      } as FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity>);
+    } else if (listData.startDate !== null) {
+      Object.assign(where, {
+        lastUpdated: MoreThanOrEqual(listData.startDate),
+      } as FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity>);
+    } else if (listData.endDate !== null) {
+      Object.assign(where, {
+        lastUpdated: LessThanOrEqual(listData.endDate),
+      } as FindOptionsWhere<AnalysisToolClientLegalProceedingTypeormEntity>);
+    }
+
+    const data = await this.list(listData, {
+      where,
+      relations: {
+        legalProceedingDetail: true,
       },
       order: {
         legalProceedingDetail: {
