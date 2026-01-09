@@ -68,6 +68,18 @@ export class GetAnalysisToolClientLegalProceedingResponseDto extends BaseBuildab
   @ResponseDtoStringProperty()
   public legalProceedingNumber: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public status?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public type?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public lastUpdated?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public deadline?: Date;
+
   @ResponseDtoObjectProperty(
     () => GetAnalysisToolClientLegalProceedingClientDetailResponseDto,
   )

@@ -16,7 +16,6 @@ import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-procee
 import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
 import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
-import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -40,7 +39,6 @@ export class LegalProceedingController {
     private readonly listLegalProceedingDetailByAnalysisToolClientIdUseCase: ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
     private readonly getAnalysisToolClientLegalProceedingActionUseCase: GetAnalysisToolClientLegalProceedingActionUseCase,
     private readonly getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase: GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
-    private readonly legalProceedingCronUseCase: LegalProceedingCronUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -241,21 +239,5 @@ export class LegalProceedingController {
       organizationSessionData,
       dto,
     );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Sincronizar processos judiciais manualmente',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'sync',
-      method: RequestMethod.POST,
-    },
-    successResponse: {
-      statusCode: HttpStatus.NO_CONTENT,
-      description: 'Processos judiciais sincronizados com sucesso',
-    },
-  })
-  public async syncLegalProceedings(): Promise<void> {
-    return this.legalProceedingCronUseCase.execute();
   }
 }

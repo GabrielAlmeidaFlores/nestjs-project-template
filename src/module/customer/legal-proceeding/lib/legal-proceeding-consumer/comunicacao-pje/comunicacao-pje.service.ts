@@ -101,7 +101,13 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
     if (type !== undefined) {
       response.type = type;
     }
-    if (lastUpdated !== undefined) {
+
+    const MIN_VALID_YEAR = 1900;
+    if (
+      lastUpdated !== undefined &&
+      !isNaN(lastUpdated.getTime()) &&
+      lastUpdated.getFullYear() >= MIN_VALID_YEAR
+    ) {
       response.lastUpdated = lastUpdated;
     }
 

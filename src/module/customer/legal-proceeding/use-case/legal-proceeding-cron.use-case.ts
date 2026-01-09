@@ -57,7 +57,7 @@ export class LegalProceedingCronUseCase {
 
   @Cron(CronExpression.EVERY_5_HOURS)
   public async execute(): Promise<void> {
-    const limit = 50;
+    const limit = 10;
     let page = 1;
     let hasNextPage: boolean;
 
@@ -80,9 +80,18 @@ export class LegalProceedingCronUseCase {
         const transactions: TransactionType[] = [];
 
         for (const proceeding of items) {
-          const tx = await this.processProceeding(proceeding);
-          if (tx) {
-            transactions.push(...tx);
+          try {
+            const tx = await this.processProceeding(proceeding);
+            if (tx) {
+              transactions.push(...tx);
+            }
+          } catch (error) {
+            if (error instanceof Error) {
+              this.logger.error(
+                `Error processing proceeding ID ${proceeding.id.toString()}: ${error.message}`,
+                error.stack,
+              );
+            }
           }
         }
 
