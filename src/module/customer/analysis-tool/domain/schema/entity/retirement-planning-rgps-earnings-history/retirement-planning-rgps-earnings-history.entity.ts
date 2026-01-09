@@ -53,5 +53,6 @@ export class RetirementPlanningRgpsEarningsHistoryEntity extends BaseEntity<Reti
     this.retirementPlanningRgpsPeriod =
       props.retirementPlanningRgpsPeriod ?? null;
     this.competenceBelowTheMinimum = props.competenceBelowTheMinimum ?? null;
+    this.analysis = props.analysis ?? null;
   }
 }
