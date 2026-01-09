@@ -86,23 +86,8 @@ export class ListAnalysisToolRecordUseCase {
 
         const analysis =
           analysisToolRecord.cnisFastAnalysis ??
-          analysisToolRecord.retirementPlanningRpps;
-
-        const retirementPlanningRgps =
+          analysisToolRecord.retirementPlanningRpps ??
           analysisToolRecord.retirementPlanningRgps;
-
-        if (retirementPlanningRgps) {
-          const data = GetAnalysisToolRecordResponseDto.build({
-            ...analysisToolRecord,
-            analysisId: retirementPlanningRgps.id,
-            status: analysisToolRecord.status,
-            analysisToolClient: client,
-            createdBy,
-            updatedBy,
-          });
-
-          resource.push(data);
-        }
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({
