@@ -56,22 +56,25 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
     name: 'security_system',
     type: 'simple-enum',
     enum: LegalPleadingSocialSecuritySystemEnum,
+    nullable: true,
   })
-  public securitySystem: LegalPleadingSocialSecuritySystemEnum;
+  public securitySystem: LegalPleadingSocialSecuritySystemEnum | null;
 
   @Column({
     name: 'benefit_type',
     type: 'simple-enum',
     enum: LegalPleadingBenefitTypeEnum,
+    nullable: true,
   })
-  public benefitType: LegalPleadingBenefitTypeEnum;
+  public benefitType: LegalPleadingBenefitTypeEnum | null;
 
   @Column({
     name: 'petition_type',
     type: 'simple-enum',
     enum: LegalPleadingPetitionTypeEnum,
+    nullable: true,
   })
-  public petitionType: LegalPleadingPetitionTypeEnum;
+  public petitionType: LegalPleadingPetitionTypeEnum | null;
 
   @Column({
     name: 'benefit_number',
