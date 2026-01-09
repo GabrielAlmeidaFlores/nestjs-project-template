@@ -151,14 +151,16 @@ export class GetLegalPleadingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public additionalComments?: string;
 
-  @ResponseDtoEnumProperty(LegalPleadingSocialSecuritySystemEnum)
-  public securitySystem: LegalPleadingSocialSecuritySystemEnum;
+  @ResponseDtoEnumProperty(LegalPleadingSocialSecuritySystemEnum, {
+    required: false,
+  })
+  public securitySystem?: LegalPleadingSocialSecuritySystemEnum;
 
-  @ResponseDtoEnumProperty(LegalPleadingBenefitTypeEnum)
-  public benefitType: LegalPleadingBenefitTypeEnum;
+  @ResponseDtoEnumProperty(LegalPleadingBenefitTypeEnum, { required: false })
+  public benefitType?: LegalPleadingBenefitTypeEnum;
 
-  @ResponseDtoEnumProperty(LegalPleadingPetitionTypeEnum)
-  public petitionType: LegalPleadingPetitionTypeEnum;
+  @ResponseDtoEnumProperty(LegalPleadingPetitionTypeEnum, { required: false })
+  public petitionType?: LegalPleadingPetitionTypeEnum;
 
   @ResponseDtoValueObjectProperty(BenefitNumber, { required: false })
   public benefitNumber?: BenefitNumber;
