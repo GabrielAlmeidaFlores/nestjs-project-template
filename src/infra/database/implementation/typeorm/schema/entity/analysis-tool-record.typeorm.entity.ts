@@ -50,6 +50,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
       nullable: true,
     },
   )
+  @JoinColumn({ name: 'retirement_planning_rpps_id' })
   public retirementPlanningRpps?: RetirementPlanningRppsTypeormEntity | null;
 
   @ManyToOne(() => RetirementPlanningRgpsTypeormEntity)
