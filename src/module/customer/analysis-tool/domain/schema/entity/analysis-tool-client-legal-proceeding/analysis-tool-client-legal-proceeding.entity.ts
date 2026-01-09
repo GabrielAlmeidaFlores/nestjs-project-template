@@ -8,6 +8,18 @@ export class AnalysisToolClientLegalProceedingEntity extends BaseEntity<Analysis
   @Description('Número do processo judicial.')
   public readonly legalProceedingNumber: string;
 
+  @Description('Tipo do processo judicial.')
+  public readonly type: string | null;
+
+  @Description('Status do processo judicial.')
+  public readonly status: string | null;
+
+  @Description('Data da última atualização do processo judicial.')
+  public readonly lastUpdated: Date | null;
+
+  @Description('Data do prazo do processo judicial.')
+  public readonly deadline: Date | null;
+
   @Description(
     'Cliente da ferramenta de análise associado ao processo judicial.',
   )
@@ -21,6 +33,10 @@ export class AnalysisToolClientLegalProceedingEntity extends BaseEntity<Analysis
     super(AnalysisToolClientLegalProceedingId, props);
 
     this.legalProceedingNumber = props.legalProceedingNumber;
+    this.type = props.type ?? null;
+    this.status = props.status ?? null;
+    this.lastUpdated = props.lastUpdated ?? null;
+    this.deadline = props.deadline ?? null;
     this.analysisToolClient = props.analysisToolClient;
   }
 }

@@ -6,7 +6,7 @@ import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
@@ -40,7 +40,7 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMap
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
-        GetAnalysisToolClientWithRelationsQueryResult,
+        GetAnalysisToolClientQueryResult,
       );
 
       const legalProceedingDetail = this.mapper.mapArray(
@@ -75,7 +75,7 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMap
     ): AnalysisToolClientLegalProceedingTypeormEntity => {
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
-        GetAnalysisToolClientWithRelationsQueryResult,
+        GetAnalysisToolClientQueryResult,
         AnalysisToolClientTypeormEntity,
       );
 

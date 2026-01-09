@@ -3,7 +3,7 @@ import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class CountLegalProceedingDetailResponseDto extends BaseBuildableDtoObject {
+export class CountLegalProceedingDetailStatusResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoNumberProperty()
   public readonly inProgress: number;
 
@@ -14,5 +14,5 @@ export class CountLegalProceedingDetailResponseDto extends BaseBuildableDtoObjec
   public readonly total: number;
 
   protected override readonly _type =
-    CountLegalProceedingDetailResponseDto.name;
+    CountLegalProceedingDetailStatusResponseDto.name;
 }
