@@ -2112,7 +2112,8 @@ Você é o assistente mais completo para análise previdenciária. Use todos os 
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS,
       ),
-      prompt: `        # PROMPT PARA GERAÇÃO DE PARECER TÉCNICO COMPLETO
+      prompt: `        
+        # PROMPT PARA GERAÇÃO DE PARECER TÉCNICO COMPLETO
         # Versão: 1.0.0
         # Modelo IA recomendado: Claude Sonnet 4 ou superior
         # Caso de uso: Parecer detalhado para entrega ao cliente
