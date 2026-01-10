@@ -198,7 +198,7 @@ function buildEndpointThrottleSpecification(
     decorator.push(UseGuards(ThrottlerGuard));
     decorator.push(
       Throttle({
-        default: { limit: 400, ttl: minutes(1) },
+        default: { limit: 300, ttl: minutes(1) },
       }),
     );
   }
