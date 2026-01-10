@@ -86,6 +86,24 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       }),
     );
 
+    if (response.lastPaymentDate) {
+      response.lastPaymentDate = moment(response.lastPaymentDate)
+        .startOf('day')
+        .toDate();
+    }
+
+    if (response.nextDueDate) {
+      response.nextDueDate = moment(response.nextDueDate)
+        .startOf('day')
+        .toDate();
+    }
+
+    if (response.accessionDate) {
+      response.accessionDate = moment(response.accessionDate)
+        .startOf('day')
+        .toDate();
+    }
+
     return response;
   }
 
