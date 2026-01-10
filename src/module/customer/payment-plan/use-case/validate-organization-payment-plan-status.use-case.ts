@@ -161,10 +161,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
     )[0];
 
-    if (firstBankPayment?.paymentMethod !== undefined) {
-      response.paymentMethod = firstBankPayment.paymentMethod;
-    }
-
     if (firstBankPayment?.paymentDate) {
       response.accessionDate = firstBankPayment.paymentDate;
     }
@@ -217,10 +213,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       });
 
     const lastConfirmedPayment = sortedConfirmedPayments[0];
-
-    if (lastConfirmedPayment?.paymentMethod !== undefined) {
-      response.paymentMethod = lastConfirmedPayment.paymentMethod;
-    }
 
     let isActive = false;
 
