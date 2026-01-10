@@ -11,9 +11,9 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { PublicPropertyType } from '@shared/system/type/public-property.type';
 
 @Injectable()
-export class GetAnalysisToolClientLegalProceedingActionUseCase {
+export class ListAnalysisToolClientLegalProceedingActionUseCase {
   protected readonly _type =
-    GetAnalysisToolClientLegalProceedingActionUseCase.name;
+    ListAnalysisToolClientLegalProceedingActionUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)

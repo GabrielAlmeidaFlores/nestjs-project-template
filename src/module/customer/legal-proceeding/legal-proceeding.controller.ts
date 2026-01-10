@@ -14,8 +14,8 @@ import { ListLegalProceedingDetailWithRelationsResponseDto } from '@module/custo
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
 import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
-import { GetAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
+import { ListAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/list-analysis-tool-client-legal-proceeding-actions.use-case';
 import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
 import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -37,7 +37,7 @@ export class LegalProceedingController {
     private readonly getLegalProceedingDetailByLegalProceedingNumberUseCase: GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     private readonly countLegalProceedingDetailUseCase: CountLegalProceedingDetailUseCase,
     private readonly listLegalProceedingDetailByAnalysisToolClientIdUseCase: ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
-    private readonly getAnalysisToolClientLegalProceedingActionUseCase: GetAnalysisToolClientLegalProceedingActionUseCase,
+    private readonly listAnalysisToolClientLegalProceedingActionUseCase: ListAnalysisToolClientLegalProceedingActionUseCase,
     private readonly getAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase: GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
   ) {}
 
@@ -114,13 +114,13 @@ export class LegalProceedingController {
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
-  public async getLegalProceedingDetailActionByOrganization(
+  public async listLegalProceedingDetailActionByOrganization(
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Query() dto: ListLegalProceedingDetailByDateRequestDto,
   ): Promise<ListLegalProceedingDetailResponseDto> {
-    return this.getAnalysisToolClientLegalProceedingActionUseCase.execute(
+    return this.listAnalysisToolClientLegalProceedingActionUseCase.execute(
       organizationSessionData,
       sessionData,
       dto,
@@ -158,17 +158,17 @@ export class LegalProceedingController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar registros numero do processo judicial',
+    summary: 'Buscar registros numero do processo judicial',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'legal-proceeding-number',
+      path: ':legalProceedingNumber',
       method: RequestMethod.GET,
     },
     tag: ['processos-juridicos'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description:
-        'Listar registros detalhados sobre os processos judiciais conforme o numero do processo',
+        'Registro detalhado sobre o processo judicial conforme o numero do processo',
       type: GetLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
