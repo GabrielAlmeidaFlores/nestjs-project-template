@@ -52,6 +52,8 @@ import { GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile } fro
 import { LegalPleadingDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-document/legal-pleading-document-entity.auto-mapper.profile';
 import { GetLegalPleadingDocumentAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-document-analysis/get-legal-pleading-document-analysis-query-result.auto-mapper.profile';
 import { LegalPleadingDocumentAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-document-analysis/legal-pleading-document-analysis-entity.auto-mapper.profile';
+import { LegalPleadingHistoryEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-history/legal-pleading-history-entity.auto-mapper.profile';
+import { LegalPleadingHistoryQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-history/legal-pleading-history-query-result.auto-mapper.profile';
 import { GetLegalPleadingResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-result/get-legal-pleading-result-query-result.auto-mapper.profile';
 import { LegalPleadingResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading-result/legal-pleading-result-entity.auto-mapper.profile';
 import { GetLegalProceedingDetailQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-query-result.auto-mapper.profile';
@@ -143,6 +145,8 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     LegalPleadingEntityAutoMapperProfile,
     LegalPleadingAddressEntityAutoMapperProfile,
     LegalPleadingDocumentEntityAutoMapperProfile,
+    LegalPleadingHistoryEntityAutoMapperProfile,
+    LegalPleadingHistoryQueryResultAutoMapperProfile,
     GetLegalPleadingWithRelationsQueryResultAutoMapperProfile,
     GetLegalPleadingAddressQueryResultAutoMapperProfile,
     GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile,
