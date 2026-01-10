@@ -194,6 +194,13 @@ function buildEndpointThrottleSpecification(
         default: { limit: props.limit, ttl: minutes(props.ttlInMinutes) },
       }),
     );
+  } else {
+    decorator.push(UseGuards(ThrottlerGuard));
+    decorator.push(
+      Throttle({
+        default: { limit: 400, ttl: minutes(1) },
+      }),
+    );
   }
 
   return decorator;
