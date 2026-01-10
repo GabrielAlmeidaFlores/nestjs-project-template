@@ -18,6 +18,7 @@ import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module
 import { ListAnalysisToolClientLegalProceedingByLegalProceedingNumberQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-by-legal-proceeding-number.query.param.gateway';
 import { ListAnalysisToolClientLegalProceedingCreatedRangeQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding-created-range.query.param.gateway';
 import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/param/list-analysis-tool-client-legal-proceeding.query.param.gateway';
+import { GetAnalysisToolClientLegalProceedingStatistics } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-statistics.query.result';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
 
@@ -92,6 +93,68 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         resource: mappedData,
       },
     );
+  }
+
+  public async countByOrganizationId(
+    organizationId: OrganizationId,
+  ): Promise<GetAnalysisToolClientLegalProceedingStatistics> {
+    const totalLegalProceedings = await this.repository.count({
+      where: {
+        analysisToolClient: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    const pendingLegalProceedings = await this.repository.count({
+      where: {
+        status: 'in_progress',
+        analysisToolClient: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    const completedLegalProceedings = await this.repository.count({
+      where: {
+        status: 'completed',
+        analysisToolClient: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    const legalProceedingWithOpenDeadlines = await this.repository.count({
+      where: {
+        deadline: MoreThanOrEqual(new Date()),
+        analysisToolClient: {
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+          },
+        },
+      },
+    });
+
+    return GetAnalysisToolClientLegalProceedingStatistics.build({
+      totalLegalProceedings,
+      pendingLegalProceedings,
+      completedLegalProceedings,
+      legalProceedingWithOpenDeadlines,
+    });
   }
 
   public async listByOrganizationId(
