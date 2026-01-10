@@ -19,9 +19,14 @@ export class SendGridService implements EmailGateway {
   public async sendHTMLEmail(props: SendHTMLEmailInputModel): Promise<void> {
     let emailTemplate = this.getEmailTemplate(props.emailTemplateName);
 
-    Object.keys(props.emailTemplateParameters).forEach((key) => {
+    const emailTemplateParametersCopy: Record<string, string> = {
+      ...props.emailTemplateParameters,
+      currentYear: new Date().getFullYear().toString(),
+    };
+
+    Object.keys(emailTemplateParametersCopy).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, 'g');
-      const value = props.emailTemplateParameters[key];
+      const value = emailTemplateParametersCopy[key];
 
       if (value !== undefined) {
         emailTemplate = emailTemplate.replace(regex, value);
