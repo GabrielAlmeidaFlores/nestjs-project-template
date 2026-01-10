@@ -47,7 +47,7 @@ export class AsaasService extends PaymentGateway {
       const data = {
         name: props.name,
         email: props.email.toString(),
-        mobilePhone: props.phoneNumber.toString(),
+        mobilePhone: props.phoneNumber.toStringWithoutCountryCode(),
         cpfCnpj: props.federalDocument.toString(),
         externalReference: props.externalReference,
         notificationDisabled: true,
