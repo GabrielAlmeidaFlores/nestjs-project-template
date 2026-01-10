@@ -203,12 +203,10 @@ export class LegalProceedingController {
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async countLegalProceedingDetail(
-    @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
   ): Promise<CountLegalProceedingDetailStatusResponseDto> {
     return this.countLegalProceedingDetailUseCase.execute(
-      sessionData,
       organizationSessionData,
     );
   }
