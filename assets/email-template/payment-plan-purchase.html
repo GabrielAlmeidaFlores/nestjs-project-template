@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Esqueci a Senha</title>
+    <title>Confirmação de Pagamento</title>
     <style>
       body {
         margin: 0;
@@ -89,15 +89,17 @@
           width="200"
         />
       </div>
-      <div class="title">Esqueci a senha</div>
+      <div class="title">Confirmação de Pagamento</div>
       <div class="content">
         <p>Olá {{name}},</p>
         <p>
-          Esqueceu a senha? Não se preocupe! Utilize o
-          <a href="#">código</a> abaixo na plataforma para redefinir sua senha:
+          Obrigado por escolher o nosso sistema! 
+        </p>
+        <p>
+          Temos o prazer de informar que o pagamento do seu plano <b>{{planName}}</b> foi confirmado com sucesso!
         </p>
       </div>
-      <div class="code-box">{{code}}</div>
+      <div class="code-box">{{amount}}</div>
       <div class="footer">
         <p>
           Dúvidas? Estamos aqui para ajudar:
@@ -109,7 +111,7 @@
       </div>
     </div>
     <div class="bottom-bar">
-      © {{currentYear}}  AgilizaPrevi. Todos os direitos reservados
+      © {{currentYear}} AgilizaPrevi. Todos os direitos reservados
     </div>
   </body>
 </html>

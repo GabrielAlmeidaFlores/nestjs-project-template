@@ -33,4 +33,8 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
   public toString(): string {
     return this.value;
   }
+
+  public toStringWithoutCountryCode(): string {
+    return this.value.substring(2);
+  }
 }
