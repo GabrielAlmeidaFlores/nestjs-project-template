@@ -150,6 +150,7 @@ export class OrganizationPaymentPlanTypeormQueryRepository
           },
         },
       },
+      relations: ['organizationPaymentPlanBankPayment'],
     });
 
     if (!data) {
