@@ -65,7 +65,9 @@ export class CountLegalProceedingDetailUseCase {
     let completed = 0;
     let total = 0;
 
-    Array.from(uniqueProceedingsMap.values()).forEach((proceeding) => {
+    const uniqueProceedingsMapArray = Array.from(uniqueProceedingsMap.values());
+
+    uniqueProceedingsMapArray.forEach((proceeding) => {
       const status = this.legalProceedingConsumer.extractLastItemStatus(
         proceeding.detail,
       );
