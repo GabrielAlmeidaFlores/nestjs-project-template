@@ -36,6 +36,13 @@ export class EmailApplicationVariable {
       'forgot-password.html',
     );
 
+  public static readonly EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE',
+      String,
+      'payment-plan-purchase.html',
+    );
+
   public static readonly EMAIL_FORGOT_PASSWORD_CODE_SUBJECT =
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_FORGOT_PASSWORD_SUBJECT',
