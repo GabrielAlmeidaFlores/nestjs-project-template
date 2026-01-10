@@ -6,12 +6,9 @@ import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool
 import { LegalProceedingController } from '@module/customer/legal-proceeding/legal-proceeding.controller';
 import { LegalProceedingConsumerModule } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.module';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
-import { GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-analysis-tool-client-legal-proceeding-actions-by-legal-proceeding-number.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { LegalProceedingCronUseCase } from '@module/customer/legal-proceeding/use-case/legal-proceeding-cron.use-case';
 import { ListAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/list-analysis-tool-client-legal-proceeding-actions.use-case';
-import { ListLegalProceedingDetailByAnalysisToolClientIdUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail-by-analysis-tool-client-id.use-case';
-import { ListLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/list-legal-proceeding-detail.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -29,12 +26,9 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   controllers: [LegalProceedingController],
   providers: [
     LegalProceedingCronUseCase,
-    ListLegalProceedingDetailUseCase,
     GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     CountLegalProceedingDetailUseCase,
-    ListLegalProceedingDetailByAnalysisToolClientIdUseCase,
     ListAnalysisToolClientLegalProceedingActionUseCase,
-    GetAnalysisToolClientLegalProceedingActionByLegalProceedingNumberUseCase,
   ],
 })
 export class LegalProceedingModule {
