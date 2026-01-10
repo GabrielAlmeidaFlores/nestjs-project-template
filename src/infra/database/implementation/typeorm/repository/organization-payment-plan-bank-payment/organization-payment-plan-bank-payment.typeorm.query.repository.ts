@@ -138,6 +138,9 @@ export class OrganizationPaymentPlanBankPaymentTypeormQueryRepository
         bankPayment: {
           id: bankPaymentId.toString(),
         },
+        organizationPaymentPlan: {
+          canceled: false,
+        },
       },
       relations: ['organizationPaymentPlan', 'bankPayment'],
     });
