@@ -139,6 +139,7 @@ export class UpdateRetirementPlanningRppsUseCase {
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
     });
 
     const transactionOperations: TransactionType[] = [];
