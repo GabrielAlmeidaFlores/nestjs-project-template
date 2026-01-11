@@ -4,10 +4,11 @@ import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ListDataResponseDto } from '@shared/api/util/dto/response/list-data.response.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class ListLegalPleadingHistoryItemResponseDto extends BaseBuildableDtoObject {
+export class GetLegalPleadingHistoryItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public id: string;
 
@@ -21,15 +22,15 @@ export class ListLegalPleadingHistoryItemResponseDto extends BaseBuildableDtoObj
   public createdAt: Date;
 
   protected override readonly _type =
-    ListLegalPleadingHistoryItemResponseDto.name;
+    GetLegalPleadingHistoryItemResponseDto.name;
 }
 
 @ResponseDto()
-export class ListLegalPleadingHistoryResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(() => ListLegalPleadingHistoryItemResponseDto, {
+export class ListLegalPleadingHistoryResponseDto extends ListDataResponseDto<GetLegalPleadingHistoryItemResponseDto> {
+  @ResponseDtoObjectProperty(() => GetLegalPleadingHistoryItemResponseDto, {
     isArray: true,
   })
-  public history: ListLegalPleadingHistoryItemResponseDto[];
+  public override resource: GetLegalPleadingHistoryItemResponseDto[];
 
   protected override readonly _type = ListLegalPleadingHistoryResponseDto.name;
 }
