@@ -1,8 +1,8 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
-import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
@@ -30,8 +30,8 @@ export class GetRetirementPlanningRgpsPeriodResponseDto extends BaseBuildableDto
   @ResponseDtoBooleanProperty({ required: false })
   public competenceBelowTheMinimum?: boolean;
 
-  @ResponseDtoNumberProperty({ required: false })
-  public contributionAverage?: number;
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public contributionAverage?: DecimalValue;
 
   @ResponseDtoStringProperty({ required: false })
   public typeOfContribution?: string;

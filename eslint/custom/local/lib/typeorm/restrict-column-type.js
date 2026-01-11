@@ -77,7 +77,21 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
 
           let actualType;
           if (actualTypeNode.type === 'TSUnionType') {
-            actualType = actualTypeNode.types.map((t) => t.type).join('|');
+            const nonNullableType = actualTypeNode.types.find(
+              (t) => t.type !== 'TSNullKeyword' && t.type !== 'TSUndefinedKeyword'
+            );
+            if (nonNullableType) {
+              if (
+                nonNullableType.type === 'TSTypeReference' &&
+                nonNullableType.typeName.type === 'Identifier'
+              ) {
+                actualType = nonNullableType.typeName.name;
+              } else {
+                actualType = nonNullableType.type;
+              }
+            } else {
+              actualType = null;
+            }
           } else if (
             actualTypeNode.type === 'TSTypeReference' &&
             actualTypeNode.typeName.type === 'Identifier'

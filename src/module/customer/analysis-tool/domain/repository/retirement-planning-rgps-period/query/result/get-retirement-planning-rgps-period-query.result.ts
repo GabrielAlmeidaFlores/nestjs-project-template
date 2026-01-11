@@ -1,3 +1,4 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
@@ -17,7 +18,7 @@ export class GetRetirementPlanningRgpsPeriodQueryResult extends BaseBuildableObj
 
   public readonly competenceBelowTheMinimum: boolean | null;
 
-  public readonly contributionAverage: number | null;
+  public readonly contributionAverage: DecimalValue | null;
 
   public readonly typeOfContribution: string | null;
 

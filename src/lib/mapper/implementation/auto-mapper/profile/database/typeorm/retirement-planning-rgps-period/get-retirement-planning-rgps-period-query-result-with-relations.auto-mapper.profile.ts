@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { GetRetirementPlanningRgpsPeriodQueryResultWithRelations } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/result/get-retirement-planning-rgps-period-query-result-with-relations';
@@ -32,9 +33,15 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
         RetirementPlanningRgpsEntity,
       );
 
+      const contributionAverage =
+        source.contributionAverage !== null
+          ? new DecimalValue(source.contributionAverage)
+          : null;
+
       return GetRetirementPlanningRgpsPeriodQueryResultWithRelations.build({
         ...source,
         id: new RetirementPlanningRgpsPeriodId(source.id),
+        contributionAverage,
         retirementPlanningRgps,
       });
     };
@@ -59,9 +66,15 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
         RetirementPlanningRgpsTypeormEntity,
       );
 
+      const contributionAverage =
+        source.contributionAverage !== null
+          ? source.contributionAverage.toString()
+          : null;
+
       return RetirementPlanningRgpsPeriodTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        contributionAverage,
         retirementPlanningRgps,
       });
     };
