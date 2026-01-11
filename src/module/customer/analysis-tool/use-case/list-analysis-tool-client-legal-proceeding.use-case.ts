@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import {
   GetAnalysisToolClientLegalProceedingClientDetailResponseDto,
   GetAnalysisToolClientLegalProceedingResponseDto,

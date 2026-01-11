@@ -4,10 +4,10 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { RetirementPlanningRgpsSpecialPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/command/retirement-planning-rgps-special-period.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
-import { RetirementPlanningRgpsSpecialPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-special-period/retirement-planning-rgps-special-period.entity';
+import { RetirementPlanningRgpsSpecialPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-special-period/command/retirement-planning-rgps-special-period.repository.gateway';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { RetirementPlanningRgpsSpecialPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-special-period/retirement-planning-rgps-special-period.entity';
 import { AnalyzeRetirementPlanningRgpsPppRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-ppp.request.dto';
 import { AnalyzeRetirementPlanningRgpsPppResponseDto } from '@module/customer/analysis-tool/dto/response/analyze-retirement-planning-rgps-ppp.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';

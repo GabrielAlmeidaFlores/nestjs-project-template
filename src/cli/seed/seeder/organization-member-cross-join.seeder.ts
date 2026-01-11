@@ -1,12 +1,12 @@
 import { Inject, Logger } from '@nestjs/common';
 
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { OrganizationMemberCommandRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/command/organization-member.command.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { OrganizationQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization/query/organization.query.repository.gateway';
 import { CustomerEntity } from '@module/customer/account/domain/schema/entity/customer/customer.entity';
-import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
 import { OrganizationEntity } from '@module/customer/account/domain/schema/entity/organization/organization.entity';
+import { OrganizationMemberEntity } from '@module/customer/account/domain/schema/entity/organization-member/organization-member.entity';
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
