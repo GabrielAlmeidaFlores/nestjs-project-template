@@ -92,11 +92,17 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
         ? new Date(latestItem.datadisponibilizacao)
         : undefined;
 
+    const textContent = latestItem?.texto ?? undefined;
+
     const response = LegalProceedingDataOutputModel.build({
       recipient,
       recipientLawyer,
       status,
     });
+
+    if (textContent !== undefined) {
+      response.textContent = textContent;
+    }
 
     if (type !== undefined) {
       response.type = type;
