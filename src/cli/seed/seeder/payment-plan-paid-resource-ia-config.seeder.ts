@@ -5,9 +5,9 @@ import { PAYMENT_PLAN_PAID_RESOURCE_SEED } from '@cli/seed/seeder/payment-plan-p
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
-import { PaymentPlanPaidResourceIaConfigEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.entity';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
+import { PaymentPlanPaidResourceIaConfigEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config.entity';
 
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 
