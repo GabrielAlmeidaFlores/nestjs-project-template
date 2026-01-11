@@ -31,7 +31,7 @@ export class BaseTypeormTransactionRepository implements BaseTransactionReposito
         await queryRunner.release();
       }
     };
-    const timeoutInMilliseconds = 30_000;
+    const timeoutInMilliseconds = 200_000;
     const timeout = setTimeout(() => {
       void timeoutPromise();
     }, timeoutInMilliseconds);

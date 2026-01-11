@@ -6,7 +6,6 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
-import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
@@ -59,7 +58,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
     sessionData: SessionDataModel,
     dto: GenerateMonthlyPaymentBillingRequestDto,
   ): Promise<GenerateMonthlyPaymentBillingResponseDto> {
-    const organizationId = organizationSessionData.organizationId.toString();
+    const organizationId = organizationSessionData.organizationId;
 
     const paymentPlan =
       await this.paymentPlanQueryRepository.findOnePaymentPlanByIdOrFail(
@@ -118,7 +117,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       maxMemberCount: paymentPlan.maxMemberCount,
       monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
       cycle: paymentPlan.cycle,
-      organization: new OrganizationId(organizationId),
+      organization: organizationId,
       paymentPlan: paymentPlan.id,
       canceled: false,
     });
