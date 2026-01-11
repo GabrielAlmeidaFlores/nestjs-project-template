@@ -1,3 +1,5 @@
+import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import type { ListLegalPleadingHistoryQueryParam } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/param/list-legal-pleading-history.query.param';
 import type { GetLegalPleadingHistoryQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/result/get-legal-pleading-history.query.result';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import type { LegalPleadingHistoryId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/value-object/legal-pleading-history-id/legal-pleading-history-id.value-object';
@@ -7,7 +9,8 @@ export abstract class LegalPleadingHistoryQueryRepositoryGateway {
     id: LegalPleadingHistoryId,
   ): Promise<GetLegalPleadingHistoryQueryResult | null>;
 
-  public abstract findManyLegalPleadingHistoryByLegalPleadingId(
+  public abstract listByLegalPleadingId(
     legalPleadingId: LegalPleadingId,
-  ): Promise<GetLegalPleadingHistoryQueryResult[]>;
+    listData: ListLegalPleadingHistoryQueryParam,
+  ): Promise<ListDataOutputModel<GetLegalPleadingHistoryQueryResult>>;
 }

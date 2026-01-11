@@ -21,6 +21,7 @@ import { CreateRetirementPlanningRppsRequestDto } from '@module/customer/analysi
 import { GetAnalysisToolRecordStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-record-statistics.request.dto';
 import { GetLegalPleadingStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-legal-pleading-statistics.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
+import { ListLegalPleadingHistoryRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading-history.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
 import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
@@ -652,11 +653,13 @@ export class AnalysisToolController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
     legalPleadingId: LegalPleadingId,
+    @Query() dto: ListLegalPleadingHistoryRequestDto,
   ): Promise<ListLegalPleadingHistoryResponseDto> {
     return await this.listLegalPleadingHistoryUseCase.execute(
       sessionData,
       organizationSessionData,
       legalPleadingId,
+      dto,
     );
   }
 

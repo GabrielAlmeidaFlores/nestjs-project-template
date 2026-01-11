@@ -2,9 +2,11 @@ import { Injectable, Inject } from '@nestjs/common';
 
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/legal-pleading-history.query.repository.gateway';
+import { ListLegalPleadingHistoryQueryParam } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/param/list-legal-pleading-history.query.param';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { ListLegalPleadingHistoryRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading-history.request.dto';
 import {
-  ListLegalPleadingHistoryItemResponseDto,
+  GetLegalPleadingHistoryItemResponseDto,
   ListLegalPleadingHistoryResponseDto,
 } from '@module/customer/analysis-tool/dto/response/list-legal-pleading-history.response.dto';
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
@@ -26,6 +28,7 @@ export class ListLegalPleadingHistoryUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     legalPleadingId: LegalPleadingId,
+    dto: ListLegalPleadingHistoryRequestDto,
   ): Promise<ListLegalPleadingHistoryResponseDto> {
     await this.legalPleadingQueryRepositoryGateway.findOneByLegalPleadingIdAndOrganizationIdAndAuthIdentityIdOrFail(
       legalPleadingId,
@@ -34,13 +37,16 @@ export class ListLegalPleadingHistoryUseCase {
       LegalPleadingNotFoundError,
     );
 
-    const historyList =
-      await this.legalPleadingHistoryQueryRepositoryGateway.findManyLegalPleadingHistoryByLegalPleadingId(
+    const queryParam = new ListLegalPleadingHistoryQueryParam(dto);
+
+    const data =
+      await this.legalPleadingHistoryQueryRepositoryGateway.listByLegalPleadingId(
         legalPleadingId,
+        queryParam,
       );
 
-    const history = historyList.map((item) =>
-      ListLegalPleadingHistoryItemResponseDto.build({
+    const resource = data.resource.map((item) =>
+      GetLegalPleadingHistoryItemResponseDto.build({
         id: item.id.toString(),
         title: item.title,
         description: item.description,
@@ -49,7 +55,8 @@ export class ListLegalPleadingHistoryUseCase {
     );
 
     return ListLegalPleadingHistoryResponseDto.build({
-      history,
+      ...data,
+      resource,
     });
   }
 }
