@@ -165,7 +165,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     await this.emailGateway.sendHTMLEmail(
       SendHTMLEmailInputModel.build({
         to: creditCardHolderInfo.email.toString(),
-        subject: 'Confirmação de Pagamento do Plano',
+        subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
         emailTemplateName:
           EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
         emailTemplateParameters: {
