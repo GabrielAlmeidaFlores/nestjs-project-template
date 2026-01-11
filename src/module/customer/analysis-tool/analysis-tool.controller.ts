@@ -21,6 +21,7 @@ import { CreateRetirementPlanningRppsRequestDto } from '@module/customer/analysi
 import { GetAnalysisToolRecordStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-analysis-tool-record-statistics.request.dto';
 import { GetLegalPleadingStatisticsRequestDto } from '@module/customer/analysis-tool/dto/request/get-legal-pleading-statistics.request.dto';
 import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool/dto/request/list-analysis-tool-record.request.dto';
+import { ListLegalPleadingHistoryRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading-history.request.dto';
 import { ListLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-pleading.request.dto';
 import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
 import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/list-retirement-planning-rpps-remuneration.request.dto';
@@ -52,6 +53,7 @@ import { ListAnalysisToolClientLegalProceedingResponseDto } from '@module/custom
 import { ListAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-client.response.dto';
 import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/list-analysis-tool-record.response.dto';
 import { ListCidTenResponseDto } from '@module/customer/analysis-tool/dto/response/list-cid-ten.response.dto';
+import { ListLegalPleadingHistoryResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading-history.response.dto';
 import { ListLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/list-legal-pleading.response.dto';
 import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
@@ -88,6 +90,7 @@ import { ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase } from 
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
+import { ListLegalPleadingHistoryUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading-history.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
@@ -147,6 +150,7 @@ export class AnalysisToolController {
     private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
     private readonly getLegalPleadingStatisticsUseCase: GetLegalPleadingStatisticsUseCase,
     private readonly deleteLegalPleadingUseCase: DeleteLegalPleadingUseCase,
+    private readonly listLegalPleadingHistoryUseCase: ListLegalPleadingHistoryUseCase,
     private readonly listAnalysisToolClientLegalProceedingUseCase: ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
   ) {}
 
@@ -625,6 +629,37 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       legalPleadingId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar histórico da peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'legal-pleading/:legalPleadingId/history',
+      method: RequestMethod.GET,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Histórico da peça processual retornado com sucesso.',
+      type: ListLegalPleadingHistoryResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async listLegalPleadingHistory(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+    @Query() dto: ListLegalPleadingHistoryRequestDto,
+  ): Promise<ListLegalPleadingHistoryResponseDto> {
+    return await this.listLegalPleadingHistoryUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
+      dto,
     );
   }
 

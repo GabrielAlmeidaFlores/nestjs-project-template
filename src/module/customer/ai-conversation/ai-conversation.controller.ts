@@ -116,6 +116,10 @@ export class AiConversationController {
       statusCode: HttpStatus.OK,
       type: SendMessageResponseDto,
     },
+    throttle: {
+      limit: 100,
+      ttlInMinutes: 1,
+    },
     summary: 'Enviar mensagem em uma conversa',
     tag: ['ai-conversation'],
     userLevel: [UserLevelEnum.CUSTOMER],
