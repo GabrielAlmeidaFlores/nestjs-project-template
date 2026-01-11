@@ -189,6 +189,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       retirementPlanningRpps: null,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
+      retirementPlanningRgps: null,
     });
 
     const updateAnalysisToolRecordTransaction =
