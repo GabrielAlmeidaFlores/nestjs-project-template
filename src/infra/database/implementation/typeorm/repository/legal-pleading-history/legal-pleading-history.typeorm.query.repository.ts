@@ -30,6 +30,7 @@ export class LegalPleadingHistoryTypeormQueryRepository
   ): Promise<GetLegalPleadingHistoryQueryResult | null> {
     const data = await this.repository.findOne({
       where: { id: id.toString() },
+      relations: ['legalPleading'],
     });
 
     if (!data) {
@@ -52,6 +53,7 @@ export class LegalPleadingHistoryTypeormQueryRepository
           id: legalPleadingId.toString(),
         },
       },
+      relations: ['legalPleading'],
       order: {
         createdAt: 'DESC',
       },

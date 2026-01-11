@@ -33,6 +33,8 @@ import { LegalPleadingDocumentTypeormCommandRepository } from '@infra/database/i
 import { LegalPleadingDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document/legal-pleading-document.typeorm.query.repository';
 import { LegalPleadingDocumentAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document-analysis/legal-pleading-document-analysis.typeorm.command.repository';
 import { LegalPleadingDocumentAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-document-analysis/legal-pleading-document-analysis.typeorm.query.repository';
+import { LegalPleadingHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-history/legal-pleading-history.typeorm.command.repository';
+import { LegalPleadingHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-pleading-history/legal-pleading-history.typeorm.query.repository';
 import { LegalProceedingDetailTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.command.repository';
 import { LegalProceedingDetailTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/legal-proceeding-detail/legal-proceeding-detail.typeorm.query.repository';
 import { OrganizationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/organization/organization.typeorm.command.repository';
@@ -73,6 +75,7 @@ import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document-analysis.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
+import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-history.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
@@ -123,6 +126,7 @@ export class TypeormIndex {
     LegalPleadingAddressTypeormEntity,
     LegalPleadingDocumentTypeormEntity,
     LegalPleadingDocumentAnalysisTypeormEntity,
+    LegalPleadingHistoryTypeormEntity,
     LegalPleadingResultTypeormEntity,
     AnalysisToolRecordTypeormEntity,
     CustomerTermsTypeormEntity,
@@ -182,6 +186,8 @@ export class TypeormIndex {
     LegalPleadingAddressTypeormQueryRepository,
     LegalPleadingDocumentAnalysisTypeormQueryRepository,
     LegalPleadingDocumentAnalysisTypeormCommandRepository,
+    LegalPleadingHistoryTypeormCommandRepository,
+    LegalPleadingHistoryTypeormQueryRepository,
     AnalysisToolRecordTypeormQueryRepository,
     AnalysisToolRecordTypeormCommandRepository,
     CustomerTermsTypeormCommandRepository,
