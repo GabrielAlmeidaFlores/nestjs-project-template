@@ -4,12 +4,15 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
+import { LegalPleadingHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/command/legal-pleading-history.command.repository.gateway';
 import { LegalPleadingResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/command/legal-pleading-result.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-document/enum/legal-pleading-document-type.enum';
+import { LegalPleadingHistoryTitleEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/enum/legal-pleading-history-title.enum';
+import { LegalPleadingHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/legal-pleading-history.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
@@ -39,6 +42,8 @@ export class CreateLegalPleadingResultUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(LegalPleadingCommandRepositoryGateway)
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
+    @Inject(LegalPleadingHistoryCommandRepositoryGateway)
+    private readonly legalPleadingHistoryCommandRepositoryGateway: LegalPleadingHistoryCommandRepositoryGateway,
     @Inject(LegalPleadingResultCommandRepositoryGateway)
     private readonly legalPleadingResultCommandRepositoryGateway: LegalPleadingResultCommandRepositoryGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
@@ -157,10 +162,23 @@ export class CreateLegalPleadingResultUseCase {
         legalPleadingResult,
       );
 
+    const legalPleadingHistory = new LegalPleadingHistoryEntity({
+      title: LegalPleadingHistoryTitleEnum.FIRST_VERSION,
+      description:
+        'Eloy enviou a primeira versão do documento para sua revisão.',
+      legalPleading: legalPleadingId,
+    });
+
+    const legalPleadingHistoryTransaction =
+      this.legalPleadingHistoryCommandRepositoryGateway.createLegalPleadingHistory(
+        legalPleadingHistory,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
       legalPleadingResultTransaction,
       legalPleadingTransaction,
+      legalPleadingHistoryTransaction,
     ]);
     await transaction.commit();
 

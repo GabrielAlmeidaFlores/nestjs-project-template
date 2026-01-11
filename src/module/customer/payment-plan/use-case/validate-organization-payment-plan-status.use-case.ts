@@ -86,6 +86,24 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       }),
     );
 
+    if (response.lastPaymentDate) {
+      response.lastPaymentDate = moment(response.lastPaymentDate)
+        .startOf('day')
+        .toDate();
+    }
+
+    if (response.nextDueDate) {
+      response.nextDueDate = moment(response.nextDueDate)
+        .startOf('day')
+        .toDate();
+    }
+
+    if (response.accessionDate) {
+      response.accessionDate = moment(response.accessionDate)
+        .startOf('day')
+        .toDate();
+    }
+
     return response;
   }
 
@@ -143,10 +161,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
     )[0];
 
-    if (firstBankPayment?.paymentMethod !== undefined) {
-      response.paymentMethod = firstBankPayment.paymentMethod;
-    }
-
     if (firstBankPayment?.paymentDate) {
       response.accessionDate = firstBankPayment.paymentDate;
     }
@@ -199,10 +213,6 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
       });
 
     const lastConfirmedPayment = sortedConfirmedPayments[0];
-
-    if (lastConfirmedPayment?.paymentMethod !== undefined) {
-      response.paymentMethod = lastConfirmedPayment.paymentMethod;
-    }
 
     let isActive = false;
 

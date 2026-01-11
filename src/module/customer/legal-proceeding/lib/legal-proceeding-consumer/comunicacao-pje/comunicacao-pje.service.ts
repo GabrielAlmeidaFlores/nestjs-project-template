@@ -74,9 +74,9 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
     const items = detailParsed.data.items;
     const lastItem = items.length > 0 ? items[items.length - 1] : null;
 
-    const recipient = (lastItem?.destinatarios ?? []) as unknown as string[];
+    const recipient = (lastItem?.destinatarios ?? []) as unknown as object[];
     const recipientLawyer = (lastItem?.destinatarioadvogados ??
-      []) as unknown as string[];
+      []) as unknown as object[];
 
     const latestItem = detailParsed.data.items[0];
 
@@ -92,11 +92,17 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
         ? new Date(latestItem.datadisponibilizacao)
         : undefined;
 
+    const textContent = latestItem?.texto ?? undefined;
+
     const response = LegalProceedingDataOutputModel.build({
       recipient,
       recipientLawyer,
       status,
     });
+
+    if (textContent !== undefined) {
+      response.textContent = textContent;
+    }
 
     if (type !== undefined) {
       response.type = type;

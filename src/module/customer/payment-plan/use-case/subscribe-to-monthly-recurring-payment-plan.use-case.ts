@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { EmailGateway } from '@infra/email/email.gateway';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
 import { SubscriptionCycleEnum } from '@infra/payment-gateway/enum/subscription-cycle.enum';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
@@ -24,6 +26,7 @@ import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/erro
 import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/delete-organization-payment-plan.use-case';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
 
 @Injectable()
 export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
@@ -45,6 +48,8 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
     private readonly deleteOrganizationPaymentPlanUseCase: DeleteOrganizationPaymentPlanUseCase,
+    @Inject(EmailGateway)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   public async execute(
@@ -151,6 +156,25 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     const response = SubscribeToMonthlyRecurringPaymentPlanResponseDto.build({
       organizationPaymentPlanId: organizationPaymentPlan.id,
     });
+
+    const amount = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(organizationPaymentPlan.price.toNumber());
+
+    await this.emailGateway.sendHTMLEmail(
+      SendHTMLEmailInputModel.build({
+        to: creditCardHolderInfo.email.toString(),
+        subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
+        emailTemplateName:
+          EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
+        emailTemplateParameters: {
+          name: creditCardHolderInfo.name,
+          planName: organizationPaymentPlan.name,
+          amount,
+        },
+      }),
+    );
 
     return response;
   }

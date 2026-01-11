@@ -2,6 +2,7 @@ import type { OrganizationId } from '@module/customer/account/domain/schema/enti
 import type { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
 import type { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
 import type { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
+import type { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 
 export abstract class OrganizationPaymentPlanQueryRepositoryGateway {
   public abstract findManyByOrganizationId(
@@ -26,5 +27,9 @@ export abstract class OrganizationPaymentPlanQueryRepositoryGateway {
 
   public abstract findOneByOrganizationId(
     organizationId: OrganizationId,
+  ): Promise<GetOrganizationPaymentPlanQueryResult | null>;
+
+  public abstract findOneByBankPaymentId(
+    bankPaymentId: BankPaymentId,
   ): Promise<GetOrganizationPaymentPlanQueryResult | null>;
 }

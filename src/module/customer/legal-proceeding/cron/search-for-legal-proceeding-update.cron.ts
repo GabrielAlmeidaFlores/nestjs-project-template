@@ -5,13 +5,16 @@ import { isEqual } from 'lodash';
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { EmailGateway } from '@infra/email/email.gateway';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
-import { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
+import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-limited-responsible-relations.query.result ';
 import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientLegalProceedingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/analysis-tool-client-legal-proceeding.query.repository.gateway';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
@@ -22,10 +25,11 @@ import { ResourceNotEnabledError } from '@module/customer/organization-credit/er
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanInactiveError } from '@module/customer/payment-plan/error/payment-plan-inactive.error';
+import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
 
 @Injectable()
-export class LegalProceedingCronUseCase {
-  protected readonly _type = LegalProceedingCronUseCase.name;
+export class SearchForLegalProceedingUpdateCron {
+  protected readonly _type = SearchForLegalProceedingUpdateCron.name;
   private readonly logger: Logger;
 
   public constructor(
@@ -51,8 +55,14 @@ export class LegalProceedingCronUseCase {
 
     @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
     private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+
+    @Inject(EmailGateway)
+    private readonly emailGateway: EmailGateway,
+
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepositoryGateway: CustomerQueryRepositoryGateway,
   ) {
-    this.logger = new Logger(LegalProceedingCronUseCase.name);
+    this.logger = new Logger(SearchForLegalProceedingUpdateCron.name);
   }
 
   @Cron(CronExpression.EVERY_5_HOURS)
@@ -124,19 +134,6 @@ export class LegalProceedingCronUseCase {
   private async processProceeding(
     proceeding: GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
   ): Promise<TransactionType[] | null> {
-    if (
-      proceeding.analysisToolClient instanceof
-        GetAnalysisToolClientQueryResult ===
-        false ||
-      proceeding.analysisToolClient.id instanceof AnalysisToolClientId === false
-    ) {
-      this.logger.warn(
-        `Proceeding ID ${proceeding.id.toString()} has no associated AnalysisToolClient ID. Skipping.`,
-      );
-
-      return null;
-    }
-
     let consumeCreditTransaction: TransactionType;
 
     const analysisToolClientQuery =
@@ -206,6 +203,21 @@ export class LegalProceedingCronUseCase {
       return null;
     }
 
+    try {
+      await this.sendUpdateEmail(
+        analysisToolClientQuery,
+        proceeding.legalProceedingNumber,
+        safeDetail,
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        this.logger.error(
+          `Error sending email for proceeding ${proceeding.legalProceedingNumber}: ${error.message}`,
+          error.stack,
+        );
+      }
+    }
+
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolClientQuery,
       createdBy: analysisToolClientQuery.createdBy.id,
@@ -239,5 +251,52 @@ export class LegalProceedingCronUseCase {
       consumeCreditTransaction,
       updateLegalProceeding,
     ];
+  }
+
+  private async sendUpdateEmail(
+    analysisToolClient: GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult,
+    legalProceedingNumber: string,
+    updateDetail: string,
+  ): Promise<void> {
+    const createdByCustomer: GetCustomerWithAuthIdentityRelationQueryResult | null =
+      await this.customerQueryRepositoryGateway.findOneByOrganizationMemberIdWithAuthIdentityRelation(
+        analysisToolClient.createdBy.id,
+      );
+
+    if (createdByCustomer === null) {
+      this.logger.warn(
+        `Cannot send email: customer not found for createdBy OrganizationMember ID ${analysisToolClient.createdBy.id.toString()}`,
+      );
+      return;
+    }
+
+    const userEmail = createdByCustomer.authIdentity.email;
+    const userName = createdByCustomer.name;
+
+    const updateContent =
+      this.legalProceedingConsumerGateway.extractLegalProceedingData(
+        updateDetail,
+      );
+
+    const updateLegalProceedingContent =
+      updateContent.textContent ?? 'Conteúdo não disponível';
+
+    await this.emailGateway.sendHTMLEmail(
+      SendHTMLEmailInputModel.build({
+        to: userEmail.toString(),
+        subject: EmailApplicationVariable.EMAIL_LEGAL_PROCEEDING_UPDATE_SUBJECT,
+        emailTemplateName:
+          EmailApplicationVariable.EMAIL_LEGAL_PROCEEDING_UPDATE_TEMPLATE,
+        emailTemplateParameters: {
+          name: userName,
+          legalProceedingNumber,
+          updateLegalProceedingContent,
+        },
+      }),
+    );
+
+    this.logger.log(
+      `Email sent successfully for legal proceeding ${legalProceedingNumber} to ${userEmail.toString()}`,
+    );
   }
 }
