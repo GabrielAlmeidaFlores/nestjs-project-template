@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsPeriodEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity.props.interface';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
@@ -13,16 +14,21 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
 
   @Description('Data de término do período de contribuição RGPS.')
   public readonly periodEnd: Date | null;
+
   @Description('Categoria do período de contribuição RGPS.')
   public readonly category: string | null;
+
   @Description('Indica se há pendência no período de contribuição RGPS.')
   public readonly isPendency: boolean | null;
+
   @Description(
     'Indica se a competência está abaixo do mínimo no período de contribuição RGPS.',
   )
   public readonly competenceBelowTheMinimum: boolean | null;
+
   @Description('Média de contribuição no período de contribuição RGPS.')
-  public readonly contributionAverage: number | null;
+  public readonly contributionAverage: DecimalValue | null;
+
   @Description('Tipo de contribuição no período de contribuição RGPS.')
   public readonly typeOfContribution: string | null;
   @Description(

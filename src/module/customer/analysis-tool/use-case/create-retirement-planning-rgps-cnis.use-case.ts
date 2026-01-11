@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
@@ -203,7 +204,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                 null,
               isPendency: reasonPendency !== '',
               competenceBelowTheMinimum,
-              contributionAverage,
+              contributionAverage: new DecimalValue(contributionAverage),
               typeOfContribution,
               retirementPlanningRgps: updatedRetirementPlanningRgps,
               reasonPendency,

@@ -57,7 +57,7 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
 
   @Column({
     name: 'compare_cnis_ctps_raw',
-    type: 'json',
+    type: 'longtext',
     nullable: true,
   })
   public compareCnisCtpsRaw: string | null;

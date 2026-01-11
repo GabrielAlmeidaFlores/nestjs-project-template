@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
 import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
@@ -46,7 +47,7 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
       category: dto.json.category,
       isPendency: dto.json.isPendency,
       competenceBelowTheMinimum: dto.json.competenceBelowTheMinimum,
-      contributionAverage: dto.json.contributionAverage,
+      contributionAverage: new DecimalValue(dto.json.contributionAverage),
       typeOfContribution: dto.json.typeOfContribution,
       retirementPlanningRgps: retirementPlanningRgpsEntity,
       status: dto.json.status,

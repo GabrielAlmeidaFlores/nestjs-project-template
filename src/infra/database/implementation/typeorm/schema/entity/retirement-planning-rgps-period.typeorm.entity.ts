@@ -63,7 +63,7 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
     scale: 2,
     nullable: true,
   })
-  public contributionAverage: number | null;
+  public contributionAverage: string | null;
 
   @Column({
     name: 'type_of_contribution',
