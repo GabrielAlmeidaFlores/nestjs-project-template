@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';

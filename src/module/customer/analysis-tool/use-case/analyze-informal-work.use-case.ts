@@ -84,94 +84,93 @@ export class AnalyzeInformalWorkUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFilesWithContract(
+      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           promptFiles: files,
-        }),
-        {
-          type: 'object',
-          properties: {
-            tipo: {
-              type: 'string',
-              enum: [
-                'Tempo rural',
-                'Serviço Militar',
-                'Serviço Público',
-                'CTPS fora do CNIS',
-                'Aluno-Aprendiz',
-                'Trabalho no Exterior',
-                'Trabalho Informal',
-                'Sentença Trabalhista',
-              ],
-              description: 'Tipo do período analisado.',
+          responseJsonSchema: {
+            type: 'object',
+            properties: {
+              tipo: {
+                type: 'string',
+                enum: [
+                  'Tempo rural',
+                  'Serviço Militar',
+                  'Serviço Público',
+                  'CTPS fora do CNIS',
+                  'Aluno-Aprendiz',
+                  'Trabalho no Exterior',
+                  'Trabalho Informal',
+                  'Sentença Trabalhista',
+                ],
+                description: 'Tipo do período analisado.',
+              },
+              nome: {
+                type: 'string',
+                description: 'Nome do segurado, retorne vazio se não houver.',
+              },
+              empresa: {
+                type: 'string',
+                description:
+                  'Nome da empresa ou instituição, retorne vazio se não houver.',
+              },
+              periodoInicio: {
+                type: 'string',
+                description:
+                  'Data de início do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+              },
+              periodoFim: {
+                type: 'string',
+                description:
+                  'Data de fim do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
+              },
+              viabilidade: {
+                type: 'string',
+                enum: ['Alta', 'Média', 'Baixa'],
+                description: 'Viabilidade do reconhecimento.',
+              },
+              reconhecimentoINSS: {
+                type: 'string',
+                enum: ['Provável', 'Parcial', 'Improvável'],
+                description:
+                  'Análise do INSS, se é provável, parcial ou improvável.',
+              },
+              impactoCarencia: {
+                type: 'boolean',
+                description:
+                  'Indica se há impacto na carência. Será true ou false.',
+              },
+              reconhecimentoJudicial: {
+                type: 'string',
+                enum: ['Favorável', 'Desfavorável', 'Sim', 'Não'],
+                description: 'Análise judicial do vínculo.',
+              },
+              tempoContribuicao: {
+                type: 'string',
+                description:
+                  'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+              },
+              observacaoTecnica: {
+                type: 'string',
+                description:
+                  'Observações técnicas sobre a análise realizada com todos os detalhes.',
+              },
             },
-            nome: {
-              type: 'string',
-              description: 'Nome do segurado, retorne vazio se não houver.',
-            },
-            empresa: {
-              type: 'string',
-              description:
-                'Nome da empresa ou instituição, retorne vazio se não houver.',
-            },
-            periodoInicio: {
-              type: 'string',
-              description:
-                'Data de início do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
-            },
-            periodoFim: {
-              type: 'string',
-              description:
-                'Data de fim do período, formato YYYY-MM-DD. Retorne vazio se não houver.',
-            },
-            viabilidade: {
-              type: 'string',
-              enum: ['Alta', 'Média', 'Baixa'],
-              description: 'Viabilidade do reconhecimento.',
-            },
-            reconhecimentoINSS: {
-              type: 'string',
-              enum: ['Provável', 'Parcial', 'Improvável'],
-              description:
-                'Análise do INSS, se é provável, parcial ou improvável.',
-            },
-            impactoCarencia: {
-              type: 'boolean',
-              description:
-                'Indica se há impacto na carência. Será true ou false.',
-            },
-            reconhecimentoJudicial: {
-              type: 'string',
-              enum: ['Favorável', 'Desfavorável', 'Sim', 'Não'],
-              description: 'Análise judicial do vínculo.',
-            },
-            tempoContribuicao: {
-              type: 'string',
-              description:
-                'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
-            },
-            observacaoTecnica: {
-              type: 'string',
-              description:
-                'Observações técnicas sobre a análise realizada com todos os detalhes.',
-            },
+            required: [
+              'tipo',
+              'nome',
+              'empresa',
+              'periodoInicio',
+              'periodoFim',
+              'viabilidade',
+              'reconhecimentoINSS',
+              'impactoCarencia',
+              'reconhecimentoJudicial',
+              'tempoContribuicao',
+              'observacaoTecnica',
+            ],
           },
-          required: [
-            'tipo',
-            'nome',
-            'empresa',
-            'periodoInicio',
-            'periodoFim',
-            'viabilidade',
-            'reconhecimentoINSS',
-            'impactoCarencia',
-            'reconhecimentoJudicial',
-            'tempoContribuicao',
-            'observacaoTecnica',
-          ],
-        },
-        'application/json',
+        }),
       )) ?? '';
 
     const retirementPlanningRgpsAnalysisResultEntity =
