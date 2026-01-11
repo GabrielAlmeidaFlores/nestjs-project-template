@@ -9,6 +9,7 @@ export class LegalProceedingDataOutputModel extends BaseBuildableObject {
   public type?: string;
   public lastUpdated?: Date;
   public deadline?: Date;
+  public textContent?: string;
 
   protected override readonly _type = LegalProceedingDataOutputModel.name;
 }
