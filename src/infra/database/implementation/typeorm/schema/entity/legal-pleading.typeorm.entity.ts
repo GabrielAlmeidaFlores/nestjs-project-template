@@ -11,6 +11,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-document.typeorm.entity';
+import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-history.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
@@ -144,6 +145,12 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
   public legalPleadingDocument?:
     | LegalPleadingDocumentTypeormEntity[]
     | undefined;
+
+  @OneToMany(
+    () => LegalPleadingHistoryTypeormEntity,
+    (entity) => entity.legalPleading,
+  )
+  public legalPleadingHistory?: LegalPleadingHistoryTypeormEntity[] | undefined;
 
   @OneToOne(
     () => LegalPleadingAddressTypeormEntity,
