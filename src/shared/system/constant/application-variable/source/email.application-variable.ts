@@ -36,6 +36,13 @@ export class EmailApplicationVariable {
       'forgot-password.html',
     );
 
+  public static readonly EMAIL_FORGOT_PASSWORD_CODE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_FORGOT_PASSWORD_SUBJECT',
+      String,
+      'Agiliza Previ - Esqueceu senha',
+    );
+
   public static readonly EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE =
     EmailApplicationVariable.source.getValueOrDefault<string>(
       'EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE',
@@ -43,12 +50,27 @@ export class EmailApplicationVariable {
       'payment-plan-purchase.html',
     );
 
-  public static readonly EMAIL_FORGOT_PASSWORD_CODE_SUBJECT =
+  public static readonly EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT =
     EmailApplicationVariable.source.getValueOrDefault<string>(
-      'EMAIL_FORGOT_PASSWORD_SUBJECT',
+      'EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT',
       String,
-      'Agiliza Previ - Esqueceu senha',
+      'Agiliza Previ - Confirmação de Pagamento do Plano',
     );
+
+  public static readonly EMAIL_LEGAL_PROCEEDING_UPDATE_TEMPLATE =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_LEGAL_PROCEEDING_UPDATE_TEMPLATE',
+      String,
+      'legal-proceeding-update.html',
+    );
+
+  public static readonly EMAIL_LEGAL_PROCEEDING_UPDATE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_LEGAL_PROCEEDING_UPDATE_SUBJECT',
+      String,
+      'Agiliza Previ - Atualização de Processo',
+    );
+
   public static readonly EMAIL_SEND_GRID_KEY =
     EmailApplicationVariable.source.getValueOrThrow<string>(
       'EMAIL_SEND_GRID_KEY',
