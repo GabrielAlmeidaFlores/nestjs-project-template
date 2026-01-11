@@ -64,6 +64,7 @@ import { ListAnalysisToolClientLegalProceedingUseCase } from '@module/customer/a
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
+import { ListLegalPleadingHistoryUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading-history.use-case';
 import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
 import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
 import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
@@ -139,6 +140,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateRetirementPlanningRppsRemunerationUseCase,
     UpdateRetirementPlanningRppsUseCase,
     ListCidTenUseCase,
+    ListLegalPleadingHistoryUseCase,
     ListAnalysisToolClientLegalProceedingUseCase,
     ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
     {

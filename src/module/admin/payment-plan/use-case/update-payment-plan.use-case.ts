@@ -44,10 +44,12 @@ export class UpdatePaymentPlanUseCase {
         const activeCount =
           await this.paymentPlanQueryRepositoryGateway.countActivePaymentPlans();
 
-        const MAX_ACTIVE_PLANS = 3;
+        const MAX_ACTIVE_PLANS = 12;
 
         if (activeCount >= MAX_ACTIVE_PLANS) {
-          throw new MaxActivePaymentPlansReachedError();
+          throw new MaxActivePaymentPlansReachedError({
+            maxActivePlans: MAX_ACTIVE_PLANS,
+          });
         }
       }
     }
