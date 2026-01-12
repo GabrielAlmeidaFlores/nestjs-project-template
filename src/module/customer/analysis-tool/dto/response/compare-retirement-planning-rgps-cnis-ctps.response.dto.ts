@@ -7,7 +7,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsResponseDto extends BaseBuilda
   @ResponseDtoStringProperty()
   public result: string;
 
-  @ResponseDtoStringProperty({})
+  @ResponseDtoStringProperty()
   public compareCnisCtpsRaw: string;
 
   protected override readonly _type =
