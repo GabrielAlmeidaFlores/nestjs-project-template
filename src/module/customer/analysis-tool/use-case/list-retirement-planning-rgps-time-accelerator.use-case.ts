@@ -1,5 +1,4 @@
 import { Inject } from '@nestjs/common';
-import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { ListRetirementPlanningRgpsTimeAcceleratorQueryParam } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/param/list-retirement-planning-rgps-time-accelerator.query.param';
@@ -51,55 +50,144 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     const resource = listQueryResult.resource.map((item) =>
       GetRetirementPlanningRgpsTimeAcceleratorResponseDto.build({
         ...item,
+        contributionTime: JSON.stringify(
+          this.totalWorkPeriod(item.periodStart, item.periodEnd),
+        ),
       }),
     );
     const acceleratorTimes =
       await this.retirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway.findByRetirementPlanningRgpsId(
         dto.retirementPlanningRgpsId,
       );
-    const { years, months, days } = this.totalWorkPeriod(acceleratorTimes);
+
+    const total = this.totalWorkPeriodFromArray(acceleratorTimes);
 
     return ListRetirementPlanningRgpsTimeAcceleratorResponseDto.build({
       ...listQueryResult,
       resource,
-      total: {
-        years,
-        months,
-        days,
-      },
+      total,
     });
   }
 
   private totalWorkPeriod(
-    periods: GetRetirementPlanningRgpsTimeAcceleratorQueryResult[],
-  ): { years: number; months: number; days: number } {
+    startDate?: Date | string | number | null,
+    endDate?: Date | string | number | null,
+  ): {
+    years: number;
+    months: number;
+    days: number;
+  } {
+    const toDate = (d?: Date | string | number | null): Date | null => {
+      if (d === undefined || d === null) {
+        return null;
+      }
+      if (d instanceof Date) {
+        return isNaN(d.getTime()) ? null : d;
+      }
+      const parsed = new Date(d);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const s = toDate(startDate);
+    const e = toDate(endDate);
+    const MONTHS_IN_YEAR = 12;
+    const THIRTY_DAYS = 30;
+    const THIRTY_ONES_DAYS = 31;
+    const FEBRUARY_DAYS = 28;
+    const LEAP_FEBRUARY_DAYS = 29;
+
+    if (!s || !e) {
+      return { years: 0, months: 0, days: 0 };
+    }
+
+    if (e < s) {
+      throw new Error('End date must be greater than or equal to start date');
+    }
+
+    const inclusiveEnd = new Date(e);
+    inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
+
+    const startYear = s.getFullYear();
+    const startMonth = s.getMonth();
+    const startDay = s.getDate();
+
+    const endYear = inclusiveEnd.getFullYear();
+    const endMonth = inclusiveEnd.getMonth();
+    const endDay = inclusiveEnd.getDate();
+
+    let years = endYear - startYear;
+    let months = endMonth - startMonth;
+    let days = endDay - startDay;
+
+    if (days < 0) {
+      months--;
+
+      const previousMonth = (endMonth - 1 + MONTHS_IN_YEAR) % MONTHS_IN_YEAR;
+      const yearOfPreviousMonth = endMonth === 0 ? endYear - 1 : endYear;
+
+      const LEAP_YEAR_DIVISOR = 4;
+      const CENTURY_DIVISOR = 100;
+      const QUADRICENTENNIAL_DIVISOR = 400;
+
+      const isLeapYear =
+        (yearOfPreviousMonth % LEAP_YEAR_DIVISOR === 0 &&
+          yearOfPreviousMonth % CENTURY_DIVISOR !== 0) ||
+        yearOfPreviousMonth % QUADRICENTENNIAL_DIVISOR === 0;
+
+      const daysInPreviousMonth =
+        [
+          THIRTY_ONES_DAYS,
+          isLeapYear ? LEAP_FEBRUARY_DAYS : FEBRUARY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+        ][previousMonth] ?? THIRTY_ONES_DAYS;
+
+      days += daysInPreviousMonth;
+    }
+
+    if (months < 0) {
+      years--;
+      months += MONTHS_IN_YEAR;
+    }
+
+    return { years, months, days };
+  }
+
+  private totalWorkPeriodFromArray(
+    items: GetRetirementPlanningRgpsTimeAcceleratorQueryResult[],
+  ): {
+    years: number;
+    months: number;
+    days: number;
+  } {
+    let totalYears = 0;
+    let totalMonths = 0;
     let totalDays = 0;
 
-    periods.forEach((period) => {
-      if (period.periodStart === null || period.periodEnd === null) {
-        return;
-      }
+    for (const item of items) {
+      const period = this.totalWorkPeriod(item.periodStart, item.periodEnd);
+      totalYears += period.years;
+      totalMonths += period.months;
+      totalDays += period.days;
+    }
 
-      const start = moment(period.periodStart);
-      const end = moment(period.periodEnd);
+    const DAYS_IN_MONTH_APPROX = 30;
+    const MONTHS_IN_YEAR = 12;
 
-      if (!start.isValid() || !end.isValid()) {
-        return;
-      }
+    totalMonths += Math.floor(totalDays / DAYS_IN_MONTH_APPROX);
+    totalDays = totalDays % DAYS_IN_MONTH_APPROX;
 
-      if (end.isBefore(start)) {
-        return;
-      }
+    totalYears += Math.floor(totalMonths / MONTHS_IN_YEAR);
+    totalMonths = totalMonths % MONTHS_IN_YEAR;
 
-      totalDays += end.diff(start, 'days');
-    });
-
-    const duration = moment.duration(totalDays, 'days');
-
-    return {
-      years: duration.years(),
-      months: duration.months(),
-      days: duration.days(),
-    };
+    return { years: totalYears, months: totalMonths, days: totalDays };
   }
 }
