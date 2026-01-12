@@ -8,7 +8,7 @@ import { AnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/e
 export class RetirementPlanningRgpsAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis_type',
-    type: 'enum',
+    type: 'simple-enum',
     enum: AnalysisTypeEnum,
     nullable: true,
   })
