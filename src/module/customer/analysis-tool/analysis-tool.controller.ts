@@ -1,16 +1,15 @@
 import {
-  Body,
-  HttpStatus,
-  Param,
-  ParseEnumPipe,
-  Query,
   RequestMethod,
+  HttpStatus,
+  Query,
+  Param,
+  Body,
+  ParseEnumPipe,
   StreamableFile,
 } from '@nestjs/common';
 
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
-import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
@@ -22,7 +21,6 @@ import { AnalyzeRetirementPlanningRgpsPppRequestDto } from '@module/customer/ana
 import { CompareRetirementPlanningRgpsCnisCtpsRequestDto } from '@module/customer/analysis-tool/dto/request/compare-retirement-planning-rgps-cnis-ctps.request.dto';
 import { ConvertRetirementPlanningRgpsSpecialPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/convert-retirement-planning-rgps-special-period.request.dto';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
-import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/create-cnis-fast-analysis.request.dto';
 import { CreateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/create-legal-pleading.request.dto';
 import { CreateMultipleRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-multiple-retirement-planning-rgps-period.request.dto';
 import { CreateRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-cnis.request.dto';
@@ -44,7 +42,6 @@ import { ListRetirementPlanningRppsRemunerationRequestDto } from '@module/custom
 import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { PeriodLeaveDateActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
-import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-cnis-fast-analysis.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
 import { UpdateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-period.request.dto';
 import { UpdateRetirementPlanningRgpsResultRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-result.request.dto';
@@ -55,8 +52,6 @@ import { AnalyzeRetirementPlanningRgpsPppResponseDto } from '@module/customer/an
 import { CompareRetirementPlanningRgpsCnisCtpsResponseDto } from '@module/customer/analysis-tool/dto/response/compare-retirement-planning-rgps-cnis-ctps.response.dto';
 import { ConvertRetirementPlanningRgpsSpecialPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/convert-retirement-planning-rgps-special-period-response.response.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
-import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis-result.response.dto';
-import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-cnis-fast-analysis.response.dto';
 import { CreateLegalPleadingDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-document-analysis.response.dto';
 import { CreateLegalPleadingResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading-result.response.dto';
 import { CreateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/create-legal-pleading.response.dto';
@@ -76,7 +71,6 @@ import { DeleteLegalPleadingResponseDto } from '@module/customer/analysis-tool/d
 import { DeleteRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/dto/response/delete-retirement-planning-rgps-time-accelerator.response.dto';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetAnalysisToolRecordStatisticsResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record-statistics.response.dto';
-import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/get-cnis-fast-analysis.response.dto';
 import { GetLegalPleadingStatisticsResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading-statistics.response.dto';
 import { GetLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/get-legal-pleading.response.dto';
 import { GetRetirementPlanningRgpsDetailsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-details.response.dto';
@@ -95,7 +89,6 @@ import { ListRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/an
 import { ListRetirementPlanningRgpsTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rgps-time-accelerator.response.dto';
 import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/list-retirement-planning-rpps-remuneration.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
-import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-cnis-fast-analysis.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { UpdateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-period.response.dto';
@@ -115,8 +108,6 @@ import { AnalyzeWorkAbroadUseCase } from '@module/customer/analysis-tool/use-cas
 import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
 import { ConvertRetirementPlanningRgpsSpecialPeriodUseCase } from '@module/customer/analysis-tool/use-case/convert-retirement-planning-rgps-special-period.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
-import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis-result.use-case';
-import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-cnis-fast-analysis.use-case';
 import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
 import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
 import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
@@ -134,13 +125,10 @@ import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
 import { DeleteLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/delete-legal-pleading.use-case';
 import { DeleteRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/delete-retirement-planning-rgps-time-accelerator.use-case';
-import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-complete-analysis.use-case';
-import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-cnis-simplified-analysis.use-case';
 import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
 import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetAnalysisToolRecordStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-record-statistics.use-case';
-import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-cnis-fast-analysis.use-case';
 import { GetLegalPleadingStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading-statistics.use-case';
 import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
 import { GetRetirementPlanningRgpsDetailsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-details.use-case';
@@ -163,7 +151,6 @@ import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/
 import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
 import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use-case/period-leave-date-action.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
-import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-cnis-fast-analysis.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
@@ -188,15 +175,10 @@ export class AnalysisToolController {
   protected readonly _type = AnalysisToolController.name;
 
   public constructor(
-    private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
-    private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
-    private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
     private readonly listAnalysisToolClientUseCase: ListAnalysisToolClientUseCase,
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly createLegalPleadingUseCase: CreateLegalPleadingUseCase,
-    private readonly downloadCnisCompleteAnalysisUseCase: DownloadCnisCompleteAnalysisUseCase,
-    private readonly downloadCnisSimplifiedAnalysisUseCase: DownloadCnisSimplifiedAnalysisUseCase,
     private readonly createLegalPleadingResultUseCase: CreateLegalPleadingResultUseCase,
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
@@ -208,7 +190,6 @@ export class AnalysisToolController {
     private readonly updateLegalPleadingToCompleteStatusUseCase: UpdateLegalPleadingStatusToCompleteUseCase,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
-    private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly createRetirementPlanningRppsUseCase: CreateRetirementPlanningRppsUseCase,
     private readonly createRetirementPlanningRppsRemunerationUseCase: CreateRetirementPlanningRppsRemunerationUseCase,
@@ -768,67 +749,6 @@ export class AnalysisToolController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
-      method: RequestMethod.PATCH,
-      type: UpdateCnisFastAnalysisRequestDto,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise rápida de CNIS atualizada com sucesso.',
-      type: UpdateCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: UpdateCnisFastAnalysisRequestDto,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-  ): Promise<UpdateCnisFastAnalysisResponseDto> {
-    return await this.updateCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Criar análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis',
-      method: RequestMethod.POST,
-      type: CreateCnisFastAnalysisRequestDto,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Análise rápida de CNIS criada com sucesso.',
-      type: CreateCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async createCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: CreateCnisFastAnalysisRequestDto,
-  ): Promise<CreateCnisFastAnalysisResponseDto> {
-    return await this.createCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
     summary: 'Remover cliente da análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -857,101 +777,6 @@ export class AnalysisToolController {
       sessionData,
       organizationSessionData,
       analysisToolClientId,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Obter análise rápida de CNIS por ID',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId',
-      method: RequestMethod.GET,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Dados da análise rápida de CNIS retornados com sucesso.',
-      type: GetCnisFastAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async getCnisFastAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-  ): Promise<GetCnisFastAnalysisResponseDto> {
-    return await this.getCnisFastAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Baixar análise de CNIS simplificada',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/simplified-version',
-      method: RequestMethod.GET,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description:
-        'Arquivo da análise simplificada de CNIS retornado para download.',
-      type: Buffer,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async downloadCnisSimplifiedAnalysisById(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
-    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
-  ): Promise<StreamableFile> {
-    return await this.downloadCnisSimplifiedAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
-      format,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Baixar análise de CNIS completa',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: '/cnis-fast-analysis/:cnisFastAnalysisId/download/complete-version',
-      method: RequestMethod.GET,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description:
-        'Arquivo da análise completa de CNIS retornado para download.',
-      type: Buffer,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async downloadCnisCompletedAnalysisById(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
-    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
-  ): Promise<StreamableFile> {
-    return await this.downloadCnisCompleteAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
-      format,
     );
   }
 
@@ -1018,35 +843,6 @@ export class AnalysisToolController {
       organizationSessionData,
       legalPleadingId,
       format,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Criar resultado da análise rápida de CNIS',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: 'cnis-fast-analysis/:cnisFastAnalysisId/result',
-      method: RequestMethod.POST,
-    },
-    tag: ['analise-rapida-cnis'],
-    successResponse: {
-      statusCode: HttpStatus.CREATED,
-      description: 'Resultado da análise rápida de CNIS criado com sucesso.',
-      type: CreateCnisFastAnalysisResultResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async createCnisFastAnalysisResult(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param('cnisFastAnalysisId', new ParseValueObjectPipe(CnisFastAnalysisId))
-    cnisFastAnalysisId: CnisFastAnalysisId,
-  ): Promise<CreateCnisFastAnalysisResultResponseDto> {
-    return await this.createCnisFastAnalysisResultUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      cnisFastAnalysisId,
     );
   }
 
