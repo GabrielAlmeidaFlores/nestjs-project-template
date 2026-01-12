@@ -45,7 +45,7 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
 
   @Column({
     name: 'reason_pendency',
-    type: 'enum',
+    type: 'simple-enum',
     enum: ReasonPendencyEnum,
     nullable: true,
   })
