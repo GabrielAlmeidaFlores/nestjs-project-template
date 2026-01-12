@@ -1,10 +1,10 @@
 import {
-  RequestMethod,
-  HttpStatus,
-  Query,
-  Param,
   Body,
+  HttpStatus,
+  Param,
   ParseEnumPipe,
+  Query,
+  RequestMethod,
   StreamableFile,
 } from '@nestjs/common';
 
@@ -1198,7 +1198,7 @@ export class AnalysisToolController {
       'Adicionar documento CNIS ao planejamento previdenciário para o regime geral de previdência social (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-cnis',
+      path: 'retirement-planning-rgps/cnis',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1230,7 +1230,7 @@ export class AnalysisToolController {
       'Adicionar período para o regime geral de previdência social (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period',
+      path: 'retirement-planning-rgps/period',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1253,7 +1253,7 @@ export class AnalysisToolController {
     summary: 'Adicionar múltiplos períodos ao planejamento RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period/many',
+      path: 'retirement-planning-rgps/many',
       method: RequestMethod.POST,
       type: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1278,7 +1278,7 @@ export class AnalysisToolController {
     summary: 'Atualizar nome e categoria do período RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period/:retirementPlanningRgpsPeriodId',
+      path: 'retirement-planning-rgps/period/:retirementPlanningRgpsPeriodId',
       method: RequestMethod.PATCH,
       type: UpdateRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1410,7 +1410,7 @@ export class AnalysisToolController {
     summary: 'Converter período especial (PPP) em período RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period/convert-from-special',
+      path: 'retirement-planning-rgps/period/convert-from-special',
       method: RequestMethod.POST,
       type: ConvertRetirementPlanningRgpsSpecialPeriodRequestDto,
     },
@@ -1435,7 +1435,7 @@ export class AnalysisToolController {
     summary: 'Comparar CNIS e CTPS para planejamento previdenciário (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period/compare-cnis-ctps',
+      path: 'retirement-planning-rgps/period/compare-cnis-ctps',
       method: RequestMethod.POST,
       type: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
     },
@@ -1725,7 +1725,7 @@ export class AnalysisToolController {
     summary: 'Criar um registro na tabela de acelerador de tempo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator',
+      path: 'retirement-planning-rgps/time-accelerator',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsTimeAcceleratorRequestDto,
     },
@@ -1750,7 +1750,7 @@ export class AnalysisToolController {
     summary: 'Deletar um registro na tabela de acelerador de tempo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator/:acceleratorId',
+      path: 'retirement-planning-rgps/time-accelerator/:acceleratorId',
       method: RequestMethod.DELETE,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -1778,7 +1778,7 @@ export class AnalysisToolController {
     summary: 'Listar de periodos do planejamento previdenciário RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-period',
+      path: 'retirement-planning-rgps/period',
       method: RequestMethod.GET,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -1808,7 +1808,7 @@ export class AnalysisToolController {
       'Listar de aceleradores de tempo do planejamento previdenciário RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator',
+      path: 'retirement-planning-rgps/time-accelerator',
       method: RequestMethod.GET,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -1837,7 +1837,7 @@ export class AnalysisToolController {
     summary: 'Extrair acelerador de tempo (JSON) de um resultado de análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps/retirement-planning-rgps-analysis-result/:retirementPlanningRgpsAnalysisResultId/time-accelerator',
+      path: 'retirement-planning-rgps/analysis-result/:retirementPlanningRgpsAnalysisResultId/time-accelerator',
       method: RequestMethod.GET,
     },
     tag: ['acrescimo-tempo'],
