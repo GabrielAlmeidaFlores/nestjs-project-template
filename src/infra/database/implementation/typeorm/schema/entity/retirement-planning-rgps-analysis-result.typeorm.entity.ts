@@ -2,11 +2,17 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
+import { AnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/enum/analysis-type.enum';
 
 @Entity({ name: 'retirement_planning_rgps_analysis_result' })
 export class RetirementPlanningRgpsAnalysisResultTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'analysis_type', type: 'varchar', length: 64 })
-  public analysisType: string;
+  @Column({
+    name: 'analysis_type',
+    type: 'enum',
+    enum: AnalysisTypeEnum,
+    nullable: true,
+  })
+  public analysisType: AnalysisTypeEnum | null;
 
   @Column({ name: 'response', type: 'longtext' })
   public response: string;
