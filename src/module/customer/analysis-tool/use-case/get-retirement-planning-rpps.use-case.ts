@@ -88,6 +88,7 @@ export class GetRetirementPlanningRppsUseCase {
               description: period.disabilityPeriod.description,
               dailyImpact: period.disabilityPeriod.dailyImpact,
               cid: GetRetirementPlanningRppsCidResponseDto.build({
+                id: period.disabilityPeriod.cid.id,
                 code: period.disabilityPeriod.cid.code,
                 description: period.disabilityPeriod.cid.description,
               }),
