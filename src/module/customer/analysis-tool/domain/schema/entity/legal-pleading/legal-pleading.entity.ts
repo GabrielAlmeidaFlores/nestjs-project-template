@@ -1,12 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidInputError } from '@core/error/invalid-input.error';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { InvalidLegalPleadingApplicationSubmitDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-application-submit-date.error';
 import { InvalidLegalPleadingBenefitTerminalDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-bennefit-terminal-date.error';
 import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
