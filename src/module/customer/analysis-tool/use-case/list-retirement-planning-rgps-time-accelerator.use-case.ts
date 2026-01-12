@@ -77,19 +77,8 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     months: number;
     days: number;
   } {
-    const toDate = (d?: Date | string | number | null): Date | null => {
-      if (d === undefined || d === null) {
-        return null;
-      }
-      if (d instanceof Date) {
-        return isNaN(d.getTime()) ? null : d;
-      }
-      const parsed = new Date(d);
-      return isNaN(parsed.getTime()) ? null : parsed;
-    };
-
-    const s = toDate(startDate);
-    const e = toDate(endDate);
+    const s = this.toDate(startDate);
+    const e = this.toDate(endDate);
     const MONTHS_IN_YEAR = 12;
     const THIRTY_DAYS = 30;
     const THIRTY_ONES_DAYS = 31;
@@ -98,10 +87,6 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
 
     if (!s || !e) {
       return { years: 0, months: 0, days: 0 };
-    }
-
-    if (e < s) {
-      throw new Error('End date must be greater than or equal to start date');
     }
 
     const inclusiveEnd = new Date(e);
@@ -189,5 +174,16 @@ export class ListRetirementPlanningRgpsTimeAcceleratorUseCase {
     totalMonths = totalMonths % MONTHS_IN_YEAR;
 
     return { years: totalYears, months: totalMonths, days: totalDays };
+  }
+
+  private toDate(d?: Date | string | number | null): Date | null {
+    if (d === undefined || d === null) {
+      return null;
+    }
+    if (d instanceof Date) {
+      return isNaN(d.getTime()) ? null : d;
+    }
+    const parsed = new Date(d);
+    return isNaN(parsed.getTime()) ? null : parsed;
   }
 }
