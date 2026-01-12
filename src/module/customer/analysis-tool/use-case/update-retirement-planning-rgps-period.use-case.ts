@@ -5,6 +5,7 @@ import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/cu
 import { RetirementPlanningRgpsPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/retirement-planning-rgps-period.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { UpdateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-period.request.dto';
 import { UpdateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-period.response.dto';
 import { RetirementPlanningRgpsPeriodNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-period-not-found.error';
@@ -27,16 +28,21 @@ export class UpdateRetirementPlanningRgpsPeriodUseCase {
     dto: UpdateRetirementPlanningRgpsPeriodRequestDto,
   ): Promise<UpdateRetirementPlanningRgpsPeriodResponseDto> {
     const retirementPlanningRgpsPeriod =
-      await this.retirementPlanningRgpsPeriodQueryRepositoryGateway.findOneByRetirementPlanningRgpsPeriodIdOrFail(
+      await this.retirementPlanningRgpsPeriodQueryRepositoryGateway.findOneByRetirementPlanningRgpsPeriodIdOrFailWithRelations(
         retirementPlanningRgpsPeriodId,
         RetirementPlanningRgpsPeriodNotFoundError,
       );
+
+    const retirementPlanningRgps = new RetirementPlanningRgpsEntity({
+      ...retirementPlanningRgpsPeriod.retirementPlanningRgps,
+    });
 
     const retirementPlanningRgpsPeriodEntity =
       new RetirementPlanningRgpsPeriodEntity({
         ...retirementPlanningRgpsPeriod,
         category: dto.category ?? retirementPlanningRgpsPeriod.category,
         periodName: dto.periodName ?? retirementPlanningRgpsPeriod.periodName,
+        retirementPlanningRgps,
       });
 
     const updateTransaction =
