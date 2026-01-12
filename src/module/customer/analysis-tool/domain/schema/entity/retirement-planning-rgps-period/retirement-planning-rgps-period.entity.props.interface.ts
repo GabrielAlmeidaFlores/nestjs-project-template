@@ -1,7 +1,8 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export interface RetirementPlanningRgpsPeriodEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRgpsPeriodId> {
   periodName?: string | null;
@@ -14,5 +15,5 @@ export interface RetirementPlanningRgpsPeriodEntityPropsInterface extends BaseEn
   typeOfContribution?: string | null;
   retirementPlanningRgps?: RetirementPlanningRgpsEntity | null;
   status?: boolean | null;
-  reasonPendency?: string | null;
+  reasonPendency?: ReasonPendencyEnum | null;
 }
