@@ -1,5 +1,0 @@
-export enum LegalPleadingHistoryTitleEnum {
-  APPROVED = 'APPROVED',
-  ADJUSTMENT_REQUEST = 'ADJUSTMENT_REQUEST',
-  FIRST_VERSION = 'FIRST_VERSION',
-}
