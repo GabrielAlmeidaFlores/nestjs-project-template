@@ -5,11 +5,16 @@ import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway'
 import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
-import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
+import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { CreateRetirementPlanningRgpsResultResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-result.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
@@ -48,6 +53,8 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -203,6 +210,33 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       },
     );
 
+    const retirementPlanningRgpsEntity = new RetirementPlanningRgpsEntity({
+      ...retirementPlanningRgps,
+      retirementPlanningRgpsResult,
+    });
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisRecord.analysisToolClient,
+      createdBy: analysisRecord.createdBy.id,
+      updatedBy: analysisRecord.updatedBy.id,
+    });
+
+    const analysisToolRecordUpdated = new AnalysisToolRecordEntity({
+      ...analysisRecord,
+      cnisFastAnalysis: null,
+      analysisToolClient,
+      retirementPlanningRpps: null,
+      status: AnalysisStatusEnum.COMPLETED,
+      createdBy: analysisRecord.createdBy.id,
+      updatedBy: organizationMember.id,
+      retirementPlanningRgps: retirementPlanningRgpsEntity,
+    });
+    const updateAnalysisRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
+        analysisRecord.id,
+        analysisToolRecordUpdated,
+      );
+
     const transaction =
       this.retirementPlanningRgpsResultCommandRepositoryGateway.updateRetirementPlanningRgpsResult(
         retirementPlanningRgpsResult.id,
@@ -212,6 +246,7 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     const transactions = await this.baseTransactionRepositoryGateway.execute([
       transaction,
       consumeCreditTransaction,
+      updateAnalysisRecordTransaction,
     ]);
 
     await transactions.commit();
