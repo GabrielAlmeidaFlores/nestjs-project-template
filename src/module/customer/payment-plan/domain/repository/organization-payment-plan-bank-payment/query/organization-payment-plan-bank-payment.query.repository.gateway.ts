@@ -1,6 +1,6 @@
-import type { NotFound } from '@aws-sdk/client-s3';
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import type { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import type { NotFoundError } from '@core/error/not-found.error';
 import type { GetOrganizationPaymentPlanBankPaymentQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/query/result/get-organization-payment-plan-bank-payment.query.result';
 import type { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import type { OrganizationPaymentPlanBankPaymentId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/value-object/organization-payment-plan-bank-payment-id/organization-payment-plan-bank-payment-id.value-object';
@@ -16,7 +16,7 @@ export abstract class OrganizationPaymentPlanBankPaymentQueryRepositoryGateway {
 
   public abstract findOneOrganizationPaymentPlanBankPaymentByIdOrFail(
     id: OrganizationPaymentPlanBankPaymentId,
-    err: Constructor<NotFound>,
+    err: Constructor<NotFoundError>,
   ): Promise<GetOrganizationPaymentPlanBankPaymentQueryResult>;
 
   public abstract findOneOrganizationPaymentPlanBankPaymentByOrganizationPaymentPlanId(

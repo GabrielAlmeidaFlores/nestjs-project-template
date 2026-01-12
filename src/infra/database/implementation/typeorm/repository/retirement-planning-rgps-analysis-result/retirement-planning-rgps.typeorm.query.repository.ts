@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError } from 'rxjs';
 import { Constructor } from 'type-fest';
 import { Repository } from 'typeorm';
 
+import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-analysis-result.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
