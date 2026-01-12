@@ -42,7 +42,7 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
     });
 
     let reasonPendency: ReasonPendencyEnum | null = null;
-
+    let isPendency = false;
     if (dto.json.competenceBelowTheMinimum === true) {
       reasonPendency = ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM;
     }
@@ -51,12 +51,16 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
       reasonPendency = ReasonPendencyEnum.LEAVE_DATE;
     }
 
+    if (reasonPendency !== null) {
+      isPendency = true;
+    }
+
     const period = new RetirementPlanningRgpsPeriodEntity({
       periodName: dto.json.periodName,
       periodStart: dto.json.periodStart,
       periodEnd: dto.json.periodEnd ?? null,
       category: dto.json.category,
-      isPendency: dto.json.isPendency,
+      isPendency: isPendency,
       competenceBelowTheMinimum: dto.json.competenceBelowTheMinimum,
       contributionAverage: new DecimalValue(dto.json.contributionAverage),
       typeOfContribution: dto.json.typeOfContribution,
