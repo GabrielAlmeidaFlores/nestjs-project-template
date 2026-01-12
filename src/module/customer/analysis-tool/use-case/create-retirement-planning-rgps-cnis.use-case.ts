@@ -10,6 +10,7 @@ import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/cu
 import { RetirementPlanningRgpsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/command/retirement-planning-rgps.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsEarningsHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.entity';
+import { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/retirement-planning-rgps-result.entity';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
@@ -25,7 +26,6 @@ import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organi
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsCnisUseCase {
@@ -207,7 +207,10 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
               contributionAverage: new DecimalValue(contributionAverage),
               typeOfContribution,
               retirementPlanningRgps: updatedRetirementPlanningRgps,
-              reasonPendency,
+              reasonPendency:
+                reasonPendency !== ''
+                  ? (reasonPendency as ReasonPendencyEnum)
+                  : null,
               status: reasonPendency === '',
             }) as PeriodWithFlagsInterface;
 
