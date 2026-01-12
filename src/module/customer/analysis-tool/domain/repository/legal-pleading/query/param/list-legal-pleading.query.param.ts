@@ -1,6 +1,6 @@
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 
-import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
+import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 
 export class ListLegalPleadingQueryParam extends ListDataInputModel {
   public searchBy: string | null;
