@@ -4,7 +4,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
