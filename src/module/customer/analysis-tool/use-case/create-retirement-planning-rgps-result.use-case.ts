@@ -192,6 +192,7 @@ export class CreateRetirementPlanningRgpsResultUseCase {
               ],
             },
           },
+          useResponseMimeTypeForTools: false,
         }),
       )) ?? '';
 

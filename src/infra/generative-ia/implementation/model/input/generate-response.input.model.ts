@@ -20,6 +20,7 @@ export class GenerateResponseInputModel extends BaseBuildableDtoObject {
     description: string;
     parameters: Record<string, unknown>;
   }>;
+  public readonly useResponseMimeTypeForTools?: boolean = true;
   public readonly toolHandlers?: Record<string, ToolHandlerType>;
 
   protected override readonly _type = GenerateResponseInputModel.name;
