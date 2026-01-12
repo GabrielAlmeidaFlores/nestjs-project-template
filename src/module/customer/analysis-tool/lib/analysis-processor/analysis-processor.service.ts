@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';

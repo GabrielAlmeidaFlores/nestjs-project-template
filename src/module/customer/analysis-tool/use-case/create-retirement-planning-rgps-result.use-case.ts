@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
