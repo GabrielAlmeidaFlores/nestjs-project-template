@@ -12,10 +12,10 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 import { AnalyzeRetirementPlanningRgpsCnisRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-cnis.request.dto';
 import { AnalyzeRetirementPlanningRgpsPppRequestDto } from '@module/customer/analysis-tool/dto/request/analyze-retirement-planning-rgps-ppp.request.dto';
@@ -1402,7 +1402,7 @@ export class AnalysisToolController {
       'Adicionar documento CNIS ao planejamento previdenciário para o regime geral de previdência social (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-cnis',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-cnis',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1434,7 +1434,7 @@ export class AnalysisToolController {
       'Adicionar período para o regime geral de previdência social (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1457,7 +1457,7 @@ export class AnalysisToolController {
     summary: 'Adicionar múltiplos períodos ao planejamento RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period/many',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period/many',
       method: RequestMethod.POST,
       type: CreateMultipleRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1482,7 +1482,7 @@ export class AnalysisToolController {
     summary: 'Atualizar nome e categoria do período RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period/:retirementPlanningRgpsPeriodId',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period/:retirementPlanningRgpsPeriodId',
       method: RequestMethod.PATCH,
       type: UpdateRetirementPlanningRgpsPeriodRequestDto,
     },
@@ -1614,7 +1614,7 @@ export class AnalysisToolController {
     summary: 'Converter período especial (PPP) em período RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period/convert-from-special',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period/convert-from-special',
       method: RequestMethod.POST,
       type: ConvertRetirementPlanningRgpsSpecialPeriodRequestDto,
     },
@@ -1639,7 +1639,7 @@ export class AnalysisToolController {
     summary: 'Comparar CNIS e CTPS para planejamento previdenciário (RGPS)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period/compare-cnis-ctps',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period/compare-cnis-ctps',
       method: RequestMethod.POST,
       type: CompareRetirementPlanningRgpsCnisCtpsRequestDto,
     },
@@ -1668,7 +1668,7 @@ export class AnalysisToolController {
     summary: 'Analisar Tempo Rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'rural-time',
+      path: 'retirement-planning-rgps/rural-time',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1697,7 +1697,7 @@ export class AnalysisToolController {
     summary: 'Analisar Serviço Militar',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'military-service',
+      path: 'retirement-planning-rgps/military-service',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1726,7 +1726,7 @@ export class AnalysisToolController {
     summary: 'Analisar Serviço Público',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'public-service',
+      path: 'retirement-planning-rgps/public-service',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1755,7 +1755,7 @@ export class AnalysisToolController {
     summary: 'Analisar CTPS fora do CNIS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'ctps-outside-cnis',
+      path: 'retirement-planning-rgps/ctps-outside-cnis',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1784,7 +1784,7 @@ export class AnalysisToolController {
     summary: 'Analisar Aluno-Aprendiz',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'apprentice-student',
+      path: 'retirement-planning-rgps/apprentice-student',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1813,7 +1813,7 @@ export class AnalysisToolController {
     summary: 'Analisar Trabalho no Exterior',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'work-abroad',
+      path: 'retirement-planning-rgps/work-abroad',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1842,7 +1842,7 @@ export class AnalysisToolController {
     summary: 'Analisar PPP (Perfil Profissiográfico Previdenciário)',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'ppp',
+      path: 'retirement-planning-rgps/ppp',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsPppRequestDto,
     },
@@ -1871,7 +1871,7 @@ export class AnalysisToolController {
     summary: 'Analisar Trabalho Informal',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'informal-work',
+      path: 'retirement-planning-rgps/informal-work',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1900,7 +1900,7 @@ export class AnalysisToolController {
     summary: 'Analisar Sentença Trabalhista',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'labor-court-decision',
+      path: 'retirement-planning-rgps/labor-court-decision',
       method: RequestMethod.POST,
       type: AnalyzeRetirementPlanningRgpsCnisRequestDto,
     },
@@ -1929,7 +1929,7 @@ export class AnalysisToolController {
     summary: 'Criar um registro na tabela de acelerador de tempo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-time-accelerator',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator',
       method: RequestMethod.POST,
       type: CreateRetirementPlanningRgpsTimeAcceleratorRequestDto,
     },
@@ -1954,7 +1954,7 @@ export class AnalysisToolController {
     summary: 'Deletar um registro na tabela de acelerador de tempo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-time-accelerator/:acceleratorId',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator/:acceleratorId',
       method: RequestMethod.DELETE,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -1982,7 +1982,7 @@ export class AnalysisToolController {
     summary: 'Listar de periodos do planejamento previdenciário RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-period',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-period',
       method: RequestMethod.GET,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -2012,7 +2012,7 @@ export class AnalysisToolController {
       'Listar de aceleradores de tempo do planejamento previdenciário RGPS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-time-accelerator',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-time-accelerator',
       method: RequestMethod.GET,
     },
     tag: ['regime-geral-previdencia-social'],
@@ -2041,7 +2041,7 @@ export class AnalysisToolController {
     summary: 'Extrair acelerador de tempo (JSON) de um resultado de análise',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'retirement-planning-rgps-analysis-result/:retirementPlanningRgpsAnalysisResultId/time-accelerator',
+      path: 'retirement-planning-rgps/retirement-planning-rgps-analysis-result/:retirementPlanningRgpsAnalysisResultId/time-accelerator',
       method: RequestMethod.GET,
     },
     tag: ['acrescimo-tempo'],

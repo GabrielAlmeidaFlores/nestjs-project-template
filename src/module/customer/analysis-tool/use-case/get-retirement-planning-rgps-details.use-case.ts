@@ -3,11 +3,11 @@ import moment from 'moment';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
-import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { GetRetirementPlanningRgpsTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/result/get-retirement-planning-rgps-time-accelerator.query.result';
 import { RetirementPlanningRgpsTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-time-accelerator/query/retirement-planning-rgps-time-accelerator.query.repository.gateway';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { GetRetirementPlanningRgpsDetailsResponseDto } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rgps-details.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
@@ -140,9 +140,32 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const totalCarenciaTimeWithAccelerationMonthsString = `${carenciaTimeWithAccelerationMonths + carenciaTimeWithPendencyMonths} contribuições`;
 
+    const searchPeriodo = periods;
+
+    let category: string | null = '';
+
+    const nonBenefitPeriods = (searchPeriodo ?? []).filter((p) => {
+      const cat = (p.category ?? '').toString().trim();
+      return cat.length > 0 && !/benef/i.test(cat);
+    });
+
+    if (nonBenefitPeriods.length > 0) {
+      const lastNonBenefit = nonBenefitPeriods.reduce((prev, cur) => {
+        const prevDate = prev?.periodEnd ?? prev?.periodStart;
+        const curDate = cur.periodEnd ?? cur.periodStart;
+        const prevTime = prevDate ? new Date(prevDate).getTime() : 0;
+        const curTime = curDate ? new Date(curDate).getTime() : 0;
+        return curTime > prevTime ? cur : prev;
+      }, nonBenefitPeriods[0]);
+      category = lastNonBenefit?.category ?? '';
+    } else {
+      category = '';
+    }
+
     return GetRetirementPlanningRgpsDetailsResponseDto.build({
       id: retirementPlanningRgps.id,
-      name: retirementPlanningRgps.cnisDocument,
+      name:
+        retirementPlanningRgps.retirementPlanningRgpsResult?.clientName ?? '',
       federalDocumentNumber:
         retirementPlanningRgps.retirementPlanningRgpsResult?.clientFederalDocument?.toString() ??
         '',
@@ -153,7 +176,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       email: analysisRecord.analysisToolClient.email ?? null,
       phoneNumber: analysisRecord.analysisToolClient.phoneNumber ?? null,
       type: analysisRecord.analysisToolClient.clientType,
-      category: 'Validar',
+      category,
       legalProceedingNumber:
         retirementPlanningRgps.retirementPlanningRgpsLegalProceeding?.map(
           (legalProceeding) => legalProceeding.legalProceedingNumber,
@@ -169,6 +192,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       carencyTimeWithPendency: carenciaTimeWithPendencyMonthsString,
       carencyTimeWithAcceleration:
         totalCarenciaTimeWithAccelerationMonthsString,
+      result: retirementPlanningRgps.retirementPlanningRgpsResult?.result ?? '',
     });
   }
 

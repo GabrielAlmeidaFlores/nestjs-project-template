@@ -109,6 +109,9 @@ export class GeminiService implements GenerativeIaGateway {
 
     if (props.responseJsonSchema !== undefined && contentConfig.config) {
       contentConfig.config.responseJsonSchema = props.responseJsonSchema;
+    }
+
+    if (props.useResponseMimeTypeForTools === true && contentConfig.config) {
       contentConfig.config.responseMimeType = 'application/json';
     }
 
