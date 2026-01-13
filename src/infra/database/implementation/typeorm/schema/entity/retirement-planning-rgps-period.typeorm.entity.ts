@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
+import { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 
 @Entity({ name: 'retirement_planning_rgps_period' })
 export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity {
@@ -44,10 +45,11 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
 
   @Column({
     name: 'reason_pendency',
-    type: 'longtext',
+    type: 'simple-enum',
+    enum: ReasonPendencyEnum,
     nullable: true,
   })
-  public reasonPendency: string | null;
+  public reasonPendency: ReasonPendencyEnum | null;
 
   @Column({
     name: 'competence_below_the_minimum',

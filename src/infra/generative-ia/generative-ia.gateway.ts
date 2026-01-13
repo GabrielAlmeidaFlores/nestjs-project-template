@@ -1,4 +1,4 @@
-import type { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import type { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 
 export abstract class GenerativeIaGateway {
   public abstract generateHighQualityResponseFromPromptAndFiles(

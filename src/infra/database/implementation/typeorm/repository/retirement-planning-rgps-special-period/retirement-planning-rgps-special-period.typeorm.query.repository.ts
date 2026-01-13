@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 
+import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RetirementPlanningRgpsSpecialPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-special-period.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -29,7 +30,7 @@ export class RetirementPlanningRgpsSpecialPeriodTypeormQueryRepository
 
   public async findOneByRetirementPlanningRgpsSpecialPeriodIdOrFail(
     id: RetirementPlanningRgpsSpecialPeriodId,
-    err: ConstructorType<Error>,
+    err: ConstructorType<NotFoundError>,
   ): Promise<GetRetirementPlanningRgpsSpecialPeriodQueryResult> {
     const data = await this.findOneOrFail(
       { where: { id: id.toString(), deletedAt: IsNull() } },

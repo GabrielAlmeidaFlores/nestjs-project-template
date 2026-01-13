@@ -20,6 +20,7 @@ import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/d
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 
 @ResponseDto()
 export class GetAnalysisToolClientResponseDto extends BaseBuildableDtoObject {
@@ -84,6 +85,9 @@ export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuil
 
 @ResponseDto()
 export class GetRetirementPlanningRppsCidResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(CidTenId)
+  public id: CidTenId;
+
   @ResponseDtoStringProperty()
   public code: string;
 

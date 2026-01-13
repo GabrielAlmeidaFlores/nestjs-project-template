@@ -18,7 +18,7 @@ export class GetRetirementPlanningRgpsTimeAcceleratorResponseDto extends BaseBui
   public updatedAt: Date;
 
   @ResponseDtoDateProperty({ required: false })
-  public deletedAt?: Date | null;
+  public deletedAt?: Date;
 
   @ResponseDtoStringProperty()
   public timeType: string;
@@ -52,6 +52,9 @@ export class GetRetirementPlanningRgpsTimeAcceleratorResponseDto extends BaseBui
 
   @ResponseDtoStringProperty({ required: false })
   public recognitionJudicial?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public contributionTime?: string;
 
   protected override readonly _type =
     GetRetirementPlanningRgpsTimeAcceleratorResponseDto.name;

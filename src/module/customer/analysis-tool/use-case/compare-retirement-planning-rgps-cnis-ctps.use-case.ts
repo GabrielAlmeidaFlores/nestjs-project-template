@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
+import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsResultCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/command/retirement-planning-rgps-result.repository.gateway';
@@ -92,124 +94,127 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           promptFiles: files,
-          responseJsonSchema: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                tipo: {
-                  type: 'string',
-                  description:
-                    'Tipo de vínculo analisado, neste caso sempre será VINCULO_FALTANTE_CNIS',
+          responseConfig: ResponseConfigInputModel.build({
+            responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+            jsonSchema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  tipo: {
+                    type: 'string',
+                    description:
+                      'Tipo de vínculo analisado, neste caso sempre será VINCULO_FALTANTE_CNIS',
+                  },
+                  empresa: {
+                    type: 'string',
+                    description:
+                      'Nome da empresa empregadora, retorne vazio se não houver.',
+                  },
+                  periodoInicio: {
+                    type: 'string',
+                    description:
+                      'Data de início do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15.',
+                  },
+                  periodoFim: {
+                    type: 'string',
+                    description:
+                      'Data de término do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15, e caso não tenha data de saída, informe "".',
+                  },
+                  viabilidade: {
+                    type: 'string',
+                    enum: ['BAIXA', 'MÉDIA', 'ALTA'],
+                    description: 'Viabilidade do reconhecimento.',
+                  },
+                  reconhecimentoINSS: {
+                    type: 'string',
+                    enum: ['PROVÁVEL', 'PARCIAL', 'IMPROVÁVEL'],
+                    description: 'Análise do INSS.',
+                  },
+                  impactoCarencia: {
+                    type: 'boolean',
+                    description: 'Indica se há impacto na carência.',
+                  },
+                  reconhecimentoJudicial: {
+                    type: 'string',
+                    enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'],
+                    description: 'Análise judicial do vínculo.',
+                  },
+                  tempoContribuicao: {
+                    type: 'string',
+                    description: 'Tempo de contribuição reconhecido.',
+                  },
+                  observacaoTecnica: {
+                    type: 'string',
+                    description:
+                      'Observações técnicas, retorne vazio se não houver.',
+                  },
+                  contribuicaoMedia: {
+                    type: 'string',
+                    description:
+                      'Valor da contribuição média mensal, retorne vazio se não houver.',
+                  },
+                  status: {
+                    type: 'boolean',
+                    description:
+                      'Indica se o vínculo é favorável ou não para o segurado, considerando todos os aspectos analisados.',
+                  },
+                  tipoDeTrabalho: {
+                    type: 'string',
+                    enum: ['URBANO', 'RURAL'],
+                    description:
+                      'Tipo de trabalho realizado no vínculo, se aplicável. Por padrão retorne URBANO.',
+                  },
+                  competenciaAbaixoDoMinimo: {
+                    type: 'boolean',
+                    description:
+                      'Indica se há competências com valor de contribuição abaixo do mínimo legal, considerando o ano de referência é o sálario mínimo vigente na época do Brasil.',
+                  },
+                  categoria: {
+                    type: 'string',
+                    enum: [
+                      'AUTONOMO',
+                      'MEI',
+                      'CONTRIBUINTE_INDIVIDUAL',
+                      'TRABALHADOR_AVULSO',
+                      'TEMPORARIO',
+                      'ESTAGIARIO',
+                      'APRENDIZ',
+                      'SERVIDOR_PUBLICO',
+                      'TRABALHADOR_RURAL',
+                      'SEGURADO_ESPECIAL',
+                      'MILITAR',
+                    ],
+                    description:
+                      'Categoria do vínculo, que encontra-se no CTPS que não consta no CNIS.',
+                  },
+                  carencia: {
+                    type: 'string',
+                    description:
+                      'Número de meses distinto de carência que o vínculo representa, retorne 0 se não houver. Considere carência como o número de meses que o vínculo contribui para a aposentadoria. Exemplo: Se o vínculo é de 6 meses, retorne 6.',
+                  },
                 },
-                empresa: {
-                  type: 'string',
-                  description:
-                    'Nome da empresa empregadora, retorne vazio se não houver.',
-                },
-                periodoInicio: {
-                  type: 'string',
-                  description:
-                    'Data de início do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15.',
-                },
-                periodoFim: {
-                  type: 'string',
-                  description:
-                    'Data de término do vínculo, retorne vazio se não houver, formate em AAAA/MM/DD, ex: 2020/01/15, e caso não tenha data de saída, informe "".',
-                },
-                viabilidade: {
-                  type: 'string',
-                  enum: ['BAIXA', 'MÉDIA', 'ALTA'],
-                  description: 'Viabilidade do reconhecimento.',
-                },
-                reconhecimentoINSS: {
-                  type: 'string',
-                  enum: ['PROVÁVEL', 'PARCIAL', 'IMPROVÁVEL'],
-                  description: 'Análise do INSS.',
-                },
-                impactoCarencia: {
-                  type: 'boolean',
-                  description: 'Indica se há impacto na carência.',
-                },
-                reconhecimentoJudicial: {
-                  type: 'string',
-                  enum: ['FAVORÁVEL', 'DESFAVORÁVEL', 'INDEFINIDO'],
-                  description: 'Análise judicial do vínculo.',
-                },
-                tempoContribuicao: {
-                  type: 'string',
-                  description: 'Tempo de contribuição reconhecido.',
-                },
-                observacaoTecnica: {
-                  type: 'string',
-                  description:
-                    'Observações técnicas, retorne vazio se não houver.',
-                },
-                contribuicaoMedia: {
-                  type: 'string',
-                  description:
-                    'Valor da contribuição média mensal, retorne vazio se não houver.',
-                },
-                status: {
-                  type: 'boolean',
-                  description:
-                    'Indica se o vínculo é favorável ou não para o segurado, considerando todos os aspectos analisados.',
-                },
-                tipoDeTrabalho: {
-                  type: 'string',
-                  enum: ['URBANO', 'RURAL'],
-                  description:
-                    'Tipo de trabalho realizado no vínculo, se aplicável. Por padrão retorne URBANO.',
-                },
-                competenciaAbaixoDoMinimo: {
-                  type: 'boolean',
-                  description:
-                    'Indica se há competências com valor de contribuição abaixo do mínimo legal, considerando o ano de referência é o sálario mínimo vigente na época do Brasil.',
-                },
-                categoria: {
-                  type: 'string',
-                  enum: [
-                    'AUTONOMO',
-                    'MEI',
-                    'CONTRIBUINTE_INDIVIDUAL',
-                    'TRABALHADOR_AVULSO',
-                    'TEMPORARIO',
-                    'ESTAGIARIO',
-                    'APRENDIZ',
-                    'SERVIDOR_PUBLICO',
-                    'TRABALHADOR_RURAL',
-                    'SEGURADO_ESPECIAL',
-                    'MILITAR',
-                  ],
-                  description:
-                    'Categoria do vínculo, que encontra-se no CTPS que não consta no CNIS.',
-                },
-                carencia: {
-                  type: 'string',
-                  description:
-                    'Número de meses distinto de carência que o vínculo representa, retorne 0 se não houver. Considere carência como o número de meses que o vínculo contribui para a aposentadoria. Exemplo: Se o vínculo é de 6 meses, retorne 6.',
-                },
+                required: [
+                  'tipo',
+                  'empresa',
+                  'periodoInicio',
+                  'periodoFim',
+                  'viabilidade',
+                  'reconhecimentoINSS',
+                  'impactoCarencia',
+                  'reconhecimentoJudicial',
+                  'tempoContribuicao',
+                  'observacaoTecnica',
+                  'contribuicaoMedia',
+                  'status',
+                  'tipoDeTrabalho',
+                  'competenciaAbaixoDoMinimo',
+                  'categoria',
+                  'carencia',
+                ],
               },
-              required: [
-                'tipo',
-                'empresa',
-                'periodoInicio',
-                'periodoFim',
-                'viabilidade',
-                'reconhecimentoINSS',
-                'impactoCarencia',
-                'reconhecimentoJudicial',
-                'tempoContribuicao',
-                'observacaoTecnica',
-                'contribuicaoMedia',
-                'status',
-                'tipoDeTrabalho',
-                'competenciaAbaixoDoMinimo',
-                'categoria',
-                'carencia',
-              ],
             },
-          },
+          }),
         }),
       )) ?? '';
 

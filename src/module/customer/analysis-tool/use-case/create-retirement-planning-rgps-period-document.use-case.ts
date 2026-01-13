@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
+import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
@@ -98,31 +100,34 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           promptFiles: files,
-          responseJsonSchema: {
-            type: 'object',
-            properties: {
-              tempoContribuicao: {
-                type: 'string',
-                description:
-                  'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+          responseConfig: ResponseConfigInputModel.build({
+            responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+            jsonSchema: {
+              type: 'object',
+              properties: {
+                tempoContribuicao: {
+                  type: 'string',
+                  description:
+                    'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
+                },
+                observacaoTecnica: {
+                  type: 'string',
+                  description:
+                    'Observações técnicas sobre a análise realizada com todos os detalhes.',
+                },
+                dataFinalDoVinculo: {
+                  type: 'string',
+                  description:
+                    'Data final do vínculo trabalhista que foi analisado. Formato DD/MM/AAAA. Se não for possível determinar, retorne uma string vazia.',
+                },
               },
-              observacaoTecnica: {
-                type: 'string',
-                description:
-                  'Observações técnicas sobre a análise realizada com todos os detalhes.',
-              },
-              dataFinalDoVinculo: {
-                type: 'string',
-                description:
-                  'Data final do vínculo trabalhista que foi analisado. Formato DD/MM/AAAA. Se não for possível determinar, retorne uma string vazia.',
-              },
+              required: [
+                'tempoContribuicao',
+                'observacaoTecnica',
+                'dataFinalDoVinculo',
+              ],
             },
-            required: [
-              'tempoContribuicao',
-              'observacaoTecnica',
-              'dataFinalDoVinculo',
-            ],
-          },
+          }),
         }),
       )) ?? '';
 
