@@ -26,6 +26,10 @@ export class CnisSessionSocialSecurityAffiliationEarningsHistoryModel extends Ba
   public dataPgto?: Date;
   public contribuicao?: string;
   public salarioContribuicao?: string;
+  public contrato?: string;
+  public establecimento?: string;
+  public tomador?: string;
+  public formaPrestacaoServico?: string;
 
   protected override readonly _type =
     CnisSessionSocialSecurityAffiliationEarningsHistoryModel.name;
