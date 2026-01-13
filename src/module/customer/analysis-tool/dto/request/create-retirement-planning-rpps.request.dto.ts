@@ -149,10 +149,8 @@ export class CreateRetirementPlanningRppsDocumentRequestDto extends BaseBuildabl
   })
   public readonly type?: RetirementPlanningDocumentTypeEnum;
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
-    required: true,
-  })
-  public readonly document: Base64FileRequestDto;
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly document: Base64;
 
   protected override readonly _type =
     CreateRetirementPlanningRppsDocumentRequestDto.name;
