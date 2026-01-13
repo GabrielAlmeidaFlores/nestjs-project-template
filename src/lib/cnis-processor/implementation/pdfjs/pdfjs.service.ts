@@ -311,6 +311,26 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
         destinyKey: 'salarioContribuicao',
         transformMethod: (v) => String(v),
       },
+      {
+        sourceKey: 'Contrat.',
+        destinyKey: 'contrato',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Estabelecimento',
+        destinyKey: 'establecimento',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Tomador',
+        destinyKey: 'tomador',
+        transformMethod: (v) => String(v),
+      },
+      {
+        sourceKey: 'Forma Prestação Serviço',
+        destinyKey: 'formaPrestacaoServico',
+        transformMethod: (v) => String(v),
+      },
     ];
 
     const parsedContent = transformMap
@@ -876,27 +896,28 @@ export class PdfJSService extends PdfUtil implements CnisProcessorGateway {
                   const prevBodyColumn = bodyColumns[bodyColumnIndex - 1];
                   const nextBodyColumn = bodyColumns[bodyColumnIndex + 1];
 
-                  if (prevBodyColumn) {
-                    const middleXBetweenColumns =
-                      (prevBodyColumn.polygon.topRight.x +
-                        bodyColumn.polygon.topLeft.x) /
-                      2;
+                  const verticalTolerance = 5;
+                  const isVerticallyAlignedWithCurrentColumn =
+                    Math.abs(
+                      possibleValue.polygon.topLeft.y -
+                        bodyColumn.polygon.topLeft.y,
+                    ) < verticalTolerance;
 
+                  if (prevBodyColumn) {
                     if (
-                      possibleValue.polygon.topLeft.x < middleXBetweenColumns
+                      possibleValue.polygon.topLeft.x <
+                        prevBodyColumn.polygon.topRight.x &&
+                      !isVerticallyAlignedWithCurrentColumn
                     ) {
                       return false;
                     }
                   }
 
                   if (nextBodyColumn) {
-                    const middleXBetweenColumns =
-                      (bodyColumn.polygon.topRight.x +
-                        nextBodyColumn.polygon.topLeft.x) /
-                      2;
-
                     if (
-                      possibleValue.polygon.topLeft.x > middleXBetweenColumns
+                      possibleValue.polygon.topRight.x >
+                        nextBodyColumn.polygon.topLeft.x &&
+                      !isVerticallyAlignedWithCurrentColumn
                     ) {
                       return false;
                     }

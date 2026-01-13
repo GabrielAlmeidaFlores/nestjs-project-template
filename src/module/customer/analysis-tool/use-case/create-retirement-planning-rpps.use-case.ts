@@ -126,28 +126,6 @@ export class CreateRetirementPlanningRppsUseCase {
       ),
     );
 
-    if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
-      for (const documentDto of dto.ctcDocuments) {
-        const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
-
-        const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
-          id: periodDocumentId,
-          documentType:
-            documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document: documentDto.document,
-          retirementPlanningRppsPeriodDisability: null,
-          retirementPlanningRppsPeriodSpecialTime: null,
-          retirementPlanningRpps,
-        });
-
-        transactionOperations.push(
-          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
-            periodDocument,
-          ),
-        );
-      }
-    }
-
     for (const periodDto of dto.periods) {
       const periodId = new RetirementPlanningRppsPeriodId();
       const period = new RetirementPlanningRppsPeriodEntity({
@@ -265,6 +243,28 @@ export class CreateRetirementPlanningRppsUseCase {
             );
           }
         }
+      }
+    }
+
+    if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
+      for (const documentDto of dto.ctcDocuments) {
+        const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
+
+        const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
+          id: periodDocumentId,
+          documentType:
+            documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
+          document: documentDto.document,
+          retirementPlanningRppsPeriodDisability: null,
+          retirementPlanningRppsPeriodSpecialTime: null,
+          retirementPlanningRpps,
+        });
+
+        transactionOperations.push(
+          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+            periodDocument,
+          ),
+        );
       }
     }
 
