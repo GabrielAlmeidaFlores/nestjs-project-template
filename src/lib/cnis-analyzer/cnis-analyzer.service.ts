@@ -392,15 +392,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     startDate?: Date | string | number | null,
     endDate?: Date | string | number | null,
   ): DiferencaYmdResultadoInterface {
-    const s = this.toDate(startDate);
-    const e = this.toDate(endDate);
+    const start = this.toDate(startDate);
+    const end = this.toDate(endDate);
     const MONTHS_IN_YEAR = 12;
     const THIRTY_DAYS = 30;
     const THIRTY_ONES_DAYS = 31;
     const FEBRUARY_DAYS = 28;
     const LEAP_FEBRUARY_DAYS = 29;
 
-    if (!s || !e) {
+    if (!start || !end) {
       return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
     }
 
@@ -409,12 +409,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const DAY_FIRST = 1;
     const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
 
-    const inclusiveEnd = new Date(e);
+    const inclusiveEnd = new Date(end);
     inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
 
-    const startYear = s.getFullYear();
-    const startMonth = s.getMonth();
-    const startDay = s.getDate();
+    const startYear = start.getFullYear();
+    const startMonth = start.getMonth();
+    const startDay = start.getDate();
 
     const endYear = inclusiveEnd.getFullYear();
     const endMonth = inclusiveEnd.getMonth();
@@ -454,7 +454,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           THIRTY_DAYS,
           THIRTY_ONES_DAYS,
         ][previousMonth] ?? THIRTY_ONES_DAYS;
-
       days += daysInPreviousMonth;
     }
 
@@ -463,7 +462,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       months += MONTHS_IN_YEAR;
     }
 
-    if (s.getTime() >= RULE_START_UTC || e.getTime() >= RULE_START_UTC) {
+    if (start.getTime() >= RULE_START_UTC || end.getTime() >= RULE_START_UTC) {
       if (days > 0) {
         months += 1;
         days = 0;
