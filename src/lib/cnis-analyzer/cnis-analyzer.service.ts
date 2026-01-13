@@ -20,8 +20,8 @@ import { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analyzer/interfac
 import { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analyzer/interface/manutencao-qualidade-segurado.interface';
 import { PedagioPosReformaInterface } from '@lib/cnis-analyzer/interface/pedagio-pos-reforma.interface';
 import {
-  PeriodoDeGracaResultadoInterface,
   PeriodoDeGracaInterface,
+  PeriodoDeGracaResultadoInterface,
 } from '@lib/cnis-analyzer/interface/periodo-de-graca-resultado.interface';
 import { PessoaCnisIdadeInterface } from '@lib/cnis-analyzer/interface/pessoa-cnis-idade.interface';
 import { SalarioTetoInterface } from '@lib/cnis-analyzer/interface/salario-teto.interface';
@@ -389,125 +389,94 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private diffYmdInclusive(
-    start: Date | null | undefined,
-    end: Date | null | undefined,
+    startDate?: Date | string | number | null,
+    endDate?: Date | string | number | null,
   ): DiferencaYmdResultadoInterface {
-    const MILLIS_PER_SECOND = 1000;
-    const SECONDS_PER_MINUTE = 60;
-    const MINUTES_PER_HOUR = 60;
-    const HOURS_PER_DAY = 24;
+    const s = this.toDate(startDate);
+    const e = this.toDate(endDate);
+    const MONTHS_IN_YEAR = 12;
+    const THIRTY_DAYS = 30;
+    const THIRTY_ONES_DAYS = 31;
+    const FEBRUARY_DAYS = 28;
+    const LEAP_FEBRUARY_DAYS = 29;
 
-    const Time = {
-      Millisecond: 1,
-      Second: MILLIS_PER_SECOND,
-      Minute: MILLIS_PER_SECOND * SECONDS_PER_MINUTE,
-      Hour: MILLIS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR,
-      Day:
-        MILLIS_PER_SECOND *
-        SECONDS_PER_MINUTE *
-        MINUTES_PER_HOUR *
-        HOURS_PER_DAY,
-    } as const;
-
-    if (
-      !start ||
-      !end ||
-      !(start instanceof Date) ||
-      !(end instanceof Date) ||
-      isNaN(start.getTime()) ||
-      isNaN(end.getTime())
-    ) {
+    if (!s || !e) {
       return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
     }
-
-    const msPerDay = Time.Day;
-
-    const toUtcDay = (d: Date): Date =>
-      new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const s = toUtcDay(start);
-    const e = toUtcDay(end);
-
-    if (e.getTime() < s.getTime()) {
-      return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
-    }
-
-    let years = e.getUTCFullYear() - s.getUTCFullYear();
-    const sPlusYears = new Date(
-      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
-    );
-
-    if (sPlusYears.getTime() > e.getTime()) {
-      years -= 1;
-    }
-
-    const afterYears = new Date(
-      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
-    );
-
-    const addMonths = (d: Date, months: number): Date => {
-      const y = d.getUTCFullYear();
-      const m = d.getUTCMonth() + months;
-      const day = d.getUTCDate();
-      let cand = new Date(Date.UTC(y, m, day));
-
-      if (cand.getUTCDate() !== day) {
-        cand = new Date(
-          Date.UTC(cand.getUTCFullYear(), cand.getUTCMonth() + 1, 0),
-        );
-      }
-      return cand;
-    };
-
-    const NUMBER_MONTHS_IN_YEAR = 12;
-
-    let months = 0;
-    const roughMonths =
-      (e.getUTCFullYear() - afterYears.getUTCFullYear()) *
-        NUMBER_MONTHS_IN_YEAR +
-      (e.getUTCMonth() - afterYears.getUTCMonth());
-
-    months = Math.max(0, roughMonths);
-
-    while (months > 0) {
-      const cand = addMonths(afterYears, months);
-      if (cand.getTime() > e.getTime()) {
-        months -= 1;
-      } else {
-        break;
-      }
-    }
-
-    while (addMonths(afterYears, months + 1) <= e) {
-      months++;
-    }
-
-    const base = addMonths(afterYears, months);
-    let days = Math.floor((e.getTime() - base.getTime()) / msPerDay) + 1;
 
     const YEAR_2019 = 2019;
     const MONTH_NOVEMBER = 10;
     const DAY_FIRST = 1;
     const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
 
+    const inclusiveEnd = new Date(e);
+    inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
+
+    const startYear = s.getFullYear();
+    const startMonth = s.getMonth();
+    const startDay = s.getDate();
+
+    const endYear = inclusiveEnd.getFullYear();
+    const endMonth = inclusiveEnd.getMonth();
+    const endDay = inclusiveEnd.getDate();
+
+    let years = endYear - startYear;
+    let months = endMonth - startMonth;
+    let days = endDay - startDay;
+
+    if (days < 0) {
+      months--;
+
+      const previousMonth = (endMonth - 1 + MONTHS_IN_YEAR) % MONTHS_IN_YEAR;
+      const yearOfPreviousMonth = endMonth === 0 ? endYear - 1 : endYear;
+
+      const LEAP_YEAR_DIVISOR = 4;
+      const CENTURY_DIVISOR = 100;
+      const QUADRICENTENNIAL_DIVISOR = 400;
+
+      const isLeapYear =
+        (yearOfPreviousMonth % LEAP_YEAR_DIVISOR === 0 &&
+          yearOfPreviousMonth % CENTURY_DIVISOR !== 0) ||
+        yearOfPreviousMonth % QUADRICENTENNIAL_DIVISOR === 0;
+
+      const daysInPreviousMonth =
+        [
+          THIRTY_ONES_DAYS,
+          isLeapYear ? LEAP_FEBRUARY_DAYS : FEBRUARY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+        ][previousMonth] ?? THIRTY_ONES_DAYS;
+
+      days += daysInPreviousMonth;
+    }
+
+    if (months < 0) {
+      years--;
+      months += MONTHS_IN_YEAR;
+    }
+
     if (s.getTime() >= RULE_START_UTC || e.getTime() >= RULE_START_UTC) {
       if (days > 0) {
         months += 1;
         days = 0;
-      }
 
-      if (months >= NUMBER_MONTHS_IN_YEAR) {
-        const addYears = Math.floor(months / NUMBER_MONTHS_IN_YEAR);
-        years += addYears;
-        months = months % NUMBER_MONTHS_IN_YEAR;
+        if (months >= MONTHS_IN_YEAR) {
+          const extraYears = Math.floor(months / MONTHS_IN_YEAR);
+          years += extraYears;
+          months = months % MONTHS_IN_YEAR;
+        }
       }
     }
 
-    return {
-      years,
-      months,
-      days,
-      formatted: `${years}a ${months}m ${days}d`,
-    };
+    return { years, months, days, formatted: `${years}a ${months}m ${days}d` };
   }
 
   private calcularVinculosConcomitantes(
@@ -906,14 +875,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     return x;
   }
 
-  private toDate(value: Date | null | undefined): Date | null {
-    if (value === null || value === undefined) {
+  private toDate(d?: Date | string | number | null): Date | null {
+    if (d === undefined || d === null) {
       return null;
     }
-    if (value instanceof Date) {
-      return value;
+    if (d instanceof Date) {
+      return isNaN(d.getTime()) ? null : d;
     }
-    const parsed = new Date(value);
+    const parsed = new Date(d);
     return isNaN(parsed.getTime()) ? null : parsed;
   }
 
