@@ -1027,13 +1027,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const relations = data.socialSecurityRelations ?? [];
     relations.forEach((relationA, indexA) => {
       const startA = relationA.socialSecurityAffiliationInfo.dataInicio;
-      const endA = relationA.socialSecurityAffiliationInfo.dataFim;
+      const endA =
+        relationA.socialSecurityAffiliationInfo.dataFim ??
+        relationA.socialSecurityAffiliationInfo.ultRemun;
       const seq = relationA.socialSecurityAffiliationInfo.seq ?? 1;
       let isConcomitante = false;
+
       relations.forEach((relationB, indexB) => {
         if (indexA !== indexB) {
           const startB = relationB.socialSecurityAffiliationInfo.dataInicio;
-          const endB = relationB.socialSecurityAffiliationInfo.dataFim;
+          const endB =
+            relationB.socialSecurityAffiliationInfo.dataFim ??
+            relationB.socialSecurityAffiliationInfo.ultRemun;
           if (
             startA instanceof Date &&
             endA instanceof Date &&
