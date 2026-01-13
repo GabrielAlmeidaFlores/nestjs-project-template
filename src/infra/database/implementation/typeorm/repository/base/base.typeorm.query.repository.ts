@@ -3,9 +3,9 @@ import { Like } from 'typeorm';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 
 import type { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import type { NotFoundError } from '@core/error/not-found.error';
 import type { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
-import type { NotFoundError } from 'rxjs';
 import type {
   FindManyOptions,
   Repository,

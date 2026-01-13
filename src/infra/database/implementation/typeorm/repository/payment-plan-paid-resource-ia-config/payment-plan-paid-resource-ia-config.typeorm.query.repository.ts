@@ -1,9 +1,9 @@
 import { Constructor } from '@automapper/core';
-import { NotFound } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { PaymentPlanPaidResourceIaConfigTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource-ia-config.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -30,7 +30,7 @@ export class PaymentPlanPaidResourceIaConfigTypeormQueryRepository
 
   public async findOnePaymentPlanPaidResourceIaConfigByIdOrFail(
     id: PaymentPlanPaidResourceIaConfigId,
-    err: Constructor<NotFound>,
+    err: Constructor<NotFoundError>,
   ): Promise<GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
       {

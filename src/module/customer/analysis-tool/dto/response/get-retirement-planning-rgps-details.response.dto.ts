@@ -60,6 +60,9 @@ export class GetRetirementPlanningRgpsDetailsResponseDto extends BaseBuildableDt
   @ResponseDtoStringProperty({ required: false })
   public carencyTimeWithAcceleration?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public result?: string;
+
   protected override readonly _type =
     GetRetirementPlanningRgpsDetailsResponseDto.name;
 }

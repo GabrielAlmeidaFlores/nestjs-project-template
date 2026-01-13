@@ -7,7 +7,8 @@ module.exports = {
         'ddd-consistent-nullable-properties': require('./ddd-consistent-nullable-properties.js'),
         'require-matching-dto-property-decorators': require('./require-matching-dto-property-decorators.js'),
         'require-dto-to-extend-base-buildable-dto-object': require('./require-dto-to-extend-base-buildable-dto-object.js'),
-        'require-dto-required-to-match-optional': require('./require-dto-required-to-match-optional.js')
+        'require-dto-required-to-match-optional': require('./require-dto-required-to-match-optional.js'),
+        'restrict-null-union-in-dtos': require('./restrict-null-union-in-dtos.js'),
       },
     },
   },
@@ -18,6 +19,7 @@ module.exports = {
       'error',
     'pattern-rule/require-matching-dto-property-decorators': 'error',
     'pattern-rule/require-dto-to-extend-base-buildable-dto-object': 'error',
-    'pattern-rule/require-dto-required-to-match-optional': 'error'
+    'pattern-rule/require-dto-required-to-match-optional': 'error',
+    'pattern-rule/restrict-null-union-in-dtos': 'error',
   },
 };

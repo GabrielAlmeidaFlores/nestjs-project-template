@@ -9,8 +9,8 @@ export class AnalyzeRetirementPlanningRgpsPppResponseDto extends BaseBuildableDt
   @ResponseDtoValueObjectProperty(RetirementPlanningRgpsSpecialPeriodId)
   public retirementPlanningRgpsSpecialPeriodId: RetirementPlanningRgpsSpecialPeriodId;
 
-  @ResponseDtoStringProperty({})
-  public analysis: string | null;
+  @ResponseDtoStringProperty({ required: false })
+  public analysis?: string;
 
   protected override readonly _type =
     AnalyzeRetirementPlanningRgpsPppResponseDto.name;

@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
-import { GetRetirementPlanningRgpsPeriodQueryResultWithRelations } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/result/get-retirement-planning-rgps-period-query-result-with-relations';
+import { GetRetirementPlanningRgpsPeriodWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/query/result/get-retirement-planning-rgps-period-with-relations.query.result';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 
@@ -26,7 +26,7 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: RetirementPlanningRgpsPeriodTypeormEntity,
-    ): GetRetirementPlanningRgpsPeriodQueryResultWithRelations => {
+    ): GetRetirementPlanningRgpsPeriodWithRelationsQueryResult => {
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -38,7 +38,7 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
           ? new DecimalValue(source.contributionAverage)
           : null;
 
-      return GetRetirementPlanningRgpsPeriodQueryResultWithRelations.build({
+      return GetRetirementPlanningRgpsPeriodWithRelationsQueryResult.build({
         ...source,
         id: new RetirementPlanningRgpsPeriodId(source.id),
         contributionAverage,
@@ -51,14 +51,14 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
     createMap(
       this.mapper,
       RetirementPlanningRgpsPeriodTypeormEntity,
-      GetRetirementPlanningRgpsPeriodQueryResultWithRelations,
+      GetRetirementPlanningRgpsPeriodWithRelationsQueryResult,
       mappingFunction,
     );
   }
 
   private mapDomainEntityToOrmEntity(): void {
     const convertDomainEntityToOrmEntity = (
-      source: GetRetirementPlanningRgpsPeriodQueryResultWithRelations,
+      source: GetRetirementPlanningRgpsPeriodWithRelationsQueryResult,
     ): RetirementPlanningRgpsPeriodTypeormEntity => {
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
@@ -83,7 +83,7 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelationsAutoMapperPr
 
     createMap(
       this.mapper,
-      GetRetirementPlanningRgpsPeriodQueryResultWithRelations,
+      GetRetirementPlanningRgpsPeriodWithRelationsQueryResult,
       RetirementPlanningRgpsPeriodTypeormEntity,
       mappingFunction,
     );

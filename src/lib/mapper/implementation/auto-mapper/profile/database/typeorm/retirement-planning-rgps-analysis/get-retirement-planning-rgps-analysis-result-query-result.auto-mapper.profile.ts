@@ -55,7 +55,7 @@ export class GetRetirementPlanningRgpsAnalysisResultQueryResultAutoMapperProfile
     ): RetirementPlanningRgpsAnalysisResultTypeormEntity => {
       return RetirementPlanningRgpsAnalysisResultTypeormEntity.build({
         id: source.id.toString(),
-        analysisType: source.analysisType ?? '',
+        analysisType: source.analysisType ?? null,
         response: source.response ?? '',
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
