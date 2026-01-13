@@ -5,7 +5,7 @@ import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-too
 import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 
-export class GetRetirementPlanningRgpsPeriodQueryResultWithRelations extends BaseBuildableObject {
+export class GetRetirementPlanningRgpsPeriodWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsPeriodId;
 
   public readonly periodName: string | null;
@@ -37,5 +37,5 @@ export class GetRetirementPlanningRgpsPeriodQueryResultWithRelations extends Bas
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
   protected override readonly _type =
-    GetRetirementPlanningRgpsPeriodQueryResultWithRelations.name;
+    GetRetirementPlanningRgpsPeriodWithRelationsQueryResult.name;
 }
