@@ -107,12 +107,22 @@ export class GeminiService implements GenerativeIaGateway {
       },
     } as GenerateContentParameters;
 
-    if (props.responseJsonSchema !== undefined && contentConfig.config) {
-      contentConfig.config.responseJsonSchema = props.responseJsonSchema;
-    }
+    if (props.responseConfig !== undefined) {
+      if (
+        props.responseConfig.jsonSchema !== undefined &&
+        contentConfig.config !== undefined
+      ) {
+        contentConfig.config.responseJsonSchema =
+          props.responseConfig.jsonSchema;
+      }
 
-    if (props.useResponseMimeTypeForTools === true && contentConfig.config) {
-      contentConfig.config.responseMimeType = 'application/json';
+      if (
+        props.responseConfig.responseMimeType !== undefined &&
+        contentConfig.config !== undefined
+      ) {
+        contentConfig.config.responseMimeType =
+          props.responseConfig.responseMimeType;
+      }
     }
 
     const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;

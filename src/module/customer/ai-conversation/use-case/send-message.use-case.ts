@@ -4,7 +4,9 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { ConversationHistoryItemInputModel } from '@infra/generative-ia/model/input/conversation-history-item.input.model';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
+import { ToolDefinitionInputModel } from '@infra/generative-ia/model/input/tool-definition.input.model';
 import { ConversationCacheGateway } from '@module/customer/ai-conversation/conversation-cache/conversation-cache.gateway';
 import { SendMessageRequestDto } from '@module/customer/ai-conversation/dto/request/send-message.request.dto';
 import {
@@ -337,8 +339,16 @@ EXEMPLOS DE AÇÕES QUE REQUEREM ATUALIZAÇÃO:
           prompt: dto.json.message,
           promptFiles: promptFiles,
           systemInstruction: enhancedSystemPrompt,
-          conversationHistory: history,
-          tools: mcpTools,
+          conversationHistory: history.map((item) =>
+            ConversationHistoryItemInputModel.build(item),
+          ),
+          tools: mcpTools.map((tool) =>
+            ToolDefinitionInputModel.build({
+              name: tool.name,
+              description: tool.description,
+              parameters: tool.parameters,
+            }),
+          ),
           toolHandlers,
         }),
       );

@@ -1,8 +1,8 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import type { AnalysisTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/enum/analysis-type.enum';
 import type { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
-import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class GetRetirementPlanningRgpsAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsAnalysisResultId;
