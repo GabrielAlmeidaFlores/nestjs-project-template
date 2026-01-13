@@ -74,7 +74,7 @@ export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuil
   public type: RetirementPlanningDocumentTypeEnum;
 
   @ResponseDtoValueObjectProperty(Base64, {
-    description: 'URL do documento no bucket',
+    description: 'Arquivo em Base64',
   })
   public document: Base64;
 
