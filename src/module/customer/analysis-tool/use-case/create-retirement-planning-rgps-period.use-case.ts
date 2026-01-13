@@ -47,10 +47,6 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
       reasonPendency = ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM;
     }
 
-    if (dto.json.periodEnd === null) {
-      reasonPendency = ReasonPendencyEnum.LEAVE_DATE;
-    }
-
     if (reasonPendency !== null) {
       isPendency = true;
     }

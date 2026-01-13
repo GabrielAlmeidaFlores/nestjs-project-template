@@ -18,7 +18,7 @@ export class GetRetirementPlanningRgpsTimeAcceleratorResponseDto extends BaseBui
   public updatedAt: Date;
 
   @ResponseDtoDateProperty({ required: false })
-  public deletedAt?: Date | null;
+  public deletedAt?: Date;
 
   @ResponseDtoStringProperty()
   public timeType: string;
