@@ -129,7 +129,7 @@ export class CreateRetirementPlanningRppsPeriodRequestDto extends BaseBuildableD
       required: false,
     },
   )
-  public readonly specialTime?: CreateRetirementPlanningRppsPeriodSpecialTimeRequestDto | null;
+  public readonly specialTime?: CreateRetirementPlanningRppsPeriodSpecialTimeRequestDto;
 
   @RequestDtoObjectProperty(
     () => CreateRetirementPlanningRppsPeriodDisabilityRequestDto,
@@ -137,7 +137,7 @@ export class CreateRetirementPlanningRppsPeriodRequestDto extends BaseBuildableD
       required: false,
     },
   )
-  public readonly disability?: CreateRetirementPlanningRppsPeriodDisabilityRequestDto | null;
+  public readonly disability?: CreateRetirementPlanningRppsPeriodDisabilityRequestDto;
 
   protected override readonly _type =
     CreateRetirementPlanningRppsPeriodRequestDto.name;
