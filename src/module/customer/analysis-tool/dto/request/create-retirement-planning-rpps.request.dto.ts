@@ -8,7 +8,6 @@ import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysi
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
-import { RequestDtoBase64FileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-base64-file-property/request-dto-base64-file-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
@@ -150,9 +149,7 @@ export class CreateRetirementPlanningRppsDocumentRequestDto extends BaseBuildabl
   })
   public readonly type?: RetirementPlanningDocumentTypeEnum;
 
-  @RequestDtoBase64FileProperty({
-    required: true,
-  })
+  @RequestDtoValueObjectProperty(Base64)
   public readonly document: Base64;
 
   protected override readonly _type =
