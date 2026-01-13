@@ -21,7 +21,7 @@ export class DataRetirementPlanningRgpsPeriodRequestDto extends BaseBuildableDto
   public periodStart: Date;
 
   @RequestDtoDateProperty({ example: '2025-12-12', required: false })
-  public periodEnd?: Date | null;
+  public periodEnd?: Date;
 
   @RequestDtoStringProperty({ example: 'Empregado Doméstico' })
   public category: string;
