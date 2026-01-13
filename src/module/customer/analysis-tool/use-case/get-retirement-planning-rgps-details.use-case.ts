@@ -140,9 +140,32 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
 
     const totalCarenciaTimeWithAccelerationMonthsString = `${carenciaTimeWithAccelerationMonths + carenciaTimeWithPendencyMonths} contribuições`;
 
+    const searchPeriodo = periods;
+
+    let category: string | null = '';
+
+    const nonBenefitPeriods = (searchPeriodo ?? []).filter((p) => {
+      const cat = (p.category ?? '').toString().trim();
+      return cat.length > 0 && !/benef/i.test(cat);
+    });
+
+    if (nonBenefitPeriods.length > 0) {
+      const lastNonBenefit = nonBenefitPeriods.reduce((prev, cur) => {
+        const prevDate = prev?.periodEnd ?? prev?.periodStart;
+        const curDate = cur.periodEnd ?? cur.periodStart;
+        const prevTime = prevDate ? new Date(prevDate).getTime() : 0;
+        const curTime = curDate ? new Date(curDate).getTime() : 0;
+        return curTime > prevTime ? cur : prev;
+      }, nonBenefitPeriods[0]);
+      category = lastNonBenefit?.category ?? '';
+    } else {
+      category = '';
+    }
+
     return GetRetirementPlanningRgpsDetailsResponseDto.build({
       id: retirementPlanningRgps.id,
-      name: retirementPlanningRgps.cnisDocument,
+      name:
+        retirementPlanningRgps.retirementPlanningRgpsResult?.clientName ?? '',
       federalDocumentNumber:
         retirementPlanningRgps.retirementPlanningRgpsResult?.clientFederalDocument?.toString() ??
         '',
@@ -153,7 +176,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       email: analysisRecord.analysisToolClient.email ?? null,
       phoneNumber: analysisRecord.analysisToolClient.phoneNumber ?? null,
       type: analysisRecord.analysisToolClient.clientType,
-      category: 'Validar',
+      category,
       legalProceedingNumber:
         retirementPlanningRgps.retirementPlanningRgpsLegalProceeding?.map(
           (legalProceeding) => legalProceeding.legalProceedingNumber,
@@ -169,6 +192,7 @@ export class GetRetirementPlanningRgpsDetailsUseCase {
       carencyTimeWithPendency: carenciaTimeWithPendencyMonthsString,
       carencyTimeWithAcceleration:
         totalCarenciaTimeWithAccelerationMonthsString,
+      result: retirementPlanningRgps.retirementPlanningRgpsResult?.result ?? '',
     });
   }
 

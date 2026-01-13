@@ -1,9 +1,11 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 
-export class GetRetirementPlanningRgpsPeriodQueryResult extends BaseBuildableObject {
+export class GetRetirementPlanningRgpsPeriodWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsPeriodId;
 
   public readonly periodName: string | null;
@@ -30,8 +32,10 @@ export class GetRetirementPlanningRgpsPeriodQueryResult extends BaseBuildableObj
 
   public readonly deletedAt: Date | null;
 
-  public readonly reasonPendency: string | null;
+  public readonly reasonPendency: ReasonPendencyEnum | null;
+
+  public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
   protected override readonly _type =
-    GetRetirementPlanningRgpsPeriodQueryResult.name;
+    GetRetirementPlanningRgpsPeriodWithRelationsQueryResult.name;
 }

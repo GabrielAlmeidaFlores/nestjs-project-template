@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 
 @Injectable()
 export class LoremIpsumService implements GenerativeIaGateway {
