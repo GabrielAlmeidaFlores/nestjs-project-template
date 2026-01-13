@@ -34,8 +34,10 @@ import { CreateRetirementPlanningRppsResponseDto } from '@module/customer/analys
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRetirementPlanningRppsUseCase {
@@ -64,6 +66,8 @@ export class CreateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway: RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway)
     private readonly retirementPlanningRppsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -130,11 +134,23 @@ export class CreateRetirementPlanningRppsUseCase {
       for (const documentDto of dto.ctcDocuments) {
         const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
 
+        const buffer = documentDto.document.base64.decodeToBuffer();
+
+        const fileModel = FileModel.build({
+          buffer,
+          originalName: documentDto.document.originalFileName,
+          size: buffer.length,
+          encoding: '7bit',
+        });
+
+        const documentUrl =
+          await this.fileProcessorGateway.uploadFile(fileModel);
+
         const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
           id: periodDocumentId,
           documentType:
             documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document: documentDto.document,
+          document: documentUrl,
           retirementPlanningRppsPeriodDisability: null,
           retirementPlanningRppsPeriodSpecialTime: null,
           retirementPlanningRpps,
@@ -204,11 +220,23 @@ export class CreateRetirementPlanningRppsUseCase {
             const periodDocumentId =
               new RetirementPlanningRppsPeriodDocumentId();
 
+            const buffer = documentDto.document.base64.decodeToBuffer();
+
+            const fileModel = FileModel.build({
+              buffer,
+              originalName: documentDto.document.originalFileName,
+              size: buffer.length,
+              encoding: '7bit',
+            });
+
+            const documentUrl =
+              await this.fileProcessorGateway.uploadFile(fileModel);
+
             const periodDocument =
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document: documentDto.document,
+                document: documentUrl,
                 retirementPlanningRppsPeriodDisability: disability,
                 retirementPlanningRppsPeriodSpecialTime: null,
                 retirementPlanningRpps: null,
@@ -248,11 +276,23 @@ export class CreateRetirementPlanningRppsUseCase {
             const periodDocumentId =
               new RetirementPlanningRppsPeriodDocumentId();
 
+            const buffer = documentDto.document.base64.decodeToBuffer();
+
+            const fileModel = FileModel.build({
+              buffer,
+              originalName: documentDto.document.originalFileName,
+              size: buffer.length,
+              encoding: '7bit',
+            });
+
+            const documentUrl =
+              await this.fileProcessorGateway.uploadFile(fileModel);
+
             const periodDocument =
               new RetirementPlanningRppsPeriodDocumentEntity({
                 id: periodDocumentId,
                 documentType: documentDto.type,
-                document: documentDto.document,
+                document: documentUrl,
                 retirementPlanningRppsPeriodDisability: null,
                 retirementPlanningRppsPeriodSpecialTime: specialTime,
                 retirementPlanningRpps: null,

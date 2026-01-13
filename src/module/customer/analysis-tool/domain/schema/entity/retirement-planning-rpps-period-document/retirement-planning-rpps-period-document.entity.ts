@@ -3,15 +3,14 @@ import { RetirementPlanningRppsPeriodDocumentId } from '@module/customer/analysi
 import { RetirementPlanningRppsPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-special-time/retirement-planning-rpps-period-special-time.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import type { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import type { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
 import type { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import type { RetirementPlanningRppsPeriodDocumentEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/retirement-planning-rpps-period-document.entity.props.interface';
 
 export class RetirementPlanningRppsPeriodDocumentEntity extends BaseEntity<RetirementPlanningRppsPeriodDocumentId> {
-  @Description('Documento do período RPPS')
-  public readonly document: Base64;
+  @Description('URL do documento do período RPPS no bucket')
+  public readonly document: string;
 
   @Description('Tipo do documento do período RPPS')
   public readonly documentType: RetirementPlanningDocumentTypeEnum;

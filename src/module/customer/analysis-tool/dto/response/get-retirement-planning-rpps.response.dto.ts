@@ -14,7 +14,6 @@ import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysi
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoBase64FileProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-base64-file-property/response-dto-base64-file-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
@@ -74,10 +73,15 @@ export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuil
   @ResponseDtoEnumProperty(RetirementPlanningDocumentTypeEnum)
   public type: RetirementPlanningDocumentTypeEnum;
 
-  @ResponseDtoBase64FileProperty({
-    description: 'Documento em formato Base64',
+  @ResponseDtoValueObjectProperty(Base64, {
+    description: 'URL do documento no bucket',
   })
   public document: Base64;
+
+  @ResponseDtoStringProperty({
+    description: 'Nome original do arquivo',
+  })
+  public originalFileName: string;
 
   protected override readonly _type =
     GetRetirementPlanningRppsPeriodDocumentResponseDto.name;
