@@ -12,6 +12,8 @@ import { RetirementPlanningRgpsPeriodDocumentEntity } from '@module/customer/ana
 import { CreateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period.request.dto';
 import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsPeriodUseCase {
@@ -26,6 +28,8 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
     private readonly retirementPlanningRgpsPeriodCommandRepositoryGateway: RetirementPlanningRgpsPeriodCommandRepositoryGateway,
     @Inject(RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway)
     private readonly retirementPlanningRgpsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -67,12 +71,26 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
 
     const documents =
       dto.documents !== undefined
-        ? dto.documents.map((value) => {
-            return new RetirementPlanningRgpsPeriodDocumentEntity({
-              document: value.file.toString(),
-              retirementPlanningRgpsPeriod: period,
-            });
-          })
+        ? await Promise.all(
+            dto.documents.map(async (value) => {
+              const buffer = value.file.base64.decodeToBuffer();
+
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: value.file.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
+              });
+
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              return new RetirementPlanningRgpsPeriodDocumentEntity({
+                document: documentUrl,
+                retirementPlanningRgpsPeriod: period,
+              });
+            }),
+          )
         : [];
 
     await this.createOnDatabase(period, documents);
