@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
@@ -16,6 +17,7 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-retirement-planning-rpps.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rpps-not-found.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -30,6 +32,8 @@ export class GetRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -62,17 +66,28 @@ export class GetRetirementPlanningRppsUseCase {
         RetirementPlanningRppsNotFoundError,
       );
 
-    const periods = (retirementPlanningRppsQueryResult.periods ?? []).map(
-      (period) => {
+    const periods = await Promise.all(
+      retirementPlanningRppsQueryResult.periods.map(async (period) => {
         const specialTimePeriod = period.specialTimePeriod
           ? GetRetirementPlanningRppsPeriodSpecialTimeResponseDto.build({
               type: period.specialTimePeriod.type,
               startDate: period.specialTimePeriod.startDate,
               endDate: period.specialTimePeriod.endDate,
-              documents: period.specialTimePeriod.documents.map((doc) =>
-                GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
-                  type: doc.documentType,
-                  document: doc.document,
+              documents: await Promise.all(
+                period.specialTimePeriod.documents.map(async (doc) => {
+                  const document =
+                    await this.fileProcessorGateway.getFileBuffer(doc.document);
+                  const originalFileName =
+                    await this.fileProcessorGateway.getOriginalFileName(
+                      doc.document,
+                    );
+                  return GetRetirementPlanningRppsPeriodDocumentResponseDto.build(
+                    {
+                      type: doc.documentType,
+                      document: Base64.encodeBuffer(document),
+                      originalFileName,
+                    },
+                  );
                 }),
               ),
             })
@@ -92,10 +107,21 @@ export class GetRetirementPlanningRppsUseCase {
                 code: period.disabilityPeriod.cid.code,
                 description: period.disabilityPeriod.cid.description,
               }),
-              documents: period.disabilityPeriod.documents.map((doc) =>
-                GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
-                  type: doc.documentType,
-                  document: doc.document,
+              documents: await Promise.all(
+                period.disabilityPeriod.documents.map(async (doc) => {
+                  const document =
+                    await this.fileProcessorGateway.getFileBuffer(doc.document);
+                  const originalFileName =
+                    await this.fileProcessorGateway.getOriginalFileName(
+                      doc.document,
+                    );
+                  return GetRetirementPlanningRppsPeriodDocumentResponseDto.build(
+                    {
+                      type: doc.documentType,
+                      document: Base64.encodeBuffer(document),
+                      originalFileName,
+                    },
+                  );
                 }),
               ),
             })
@@ -111,28 +137,35 @@ export class GetRetirementPlanningRppsUseCase {
           specialTimePeriod,
           disabilityPeriod,
         });
-      },
+      }),
     );
 
     const analysisToolClient = GetAnalysisToolClientResponseDto.build({
       ...analysisToolRecordQueryResult.analysisToolClient,
     });
 
-    const legalProceedingNumber = (
-      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding ??
-      []
-    ).map((entity) => entity.legalProceeding);
+    const legalProceedingNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding.map(
+        (entity) => entity.legalProceeding,
+      );
 
-    const inssBenefitNumber = (
-      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit ?? []
-    ).map((entity) => entity.inssBenefitNumber);
+    const inssBenefitNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit.map(
+        (entity) => entity.inssBenefitNumber,
+      );
 
-    const ctcDocuments = (
-      retirementPlanningRppsQueryResult.ctcDocuments ?? []
-    ).map((doc) =>
-      GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
-        type: doc.documentType,
-        document: doc.document,
+    const ctcDocuments = await Promise.all(
+      retirementPlanningRppsQueryResult.ctcDocuments.map(async (doc) => {
+        const document = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+        return GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
+          type: doc.documentType,
+          document: Base64.encodeBuffer(document),
+          originalFileName,
+        });
       }),
     );
 

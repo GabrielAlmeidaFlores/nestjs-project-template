@@ -7,7 +7,8 @@ import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/imple
 export class RetirementPlanningRgpsPeriodDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'document',
-    type: 'longtext',
+    type: 'varchar',
+    length: 255,
     nullable: false,
   })
   public document: string;

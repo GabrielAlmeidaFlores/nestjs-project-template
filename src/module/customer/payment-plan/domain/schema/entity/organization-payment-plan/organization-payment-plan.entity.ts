@@ -67,7 +67,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   private static validateTotalInstallments(
     totalInstallments: number | null | undefined,
   ): void {
-    const MAX_INSTALLMENTS = 6;
+    const MAX_INSTALLMENTS = 12;
 
     if (
       totalInstallments !== null &&
