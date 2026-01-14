@@ -12,11 +12,13 @@ import { RetirementPlanningRgpsPeriodDocumentEntity } from '@module/customer/ana
 import { CreateRetirementPlanningRgpsPeriodDocumentRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period-document.request.dto';
 import { CreateRetirementPlanningRgpsPeriodDocumentResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period-document.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
@@ -36,6 +38,8 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -57,12 +61,25 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
       id: dto.json.retirementPlanningRgpsPeriodId,
     });
 
-    const documents = dto.documents.map(
-      (d) =>
-        new RetirementPlanningRgpsPeriodDocumentEntity({
-          document: d.file.toString(),
+    const documents = await Promise.all(
+      dto.documents.map(async (d) => {
+        const buffer = d.file.base64.decodeToBuffer();
+
+        const fileModel = FileModel.build({
+          buffer,
+          originalName: d.file.originalFileName,
+          size: buffer.length,
+          encoding: '7bit',
+        });
+
+        const documentUrl =
+          await this.fileProcessorGateway.uploadFile(fileModel);
+
+        return new RetirementPlanningRgpsPeriodDocumentEntity({
+          document: documentUrl,
           retirementPlanningRgpsPeriod: period,
-        }),
+        });
+      }),
     );
 
     const transactions = documents.map((doc) =>
@@ -92,7 +109,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
     const files: Buffer[] = [];
 
     dto.documents.forEach((doc) => {
-      files.push(Buffer.from(doc.file.toString(), 'base64'));
+      files.push(Buffer.from(doc.file.base64.toString(), 'base64'));
     });
 
     const result =
