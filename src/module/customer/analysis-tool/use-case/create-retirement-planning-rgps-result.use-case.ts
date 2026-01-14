@@ -100,7 +100,11 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     const cnisAnalyzerResponse =
       await this.cnisAnalysisGateway.analyzeCnisDocument(
         cnisDocumentData,
-        analysisRecord.analysisToolClient,
+        new AnalysisToolClientEntity({
+          ...analysisRecord.analysisToolClient,
+          createdBy: analysisRecord.analysisToolClient.createdBy.id,
+          updatedBy: analysisRecord.analysisToolClient.updatedBy.id,
+        }),
       );
 
     const jsonCnisAnalyzerResponse = JSON.stringify(
