@@ -21,7 +21,7 @@ export class GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile {
   }
 
   private mapOrmEntityToDomainEntity(): void {
-    const convertOrmEntityToDomainEntity = (
+    const convert = (
       source: AnalysisToolClientLegalProceedingTypeormEntity,
     ): GetAnalysisToolClientLegalProceedingQueryResult => {
       return GetAnalysisToolClientLegalProceedingQueryResult.build({
@@ -30,13 +30,11 @@ export class GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile {
       });
     };
 
-    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
-
     createMap(
       this.mapper,
       AnalysisToolClientLegalProceedingTypeormEntity,
       GetAnalysisToolClientLegalProceedingQueryResult,
-      mappingFunction,
+      constructUsing(convert),
     );
   }
 

@@ -4,12 +4,15 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
+import { LegalPleadingHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/command/legal-pleading-history.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { LegalPleadingEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/legal-pleading.entity';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import { LegalPleadingHistoryTitleEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/enum/legal-pleading-history-title.enum';
+import { LegalPleadingHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/legal-pleading-history.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -29,6 +32,8 @@ export class UpdateLegalPleadingStatusToCompleteUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(LegalPleadingCommandRepositoryGateway)
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
+    @Inject(LegalPleadingHistoryCommandRepositoryGateway)
+    private readonly legalPleadingHistoryCommandRepositoryGateway: LegalPleadingHistoryCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -87,8 +92,21 @@ export class UpdateLegalPleadingStatusToCompleteUseCase {
         legalPleadingUpdate,
       );
 
+    const legalPleadingHistory = new LegalPleadingHistoryEntity({
+      title: LegalPleadingHistoryTitleEnum.APPROVED,
+      description:
+        'Você aprovou a versão final do documento. A peça está pronta para download e uso.',
+      legalPleading: legalPleadingId,
+    });
+
+    const legalPleadingHistoryTransaction =
+      this.legalPleadingHistoryCommandRepositoryGateway.createLegalPleadingHistory(
+        legalPleadingHistory,
+      );
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       legalPleadingTransaction,
+      legalPleadingHistoryTransaction,
     ]);
     await transaction.commit();
 

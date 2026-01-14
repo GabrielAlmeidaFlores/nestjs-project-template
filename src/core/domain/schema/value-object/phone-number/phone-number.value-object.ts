@@ -21,7 +21,7 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
   }
 
   public static isValid(value: string): boolean {
-    const phoneRegex = /^\d{12,13}$/;
+    const phoneRegex = /^\d{13}$/;
 
     return phoneRegex.test(value);
   }
@@ -32,5 +32,9 @@ export class PhoneNumber extends BaseValueObject<PhoneNumber> {
 
   public toString(): string {
     return this.value;
+  }
+
+  public toStringWithoutCountryCode(): string {
+    return this.value.substring(2);
   }
 }

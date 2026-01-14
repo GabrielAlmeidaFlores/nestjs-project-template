@@ -36,6 +36,9 @@ export class UpdateCustomerRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public name?: string;
 
+  @RequestDtoStringProperty({ required: false })
+  public inssPassword?: string;
+
   @RequestDtoObjectProperty(() => UpdateCustomerAddressRequestDto, {
     required: false,
   })

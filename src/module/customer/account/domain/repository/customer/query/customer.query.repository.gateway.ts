@@ -1,9 +1,11 @@
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { NotFoundError } from '@core/error/not-found.error';
+import type { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import type { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import type { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import type { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -29,4 +31,10 @@ export abstract class CustomerQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetCustomerWithCustomerAddressRelationQueryResult>;
+
+  public abstract findOneByOrganizationMemberIdWithAuthIdentityRelation(
+    organizationMemberId: OrganizationMemberId,
+  ): Promise<GetCustomerWithAuthIdentityRelationQueryResult | null>;
+
+  public abstract listAll(): Promise<Array<GetCustomerQueryResult>>;
 }

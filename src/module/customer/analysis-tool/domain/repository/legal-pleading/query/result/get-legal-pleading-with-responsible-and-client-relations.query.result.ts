@@ -3,6 +3,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import type { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
+import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import type { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
 import type { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import type { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
@@ -11,7 +12,6 @@ import type { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/
 import type { BenefitNumber } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/benefit-number/benefit-number.value-object';
 import type { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-import type { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 
 export class GetLegalPleadingWithResponsibleAndClientRelationsQueryResult extends BaseBuildableObject {
   public readonly id: LegalPleadingId;
@@ -19,9 +19,9 @@ export class GetLegalPleadingWithResponsibleAndClientRelationsQueryResult extend
   public readonly status: AnalysisStatusEnum;
   public readonly statementOfFacts: string | null;
   public readonly additionalComments: string | null;
-  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
-  public readonly benefitType: LegalPleadingBenefitTypeEnum;
-  public readonly petitionType: LegalPleadingPetitionTypeEnum;
+  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum | null;
+  public readonly benefitType: LegalPleadingBenefitTypeEnum | null;
+  public readonly petitionType: LegalPleadingPetitionTypeEnum | null;
   public readonly benefitNumber: BenefitNumber | null;
   public readonly applicationSubmissionDate: Date | null;
   public readonly benefitTerminationDate: Date | null;

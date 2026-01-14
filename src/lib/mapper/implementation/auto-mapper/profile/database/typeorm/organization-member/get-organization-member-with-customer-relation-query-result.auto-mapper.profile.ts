@@ -4,8 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 
 @Injectable()
@@ -26,6 +28,14 @@ export class GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfi
     const convertOrmEntityToDomainEntity = (
       source: OrganizationMemberTypeormEntity,
     ): GetOrganizationMemberWithCustomerRelationQueryResult => {
+      if (!source.organization || !source.customer) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetOrganizationMemberWithCustomerRelationQueryResult.name,
+          sourceClass: OrganizationMemberTypeormEntity.name,
+        });
+      }
+
       const customer = this.mapper.map(
         source.customer,
         CustomerTypeormEntity,
@@ -35,6 +45,7 @@ export class GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfi
       return GetOrganizationMemberWithCustomerRelationQueryResult.build({
         ...source,
         id: new OrganizationMemberId(source.id),
+        organizationId: new OrganizationId(source.organization.id),
         customer,
       });
     };

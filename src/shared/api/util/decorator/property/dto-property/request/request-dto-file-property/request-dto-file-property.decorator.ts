@@ -29,8 +29,14 @@ export function RequestDtoFileProperty(
       HasMimeType(props.allowedMimeType, {
         each: isArray,
         message: (args: ValidationArguments) => {
+          const receivedMimeType =
+            (args.value as { mimeType?: string } | undefined)?.mimeType ??
+            'desconhecido';
+          const receivedFileName =
+            (args.value as { originalName?: string } | undefined)
+              ?.originalName ?? 'desconhecido';
           const allowedValue = props.allowedMimeType?.join(', ');
-          return `o campo '${args.property}' não é compatível com os valores esperados: ${allowedValue}`;
+          return `o campo '${args.property}' recebeu o mimetype '${receivedMimeType}' (arquivo: ${receivedFileName}), mas os valores esperados são: ${allowedValue}`;
         },
       }),
     );

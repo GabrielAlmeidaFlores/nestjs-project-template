@@ -1,9 +1,11 @@
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
+import { AdminModule } from '@module/admin/admin.module';
 import { CustomerModule } from '@module/customer/customer.module';
 import { GenericModule } from '@module/generic/generic.module';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
@@ -11,8 +13,10 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
 
 @Module({
   imports: [
+    AdminModule,
     GenericModule,
     CustomerModule,
+    AdminModule,
     NestjsFormDataModule.config({
       isGlobal: true,
       storage: MemoryStoredFile,
@@ -45,6 +49,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
         };
       },
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],

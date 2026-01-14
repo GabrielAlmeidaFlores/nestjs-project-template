@@ -13,4 +13,6 @@ export abstract class OrganizationQueryRepositoryGateway {
     customerId: CustomerId,
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetOrganizationQueryResult>>;
+
+  public abstract listAll(): Promise<Array<GetOrganizationQueryResult>>;
 }

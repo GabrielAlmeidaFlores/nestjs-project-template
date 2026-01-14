@@ -7,6 +7,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
@@ -28,6 +29,13 @@ export class AnalysisToolClientEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: AnalysisToolClientTypeormEntity,
     ): AnalysisToolClientEntity => {
+      if (!source.createdBy || !source.updatedBy) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: AnalysisToolClientEntity.name,
+          sourceClass: AnalysisToolClientTypeormEntity.name,
+        });
+      }
+
       const federalDocument =
         source.federalDocument !== null
           ? new FederalDocument(source.federalDocument)
@@ -44,8 +52,8 @@ export class AnalysisToolClientEntityAutoMapperProfile {
         federalDocument,
         email,
         phoneNumber,
-        createdBy: new OrganizationMemberId(source.createdBy?.id),
-        updatedBy: new OrganizationMemberId(source.updatedBy?.id),
+        createdBy: new OrganizationMemberId(source.createdBy.id),
+        updatedBy: new OrganizationMemberId(source.updatedBy.id),
       });
     };
 

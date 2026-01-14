@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -84,7 +84,10 @@ export class ListAnalysisToolRecordUseCase {
           ...analysisToolRecord.analysisToolClient,
         });
 
-        const analysis = analysisToolRecord.cnisFastAnalysis;
+        const analysis =
+          analysisToolRecord.cnisFastAnalysis ??
+          analysisToolRecord.retirementPlanningRpps ??
+          analysisToolRecord.retirementPlanningRgps;
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({

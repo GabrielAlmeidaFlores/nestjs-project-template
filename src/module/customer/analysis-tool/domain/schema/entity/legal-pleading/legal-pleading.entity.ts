@@ -1,12 +1,12 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { InvalidInputError } from '@core/error/invalid-input.error';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { InvalidLegalPleadingApplicationSubmitDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-application-submit-date.error';
 import { InvalidLegalPleadingBenefitTerminalDateError } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/error/invalid-legal-pleading-bennefit-terminal-date.error';
 import { LegalPleadingCode } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 import { LegalPleadingResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/legal-pleading-result.entity';
-import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/enum/analysis-status.enum';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
@@ -34,13 +34,13 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
   public readonly additionalComments: string | null;
 
   @Description('Sistema de seguridade social relacionado à peça processual.')
-  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum;
+  public readonly securitySystem: LegalPleadingSocialSecuritySystemEnum | null;
 
   @Description('Tipo de benefício relacionado à peça processual.')
-  public readonly benefitType: LegalPleadingBenefitTypeEnum;
+  public readonly benefitType: LegalPleadingBenefitTypeEnum | null;
 
   @Description('Tipo de petição relacionado à peça processual.')
-  public readonly petitionType: LegalPleadingPetitionTypeEnum;
+  public readonly petitionType: LegalPleadingPetitionTypeEnum | null;
 
   @Description('Número do benefício relacionado à peça processual.')
   public readonly benefitNumber: BenefitNumber | null;
@@ -102,9 +102,9 @@ export class LegalPleadingEntity extends BaseEntity<LegalPleadingId> {
     this.status = props.status;
     this.statementOfFacts = props.statementOfFacts ?? null;
     this.additionalComments = props.additionalComments ?? null;
-    this.securitySystem = props.securitySystem;
-    this.benefitType = props.benefitType;
-    this.petitionType = props.petitionType;
+    this.securitySystem = props.securitySystem ?? null;
+    this.benefitType = props.benefitType ?? null;
+    this.petitionType = props.petitionType ?? null;
     this.benefitNumber = props.benefitNumber ?? null;
     this.applicationSubmissionDate = props.applicationSubmissionDate ?? null;
     this.benefitTerminationDate = props.benefitTerminationDate ?? null;

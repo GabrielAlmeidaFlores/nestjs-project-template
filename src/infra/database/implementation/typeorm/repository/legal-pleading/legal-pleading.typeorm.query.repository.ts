@@ -12,7 +12,12 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
+import {
+  LegalPleadingMonthlyStatisticsQueryResult,
+  LegalPleadingStatisticsQueryResult,
+} from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/result/legal-pleading-statistics.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
@@ -96,9 +101,11 @@ export class LegalPleadingTypeormQueryRepository
           analysisToolClientLegalProceeding: true,
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
         legalPleadingAddress: true,
@@ -108,9 +115,11 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingResult: true,
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
       },
     });
@@ -152,9 +161,11 @@ export class LegalPleadingTypeormQueryRepository
         analysisToolClient: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
@@ -166,9 +177,11 @@ export class LegalPleadingTypeormQueryRepository
         legalPleadingResult: true,
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
       },
     });
@@ -207,9 +220,11 @@ export class LegalPleadingTypeormQueryRepository
           analysisToolClient: {
             createdBy: {
               customer: true,
+              organization: true,
             },
             updatedBy: {
               customer: true,
+              organization: true,
             },
             analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
@@ -221,9 +236,11 @@ export class LegalPleadingTypeormQueryRepository
           legalPleadingResult: true,
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
         },
       },
@@ -285,5 +302,101 @@ export class LegalPleadingTypeormQueryRepository
     });
 
     return total;
+  }
+
+  public async getStatisticsByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    startDate: Date,
+    endDate: Date,
+    petitionType?: LegalPleadingPetitionTypeEnum,
+  ): Promise<LegalPleadingStatisticsQueryResult> {
+    const startDateNormalized = new Date(startDate);
+    startDateNormalized.setHours(0, 0, 0, 0);
+
+    const endDateNormalized = new Date(endDate);
+    const HOURS_IN_DAY = 23;
+    const MINUTES_IN_HOUR = 59;
+    const SECONDS_IN_MINUTE = 59;
+    const MILLISECONDS_IN_SECOND = 999;
+    endDateNormalized.setHours(
+      HOURS_IN_DAY,
+      MINUTES_IN_HOUR,
+      SECONDS_IN_MINUTE,
+      MILLISECONDS_IN_SECOND,
+    );
+
+    const whereClause: FindOptionsWhere<LegalPleadingTypeormEntity> = {
+      createdBy: {
+        customer: {
+          authIdentity: {
+            id: authIdentityId.toString(),
+          },
+        },
+        organization: {
+          id: organizationId.toString(),
+        },
+      },
+    };
+
+    if (typeof petitionType !== 'undefined') {
+      whereClause.petitionType = petitionType;
+    }
+
+    const records = await this.find({
+      where: whereClause,
+      select: {
+        id: true,
+        createdAt: true,
+      },
+    });
+
+    const filteredRecords = records.filter(
+      (record) =>
+        record.createdAt >= startDateNormalized &&
+        record.createdAt <= endDateNormalized,
+    );
+
+    const monthlyStats = new Map<string, number>();
+    let totalCount = 0;
+
+    for (const record of filteredRecords) {
+      const date = new Date(record.createdAt);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      const currentCount = monthlyStats.get(monthKey) ?? 0;
+      monthlyStats.set(monthKey, currentCount + 1);
+      totalCount++;
+    }
+
+    const allMonths = new Set<string>();
+    const currentDate = new Date(startDateNormalized);
+    while (currentDate <= endDateNormalized) {
+      const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+      allMonths.add(monthKey);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+
+    for (const monthKey of allMonths) {
+      if (!monthlyStats.has(monthKey)) {
+        monthlyStats.set(monthKey, 0);
+      }
+    }
+
+    const monthlyStatistics = Array.from(monthlyStats.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([monthKey, count]) => {
+        const [yearStr = '0', monthStr = '00'] = monthKey.split('-');
+        return LegalPleadingMonthlyStatisticsQueryResult.build({
+          year: parseInt(yearStr, 10),
+          month: monthStr,
+          count,
+        });
+      });
+
+    return LegalPleadingStatisticsQueryResult.build({
+      totalCount,
+      monthlyStatistics,
+    });
   }
 }
