@@ -67,7 +67,13 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       });
     }
 
-    await processor(dto);
+    try {
+      await processor(dto);
+    } catch {
+      const waitTime = 5000;
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+      await processor(dto);
+    }
 
     return AsaasWebhookPaymentEventResponseDto.build({
       message: `Pagamento com status ${paymentStatus} processado com sucesso`,
