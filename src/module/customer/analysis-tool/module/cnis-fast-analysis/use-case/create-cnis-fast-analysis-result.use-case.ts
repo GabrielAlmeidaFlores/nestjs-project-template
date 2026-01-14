@@ -114,7 +114,13 @@ export class CreateCnisFastAnalysisResultUseCase {
     const cnisAnalyzerResponse =
       await this.cnisAnalysisGateway.analyzeCnisDocument(
         cnisDocumentData,
-        analysisToolRecordQueryResult.analysisToolClient,
+        new AnalysisToolClientEntity({
+          ...analysisToolRecordQueryResult.analysisToolClient,
+          createdBy:
+            analysisToolRecordQueryResult.analysisToolClient.createdBy.id,
+          updatedBy:
+            analysisToolRecordQueryResult.analysisToolClient.updatedBy.id,
+        }),
       );
 
     const jsonCnisAnalyzerResponse = JSON.stringify(

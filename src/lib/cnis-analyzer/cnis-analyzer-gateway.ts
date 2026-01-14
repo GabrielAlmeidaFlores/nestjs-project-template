@@ -1,10 +1,10 @@
 import type { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
 import type { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
-import type { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import type { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
 export abstract class CnisAnalyzerGateway {
   public abstract analyzeCnisDocument(
     data: CnisModel,
-    analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult,
+    analysisToolClient: AnalysisToolClientEntity,
   ): Promise<CnisAnalysisResultModel>;
 }
