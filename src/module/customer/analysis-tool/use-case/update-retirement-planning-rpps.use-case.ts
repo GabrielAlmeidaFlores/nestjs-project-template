@@ -215,8 +215,8 @@ export class UpdateRetirementPlanningRppsUseCase {
       }
     }
 
-    if (dto.inssBenefitNumbers && dto.inssBenefitNumbers.length > 0) {
-      for (const inssBenefitNumber of dto.inssBenefitNumbers) {
+    if (dto.inssBenefitNumber && dto.inssBenefitNumber.length > 0) {
+      for (const inssBenefitNumber of dto.inssBenefitNumber) {
         const inssBenefitId = new RetirementPlanningRppsInssBenefitId();
 
         const inssBenefit = new RetirementPlanningRppsInssBenefitEntity({
@@ -246,8 +246,8 @@ export class UpdateRetirementPlanningRppsUseCase {
       }
     }
 
-    if (dto.legalProceedings && dto.legalProceedings.length > 0) {
-      for (const legalProceedingNumber of dto.legalProceedings) {
+    if (dto.legalProceedingNumber && dto.legalProceedingNumber.length > 0) {
+      for (const legalProceedingNumber of dto.legalProceedingNumber) {
         const legalProceedingId = new RetirementPlanningRppsLegalProceedingId();
 
         const legalProceeding = new RetirementPlanningRppsLegalProceedingEntity(
