@@ -187,6 +187,12 @@ export class UpdateRetirementPlanningRppsRequestDto extends BaseBuildableDtoObje
   )
   public readonly periods: UpdateRetirementPlanningRppsPeriodRequestDto[];
 
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public readonly inssBenefitNumbers?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public readonly legalProceedings?: string[];
+
   protected override readonly _type =
     UpdateRetirementPlanningRppsRequestDto.name;
 }

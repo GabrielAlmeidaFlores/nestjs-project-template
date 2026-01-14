@@ -9,6 +9,8 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
 import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
+import { RetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/command/retirement-planning-rpps-inss-benefit.command.repository.gateway';
+import { RetirementPlanningRppsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/command/retirement-planning-rpps-legal-proceeding.command.repository.gateway';
 import { RetirementPlanningRppsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/command/retirement-planning-rpps-period.command.repository.gateway';
 import { GetRetirementPlanningRppsPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/query/result/get-retirement-planning-rpps-period.query.result';
 import { RetirementPlanningRppsPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/command/retirement-planning-rpps-period-disability.command.repository.gateway';
@@ -20,6 +22,10 @@ import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema
 import { CidTenEntity } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/cid-ten-entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RetirementPlanningRppsInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.entity';
+import { RetirementPlanningRppsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/value-object/retirement-planning-rpps-inss-benefit-id.value-object';
+import { RetirementPlanningRppsLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.entity';
+import { RetirementPlanningRppsLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/value-object/retirement-planning-rpps-legal-proceeding-id.value-object';
 import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity';
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
@@ -69,6 +75,10 @@ export class UpdateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway)
     private readonly retirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway: RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsInssBenefitCommandRepositoryGateway)
+    private readonly retirementPlanningRppsInssBenefitCommandRepositoryGateway: RetirementPlanningRppsInssBenefitCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    private readonly retirementPlanningRppsLegalProceedingCommandRepositoryGateway: RetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -187,6 +197,70 @@ export class UpdateRetirementPlanningRppsUseCase {
         transactionOperations.push(
           this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
             periodDocument,
+          ),
+        );
+      }
+    }
+
+    if (
+      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit
+        .length > 0
+    ) {
+      for (const inssBenefit of retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit) {
+        transactionOperations.push(
+          this.retirementPlanningRppsInssBenefitCommandRepositoryGateway.deleteRetirementPlanningRppsInssBenefit(
+            inssBenefit.id,
+          ),
+        );
+      }
+    }
+
+    if (dto.inssBenefitNumbers && dto.inssBenefitNumbers.length > 0) {
+      for (const inssBenefitNumber of dto.inssBenefitNumbers) {
+        const inssBenefitId = new RetirementPlanningRppsInssBenefitId();
+
+        const inssBenefit = new RetirementPlanningRppsInssBenefitEntity({
+          id: inssBenefitId,
+          inssBenefitNumber,
+          retirementPlanningRpps,
+        });
+
+        transactionOperations.push(
+          this.retirementPlanningRppsInssBenefitCommandRepositoryGateway.createRetirementPlanningRppsInssBenefit(
+            inssBenefit,
+          ),
+        );
+      }
+    }
+
+    if (
+      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding
+        .length > 0
+    ) {
+      for (const legalProceeding of retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding) {
+        transactionOperations.push(
+          this.retirementPlanningRppsLegalProceedingCommandRepositoryGateway.deleteRetirementPlanningRppsLegalProceeding(
+            legalProceeding.id,
+          ),
+        );
+      }
+    }
+
+    if (dto.legalProceedings && dto.legalProceedings.length > 0) {
+      for (const legalProceedingNumber of dto.legalProceedings) {
+        const legalProceedingId = new RetirementPlanningRppsLegalProceedingId();
+
+        const legalProceeding = new RetirementPlanningRppsLegalProceedingEntity(
+          {
+            id: legalProceedingId,
+            legalProceeding: legalProceedingNumber,
+            retirementPlanningRpps,
+          },
+        );
+
+        transactionOperations.push(
+          this.retirementPlanningRppsLegalProceedingCommandRepositoryGateway.createRetirementPlanningRppsLegalProceeding(
+            legalProceeding,
           ),
         );
       }
