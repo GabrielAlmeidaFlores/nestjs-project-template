@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -13,6 +13,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-limited-responsible-relations.query.result ';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
@@ -29,6 +30,50 @@ export class AnalysisToolClientTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async findOneByIdWithRelations(
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        id: analysisToolClientId.toString(),
+        createdBy: {
+          organization: {
+            deletedAt: IsNull(),
+          },
+        },
+        updatedBy: {
+          organization: {
+            deletedAt: IsNull(),
+          },
+        },
+      },
+      relations: {
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+        analysisToolClientInssBenefit: true,
+        analysisToolClientLegalProceeding: true,
+      },
+    });
+
+    if (data === null) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolClientTypeormEntity,
+      GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult,
+    );
+
+    return mappedData;
   }
 
   public async findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
@@ -49,9 +94,11 @@ export class AnalysisToolClientTypeormQueryRepository
         relations: {
           createdBy: {
             customer: true,
+            organization: true,
           },
           updatedBy: {
             customer: true,
+            organization: true,
           },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
@@ -85,9 +132,11 @@ export class AnalysisToolClientTypeormQueryRepository
       relations: {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClientInssBenefit: true,
         analysisToolClientLegalProceeding: true,
@@ -123,9 +172,11 @@ export class AnalysisToolClientTypeormQueryRepository
       relations: {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClientInssBenefit: true,
         analysisToolClientLegalProceeding: true,
@@ -167,9 +218,11 @@ export class AnalysisToolClientTypeormQueryRepository
       relations: {
         createdBy: {
           customer: true,
+          organization: true,
         },
         updatedBy: {
           customer: true,
+          organization: true,
         },
         analysisToolClientInssBenefit: true,
         analysisToolClientLegalProceeding: true,

@@ -7,8 +7,7 @@ import type { OrganizationMemberId } from '@module/customer/account/domain/schem
 import type { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 
-export interface AnalysisToolClientEntityPropsInterface
-  extends BaseEntityPropsInterface<AnalysisToolClientId> {
+export interface AnalysisToolClientEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolClientId> {
   name?: string | null;
   federalDocument?: FederalDocument | null;
   inssPassword?: string | null;
