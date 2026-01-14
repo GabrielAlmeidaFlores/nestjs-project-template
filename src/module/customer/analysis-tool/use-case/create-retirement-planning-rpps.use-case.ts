@@ -131,37 +131,42 @@ export class CreateRetirementPlanningRppsUseCase {
     );
 
     if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
-      for (const documentDto of dto.ctcDocuments) {
-        const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
+      const ctcDocumentTransactions = await Promise.all(
+        dto.ctcDocuments.map(async (documentDto) => {
+          const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
 
-        const buffer = documentDto.document.base64.decodeToBuffer();
+          const buffer = documentDto.document.base64.decodeToBuffer();
 
-        const fileModel = FileModel.build({
-          buffer,
-          originalName: documentDto.document.originalFileName,
-          size: buffer.length,
-          encoding: '7bit',
-        });
+          const fileModel = FileModel.build({
+            buffer,
+            originalName: documentDto.document.originalFileName,
+            size: buffer.length,
+            encoding: '7bit',
+          });
 
-        const documentUrl =
-          await this.fileProcessorGateway.uploadFile(fileModel);
+          const documentUrl =
+            await this.fileProcessorGateway.uploadFile(fileModel);
 
-        const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
-          id: periodDocumentId,
-          documentType:
-            documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document: documentUrl,
-          retirementPlanningRppsPeriodDisability: null,
-          retirementPlanningRppsPeriodSpecialTime: null,
-          retirementPlanningRpps,
-        });
+          const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity(
+            {
+              id: periodDocumentId,
+              documentType:
+                documentDto.type ??
+                RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
+              document: documentUrl,
+              retirementPlanningRppsPeriodDisability: null,
+              retirementPlanningRppsPeriodSpecialTime: null,
+              retirementPlanningRpps,
+            },
+          );
 
-        transactionOperations.push(
-          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+          return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
             periodDocument,
-          ),
-        );
-      }
+          );
+        }),
+      );
+
+      transactionOperations.push(...ctcDocumentTransactions);
     }
 
     for (const periodDto of dto.periods) {
@@ -216,38 +221,40 @@ export class CreateRetirementPlanningRppsUseCase {
           periodDto.disability.documents &&
           periodDto.disability.documents.length > 0
         ) {
-          for (const documentDto of periodDto.disability.documents) {
-            const periodDocumentId =
-              new RetirementPlanningRppsPeriodDocumentId();
+          const disabilityDocumentTransactions = await Promise.all(
+            periodDto.disability.documents.map(async (documentDto) => {
+              const periodDocumentId =
+                new RetirementPlanningRppsPeriodDocumentId();
 
-            const buffer = documentDto.document.base64.decodeToBuffer();
+              const buffer = documentDto.document.base64.decodeToBuffer();
 
-            const fileModel = FileModel.build({
-              buffer,
-              originalName: documentDto.document.originalFileName,
-              size: buffer.length,
-              encoding: '7bit',
-            });
-
-            const documentUrl =
-              await this.fileProcessorGateway.uploadFile(fileModel);
-
-            const periodDocument =
-              new RetirementPlanningRppsPeriodDocumentEntity({
-                id: periodDocumentId,
-                documentType: documentDto.type,
-                document: documentUrl,
-                retirementPlanningRppsPeriodDisability: disability,
-                retirementPlanningRppsPeriodSpecialTime: null,
-                retirementPlanningRpps: null,
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: documentDto.document.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
               });
 
-            transactionOperations.push(
-              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              const periodDocument =
+                new RetirementPlanningRppsPeriodDocumentEntity({
+                  id: periodDocumentId,
+                  documentType: documentDto.type,
+                  document: documentUrl,
+                  retirementPlanningRppsPeriodDisability: disability,
+                  retirementPlanningRppsPeriodSpecialTime: null,
+                  retirementPlanningRpps: null,
+                });
+
+              return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
                 periodDocument,
-              ),
-            );
-          }
+              );
+            }),
+          );
+
+          transactionOperations.push(...disabilityDocumentTransactions);
         }
       }
 
@@ -272,38 +279,40 @@ export class CreateRetirementPlanningRppsUseCase {
           periodDto.specialTime.documents &&
           periodDto.specialTime.documents.length > 0
         ) {
-          for (const documentDto of periodDto.specialTime.documents) {
-            const periodDocumentId =
-              new RetirementPlanningRppsPeriodDocumentId();
+          const specialTimeDocumentTransactions = await Promise.all(
+            periodDto.specialTime.documents.map(async (documentDto) => {
+              const periodDocumentId =
+                new RetirementPlanningRppsPeriodDocumentId();
 
-            const buffer = documentDto.document.base64.decodeToBuffer();
+              const buffer = documentDto.document.base64.decodeToBuffer();
 
-            const fileModel = FileModel.build({
-              buffer,
-              originalName: documentDto.document.originalFileName,
-              size: buffer.length,
-              encoding: '7bit',
-            });
-
-            const documentUrl =
-              await this.fileProcessorGateway.uploadFile(fileModel);
-
-            const periodDocument =
-              new RetirementPlanningRppsPeriodDocumentEntity({
-                id: periodDocumentId,
-                documentType: documentDto.type,
-                document: documentUrl,
-                retirementPlanningRppsPeriodDisability: null,
-                retirementPlanningRppsPeriodSpecialTime: specialTime,
-                retirementPlanningRpps: null,
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: documentDto.document.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
               });
 
-            transactionOperations.push(
-              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              const periodDocument =
+                new RetirementPlanningRppsPeriodDocumentEntity({
+                  id: periodDocumentId,
+                  documentType: documentDto.type,
+                  document: documentUrl,
+                  retirementPlanningRppsPeriodDisability: null,
+                  retirementPlanningRppsPeriodSpecialTime: specialTime,
+                  retirementPlanningRpps: null,
+                });
+
+              return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
                 periodDocument,
-              ),
-            );
-          }
+              );
+            }),
+          );
+
+          transactionOperations.push(...specialTimeDocumentTransactions);
         }
       }
     }
