@@ -10,12 +10,15 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { AnalyzeCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/analyze-cnis-document.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/create-cnis-fast-analysis.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/update-cnis-fast-analysis.request.dto';
+import { AnalyzeCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/analyze-cnis-document.response.dto';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/get-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/update-cnis-fast-analysis.response.dto';
+import { AnalyzeCnisDocumentUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/analyze-cnis-document.use-case';
 import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-complete-analysis.use-case';
@@ -38,6 +41,7 @@ export class CnisFastAnalysisController {
   protected readonly _type = CnisFastAnalysisController.name;
 
   public constructor(
+    private readonly analyzeCnisDocumentUseCase: AnalyzeCnisDocumentUseCase,
     private readonly createCnisFastAnalysisUseCase: CreateCnisFastAnalysisUseCase,
     private readonly createCnisFastAnalysisResultUseCase: CreateCnisFastAnalysisResultUseCase,
     private readonly getCnisFastAnalysisUseCase: GetCnisFastAnalysisUseCase,
@@ -76,6 +80,27 @@ export class CnisFastAnalysisController {
       cnisFastAnalysisId,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Analisar documento CNIS sem salvar',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze',
+      method: RequestMethod.POST,
+      type: AnalyzeCnisDocumentRequestDto,
+    },
+    tag: ['analise-rapida-cnis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise do CNIS realizada com sucesso.',
+      type: AnalyzeCnisDocumentResponseDto,
+    },
+  })
+  public async analyzeCnisDocument(
+    @Body() dto: AnalyzeCnisDocumentRequestDto,
+  ): Promise<AnalyzeCnisDocumentResponseDto> {
+    return await this.analyzeCnisDocumentUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
