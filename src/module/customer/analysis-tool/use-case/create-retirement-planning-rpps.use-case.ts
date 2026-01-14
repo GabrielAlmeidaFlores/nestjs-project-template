@@ -8,6 +8,8 @@ import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/ana
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
+import { RetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/command/retirement-planning-rpps-inss-benefit.command.repository.gateway';
+import { RetirementPlanningRppsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/command/retirement-planning-rpps-legal-proceeding.command.repository.gateway';
 import { RetirementPlanningRppsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/command/retirement-planning-rpps-period.command.repository.gateway';
 import { RetirementPlanningRppsPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/command/retirement-planning-rpps-period-disability.command.repository.gateway';
 import { RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/command/retirement-planning-rpps-period-document.command.repository.gateway';
@@ -20,6 +22,10 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { CidTenEntity } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/cid-ten-entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RetirementPlanningRppsInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.entity';
+import { RetirementPlanningRppsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/value-object/retirement-planning-rpps-inss-benefit-id.value-object';
+import { RetirementPlanningRppsLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.entity';
+import { RetirementPlanningRppsLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/value-object/retirement-planning-rpps-legal-proceeding-id.value-object';
 import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity';
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
@@ -66,6 +72,10 @@ export class CreateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway: RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway)
     private readonly retirementPlanningRppsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsInssBenefitCommandRepositoryGateway)
+    private readonly retirementPlanningRppsInssBenefitCommandRepositoryGateway: RetirementPlanningRppsInssBenefitCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    private readonly retirementPlanningRppsLegalProceedingCommandRepositoryGateway: RetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
@@ -167,6 +177,44 @@ export class CreateRetirementPlanningRppsUseCase {
       );
 
       transactionOperations.push(...ctcDocumentTransactions);
+    }
+
+    if (dto.inssBenefitNumbers && dto.inssBenefitNumbers.length > 0) {
+      for (const inssBenefitNumber of dto.inssBenefitNumbers) {
+        const inssBenefitId = new RetirementPlanningRppsInssBenefitId();
+
+        const inssBenefit = new RetirementPlanningRppsInssBenefitEntity({
+          id: inssBenefitId,
+          inssBenefitNumber,
+          retirementPlanningRpps,
+        });
+
+        transactionOperations.push(
+          this.retirementPlanningRppsInssBenefitCommandRepositoryGateway.createRetirementPlanningRppsInssBenefit(
+            inssBenefit,
+          ),
+        );
+      }
+    }
+
+    if (dto.legalProceedings && dto.legalProceedings.length > 0) {
+      for (const legalProceedingNumber of dto.legalProceedings) {
+        const legalProceedingId = new RetirementPlanningRppsLegalProceedingId();
+
+        const legalProceeding = new RetirementPlanningRppsLegalProceedingEntity(
+          {
+            id: legalProceedingId,
+            legalProceeding: legalProceedingNumber,
+            retirementPlanningRpps,
+          },
+        );
+
+        transactionOperations.push(
+          this.retirementPlanningRppsLegalProceedingCommandRepositoryGateway.createRetirementPlanningRppsLegalProceeding(
+            legalProceeding,
+          ),
+        );
+      }
     }
 
     for (const periodDto of dto.periods) {
