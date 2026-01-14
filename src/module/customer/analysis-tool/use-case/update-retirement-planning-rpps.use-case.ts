@@ -148,7 +148,7 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     const transactionOperations: TransactionType[] = [];
 
-    if (retirementPlanningRppsQueryResult.ctcDocuments) {
+    if (retirementPlanningRppsQueryResult.ctcDocuments.length > 0) {
       for (const ctcDocument of retirementPlanningRppsQueryResult.ctcDocuments) {
         transactionOperations.push(
           this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.deleteRetirementPlanningRppsPeriodDocument(
@@ -194,7 +194,7 @@ export class UpdateRetirementPlanningRppsUseCase {
 
     const periodsTransactions = await this.updatePeriodsOnDatabase(
       retirementPlanningRpps,
-      retirementPlanningRppsQueryResult.periods ?? [],
+      retirementPlanningRppsQueryResult.periods,
       dto.periods,
     );
 

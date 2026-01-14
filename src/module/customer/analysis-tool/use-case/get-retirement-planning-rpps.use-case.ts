@@ -67,7 +67,7 @@ export class GetRetirementPlanningRppsUseCase {
       );
 
     const periods = await Promise.all(
-      (retirementPlanningRppsQueryResult.periods ?? []).map(async (period) => {
+      retirementPlanningRppsQueryResult.periods.map(async (period) => {
         const specialTimePeriod = period.specialTimePeriod
           ? GetRetirementPlanningRppsPeriodSpecialTimeResponseDto.build({
               type: period.specialTimePeriod.type,
@@ -144,30 +144,29 @@ export class GetRetirementPlanningRppsUseCase {
       ...analysisToolRecordQueryResult.analysisToolClient,
     });
 
-    const legalProceedingNumber = (
-      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding ??
-      []
-    ).map((entity) => entity.legalProceeding);
+    const legalProceedingNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsLegalProceeding.map(
+        (entity) => entity.legalProceeding,
+      );
 
-    const inssBenefitNumber = (
-      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit ?? []
-    ).map((entity) => entity.inssBenefitNumber);
+    const inssBenefitNumber =
+      retirementPlanningRppsQueryResult.retirementPlanningRppsInssBenefit.map(
+        (entity) => entity.inssBenefitNumber,
+      );
 
     const ctcDocuments = await Promise.all(
-      (retirementPlanningRppsQueryResult.ctcDocuments ?? []).map(
-        async (doc) => {
-          const document = await this.fileProcessorGateway.getFileBuffer(
-            doc.document,
-          );
-          const originalFileName =
-            await this.fileProcessorGateway.getOriginalFileName(doc.document);
-          return GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
-            type: doc.documentType,
-            document: Base64.encodeBuffer(document),
-            originalFileName,
-          });
-        },
-      ),
+      retirementPlanningRppsQueryResult.ctcDocuments.map(async (doc) => {
+        const document = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+        return GetRetirementPlanningRppsPeriodDocumentResponseDto.build({
+          type: doc.documentType,
+          document: Base64.encodeBuffer(document),
+          originalFileName,
+        });
+      }),
     );
 
     const retirementPlanningRppsResult =
