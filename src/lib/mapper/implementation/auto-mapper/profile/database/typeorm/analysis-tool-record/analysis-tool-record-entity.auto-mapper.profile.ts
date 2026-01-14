@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
@@ -16,6 +17,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 
 @Injectable()
@@ -58,6 +60,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const administrativeProcedureInssAnalysis =
+        source.administrativeProcedureInssAnalysis !== undefined
+          ? this.mapper.map(
+              source.administrativeProcedureInssAnalysis,
+              AdministrativeProcedureInssAnalysisTypeormEntity,
+              AdministrativeProcedureInssAnalysisEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -80,6 +91,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
+        administrativeProcedureInssAnalysis,
       });
     };
 
@@ -113,6 +125,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const administrativeProcedureInssAnalysis =
+        source.administrativeProcedureInssAnalysis !== null
+          ? this.mapper.map(
+              source.administrativeProcedureInssAnalysis,
+              AdministrativeProcedureInssAnalysisEntity,
+              AdministrativeProcedureInssAnalysisTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -140,6 +161,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        administrativeProcedureInssAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,

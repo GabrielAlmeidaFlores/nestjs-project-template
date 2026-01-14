@@ -20,6 +20,7 @@ import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/mod
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-not-found.error';
+import { CnisFastAnalysisResultAlreadyExistsError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-result-already-exists.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -95,6 +96,13 @@ export class CreateCnisFastAnalysisResultUseCase {
 
     if (cnisFastAnalysisQueryResult === null) {
       throw new CnisFastAnalysisNotFoundError();
+    }
+
+    if (
+      analysisToolRecordQueryResult.cnisFastAnalysis?.cnisFastAnalysisResult !==
+      null
+    ) {
+      throw new CnisFastAnalysisResultAlreadyExistsError();
     }
 
     if (cnisFastAnalysisQueryResult.cnisDocument === null) {
@@ -191,6 +199,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
