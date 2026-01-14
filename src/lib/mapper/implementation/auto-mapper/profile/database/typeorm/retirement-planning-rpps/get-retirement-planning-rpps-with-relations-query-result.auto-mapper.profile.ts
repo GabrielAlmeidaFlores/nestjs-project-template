@@ -138,39 +138,26 @@ export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile 
           )
         : undefined;
 
-      const remunerations = source.remunerations
-        ? this.mapper.mapArray(
-            source.remunerations,
-            GetRetirementPlanningRppsRemunerationQueryResult,
-            RetirementPlanningRppsRemunerationTypeormEntity,
-          )
-        : undefined;
-
-      const periods = source.periods
-        ? this.mapper.mapArray(
-            source.periods,
-            GetRetirementPlanningRppsPeriodQueryResult,
-            RetirementPlanningRppsPeriodTypeormEntity,
-          )
-        : undefined;
-
-      const retirementPlanningRppsInssBenefit =
-        source.retirementPlanningRppsInssBenefit
-          ? this.mapper.mapArray(
-              source.retirementPlanningRppsInssBenefit,
-              GetRetirementPlanningRppsInssBenefitQueryResult,
-              RetirementPlanningRppsInssBenefitTypeormEntity,
-            )
-          : [];
-
-      const retirementPlanningRppsLegalProceeding =
-        source.retirementPlanningRppsLegalProceeding
-          ? this.mapper.mapArray(
-              source.retirementPlanningRppsLegalProceeding,
-              GetRetirementPlanningRppsLegalProceedingQueryResult,
-              RetirementPlanningRppsLegalProceedingTypeormEntity,
-            )
-          : [];
+      const remunerations = this.mapper.mapArray(
+        source.remunerations,
+        GetRetirementPlanningRppsRemunerationQueryResult,
+        RetirementPlanningRppsRemunerationTypeormEntity,
+      );
+      const periods = this.mapper.mapArray(
+        source.periods,
+        GetRetirementPlanningRppsPeriodQueryResult,
+        RetirementPlanningRppsPeriodTypeormEntity,
+      );
+      const retirementPlanningRppsInssBenefit = this.mapper.mapArray(
+        source.retirementPlanningRppsInssBenefit,
+        GetRetirementPlanningRppsInssBenefitQueryResult,
+        RetirementPlanningRppsInssBenefitTypeormEntity,
+      );
+      const retirementPlanningRppsLegalProceeding = this.mapper.mapArray(
+        source.retirementPlanningRppsLegalProceeding,
+        GetRetirementPlanningRppsLegalProceedingQueryResult,
+        RetirementPlanningRppsLegalProceedingTypeormEntity,
+      );
 
       const retirementPlanningRppsRemunerationCalculation =
         source.retirementPlanningRppsRemunerationCalculation
