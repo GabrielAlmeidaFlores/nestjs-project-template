@@ -73,8 +73,15 @@ export class GetRetirementPlanningRppsPeriodDocumentResponseDto extends BaseBuil
   @ResponseDtoEnumProperty(RetirementPlanningDocumentTypeEnum)
   public type: RetirementPlanningDocumentTypeEnum;
 
-  @ResponseDtoValueObjectProperty(Base64)
+  @ResponseDtoValueObjectProperty(Base64, {
+    description: 'Arquivo em Base64',
+  })
   public document: Base64;
+
+  @ResponseDtoStringProperty({
+    description: 'Nome original do arquivo',
+  })
+  public originalFileName: string;
 
   protected override readonly _type =
     GetRetirementPlanningRppsPeriodDocumentResponseDto.name;
