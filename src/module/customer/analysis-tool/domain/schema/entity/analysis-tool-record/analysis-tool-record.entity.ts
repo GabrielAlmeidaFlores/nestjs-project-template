@@ -6,6 +6,7 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -38,6 +39,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
   @Description(
+    'Análise administrativa do INSS associada ao registro da ferramenta de análise',
+  )
+  public readonly administrativeProcedureInssAnalysis: AdministrativeProcedureInssAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -62,6 +68,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
     this.retirementPlanningRpps = props.retirementPlanningRpps ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
+    this.administrativeProcedureInssAnalysis =
+      props.administrativeProcedureInssAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

@@ -172,6 +172,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
