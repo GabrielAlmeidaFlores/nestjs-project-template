@@ -11,19 +11,11 @@ import type { GetRetirementPlanningRppsResultQueryResult } from '@module/custome
 export class GetRetirementPlanningRppsWithRelationsQueryResult extends GetRetirementPlanningRppsQueryResult {
   public readonly retirementPlanningRppsResult: GetRetirementPlanningRppsResultQueryResult | null;
   public readonly retirementPlanningRppsRemunerationCalculation: GetRetirementPlanningRppsRemunerationCalculationQueryResult | null;
-  public readonly retirementPlanningRppsInssBenefit:
-    | GetRetirementPlanningRppsInssBenefitQueryResult[]
-    | null;
-  public readonly retirementPlanningRppsLegalProceeding:
-    | GetRetirementPlanningRppsLegalProceedingQueryResult[]
-    | null;
-  public readonly ctcDocuments:
-    | GetRetirementPlanningRppsPeriodDocumentQueryResult[]
-    | null;
-  public readonly remunerations:
-    | GetRetirementPlanningRppsRemunerationQueryResult[]
-    | null;
-  public readonly periods: GetRetirementPlanningRppsPeriodQueryResult[] | null;
+  public readonly retirementPlanningRppsInssBenefit: GetRetirementPlanningRppsInssBenefitQueryResult[];
+  public readonly retirementPlanningRppsLegalProceeding: GetRetirementPlanningRppsLegalProceedingQueryResult[];
+  public readonly ctcDocuments: GetRetirementPlanningRppsPeriodDocumentQueryResult[];
+  public readonly remunerations: GetRetirementPlanningRppsRemunerationQueryResult[];
+  public readonly periods: GetRetirementPlanningRppsPeriodQueryResult[];
 
   protected override readonly _type =
     GetRetirementPlanningRppsWithRelationsQueryResult.name;
