@@ -20,8 +20,8 @@ import { CnisIndicadoresDePendenciaInterface } from '@lib/cnis-analyzer/interfac
 import { ManutencaoQualidadeSeguradoInterface } from '@lib/cnis-analyzer/interface/manutencao-qualidade-segurado.interface';
 import { PedagioPosReformaInterface } from '@lib/cnis-analyzer/interface/pedagio-pos-reforma.interface';
 import {
-  PeriodoDeGracaResultadoInterface,
   PeriodoDeGracaInterface,
+  PeriodoDeGracaResultadoInterface,
 } from '@lib/cnis-analyzer/interface/periodo-de-graca-resultado.interface';
 import { PessoaCnisIdadeInterface } from '@lib/cnis-analyzer/interface/pessoa-cnis-idade.interface';
 import { SalarioTetoInterface } from '@lib/cnis-analyzer/interface/salario-teto.interface';
@@ -37,8 +37,11 @@ import {
   TempoDeContribuicaoInterface,
 } from '@lib/cnis-analyzer/interface/time-contribution.interface';
 import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
-import { CnisModel } from '@lib/cnis-processor/model/generic/cnis.model';
-import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
+import {
+  CnisModel,
+  CnisSessionSocialSecurityAffiliationEarningsHistoryModel,
+} from '@lib/cnis-processor/model/generic/cnis.model';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 
 @Injectable()
 export class CnisAnalyzerService implements CnisAnalyzerGateway {
@@ -79,7 +82,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   public analyzeCnisDocument(
     data: CnisModel,
-    analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult,
+    analysisToolClient: AnalysisToolClientEntity,
   ): Promise<CnisAnalysisResultModel> {
     const idade = this.calculateAge(
       data.affiliateIdentification?.dataDeNascimento,
@@ -215,8 +218,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
 
-    const indicadoresDePendencia =
-      this.calculateImpactoLiquidoDePendencias(consolidadoResumido);
+    const indicadoresDePendencia = this.calculateImpactoLiquidoDePendencias(
+      consolidadoResumido,
+      data,
+    );
 
     const indicadoresDeIncapacidade =
       this.calculateIncapacidade(consolidadoResumido);
@@ -389,125 +394,93 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private diffYmdInclusive(
-    start: Date | null | undefined,
-    end: Date | null | undefined,
+    startDate?: Date | string | number | null,
+    endDate?: Date | string | number | null,
   ): DiferencaYmdResultadoInterface {
-    const MILLIS_PER_SECOND = 1000;
-    const SECONDS_PER_MINUTE = 60;
-    const MINUTES_PER_HOUR = 60;
-    const HOURS_PER_DAY = 24;
+    const start = this.toDate(startDate);
+    const end = this.toDate(endDate);
+    const MONTHS_IN_YEAR = 12;
+    const THIRTY_DAYS = 30;
+    const THIRTY_ONES_DAYS = 31;
+    const FEBRUARY_DAYS = 28;
+    const LEAP_FEBRUARY_DAYS = 29;
 
-    const Time = {
-      Millisecond: 1,
-      Second: MILLIS_PER_SECOND,
-      Minute: MILLIS_PER_SECOND * SECONDS_PER_MINUTE,
-      Hour: MILLIS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR,
-      Day:
-        MILLIS_PER_SECOND *
-        SECONDS_PER_MINUTE *
-        MINUTES_PER_HOUR *
-        HOURS_PER_DAY,
-    } as const;
-
-    if (
-      !start ||
-      !end ||
-      !(start instanceof Date) ||
-      !(end instanceof Date) ||
-      isNaN(start.getTime()) ||
-      isNaN(end.getTime())
-    ) {
+    if (!start || !end) {
       return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
     }
-
-    const msPerDay = Time.Day;
-
-    const toUtcDay = (d: Date): Date =>
-      new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const s = toUtcDay(start);
-    const e = toUtcDay(end);
-
-    if (e.getTime() < s.getTime()) {
-      return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
-    }
-
-    let years = e.getUTCFullYear() - s.getUTCFullYear();
-    const sPlusYears = new Date(
-      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
-    );
-
-    if (sPlusYears.getTime() > e.getTime()) {
-      years -= 1;
-    }
-
-    const afterYears = new Date(
-      Date.UTC(s.getUTCFullYear() + years, s.getUTCMonth(), s.getUTCDate()),
-    );
-
-    const addMonths = (d: Date, months: number): Date => {
-      const y = d.getUTCFullYear();
-      const m = d.getUTCMonth() + months;
-      const day = d.getUTCDate();
-      let cand = new Date(Date.UTC(y, m, day));
-
-      if (cand.getUTCDate() !== day) {
-        cand = new Date(
-          Date.UTC(cand.getUTCFullYear(), cand.getUTCMonth() + 1, 0),
-        );
-      }
-      return cand;
-    };
-
-    const NUMBER_MONTHS_IN_YEAR = 12;
-
-    let months = 0;
-    const roughMonths =
-      (e.getUTCFullYear() - afterYears.getUTCFullYear()) *
-        NUMBER_MONTHS_IN_YEAR +
-      (e.getUTCMonth() - afterYears.getUTCMonth());
-
-    months = Math.max(0, roughMonths);
-
-    while (months > 0) {
-      const cand = addMonths(afterYears, months);
-      if (cand.getTime() > e.getTime()) {
-        months -= 1;
-      } else {
-        break;
-      }
-    }
-
-    while (addMonths(afterYears, months + 1) <= e) {
-      months++;
-    }
-
-    const base = addMonths(afterYears, months);
-    let days = Math.floor((e.getTime() - base.getTime()) / msPerDay) + 1;
 
     const YEAR_2019 = 2019;
     const MONTH_NOVEMBER = 10;
     const DAY_FIRST = 1;
     const RULE_START_UTC = Date.UTC(YEAR_2019, MONTH_NOVEMBER, DAY_FIRST);
 
-    if (s.getTime() >= RULE_START_UTC || e.getTime() >= RULE_START_UTC) {
+    const inclusiveEnd = new Date(end);
+    inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
+
+    const startYear = start.getFullYear();
+    const startMonth = start.getMonth();
+    const startDay = start.getDate();
+
+    const endYear = inclusiveEnd.getFullYear();
+    const endMonth = inclusiveEnd.getMonth();
+    const endDay = inclusiveEnd.getDate();
+
+    let years = endYear - startYear;
+    let months = endMonth - startMonth;
+    let days = endDay - startDay;
+
+    if (days < 0) {
+      months--;
+
+      const previousMonth = (endMonth - 1 + MONTHS_IN_YEAR) % MONTHS_IN_YEAR;
+      const yearOfPreviousMonth = endMonth === 0 ? endYear - 1 : endYear;
+
+      const LEAP_YEAR_DIVISOR = 4;
+      const CENTURY_DIVISOR = 100;
+      const QUADRICENTENNIAL_DIVISOR = 400;
+
+      const isLeapYear =
+        (yearOfPreviousMonth % LEAP_YEAR_DIVISOR === 0 &&
+          yearOfPreviousMonth % CENTURY_DIVISOR !== 0) ||
+        yearOfPreviousMonth % QUADRICENTENNIAL_DIVISOR === 0;
+
+      const daysInPreviousMonth =
+        [
+          THIRTY_ONES_DAYS,
+          isLeapYear ? LEAP_FEBRUARY_DAYS : FEBRUARY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+          THIRTY_DAYS,
+          THIRTY_ONES_DAYS,
+        ][previousMonth] ?? THIRTY_ONES_DAYS;
+      days += daysInPreviousMonth;
+    }
+
+    if (months < 0) {
+      years--;
+      months += MONTHS_IN_YEAR;
+    }
+
+    if (start.getTime() >= RULE_START_UTC || end.getTime() >= RULE_START_UTC) {
       if (days > 0) {
         months += 1;
         days = 0;
-      }
 
-      if (months >= NUMBER_MONTHS_IN_YEAR) {
-        const addYears = Math.floor(months / NUMBER_MONTHS_IN_YEAR);
-        years += addYears;
-        months = months % NUMBER_MONTHS_IN_YEAR;
+        if (months >= MONTHS_IN_YEAR) {
+          const extraYears = Math.floor(months / MONTHS_IN_YEAR);
+          years += extraYears;
+          months = months % MONTHS_IN_YEAR;
+        }
       }
     }
 
-    return {
-      years,
-      months,
-      days,
-      formatted: `${years}a ${months}m ${days}d`,
-    };
+    return { years, months, days, formatted: `${years}a ${months}m ${days}d` };
   }
 
   private calcularVinculosConcomitantes(
@@ -906,14 +879,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     return x;
   }
 
-  private toDate(value: Date | null | undefined): Date | null {
-    if (value === null || value === undefined) {
+  private toDate(d?: Date | string | number | null): Date | null {
+    if (d === undefined || d === null) {
       return null;
     }
-    if (value instanceof Date) {
-      return value;
+    if (d instanceof Date) {
+      return isNaN(d.getTime()) ? null : d;
     }
-    const parsed = new Date(value);
+    const parsed = new Date(d);
     return isNaN(parsed.getTime()) ? null : parsed;
   }
 
@@ -1054,13 +1027,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const relations = data.socialSecurityRelations ?? [];
     relations.forEach((relationA, indexA) => {
       const startA = relationA.socialSecurityAffiliationInfo.dataInicio;
-      const endA = relationA.socialSecurityAffiliationInfo.dataFim;
+      const endA =
+        relationA.socialSecurityAffiliationInfo.dataFim ??
+        relationA.socialSecurityAffiliationInfo.ultRemun;
       const seq = relationA.socialSecurityAffiliationInfo.seq ?? 1;
       let isConcomitante = false;
+
       relations.forEach((relationB, indexB) => {
         if (indexA !== indexB) {
           const startB = relationB.socialSecurityAffiliationInfo.dataInicio;
-          const endB = relationB.socialSecurityAffiliationInfo.dataFim;
+          const endB =
+            relationB.socialSecurityAffiliationInfo.dataFim ??
+            relationB.socialSecurityAffiliationInfo.ultRemun;
           if (
             startA instanceof Date &&
             endA instanceof Date &&
@@ -1163,8 +1141,31 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           .map((item) => item.indicadores)
           .filter((v): v is string => typeof v === 'string' && v.trim() !== '');
 
-      const indicadorPrincipal =
-        relation.socialSecurityAffiliationInfo.indicadores;
+      const indicadorPrincipal = ((): string => {
+        const ind = relation.socialSecurityAffiliationInfo.indicadores;
+        if (typeof ind !== 'string' || ind.trim() === '') {
+          return '';
+        }
+
+        const pendencySet = new Set<string>();
+        for (const list of indicadorsData) {
+          if (typeof list.sigla === 'string' && list.tipo === 'CsPendencia') {
+            if (ind.includes(list.sigla)) {
+              pendencySet.add(list.sigla);
+            }
+          }
+        }
+
+        if (ind.includes('PSC-MEN-SM')) {
+          pendencySet.add('PSC-MEN-SM');
+        }
+        if (ind.includes('PREM-EXT')) {
+          pendencySet.add('PREM-EXT');
+        }
+
+        return Array.from(pendencySet).join(',');
+      })();
+
       const indicadoresArray: string[] = [
         ...(typeof indicadorPrincipal === 'string' &&
         indicadorPrincipal.trim() !== ''
@@ -1173,10 +1174,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         ...indicadoresRemuneracao,
       ];
       const uniqueIndicadores = Array.from(new Set(indicadoresArray));
+
       indicadoresArray.length = 0;
       indicadoresArray.push(...uniqueIndicadores);
       const indicadores = indicadoresArray.join(',').trim();
-      const isPendencia = this.calculateIsPendencia(indicadores);
+      const isPendencia = this.calculateIsPendencia(
+        indicadores,
+        relation.socialSecurityAffiliationEarningsHistory,
+      );
 
       const contributionTimeFound = temposContribuicao.find(
         (item) => item.seq === seq,
@@ -1281,32 +1286,105 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     };
   }
 
-  private calculateIsPendencia(sigla: string | null | undefined): boolean {
+  private calculateIsPendencia(
+    sigla: string | null | undefined,
+    earningsHistory: CnisSessionSocialSecurityAffiliationEarningsHistoryModel[],
+  ): boolean {
     if (typeof sigla !== 'string') {
       return false;
     }
 
-    const pendenciaIndicators = ['IREM-INDPEND', 'IREC-INDPEND'];
-    const isPendencia =
-      pendenciaIndicators.some((ind) => sigla.includes(ind)) ||
-      indicadorsData.some(
-        (list) =>
-          typeof list.sigla === 'string' &&
-          sigla.includes(list.sigla) &&
-          list.tipo === 'CsPendencia',
-      );
-    return isPendencia;
+    const pendencyCodes = new Set<string>();
+    for (const list of indicadorsData) {
+      if (typeof list.sigla === 'string' && list.tipo === 'CsPendencia') {
+        pendencyCodes.add(list.sigla);
+      }
+    }
+
+    pendencyCodes.add('PSC-MEN-SM');
+    pendencyCodes.add('PREM-EXT');
+
+    for (const earning of earningsHistory) {
+      const earnInd = earning.indicadores;
+      if (typeof earnInd === 'string' && earnInd.trim() !== '') {
+        for (const code of pendencyCodes) {
+          if (earnInd.includes(code)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   private calculateImpactoLiquidoDePendencias(
     data: ConsolidadoRelacaoInterface[],
+    cnisModel: CnisModel,
   ): CnisIndicadoresDePendenciaInterface[] {
     const sequenciasComPendencia = data.filter((item) => item.isPendencia);
+
     const tempoTotal = sequenciasComPendencia.map((item) => {
+      const relation = cnisModel.socialSecurityRelations?.find(
+        (r) => r.socialSecurityAffiliationInfo.seq === item.seq,
+      );
+
+      const pendencyCodes = new Set<string>();
+      for (const list of indicadorsData) {
+        if (typeof list.sigla === 'string' && list.tipo === 'CsPendencia') {
+          pendencyCodes.add(list.sigla);
+        }
+      }
+      pendencyCodes.add('PSC-MEN-SM');
+      pendencyCodes.add('PREM-EXT');
+
+      if (
+        relation &&
+        Array.isArray(relation.socialSecurityAffiliationEarningsHistory)
+      ) {
+        const monthsSet = new Set<string>();
+        for (const earning of relation.socialSecurityAffiliationEarningsHistory) {
+          const earnInd = earning.indicadores;
+          const competencia = earning.competencia;
+          if (
+            typeof earnInd === 'string' &&
+            earnInd.trim() !== '' &&
+            competencia instanceof Date &&
+            !isNaN(competencia.getTime())
+          ) {
+            for (const code of pendencyCodes) {
+              if (earnInd.includes(code)) {
+                const key = `${competencia.getFullYear()}-${String(
+                  competencia.getMonth() + 1,
+                ).padStart(2, '0')}`;
+                monthsSet.add(key);
+                break;
+              }
+            }
+          }
+        }
+
+        const carenciaCount = monthsSet.size;
+        const anos = Math.floor(carenciaCount / this.MONTHS_IN_YEAR);
+        const meses = carenciaCount % this.MONTHS_IN_YEAR;
+        const dias = 0;
+
+        return {
+          seq: item.seq,
+          indicadores: item.indicadores,
+          dias,
+          meses,
+          anos,
+          carencia: carenciaCount,
+        };
+      }
+
       const startDate = item.contributionTime?.data?.dataInicio;
       const endDate = item.contributionTime?.data?.dataFim;
       if (!startDate || !endDate) {
         return {
+          seq: item.seq,
+          indicadores: item.indicadores,
           dias: 0,
           meses: 0,
           anos: 0,
@@ -1337,6 +1415,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     return tempoTotal;
   }
+
   private isEspecieBeneficio(especie?: string | null): boolean {
     const s = String(especie ?? '').trim();
     if (!s) {

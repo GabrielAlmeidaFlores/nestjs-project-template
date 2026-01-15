@@ -8,6 +8,8 @@ import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/ana
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { CidTenQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/cid-ten/query/cid-ten.query.repository.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
+import { RetirementPlanningRppsInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/command/retirement-planning-rpps-inss-benefit.command.repository.gateway';
+import { RetirementPlanningRppsLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/command/retirement-planning-rpps-legal-proceeding.command.repository.gateway';
 import { RetirementPlanningRppsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/command/retirement-planning-rpps-period.command.repository.gateway';
 import { RetirementPlanningRppsPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-disability/command/retirement-planning-rpps-period-disability.command.repository.gateway';
 import { RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/command/retirement-planning-rpps-period-document.command.repository.gateway';
@@ -20,6 +22,10 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { CidTenEntity } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/cid-ten-entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RetirementPlanningRppsInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.entity';
+import { RetirementPlanningRppsInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-inss-benefit/value-object/retirement-planning-rpps-inss-benefit-id.value-object';
+import { RetirementPlanningRppsLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.entity';
+import { RetirementPlanningRppsLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-legal-proceeding/value-object/retirement-planning-rpps-legal-proceeding-id.value-object';
 import { RetirementPlanningRppsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/retirement-planning-rpps-period.entity';
 import { RetirementPlanningRppsPeriodId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/value-object/retirement-planning-rpps-period-id.value-object';
 import { RetirementPlanningRppsPeriodDisabilityEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/retirement-planning-rpps-period-disability.entity';
@@ -34,8 +40,10 @@ import { CreateRetirementPlanningRppsResponseDto } from '@module/customer/analys
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-ten-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRetirementPlanningRppsUseCase {
@@ -64,6 +72,12 @@ export class CreateRetirementPlanningRppsUseCase {
     private readonly retirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway: RetirementPlanningRppsPeriodSpecialTimeCommandRepositoryGateway,
     @Inject(RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway)
     private readonly retirementPlanningRppsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRppsPeriodDocumentCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsInssBenefitCommandRepositoryGateway)
+    private readonly retirementPlanningRppsInssBenefitCommandRepositoryGateway: RetirementPlanningRppsInssBenefitCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsLegalProceedingCommandRepositoryGateway)
+    private readonly retirementPlanningRppsLegalProceedingCommandRepositoryGateway: RetirementPlanningRppsLegalProceedingCommandRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -127,22 +141,77 @@ export class CreateRetirementPlanningRppsUseCase {
     );
 
     if (dto.ctcDocuments && dto.ctcDocuments.length > 0) {
-      for (const documentDto of dto.ctcDocuments) {
-        const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
+      const ctcDocumentTransactions = await Promise.all(
+        dto.ctcDocuments.map(async (documentDto) => {
+          const periodDocumentId = new RetirementPlanningRppsPeriodDocumentId();
 
-        const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity({
-          id: periodDocumentId,
-          documentType:
-            documentDto.type ?? RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
-          document: documentDto.document,
-          retirementPlanningRppsPeriodDisability: null,
-          retirementPlanningRppsPeriodSpecialTime: null,
+          const buffer = documentDto.document.base64.decodeToBuffer();
+
+          const fileModel = FileModel.build({
+            buffer,
+            originalName: documentDto.document.originalFileName,
+            size: buffer.length,
+            encoding: '7bit',
+          });
+
+          const documentUrl =
+            await this.fileProcessorGateway.uploadFile(fileModel);
+
+          const periodDocument = new RetirementPlanningRppsPeriodDocumentEntity(
+            {
+              id: periodDocumentId,
+              documentType:
+                documentDto.type ??
+                RetirementPlanningDocumentTypeEnum.CTC_DOCUMENT,
+              document: documentUrl,
+              retirementPlanningRppsPeriodDisability: null,
+              retirementPlanningRppsPeriodSpecialTime: null,
+              retirementPlanningRpps,
+            },
+          );
+
+          return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+            periodDocument,
+          );
+        }),
+      );
+
+      transactionOperations.push(...ctcDocumentTransactions);
+    }
+
+    if (dto.inssBenefitNumber && dto.inssBenefitNumber.length > 0) {
+      for (const inssBenefitNumber of dto.inssBenefitNumber) {
+        const inssBenefitId = new RetirementPlanningRppsInssBenefitId();
+
+        const inssBenefit = new RetirementPlanningRppsInssBenefitEntity({
+          id: inssBenefitId,
+          inssBenefitNumber,
           retirementPlanningRpps,
         });
 
         transactionOperations.push(
-          this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
-            periodDocument,
+          this.retirementPlanningRppsInssBenefitCommandRepositoryGateway.createRetirementPlanningRppsInssBenefit(
+            inssBenefit,
+          ),
+        );
+      }
+    }
+
+    if (dto.legalProceedingNumber && dto.legalProceedingNumber.length > 0) {
+      for (const legalProceedingNumber of dto.legalProceedingNumber) {
+        const legalProceedingId = new RetirementPlanningRppsLegalProceedingId();
+
+        const legalProceeding = new RetirementPlanningRppsLegalProceedingEntity(
+          {
+            id: legalProceedingId,
+            legalProceeding: legalProceedingNumber,
+            retirementPlanningRpps,
+          },
+        );
+
+        transactionOperations.push(
+          this.retirementPlanningRppsLegalProceedingCommandRepositoryGateway.createRetirementPlanningRppsLegalProceeding(
+            legalProceeding,
           ),
         );
       }
@@ -200,26 +269,40 @@ export class CreateRetirementPlanningRppsUseCase {
           periodDto.disability.documents &&
           periodDto.disability.documents.length > 0
         ) {
-          for (const documentDto of periodDto.disability.documents) {
-            const periodDocumentId =
-              new RetirementPlanningRppsPeriodDocumentId();
+          const disabilityDocumentTransactions = await Promise.all(
+            periodDto.disability.documents.map(async (documentDto) => {
+              const periodDocumentId =
+                new RetirementPlanningRppsPeriodDocumentId();
 
-            const periodDocument =
-              new RetirementPlanningRppsPeriodDocumentEntity({
-                id: periodDocumentId,
-                documentType: documentDto.type,
-                document: documentDto.document,
-                retirementPlanningRppsPeriodDisability: disability,
-                retirementPlanningRppsPeriodSpecialTime: null,
-                retirementPlanningRpps: null,
+              const buffer = documentDto.document.base64.decodeToBuffer();
+
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: documentDto.document.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
               });
 
-            transactionOperations.push(
-              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              const periodDocument =
+                new RetirementPlanningRppsPeriodDocumentEntity({
+                  id: periodDocumentId,
+                  documentType: documentDto.type,
+                  document: documentUrl,
+                  retirementPlanningRppsPeriodDisability: disability,
+                  retirementPlanningRppsPeriodSpecialTime: null,
+                  retirementPlanningRpps: null,
+                });
+
+              return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
                 periodDocument,
-              ),
-            );
-          }
+              );
+            }),
+          );
+
+          transactionOperations.push(...disabilityDocumentTransactions);
         }
       }
 
@@ -244,26 +327,40 @@ export class CreateRetirementPlanningRppsUseCase {
           periodDto.specialTime.documents &&
           periodDto.specialTime.documents.length > 0
         ) {
-          for (const documentDto of periodDto.specialTime.documents) {
-            const periodDocumentId =
-              new RetirementPlanningRppsPeriodDocumentId();
+          const specialTimeDocumentTransactions = await Promise.all(
+            periodDto.specialTime.documents.map(async (documentDto) => {
+              const periodDocumentId =
+                new RetirementPlanningRppsPeriodDocumentId();
 
-            const periodDocument =
-              new RetirementPlanningRppsPeriodDocumentEntity({
-                id: periodDocumentId,
-                documentType: documentDto.type,
-                document: documentDto.document,
-                retirementPlanningRppsPeriodDisability: null,
-                retirementPlanningRppsPeriodSpecialTime: specialTime,
-                retirementPlanningRpps: null,
+              const buffer = documentDto.document.base64.decodeToBuffer();
+
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: documentDto.document.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
               });
 
-            transactionOperations.push(
-              this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              const periodDocument =
+                new RetirementPlanningRppsPeriodDocumentEntity({
+                  id: periodDocumentId,
+                  documentType: documentDto.type,
+                  document: documentUrl,
+                  retirementPlanningRppsPeriodDisability: null,
+                  retirementPlanningRppsPeriodSpecialTime: specialTime,
+                  retirementPlanningRpps: null,
+                });
+
+              return this.retirementPlanningRppsPeriodDocumentCommandRepositoryGateway.createRetirementPlanningRppsPeriodDocument(
                 periodDocument,
-              ),
-            );
-          }
+              );
+            }),
+          );
+
+          transactionOperations.push(...specialTimeDocumentTransactions);
         }
       }
     }

@@ -36,6 +36,9 @@ export class OrganizationPaymentPlanTypeormQueryRepository
           id: organizationId.toString(),
         },
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
 
     return this.mapperGateway.mapArray(
