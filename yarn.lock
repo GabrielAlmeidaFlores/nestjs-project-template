@@ -1274,17 +1274,17 @@
   resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.19.7.tgz#ecb2d3a7af40d1d378e53ce1fc1219f199fbcd6f"
   integrity sha512-vUcD0uauS7EU2caukW8z5lJKtoGMokxNbJtBiwHgpqxEXokaHCBkQUmCHhjFB1VUTWdqj25QoMkMKzgjq+uhrw==
 
-"@huggingface/jinja@^0.5.3":
+"@huggingface/jinja@^0.5.1":
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@huggingface/jinja/-/jinja-0.5.3.tgz#8182a2d6fc9f84c1539fa12c219a5915cdc41264"
   integrity sha512-asqfZ4GQS0hD876Uw4qiUb7Tr/V5Q+JZuo2L+BtdrD4U40QU58nIRq3ZSgAzJgT874VLjhGVacaYfrdpXtEvtA==
 
-"@huggingface/transformers@^3.7.5":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@huggingface/transformers/-/transformers-3.8.1.tgz#317da003865322396796173223eeaaf0f9723f0a"
-  integrity sha512-tsTk4zVjImqdqjS8/AOZg2yNLd1z9S5v+7oUPpXaasDRwEDhB+xnglK1k5cad26lL5/ZIaeREgWWy0bs9y9pPA==
+"@huggingface/transformers@3.7.5":
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/@huggingface/transformers/-/transformers-3.7.5.tgz#63d6b5792c74904168959561c6a05a05d680092f"
+  integrity sha512-5jvrIwHyRXfOKVaGKYvUZM6ZjJKQXWeKzIOdKBE5pdzPSNzTwBNx5NdWcGElf4Ddv7Dl2mWsvJh+G5RnCUxMmA==
   dependencies:
-    "@huggingface/jinja" "^0.5.3"
+    "@huggingface/jinja" "^0.5.1"
     onnxruntime-node "1.21.0"
     onnxruntime-web "1.22.0-dev.20250409-89f8206ba4"
     sharp "^0.34.1"
@@ -3004,10 +3004,17 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-2.1.0.tgz#052aa67a48eccc4309d7f0191b7e41434b90bb78"
   integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
-"@types/node@*", "@types/node@>=13.7.0":
+"@types/node@*":
   version "25.0.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-25.0.3.tgz#79b9ac8318f373fbfaaf6e2784893efa9701f269"
   integrity sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==
+  dependencies:
+    undici-types "~7.16.0"
+
+"@types/node@>=13.7.0":
+  version "25.0.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-25.0.9.tgz#81ce3579ddf67cae812a9d49c8a0ab90c82e7782"
+  integrity sha512-/rpCXHlCWeqClNBwUhDcusJxXYDjZTyE8v5oTO7WbL8eij2nKhUeU89/6xgjU7N4/Vh3He0BtyhJdQbDyhiXAw==
   dependencies:
     undici-types "~7.16.0"
 

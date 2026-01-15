@@ -29,6 +29,9 @@ export class GetCnisFastAnalysisClientResponseDto extends BaseBuildableDtoObject
   @ResponseDtoValueObjectProperty(Email, { required: false })
   public email?: Email;
 
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public corporateEmail?: Email;
+
   @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
   public phoneNumber?: PhoneNumber;
 
