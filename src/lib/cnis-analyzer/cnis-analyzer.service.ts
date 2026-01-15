@@ -157,31 +157,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       0,
     );
 
-    const vinculosSecundarios = consolidadoResumido.filter(
-      (vinculo) => vinculo.tipo === 'secundario',
-    );
-    const somaVinculosSecundarios = vinculosSecundarios.reduce(
-      (accumulator, currentValue) => {
-        const startDate = currentValue.validContributionTime?.data?.dataInicio;
-        const endDate = currentValue.validContributionTime?.data?.dataFim;
-        if (
-          startDate instanceof Date &&
-          !isNaN(startDate.getTime()) &&
-          endDate instanceof Date &&
-          !isNaN(endDate.getTime())
-        ) {
-          const duration = this.daysBetween(startDate, endDate);
-          return accumulator + duration;
-        }
-        return accumulator;
-      },
-      0,
-    );
-
     const duracaoTotalEmDias =
-      somaVinculosNaoConcomitantes +
-      somaVinculosPrincipais +
-      somaVinculosSecundarios;
+      somaVinculosNaoConcomitantes + somaVinculosPrincipais;
 
     const somaPotencial = consolidadoResumido.reduce(
       (acc, curr) =>
@@ -525,7 +502,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         end: null,
       },
     );
-
     for (let i = 1; i < items.length; i++) {
       const it = items[i];
       const inicioIt = it?.start ? it.start.getTime() : 0;
@@ -616,7 +592,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
     const secundariosAjustados: ConcomitanciaDetalhesInterface[] = [];
-
     for (const membro of group) {
       if (membro === entradaPrincipal) {
         continue;
@@ -795,16 +770,50 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const restantes = items.slice(group.length).map((it) => it.original);
 
-    const ajustadosParaProximaRodada = secundariosAjustados.filter((s) => {
-      const st = this.toDate(s.contributionTime.dataInicio);
-      const en = this.toDate(s.contributionTime.dataFim);
-      return st !== null && en !== null && st.getTime() <= en.getTime();
-    });
+    const ajustadosParaProximaRodada = secundariosAjustados
+      .filter((s) => {
+        const st = this.toDate(s.contributionTime.dataInicio);
+        const en = this.toDate(s.contributionTime.dataFim);
+        return st !== null && en !== null && st.getTime() <= en.getTime();
+      })
+      .map((s) => {
+        const novaDataInicio = this.toDate(s.contributionTime.dataInicio);
+        const novaDataFim = this.toDate(s.contributionTime.dataFim);
 
-    const proximaLista = [...ajustadosParaProximaRodada, ...restantes];
+        if (!novaDataInicio || !novaDataFim) {
+          return s;
+        }
+
+        const recalculado = this.diffYmdInclusive(novaDataInicio, novaDataFim);
+
+        const { tipo: _tipo, ajustado: _ajustado, ...resto } = s;
+
+        return {
+          ...resto,
+          contributionTime: {
+            ...s.contributionTime,
+            anos: recalculado.years,
+            meses: recalculado.months,
+            dias: recalculado.days,
+            abreviado: recalculado.formatted,
+          },
+        } as ConcomitanciaDetalhesInterface;
+      });
+
+    const proximaLista = [...ajustadosParaProximaRodada, ...restantes].sort(
+      (a, b) => {
+        const aStart = this.toDate(a.contributionTime.dataInicio);
+        const bStart = this.toDate(b.contributionTime.dataInicio);
+        if (!aStart || !bStart) {
+          return 0;
+        }
+        return aStart.getTime() - bStart.getTime();
+      },
+    );
 
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
   }
+
   private getRequiredContributionAge(gender: string): number {
     return gender === 'F'
       ? this.REQUIRED_CONTRIBUTION_WOMEN
@@ -895,6 +904,86 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   ): ConcomitanciaDetalhesInterface[] {
     const rawResult: ConcomitanciaDetalhesInterface[] =
       this.calcularVinculosConcomitantes(Array.isArray(data) ? data : []);
+
+    for (let i = 0; i < rawResult.length; i++) {
+      const vinculoA = rawResult[i];
+      if (!vinculoA) {
+        continue;
+      }
+
+      const startA = this.toDate(vinculoA.dataAjustada?.dataInicio);
+      const endA = this.toDate(vinculoA.dataAjustada?.dataFim);
+      if (!startA || !endA) {
+        continue;
+      }
+
+      for (let j = i + 1; j < rawResult.length; j++) {
+        const vinculoB = rawResult[j];
+        if (!vinculoB) {
+          continue;
+        }
+        const startB = this.toDate(vinculoB.dataAjustada?.dataInicio);
+        const endB = this.toDate(vinculoB.dataAjustada?.dataFim);
+        if (!startB || !endB) {
+          continue;
+        }
+
+        if (startA <= endB && endA >= startB) {
+          const duracaoA = this.daysBetween(startA, endA);
+          const duracaoB = this.daysBetween(startB, endB);
+
+          let winnerIsA: boolean;
+          if (duracaoA > duracaoB) {
+            winnerIsA = true;
+          } else if (duracaoA < duracaoB) {
+            winnerIsA = false;
+          } else {
+            if (startA.getTime() !== startB.getTime()) {
+              winnerIsA = startA.getTime() < startB.getTime();
+            } else {
+              const seqA = vinculoA.seq;
+              const seqB = vinculoB.seq;
+              winnerIsA = seqA <= seqB;
+            }
+          }
+
+          const winner = winnerIsA ? vinculoA : vinculoB;
+          const loser = winnerIsA ? vinculoB : vinculoA;
+
+          const winnerStart = this.toDate(
+            winner.dataAjustada?.dataInicio ??
+              winner.contributionTime.dataInicio,
+          );
+          const winnerEnd = this.toDate(
+            winner.dataAjustada?.dataFim ?? winner.contributionTime.dataFim,
+          );
+          const loserStart = this.toDate(
+            loser.dataAjustada?.dataInicio ?? loser.contributionTime.dataInicio,
+          );
+          const loserEnd = this.toDate(
+            loser.dataAjustada?.dataFim ?? loser.contributionTime.dataFim,
+          );
+
+          if (!winnerStart || !winnerEnd || !loserStart || !loserEnd) {
+            continue;
+          }
+
+          if (loserStart.getTime() < winnerStart.getTime()) {
+            const novoFim = this.daysBeforeOrAfter(winnerStart, 'before');
+            loser.dataAjustada = {
+              dataInicio: loserStart,
+              dataFim: novoFim,
+            };
+          } else {
+            const novoInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
+            loser.dataAjustada = {
+              dataInicio: novoInicio,
+              dataFim: loserEnd,
+            };
+          }
+        }
+      }
+    }
 
     return rawResult;
   }
@@ -1094,8 +1183,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       .filter((item) => item.seq !== undefined) as {
       seq: number;
       contributionTime?: {
-        dataInicio?: Date;
-        dataFim?: Date;
+        data: {
+          dataInicio?: Date;
+          dataFim?: Date;
+        };
         abreviado: string;
         dias: number;
         meses: number;
@@ -1113,8 +1204,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return {
         ...item,
         contributionTime: {
-          dataInicio: item.contributionTime?.dataInicio ?? new Date(),
-          dataFim: item.contributionTime?.dataFim ?? new Date(),
+          dataInicio: item.contributionTime?.data.dataInicio,
+          dataFim: item.contributionTime?.data.dataFim,
           abreviado: item.contributionTime?.abreviado ?? '0a 0m 0d',
           dias: item.contributionTime?.dias ?? 0,
           meses: item.contributionTime?.meses ?? 0,
