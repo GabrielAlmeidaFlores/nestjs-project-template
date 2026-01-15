@@ -1441,8 +1441,7 @@ A seguir, uma lista consolidada das principais atividades profissionais que gara
 "A sentença é nula por cerceamento de defesa. O juízo de origem julgou o feito improcedente sem oportunizar a produção de prova essencial para o deslinde da causa, qual seja, \[INDICAR A PROVA, ex: a oitiva de testemunhas para comprovar o labor rural\]. Tal prova foi tempestivamente requerida e sua ausência prejudicou a demonstração do direito do(a) autor(a). Sendo assim, requer-se, subsidiariamente, a anulação da sentença, com o retorno dos autos à primeira instância para a devida instrução probatória."
 
 OBSERVAÇÃO IMPORTANTE:
-  - Gere apenas a resposta solicitada, sem comprimentos iniciais.
-  - Gerar apenas a resposta solicitada, sem perguntas finais.
+  - Responda apenas com o conteúdo solicitado, sem introduções ou conclusões.
 `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
@@ -1451,6 +1450,9 @@ OBSERVAÇÃO IMPORTANTE:
       ),
       prompt: `
 Gere uma mensagem ao cliente explicando, de forma clara, didática e acessível, o teor, o objetivo e os principais pontos da peça processual que foi elaborada, evitando jargões excessivamente técnicos e garantindo fácil compreensão. Na forma de uma carta.
+
+OBSERVAÇÃO IMPORTANTE:
+  - Responda apenas com o conteúdo solicitado, sem introduções ou conclusões.
 `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
