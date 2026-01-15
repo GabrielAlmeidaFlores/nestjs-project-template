@@ -40,4 +40,9 @@ export abstract class AnalysisProcessorGateway {
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getAdministrativeProcedureInssAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

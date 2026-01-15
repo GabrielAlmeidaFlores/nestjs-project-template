@@ -99,7 +99,7 @@ export class DownloadAdministrativeProcedureInssSimplifiedAnalysisUseCase {
 
     if (responseAi === null) {
       const administrativeProcedureSimplifiedAnalysis =
-        await this.analysisProcessorGateway.getCnisSimplifiedAnalysis(
+        await this.analysisProcessorGateway.getAdministrativeProcedureInssAnalysisSimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
