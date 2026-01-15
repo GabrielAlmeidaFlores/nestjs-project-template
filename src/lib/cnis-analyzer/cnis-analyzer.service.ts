@@ -784,11 +784,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           return s;
         }
 
-        
         const recalculado = this.diffYmdInclusive(novaDataInicio, novaDataFim);
 
-        
-        const { tipo, ajustado, ...resto } = s;
+        const { tipo: _tipo, ajustado: _ajustado, ...resto } = s;
 
         return {
           ...resto,
