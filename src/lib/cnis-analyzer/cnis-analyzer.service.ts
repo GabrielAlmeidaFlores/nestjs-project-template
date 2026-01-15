@@ -525,7 +525,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         end: null,
       },
     );
-
     for (let i = 1; i < items.length; i++) {
       const it = items[i];
       const inicioIt = it?.start ? it.start.getTime() : 0;
@@ -616,7 +615,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
     const secundariosAjustados: ConcomitanciaDetalhesInterface[] = [];
-
     for (const membro of group) {
       if (membro === entradaPrincipal) {
         continue;
@@ -805,6 +803,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
   }
+
   private getRequiredContributionAge(gender: string): number {
     return gender === 'F'
       ? this.REQUIRED_CONTRIBUTION_WOMEN
@@ -895,6 +894,89 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   ): ConcomitanciaDetalhesInterface[] {
     const rawResult: ConcomitanciaDetalhesInterface[] =
       this.calcularVinculosConcomitantes(Array.isArray(data) ? data : []);
+
+    for (let i = 0; i < rawResult.length; i++) {
+      const vinculoA = rawResult[i];
+      if (!vinculoA) {
+        continue;
+      }
+
+      const startA = this.toDate(vinculoA.dataAjustada?.dataInicio);
+      const endA = this.toDate(vinculoA.dataAjustada?.dataFim);
+      if (!startA || !endA) {
+        continue;
+      }
+
+      for (let j = i + 1; j < rawResult.length; j++) {
+        const vinculoB = rawResult[j];
+        if (!vinculoB) {
+          continue;
+        }
+        const startB = this.toDate(vinculoB.dataAjustada?.dataInicio);
+        const endB = this.toDate(vinculoB.dataAjustada?.dataFim);
+        if (!startB || !endB) {
+          continue;
+        }
+
+        if (startA <= endB && endA >= startB) {
+          const duracaoA = this.daysBetween(startA, endA);
+          const duracaoB = this.daysBetween(startB, endB);
+
+          // decide vencedor por duração -> início mais antigo -> seq menor
+          let winnerIsA: boolean;
+          if (duracaoA > duracaoB) {
+            winnerIsA = true;
+          } else if (duracaoA < duracaoB) {
+            winnerIsA = false;
+          } else {
+            if (startA.getTime() !== startB.getTime()) {
+              winnerIsA = startA.getTime() < startB.getTime();
+            } else {
+              const seqA = vinculoA.seq ?? Number.MAX_SAFE_INTEGER;
+              const seqB = vinculoB.seq ?? Number.MAX_SAFE_INTEGER;
+              winnerIsA = seqA <= seqB;
+            }
+          }
+
+          const winner = winnerIsA ? vinculoA : vinculoB;
+          const loser = winnerIsA ? vinculoB : vinculoA;
+
+          const winnerStart = this.toDate(
+            winner.dataAjustada?.dataInicio ??
+              winner.contributionTime.dataInicio,
+          );
+          const winnerEnd = this.toDate(
+            winner.dataAjustada?.dataFim ?? winner.contributionTime.dataFim,
+          );
+          const loserStart = this.toDate(
+            loser.dataAjustada?.dataInicio ?? loser.contributionTime.dataInicio,
+          );
+          const loserEnd = this.toDate(
+            loser.dataAjustada?.dataFim ?? loser.contributionTime.dataFim,
+          );
+
+          if (!winnerStart || !winnerEnd || !loserStart || !loserEnd) {
+            continue;
+          }
+
+          if (loserStart.getTime() < winnerStart.getTime()) {
+            // perdedor começa antes do vencedor: cortar fim do perdedor para dia anterior ao início do vencedor
+            const novoFim = this.daysBeforeOrAfter(winnerStart, 'before');
+            loser.dataAjustada = {
+              dataInicio: loserStart,
+              dataFim: novoFim,
+            };
+          } else {
+            // perdedor inicia durante/depois do vencedor: mover início do perdedor para dia seguinte ao fim do vencedor
+            const novoInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
+            loser.dataAjustada = {
+              dataInicio: novoInicio,
+              dataFim: loserEnd,
+            };
+          }
+        }
+      }
+    }
 
     return rawResult;
   }
@@ -1094,8 +1176,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       .filter((item) => item.seq !== undefined) as {
       seq: number;
       contributionTime?: {
-        dataInicio?: Date;
-        dataFim?: Date;
+        data: {
+          dataInicio?: Date;
+          dataFim?: Date;
+        };
         abreviado: string;
         dias: number;
         meses: number;
@@ -1113,8 +1197,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return {
         ...item,
         contributionTime: {
-          dataInicio: item.contributionTime?.dataInicio ?? new Date(),
-          dataFim: item.contributionTime?.dataFim ?? new Date(),
+          dataInicio: item.contributionTime?.data.dataInicio,
+          dataFim: item.contributionTime?.data.dataFim,
           abreviado: item.contributionTime?.abreviado ?? '0a 0m 0d',
           dias: item.contributionTime?.dias ?? 0,
           meses: item.contributionTime?.meses ?? 0,
