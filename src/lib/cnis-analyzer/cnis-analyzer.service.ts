@@ -525,7 +525,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         end: null,
       },
     );
-
     for (let i = 1; i < items.length; i++) {
       const it = items[i];
       const inicioIt = it?.start ? it.start.getTime() : 0;
@@ -616,7 +615,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
     const secundariosAjustados: ConcomitanciaDetalhesInterface[] = [];
-
     for (const membro of group) {
       if (membro === entradaPrincipal) {
         continue;
@@ -1094,8 +1092,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       .filter((item) => item.seq !== undefined) as {
       seq: number;
       contributionTime?: {
-        dataInicio?: Date;
-        dataFim?: Date;
+        data: {
+          dataInicio?: Date;
+          dataFim?: Date;
+        };
         abreviado: string;
         dias: number;
         meses: number;
@@ -1113,8 +1113,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return {
         ...item,
         contributionTime: {
-          dataInicio: item.contributionTime?.dataInicio ?? new Date(),
-          dataFim: item.contributionTime?.dataFim ?? new Date(),
+          dataInicio: item.contributionTime?.data.dataInicio,
+          dataFim: item.contributionTime?.data.dataFim,
           abreviado: item.contributionTime?.abreviado ?? '0a 0m 0d',
           dias: item.contributionTime?.dias ?? 0,
           meses: item.contributionTime?.meses ?? 0,
