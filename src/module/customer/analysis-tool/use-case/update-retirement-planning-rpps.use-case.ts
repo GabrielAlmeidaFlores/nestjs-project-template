@@ -154,6 +154,7 @@ export class UpdateRetirementPlanningRppsUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      specialActivity: null,
     });
 
     const transactionOperations: TransactionType[] = [];

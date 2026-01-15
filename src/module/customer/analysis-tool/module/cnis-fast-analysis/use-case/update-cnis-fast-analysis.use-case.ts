@@ -139,6 +139,7 @@ export class UpdateCnisFastAnalysisUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      specialActivity: null,
     });
 
     const transactions: TransactionType[] = [];

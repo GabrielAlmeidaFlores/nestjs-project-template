@@ -123,6 +123,11 @@ import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperPr
 import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
+import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
+import { SpecialActivityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/special-activity-document-entity.auto-mapper.profile';
+import { SpecialActivityInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/special-activity-inss-benefit-entity.auto-mapper.profile';
+import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
+import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -252,6 +257,11 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
     RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile,
+    SpecialActivityEntityAutoMapperProfile,
+    SpecialActivityResultEntityAutoMapperProfile,
+    SpecialActivityDocumentEntityAutoMapperProfile,
+    SpecialActivityInssBenefitEntityAutoMapperProfile,
+    SpecialActivityLegalProceedingEntityAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

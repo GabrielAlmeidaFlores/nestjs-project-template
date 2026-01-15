@@ -8,6 +8,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -16,6 +17,7 @@ import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
+import { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -65,6 +67,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetRetirementPlanningRgpsWithRelationsQueryResult,
       );
 
+      const specialActivity = this.mapper.map(
+        source.specialActivity,
+        SpecialActivityTypeormEntity,
+        GetSpecialActivityWithRelationsQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -78,6 +86,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        specialActivity,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -128,6 +137,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         RetirementPlanningRgpsTypeormEntity,
       );
 
+      const specialActivity = this.mapper.map(
+        source.specialActivity,
+        GetSpecialActivityWithRelationsQueryResult,
+        SpecialActivityTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -142,6 +157,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRpps,
         retirementPlanningRgps,
         analysisToolClient,
+        specialActivity,
         createdBy,
         updatedBy,
       });
