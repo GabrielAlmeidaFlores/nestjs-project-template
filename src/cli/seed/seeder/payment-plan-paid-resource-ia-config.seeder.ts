@@ -1404,11 +1404,11 @@ A seguir, uma lista consolidada das principais atividades profissionais que gara
 
 * **\[ADM-01\] Endereçamento e Qualificação:**
 
-"ILUSTRÍSSIMO(A) SENHOR(A) GERENTE DA AGÊNCIA DA PREVIDÊNCIA SOCIAL EM \[CIDADE/UF\]\\n\\n\*\*\[NOME COMPLETO\]\*\*, \[nacionalidade\], \[estado civil\], \[profissão\], portador(a) do RG nº \[Nº DO RG\] e inscrito(a) no CPF sob o nº \[Nº DO CPF\], NIT/PIS nº \[Nº DO NIT\], nascido(a) em \[DATA DE NASCIMENTO\], residente e domiciliado(a) na \[ENDEREÇO COMPLETO\], com telefone para contato \[TELEFONE\] e e-mail \[E-MAIL\], vem, respeitosamente, perante este Instituto, requerer a concessão de \[NOME DO BENEFÍCIO\], pelos fatos e fundamentos a seguir expostos."
+"ILUSTRÍSSIMO(A) SENHOR(A) GERENTE DA AGÊNCIA DA PREVIDÊNCIA SOCIAL EM \[CIDADE/UF\]\\\*\*\[NOME COMPLETO\]\*\*, \[nacionalidade\], \[estado civil\], \[profissão\], portador(a) do RG nº \[Nº DO RG\] e inscrito(a) no CPF sob o nº \[Nº DO CPF\], NIT/PIS nº \[Nº DO NIT\], nascido(a) em \[DATA DE NASCIMENTO\], residente e domiciliado(a) na \[ENDEREÇO COMPLETO\], com telefone para contato \[TELEFONE\] e e-mail \[E-MAIL\], vem, respeitosamente, perante este Instituto, requerer a concessão de \[NOME DO BENEFÍCIO\], pelos fatos e fundamentos a seguir expostos."
 
 * **\[ADM-02\] Síntese Fática e Fundamentação (Estrutura Genérica):**
 
-"O(A) Requerente preenche todos os requisitos legais para a concessão do benefício de \[NOME DO BENEFÍCIO\], nos termos da legislação previdenciária.\\n\\n\[SÍNTESE DOS FATOS E DO DIREITO FORNECIDA PELO USUÁRIO\]\\n\\nConforme se comprova pela documentação anexa, o(a) segurado(a) implementou as condições necessárias, fazendo jus à proteção social pleiteada."
+"O(A) Requerente preenche todos os requisitos legais para a concessão do benefício de \[NOME DO BENEFÍCIO\], nos termos da legislação previdenciária.\\\[SÍNTESE DOS FATOS E DO DIREITO FORNECIDA PELO USUÁRIO\]\\Conforme se comprova pela documentação anexa, o(a) segurado(a) implementou as condições necessárias, fazendo jus à proteção social pleiteada."
 
 * **\[ADM-03\] Pedido Administrativo:**
 
@@ -1416,7 +1416,7 @@ A seguir, uma lista consolidada das principais atividades profissionais que gara
 
 * **\[ADM-04\] Fechamento e Rol de Documentos:**
 
-"Termos em que,\\nPede deferimento.\\n\\n\[CIDADE\], \[DATA\].\\n\\n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\\n\*\*\[NOME DO REQUERENTE/PROCURADOR\]**\\n\\n\\n**ROL DE DOCUMENTOS:\*\*\\n\[LISTA DE DOCUMENTOS FORNECIDA PELO USUÁRIO\]
+"Termos em que,\Pede deferimento.\\\[CIDADE\], \[DATA\].\\\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\\*\*\[NOME DO REQUERENTE/PROCURADOR\]**\\\**ROL DE DOCUMENTOS:\*\*\\[LISTA DE DOCUMENTOS FORNECIDA PELO USUÁRIO\]
 
 **Seção 13: Recurso Inominado \[REC\]**
 
@@ -4944,7 +4944,7 @@ export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
       if (existing) {
         action =
           this.paymentPlanPaidResourceIaConfigCommandRepository.updatePaymentPlanPaidResourceIaConfig(
-            entity.id,
+            existing.id,
             entity,
           );
       }
