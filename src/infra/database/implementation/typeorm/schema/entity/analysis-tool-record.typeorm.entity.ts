@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -56,6 +57,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => RetirementPlanningRgpsTypeormEntity)
   @JoinColumn({ name: 'retirement_planning_rgps_id' })
   public retirementPlanningRgps?: RetirementPlanningRgpsTypeormEntity | null;
+
+  @OneToOne(
+    () => JudicialCaseAnalysisTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'judicial_case_analysis_id' })
+  public judicialCaseAnalysis?: JudicialCaseAnalysisTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
