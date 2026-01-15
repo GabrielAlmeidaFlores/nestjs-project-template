@@ -1,0 +1,718 @@
+import type { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class InitDb1768402214340 implements MigrationInterface {
+  name = 'InitDb1768402214340';
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `CREATE TABLE \`customer_address\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`postal_code\` varchar(100) NOT NULL, \`state_code\` varchar(50) NOT NULL, \`city\` varchar(255) NOT NULL, \`neighborhood\` varchar(255) NOT NULL, \`street\` varchar(255) NOT NULL, \`address_number\` varchar(100) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`customer_terms\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`content\` text NOT NULL, \`is_active\` tinyint NOT NULL DEFAULT 1, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`customer_terms_acceptance\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`customer_id\` varchar(36) NULL, \`customer_terms_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`bank_payment\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`description\` text NULL, \`payment_receipt\` text NULL, \`bank_external_id\` varchar(255) NOT NULL, \`payment_method\` enum ('PIX', 'CREDIT_CARD', 'UNDEFINED', 'BOLETO') NOT NULL, \`amount\` decimal(10,2) NOT NULL, \`status\` enum ('PENDING', 'CONFIRMED', 'REFUNDED', 'OVERDUE') NOT NULL, \`due_date\` timestamp NOT NULL, \`payment_date\` timestamp NULL, \`installment_number\` int NULL, \`pix_qr_code\` text NULL, \`pix_copy_paste\` text NULL, UNIQUE INDEX \`IDX_fd6ceb1b4ed705075fb352efc5\` (\`bank_external_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_payment_plan_bank_payment\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`organization_payment_plan_id\` varchar(36) NULL, \`bank_payment_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`payment_plan\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(100) NOT NULL, \`description\` varchar(255) NOT NULL, \`price\` decimal(10,2) NOT NULL, \`max_member_count\` int NOT NULL, \`monthly_credit_amount\` int NOT NULL, \`active\` tinyint NOT NULL, \`cycle\` varchar(100) NOT NULL, \`highlight\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`payment_plan_enable_resource\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`payment_plan_id\` varchar(36) NULL, \`payment_plan_paid_resource_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`payment_plan_paid_resource_ia_config\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`prompt\` text NOT NULL, \`payment_plan_paid_resource_id\` varchar(36) NULL, UNIQUE INDEX \`REL_3aecf87081e1868b23222e9350\` (\`payment_plan_paid_resource_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`payment_plan_paid_resource\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`resource\` enum ('LEGAL_PLEADING_COMPLETE_ANALYSIS', 'LEGAL_PLEADING_SIMPLIFIED_ANALYSIS', 'LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS', 'RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS', 'CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS', 'CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS', 'LEGAL_PROCEEDING_MONITORING', 'ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS', 'ELOY_CHAT_LEGISLATION_QUESTIONS', 'ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH', 'ELOY_CHAT_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_COMPARE_CNIS_CTPS', 'RETIREMENT_PLANNING_RGPS_SPECIAL_PERIOD_PPP_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_NO_END_DATE_DOCUMENTS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_RURAL_TIME_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_MILITARY_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_PUBLIC_SERVICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_CTPS_OUTSIDE_CNIS_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_WORK_ABROAD_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_INFORMAL_WORK_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_LABOR_COURT_DECISION_ANALYSIS', 'RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS') NOT NULL, \`credit_cost\` double NOT NULL, \`description\` varchar(150) NOT NULL, \`created_by_id\` varchar(36) NULL, \`updated_by_id\` varchar(36) NULL, UNIQUE INDEX \`IDX_b9e41e6eee7934d8b4b85cb0cc\` (\`resource\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_payment_plan_enable_paid_resource\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`organization_payment_plan_id\` varchar(36) NULL, \`payment_plan_paid_resource_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_payment_plan\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(100) NOT NULL, \`description\` varchar(255) NOT NULL, \`price\` decimal(10,2) NOT NULL, \`max_member_count\` int NOT NULL, \`monthly_credit_amount\` int NOT NULL, \`cycle\` varchar(100) NOT NULL, \`total_installments\` int NULL, \`bank_external_id\` varchar(100) NOT NULL, \`canceled\` tinyint NOT NULL DEFAULT 0, \`payment_plan_id\` varchar(36) NULL, \`organization_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(100) NOT NULL, \`organization_logo\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_member\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`owner\` tinyint NOT NULL, \`organization_id\` varchar(36) NULL, \`customer_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`customer\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(100) NOT NULL, \`phone_number\` varchar(255) NOT NULL, \`profile_picture\` varchar(255) NULL, \`bank_external_id\` varchar(100) NOT NULL, \`customer_address_id\` varchar(36) NOT NULL, UNIQUE INDEX \`REL_0c722aa15f596b6341c80b3880\` (\`customer_address_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`auth_identity\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`email\` varchar(100) NOT NULL, \`federal_document\` varchar(50) NOT NULL, \`password\` char(60) NOT NULL, \`authenticator_app_secret\` varchar(255) NULL, \`customer_id\` varchar(36) NULL, \`admin_id\` varchar(36) NULL, UNIQUE INDEX \`IDX_d16af8546a79a73426d3fc908c\` (\`email\`), UNIQUE INDEX \`IDX_66a84dcff03a236c738de0e0de\` (\`federal_document\`), UNIQUE INDEX \`REL_5cbe443c958a6bfbadb30de44f\` (\`customer_id\`), UNIQUE INDEX \`REL_8f262a64773b2324554f88c5e7\` (\`admin_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`admin\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(100) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`analysis_tool_client_inss_benefit\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`inss_benefit_number\` varchar(100) NOT NULL, \`analysis_tool_client_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_proceeding_detail\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`analysis_tool_client_legal_proceeding_detail\` longtext NOT NULL, \`analysis_tool_client_legal_proceeding_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`analysis_tool_client_legal_proceeding\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_proceeding_number\` varchar(100) NOT NULL, \`type\` varchar(100) NULL, \`status\` varchar(100) NULL, \`last_updated\` date NULL, \`deadline\` date NULL, \`analysis_tool_client_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`cnis_fast_analysis_inss_benefit\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`inss_benefit_number\` varchar(100) NOT NULL, \`cnis_fast_analysis_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`cnis_fast_analysis_legal_proceeding\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_proceeding_number\` varchar(100) NOT NULL, \`cnis_fast_analysis_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`cnis_fast_analysis_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`client_name\` varchar(255) NULL, \`client_federal_document\` varchar(50) NULL, \`client_birth_date\` date NULL, \`client_last_affiliation_date\` date NULL, \`cnis_complete_analysis\` longtext NULL, \`cnis_simplified_analysis\` text NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`cnis_fast_analysis\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`cnis_document\` varchar(255) NULL, \`cnis_fast_analysis_result_id\` varchar(36) NULL, UNIQUE INDEX \`REL_5eee93c39a3324120b38641ff7\` (\`cnis_fast_analysis_result_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_analysis_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`analysis_type\` enum ('tempo_rural', 'servico_militar', 'servico_publico', 'ctps_fora_do_cnis', 'aluno_aprendiz', 'trabalho_no_exterior', 'trabalho_informal', 'sentenca_trabalhista') NULL, \`response\` longtext NOT NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_inss_benefit\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`inss_benefit_number\` varchar(100) NOT NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_legal_proceeding\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_proceeding_number\` varchar(100) NOT NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_period\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`period_name\` varchar(255) NULL, \`period_start\` date NULL, \`period_end\` date NULL, \`category\` varchar(100) NULL, \`is_pendency\` tinyint NULL, \`reason_pendency\` enum ('LEAVE_DATE', 'COMPETENCE_BELOW_MINIMUM', 'INCONSISTENT_COMPETENCE') NULL, \`competence_below_the_minimum\` tinyint NULL, \`contribution_average\` decimal(10,2) NULL, \`type_of_contribution\` varchar(100) NULL, \`status\` tinyint NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`client_name\` varchar(255) NULL, \`client_federal_document\` varchar(50) NULL, \`client_birth_date\` date NULL, \`client_last_affiliation_date\` date NULL, \`compare_cnis_ctps\` longtext NULL, \`compare_cnis_ctps_raw\` longtext NULL, \`result\` longtext NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_special_period\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`response\` longtext NOT NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_time_accelerator\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`time_type\` varchar(100) NOT NULL, \`recognition_inss\` varchar(255) NOT NULL, \`recognition_judicial\` varchar(255) NOT NULL, \`name\` varchar(255) NULL, \`institution\` varchar(255) NULL, \`period_start\` date NULL, \`period_end\` date NULL, \`affects_qualifying_period\` tinyint NULL, \`time_gained\` varchar(100) NULL, \`viability\` varchar(50) NULL, \`technical_note\` longtext NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`cnis_document\` varchar(255) NULL, \`retirement_planning_rgps_result_id\` varchar(36) NULL, UNIQUE INDEX \`REL_ffe7e198cc69318f5d73e9390a\` (\`retirement_planning_rgps_result_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_inss_benefit\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`inss_benefit_number\` varchar(100) NOT NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_legal_proceeding\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_proceeding_number\` varchar(100) NOT NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`cid_ten\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`code\` varchar(10) NOT NULL, \`description\` text NOT NULL, UNIQUE INDEX \`IDX_23315335c87e758c4f4a10ea07\` (\`code\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_period_special_time\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`type\` enum ('total', 'parcial', 'nenhum') NOT NULL, \`start_date\` date NOT NULL, \`end_date\` date NOT NULL, \`retirement_planning_rpps_period_id\` varchar(36) NULL, UNIQUE INDEX \`REL_cdfd7dbc5ecbed75bf601fc7f4\` (\`retirement_planning_rpps_period_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_period\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`start_date\` date NOT NULL, \`end_date\` date NOT NULL, \`job_position\` varchar(255) NOT NULL, \`career\` varchar(255) NOT NULL, \`service_type\` enum ('comum', 'especial', 'tempo_de_pcd', 'averbacao_tempo_comum_rgps', 'averbacao_tempo_especial_rgps', 'averbacao_tempo_de_pcd_rgps', 'outros') NOT NULL, \`department\` varchar(255) NOT NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_period_disability\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`type\` enum ('total', 'parcial', 'nenhum') NOT NULL, \`degree\` enum ('leve', 'moderado', 'grave') NOT NULL, \`start_date\` date NOT NULL, \`end_date\` date NOT NULL, \`category\` enum ('mental_ou_intelectual', 'fisica', 'sensorial') NOT NULL, \`daily_impact\` text NOT NULL, \`description\` text NOT NULL, \`cid_id\` varchar(36) NULL, \`retirement_planning_rpps_period_id\` varchar(36) NULL, UNIQUE INDEX \`REL_a50d89ef539a83eef1fccdd718\` (\`retirement_planning_rpps_period_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_period_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document_type\` enum ('ctc_document', 'ppp', 'cpts', 'ltcat', 'judicial', 'medico', 'outros', 'outros_medicos') NOT NULL DEFAULT 'outros', \`document\` varchar(255) NOT NULL, \`retirement_planning_rpps_period_special_time_id\` varchar(36) NULL, \`retirement_planning_rpps_period_disability_id\` varchar(36) NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_remuneration_calculation\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`total_competencies\` int NULL, \`total_amount\` int NULL, \`average_amount\` int NULL, \`top_eighty_percent_competencies\` int NULL, \`bottom_twenty_percent_competencies\` int NULL, \`top_eighty_percent_average_amount\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_remuneration\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`remuneration_date\` date NOT NULL, \`remuneration_amount\` decimal(15,2) NOT NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`retirement_planning_rpps_complete_analysis\` longtext NULL, \`retirement_planning_rpps_simplified_analysis\` longtext NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rpps\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`career_start_date\` date NOT NULL, \`public_service_start_date\` date NOT NULL, \`retirement_planning_rpps_result_id\` varchar(36) NULL, \`retirement_planning_rpps_remuneration_calculation_id\` varchar(36) NULL, UNIQUE INDEX \`REL_5d8721ed5a5e02fe9c5c686a29\` (\`retirement_planning_rpps_result_id\`), UNIQUE INDEX \`REL_e5c2417625a18f56881b5ee822\` (\`retirement_planning_rpps_remuneration_calculation_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`analysis_tool_record\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`status\` enum ('in_progress', 'completed') NOT NULL DEFAULT 'in_progress', \`code\` varchar(255) NOT NULL, \`type\` enum ('analise_rapida_cnis', 'planejamento_previdenciario_rgps', 'planejamento_aposentadoria_rpps') NOT NULL, \`cnis_fast_analysis_id\` varchar(36) NULL, \`retirement_planning_rpps_id\` varchar(36) NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, \`analysis_tool_client_id\` varchar(36) NULL, \`created_by_id\` varchar(36) NULL, \`updated_by_id\` varchar(36) NULL, UNIQUE INDEX \`REL_cc960ef14827af16d4f8721ea4\` (\`cnis_fast_analysis_id\`), UNIQUE INDEX \`REL_c8a5b1e81520cc0eef0b86d2b5\` (\`retirement_planning_rpps_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading_address\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`postal_code\` varchar(100) NOT NULL, \`state_code\` varchar(50) NOT NULL, \`city\` varchar(255) NOT NULL, \`neighborhood\` varchar(255) NOT NULL, \`street\` varchar(255) NOT NULL, \`address_number\` varchar(100) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading_document_analysis\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`analysis\` text NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`type\` enum ('cnis', 'carteira_de_trabalho', 'documento_rural', 'documento_para_tempo_especial', 'documento_pessoal', 'processo_administrativo_anterior_relevante', 'processo_judicial_relacionado_ao_caso', 'documento_de_suporte') NOT NULL, \`document\` varchar(255) NOT NULL, \`legal_pleading_id\` varchar(36) NULL, \`legal_pleading_document_analysis_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading_history\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`title\` enum ('APPROVED', 'ADJUSTMENT_REQUEST', 'FIRST_VERSION') NOT NULL, \`description\` text NOT NULL, \`legal_pleading_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading_result\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`legal_pleading_complete_analysis\` longtext NULL, \`legal_pleading_simplified_analysis\` text NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`legal_pleading\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`code\` varchar(255) NOT NULL, \`status\` enum ('in_progress', 'completed') NOT NULL DEFAULT 'in_progress', \`statement_of_facts\` text NULL, \`additional_comments\` text NULL, \`security_system\` enum ('rpps', 'rgps') NULL, \`benefit_type\` enum ('aposentadoria_urbana_comum', 'aposentadoria_rural_ou_hibrida', 'aposentadoria_pcd', 'aposentadoria_do_professor', 'aposentadoria_especial', 'aposentadoria_por_incapacidade_permanente', 'auxilio_por_incapacidade_temporaria', 'auxilio_acidente', 'pensao_por_morte', 'salario_maternidade', 'bpc_idoso', 'bpc_deficiente') NULL, \`petition_type\` enum ('requerimento_administrativo', 'cumprimento_de_exigencia_no_inss', 'recurso_ordinario_ao_crps', 'peticao_inicial', 'mandado_de_seguranca', 'impugnacao_a_contestacao_replica', 'impugnacao_ao_laudo_medico_pericial', 'impugnacao_ao_laudo_socioeconomico_judicial', 'embargos_de_declaracao', 'contestacao', 'recurso_inominado_jef', 'apelacao', 'incidente_de_uniformizacao_de_jurisprudencia_tru', 'incidente_de_uniformizacao_de_jurisprudencia_tnu', 'outros') NULL, \`benefit_number\` varchar(50) NULL, \`application_submission_date\` date NULL, \`benefit_termination_date\` date NULL, \`benefit_initial_monthly_income\` decimal NULL, \`benefit_current_monthly_income\` decimal NULL, \`social_security_objective\` enum ('concessao_de_novo_beneficio', 'restabelecimento_de_beneficio_cessado', 'manutencao_de_beneficio_ja_implantado', 'conversao_de_beneficio_em_outro', 'revisao_de_beneficio') NULL, \`legal_pleading_writ_of_mandamus_objective\` enum ('reabertura_processo_encerrado_ilegalmente', 'antecipacao_analise_processo_parado_inss', 'antecipacao_analise_processo_parado_crps', 'antecipacao_pericia_medica_ou_avaliacao_social_inss') NULL, \`analysis_tool_client_id\` varchar(36) NULL, \`legal_pleading_address_id\` varchar(36) NULL, \`legal_pleading_result_id\` varchar(36) NULL, \`created_by_id\` varchar(36) NULL, \`updated_by_id\` varchar(36) NULL, UNIQUE INDEX \`REL_e445a94b6792f1edcce2267370\` (\`legal_pleading_address_id\`), UNIQUE INDEX \`REL_dc2e592765c6616392672afdd9\` (\`legal_pleading_result_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`analysis_tool_client\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`client_name\` varchar(255) NULL, \`federal_document\` varchar(50) NULL, \`email\` varchar(100) NULL, \`corporate_email\` varchar(100) NULL, \`inssPassword\` varchar(100) NULL, \`phone_number\` varchar(100) NULL, \`birth_date\` date NULL, \`gender\` enum ('male', 'female') NULL, \`client_type\` enum ('empregado_urbano', 'empregado_rural', 'empregado_domestico', 'trabalhador_avulso', 'contribuinte_individual_autonomo', 'contribuinte_individual_prestador', 'mei', 'segurado_especial', 'segurado_facultativo') NULL, \`created_by_id\` varchar(36) NULL, \`updated_by_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_credit_purchase\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`credit_amount\` int NOT NULL, \`valid_from\` date NULL, \`organization_id\` varchar(36) NULL, \`bank_payment_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`organization_credit_usage\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`credit_amount\` int NOT NULL, \`payment_plan_paid_resource_id\` varchar(36) NULL, \`created_by_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_earnings_history\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`competence\` date NULL, \`remuneration\` longtext NULL, \`indicators\` varchar(255) NULL, \`payment_date\` date NULL, \`contribution\` varchar(255) NULL, \`contribution_salary\` varchar(255) NULL, \`analysis\` longtext NULL, \`competence_below_the_minimum\` tinyint NULL, \`retirement_planning_rgps_period_id\` varchar(36) NULL, \`retirement_planning_rgps_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`retirement_planning_rgps_period_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(255) NOT NULL, \`retirement_planning_rgps_period_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer_terms_acceptance\` ADD CONSTRAINT \`FK_b69ed51d913776256f2d50c9609\` FOREIGN KEY (\`customer_id\`) REFERENCES \`customer\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer_terms_acceptance\` ADD CONSTRAINT \`FK_558d7f8f21f4b5c6756ee6c91cf\` FOREIGN KEY (\`customer_terms_id\`) REFERENCES \`customer_terms\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_bank_payment\` ADD CONSTRAINT \`FK_9cbe6cfd5cabed82d8c80f97a08\` FOREIGN KEY (\`organization_payment_plan_id\`) REFERENCES \`organization_payment_plan\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_bank_payment\` ADD CONSTRAINT \`FK_a973ce0fc68ed08ac710bf0dad4\` FOREIGN KEY (\`bank_payment_id\`) REFERENCES \`bank_payment\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_enable_resource\` ADD CONSTRAINT \`FK_93d57e5baaaac4b6d378ee9fa35\` FOREIGN KEY (\`payment_plan_id\`) REFERENCES \`payment_plan\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_enable_resource\` ADD CONSTRAINT \`FK_628a464fa0fdadf950089b4c594\` FOREIGN KEY (\`payment_plan_paid_resource_id\`) REFERENCES \`payment_plan_paid_resource\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource_ia_config\` ADD CONSTRAINT \`FK_3aecf87081e1868b23222e93504\` FOREIGN KEY (\`payment_plan_paid_resource_id\`) REFERENCES \`payment_plan_paid_resource\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` ADD CONSTRAINT \`FK_aa64b812bbeca98b54618d7e230\` FOREIGN KEY (\`created_by_id\`) REFERENCES \`admin\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` ADD CONSTRAINT \`FK_a27b2e2feb23fbc32e844335764\` FOREIGN KEY (\`updated_by_id\`) REFERENCES \`admin\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_enable_paid_resource\` ADD CONSTRAINT \`FK_893cae7932e20b45592ec56529f\` FOREIGN KEY (\`organization_payment_plan_id\`) REFERENCES \`organization_payment_plan\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_enable_paid_resource\` ADD CONSTRAINT \`FK_14e2292169fdb3bb7eb225e5fe2\` FOREIGN KEY (\`payment_plan_paid_resource_id\`) REFERENCES \`payment_plan_paid_resource\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan\` ADD CONSTRAINT \`FK_b13db5a77fa16ed83c5e7a15557\` FOREIGN KEY (\`payment_plan_id\`) REFERENCES \`payment_plan\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan\` ADD CONSTRAINT \`FK_69b4b1cdeb2e46b7b984f65854d\` FOREIGN KEY (\`organization_id\`) REFERENCES \`organization\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_member\` ADD CONSTRAINT \`FK_ce08825728e5afefdc6e682b8d7\` FOREIGN KEY (\`organization_id\`) REFERENCES \`organization\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_member\` ADD CONSTRAINT \`FK_3f0d0a6437c3b29f3b3741c8a7f\` FOREIGN KEY (\`customer_id\`) REFERENCES \`customer\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer\` ADD CONSTRAINT \`FK_0c722aa15f596b6341c80b38809\` FOREIGN KEY (\`customer_address_id\`) REFERENCES \`customer_address\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`auth_identity\` ADD CONSTRAINT \`FK_5cbe443c958a6bfbadb30de44fd\` FOREIGN KEY (\`customer_id\`) REFERENCES \`customer\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`auth_identity\` ADD CONSTRAINT \`FK_8f262a64773b2324554f88c5e7e\` FOREIGN KEY (\`admin_id\`) REFERENCES \`admin\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client_inss_benefit\` ADD CONSTRAINT \`FK_52aa196af5bdbaf81cd194951fb\` FOREIGN KEY (\`analysis_tool_client_id\`) REFERENCES \`analysis_tool_client\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_proceeding_detail\` ADD CONSTRAINT \`FK_6eba5141d9e7373bccdb194b55b\` FOREIGN KEY (\`analysis_tool_client_legal_proceeding_id\`) REFERENCES \`analysis_tool_client_legal_proceeding\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client_legal_proceeding\` ADD CONSTRAINT \`FK_755678eab52126709e5abfa6b12\` FOREIGN KEY (\`analysis_tool_client_id\`) REFERENCES \`analysis_tool_client\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis_inss_benefit\` ADD CONSTRAINT \`FK_c47ec559c4853b1721fe814d9dc\` FOREIGN KEY (\`cnis_fast_analysis_id\`) REFERENCES \`cnis_fast_analysis\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis_legal_proceeding\` ADD CONSTRAINT \`FK_8b025a6229e06224f60f9715527\` FOREIGN KEY (\`cnis_fast_analysis_id\`) REFERENCES \`cnis_fast_analysis\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis\` ADD CONSTRAINT \`FK_5eee93c39a3324120b38641ff77\` FOREIGN KEY (\`cnis_fast_analysis_result_id\`) REFERENCES \`cnis_fast_analysis_result\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_analysis_result\` ADD CONSTRAINT \`FK_1b113c1b4c9dcdeb746e9bbb805\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_inss_benefit\` ADD CONSTRAINT \`FK_6358cf52bb0d2b7c86485c75537\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_legal_proceeding\` ADD CONSTRAINT \`FK_a01c48617adf7a4317671d9641b\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_period\` ADD CONSTRAINT \`FK_7133e2640ccd1ef5c2811412e6e\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_special_period\` ADD CONSTRAINT \`FK_d154bcbf276f364c4a55a3137e6\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_time_accelerator\` ADD CONSTRAINT \`FK_3fb257142c097f70f764b4565e9\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps\` ADD CONSTRAINT \`FK_ffe7e198cc69318f5d73e9390ad\` FOREIGN KEY (\`retirement_planning_rgps_result_id\`) REFERENCES \`retirement_planning_rgps_result\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_inss_benefit\` ADD CONSTRAINT \`FK_6d41861c3eb2f594649a73c8642\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_legal_proceeding\` ADD CONSTRAINT \`FK_21e57911a97a121cb18ec0542f9\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_special_time\` ADD CONSTRAINT \`FK_cdfd7dbc5ecbed75bf601fc7f4b\` FOREIGN KEY (\`retirement_planning_rpps_period_id\`) REFERENCES \`retirement_planning_rpps_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period\` ADD CONSTRAINT \`FK_8863ec01131c17d3228a963b641\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_disability\` ADD CONSTRAINT \`FK_147062f24a0e351d21261856f56\` FOREIGN KEY (\`cid_id\`) REFERENCES \`cid_ten\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_disability\` ADD CONSTRAINT \`FK_a50d89ef539a83eef1fccdd7180\` FOREIGN KEY (\`retirement_planning_rpps_period_id\`) REFERENCES \`retirement_planning_rpps_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` ADD CONSTRAINT \`FK_211e4e11b765a33bfcda1406b2c\` FOREIGN KEY (\`retirement_planning_rpps_period_special_time_id\`) REFERENCES \`retirement_planning_rpps_period_special_time\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` ADD CONSTRAINT \`FK_366e69748ab63fc17c27a175d96\` FOREIGN KEY (\`retirement_planning_rpps_period_disability_id\`) REFERENCES \`retirement_planning_rpps_period_disability\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` ADD CONSTRAINT \`FK_3e711a8271a448256f4b3046d29\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_remuneration\` ADD CONSTRAINT \`FK_3b8b1956e2658d221e13d8741be\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps\` ADD CONSTRAINT \`FK_5d8721ed5a5e02fe9c5c686a29d\` FOREIGN KEY (\`retirement_planning_rpps_result_id\`) REFERENCES \`retirement_planning_rpps_result\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps\` ADD CONSTRAINT \`FK_e5c2417625a18f56881b5ee8229\` FOREIGN KEY (\`retirement_planning_rpps_remuneration_calculation_id\`) REFERENCES \`retirement_planning_rpps_remuneration_calculation\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_cc960ef14827af16d4f8721ea49\` FOREIGN KEY (\`cnis_fast_analysis_id\`) REFERENCES \`cnis_fast_analysis\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_c8a5b1e81520cc0eef0b86d2b58\` FOREIGN KEY (\`retirement_planning_rpps_id\`) REFERENCES \`retirement_planning_rpps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_3247450bc6eb51a829b171daf83\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_e6ee5e8d95d03bf65a427bdfa9d\` FOREIGN KEY (\`analysis_tool_client_id\`) REFERENCES \`analysis_tool_client\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_7c1280af9f78ec8754644652bf4\` FOREIGN KEY (\`created_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` ADD CONSTRAINT \`FK_60a4deb79c0a5025ad6919f732f\` FOREIGN KEY (\`updated_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_document\` ADD CONSTRAINT \`FK_685faf0504bc675295f3165502c\` FOREIGN KEY (\`legal_pleading_id\`) REFERENCES \`legal_pleading\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_document\` ADD CONSTRAINT \`FK_a8d13916a1254eddae3a7789ec1\` FOREIGN KEY (\`legal_pleading_document_analysis_id\`) REFERENCES \`legal_pleading_document_analysis\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_history\` ADD CONSTRAINT \`FK_8bfd8bd8de55e2c95260587865b\` FOREIGN KEY (\`legal_pleading_id\`) REFERENCES \`legal_pleading\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` ADD CONSTRAINT \`FK_f3e6647160f9a64aeb510c1bcd6\` FOREIGN KEY (\`analysis_tool_client_id\`) REFERENCES \`analysis_tool_client\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` ADD CONSTRAINT \`FK_e445a94b6792f1edcce22673707\` FOREIGN KEY (\`legal_pleading_address_id\`) REFERENCES \`legal_pleading_address\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` ADD CONSTRAINT \`FK_dc2e592765c6616392672afdd9d\` FOREIGN KEY (\`legal_pleading_result_id\`) REFERENCES \`legal_pleading_result\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` ADD CONSTRAINT \`FK_4184f0625d2ceed9bc3e187db41\` FOREIGN KEY (\`created_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` ADD CONSTRAINT \`FK_4086b9184104ceaba5b1e7d9730\` FOREIGN KEY (\`updated_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client\` ADD CONSTRAINT \`FK_7b90f915db9f036809791e3af8b\` FOREIGN KEY (\`created_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client\` ADD CONSTRAINT \`FK_8deb0c93cba4fb91472aeafff24\` FOREIGN KEY (\`updated_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_purchase\` ADD CONSTRAINT \`FK_32de382d298a541c80fddee31d3\` FOREIGN KEY (\`organization_id\`) REFERENCES \`organization\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_purchase\` ADD CONSTRAINT \`FK_047167a78a1dac16f86e5948f17\` FOREIGN KEY (\`bank_payment_id\`) REFERENCES \`bank_payment\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_usage\` ADD CONSTRAINT \`FK_db20475add2e374dd952d48ae92\` FOREIGN KEY (\`payment_plan_paid_resource_id\`) REFERENCES \`payment_plan_paid_resource\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_usage\` ADD CONSTRAINT \`FK_abdf40aa47ff13eb674d32f0ef7\` FOREIGN KEY (\`created_by_id\`) REFERENCES \`organization_member\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_earnings_history\` ADD CONSTRAINT \`FK_3d8fd2e6a2caa76981f1fbabe97\` FOREIGN KEY (\`retirement_planning_rgps_period_id\`) REFERENCES \`retirement_planning_rgps_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_earnings_history\` ADD CONSTRAINT \`FK_dfc01e49ffa5423c031c6f0b685\` FOREIGN KEY (\`retirement_planning_rgps_id\`) REFERENCES \`retirement_planning_rgps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_period_document\` ADD CONSTRAINT \`FK_c42bf0bbd5b403e3191330cc9f5\` FOREIGN KEY (\`retirement_planning_rgps_period_id\`) REFERENCES \`retirement_planning_rgps_period\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_period_document\` DROP FOREIGN KEY \`FK_c42bf0bbd5b403e3191330cc9f5\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_earnings_history\` DROP FOREIGN KEY \`FK_dfc01e49ffa5423c031c6f0b685\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_earnings_history\` DROP FOREIGN KEY \`FK_3d8fd2e6a2caa76981f1fbabe97\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_usage\` DROP FOREIGN KEY \`FK_abdf40aa47ff13eb674d32f0ef7\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_usage\` DROP FOREIGN KEY \`FK_db20475add2e374dd952d48ae92\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_purchase\` DROP FOREIGN KEY \`FK_047167a78a1dac16f86e5948f17\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_credit_purchase\` DROP FOREIGN KEY \`FK_32de382d298a541c80fddee31d3\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client\` DROP FOREIGN KEY \`FK_8deb0c93cba4fb91472aeafff24\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client\` DROP FOREIGN KEY \`FK_7b90f915db9f036809791e3af8b\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` DROP FOREIGN KEY \`FK_4086b9184104ceaba5b1e7d9730\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` DROP FOREIGN KEY \`FK_4184f0625d2ceed9bc3e187db41\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` DROP FOREIGN KEY \`FK_dc2e592765c6616392672afdd9d\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` DROP FOREIGN KEY \`FK_e445a94b6792f1edcce22673707\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading\` DROP FOREIGN KEY \`FK_f3e6647160f9a64aeb510c1bcd6\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_history\` DROP FOREIGN KEY \`FK_8bfd8bd8de55e2c95260587865b\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_document\` DROP FOREIGN KEY \`FK_a8d13916a1254eddae3a7789ec1\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_pleading_document\` DROP FOREIGN KEY \`FK_685faf0504bc675295f3165502c\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_60a4deb79c0a5025ad6919f732f\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_7c1280af9f78ec8754644652bf4\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_e6ee5e8d95d03bf65a427bdfa9d\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_3247450bc6eb51a829b171daf83\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_c8a5b1e81520cc0eef0b86d2b58\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_record\` DROP FOREIGN KEY \`FK_cc960ef14827af16d4f8721ea49\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps\` DROP FOREIGN KEY \`FK_e5c2417625a18f56881b5ee8229\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps\` DROP FOREIGN KEY \`FK_5d8721ed5a5e02fe9c5c686a29d\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_remuneration\` DROP FOREIGN KEY \`FK_3b8b1956e2658d221e13d8741be\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` DROP FOREIGN KEY \`FK_3e711a8271a448256f4b3046d29\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` DROP FOREIGN KEY \`FK_366e69748ab63fc17c27a175d96\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_document\` DROP FOREIGN KEY \`FK_211e4e11b765a33bfcda1406b2c\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_disability\` DROP FOREIGN KEY \`FK_a50d89ef539a83eef1fccdd7180\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_disability\` DROP FOREIGN KEY \`FK_147062f24a0e351d21261856f56\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period\` DROP FOREIGN KEY \`FK_8863ec01131c17d3228a963b641\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_period_special_time\` DROP FOREIGN KEY \`FK_cdfd7dbc5ecbed75bf601fc7f4b\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_legal_proceeding\` DROP FOREIGN KEY \`FK_21e57911a97a121cb18ec0542f9\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rpps_inss_benefit\` DROP FOREIGN KEY \`FK_6d41861c3eb2f594649a73c8642\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps\` DROP FOREIGN KEY \`FK_ffe7e198cc69318f5d73e9390ad\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_time_accelerator\` DROP FOREIGN KEY \`FK_3fb257142c097f70f764b4565e9\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_special_period\` DROP FOREIGN KEY \`FK_d154bcbf276f364c4a55a3137e6\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_period\` DROP FOREIGN KEY \`FK_7133e2640ccd1ef5c2811412e6e\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_legal_proceeding\` DROP FOREIGN KEY \`FK_a01c48617adf7a4317671d9641b\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_inss_benefit\` DROP FOREIGN KEY \`FK_6358cf52bb0d2b7c86485c75537\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`retirement_planning_rgps_analysis_result\` DROP FOREIGN KEY \`FK_1b113c1b4c9dcdeb746e9bbb805\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis\` DROP FOREIGN KEY \`FK_5eee93c39a3324120b38641ff77\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis_legal_proceeding\` DROP FOREIGN KEY \`FK_8b025a6229e06224f60f9715527\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`cnis_fast_analysis_inss_benefit\` DROP FOREIGN KEY \`FK_c47ec559c4853b1721fe814d9dc\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client_legal_proceeding\` DROP FOREIGN KEY \`FK_755678eab52126709e5abfa6b12\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`legal_proceeding_detail\` DROP FOREIGN KEY \`FK_6eba5141d9e7373bccdb194b55b\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`analysis_tool_client_inss_benefit\` DROP FOREIGN KEY \`FK_52aa196af5bdbaf81cd194951fb\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`auth_identity\` DROP FOREIGN KEY \`FK_8f262a64773b2324554f88c5e7e\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`auth_identity\` DROP FOREIGN KEY \`FK_5cbe443c958a6bfbadb30de44fd\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer\` DROP FOREIGN KEY \`FK_0c722aa15f596b6341c80b38809\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_member\` DROP FOREIGN KEY \`FK_3f0d0a6437c3b29f3b3741c8a7f\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_member\` DROP FOREIGN KEY \`FK_ce08825728e5afefdc6e682b8d7\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan\` DROP FOREIGN KEY \`FK_69b4b1cdeb2e46b7b984f65854d\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan\` DROP FOREIGN KEY \`FK_b13db5a77fa16ed83c5e7a15557\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_enable_paid_resource\` DROP FOREIGN KEY \`FK_14e2292169fdb3bb7eb225e5fe2\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_enable_paid_resource\` DROP FOREIGN KEY \`FK_893cae7932e20b45592ec56529f\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` DROP FOREIGN KEY \`FK_a27b2e2feb23fbc32e844335764\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource\` DROP FOREIGN KEY \`FK_aa64b812bbeca98b54618d7e230\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_paid_resource_ia_config\` DROP FOREIGN KEY \`FK_3aecf87081e1868b23222e93504\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_enable_resource\` DROP FOREIGN KEY \`FK_628a464fa0fdadf950089b4c594\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`payment_plan_enable_resource\` DROP FOREIGN KEY \`FK_93d57e5baaaac4b6d378ee9fa35\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_bank_payment\` DROP FOREIGN KEY \`FK_a973ce0fc68ed08ac710bf0dad4\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`organization_payment_plan_bank_payment\` DROP FOREIGN KEY \`FK_9cbe6cfd5cabed82d8c80f97a08\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer_terms_acceptance\` DROP FOREIGN KEY \`FK_558d7f8f21f4b5c6756ee6c91cf\``,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`customer_terms_acceptance\` DROP FOREIGN KEY \`FK_b69ed51d913776256f2d50c9609\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_period_document\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_earnings_history\``,
+    );
+    await queryRunner.query(`DROP TABLE \`organization_credit_usage\``);
+    await queryRunner.query(`DROP TABLE \`organization_credit_purchase\``);
+    await queryRunner.query(`DROP TABLE \`analysis_tool_client\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_dc2e592765c6616392672afdd9\` ON \`legal_pleading\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_e445a94b6792f1edcce2267370\` ON \`legal_pleading\``,
+    );
+    await queryRunner.query(`DROP TABLE \`legal_pleading\``);
+    await queryRunner.query(`DROP TABLE \`legal_pleading_result\``);
+    await queryRunner.query(`DROP TABLE \`legal_pleading_history\``);
+    await queryRunner.query(`DROP TABLE \`legal_pleading_document\``);
+    await queryRunner.query(`DROP TABLE \`legal_pleading_document_analysis\``);
+    await queryRunner.query(`DROP TABLE \`legal_pleading_address\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_c8a5b1e81520cc0eef0b86d2b5\` ON \`analysis_tool_record\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_cc960ef14827af16d4f8721ea4\` ON \`analysis_tool_record\``,
+    );
+    await queryRunner.query(`DROP TABLE \`analysis_tool_record\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_e5c2417625a18f56881b5ee822\` ON \`retirement_planning_rpps\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_5d8721ed5a5e02fe9c5c686a29\` ON \`retirement_planning_rpps\``,
+    );
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rpps\``);
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rpps_result\``);
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_remuneration\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_remuneration_calculation\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_period_document\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_a50d89ef539a83eef1fccdd718\` ON \`retirement_planning_rpps_period_disability\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_period_disability\``,
+    );
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rpps_period\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_cdfd7dbc5ecbed75bf601fc7f4\` ON \`retirement_planning_rpps_period_special_time\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_period_special_time\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_23315335c87e758c4f4a10ea07\` ON \`cid_ten\``,
+    );
+    await queryRunner.query(`DROP TABLE \`cid_ten\``);
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_legal_proceeding\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rpps_inss_benefit\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_ffe7e198cc69318f5d73e9390a\` ON \`retirement_planning_rgps\``,
+    );
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rgps\``);
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_time_accelerator\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_special_period\``,
+    );
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rgps_result\``);
+    await queryRunner.query(`DROP TABLE \`retirement_planning_rgps_period\``);
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_legal_proceeding\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_inss_benefit\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`retirement_planning_rgps_analysis_result\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_5eee93c39a3324120b38641ff7\` ON \`cnis_fast_analysis\``,
+    );
+    await queryRunner.query(`DROP TABLE \`cnis_fast_analysis\``);
+    await queryRunner.query(`DROP TABLE \`cnis_fast_analysis_result\``);
+    await queryRunner.query(
+      `DROP TABLE \`cnis_fast_analysis_legal_proceeding\``,
+    );
+    await queryRunner.query(`DROP TABLE \`cnis_fast_analysis_inss_benefit\``);
+    await queryRunner.query(
+      `DROP TABLE \`analysis_tool_client_legal_proceeding\``,
+    );
+    await queryRunner.query(`DROP TABLE \`legal_proceeding_detail\``);
+    await queryRunner.query(`DROP TABLE \`analysis_tool_client_inss_benefit\``);
+    await queryRunner.query(`DROP TABLE \`admin\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_8f262a64773b2324554f88c5e7\` ON \`auth_identity\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`REL_5cbe443c958a6bfbadb30de44f\` ON \`auth_identity\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_66a84dcff03a236c738de0e0de\` ON \`auth_identity\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_d16af8546a79a73426d3fc908c\` ON \`auth_identity\``,
+    );
+    await queryRunner.query(`DROP TABLE \`auth_identity\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_0c722aa15f596b6341c80b3880\` ON \`customer\``,
+    );
+    await queryRunner.query(`DROP TABLE \`customer\``);
+    await queryRunner.query(`DROP TABLE \`organization_member\``);
+    await queryRunner.query(`DROP TABLE \`organization\``);
+    await queryRunner.query(`DROP TABLE \`organization_payment_plan\``);
+    await queryRunner.query(
+      `DROP TABLE \`organization_payment_plan_enable_paid_resource\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_b9e41e6eee7934d8b4b85cb0cc\` ON \`payment_plan_paid_resource\``,
+    );
+    await queryRunner.query(`DROP TABLE \`payment_plan_paid_resource\``);
+    await queryRunner.query(
+      `DROP INDEX \`REL_3aecf87081e1868b23222e9350\` ON \`payment_plan_paid_resource_ia_config\``,
+    );
+    await queryRunner.query(
+      `DROP TABLE \`payment_plan_paid_resource_ia_config\``,
+    );
+    await queryRunner.query(`DROP TABLE \`payment_plan_enable_resource\``);
+    await queryRunner.query(`DROP TABLE \`payment_plan\``);
+    await queryRunner.query(
+      `DROP TABLE \`organization_payment_plan_bank_payment\``,
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_fd6ceb1b4ed705075fb352efc5\` ON \`bank_payment\``,
+    );
+    await queryRunner.query(`DROP TABLE \`bank_payment\``);
+    await queryRunner.query(`DROP TABLE \`customer_terms_acceptance\``);
+    await queryRunner.query(`DROP TABLE \`customer_terms\``);
+    await queryRunner.query(`DROP TABLE \`customer_address\``);
+  }
+}
