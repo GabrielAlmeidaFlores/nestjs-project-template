@@ -15,7 +15,6 @@ import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-t
 import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
-import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
 import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -62,18 +61,6 @@ export class UpdateAnalysisToolClientUseCase {
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
-
-    if (dto.email) {
-      const verifyConstraint =
-        await this.analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId(
-          dto.email,
-          organizationSessionData.organizationId,
-        );
-
-      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
-        throw new AnalysisToolClientEmailAlreadyInUseError();
-      }
-    }
 
     if (dto.federalDocument) {
       const verifyConstraint =
