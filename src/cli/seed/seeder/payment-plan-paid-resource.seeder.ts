@@ -194,6 +194,13 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise das regras finais para planejamento de aposentadoria RGPS.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a85-9c01-5e2b8d1f96a3'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
+      creditCost: 3,
+      description: 'Análise completa de Atividade Especial',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
