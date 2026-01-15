@@ -14,6 +14,7 @@ export interface AnalysisToolClientEntityPropsInterface extends BaseEntityPropsI
   birthDate?: Date | null;
   gender?: GenderEnum | null;
   email?: Email | null;
+  corporateEmail?: Email | null;
   phoneNumber?: PhoneNumber | null;
   clientType?: AnalysisToolClientTypeEnum | null;
   createdBy: OrganizationMemberId;
