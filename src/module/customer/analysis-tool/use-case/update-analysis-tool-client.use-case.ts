@@ -98,6 +98,8 @@ export class UpdateAnalysisToolClientUseCase {
       federalDocument:
         dto.federalDocument ?? analysisToolClientQueryResult.federalDocument,
       email: dto.email ?? analysisToolClientQueryResult.email,
+      corporateEmail:
+        dto.corporateEmail ?? analysisToolClientQueryResult.corporateEmail,
       phoneNumber: dto.phoneNumber ?? analysisToolClientQueryResult.phoneNumber,
       clientType: dto.clientType ?? analysisToolClientQueryResult.clientType,
       createdAt: analysisToolClientQueryResult.createdAt,
