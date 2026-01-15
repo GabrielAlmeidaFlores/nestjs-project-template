@@ -6,11 +6,14 @@ import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/a
 import { RetirementPlanningRgpsPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period/command/retirement-planning-rgps-period.repository.gateway';
 import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsPeriodDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.entity';
 import { CreateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/create-retirement-planning-rgps-period.request.dto';
 import { CreateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/create-retirement-planning-rgps-period.response.dto';
 import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/error/retirement-planning-rgps-not-found.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRetirementPlanningRgpsPeriodUseCase {
@@ -25,6 +28,8 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
     private readonly retirementPlanningRgpsPeriodCommandRepositoryGateway: RetirementPlanningRgpsPeriodCommandRepositoryGateway,
     @Inject(RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway)
     private readonly retirementPlanningRgpsPeriodDocumentCommandRepositoryGateway: RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -40,27 +45,52 @@ export class CreateRetirementPlanningRgpsPeriodUseCase {
       ...retirementPlanningRgps,
     });
 
+    let reasonPendency: ReasonPendencyEnum | null = null;
+    let isPendency = false;
+    if (dto.json.competenceBelowTheMinimum === true) {
+      reasonPendency = ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM;
+    }
+
+    if (reasonPendency !== null) {
+      isPendency = true;
+    }
+
     const period = new RetirementPlanningRgpsPeriodEntity({
       periodName: dto.json.periodName,
       periodStart: dto.json.periodStart,
-      periodEnd: dto.json.periodEnd,
+      periodEnd: dto.json.periodEnd ?? null,
       category: dto.json.category,
-      isPendency: dto.json.isPendency,
+      isPendency: isPendency,
       competenceBelowTheMinimum: dto.json.competenceBelowTheMinimum,
       contributionAverage: new DecimalValue(dto.json.contributionAverage),
       typeOfContribution: dto.json.typeOfContribution,
       retirementPlanningRgps: retirementPlanningRgpsEntity,
       status: dto.json.status,
+      reasonPendency,
     });
 
     const documents =
       dto.documents !== undefined
-        ? dto.documents.map((value) => {
-            return new RetirementPlanningRgpsPeriodDocumentEntity({
-              document: value.file.toString(),
-              retirementPlanningRgpsPeriod: period,
-            });
-          })
+        ? await Promise.all(
+            dto.documents.map(async (value) => {
+              const buffer = value.file.base64.decodeToBuffer();
+
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: value.file.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
+              });
+
+              const documentUrl =
+                await this.fileProcessorGateway.uploadFile(fileModel);
+
+              return new RetirementPlanningRgpsPeriodDocumentEntity({
+                document: documentUrl,
+                retirementPlanningRgpsPeriod: period,
+              });
+            }),
+          )
         : [];
 
     await this.createOnDatabase(period, documents);

@@ -22,7 +22,7 @@ export class PaymentPlanPaidResourceResponseDto extends BaseBuildableDtoObject {
   public description: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public prompt?: string | null;
+  public prompt?: string;
 
   protected override readonly _type = PaymentPlanPaidResourceResponseDto.name;
 }

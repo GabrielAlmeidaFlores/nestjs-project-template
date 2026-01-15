@@ -4,7 +4,7 @@ import * as fileType from 'file-type';
 import jsPDF from 'jspdf';
 
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
-import { GenerateResponseInputModel } from '@infra/generative-ia/implementation/model/input/generate-response.input.model';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
 
@@ -107,9 +107,22 @@ export class GeminiService implements GenerativeIaGateway {
       },
     } as GenerateContentParameters;
 
-    if (props.responseJsonSchema !== undefined && contentConfig.config) {
-      contentConfig.config.responseJsonSchema = props.responseJsonSchema;
-      contentConfig.config.responseMimeType = 'application/json';
+    if (props.responseConfig !== undefined) {
+      if (
+        props.responseConfig.jsonSchema !== undefined &&
+        contentConfig.config !== undefined
+      ) {
+        contentConfig.config.responseJsonSchema =
+          props.responseConfig.jsonSchema;
+      }
+
+      if (
+        props.responseConfig.responseMimeType !== undefined &&
+        contentConfig.config !== undefined
+      ) {
+        contentConfig.config.responseMimeType =
+          props.responseConfig.responseMimeType;
+      }
     }
 
     const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;

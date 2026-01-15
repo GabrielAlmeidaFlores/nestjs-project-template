@@ -46,7 +46,7 @@ export class CreateMultipleRetirementPlanningRgpsPeriodsUseCase {
           return new RetirementPlanningRgpsPeriodEntity({
             periodName: p.periodName,
             periodStart: p.periodStart,
-            periodEnd: p.periodEnd,
+            periodEnd: p.periodEnd ?? null,
             category: p.category,
             isPendency: p.isPendency,
             competenceBelowTheMinimum: p.competenceBelowTheMinimum,
