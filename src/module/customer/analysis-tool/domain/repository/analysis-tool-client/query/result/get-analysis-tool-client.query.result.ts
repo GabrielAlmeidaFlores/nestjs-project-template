@@ -12,6 +12,7 @@ export class GetAnalysisToolClientQueryResult extends BaseBuildableObject {
   public readonly name: string | null;
   public readonly federalDocument: FederalDocument | null;
   public readonly email: Email | null;
+  public readonly corporateEmail: Email | null;
   public readonly inssPassword: string | null;
   public readonly phoneNumber: PhoneNumber | null;
   public readonly birthDate: Date | null;

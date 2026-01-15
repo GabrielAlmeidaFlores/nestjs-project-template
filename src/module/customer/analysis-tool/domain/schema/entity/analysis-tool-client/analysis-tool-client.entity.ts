@@ -22,6 +22,9 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
   @Description('Email do cliente da ferramenta de análise.')
   public readonly email: Email | null;
 
+  @Description('Email corporativo do cliente da ferramenta de análise.')
+  public readonly corporateEmail: Email | null;
+
   @Description('Senha utilizada para acessar o sistema do INSS.')
   public readonly inssPassword: string | null;
 
@@ -58,6 +61,7 @@ export class AnalysisToolClientEntity extends BaseEntity<AnalysisToolClientId> {
     this.name = props.name ?? null;
     this.federalDocument = props.federalDocument ?? null;
     this.email = props.email ?? null;
+    this.corporateEmail = props.corporateEmail ?? null;
     this.inssPassword = props.inssPassword ?? null;
     this.phoneNumber = props.phoneNumber ?? null;
     this.birthDate = props.birthDate ?? null;

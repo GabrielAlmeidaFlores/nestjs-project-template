@@ -40,6 +40,15 @@ export class AnalysisToolClientTypeormEntity extends BaseTypeormEntity {
   public email: string | null;
 
   @Column({
+    name: 'corporate_email',
+    type: 'varchar',
+    length: 100,
+    transformer: CryptographyTransformer,
+    nullable: true,
+  })
+  public corporateEmail: string | null;
+
+  @Column({
     name: 'inssPassword',
     type: 'varchar',
     length: 100,

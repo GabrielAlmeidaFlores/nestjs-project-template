@@ -51,6 +51,10 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
           ? new FederalDocument(source.federalDocument)
           : null;
       const email = source.email !== null ? new Email(source.email) : null;
+      const corporateEmail =
+        source.corporateEmail !== null
+          ? new Email(source.corporateEmail)
+          : null;
       const phoneNumber =
         source.phoneNumber !== null
           ? new PhoneNumber(source.phoneNumber)
@@ -85,6 +89,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         id: new AnalysisToolClientId(source.id),
         federalDocument,
         email,
+        corporateEmail,
         phoneNumber,
         createdBy,
         updatedBy,
@@ -112,6 +117,10 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
           ? source.federalDocument.toString()
           : null;
       const email = source.email !== null ? source.email.toString() : null;
+      const corporateEmail =
+        source.corporateEmail !== null
+          ? source.corporateEmail.toString()
+          : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
 
@@ -144,6 +153,7 @@ export class GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile {
         id: source.id.toString(),
         federalDocument,
         email,
+        corporateEmail,
         phoneNumber,
         updatedBy,
         createdBy,
