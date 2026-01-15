@@ -922,7 +922,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           const duracaoA = this.daysBetween(startA, endA);
           const duracaoB = this.daysBetween(startB, endB);
 
-          // decide vencedor por duração -> início mais antigo -> seq menor
           let winnerIsA: boolean;
           if (duracaoA > duracaoB) {
             winnerIsA = true;
@@ -960,14 +959,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           }
 
           if (loserStart.getTime() < winnerStart.getTime()) {
-            // perdedor começa antes do vencedor: cortar fim do perdedor para dia anterior ao início do vencedor
             const novoFim = this.daysBeforeOrAfter(winnerStart, 'before');
             loser.dataAjustada = {
               dataInicio: loserStart,
               dataFim: novoFim,
             };
           } else {
-            // perdedor inicia durante/depois do vencedor: mover início do perdedor para dia seguinte ao fim do vencedor
             const novoInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
             loser.dataAjustada = {
               dataInicio: novoInicio,
