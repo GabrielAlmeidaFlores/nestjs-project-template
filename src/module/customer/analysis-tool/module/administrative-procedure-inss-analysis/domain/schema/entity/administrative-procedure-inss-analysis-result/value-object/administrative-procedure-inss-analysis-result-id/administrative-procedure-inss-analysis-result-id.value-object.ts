@@ -1,0 +1,7 @@
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+
+export class AdministrativeProcedureInssAnalysisResultId extends Guid {
+  protected override readonly _type =
+    AdministrativeProcedureInssAnalysisResultId.name;
+}
+
