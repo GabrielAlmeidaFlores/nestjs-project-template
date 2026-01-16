@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { isEqual } from 'lodash';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { EmailGateway } from '@infra/email/email.gateway';
 import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
+import { EventEnum } from '@lib/event/enum/event.enum';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-limited-responsible-relations.query.result ';
@@ -60,6 +62,7 @@ export class UpdateLegalProceedingDataUseCase {
     private readonly analysisToolClientLegalProceedingQueryRepositoryGateway: AnalysisToolClientLegalProceedingQueryRepositoryGateway,
   ) {}
 
+  @OnEvent(EventEnum.UPDATE_LEGAL_PROCEEDING_DATA)
   public async execute(id: AnalysisToolClientLegalProceedingId): Promise<void> {
     const proceeding =
       await this.analysisToolClientLegalProceedingQueryRepositoryGateway.findByOneAnalysisToolClientLegalProceedingId(
@@ -129,16 +132,12 @@ export class UpdateLegalProceedingDataUseCase {
       return;
     }
 
-    try {
-      await this.sendUpdateEmail(
+    if (proceedingsExist) {
+      void this.sendUpdateEmail(
         analysisToolClientQuery,
         proceeding.legalProceedingNumber,
         safeDetail,
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
     }
 
     const analysisToolClient = new AnalysisToolClientEntity({
