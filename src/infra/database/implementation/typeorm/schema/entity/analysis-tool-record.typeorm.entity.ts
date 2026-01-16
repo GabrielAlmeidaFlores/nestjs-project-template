@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
+import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
@@ -33,6 +34,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
     enum: AnalysisToolRecordTypeEnum,
   })
   public type: AnalysisToolRecordTypeEnum;
+
+  @OneToOne(
+    () => AdministrativeProcedureInssAnalysisTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'administrative_procedure_inss_analysis_id' })
+  public administrativeProcedureInssAnalysis?: AdministrativeProcedureInssAnalysisTypeormEntity | null;
 
   @OneToOne(
     () => CnisFastAnalysisTypeormEntity,

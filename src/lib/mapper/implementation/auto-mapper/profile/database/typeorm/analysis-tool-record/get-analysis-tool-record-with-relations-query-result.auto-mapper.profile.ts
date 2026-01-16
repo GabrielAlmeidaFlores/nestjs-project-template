@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
@@ -16,6 +17,7 @@ import { GetRetirementPlanningRgpsWithRelationsQueryResult } from '@module/custo
 import { GetRetirementPlanningRppsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps.query.resut';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 
@@ -73,6 +75,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetJudicialCaseAnalysisQueryResult,
       );
 
+      const administrativeProcedureInssAnalysis = this.mapper.map(
+        source.administrativeProcedureInssAnalysis,
+        AdministrativeProcedureInssAnalysisTypeormEntity,
+        GetAdministrativeProcedureInssAnalysisQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -87,6 +95,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRpps,
         retirementPlanningRgps,
         judicialCaseAnalysis,
+        administrativeProcedureInssAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -143,6 +152,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         JudicialCaseAnalysisTypeormEntity,
       );
 
+      const administrativeProcedureInssAnalysis = this.mapper.map(
+        source.administrativeProcedureInssAnalysis,
+        GetAdministrativeProcedureInssAnalysisQueryResult,
+        AdministrativeProcedureInssAnalysisTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -157,6 +172,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRpps,
         retirementPlanningRgps,
         judicialCaseAnalysis,
+        administrativeProcedureInssAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,

@@ -155,6 +155,7 @@ export class UpdateRetirementPlanningRppsUseCase {
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
       judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const transactionOperations: TransactionType[] = [];
