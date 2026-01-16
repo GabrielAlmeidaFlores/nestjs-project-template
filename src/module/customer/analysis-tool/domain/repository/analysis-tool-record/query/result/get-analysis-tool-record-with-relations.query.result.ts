@@ -10,8 +10,8 @@ import type { AnalysisToolRecordCode } from '@module/customer/analysis-tool/doma
 import type { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import type { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import type { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
-import type { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
+import type { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolRecordId;
