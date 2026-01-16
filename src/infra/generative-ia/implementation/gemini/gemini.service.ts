@@ -23,11 +23,11 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 10_000;
+    const maxOutputTokens = 5_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
-      'gemini-2.5-flash',
+      'gemini-3-flash-preview',
       maxOutputTokens,
     );
   }
@@ -35,11 +35,11 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 50_000;
+    const maxOutputTokens = 30_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
-      'gemini-2.5-flash',
+      'gemini-3-flash-preview',
       maxOutputTokens,
     );
   }
@@ -47,11 +47,11 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 1_000_000;
+    const maxOutputTokens = 40_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
-      'gemini-2.5-pro',
+      'gemini-3-pro-preview',
       maxOutputTokens,
     );
   }
