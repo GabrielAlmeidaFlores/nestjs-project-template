@@ -140,6 +140,8 @@ export class UpdateCnisFastAnalysisUseCase {
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
       specialActivity: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];
