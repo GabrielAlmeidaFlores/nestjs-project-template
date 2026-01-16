@@ -121,7 +121,7 @@ export class JudicialCaseAnalysisEntityAutoMapperProfile {
           : undefined;
 
       const judicialCaseAnalysisBenefit =
-        source.judicialCaseAnalysisBenefit !== undefined
+        source.judicialCaseAnalysisBenefit !== null
           ? this.mapper.mapArray(
               source.judicialCaseAnalysisBenefit,
               JudicialCaseAnalysisBenefitEntity,
@@ -130,7 +130,7 @@ export class JudicialCaseAnalysisEntityAutoMapperProfile {
           : undefined;
 
       const judicialCaseAnalysisLegalProceeding =
-        source.judicialCaseAnalysisLegalProceeding !== undefined
+        source.judicialCaseAnalysisLegalProceeding !== null
           ? this.mapper.mapArray(
               source.judicialCaseAnalysisLegalProceeding,
               JudicialCaseAnalysisLegalProceedingEntity,
@@ -139,7 +139,7 @@ export class JudicialCaseAnalysisEntityAutoMapperProfile {
           : undefined;
 
       const judicialCaseAnalysisDocument =
-        source.judicialCaseAnalysisDocument !== undefined
+        source.judicialCaseAnalysisDocument !== null
           ? this.mapper.mapArray(
               source.judicialCaseAnalysisDocument,
               JudicialCaseAnalysisDocumentEntity,
