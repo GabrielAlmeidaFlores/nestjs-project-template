@@ -4,6 +4,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
 
 @Entity({ name: 'analysis_tool_client_legal_proceeding' })
 export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormEntity {
@@ -24,11 +25,11 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
 
   @Column({
     name: 'status',
-    type: 'varchar',
-    length: 100,
+    type: 'simple-enum',
+    enum: LegalProceedingStatusEnum,
     nullable: true,
   })
-  public status: string | null;
+  public status: LegalProceedingStatusEnum | null;
 
   @Column({
     name: 'last_updated',

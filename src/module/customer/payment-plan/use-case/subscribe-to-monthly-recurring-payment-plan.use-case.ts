@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
-import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { SubscriptionCycleEnum } from '@infra/payment-gateway/enum/subscription-cycle.enum';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
 import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
