@@ -62,6 +62,28 @@ export class GetSpecialActivityByIdUseCase {
       }),
     );
 
+    const parsedSpecialActivityCompleteAnalysis =
+      specialActivityQueryResult.specialActivityResult
+        ?.specialActivityCompleteAnalysis !== null &&
+      specialActivityQueryResult.specialActivityResult
+        ?.specialActivityCompleteAnalysis !== undefined
+        ? (JSON.parse(
+            specialActivityQueryResult.specialActivityResult
+              .specialActivityCompleteAnalysis,
+          ) as object)
+        : null;
+
+    const parsedSpecialActivitySimplifiedAnalysis =
+      specialActivityQueryResult.specialActivityResult
+        ?.specialActivitySimplifiedAnalysis !== null &&
+      specialActivityQueryResult.specialActivityResult
+        ?.specialActivitySimplifiedAnalysis !== undefined
+        ? (JSON.parse(
+            specialActivityQueryResult.specialActivityResult
+              .specialActivitySimplifiedAnalysis,
+          ) as object)
+        : null;
+
     return GetSpecialActivityResponseDto.build({
       id: specialActivityQueryResult.id,
       documents,
@@ -88,20 +110,10 @@ export class GetSpecialActivityByIdUseCase {
         ),
       specialActivityResult: specialActivityQueryResult.specialActivityResult
         ? GetSpecialActivityResultResponseDto.build({
-            specialActivityCompleteAnalysis: specialActivityQueryResult
-              .specialActivityResult.specialActivityCompleteAnalysis
-              ? JSON.parse(
-                  specialActivityQueryResult.specialActivityResult
-                    .specialActivityCompleteAnalysis,
-                )
-              : undefined,
-            specialActivitySimplifiedAnalysis: specialActivityQueryResult
-              .specialActivityResult.specialActivitySimplifiedAnalysis
-              ? JSON.parse(
-                  specialActivityQueryResult.specialActivityResult
-                    .specialActivitySimplifiedAnalysis,
-                )
-              : undefined,
+            specialActivityCompleteAnalysis:
+              parsedSpecialActivityCompleteAnalysis,
+            specialActivitySimplifiedAnalysis:
+              parsedSpecialActivitySimplifiedAnalysis,
             createdAt:
               specialActivityQueryResult.specialActivityResult.createdAt,
             updatedAt:
