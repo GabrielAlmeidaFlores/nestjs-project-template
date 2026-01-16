@@ -1442,6 +1442,7 @@ A seguir, uma lista consolidada das principais atividades profissionais que gara
 
 OBSERVAÇÃO IMPORTANTE:
   - Responda apenas com o conteúdo solicitado, sem introduções ou conclusões.
+  - Gere a peça processual com as informações recebidas, sem fazer nenhum tipo de pergunta.
 `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
@@ -1453,6 +1454,7 @@ Gere uma mensagem ao cliente explicando, de forma clara, didática e acessível,
 
 OBSERVAÇÃO IMPORTANTE:
   - Responda apenas com o conteúdo solicitado, sem introduções ou conclusões.
+  - Gera a resposta final sem fazer perguntas.
 `,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
