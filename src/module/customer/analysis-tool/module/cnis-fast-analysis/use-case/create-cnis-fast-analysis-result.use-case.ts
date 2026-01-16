@@ -205,6 +205,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
     });
 

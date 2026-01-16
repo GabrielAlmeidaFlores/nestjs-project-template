@@ -32,6 +32,10 @@ export class GetAnalysisToolClientQueryResultAutoMapperProfile {
           ? new FederalDocument(source.federalDocument)
           : null;
       const email = source.email !== null ? new Email(source.email) : null;
+      const corporateEmail =
+        source.corporateEmail !== null
+          ? new Email(source.corporateEmail)
+          : null;
       const phoneNumber =
         source.phoneNumber !== null
           ? new PhoneNumber(source.phoneNumber)
@@ -42,6 +46,7 @@ export class GetAnalysisToolClientQueryResultAutoMapperProfile {
         id: new AnalysisToolClientId(source.id),
         federalDocument,
         email,
+        corporateEmail,
         phoneNumber,
       });
     };
@@ -65,6 +70,10 @@ export class GetAnalysisToolClientQueryResultAutoMapperProfile {
           ? source.federalDocument.toString()
           : null;
       const email = source.email !== null ? source.email.toString() : null;
+      const corporateEmail =
+        source.corporateEmail !== null
+          ? source.corporateEmail.toString()
+          : null;
       const phoneNumber =
         source.phoneNumber !== null ? source.phoneNumber.toString() : null;
 
@@ -73,6 +82,7 @@ export class GetAnalysisToolClientQueryResultAutoMapperProfile {
         id: source.id.toString(),
         federalDocument,
         email,
+        corporateEmail,
         phoneNumber,
       });
     };

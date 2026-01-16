@@ -6,6 +6,7 @@ import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/databas
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -18,6 +19,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
+import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -67,6 +69,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetRetirementPlanningRgpsWithRelationsQueryResult,
       );
 
+      const judicialCaseAnalysis = this.mapper.map(
+        source.judicialCaseAnalysis,
+        JudicialCaseAnalysisTypeormEntity,
+        GetJudicialCaseAnalysisQueryResult,
+      );
+
       const administrativeProcedureInssAnalysis = this.mapper.map(
         source.administrativeProcedureInssAnalysis,
         AdministrativeProcedureInssAnalysisTypeormEntity,
@@ -86,6 +94,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         analysisToolClient,
         createdBy,
@@ -137,6 +146,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         RetirementPlanningRgpsTypeormEntity,
       );
 
+      const judicialCaseAnalysis = this.mapper.map(
+        source.judicialCaseAnalysis,
+        GetJudicialCaseAnalysisQueryResult,
+        JudicialCaseAnalysisTypeormEntity,
+      );
+
       const administrativeProcedureInssAnalysis = this.mapper.map(
         source.administrativeProcedureInssAnalysis,
         GetAdministrativeProcedureInssAnalysisQueryResult,
@@ -156,6 +171,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         analysisToolClient,
         createdBy,
