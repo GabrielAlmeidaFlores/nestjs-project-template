@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { EventModule } from '@lib/event/event.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
@@ -95,6 +96,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ExportDocumentModule,
     RemunerationCalculatorModule,
     CnisAnalyzerModule,
+    CnisProcessorModule,
     GenerativeIaModule,
     CnisFastAnalysisModule,
   ],
