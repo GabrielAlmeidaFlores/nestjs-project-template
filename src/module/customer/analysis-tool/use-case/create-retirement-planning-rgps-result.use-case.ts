@@ -237,6 +237,8 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       updatedBy: organizationMember.id,
       retirementPlanningRgps: retirementPlanningRgpsEntity,
       specialActivity: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
     });
     const updateAnalysisRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(

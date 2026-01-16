@@ -5,6 +5,17 @@ import { Module } from '@nestjs/common';
 import { AutoMapperService } from '@lib/mapper/implementation/auto-mapper/auto-mapper.service';
 import { AdminEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/admin-entity.auto-mapper.profile';
 import { GetAdminQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/admin/get-admin-query-result.auto-mapper.profile';
+import { AdministrativeProcedureInssAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis-entity.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/get-administrative-procedure-inss-analysis-query-result.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis/get-administrative-procedure-inss-analysis-with-relations-query-result.auto-mapper.profile';
+import { AdministrativeProcedureInssAnalysisBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-benefit/administrative-procedure-inss-analysis-benefit-entity.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-benefit/get-administrative-procedure-inss-analysis-benefit-query-result.auto-mapper.profile';
+import { AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-document/administrative-procedure-inss-analysis-document-entity.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-document/get-administrative-procedure-inss-analysis-document-query-result.auto-mapper.profile';
+import { AdministrativeProcedureInssAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-legal-proceeding/administrative-procedure-inss-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-legal-proceeding/get-administrative-procedure-inss-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/administrative-procedure-inss-analysis-result-entity.auto-mapper.profile';
+import { GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/get-administrative-procedure-inss-analysis-result-query-result.auto-mapper.profile';
 import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
 import { GetAnalysisToolClientQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-query-result.auto-mapper.profile';
 import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-limited-relations-query-result.auto-mapper.profile';
@@ -43,6 +54,17 @@ import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation
 import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
 import { CustomerTermsAcceptanceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/customer-terms-acceptance-entity.auto-mapper.profile';
 import { GetCustomerTermsAcceptanceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/get-customer-terms-acceptance-query-result.auto-mapper.profile';
+import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
+import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
+import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
+import { GetJudicialCaseAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-benefit/get-judicial-case-analysis-benefit-query-result.auto-mapper.profile';
+import { JudicialCaseAnalysisBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-benefit/judicial-case-analysis-benefit-entity.auto-mapper.profile';
+import { GetJudicialCaseAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-document/get-judicial-case-analysis-document-query-result.auto-mapper.profile';
+import { JudicialCaseAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-document/judicial-case-analysis-document-entity.auto-mapper.profile';
+import { GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-legal-proceeding/get-judicial-case-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { JudicialCaseAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-legal-proceeding/judicial-case-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/get-judicial-case-analysis-result-query-result.auto-mapper.profile';
+import { JudicialCaseAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/judicial-case-analysis-result-entity.auto-mapper.profile';
 import { GetLegalPleadingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-relations-query-result.auto-mapper.profile';
 import { GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-responsible-and-client-relations-query-result.auto-mapper.profile';
 import { LegalPleadingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/legal-pleading-entity.auto-mapper.profile';
@@ -262,6 +284,28 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     SpecialActivityDocumentEntityAutoMapperProfile,
     SpecialActivityInssBenefitEntityAutoMapperProfile,
     SpecialActivityLegalProceedingEntityAutoMapperProfile,
+    AdministrativeProcedureInssAnalysisEntityAutoMapperProfile,
+    AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisQueryResultAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisWithRelationsQueryResultAutoMapperProfile,
+    AdministrativeProcedureInssAnalysisBenefitEntityAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisBenefitQueryResultAutoMapperProfile,
+    AdministrativeProcedureInssAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile,
+    GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile,
+    JudicialCaseAnalysisEntityAutoMapperProfile,
+    GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
+    GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
+    JudicialCaseAnalysisResultEntityAutoMapperProfile,
+    GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile,
+    JudicialCaseAnalysisBenefitEntityAutoMapperProfile,
+    GetJudicialCaseAnalysisBenefitQueryResultAutoMapperProfile,
+    JudicialCaseAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    JudicialCaseAnalysisDocumentEntityAutoMapperProfile,
+    GetJudicialCaseAnalysisDocumentQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
