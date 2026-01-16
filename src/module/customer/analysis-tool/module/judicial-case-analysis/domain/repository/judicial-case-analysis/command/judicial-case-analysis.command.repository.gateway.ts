@@ -18,4 +18,3 @@ export abstract class JudicialCaseAnalysisCommandRepositoryGateway {
     updatedBy: OrganizationMemberId,
   ): TransactionType;
 }
-

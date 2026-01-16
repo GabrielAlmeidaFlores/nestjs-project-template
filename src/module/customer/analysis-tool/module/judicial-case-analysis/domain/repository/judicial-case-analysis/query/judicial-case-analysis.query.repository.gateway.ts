@@ -20,4 +20,3 @@ export abstract class JudicialCaseAnalysisQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetJudicialCaseAnalysisWithRelationsQueryResult>;
 }
-

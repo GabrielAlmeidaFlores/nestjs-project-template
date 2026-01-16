@@ -14,4 +14,3 @@ export class GetJudicialCaseAnalysisDocumentQueryResult extends BaseBuildableObj
   protected override readonly _type =
     GetJudicialCaseAnalysisDocumentQueryResult.name;
 }
-

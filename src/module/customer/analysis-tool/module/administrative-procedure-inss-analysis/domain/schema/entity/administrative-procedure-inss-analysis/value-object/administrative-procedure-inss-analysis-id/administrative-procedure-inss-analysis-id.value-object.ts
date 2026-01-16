@@ -4,4 +4,3 @@ export class AdministrativeProcedureInssAnalysisId extends Guid {
   protected override readonly _type =
     AdministrativeProcedureInssAnalysisId.name;
 }
-

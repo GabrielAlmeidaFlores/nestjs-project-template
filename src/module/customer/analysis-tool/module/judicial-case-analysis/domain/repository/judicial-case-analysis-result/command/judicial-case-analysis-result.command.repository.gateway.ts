@@ -12,4 +12,3 @@ export abstract class JudicialCaseAnalysisResultCommandRepositoryGateway {
     props: JudicialCaseAnalysisResultEntity,
   ): TransactionType;
 }
-

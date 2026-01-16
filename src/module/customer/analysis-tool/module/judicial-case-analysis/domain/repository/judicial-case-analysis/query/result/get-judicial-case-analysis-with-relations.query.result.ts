@@ -22,4 +22,3 @@ export class GetJudicialCaseAnalysisWithRelationsQueryResult extends BaseBuildab
   protected override readonly _type =
     GetJudicialCaseAnalysisWithRelationsQueryResult.name;
 }
-

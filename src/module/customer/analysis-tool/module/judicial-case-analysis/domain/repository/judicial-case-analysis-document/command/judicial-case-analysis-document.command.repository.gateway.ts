@@ -11,4 +11,3 @@ export abstract class JudicialCaseAnalysisDocumentCommandRepositoryGateway {
     id: JudicialCaseAnalysisDocumentId,
   ): TransactionType;
 }
-

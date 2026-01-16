@@ -12,4 +12,3 @@ export class GetJudicialCaseAnalysisLegalProceedingQueryResult extends BaseBuild
   protected override readonly _type =
     GetJudicialCaseAnalysisLegalProceedingQueryResult.name;
 }
-

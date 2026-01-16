@@ -11,8 +11,7 @@ export class JudicialCaseAnalysisLegalProceedingEntity extends BaseEntity<Judici
   @Description('Caso judicial associado ao processo judicial.')
   public readonly judicialCaseAnalysis: JudicialCaseAnalysisEntity;
 
-  protected readonly _type =
-    JudicialCaseAnalysisLegalProceedingEntity.name;
+  protected readonly _type = JudicialCaseAnalysisLegalProceedingEntity.name;
 
   public constructor(
     props: JudicialCaseAnalysisLegalProceedingEntityPropsInterface,
@@ -23,4 +22,3 @@ export class JudicialCaseAnalysisLegalProceedingEntity extends BaseEntity<Judici
     this.judicialCaseAnalysis = props.judicialCaseAnalysis;
   }
 }
-

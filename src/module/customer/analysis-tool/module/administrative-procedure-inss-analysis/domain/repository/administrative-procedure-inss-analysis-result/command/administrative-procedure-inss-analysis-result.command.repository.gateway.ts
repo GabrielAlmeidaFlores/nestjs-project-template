@@ -12,4 +12,3 @@ export abstract class AdministrativeProcedureInssAnalysisResultCommandRepository
     props: AdministrativeProcedureInssAnalysisResultEntity,
   ): TransactionType;
 }
-

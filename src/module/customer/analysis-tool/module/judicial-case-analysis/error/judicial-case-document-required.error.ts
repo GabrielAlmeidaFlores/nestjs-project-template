@@ -1,8 +1,7 @@
 import { InvalidInputError } from '@core/error/invalid-input.error';
 
 export class JudicialCaseDocumentRequiredError extends InvalidInputError {
-  protected override readonly _type =
-    JudicialCaseDocumentRequiredError.name;
+  protected override readonly _type = JudicialCaseDocumentRequiredError.name;
 
   public constructor() {
     super(
@@ -10,4 +9,3 @@ export class JudicialCaseDocumentRequiredError extends InvalidInputError {
     );
   }
 }
-

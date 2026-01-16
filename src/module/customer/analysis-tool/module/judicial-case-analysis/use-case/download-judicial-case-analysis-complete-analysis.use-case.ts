@@ -48,9 +48,7 @@ export class DownloadJudicialCaseAnalysisCompleteAnalysisUseCase {
         JudicialCaseAnalysisNotFoundError,
       );
 
-    if (
-      !judicialCaseAnalysisQueryResult.judicialCaseAnalysisResult
-    ) {
+    if (!judicialCaseAnalysisQueryResult.judicialCaseAnalysisResult) {
       throw new JudicialCaseAnalysisNotFoundError();
     }
 
@@ -69,4 +67,3 @@ export class DownloadJudicialCaseAnalysisCompleteAnalysisUseCase {
     );
   }
 }
-

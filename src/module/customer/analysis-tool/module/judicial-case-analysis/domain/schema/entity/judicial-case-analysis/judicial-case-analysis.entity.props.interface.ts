@@ -6,13 +6,13 @@ import type { JudicialCaseAnalysisDocumentEntity } from '@module/customer/analys
 import type { JudicialCaseAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis-legal-proceeding/judicial-case-analysis-legal-proceeding.entity';
 import type { JudicialCaseAnalysisResultEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis-result/judicial-case-analysis-result.entity';
 
-export interface JudicialCaseAnalysisEntityPropsInterface
-  extends BaseEntityPropsInterface<JudicialCaseAnalysisId> {
+export interface JudicialCaseAnalysisEntityPropsInterface extends BaseEntityPropsInterface<JudicialCaseAnalysisId> {
   judicialCaseAnalysisResult?: JudicialCaseAnalysisResultEntity | null;
-  judicialCaseAnalysisBenefit?: JudicialCaseAnalysisBenefitEntity[];
-  judicialCaseAnalysisLegalProceeding?: JudicialCaseAnalysisLegalProceedingEntity[];
-  judicialCaseAnalysisDocument?: JudicialCaseAnalysisDocumentEntity[];
+  judicialCaseAnalysisBenefit?: JudicialCaseAnalysisBenefitEntity[] | null;
+  judicialCaseAnalysisLegalProceeding?:
+    | JudicialCaseAnalysisLegalProceedingEntity[]
+    | null;
+  judicialCaseAnalysisDocument?: JudicialCaseAnalysisDocumentEntity[] | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }
-
