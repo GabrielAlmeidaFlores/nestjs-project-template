@@ -1,5 +1,6 @@
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { JwtModule } from '@nestjs/jwt';
 import { ScheduleModule } from '@nestjs/schedule';
 import { minutes, ThrottlerModule } from '@nestjs/throttler';
@@ -13,6 +14,7 @@ import { FrameworkApplicationVariable } from '@shared/system/constant/applicatio
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     AdminModule,
     GenericModule,
     CustomerModule,

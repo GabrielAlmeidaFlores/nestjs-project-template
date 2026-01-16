@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import sgMail from '@sendgrid/mail';
 
 import { EmailGateway } from '@infra/email/email.gateway';
-import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
 
 @Injectable()

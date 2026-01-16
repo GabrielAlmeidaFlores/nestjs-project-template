@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { EventGateway } from '@lib/event/event.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
@@ -37,6 +38,8 @@ export class UpdateAnalysisToolClientUseCase {
     private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
     @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
     private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+    @Inject(EventGateway)
+    private readonly eventGateway: EventGateway,
   ) {}
 
   public async execute(
@@ -79,6 +82,17 @@ export class UpdateAnalysisToolClientUseCase {
       dto,
       organizationMember,
     );
+
+    const updatedClient =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+        analysisToolClientId,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    updatedClient.analysisToolClientLegalProceeding.forEach((proceeding) => {
+      this.eventGateway.emitUpdateLegalProceedingDataEvent(proceeding.id);
+    });
 
     return UpdateAnalysisToolClientResponseDto.build({
       analysisToolClient: updateClient.id,
