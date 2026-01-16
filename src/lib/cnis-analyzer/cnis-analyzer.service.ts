@@ -157,31 +157,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       0,
     );
 
-    const vinculosSecundarios = consolidadoResumido.filter(
-      (vinculo) => vinculo.tipo === 'secundario',
-    );
-    const somaVinculosSecundarios = vinculosSecundarios.reduce(
-      (accumulator, currentValue) => {
-        const startDate = currentValue.validContributionTime?.data?.dataInicio;
-        const endDate = currentValue.validContributionTime?.data?.dataFim;
-        if (
-          startDate instanceof Date &&
-          !isNaN(startDate.getTime()) &&
-          endDate instanceof Date &&
-          !isNaN(endDate.getTime())
-        ) {
-          const duration = this.daysBetween(startDate, endDate);
-          return accumulator + duration;
-        }
-        return accumulator;
-      },
-      0,
-    );
-
     const duracaoTotalEmDias =
-      somaVinculosNaoConcomitantes +
-      somaVinculosPrincipais +
-      somaVinculosSecundarios;
+      somaVinculosNaoConcomitantes + somaVinculosPrincipais;
 
     const somaPotencial = consolidadoResumido.reduce(
       (acc, curr) =>
@@ -192,9 +169,16 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         ),
       0,
     );
-    const anosPotencial = moment.duration(somaPotencial, 'days').years();
-    const mesesPotencial = moment.duration(somaPotencial, 'days').months();
-    const diasPotencial = moment.duration(somaPotencial, 'days').days();
+    const somaPotencialComAjuste = somaPotencial + 1;
+    const anosPotencial = moment
+      .duration(somaPotencialComAjuste, 'days')
+      .years();
+    const mesesPotencial = moment
+      .duration(somaPotencialComAjuste, 'days')
+      .months();
+    const diasPotencial = moment
+      .duration(somaPotencialComAjuste, 'days')
+      .days();
 
     const somaPotencialRestrito = consolidadoResumido
       .filter((vinculo) => !vinculo.isPendencia)
@@ -208,13 +192,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         0,
       );
 
+    const somaPotencialRestritoComAjuste = somaPotencialRestrito + 1;
     const potencialValido = `${anosPotencial}a ${mesesPotencial}m ${diasPotencial}d`;
 
-    const anosRestrito = moment.duration(somaPotencialRestrito, 'days').years();
+    const anosRestrito = moment
+      .duration(somaPotencialRestritoComAjuste, 'days')
+      .years();
     const mesesRestrito = moment
-      .duration(somaPotencialRestrito, 'days')
+      .duration(somaPotencialRestritoComAjuste, 'days')
       .months();
-    const diasRestrito = moment.duration(somaPotencialRestrito, 'days').days();
+    const diasRestrito = moment
+      .duration(somaPotencialRestritoComAjuste, 'days')
+      .days();
 
     const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
 
@@ -511,38 +500,56 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return resultadoFinal;
     }
 
+    // Agrupa itens que se sobrepõem direta ou indiretamente
     const group: {
       original: ConcomitanciaDetalhesInterface;
       start: Date | null;
       end: Date | null;
     }[] = [];
     const firstItem = items[0];
-    let endOfGroup = firstItem?.end ? firstItem.end.getTime() : 0;
-    group.push(
-      firstItem ?? {
-        original: {} as ConcomitanciaDetalhesInterface,
-        start: null,
-        end: null,
-      },
-    );
+    if (!firstItem) {
+      return resultadoFinal;
+    }
 
-    for (let i = 1; i < items.length; i++) {
-      const it = items[i];
-      const inicioIt = it?.start ? it.start.getTime() : 0;
-      if (inicioIt <= endOfGroup) {
-        group.push(
-          it ?? {
-            original: {} as ConcomitanciaDetalhesInterface,
-            start: null,
-            end: null,
-          },
-        );
-        const fimIt = it?.end ? it.end.getTime() : endOfGroup;
-        if (fimIt > endOfGroup) {
-          endOfGroup = fimIt;
+    group.push(firstItem);
+    let endOfGroup = firstItem.end ? firstItem.end.getTime() : 0;
+    let changed = true;
+
+    // Continua adicionando itens enquanto houver sobreposição com o grupo
+    // Isso garante que itens que se sobrepõem indiretamente sejam agrupados
+    while (changed) {
+      changed = false;
+      for (let i = 1; i < items.length; i++) {
+        const it = items[i];
+        if (!it) {
+          continue;
         }
-      } else {
-        break;
+
+        // Verifica se já está no grupo
+        const alreadyInGroup = group.some(
+          (g) => g.original.seq === it.original.seq,
+        );
+        if (alreadyInGroup) {
+          continue;
+        }
+
+        const inicioIt = it.start ? it.start.getTime() : 0;
+        const fimIt = it.end ? it.end.getTime() : 0;
+
+        // Verifica se se sobrepõe com algum item do grupo
+        const overlaps = group.some((g) => {
+          const gStart = g.start ? g.start.getTime() : 0;
+          const gEnd = g.end ? g.end.getTime() : 0;
+          return inicioIt <= gEnd && fimIt >= gStart;
+        });
+
+        if (overlaps) {
+          group.push(it);
+          if (fimIt > endOfGroup) {
+            endOfGroup = fimIt;
+          }
+          changed = true;
+        }
       }
     }
 
@@ -616,7 +623,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     grupoProcessado.push(vinculoPrincipal as ConcomitanciaDetalhesInterface);
 
     const secundariosAjustados: ConcomitanciaDetalhesInterface[] = [];
-
     for (const membro of group) {
       if (membro === entradaPrincipal) {
         continue;
@@ -682,17 +688,20 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         e.getTime() >= inicioPrincipal.getTime() &&
         e.getTime() <= fimPrincipal.getTime()
       ) {
+        // Item começa antes e termina dentro: ajusta apenas o fim
         novoFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
       } else if (
         s.getTime() >= inicioPrincipal.getTime() &&
         s.getTime() <= fimPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
+        // Item começa dentro e termina depois: ajusta apenas o início
         novoInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
       } else if (
         s.getTime() < inicioPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
+        // Item que envolve completamente o principal: cria apenas as partes antes e depois
         const antesFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
         if (s.getTime() <= antesFim.getTime()) {
           const parteAntes = {
@@ -709,6 +718,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
               dataFim: antesFim,
             },
           } as ConcomitanciaDetalhesInterface;
+          // Recalcula o tempo para a parte antes
+          const recalculadoAntes = this.diffYmdInclusive(s, antesFim);
+          parteAntes.contributionTime.anos = recalculadoAntes.years;
+          parteAntes.contributionTime.meses = recalculadoAntes.months;
+          parteAntes.contributionTime.dias = recalculadoAntes.days;
+          parteAntes.contributionTime.abreviado = recalculadoAntes.formatted;
           secundariosAjustados.push(parteAntes);
         }
         const depoisInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
@@ -727,27 +742,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
               dataFim: e,
             },
           } as ConcomitanciaDetalhesInterface;
+          // Recalcula o tempo para a parte depois
+          const recalculadoDepois = this.diffYmdInclusive(depoisInicio, e);
+          parteDepois.contributionTime.anos = recalculadoDepois.years;
+          parteDepois.contributionTime.meses = recalculadoDepois.months;
+          parteDepois.contributionTime.dias = recalculadoDepois.days;
+          parteDepois.contributionTime.abreviado = recalculadoDepois.formatted;
           secundariosAjustados.push(parteDepois);
         }
-        const zero = {
-          ...orig,
-          tipo: 'secundario' as const,
-          contributionTime: {
-            ...orig.contributionTime,
-            dataInicio: s,
-            dataFim: e,
-            abreviado: '0 anos 0 meses 0 dias',
-            dias: 0,
-            meses: 0,
-            anos: 0,
-          },
-          ajustado: true,
-          dataAjustada: {
-            dataInicio: s,
-            dataFim: e,
-          },
-        } as ConcomitanciaDetalhesInterface;
-        grupoProcessado.push(zero);
+        // Não adiciona item zerado, apenas as partes válidas
         continue;
       }
 
@@ -766,6 +769,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dataFim: novoFim,
           },
         } as ConcomitanciaDetalhesInterface;
+        // Recalcula o tempo para o ajustado
+        const recalculado = this.diffYmdInclusive(novoInicio, novoFim);
+        ajustado.contributionTime.anos = recalculado.years;
+        ajustado.contributionTime.meses = recalculado.months;
+        ajustado.contributionTime.dias = recalculado.days;
+        ajustado.contributionTime.abreviado = recalculado.formatted;
         grupoProcessado.push(ajustado);
         secundariosAjustados.push(ajustado);
       } else {
@@ -795,16 +804,50 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const restantes = items.slice(group.length).map((it) => it.original);
 
-    const ajustadosParaProximaRodada = secundariosAjustados.filter((s) => {
-      const st = this.toDate(s.contributionTime.dataInicio);
-      const en = this.toDate(s.contributionTime.dataFim);
-      return st !== null && en !== null && st.getTime() <= en.getTime();
-    });
+    const ajustadosParaProximaRodada = secundariosAjustados
+      .filter((s) => {
+        const st = this.toDate(s.contributionTime.dataInicio);
+        const en = this.toDate(s.contributionTime.dataFim);
+        return st !== null && en !== null && st.getTime() <= en.getTime();
+      })
+      .map((s) => {
+        const novaDataInicio = this.toDate(s.contributionTime.dataInicio);
+        const novaDataFim = this.toDate(s.contributionTime.dataFim);
 
-    const proximaLista = [...ajustadosParaProximaRodada, ...restantes];
+        if (!novaDataInicio || !novaDataFim) {
+          return s;
+        }
+
+        const recalculado = this.diffYmdInclusive(novaDataInicio, novaDataFim);
+
+        const { tipo: _tipo, ajustado: _ajustado, ...resto } = s;
+
+        return {
+          ...resto,
+          contributionTime: {
+            ...s.contributionTime,
+            anos: recalculado.years,
+            meses: recalculado.months,
+            dias: recalculado.days,
+            abreviado: recalculado.formatted,
+          },
+        } as ConcomitanciaDetalhesInterface;
+      });
+
+    const proximaLista = [...ajustadosParaProximaRodada, ...restantes].sort(
+      (a, b) => {
+        const aStart = this.toDate(a.contributionTime.dataInicio);
+        const bStart = this.toDate(b.contributionTime.dataInicio);
+        if (!aStart || !bStart) {
+          return 0;
+        }
+        return aStart.getTime() - bStart.getTime();
+      },
+    );
 
     return this.calcularVinculosConcomitantes(proximaLista, resultadoFinal);
   }
+
   private getRequiredContributionAge(gender: string): number {
     return gender === 'F'
       ? this.REQUIRED_CONTRIBUTION_WOMEN
@@ -895,6 +938,185 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   ): ConcomitanciaDetalhesInterface[] {
     const rawResult: ConcomitanciaDetalhesInterface[] =
       this.calcularVinculosConcomitantes(Array.isArray(data) ? data : []);
+
+    for (let i = 0; i < rawResult.length; i++) {
+      const vinculoA = rawResult[i];
+      if (!vinculoA) {
+        continue;
+      }
+
+      // Usa dataAjustada se existir, senão usa contributionTime (fallback)
+      const startA = this.toDate(
+        vinculoA.dataAjustada?.dataInicio ??
+          vinculoA.contributionTime.dataInicio,
+      );
+      const endA = this.toDate(
+        vinculoA.dataAjustada?.dataFim ?? vinculoA.contributionTime.dataFim,
+      );
+      if (!startA || !endA) {
+        continue;
+      }
+
+      for (let j = i + 1; j < rawResult.length; j++) {
+        const vinculoB = rawResult[j];
+        if (!vinculoB) {
+          continue;
+        }
+        // Usa dataAjustada se existir, senão usa contributionTime (fallback)
+        const startB = this.toDate(
+          vinculoB.dataAjustada?.dataInicio ??
+            vinculoB.contributionTime.dataInicio,
+        );
+        const endB = this.toDate(
+          vinculoB.dataAjustada?.dataFim ?? vinculoB.contributionTime.dataFim,
+        );
+        if (!startB || !endB) {
+          continue;
+        }
+
+        // Verifica se há sobreposição
+        if (startA <= endB && endA >= startB) {
+          const duracaoA = this.daysBetween(startA, endA);
+          const duracaoB = this.daysBetween(startB, endB);
+
+          let winnerIsA: boolean;
+          if (duracaoA > duracaoB) {
+            winnerIsA = true;
+          } else if (duracaoA < duracaoB) {
+            winnerIsA = false;
+          } else {
+            if (startA.getTime() !== startB.getTime()) {
+              winnerIsA = startA.getTime() < startB.getTime();
+            } else {
+              const seqA = vinculoA.seq;
+              const seqB = vinculoB.seq;
+              winnerIsA = seqA <= seqB;
+            }
+          }
+
+          const winner = winnerIsA ? vinculoA : vinculoB;
+          const loser = winnerIsA ? vinculoB : vinculoA;
+
+          const winnerStart = this.toDate(
+            winner.dataAjustada?.dataInicio ??
+              winner.contributionTime.dataInicio,
+          );
+          const winnerEnd = this.toDate(
+            winner.dataAjustada?.dataFim ?? winner.contributionTime.dataFim,
+          );
+          const loserStart = this.toDate(
+            loser.dataAjustada?.dataInicio ?? loser.contributionTime.dataInicio,
+          );
+          const loserEnd = this.toDate(
+            loser.dataAjustada?.dataFim ?? loser.contributionTime.dataFim,
+          );
+
+          if (!winnerStart || !winnerEnd || !loserStart || !loserEnd) {
+            continue;
+          }
+
+          // Determina o tipo de sobreposição e ajusta o perdedor
+          const loserCompletelyInside =
+            loserStart.getTime() >= winnerStart.getTime() &&
+            loserEnd.getTime() <= winnerEnd.getTime();
+          const loserCompletelyOutside =
+            loserStart.getTime() < winnerStart.getTime() &&
+            loserEnd.getTime() > winnerEnd.getTime();
+          const loserBefore =
+            loserStart.getTime() < winnerStart.getTime() &&
+            loserEnd.getTime() >= winnerStart.getTime() &&
+            loserEnd.getTime() <= winnerEnd.getTime();
+          const loserAfter =
+            loserStart.getTime() >= winnerStart.getTime() &&
+            loserStart.getTime() <= winnerEnd.getTime() &&
+            loserEnd.getTime() > winnerEnd.getTime();
+
+          if (loserCompletelyInside) {
+            // Perdedor totalmente dentro: zera o tempo
+            const novoFim = loserStart;
+            loser.dataAjustada = {
+              dataInicio: novoFim,
+              dataFim: novoFim,
+            };
+            loser.contributionTime.anos = 0;
+            loser.contributionTime.meses = 0;
+            loser.contributionTime.dias = 0;
+            loser.contributionTime.abreviado = '0a 0m 0d';
+          } else if (loserCompletelyOutside) {
+            // Perdedor envolve completamente: cria duas partes (antes e depois)
+            const antesFim = this.daysBeforeOrAfter(winnerStart, 'before');
+            const depoisInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
+
+            if (loserStart.getTime() <= antesFim.getTime()) {
+              // Parte antes
+              loser.dataAjustada = {
+                dataInicio: loserStart,
+                dataFim: antesFim,
+              };
+              const recalculadoAntes = this.diffYmdInclusive(
+                loserStart,
+                antesFim,
+              );
+              loser.contributionTime.anos = recalculadoAntes.years;
+              loser.contributionTime.meses = recalculadoAntes.months;
+              loser.contributionTime.dias = recalculadoAntes.days;
+              loser.contributionTime.abreviado = recalculadoAntes.formatted;
+            } else if (depoisInicio.getTime() <= loserEnd.getTime()) {
+              // Parte depois
+              loser.dataAjustada = {
+                dataInicio: depoisInicio,
+                dataFim: loserEnd,
+              };
+              const recalculadoDepois = this.diffYmdInclusive(
+                depoisInicio,
+                loserEnd,
+              );
+              loser.contributionTime.anos = recalculadoDepois.years;
+              loser.contributionTime.meses = recalculadoDepois.months;
+              loser.contributionTime.dias = recalculadoDepois.days;
+              loser.contributionTime.abreviado = recalculadoDepois.formatted;
+            } else {
+              // Não há partes válidas: zera
+              loser.dataAjustada = {
+                dataInicio: loserStart,
+                dataFim: loserEnd,
+              };
+              loser.contributionTime.anos = 0;
+              loser.contributionTime.meses = 0;
+              loser.contributionTime.dias = 0;
+              loser.contributionTime.abreviado = '0a 0m 0d';
+            }
+          } else if (loserBefore) {
+            // Perdedor começa antes e termina dentro: ajusta apenas o fim
+            const novoFim = this.daysBeforeOrAfter(winnerStart, 'before');
+            loser.dataAjustada = {
+              dataInicio: loserStart,
+              dataFim: novoFim,
+            };
+            const recalculado = this.diffYmdInclusive(loserStart, novoFim);
+            loser.contributionTime.anos = recalculado.years;
+            loser.contributionTime.meses = recalculado.months;
+            loser.contributionTime.dias = recalculado.days;
+            loser.contributionTime.abreviado = recalculado.formatted;
+          } else if (loserAfter) {
+            // Perdedor começa dentro e termina depois: ajusta apenas o início
+            const novoInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
+            loser.dataAjustada = {
+              dataInicio: novoInicio,
+              dataFim: loserEnd,
+            };
+            const recalculado = this.diffYmdInclusive(novoInicio, loserEnd);
+            loser.contributionTime.anos = recalculado.years;
+            loser.contributionTime.meses = recalculado.months;
+            loser.contributionTime.dias = recalculado.days;
+            loser.contributionTime.abreviado = recalculado.formatted;
+          }
+
+          // Garante que ajustado está marcado
+          loser.ajustado = true;
+        }
+      }
+    }
 
     return rawResult;
   }
@@ -1094,8 +1316,10 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       .filter((item) => item.seq !== undefined) as {
       seq: number;
       contributionTime?: {
-        dataInicio?: Date;
-        dataFim?: Date;
+        data: {
+          dataInicio?: Date;
+          dataFim?: Date;
+        };
         abreviado: string;
         dias: number;
         meses: number;
@@ -1113,8 +1337,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return {
         ...item,
         contributionTime: {
-          dataInicio: item.contributionTime?.dataInicio ?? new Date(),
-          dataFim: item.contributionTime?.dataFim ?? new Date(),
+          dataInicio: item.contributionTime?.data.dataInicio,
+          dataFim: item.contributionTime?.data.dataFim,
           abreviado: item.contributionTime?.abreviado ?? '0a 0m 0d',
           dias: item.contributionTime?.dias ?? 0,
           meses: item.contributionTime?.meses ?? 0,

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { EventGateway } from '@lib/event/event.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
@@ -11,8 +12,8 @@ import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-t
 import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { CreateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/create-analysis-tool-client.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
-import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
 import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -34,6 +35,8 @@ export class CreateAnalysisToolClientUseCase {
     private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(EventGateway)
+    private readonly eventGateway: EventGateway,
   ) {}
 
   public async execute(
@@ -49,18 +52,6 @@ export class CreateAnalysisToolClientUseCase {
 
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
-    }
-
-    if (dto.email) {
-      const verifyConstraint =
-        await this.analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId(
-          dto.email,
-          organizationSessionData.organizationId,
-        );
-
-      if (verifyConstraint) {
-        throw new AnalysisToolClientEmailAlreadyInUseError();
-      }
     }
 
     if (dto.federalDocument) {
@@ -125,7 +116,19 @@ export class CreateAnalysisToolClientUseCase {
       ...analysisToolClientInssBenefitTransaction,
       ...analysisToolClientLegalProceedingTransaction,
     ]);
+
     await transaction.commit();
+
+    const newClient =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+        analysisToolClient.id,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    newClient.analysisToolClientLegalProceeding.forEach((proceeding) => {
+      this.eventGateway.emitUpdateLegalProceedingDataEvent(proceeding.id);
+    });
 
     return CreateAnalysisToolClientResponseDto.build({
       analysisToolClientId: analysisToolClient.id,

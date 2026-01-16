@@ -88,8 +88,13 @@ export class GetLegalPleadingUseCase {
           (i) => i.type === type,
         );
 
-        const analysis =
+        let analysis =
           documents[0]?.legalPleadingDocumentAnalysis?.analysis ?? null;
+
+        if (analysis !== null) {
+          analysis =
+            await this.exportDocumentGateway.convertMarkdownToHtml(analysis);
+        }
 
         const documentUrls = await Promise.all(
           documents.map(async (item) => {

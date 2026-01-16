@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { EventGateway } from '@lib/event/event.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { GetOrganizationMemberQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member.query.result';
 import { AnalysisToolClientCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/command/analysis-tool-client.command.repository.gateway';
@@ -15,7 +16,6 @@ import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-t
 import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
-import { AnalysisToolClientEmailAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-email-already-in-use.error';
 import { AnalysisToolClientFederalDocumentAlreadyInUseError } from '@module/customer/analysis-tool/error/analysis-tool-client-federal-document-already-in-use.error';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -38,6 +38,8 @@ export class UpdateAnalysisToolClientUseCase {
     private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
     @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
     private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
+    @Inject(EventGateway)
+    private readonly eventGateway: EventGateway,
   ) {}
 
   public async execute(
@@ -63,18 +65,6 @@ export class UpdateAnalysisToolClientUseCase {
         AnalysisToolClientNotFoundError,
       );
 
-    if (dto.email) {
-      const verifyConstraint =
-        await this.analysisToolClientQueryRepositoryGateway.findOneByEmailAndOrganizationId(
-          dto.email,
-          organizationSessionData.organizationId,
-        );
-
-      if (verifyConstraint && !verifyConstraint.id.equals(client.id)) {
-        throw new AnalysisToolClientEmailAlreadyInUseError();
-      }
-    }
-
     if (dto.federalDocument) {
       const verifyConstraint =
         await this.analysisToolClientQueryRepositoryGateway.findOneByFederalDocumentAndOrganizationId(
@@ -92,6 +82,17 @@ export class UpdateAnalysisToolClientUseCase {
       dto,
       organizationMember,
     );
+
+    const updatedClient =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+        analysisToolClientId,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    updatedClient.analysisToolClientLegalProceeding.forEach((proceeding) => {
+      this.eventGateway.emitUpdateLegalProceedingDataEvent(proceeding.id);
+    });
 
     return UpdateAnalysisToolClientResponseDto.build({
       analysisToolClient: updateClient.id,
@@ -111,6 +112,8 @@ export class UpdateAnalysisToolClientUseCase {
       federalDocument:
         dto.federalDocument ?? analysisToolClientQueryResult.federalDocument,
       email: dto.email ?? analysisToolClientQueryResult.email,
+      corporateEmail:
+        dto.corporateEmail ?? analysisToolClientQueryResult.corporateEmail,
       phoneNumber: dto.phoneNumber ?? analysisToolClientQueryResult.phoneNumber,
       clientType: dto.clientType ?? analysisToolClientQueryResult.clientType,
       createdAt: analysisToolClientQueryResult.createdAt,
