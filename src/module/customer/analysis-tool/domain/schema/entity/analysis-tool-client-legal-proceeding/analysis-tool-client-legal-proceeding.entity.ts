@@ -1,6 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolClientLegalProceedingEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity.props.interface';
+import { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
 import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -12,7 +13,7 @@ export class AnalysisToolClientLegalProceedingEntity extends BaseEntity<Analysis
   public readonly type: string | null;
 
   @Description('Status do processo judicial.')
-  public readonly status: string | null;
+  public readonly status: LegalProceedingStatusEnum | null;
 
   @Description('Data da última atualização do processo judicial.')
   public readonly lastUpdated: Date | null;
