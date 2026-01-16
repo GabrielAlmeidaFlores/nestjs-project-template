@@ -11,7 +11,5 @@ export class GetJudicialCaseAnalysisQueryResult extends BaseBuildableObject {
   public readonly deletedAt: Date | null;
   public readonly judicialCaseAnalysisResult: JudicialCaseAnalysisResultTypeormEntity | null;
   public readonly judicialCaseAnalysisDocument: JudicialCaseAnalysisDocumentTypeormEntity[];
-  protected override readonly _type =
-    GetJudicialCaseAnalysisQueryResult.name;
+  protected override readonly _type = GetJudicialCaseAnalysisQueryResult.name;
 }
-

@@ -69,7 +69,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               JudicialCaseAnalysisTypeormEntity,
               JudicialCaseAnalysisEntity,
             )
-        : null;
+          : null;
 
       const administrativeProcedureInssAnalysis =
         source.administrativeProcedureInssAnalysis !== undefined
@@ -78,7 +78,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               AdministrativeProcedureInssAnalysisTypeormEntity,
               AdministrativeProcedureInssAnalysisEntity,
             )
-            : null;
+          : null;
 
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
@@ -144,7 +144,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               JudicialCaseAnalysisEntity,
               JudicialCaseAnalysisTypeormEntity,
             )
-        : null;
+          : null;
 
       const administrativeProcedureInssAnalysis =
         source.administrativeProcedureInssAnalysis !== null
@@ -153,7 +153,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               AdministrativeProcedureInssAnalysisEntity,
               AdministrativeProcedureInssAnalysisTypeormEntity,
             )
-            : null;
+          : null;
 
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,

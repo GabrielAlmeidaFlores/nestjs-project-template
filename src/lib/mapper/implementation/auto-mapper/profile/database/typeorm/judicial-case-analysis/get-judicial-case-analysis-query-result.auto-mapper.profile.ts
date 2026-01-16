@@ -27,10 +27,8 @@ export class GetJudicialCaseAnalysisQueryResultAutoMapperProfile {
       return GetJudicialCaseAnalysisQueryResult.build({
         ...source,
         id: new JudicialCaseAnalysisId(source.id),
-        judicialCaseAnalysisDocument:
-          source.judicialCaseAnalysisDocument ?? [],
-        judicialCaseAnalysisResult:
-          source.judicialCaseAnalysisResult ?? null,
+        judicialCaseAnalysisDocument: source.judicialCaseAnalysisDocument ?? [],
+        judicialCaseAnalysisResult: source.judicialCaseAnalysisResult ?? null,
       });
     };
 
@@ -65,4 +63,3 @@ export class GetJudicialCaseAnalysisQueryResultAutoMapperProfile {
     );
   }
 }
-

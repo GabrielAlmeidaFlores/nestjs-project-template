@@ -12,9 +12,7 @@ export class JudicialCaseAnalysisResultEntity extends BaseEntity<JudicialCaseAna
 
   protected readonly _type = JudicialCaseAnalysisResultEntity.name;
 
-  public constructor(
-    props: JudicialCaseAnalysisResultEntityPropsInterface,
-  ) {
+  public constructor(props: JudicialCaseAnalysisResultEntityPropsInterface) {
     super(JudicialCaseAnalysisResultId, props);
 
     this.judicialCaseCompleteAnalysis =
@@ -23,4 +21,3 @@ export class JudicialCaseAnalysisResultEntity extends BaseEntity<JudicialCaseAna
       props.judicialCaseSimplifiedAnalysis ?? null;
   }
 }
-

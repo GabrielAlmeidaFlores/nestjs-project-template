@@ -6,6 +6,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { JudicialCaseAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/judicial-case-analysis.query.repository.gateway';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
+import { JudicialCaseAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis-document/enum/judicial-case-analysis-document-type.enum';
 import {
   GetJudicialCaseAnalysisResponseDto,
   GetJudicialCaseAnalysisClientResponseDto,
@@ -14,7 +15,6 @@ import {
   GetJudicialCaseAnalysisDocumentResponseDto,
 } from '@module/customer/analysis-tool/module/judicial-case-analysis/dto/response/get-judicial-case-analysis.response.dto';
 import { JudicialCaseAnalysisNotFoundError } from '@module/customer/analysis-tool/module/judicial-case-analysis/error/judicial-case-analysis-not-found.error';
-import { JudicialCaseAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis-document/enum/judicial-case-analysis-document-type.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -68,10 +68,9 @@ export class GetJudicialCaseAnalysisUseCase {
       status: analysisToolRecordQueryResult.status,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
       createdAt: analysisToolRecordQueryResult.createdAt,
-      analysisToolClient:
-        GetJudicialCaseAnalysisClientResponseDto.build({
-          ...analysisToolRecordQueryResult.analysisToolClient,
-        }),
+      analysisToolClient: GetJudicialCaseAnalysisClientResponseDto.build({
+        ...analysisToolRecordQueryResult.analysisToolClient,
+      }),
       legalProceedingNumber:
         judicialCaseAnalysisQueryResult.judicialCaseAnalysisLegalProceeding.map(
           (t) => t.legalProceedingNumber,
@@ -86,25 +85,27 @@ export class GetJudicialCaseAnalysisUseCase {
               ...judicialCaseAnalysisQueryResult.judicialCaseAnalysisResult,
             })
           : null,
-      createdBy:
-        GetJudicialCaseAnalysisResponsibleResponseDto.build({
-          ...analysisToolRecordQueryResult.createdBy.customer,
-        }),
-      updatedBy:
-        GetJudicialCaseAnalysisResponsibleResponseDto.build({
-          ...analysisToolRecordQueryResult.updatedBy.customer,
-        }),
+      createdBy: GetJudicialCaseAnalysisResponsibleResponseDto.build({
+        ...analysisToolRecordQueryResult.createdBy.customer,
+      }),
+      updatedBy: GetJudicialCaseAnalysisResponsibleResponseDto.build({
+        ...analysisToolRecordQueryResult.updatedBy.customer,
+      }),
     });
 
     if (
       judicialCaseAnalysisQueryResult.judicialCaseAnalysisDocument.length > 0
     ) {
-      const judicialCaseDocuments = judicialCaseAnalysisQueryResult.judicialCaseAnalysisDocument.filter(
-        (doc) => doc.type === JudicialCaseAnalysisDocumentTypeEnum.JUDICIAL_CASE,
-      );
-      const otherDocuments = judicialCaseAnalysisQueryResult.judicialCaseAnalysisDocument.filter(
-        (doc) => doc.type === JudicialCaseAnalysisDocumentTypeEnum.OTHER_DOCUMENT,
-      );
+      const judicialCaseDocuments =
+        judicialCaseAnalysisQueryResult.judicialCaseAnalysisDocument.filter(
+          (doc) =>
+            doc.type === JudicialCaseAnalysisDocumentTypeEnum.JUDICIAL_CASE,
+        );
+      const otherDocuments =
+        judicialCaseAnalysisQueryResult.judicialCaseAnalysisDocument.filter(
+          (doc) =>
+            doc.type === JudicialCaseAnalysisDocumentTypeEnum.OTHER_DOCUMENT,
+        );
 
       if (judicialCaseDocuments.length > 0) {
         const judicialCaseDocumentUrls = await Promise.all(
@@ -153,12 +154,11 @@ export class GetJudicialCaseAnalysisUseCase {
           }),
         );
 
-        response.otherDocuments = otherDocumentUrls.map(
-          (document) =>
-            GetJudicialCaseAnalysisDocumentResponseDto.build({
-              url: document.url.toString(),
-              originalFileName: document.originalFileName.toString(),
-            }),
+        response.otherDocuments = otherDocumentUrls.map((document) =>
+          GetJudicialCaseAnalysisDocumentResponseDto.build({
+            url: document.url.toString(),
+            originalFileName: document.originalFileName.toString(),
+          }),
         );
       }
     }
@@ -186,4 +186,3 @@ export class GetJudicialCaseAnalysisUseCase {
     return response;
   }
 }
-

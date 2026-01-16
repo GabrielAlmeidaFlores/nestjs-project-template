@@ -13,13 +13,10 @@ export class JudicialCaseAnalysisBenefitEntity extends BaseEntity<JudicialCaseAn
 
   protected readonly _type = JudicialCaseAnalysisBenefitEntity.name;
 
-  public constructor(
-    props: JudicialCaseAnalysisBenefitEntityPropsInterface,
-  ) {
+  public constructor(props: JudicialCaseAnalysisBenefitEntityPropsInterface) {
     super(JudicialCaseAnalysisBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
     this.judicialCaseAnalysis = props.judicialCaseAnalysis;
   }
 }
-

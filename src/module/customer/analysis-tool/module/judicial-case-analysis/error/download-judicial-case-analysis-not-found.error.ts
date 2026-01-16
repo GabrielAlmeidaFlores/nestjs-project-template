@@ -8,4 +8,3 @@ export class DownloadJudicialCaseAnalysisIsNotValidError extends InvalidInputErr
     super('Formato de documento para download inválido');
   }
 }
-

@@ -12,4 +12,3 @@ export class GetJudicialCaseAnalysisBenefitQueryResult extends BaseBuildableObje
   protected override readonly _type =
     GetJudicialCaseAnalysisBenefitQueryResult.name;
 }
-

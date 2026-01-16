@@ -11,4 +11,3 @@ export class DeleteJudicialCaseAnalysisResponseDto extends BaseBuildableDtoObjec
   protected override readonly _type =
     DeleteJudicialCaseAnalysisResponseDto.name;
 }
-
