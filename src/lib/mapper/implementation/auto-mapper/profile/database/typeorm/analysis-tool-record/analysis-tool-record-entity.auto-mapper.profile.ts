@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
+import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -17,6 +18,7 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -58,6 +60,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const judicialCaseAnalysis =
+        source.judicialCaseAnalysis !== undefined
+          ? this.mapper.map(
+              source.judicialCaseAnalysis,
+              JudicialCaseAnalysisTypeormEntity,
+              JudicialCaseAnalysisEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -80,6 +91,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
+        judicialCaseAnalysis,
       });
     };
 
@@ -113,6 +125,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           )
         : null;
 
+      const judicialCaseAnalysis =
+        source.judicialCaseAnalysis !== null
+          ? this.mapper.map(
+              source.judicialCaseAnalysis,
+              JudicialCaseAnalysisEntity,
+              JudicialCaseAnalysisTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -140,6 +161,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        judicialCaseAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,
