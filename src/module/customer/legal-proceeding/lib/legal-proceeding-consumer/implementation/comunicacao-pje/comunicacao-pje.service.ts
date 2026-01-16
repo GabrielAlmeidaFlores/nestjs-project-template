@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 
-import { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
-import { ComunicacaoPjeLegalProceedingDetailDataModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail-item.model';
-import { ComunicacaoPjeLegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail.model';
-import { LegalProceedingStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/enum/legal-proceeding-status.enum';
+import { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
+import { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/implementation/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
+import { ComunicacaoPjeLegalProceedingDetailDataModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/implementation/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail-item.model';
+import { ComunicacaoPjeLegalProceedingDetailModel } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/implementation/comunicacao-pje/model/generic/comunicacao-pje-legal-proceeding-detail.model';
 import { LegalProceedingConsumerGateway } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/legal-proceeding-consumer.gateway';
 import {
   LegalProceedingActionAdvogadoDetailOutputModel,
@@ -80,11 +80,19 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
 
     const latestItem = detailParsed.data.items[0];
 
-    const status =
+    let status: LegalProceedingStatusEnum | null = null;
+
+    if (
+      lastItem?.status ===
+      ComunicacaoPjeLegalProceedingDetailItemStatusEnum.IN_PROGRESS
+    ) {
+      status = LegalProceedingStatusEnum.IN_PROGRESS;
+    } else if (
       lastItem?.status ===
       ComunicacaoPjeLegalProceedingDetailItemStatusEnum.COMPLETED
-        ? LegalProceedingStatusEnum.COMPLETED
-        : LegalProceedingStatusEnum.IN_PROGRESS;
+    ) {
+      status = LegalProceedingStatusEnum.COMPLETED;
+    }
 
     const type = latestItem?.tipoComunicacao ?? undefined;
     const lastUpdated =
@@ -97,8 +105,11 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
     const response = LegalProceedingDataOutputModel.build({
       recipient,
       recipientLawyer,
-      status,
     });
+
+    if (status !== null) {
+      response.status = status;
+    }
 
     if (textContent !== undefined) {
       response.textContent = textContent;
