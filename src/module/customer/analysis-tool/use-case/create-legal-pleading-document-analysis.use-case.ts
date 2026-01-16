@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { PaymentPlanPaidResourceNotFoundError } from '@module/admin/payment-plan/error/payment-plan-paid-resource-not-found.error';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
@@ -61,6 +63,10 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly paymentPlanPaidResourceQueryRepositoryGateway: PaymentPlanPaidResourceQueryRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(CnisProcessorGateway)
+    private readonly cnisProcessorGateway: CnisProcessorGateway,
+    @Inject(CnisAnalyzerGateway)
+    private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
   ) {}
 
   public async execute(
@@ -161,16 +167,45 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
       );
 
+    const cnisFastAnalysisCompleteAnalysisPrompt =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
+      );
+
     await Promise.all(
       Object.keys(documentGroup).map(async (key) => {
         const documentType = key as LegalPleadingDocumentTypeEnum;
         const documents = documentGroup[documentType] as Buffer[];
 
-        const documentAnalysis =
-          await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
-            legalPleadingQuickDocumentAnalysisPrompt.prompt,
-            documents,
+        let documentAnalysis: string | null = null;
+
+        if (
+          documentType === LegalPleadingDocumentTypeEnum.CNIS &&
+          documents[0] !== undefined
+        ) {
+          const cnisParsed = await this.cnisProcessorGateway.parseCnisDocument(
+            documents[0],
           );
+
+          const cnisAnalyzed =
+            await this.cnisAnalyzerGateway.analyzeCnisDocument(
+              cnisParsed,
+              analysisToolClient,
+            );
+
+          documentAnalysis =
+            await this.analysisProcessorGateway.getCnisCompleteAnalysis(
+              cnisFastAnalysisCompleteAnalysisPrompt.prompt,
+              JSON.stringify(cnisAnalyzed),
+              documents,
+            );
+        } else {
+          documentAnalysis =
+            await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
+              legalPleadingQuickDocumentAnalysisPrompt.prompt,
+              documents,
+            );
+        }
 
         const legalPleadingDocumentAnalysis =
           new LegalPleadingDocumentAnalysisEntity({
