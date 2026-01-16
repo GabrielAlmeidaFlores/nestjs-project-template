@@ -22,6 +22,7 @@ import {
 import { LegalPleadingNotFoundError } from '@module/customer/analysis-tool/error/legal-pleading-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -54,6 +55,8 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -156,9 +159,16 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
             analysis: documentAnalysis,
           });
 
+        const analysis =
+          documentAnalysis !== null
+            ? await this.exportDocumentGateway.convertMarkdownToHtml(
+                documentAnalysis,
+              )
+            : null;
+
         const documentAnalysisResponseData =
           CreateLegalPleadingDocumentTypeAnalysisResponseDto.build({
-            analysis: documentAnalysis,
+            analysis,
             type: documentType,
           });
 
