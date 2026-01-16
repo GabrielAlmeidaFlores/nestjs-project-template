@@ -9,6 +9,7 @@ import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
+import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
@@ -94,6 +95,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CnisAnalyzerModule,
     GenerativeIaModule,
     CnisFastAnalysisModule,
+    JudicialCaseAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [

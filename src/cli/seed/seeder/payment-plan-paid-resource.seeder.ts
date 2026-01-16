@@ -194,6 +194,20 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise das regras finais para planejamento de aposentadoria RGPS.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      description: 'Análise completa do caso judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      description: 'Análise simplificada do caso judicial.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
