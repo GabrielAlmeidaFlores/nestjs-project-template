@@ -8,8 +8,9 @@ export class ListPaymentPlanPaidResourcesRequestDto extends ListDataRequestDto {
   @RequestDtoEnumProperty(PaymentPlanPaidResourceTypeEnum, {
     isArray: true,
     description: 'Tipos de recursos pagos',
+    required: false,
   })
-  public resources: Array<PaymentPlanPaidResourceTypeEnum>;
+  public resources?: Array<PaymentPlanPaidResourceTypeEnum>;
 
   protected override readonly _type =
     ListPaymentPlanPaidResourcesRequestDto.name;

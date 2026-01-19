@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, In, Like, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
@@ -50,15 +50,36 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
   public async listPaymentPlanPaidResource(
     listData: ListPaymentPlanPaidResourceQueryParam,
   ): Promise<ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>> {
-    const data = await this.list(listData, {
-      where: {
-        ...(listData.resources
-          ? {
-              resource: In(listData.resources),
-            }
-          : {}),
-      },
-    });
+    const searchOptions: FindManyOptions<PaymentPlanPaidResourceTypeormEntity> =
+      {
+        where: [
+          {
+            ...(listData.searchBy !== null
+              ? { title: Like(listData.searchBy) }
+              : {}),
+            ...(listData.resource instanceof Array
+              ? { resource: In(listData.resource) }
+              : listData.resource !== null
+                ? { resource: listData.resource }
+                : {}),
+          },
+          {
+            ...(listData.searchBy !== null
+              ? { description: Like(listData.searchBy) }
+              : {}),
+            ...(listData.resource instanceof Array
+              ? { resource: In(listData.resource) }
+              : listData.resource !== null
+                ? { resource: listData.resource }
+                : {}),
+          },
+        ],
+      };
+
+    if (searchOptions.where && listData.searchBy !== null) {
+    }
+
+    const data = await this.list(listData, searchOptions);
 
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
