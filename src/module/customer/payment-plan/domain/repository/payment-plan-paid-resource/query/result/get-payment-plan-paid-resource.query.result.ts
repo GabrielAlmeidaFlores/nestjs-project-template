@@ -8,6 +8,8 @@ export class GetPaymentPlanPaidResourceQueryResult extends BaseBuildableObject {
   public readonly resource: PaymentPlanPaidResourceTypeEnum;
   public readonly creditCost: number;
   public readonly description: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 
   protected override readonly _type =
     GetPaymentPlanPaidResourceQueryResult.name;

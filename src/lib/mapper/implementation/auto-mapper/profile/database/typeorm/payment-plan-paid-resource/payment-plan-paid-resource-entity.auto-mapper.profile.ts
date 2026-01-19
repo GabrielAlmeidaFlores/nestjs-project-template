@@ -77,6 +77,8 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
         resource: source.resource,
         creditCost: source.creditCost,
         description: source.description,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
       });
     };
 
