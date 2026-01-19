@@ -20,6 +20,12 @@ export class UpdatePaymentPlanPaidResourceRequestDto extends BaseBuildableDtoObj
   public description?: string;
 
   @RequestDtoStringProperty({
+    description: 'Título do recurso pago.',
+    required: false,
+  })
+  public title?: string;
+
+  @RequestDtoStringProperty({
     description:
       'Prompt configurado para o recurso pago de IA. Se fornecido, cria ou atualiza a configuração de IA automaticamente.',
     required: false,

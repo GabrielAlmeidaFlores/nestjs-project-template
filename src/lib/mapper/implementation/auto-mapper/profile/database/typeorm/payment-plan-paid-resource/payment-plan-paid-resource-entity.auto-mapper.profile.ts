@@ -30,6 +30,7 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
         id: new PaymentPlanPaidResourceId(source.id),
         resource: source.resource,
         creditCost: source.creditCost,
+        title: source.title,
         description: source.description,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -53,6 +54,7 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
         id: source.id.toString(),
         resource: source.resource,
         creditCost: source.creditCost,
+        title: source.title,
         description: source.description,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -76,7 +78,10 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
         id: new PaymentPlanPaidResourceId(source.id),
         resource: source.resource,
         creditCost: source.creditCost,
+        title: source.title,
         description: source.description,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
       });
     };
 
