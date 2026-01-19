@@ -4,8 +4,10 @@ import type { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-p
 
 export class ListPaymentPlanPaidResourceQueryParam extends ListDataInputModel {
   public searchBy: string | null;
-  public resource: PaymentPlanPaidResourceTypeEnum | null;
-  public readonly resources: Array<PaymentPlanPaidResourceTypeEnum> | null;
+  public resource:
+    | PaymentPlanPaidResourceTypeEnum
+    | Array<PaymentPlanPaidResourceTypeEnum>
+    | null;
 
   protected override readonly _type =
     ListPaymentPlanPaidResourceQueryParam.name;
@@ -15,6 +17,5 @@ export class ListPaymentPlanPaidResourceQueryParam extends ListDataInputModel {
 
     this.searchBy = props.searchBy ?? null;
     this.resource = props.resource ?? null;
-    this.resources = props.resources ?? null;
   }
 }

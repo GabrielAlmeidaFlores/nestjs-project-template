@@ -22,7 +22,7 @@ export class ListPaymentPlanPaidResourcesUseCase {
   ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
     const queryParameter = new ListPaymentPlanPaidResourceQueryParam({
       ...listData,
-      resources: listData.resources,
+      resource: listData.resources ?? null,
     });
 
     const paidResources =
