@@ -124,6 +124,8 @@ export class UpdateSpecialActivityUseCase {
       cnisFastAnalysis: null,
       retirementPlanningRpps: null,
       retirementPlanningRgps: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];

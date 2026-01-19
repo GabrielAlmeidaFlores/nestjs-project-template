@@ -147,6 +147,8 @@ export class CreateSpecialActivityResultUseCase {
       cnisFastAnalysis: null,
       retirementPlanningRpps: null,
       retirementPlanningRgps: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
