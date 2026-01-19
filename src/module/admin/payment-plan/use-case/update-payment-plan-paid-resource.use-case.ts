@@ -46,6 +46,7 @@ export class UpdatePaymentPlanPaidResourceUseCase {
     if (dto.creditCost !== undefined || dto.description !== undefined) {
       const entity = new PaymentPlanPaidResourceEntity({
         id: paidResource.id,
+        title: dto.title ?? paidResource.title,
         resource: paidResource.resource,
         creditCost: dto.creditCost ?? paidResource.creditCost,
         description: dto.description ?? paidResource.description,
@@ -69,6 +70,7 @@ export class UpdatePaymentPlanPaidResourceUseCase {
       const paidResourceEntity = new PaymentPlanPaidResourceEntity({
         id: paidResource.id,
         resource: paidResource.resource,
+        title: dto.title ?? paidResource.title,
         creditCost: dto.creditCost ?? paidResource.creditCost,
         description: dto.description ?? paidResource.description,
       });
