@@ -24,21 +24,23 @@ export class ListPaymentPlanPaidResourcesUseCase {
         listData,
       );
 
-    const iaConfigsPromises = paidResources.resource.map((paidResource) =>
-      this.paymentPlanPaidResourceIaConfigQueryRepositoryGateway.findOnePaymentPlanPaidResourceIaConfigByPaidResourceId(
-        paidResource.id,
-      ),
-    );
+    const resources = paidResources.resource.map(async (paidResource) => {
+      const iaConfig =
+        await this.paymentPlanPaidResourceIaConfigQueryRepositoryGateway.findOnePaymentPlanPaidResourceIaConfigByPaidResourceId(
+          paidResource.id,
+        );
 
-    const iaConfigs = await Promise.all(iaConfigsPromises);
+      const updatedAt =
+        iaConfig && iaConfig.updatedAt > paidResource.updatedAt
+          ? iaConfig.updatedAt
+          : paidResource.updatedAt;
 
-    const resources = paidResources.resource.map((paidResource, index) => {
-      const iaConfig = iaConfigs[index];
       const response = PaymentPlanPaidResourceResponseDto.build({
         id: paidResource.id,
         resource: paidResource.resource,
         creditCost: paidResource.creditCost,
         description: paidResource.description,
+        updatedAt,
       });
 
       if (iaConfig) {
@@ -50,7 +52,7 @@ export class ListPaymentPlanPaidResourcesUseCase {
 
     return ListPaymentPlanPaidResourcesResponseDto.build({
       ...paidResources,
-      resource: resources,
+      resource: await Promise.all(resources),
     });
   }
 }
