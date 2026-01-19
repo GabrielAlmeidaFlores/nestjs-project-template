@@ -52,7 +52,11 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
   ): Promise<ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>> {
     const data = await this.list(listData, {
       where: {
-        resource: In(listData.resources ?? []),
+        ...(listData.resources
+          ? {
+              resource: In(listData.resources),
+            }
+          : {}),
       },
     });
 
