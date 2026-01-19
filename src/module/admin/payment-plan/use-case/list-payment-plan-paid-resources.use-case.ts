@@ -1,8 +1,9 @@
 import { Inject } from '@nestjs/common';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { ListPaymentPlanPaidResourcesRequestDto } from '@module/admin/payment-plan/dto/request/list-payment-plan-paid-resources.request.dto';
 import { GetPaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan-paid-resource.response.dto';
 import { ListPaymentPlanPaidResourcesResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
+import { ListPaymentPlanPaidResourceQueryParam } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/param/list-payment-plan-paid-resource.query.param';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 
@@ -17,11 +18,16 @@ export class ListPaymentPlanPaidResourcesUseCase {
   ) {}
 
   public async execute(
-    listData: ListDataInputModel,
+    listData: ListPaymentPlanPaidResourcesRequestDto,
   ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
+    const queryParameter = new ListPaymentPlanPaidResourceQueryParam({
+      ...listData,
+      resources: listData.resources,
+    });
+
     const paidResources =
       await this.paymentPlanPaidResourceQueryRepositoryGateway.listPaymentPlanPaidResource(
-        listData,
+        queryParameter,
       );
 
     const resources = paidResources.resource.map(async (paidResource) => {

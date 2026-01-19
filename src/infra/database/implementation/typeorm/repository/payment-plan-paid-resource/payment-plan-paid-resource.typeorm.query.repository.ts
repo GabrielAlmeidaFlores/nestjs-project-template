@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { ListPaymentPlanPaidResourceQueryParam } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/param/list-payment-plan-paid-resource.query.param';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.result';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -48,9 +48,13 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
   }
 
   public async listPaymentPlanPaidResource(
-    listData: ListDataInputModel,
+    listData: ListPaymentPlanPaidResourceQueryParam,
   ): Promise<ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>> {
-    const data = await this.list(listData);
+    const data = await this.list(listData, {
+      where: {
+        resource: In(listData.resources ?? []),
+      },
+    });
 
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
