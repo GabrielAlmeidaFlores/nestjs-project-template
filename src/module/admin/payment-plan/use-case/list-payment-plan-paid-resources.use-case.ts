@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { GetPaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan-paid-resource.response.dto';
 import { ListPaymentPlanPaidResourcesResponseDto } from '@module/admin/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
-import { PaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/payment-plan-paid-resource.response.dto';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 
@@ -35,11 +35,12 @@ export class ListPaymentPlanPaidResourcesUseCase {
           ? iaConfig.updatedAt
           : paidResource.updatedAt;
 
-      const response = PaymentPlanPaidResourceResponseDto.build({
+      const response = GetPaymentPlanPaidResourceResponseDto.build({
         id: paidResource.id,
         resource: paidResource.resource,
         creditCost: paidResource.creditCost,
         description: paidResource.description,
+        title: paidResource.title,
         updatedAt,
       });
 

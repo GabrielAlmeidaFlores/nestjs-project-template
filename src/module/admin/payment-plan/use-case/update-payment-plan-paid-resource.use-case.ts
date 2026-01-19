@@ -119,10 +119,12 @@ export class UpdatePaymentPlanPaidResourceUseCase {
     }
 
     const response = GetPaymentPlanPaidResourceResponseDto.build({
-      id: paidResource.id.toString(),
+      id: paidResource.id,
       resource: paidResource.resource,
+      title: dto.title ?? paidResource.title,
       creditCost: dto.creditCost ?? paidResource.creditCost,
       description: dto.description ?? paidResource.description,
+      updatedAt: paidResource.updatedAt,
     });
 
     if (finalPrompt !== undefined) {
