@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 
-@Entity({ name: 'special_activity_inss_legal_proceeding' })
+@Entity({ name: 'special_activity_legal_proceeding' })
 export class SpecialActivityLegalProceedingTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'legal_proceeding_number',
