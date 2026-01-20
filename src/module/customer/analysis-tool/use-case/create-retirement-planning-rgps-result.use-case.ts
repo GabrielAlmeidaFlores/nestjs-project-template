@@ -228,7 +228,9 @@ export class CreateRetirementPlanningRgpsResultUseCase {
     });
 
     const analysisToolRecordUpdated = new AnalysisToolRecordEntity({
-      ...analysisRecord,
+      id: analysisRecord.id,
+      code: analysisRecord.code,
+      type: analysisRecord.type,
       cnisFastAnalysis: null,
       analysisToolClient,
       retirementPlanningRpps: null,
@@ -238,6 +240,7 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       retirementPlanningRgps: retirementPlanningRgpsEntity,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
     const updateAnalysisRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
