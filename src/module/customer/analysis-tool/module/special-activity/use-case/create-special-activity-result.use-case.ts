@@ -192,6 +192,7 @@ export class CreateSpecialActivityResultUseCase {
     }
 
     return CreateSpecialActivityResultResponseDto.build({
+      specialActivityId: specialActivity.id,
       specialActivityCompleteAnalysis: parsedAnalysis,
     });
   }
