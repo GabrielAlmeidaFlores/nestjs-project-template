@@ -226,253 +226,195 @@ Análise processada do CNIS:
         responseConfig: ResponseConfigInputModel.build({
           responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
           jsonSchema: {
-            type: 'array',
-            description:
-              'Lista de períodos de atividade especial identificados',
-            items: {
-              type: 'object',
-              properties: {
-                period: {
-                  type: 'object',
-                  description: 'Período de trabalho',
-                  properties: {
-                    label: {
-                      type: 'string',
-                      description: 'Rótulo descritivo do período',
-                    },
-                    start: {
-                      type: 'string',
-                      format: 'date',
-                      description:
-                        'Data de início do período no formato YYYY-MM-DD',
-                    },
-                    end: {
-                      type: 'string',
-                      format: 'date',
-                      description:
-                        'Data de término do período no formato YYYY-MM-DD',
-                    },
-                    recognized: {
-                      type: 'boolean',
-                      description:
-                        'Indica se o período foi reconhecido como atividade especial',
-                    },
+            type: 'object',
+            properties: {
+              period: {
+                type: 'object',
+                description: 'Período de atividade especial',
+                properties: {
+
+                  label: {
+                    type: 'string',
+                    description: 'Rótulo descritivo do período',
                   },
-                  required: ['label', 'start', 'end', 'recognized'],
-                },
-                company: {
-                  type: 'object',
-                  description: 'Dados da empresa',
-                  properties: {
-                    name: {
-                      type: 'string',
-                      description: 'Nome da empresa/empregador',
-                    },
-                    cnpj: {
-                      type: 'string',
-                      description: 'CNPJ da empresa',
-                    },
+                  start: {
+                    type: 'string',
+                    description: 'Data de início no formato YYYY-MM-DD',
                   },
-                  required: ['name', 'cnpj'],
-                },
-                role: {
-                  type: 'string',
-                  description: 'Cargo/função exercida',
-                },
-                employmentLink: {
-                  type: 'object',
-                  description: 'Vínculo empregatício',
-                  properties: {
-                    startDate: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'Data de início do vínculo',
-                    },
-                    endDate: {
-                      type: 'string',
-                      format: 'date',
-                      description: 'Data de término do vínculo',
-                    },
-                    supportingDocument: {
-                      type: 'string',
-                      description: 'Documento comprobatório do vínculo',
-                    },
-                    presentInCNIS: {
-                      type: 'boolean',
-                      description: 'Indica se o vínculo consta no CNIS',
-                    },
-                    earningsInCNIS: {
-                      type: 'boolean',
-                      description:
-                        'Indica se há remunerações registradas no CNIS',
-                    },
+                  end: {
+                    type: 'string',
+                    description: 'Data de término no formato YYYY-MM-DD',
                   },
-                  required: [
-                    'startDate',
-                    'endDate',
-                    'supportingDocument',
-                    'presentInCNIS',
-                    'earningsInCNIS',
-                  ],
-                },
-                harmfulAgents: {
-                  type: 'object',
-                  description: 'Agentes nocivos',
-                  properties: {
-                    hasAny: {
-                      type: 'boolean',
-                      description: 'Indica se há agentes nocivos identificados',
-                    },
-                    exposureFrequencyAndIntensity: {
-                      type: 'array',
-                      description:
-                        'Frequência e intensidade de exposição aos agentes',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          agent: {
-                            type: 'string',
-                            description: 'Nome do agente nocivo',
-                          },
-                          intensity: {
-                            type: 'string',
-                            description: 'Intensidade da exposição',
-                          },
-                          characteristic: {
-                            type: 'string',
-                            description: 'Característica do agente',
-                          },
-                        },
-                        required: ['agent', 'intensity', 'characteristic'],
-                      },
-                    },
-                    informationSource: {
-                      type: 'array',
-                      description: 'Fontes de informação sobre os agentes',
-                      items: {
-                        type: 'string',
-                      },
-                    },
-                    identifiedAgents: {
-                      type: 'array',
-                      description: 'Lista de agentes identificados',
-                      items: {
-                        type: 'string',
-                      },
-                    },
-                    effectivePPE: {
-                      type: 'boolean',
-                      description:
-                        'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
-                    },
+                  recognized: {
+                    type: 'boolean',
+                    description:
+                      'Indica se o período foi reconhecido como atividade especial',
                   },
-                  required: [
-                    'hasAny',
-                    'exposureFrequencyAndIntensity',
-                    'informationSource',
-                    'identifiedAgents',
-                    'effectivePPE',
-                  ],
-                },
-                legalFramework: {
-                  type: 'object',
-                  description: 'Enquadramento legal',
-                  properties: {
-                    occupationalCategory: {
+                  companyName: {
+                    type: 'string',
+                    description: 'Nome da empresa/empregador',
+                  },
+                  companyCNPJ: {
+                    type: 'string',
+                    description: 'CNPJ da empresa',
+                  },
+                  role: {
+                    type: 'string',
+                    description: 'Cargo/função exercida',
+                  },
+                  employmentLinkStartDate: {
+                    type: 'string',
+                    description: 'Data de início do vínculo',
+                  },
+                  employmentLinkEndDate: {
+                    type: 'string',
+                    description: 'Data de término do vínculo',
+                  },
+                  employmentLinkSupportingDocument: {
+                    type: 'string',
+                    description: 'Documento comprobatório do vínculo',
+                  },
+                  employmentLinkPresentInCNIS: {
+                    type: 'boolean',
+                    description: 'Indica se o vínculo consta no CNIS',
+                  },
+                  employmentLinkEarningsInCNIS: {
+                    type: 'boolean',
+                    description:
+                      'Indica se há remunerações registradas no CNIS',
+                  },
+                  harmfulAgentsHasAny: {
+                    type: 'boolean',
+                    description: 'Indica se há agentes nocivos identificados',
+                  },
+                  harmfulAgentsExposureFrequency: {
+                    type: 'array',
+                    description:
+                      'Frequência e intensidade de exposição aos agentes',
+                    items: {
                       type: 'object',
-                      description: 'Categoria profissional',
                       properties: {
-                        decree: {
+                        agent: {
                           type: 'string',
-                          description: 'Decreto aplicável',
+                          description: 'Nome do agente nocivo',
                         },
-                        code: {
+                        intensity: {
                           type: 'string',
-                          description: 'Código da categoria',
+                          description: 'Intensidade da exposição',
                         },
-                        description: {
+                        characteristic: {
                           type: 'string',
-                          description: 'Descrição da categoria',
+                          description: 'Característica do agente',
                         },
                       },
-                      required: ['decree', 'code', 'description'],
-                    },
-                    harmfulAgent: {
-                      type: 'object',
-                      description: 'Enquadramento do agente nocivo',
-                      properties: {
-                        decree: {
-                          type: 'string',
-                          description: 'Decreto aplicável',
-                        },
-                        code: {
-                          type: 'string',
-                          description: 'Código do agente',
-                        },
-                        description: {
-                          type: 'string',
-                          description: 'Descrição do agente',
-                        },
-                      },
-                      required: ['decree', 'code', 'description'],
-                    },
-                    caseLawOrTechnicalStandard: {
-                      type: 'object',
-                      description: 'Jurisprudência ou norma técnica',
-                      properties: {
-                        reference: {
-                          type: 'string',
-                          description: 'Referência da jurisprudência/norma',
-                        },
-                        code: {
-                          type: 'string',
-                          description: 'Código da norma',
-                        },
-                        description: {
-                          type: 'string',
-                          description: 'Descrição da norma',
-                        },
-                      },
-                      required: ['reference', 'code', 'description'],
                     },
                   },
-                  required: [
-                    'occupationalCategory',
-                    'harmfulAgent',
-                    'caseLawOrTechnicalStandard',
-                  ],
-                },
-                technicalConclusion: {
-                  type: 'object',
-                  description: 'Conclusão técnica',
-                  properties: {
-                    specialTimeRecognized: {
-                      type: 'boolean',
-                      description: 'Indica se o tempo especial foi reconhecido',
-                    },
-                    justification: {
+                  harmfulAgentsInformationSource: {
+                    type: 'array',
+                    description: 'Fontes de informação sobre os agentes',
+                    items: {
                       type: 'string',
-                      description: 'Justificativa da conclusão',
                     },
                   },
-                  required: ['specialTimeRecognized', 'justification'],
+                  harmfulAgentsIdentifiedAgents: {
+                    type: 'array',
+                    description: 'Lista de agentes identificados',
+                    items: {
+                      type: 'string',
+                    },
+                  },
+                  harmfulAgentsEffectivePPE: {
+                    type: 'boolean',
+                    description:
+                      'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
+                  },
+                  legalFrameworkOccupationalCategoryDecree: {
+                    type: 'string',
+                    description: 'Decreto aplicável à categoria profissional',
+                  },
+                  legalFrameworkOccupationalCategoryCode: {
+                    type: 'string',
+                    description: 'Código da categoria profissional',
+                  },
+                  legalFrameworkOccupationalCategoryDescription: {
+                    type: 'string',
+                    description: 'Descrição da categoria profissional',
+                  },
+                  legalFrameworkHarmfulAgentDecree: {
+                    type: 'string',
+                    description: 'Decreto aplicável ao agente nocivo',
+                  },
+                  legalFrameworkHarmfulAgentCode: {
+                    type: 'string',
+                    description: 'Código do agente nocivo',
+                  },
+                  legalFrameworkHarmfulAgentDescription: {
+                    type: 'string',
+                    description: 'Descrição do agente nocivo',
+                  },
+                  legalFrameworkCaseLawOrTechnicalStandardReference: {
+                    type: 'string',
+                    description: 'Referência da jurisprudência/norma',
+                  },
+                  legalFrameworkCaseLawOrTechnicalStandardCode: {
+                    type: 'string',
+                    description: 'Código da norma técnica',
+                  },
+                  legalFrameworkCaseLawOrTechnicalStandardDescription: {
+                    type: 'string',
+                    description: 'Descrição da norma técnica',
+                  },
+                  technicalConclusionSpecialTimeRecognized: {
+                    type: 'boolean',
+                    description: 'Indica se o tempo especial foi reconhecido',
+                  },
+                  technicalConclusionJustification: {
+                    type: 'string',
+                    description: 'Justificativa da conclusão técnica',
+                  },
+                  additionalNotes: {
+                    type: 'string',
+                    description: 'Observações adicionais relevantes',
+                  },
                 },
-                additionalNotes: {
-                  type: 'string',
-                  description: 'Observações adicionais relevantes',
-                },
+                required: [
+                  'label',
+                  'start',
+                  'end',
+                  'recognized',
+                  'companyName',
+                  'companyCNPJ',
+                  'role',
+                  'employmentLinkStartDate',
+                  'employmentLinkEndDate',
+                  'employmentLinkSupportingDocument',
+                  'employmentLinkPresentInCNIS',
+                  'employmentLinkEarningsInCNIS',
+                  'harmfulAgentsHasAny',
+                  'harmfulAgentsExposureFrequency',
+                  'harmfulAgentsInformationSource',
+                  'harmfulAgentsIdentifiedAgents',
+                  'harmfulAgentsEffectivePPE',
+                  'legalFrameworkOccupationalCategoryDecree',
+                  'legalFrameworkOccupationalCategoryCode',
+                  'legalFrameworkOccupationalCategoryDescription',
+                  'legalFrameworkHarmfulAgentDecree',
+                  'legalFrameworkHarmfulAgentCode',
+                  'legalFrameworkHarmfulAgentDescription',
+                  'legalFrameworkCaseLawOrTechnicalStandardReference',
+                  'legalFrameworkCaseLawOrTechnicalStandardCode',
+                  'legalFrameworkCaseLawOrTechnicalStandardDescription',
+                  'technicalConclusionSpecialTimeRecognized',
+                  'technicalConclusionJustification',
+                  'additionalNotes',
+                ],
               },
-              required: [
-                'period',
-                'company',
-                'role',
-                'employmentLink',
-                'harmfulAgents',
-                'legalFramework',
-                'technicalConclusion',
-                'additionalNotes',
-              ],
+              analysisResult: {
+                type: 'string',
+                description: 'Análise completa em formato markdown',
+              },
             },
+            required: ['period', 'analysisResult'],
           },
         }),
       }),
