@@ -303,6 +303,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
         relations: {
           analysisToolClient: {
+            analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
@@ -365,6 +366,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
         relations: {
           analysisToolClient: {
+            analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
@@ -438,6 +440,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
         relations: {
           analysisToolClient: {
+            analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
@@ -645,6 +648,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
         relations: {
           analysisToolClient: {
+            analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
             createdBy: {
               customer: true,
@@ -799,6 +803,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             customer: true,
             organization: true,
           },
+          analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
       };
