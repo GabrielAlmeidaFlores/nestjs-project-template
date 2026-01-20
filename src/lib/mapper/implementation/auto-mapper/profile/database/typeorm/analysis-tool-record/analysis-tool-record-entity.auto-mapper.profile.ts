@@ -94,11 +94,14 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientEntity,
       );
 
-      const specialActivity = this.mapper.map(
-        source.specialActivity,
-        SpecialActivityTypeormEntity,
-        SpecialActivityEntity,
-      );
+      const specialActivity = 
+      source.specialActivity !== null
+        ? this.mapper.map(
+            source.specialActivity,
+            SpecialActivityTypeormEntity,
+            SpecialActivityEntity,
+          )
+        : null;
 
       return new AnalysisToolRecordEntity({
         ...source,
@@ -176,11 +179,14 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
-      const specialActivity = this.mapper.map(
-        source.specialActivity,
-        SpecialActivityEntity,
-        SpecialActivityTypeormEntity,
-      );
+      const specialActivity = 
+      source.specialActivity !== null
+        ? this.mapper.map(
+            source.specialActivity,
+            SpecialActivityEntity,
+            SpecialActivityTypeormEntity,
+          )
+        : null;
 
       const createdBy = {
         id: source.createdBy.toString(),
