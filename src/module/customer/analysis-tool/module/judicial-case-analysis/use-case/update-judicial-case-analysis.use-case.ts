@@ -117,7 +117,9 @@ export class UpdateJudicialCaseAnalysisUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       judicialCaseAnalysis,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
@@ -126,6 +128,8 @@ export class UpdateJudicialCaseAnalysisUseCase {
       cnisFastAnalysis: null,
       retirementPlanningRgps: null,
       retirementPlanningRpps: null,
+      administrativeProcedureInssAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];
