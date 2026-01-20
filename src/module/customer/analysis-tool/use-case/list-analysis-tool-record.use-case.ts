@@ -87,6 +87,9 @@ export class ListAnalysisToolRecordUseCase {
         const analysis =
           analysisToolRecord.cnisFastAnalysis ??
           analysisToolRecord.retirementPlanningRpps ??
+          analysisToolRecord.administrativeProcedureInssAnalysis ??
+          analysisToolRecord.judicialCaseAnalysis ??
+          analysisToolRecord.specialActivity ??
           analysisToolRecord.retirementPlanningRgps;
 
         if (analysis !== null) {
