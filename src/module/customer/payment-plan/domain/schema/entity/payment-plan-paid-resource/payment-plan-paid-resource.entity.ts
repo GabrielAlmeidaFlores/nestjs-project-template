@@ -12,6 +12,9 @@ export class PaymentPlanPaidResourceEntity extends BaseEntity<PaymentPlanPaidRes
   @Description('Custo em créditos do recurso pago')
   public readonly creditCost: number;
 
+  @Description('Título do recurso pago')
+  public readonly title: string;
+
   @Description('Descrição do recurso pago')
   public readonly description: string;
 
@@ -22,6 +25,7 @@ export class PaymentPlanPaidResourceEntity extends BaseEntity<PaymentPlanPaidRes
 
     this.resource = props.resource;
     this.creditCost = props.creditCost;
+    this.title = props.title;
     this.description = props.description;
   }
 }

@@ -2,6 +2,7 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { CreatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/create-payment-plan.request.dto';
+import { ListPaymentPlanPaidResourcesRequestDto } from '@module/admin/payment-plan/dto/request/list-payment-plan-paid-resources.request.dto';
 import { UpdatePaymentPlanPaidResourceRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan-paid-resource.request.dto';
 import { UpdatePaymentPlanRequestDto } from '@module/admin/payment-plan/dto/request/update-payment-plan.request.dto';
 import { GetPaymentPlanPaidResourceResponseDto } from '@module/admin/payment-plan/dto/response/get-payment-plan-paid-resource.response.dto';
@@ -168,11 +169,9 @@ export class PaymentPlanController {
     guard: [AuthGuard],
   })
   public async listPaymentPlanPaidResources(
-    @Query() dto: ListDataRequestDto,
+    @Query() dto: ListPaymentPlanPaidResourcesRequestDto,
   ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
-    return await this.listPaymentPlanPaidResourcesUseCase.execute(
-      new ListDataInputModel(dto),
-    );
+    return await this.listPaymentPlanPaidResourcesUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
