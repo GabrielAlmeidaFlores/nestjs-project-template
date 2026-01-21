@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import moment from 'moment';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { calculatePotencialRestrito } from '@lib/cnis-analyzer/calculate-potencial-restrito';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { especiesData } from '@lib/cnis-analyzer/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analyzer/data/indicadors-data';
@@ -160,52 +160,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const duracaoTotalEmDias =
       somaVinculosNaoConcomitantes + somaVinculosPrincipais;
 
-    const somaPotencial = consolidadoResumido.reduce(
-      (acc, curr) =>
-        acc +
-        this.daysBetween(
-          curr.validContributionTime?.data?.dataInicio,
-          curr.validContributionTime?.data?.dataFim,
-        ),
-      0,
-    );
-    const somaPotencialComAjuste = somaPotencial + 1;
-    const anosPotencial = moment
-      .duration(somaPotencialComAjuste, 'days')
-      .years();
-    const mesesPotencial = moment
-      .duration(somaPotencialComAjuste, 'days')
-      .months();
-    const diasPotencial = moment
-      .duration(somaPotencialComAjuste, 'days')
-      .days();
-
-    const somaPotencialRestrito = consolidadoResumido
-      .filter((vinculo) => !vinculo.isPendencia)
-      .reduce(
-        (acc, curr) =>
-          acc +
-          this.daysBetween(
-            curr.validContributionTime?.data?.dataInicio,
-            curr.validContributionTime?.data?.dataFim,
-          ),
-        0,
-      );
-
-    const somaPotencialRestritoComAjuste = somaPotencialRestrito + 1;
-    const potencialValido = `${anosPotencial}a ${mesesPotencial}m ${diasPotencial}d`;
-
-    const anosRestrito = moment
-      .duration(somaPotencialRestritoComAjuste, 'days')
-      .years();
-    const mesesRestrito = moment
-      .duration(somaPotencialRestritoComAjuste, 'days')
-      .months();
-    const diasRestrito = moment
-      .duration(somaPotencialRestritoComAjuste, 'days')
-      .days();
-
-    const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
+    const { potencialValido, restritoValido } =
+      calculatePotencialRestrito(data);
 
     const indicadoresDePendencia = this.calculateImpactoLiquidoDePendencias(
       consolidadoResumido,
