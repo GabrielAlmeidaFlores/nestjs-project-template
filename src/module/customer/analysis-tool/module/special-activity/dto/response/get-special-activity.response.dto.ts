@@ -15,6 +15,7 @@ import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/d
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 
 @ResponseDto()
 export class GetSpecialActivityClientResponseDto extends BaseBuildableDtoObject {
@@ -50,8 +51,10 @@ export class GetSpecialActivityDocumentResponseDto extends BaseBuildableDtoObjec
   @ResponseDtoValueObjectProperty(SpecialActivityDocumentId)
   public id: SpecialActivityDocumentId;
 
-  @ResponseDtoStringProperty()
-  public document: string;
+  @ResponseDtoValueObjectProperty(Base64, {
+    description: 'Arquivo em Base64',
+  })
+  public document: Base64;
 
   @ResponseDtoStringProperty()
   public documentOriginalFileName: string;

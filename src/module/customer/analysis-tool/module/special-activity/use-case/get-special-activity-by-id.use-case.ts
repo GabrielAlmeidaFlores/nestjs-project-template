@@ -13,6 +13,7 @@ import {
 import { SpecialActivityNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 
 @Injectable()
 export class GetSpecialActivityByIdUseCase {
@@ -49,11 +50,14 @@ export class GetSpecialActivityByIdUseCase {
 
     const documents = await Promise.all(
       specialActivityQueryResult.specialActivityDocuments.map(async (doc) => {
+        const document = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
         const originalFileName =
           await this.fileProcessorGateway.getOriginalFileName(doc.document);
         return GetSpecialActivityDocumentResponseDto.build({
           id: doc.id,
-          document: doc.document,
+          document: Base64.encodeBuffer(document),
           documentOriginalFileName: originalFileName,
           type: doc.type,
           createdAt: doc.createdAt,
