@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
-import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { CreditCardHolderInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-holder.input.model';
 import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/credit-card-info.input.model';
 import { PayBillingInputModel } from '@infra/payment-gateway/model/input/pay-billing.input.model';

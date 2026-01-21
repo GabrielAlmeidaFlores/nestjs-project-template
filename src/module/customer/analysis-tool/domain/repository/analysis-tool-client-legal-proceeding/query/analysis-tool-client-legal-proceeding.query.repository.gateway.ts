@@ -7,6 +7,7 @@ import type { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@mo
 import type { GetAnalysisToolClientLegalProceedingStatistics } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-statistics.query.result';
 import type { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import type { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
+import type { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 
 export abstract class AnalysisToolClientLegalProceedingQueryRepositoryGateway {
   public abstract listAnalysisToolClient(
@@ -51,4 +52,8 @@ export abstract class AnalysisToolClientLegalProceedingQueryRepositoryGateway {
   public abstract countByOrganizationId(
     organizationId: OrganizationId,
   ): Promise<GetAnalysisToolClientLegalProceedingStatistics>;
+
+  public abstract findByOneAnalysisToolClientLegalProceedingId(
+    id: AnalysisToolClientLegalProceedingId,
+  ): Promise<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult | null>;
 }

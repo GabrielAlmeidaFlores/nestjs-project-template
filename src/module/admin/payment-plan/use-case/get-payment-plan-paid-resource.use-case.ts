@@ -31,11 +31,18 @@ export class GetPaymentPlanPaidResourceUseCase {
         paymentPlanPaidResourceId,
       );
 
+    const updatedAt =
+      iaConfig && iaConfig.updatedAt > paidResource.updatedAt
+        ? iaConfig.updatedAt
+        : paidResource.updatedAt;
+
     const response = GetPaymentPlanPaidResourceResponseDto.build({
-      id: paidResource.id.toString(),
+      id: paidResource.id,
+      title: paidResource.title,
       resource: paidResource.resource,
       creditCost: paidResource.creditCost,
       description: paidResource.description,
+      updatedAt,
     });
 
     if (iaConfig) {

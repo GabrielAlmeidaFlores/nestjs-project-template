@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { ListPaymentPlanPaidResourceQueryParam } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/param/list-payment-plan-paid-resource.query.param';
 import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { ListPaymentPlanPaidResourcesResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plan-paid-resources.response.dto';
 import { PaymentPlanPaidResourceResponseDto } from '@module/customer/payment-plan/dto/response/payment-plan-paid-resource.response.dto';
@@ -20,7 +20,7 @@ export class ListPaymentPlanPaidResourcesUseCase {
   ): Promise<ListPaymentPlanPaidResourcesResponseDto> {
     const paidResources =
       await this.paymentPlanPaidResourceQueryRepositoryGateway.listPaymentPlanPaidResource(
-        new ListDataInputModel({
+        new ListPaymentPlanPaidResourceQueryParam({
           ...dto,
         }),
       );

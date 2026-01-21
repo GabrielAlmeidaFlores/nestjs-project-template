@@ -1,6 +1,7 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { GetAnalysisToolClientQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client.query.result';
+import type { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
 import type { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 import type { GetLegalProceedingDetailQueryResult } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/result/get-legal-proceeding-detail.query.result';
 
@@ -8,7 +9,7 @@ export class GetAnalysisToolClientLegalProceedingWithRelationsQueryResult extend
   public readonly id: AnalysisToolClientLegalProceedingId;
   public readonly legalProceedingNumber: string;
   public readonly type: string | null;
-  public readonly status: string | null;
+  public readonly status: LegalProceedingStatusEnum | null;
   public readonly lastUpdated: Date | null;
   public readonly deadline: Date | null;
   public readonly analysisToolClient: GetAnalysisToolClientQueryResult;
