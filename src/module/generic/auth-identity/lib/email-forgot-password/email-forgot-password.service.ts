@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { CacheStorageGateway } from '@infra/cache-storage/cache-storage.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
-import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.iput.model';
+import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { EmailForgotPasswordGateway } from '@module/generic/auth-identity/lib/email-forgot-password/email-forgot-password.gateway';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';

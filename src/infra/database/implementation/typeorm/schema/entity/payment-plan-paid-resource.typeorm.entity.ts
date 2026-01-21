@@ -27,6 +27,9 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'credit_cost', type: 'double' })
   public creditCost: number;
 
+  @Column({ name: 'title', type: 'varchar', length: 100 })
+  public title: string;
+
   @Column({ name: 'description', type: 'varchar', length: 150 })
   public description: string;
 

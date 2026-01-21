@@ -21,6 +21,8 @@ import { ListAnalysisToolClientLegalProceedingQueryParamGateway } from '@module/
 import { GetAnalysisToolClientLegalProceedingStatistics } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-statistics.query.result';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding-with-relations.query.result';
 import { GetAnalysisToolClientLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/query/result/get-analysis-tool-client-legal-proceeding.query.result';
+import { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
+import { AnalysisToolClientLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/value-object/analysis-tool-client-legal-proceeding-id/analysis-tool-client-legal-proceeding-id.value-object';
 
 export class AnalysisToolClientLegalProceedingTypeormQueryRepository
   extends BaseTypeormQueryRepository<AnalysisToolClientLegalProceedingTypeormEntity>
@@ -112,7 +114,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
 
     const pendingLegalProceedings = await this.repository.count({
       where: {
-        status: 'in_progress',
+        status: LegalProceedingStatusEnum.IN_PROGRESS,
         analysisToolClient: {
           createdBy: {
             organization: {
@@ -125,7 +127,7 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
 
     const completedLegalProceedings = await this.repository.count({
       where: {
-        status: 'completed',
+        status: LegalProceedingStatusEnum.COMPLETED,
         analysisToolClient: {
           createdBy: {
             organization: {
@@ -371,6 +373,44 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
         resource: mappedData,
       },
     );
+  }
+
+  public async findByOneAnalysisToolClientLegalProceedingId(
+    id: AnalysisToolClientLegalProceedingId,
+  ): Promise<GetAnalysisToolClientLegalProceedingWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        id: id.toString(),
+        analysisToolClient: {
+          deletedAt: IsNull(),
+        },
+      },
+      relations: {
+        legalProceedingDetail: true,
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolClientLegalProceedingTypeormEntity,
+      GetAnalysisToolClientLegalProceedingWithRelationsQueryResult,
+    );
+
+    return mappedData;
   }
 
   public async listAnalysisToolClientLegalProceeding(
