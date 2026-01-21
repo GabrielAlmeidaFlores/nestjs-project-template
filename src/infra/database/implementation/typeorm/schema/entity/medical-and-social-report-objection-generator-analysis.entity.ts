@@ -8,7 +8,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormE
 import { MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-result.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 
-@Entity({ name: 'medical_and_social_report_objection_generator_analysis' })
+@Entity({ name: 'ms_report_objection_analysis' })
 export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
@@ -16,7 +16,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity exten
     { nullable: true },
   )
   @JoinColumn({
-    name: 'medical_and_social_report_objection_generator_analysis_result_id',
+    // eslint-disable-next-line typeorm-rule/require-column-name-and-match
+    name: 'ms_report_objection_analysis_result_id',
   })
   public medicalAndSocialReportObjectionGeneratorAnalysisResult?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity
@@ -31,7 +32,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity exten
     | undefined;
 
   @OneToMany(
-    () => MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
+    () =>
+      MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
     (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysis,
   )
   public medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding?:

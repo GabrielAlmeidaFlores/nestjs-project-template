@@ -4,11 +4,11 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 
 @Entity({
-  name: 'medical_and_social_report_objection_generator_analysis_result',
+  name: 'ms_report_objection_analysis_result',
 })
 export class MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity extends BaseTypeormEntity {
   @Column({
-    name: 'medical_and_social_report_objection_generator_complete_analysis',
+    name: 'ms_report_objection_complete_analysis',
     type: 'longtext',
     nullable: true,
   })
@@ -17,7 +17,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity
     | null;
 
   @Column({
-    name: 'medical_and_social_report_objection_generator_simplified_analysis',
+    name: 'ms_report_objection_simplified_analysis',
     type: 'text',
     nullable: true,
   })
