@@ -805,6 +805,7 @@ export class AnalysisToolRecordTypeormQueryRepository
           },
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
+          analysisToolClientInssBenefit: true,
         },
       };
 
