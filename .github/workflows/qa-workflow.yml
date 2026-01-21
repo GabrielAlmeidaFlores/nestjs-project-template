@@ -22,7 +22,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: quality-assurance
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -30,32 +30,17 @@ jobs:
       - name: 🏷️ Extract App Version
         run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: 🛑 SSH - Stop Old Docker Container
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ env.WORKING_DIRECTORY }}
-            bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh || true
-
       - name: ⚙️ SSH - Update Container Environment Variables
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ env.WORKING_DIRECTORY }}
-            echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+
+      - name: 🛑 SSH - Stop Old Docker Container
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh || true
 
       - name: 🚀 SSH - Start New Docker Container
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.QA_SSH_HOST }}
-          username: ${{ secrets.QA_SSH_USER }}
-          key: ${{ secrets.QA_SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ env.WORKING_DIRECTORY }}
-            bash ${{ env.WORKING_DIRECTORY }}/start.container.sh
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          bash ${{ env.WORKING_DIRECTORY }}/start.container.sh
