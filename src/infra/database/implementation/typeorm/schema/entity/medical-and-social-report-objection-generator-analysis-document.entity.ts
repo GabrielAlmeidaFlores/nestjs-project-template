@@ -5,7 +5,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/enum/medical-and-social-report-objection-generator-analysis-document-type.enum';
 
 @Entity({
-  name: 'medical_and_social_report_objection_generator_analysis_document',
+  name: 'ms_report_objection_analysis_document',
 })
 export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'document', type: 'varchar' })
@@ -22,7 +22,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEnti
     () => MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
   )
   @JoinColumn({
-    name: 'medical_and_social_report_objection_generator_analysis_id',
+    // eslint-disable-next-line typeorm-rule/require-column-name-and-match
+    name: 'ms_report_objection_analysis_id',
   })
   public medicalAndSocialReportObjectionGeneratorAnalysis?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity

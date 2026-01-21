@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 
 @Entity({
-  name: 'medical_and_social_report_objection_generator_analysis_benefit',
+  name: 'ms_report_objection_analysis_benefit',
 })
 export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity extends BaseTypeormEntity {
   @Column({
@@ -19,7 +19,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntit
     (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
   )
   @JoinColumn({
-    name: 'medical_and_social_report_objection_generator_analysis_id',
+    // eslint-disable-next-line typeorm-rule/require-column-name-and-match
+    name: 'ms_report_objection_analysis_id',
   })
   public medicalAndSocialReportObjectionGeneratorAnalysis:
     | MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity

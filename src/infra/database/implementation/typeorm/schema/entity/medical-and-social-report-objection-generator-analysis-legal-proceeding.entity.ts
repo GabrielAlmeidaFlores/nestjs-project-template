@@ -1,9 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 
-@Entity({ name: 'medical_and_social_report_objection_generator_analysis_legal_proceeding' })
+@Entity({
+  name: 'ms_report_objection_analysis_legal_proc',
+})
 export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'legal_proceeding_number',
@@ -14,9 +16,11 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingType
 
   @ManyToOne(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
-    (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
+    (entity) =>
+      entity.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
   )
-  @JoinColumn({ name: 'medical_and_social_report_objection_generator_analysis_id' })
+  // eslint-disable-next-line typeorm-rule/require-column-name-and-match
+  @JoinColumn({ name: 'ms_report_objection_analysis_id' })
   public medicalAndSocialReportObjectionGeneratorAnalysis:
     | MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity
     | undefined;
@@ -24,4 +28,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingType
   protected override readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity.name;
 }
-
