@@ -5,5 +5,6 @@ import type { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/do
 export interface PaymentPlanPaidResourceEntityPropsInterface extends BaseEntityPropsInterface<PaymentPlanPaidResourceId> {
   resource: PaymentPlanPaidResourceTypeEnum;
   creditCost: number;
+  title: string;
   description: string;
 }

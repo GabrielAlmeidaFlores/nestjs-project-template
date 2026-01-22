@@ -790,6 +790,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             organization: true,
           },
           analysisToolClientLegalProceeding: true,
+          analysisToolClientInssBenefit: true,
         },
       };
 

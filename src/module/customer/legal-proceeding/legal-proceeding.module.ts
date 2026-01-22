@@ -10,6 +10,7 @@ import { LegalProceedingConsumerModule } from '@module/customer/legal-proceeding
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
 import { ListAnalysisToolClientLegalProceedingActionUseCase } from '@module/customer/legal-proceeding/use-case/list-analysis-tool-client-legal-proceeding-actions.use-case';
+import { UpdateLegalProceedingDataUseCase } from '@module/customer/legal-proceeding/use-case/update-legal-proceeding-data.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
@@ -31,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetLegalProceedingDetailByLegalProceedingNumberUseCase,
     CountLegalProceedingDetailUseCase,
     ListAnalysisToolClientLegalProceedingActionUseCase,
+    UpdateLegalProceedingDataUseCase,
   ],
 })
 export class LegalProceedingModule {
