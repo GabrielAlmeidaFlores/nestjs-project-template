@@ -4,7 +4,10 @@ import type { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-p
 
 export class ListPaymentPlanPaidResourceQueryParam extends ListDataInputModel {
   public searchBy: string | null;
-  public resource: PaymentPlanPaidResourceTypeEnum | null;
+  public resource:
+    | PaymentPlanPaidResourceTypeEnum
+    | Array<PaymentPlanPaidResourceTypeEnum>
+    | null;
 
   protected override readonly _type =
     ListPaymentPlanPaidResourceQueryParam.name;

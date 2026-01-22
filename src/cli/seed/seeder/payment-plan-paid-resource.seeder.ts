@@ -16,6 +16,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 5,
+      title: 'Análise Completa CNIS',
       description: 'Análise completa do CNIS com parecer detalhado.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -23,6 +24,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
+      title: 'Análise Simplificada CNIS',
       description: 'Análise simplificada do CNIS com parecer resumido.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -30,6 +32,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
       creditCost: 5,
+      title: 'Análise Completa de Peças Jurídicas',
       description: 'Análise completa de peças jurídicas com parecer detalhado.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -37,6 +40,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
+      title: 'Análise Simplificada de Peças Jurídicas',
       description:
         'Análise simplificada de peças jurídicas com parecer resumido.',
     }),
@@ -45,6 +49,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
       creditCost: 3,
+      title: 'Análise Rápida de Documentos',
       description:
         'Análise rápida de documentos previdenciários (CNIS, CTPS, PPP, CTC).',
     }),
@@ -53,6 +58,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RPPS_COMPLETE_ANALYSIS,
       creditCost: 8,
+      title: 'Planejamento Aposentadoria RPPS Completo',
       description:
         'Análise completa de planejamento de aposentadoria RPPS com parecer detalhado.',
     }),
@@ -60,6 +66,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
+      title: 'Monitoramento de Processos',
       description: 'Monitoramento automático de processos jurídicos.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -67,6 +74,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS,
       creditCost: 0.3,
+      title: 'Chat Eloy - Questões Previdenciárias',
       description:
         'Chat Eloy para perguntas sobre questões previdenciárias gerais.',
     }),
@@ -74,6 +82,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('056fa86a-6a7e-49fc-941a-477ec9a28f56'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_LEGISLATION_QUESTIONS,
       creditCost: 0.3,
+      title: 'Chat Eloy - Legislação',
       description: 'Chat Eloy para perguntas sobre legislação previdenciária.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -81,6 +90,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH,
       creditCost: 0.3,
+      title: 'Chat Eloy - Teses Jurídicas',
       description:
         'Chat Eloy para pesquisa de teses jurídicas vencedoras em direito previdenciário.',
     }),
@@ -88,6 +98,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('d146fdb8-8511-472e-9f0c-dc9d5fb0d2ad'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_ANALYSIS,
       creditCost: 0.3,
+      title: 'Chat Eloy - Análise',
       description:
         'Chat Eloy para análise de documentos e casos previdenciários.',
     }),
@@ -96,6 +107,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_CNIS_ANALYSIS,
       creditCost: 5,
+      title: 'Planejamento RGPS - Análise CNIS',
       description: 'Análise do CNIS para planejamento de aposentadoria RGPS.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -103,6 +115,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_COMPARE_CNIS_CTPS,
       creditCost: 4,
+      title: 'Planejamento RGPS - CNIS vs CTPS',
       description:
         'Comparação entre CNIS e CTPS para planejamento de aposentadoria RGPS.',
     }),
@@ -111,6 +124,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_SPECIAL_PERIOD_PPP_ANALYSIS,
       creditCost: 6,
+      title: 'Planejamento RGPS - Períodos Especiais PPP',
       description:
         'Análise de períodos especiais com base na PPP para planejamento de aposentadoria RGPS.',
     }),
@@ -119,6 +133,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_NO_END_DATE_DOCUMENTS_ANALYSIS,
       creditCost: 5,
+      title: 'Planejamento RGPS - Documentos sem Data Fim',
       description:
         'Análise de documentos sem data de término para planejamento de aposentadoria RGPS.',
     }),
@@ -127,6 +142,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_RURAL_TIME_ANALYSIS,
       creditCost: 4,
+      title: 'Planejamento RGPS - Tempo Rural',
       description:
         'Análise de tempo rural para planejamento de aposentadoria RGPS.',
     }),
@@ -135,6 +151,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_MILITARY_SERVICE_ANALYSIS,
       creditCost: 4,
+      title: 'Planejamento RGPS - Serviço Militar',
       description:
         'Análise de tempo de serviço militar para planejamento de aposentadoria RGPS.',
     }),
@@ -143,6 +160,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_PUBLIC_SERVICE_ANALYSIS,
       creditCost: 5,
+      title: 'Planejamento RGPS - Serviço Público',
       description:
         'Análise de tempo de serviço público para planejamento de aposentadoria RGPS.',
     }),
@@ -151,6 +169,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_CTPS_OUTSIDE_CNIS_ANALYSIS,
       creditCost: 4,
+      title: 'Planejamento RGPS - CTPS Fora CNIS',
       description:
         'Análise de CTPS fora do CNIS para planejamento de aposentadoria RGPS.',
     }),
@@ -159,6 +178,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS,
       creditCost: 3,
+      title: 'Planejamento RGPS - Estudante Aprendiz',
       description:
         'Análise de tempo como estudante aprendiz para planejamento de aposentadoria RGPS.',
     }),
@@ -167,6 +187,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_WORK_ABROAD_ANALYSIS,
       creditCost: 5,
+      title: 'Planejamento RGPS - Trabalho no Exterior',
       description:
         'Análise de tempo de trabalho no exterior para planejamento de aposentadoria RGPS.',
     }),
@@ -175,6 +196,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_INFORMAL_WORK_ANALYSIS,
       creditCost: 4,
+      title: 'Planejamento RGPS - Trabalho Informal',
       description:
         'Análise de tempo de trabalho informal para planejamento de aposentadoria RGPS  .',
     }),
@@ -183,6 +205,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_LABOR_COURT_DECISION_ANALYSIS,
       creditCost: 6,
+      title: 'Planejamento RGPS - Decisões Justiça Trabalho',
       description:
         'Análise de decisões da Justiça do Trabalho para planejamento de aposentadoria RGPS.',
     }),
@@ -191,6 +214,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS,
       creditCost: 5,
+      title: 'Planejamento RGPS - Regras Finais',
       description:
         'Análise das regras finais para planejamento de aposentadoria RGPS.',
     }),
@@ -199,6 +223,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Administrativa INSS Completa',
       description: 'Análise completa do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -206,6 +231,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Administrativa INSS Simplificada',
       description:
         'Análise simplificada do procedimento administrativo do INSS.',
     }),
@@ -214,6 +240,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Judicial Completa',
       description: 'Análise completa do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -221,6 +248,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Judicial Simplificada',
       description: 'Análise simplificada do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -228,6 +256,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Completa',
       description:
         'Análise completa do gerador de impugnação a laudos médicos e sociais.',
     }),
@@ -236,6 +266,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Simplificada',
       description:
         'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),

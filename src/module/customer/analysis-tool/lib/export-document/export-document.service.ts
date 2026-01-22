@@ -1,9 +1,13 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import HtmlToDocx from '@turbodocx/html-to-docx';
-import { marked } from 'marked';
 import moment from 'moment';
 import * as Puppeteer from 'puppeteer';
+import rehypeStringify from 'rehype-stringify';
+import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import TurndownService from 'turndown';
+import { unified } from 'unified';
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
@@ -20,10 +24,14 @@ export class ExportDocumentService implements ExportDocumentGateway {
   }
 
   public async convertMarkdownToHtml(markdown: string): Promise<string> {
-    return await marked.parse(markdown, {
-      breaks: true,
-      gfm: true,
-    });
+    const file = await unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(remarkRehype)
+      .use(rehypeStringify)
+      .process(markdown);
+
+    return String(file);
   }
 
   public getUnifiedStyles(): string {

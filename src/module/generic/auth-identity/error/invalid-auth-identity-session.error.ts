@@ -4,6 +4,6 @@ export class InvalidAuthIdentitySessionError extends ForbiddenError {
   protected override readonly _type = InvalidAuthIdentitySessionError.name;
 
   public constructor() {
-    super('Sessão inválida');
+    super('Sua sessão de autenticação expirou ou é inválida.');
   }
 }

@@ -4064,7 +4064,7 @@ Extrato do FGTS: Se o usuário anexar extrato do FGTS, procure o código de movi
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_FINAL_RULES_ANALYSIS,
       ),
-      prompt: `        
+      prompt: `         
 # PROMPT PARA GERAÇÃO DE PARECER TÉCNICO COMPLETO
 # Versão: 1.0.0
 # Modelo IA recomendado: Claude Sonnet 4 ou superior
@@ -4892,7 +4892,7 @@ O output deve começar diretamente com:
       detalhes: {
         type: 'string',
         description:
-          'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00',
+          'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00 (Estes detalhes devem ser sempre entregue em formato markdown)',
       },
     },
     required: [
