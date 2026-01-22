@@ -21,11 +21,13 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEnti
   public constructor(
     props: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityPropsInterface,
   ) {
-    super(MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId, props);
+    super(
+      MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId,
+      props,
+    );
 
     this.legalProceedingNumber = props.legalProceedingNumber;
     this.medicalAndSocialReportObjectionGeneratorAnalysis =
       props.medicalAndSocialReportObjectionGeneratorAnalysis;
   }
 }
-

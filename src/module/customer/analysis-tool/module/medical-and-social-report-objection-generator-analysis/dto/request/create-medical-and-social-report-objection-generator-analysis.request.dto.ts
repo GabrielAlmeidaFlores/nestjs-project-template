@@ -47,4 +47,3 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto ex
   protected override readonly _type =
     CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto.name;
 }
-

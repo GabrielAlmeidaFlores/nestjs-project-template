@@ -72,11 +72,14 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentResponse
 
 @ResponseDto()
 export class GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(MedicalAndSocialReportObjectionGeneratorAnalysisId)
+  @ResponseDtoValueObjectProperty(
+    MedicalAndSocialReportObjectionGeneratorAnalysisId,
+  )
   public id: MedicalAndSocialReportObjectionGeneratorAnalysisId;
 
   @ResponseDtoObjectProperty(
-    () => GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentResponseDto,
+    () =>
+      GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentResponseDto,
     {
       required: false,
       isArray: true,
@@ -103,12 +106,14 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto exte
   public medicalAndSocialReportObjectionGeneratorAnalysisResult?: GetMedicalAndSocialReportObjectionGeneratorAnalysisResultResponseDto;
 
   @ResponseDtoObjectProperty(
-    () => GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto,
+    () =>
+      GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto,
   )
   public createdBy: GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto;
 
   @ResponseDtoObjectProperty(
-    () => GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto,
+    () =>
+      GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto,
   )
   public updatedBy: GetMedicalAndSocialReportObjectionGeneratorAnalysisResponsibleResponseDto;
 
@@ -121,4 +126,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto exte
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.name;
 }
-

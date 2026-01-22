@@ -19,8 +19,8 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandReposito
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis-legal-proceeding/command/medical-and-social-report-objection-generator-analysis-legal-proceeding.command.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-benefit/medical-and-social-report-objection-generator-analysis-benefit.entity';
-import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/enum/medical-and-social-report-objection-generator-analysis-document-type.enum';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-legal-proceeding/medical-and-social-report-objection-generator-analysis-legal-proceeding.entity';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/dto/request/create-medical-and-social-report-objection-generator-analysis.request.dto';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/dto/response/create-medical-and-social-report-objection-generator-analysis.response.dto';
@@ -37,15 +37,23 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -108,40 +116,48 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
     const medicalAndSocialReportObjectionGeneratorAnalysisBenefit =
       dto.json.inssBenefitNumber !== undefined
         ? dto.json.inssBenefitNumber.map((value) => {
-            return new MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity({
-              inssBenefitNumber: value,
-              medicalAndSocialReportObjectionGeneratorAnalysis,
-            });
+            return new MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity(
+              {
+                inssBenefitNumber: value,
+                medicalAndSocialReportObjectionGeneratorAnalysis,
+              },
+            );
           })
         : [];
 
     const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding =
       dto.json.legalProceedingNumber !== undefined
         ? dto.json.legalProceedingNumber.map((value) => {
-            return new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity({
-              legalProceedingNumber: value,
-              medicalAndSocialReportObjectionGeneratorAnalysis,
-            });
+            return new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity(
+              {
+                legalProceedingNumber: value,
+                medicalAndSocialReportObjectionGeneratorAnalysis,
+              },
+            );
           })
         : [];
 
-    const medicalExpertReportDocuments =
-      medicalExpertReportFiles.map((value) => {
-        return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity({
-          document: value,
-          type: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeEnum.MEDICAL_EXPERT_REPORT,
-          medicalAndSocialReportObjectionGeneratorAnalysis,
-        });
-      });
+    const medicalExpertReportDocuments = medicalExpertReportFiles.map(
+      (value) => {
+        return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity(
+          {
+            document: value,
+            type: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeEnum.MEDICAL_EXPERT_REPORT,
+            medicalAndSocialReportObjectionGeneratorAnalysis,
+          },
+        );
+      },
+    );
 
-    const legalCaseDocuments =
-      legalCaseFiles.map((value) => {
-        return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity({
+    const legalCaseDocuments = legalCaseFiles.map((value) => {
+      return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity(
+        {
           document: value,
           type: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeEnum.LEGAL_CASE,
           medicalAndSocialReportObjectionGeneratorAnalysis,
-        });
-      });
+        },
+      );
+    });
 
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
@@ -168,10 +184,12 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       legalCaseDocuments,
     );
 
-    return CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build({
-      medicalAndSocialReportObjectionGeneratorAnalysisId:
-        medicalAndSocialReportObjectionGeneratorAnalysis.id,
-    });
+    return CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build(
+      {
+        medicalAndSocialReportObjectionGeneratorAnalysisId:
+          medicalAndSocialReportObjectionGeneratorAnalysis.id,
+      },
+    );
   }
 
   private async createOnDatabase(
@@ -199,11 +217,13 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       });
 
     const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTransactions =
-      medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding.map((value) => {
-        return this.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway.createMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding(
-          value,
-        );
-      });
+      medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding.map(
+        (value) => {
+          return this.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway.createMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding(
+            value,
+          );
+        },
+      );
 
     const medicalAndSocialReportObjectionGeneratorAnalysisTransaction =
       this.medicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway.createMedicalAndSocialReportObjectionGeneratorAnalysis(
@@ -226,4 +246,3 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
     await transaction.commit();
   }
 }
-

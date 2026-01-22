@@ -12,4 +12,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQ
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResult.name;
 }
-

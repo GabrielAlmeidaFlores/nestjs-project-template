@@ -6,13 +6,17 @@ import type { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity } f
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-legal-proceeding/medical-and-social-report-objection-generator-analysis-legal-proceeding.entity';
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-result/medical-and-social-report-objection-generator-analysis-result.entity';
 
-export interface MedicalAndSocialReportObjectionGeneratorAnalysisEntityPropsInterface
-  extends BaseEntityPropsInterface<MedicalAndSocialReportObjectionGeneratorAnalysisId> {
+export interface MedicalAndSocialReportObjectionGeneratorAnalysisEntityPropsInterface extends BaseEntityPropsInterface<MedicalAndSocialReportObjectionGeneratorAnalysisId> {
   medicalAndSocialReportObjectionGeneratorAnalysisResult?: MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity | null;
-  medicalAndSocialReportObjectionGeneratorAnalysisBenefit?: MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity[];
-  medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding?: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity[];
-  medicalAndSocialReportObjectionGeneratorAnalysisDocument?: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity[];
+  medicalAndSocialReportObjectionGeneratorAnalysisBenefit?:
+    | MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity[]
+    | null;
+  medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding?:
+    | MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity[]
+    | null;
+  medicalAndSocialReportObjectionGeneratorAnalysisDocument?:
+    | MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity[]
+    | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;
 }
-

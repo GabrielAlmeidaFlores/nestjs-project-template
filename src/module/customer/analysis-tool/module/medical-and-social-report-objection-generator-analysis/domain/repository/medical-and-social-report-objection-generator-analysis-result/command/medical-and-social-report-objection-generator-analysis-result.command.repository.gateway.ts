@@ -12,4 +12,3 @@ export abstract class MedicalAndSocialReportObjectionGeneratorAnalysisResultComm
     props: MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity,
   ): TransactionType;
 }
-

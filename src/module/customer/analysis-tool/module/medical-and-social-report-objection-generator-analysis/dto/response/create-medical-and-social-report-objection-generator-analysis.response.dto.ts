@@ -5,10 +5,11 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(MedicalAndSocialReportObjectionGeneratorAnalysisId)
+  @ResponseDtoValueObjectProperty(
+    MedicalAndSocialReportObjectionGeneratorAnalysisId,
+  )
   public medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId;
 
   protected override readonly _type =
     CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.name;
 }
-

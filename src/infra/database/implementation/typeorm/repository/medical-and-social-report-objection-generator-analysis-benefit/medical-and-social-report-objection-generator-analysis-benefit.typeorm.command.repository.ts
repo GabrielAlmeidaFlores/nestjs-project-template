@@ -13,13 +13,16 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId } from '@modu
 @Injectable()
 export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormCommandRepository
   extends BaseTypeormCommandRepository<MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity>
-  implements MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway
+  implements
+    MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositoryGateway
 {
   protected readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity)
+    @InjectRepository(
+      MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
+    )
     repository: Repository<MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -44,4 +47,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormComma
     return this.create(mappedData);
   }
 }
-

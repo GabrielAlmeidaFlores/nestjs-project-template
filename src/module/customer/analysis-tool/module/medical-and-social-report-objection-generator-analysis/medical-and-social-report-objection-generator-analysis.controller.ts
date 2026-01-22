@@ -3,8 +3,12 @@ import {
   HttpStatus,
   Body,
   Param,
+  Query,
+  ParseEnumPipe,
+  StreamableFile,
 } from '@nestjs/common';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/dto/request/create-medical-and-social-report-objection-generator-analysis.request.dto';
 import { UpdateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/dto/request/update-medical-and-social-report-objection-generator-analysis.request.dto';
@@ -14,6 +18,8 @@ import { GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto } from '
 import { UpdateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/dto/response/update-medical-and-social-report-objection-generator-analysis.response.dto';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/create-medical-and-social-report-objection-generator-analysis-result.use-case';
 import { CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/create-medical-and-social-report-objection-generator-analysis.use-case';
+import { DownloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/download-medical-and-social-report-objection-generator-complete-analysis.use-case';
+import { DownloadMedicalAndSocialReportObjectionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/download-medical-and-social-report-objection-generator-simplified-analysis.use-case';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/get-medical-and-social-report-objection-generator-analysis.use-case';
 import { UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/use-case/update-medical-and-social-report-objection-generator-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -27,14 +33,19 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-@CustomerControllerRoute('analysis-tool/medical-and-social-report-objection-generator-analysis')
+@CustomerControllerRoute(
+  'analysis-tool/medical-and-social-report-objection-generator-analysis',
+)
 export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
-  protected readonly _type = MedicalAndSocialReportObjectionGeneratorAnalysisController.name;
+  protected readonly _type =
+    MedicalAndSocialReportObjectionGeneratorAnalysisController.name;
 
   public constructor(
     private readonly createMedicalAndSocialReportObjectionGeneratorAnalysisUseCase: CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase,
     private readonly createMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase: CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase,
     private readonly getMedicalAndSocialReportObjectionGeneratorAnalysisUseCase: GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase,
+    private readonly downloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUseCase: DownloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUseCase,
+    private readonly downloadMedicalAndSocialReportObjectionGeneratorSimplifiedAnalysisUseCase: DownloadMedicalAndSocialReportObjectionGeneratorSimplifiedAnalysisUseCase,
     private readonly updateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase: UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase,
   ) {}
 
@@ -59,7 +70,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto,
+    @Body()
+    dto: CreateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto,
   ): Promise<CreateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto> {
     return await this.createMedicalAndSocialReportObjectionGeneratorAnalysisUseCase.execute(
       sessionData,
@@ -69,7 +81,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Obter análise geradora de objeção de laudo médico e social por ID',
+    summary:
+      'Obter análise geradora de objeção de laudo médico e social por ID',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':medicalAndSocialReportObjectionGeneratorAnalysisId',
@@ -90,7 +103,9 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'medicalAndSocialReportObjectionGeneratorAnalysisId',
-      new ParseValueObjectPipe(MedicalAndSocialReportObjectionGeneratorAnalysisId),
+      new ParseValueObjectPipe(
+        MedicalAndSocialReportObjectionGeneratorAnalysisId,
+      ),
     )
     medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
   ): Promise<GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto> {
@@ -122,10 +137,13 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: UpdateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto,
+    @Body()
+    dto: UpdateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto,
     @Param(
       'medicalAndSocialReportObjectionGeneratorAnalysisId',
-      new ParseValueObjectPipe(MedicalAndSocialReportObjectionGeneratorAnalysisId),
+      new ParseValueObjectPipe(
+        MedicalAndSocialReportObjectionGeneratorAnalysisId,
+      ),
     )
     medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
   ): Promise<UpdateMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto> {
@@ -138,7 +156,86 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Criar resultado da análise geradora de objeção de laudo médico e social',
+    summary:
+      'Baixar análise geradora de objeção de laudo médico e social simplificada',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':medicalAndSocialReportObjectionGeneratorAnalysisId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-geradora-objeção-laudo-medico-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada geradora de objeção de laudo médico e social retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadMedicalAndSocialReportObjectionGeneratorSimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'medicalAndSocialReportObjectionGeneratorAnalysisId',
+      new ParseValueObjectPipe(
+        MedicalAndSocialReportObjectionGeneratorAnalysisId,
+      ),
+    )
+    medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadMedicalAndSocialReportObjectionGeneratorSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      medicalAndSocialReportObjectionGeneratorAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Baixar análise geradora de objeção de laudo médico e social completa',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':medicalAndSocialReportObjectionGeneratorAnalysisId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-geradora-objeção-laudo-medico-social'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa geradora de objeção de laudo médico e social retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadMedicalAndSocialReportObjectionGeneratorCompletedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'medicalAndSocialReportObjectionGeneratorAnalysisId',
+      new ParseValueObjectPipe(
+        MedicalAndSocialReportObjectionGeneratorAnalysisId,
+      ),
+    )
+    medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadMedicalAndSocialReportObjectionGeneratorCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      medicalAndSocialReportObjectionGeneratorAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Criar resultado da análise geradora de objeção de laudo médico e social',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':medicalAndSocialReportObjectionGeneratorAnalysisId/result',
@@ -159,7 +256,9 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param(
       'medicalAndSocialReportObjectionGeneratorAnalysisId',
-      new ParseValueObjectPipe(MedicalAndSocialReportObjectionGeneratorAnalysisId),
+      new ParseValueObjectPipe(
+        MedicalAndSocialReportObjectionGeneratorAnalysisId,
+      ),
     )
     medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
   ): Promise<CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultResponseDto> {
@@ -170,4 +269,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisController {
     );
   }
 }
-
