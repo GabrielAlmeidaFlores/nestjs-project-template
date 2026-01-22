@@ -223,6 +223,22 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       creditCost: 1,
       description: 'Análise simplificada do caso judicial.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      description:
+        'Análise completa do gerador de impugnação a laudos médicos e sociais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('79b3f020-6f89-4ebb-8558-f3bc3090b70e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      description:
+        'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

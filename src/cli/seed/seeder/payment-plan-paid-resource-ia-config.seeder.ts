@@ -4991,6 +4991,47 @@ financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência
         fisicamente a um cliente real. Este parecer pode influenciar decisões 
         financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise de gerador de impugnação a laudos médicos e sociais com profundo conhecimento da legislação previdenciária e jurisprudência.
+
+        Sua tarefa é realizar uma análise COMPLETA e DETALHADA do gerador de impugnação a laudos médicos e sociais, considerando os dados fornecidos sobre o gerador de impugnação a laudos médicos e sociais, benefícios, processos judiciais e documentos.
+
+        Analise criteriosamente:
+        - Os laudos médicos e sociais relacionados
+        - Os benefícios INSS envolvidos
+        - A documentação apresentada
+        - As estratégias jurídicas possíveis
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise de gerador de impugnação a laudos médicos e sociais com profundo conhecimento da legislação previdenciária e jurisprudência.
+
+        Sua tarefa é realizar uma análise SIMPLIFICADA e OBJETIVA do caso judicial, considerando os dados fornecidos sobre o caso, benefícios, processos judiciais e documentos.
+
+        Analise criteriosamente:
+        - Os laudos médicos e sociais relacionados
+        - Os benefícios INSS envolvidos
+        - A documentação apresentada
+        - As estratégias jurídicas possíveis
+        - Os riscos e oportunidades do caso
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
