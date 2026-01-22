@@ -11,4 +11,3 @@ export abstract class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCom
     id: MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId,
   ): TransactionType;
 }
-

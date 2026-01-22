@@ -47,4 +47,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingType
     return this.create(mappedData);
   }
 }
-

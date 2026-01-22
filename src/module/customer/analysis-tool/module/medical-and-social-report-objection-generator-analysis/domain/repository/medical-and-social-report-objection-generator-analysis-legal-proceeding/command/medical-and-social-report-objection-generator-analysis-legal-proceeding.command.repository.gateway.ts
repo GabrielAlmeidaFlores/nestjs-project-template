@@ -11,4 +11,3 @@ export abstract class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProce
     id: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId,
   ): TransactionType;
 }
-

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
@@ -13,13 +14,16 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/cust
 @Injectable()
 export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepository
   extends BaseTypeormCommandRepository<MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity>
-  implements MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway
+  implements
+    MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway
 {
   protected readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity)
+    @InjectRepository(
+      MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+    )
     repository: Repository<MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -63,4 +67,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormCommandRepos
     });
   }
 }
-

@@ -19,9 +19,13 @@ export class DeleteMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway,
-    @Inject(MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway)
+    @Inject(
+      MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway,
+    )
     private readonly medicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway: MedicalAndSocialReportObjectionGeneratorAnalysisCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -61,10 +65,11 @@ export class DeleteMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
 
     await transaction.commit();
 
-    return DeleteMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build({
-      medicalAndSocialReportObjectionGeneratorAnalysisId:
-        medicalAndSocialReportObjectionGeneratorAnalysisResult.id,
-    });
+    return DeleteMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build(
+      {
+        medicalAndSocialReportObjectionGeneratorAnalysisId:
+          medicalAndSocialReportObjectionGeneratorAnalysisResult.id,
+      },
+    );
   }
 }
-

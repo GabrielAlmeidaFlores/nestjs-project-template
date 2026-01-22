@@ -13,10 +13,14 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisEntity extends Base
   @Description('Resultado do gerador de objeção de laudo médico e social.')
   public readonly medicalAndSocialReportObjectionGeneratorAnalysisResult: MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity | null;
 
-  @Description('Benefícios INSS do gerador de objeção de laudo médico e social.')
+  @Description(
+    'Benefícios INSS do gerador de objeção de laudo médico e social.',
+  )
   public readonly medicalAndSocialReportObjectionGeneratorAnalysisBenefit: MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity[];
 
-  @Description('Processos judiciais do gerador de objeção de laudo médico e social.')
+  @Description(
+    'Processos judiciais do gerador de objeção de laudo médico e social.',
+  )
   public readonly medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity[];
 
   @Description('Documentos do gerador de objeção de laudo médico e social.')
@@ -32,7 +36,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisEntity extends Base
   )
   public readonly updatedBy: OrganizationMemberId;
 
-  protected readonly _type = MedicalAndSocialReportObjectionGeneratorAnalysisEntity.name;
+  protected readonly _type =
+    MedicalAndSocialReportObjectionGeneratorAnalysisEntity.name;
 
   public constructor(
     props: MedicalAndSocialReportObjectionGeneratorAnalysisEntityPropsInterface,
@@ -44,11 +49,11 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisEntity extends Base
     this.medicalAndSocialReportObjectionGeneratorAnalysisBenefit =
       props.medicalAndSocialReportObjectionGeneratorAnalysisBenefit ?? [];
     this.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding =
-      props.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ?? [];
+      props.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ??
+      [];
     this.medicalAndSocialReportObjectionGeneratorAnalysisDocument =
       props.medicalAndSocialReportObjectionGeneratorAnalysisDocument ?? [];
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }
 }
-

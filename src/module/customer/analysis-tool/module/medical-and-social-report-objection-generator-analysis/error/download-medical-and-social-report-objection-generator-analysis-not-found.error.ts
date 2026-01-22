@@ -8,4 +8,3 @@ export class DownloadMedicalAndSocialReportObjectionGeneratorAnalysisIsNotValidE
     super('Formato de documento para download inválido');
   }
 }
-

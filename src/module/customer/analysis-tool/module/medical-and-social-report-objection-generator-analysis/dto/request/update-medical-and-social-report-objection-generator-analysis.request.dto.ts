@@ -43,4 +43,3 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto ex
   protected override readonly _type =
     UpdateMedicalAndSocialReportObjectionGeneratorAnalysisRequestDto.name;
 }
-

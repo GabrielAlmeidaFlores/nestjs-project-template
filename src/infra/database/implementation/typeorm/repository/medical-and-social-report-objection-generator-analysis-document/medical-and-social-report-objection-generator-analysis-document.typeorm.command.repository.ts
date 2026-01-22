@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-document.entity';
@@ -12,13 +13,16 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentId } from '@mod
 @Injectable()
 export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity>
-  implements MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway
+  implements
+    MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway
 {
   protected readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity)
+    @InjectRepository(
+      MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
+    )
     repository: Repository<MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -43,4 +47,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormComm
     return this.delete(id.toString());
   }
 }
-

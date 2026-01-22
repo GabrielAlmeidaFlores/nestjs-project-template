@@ -22,4 +22,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult.name;
 }
-

@@ -18,13 +18,16 @@ import type { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module
 @Injectable()
 export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryRepository
   extends BaseTypeormQueryRepository<MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity>
-  implements MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway
+  implements
+    MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepositoryGateway
 {
   protected readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity)
+    @InjectRepository(
+      MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+    )
     repository: Repository<MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -104,6 +107,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryReposit
           },
           medicalAndSocialReportObjectionGeneratorAnalysisDocument: true,
           medicalAndSocialReportObjectionGeneratorAnalysisResult: true,
+          medicalAndSocialReportObjectionGeneratorAnalysisBenefit: true,
+          medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding: true,
         },
       },
       err,
@@ -118,4 +123,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryReposit
     return mappedData;
   }
 }
-

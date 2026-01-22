@@ -20,4 +20,3 @@ export abstract class MedicalAndSocialReportObjectionGeneratorAnalysisQueryRepos
     err: ConstructorType<NotFoundError>,
   ): Promise<GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult>;
 }
-

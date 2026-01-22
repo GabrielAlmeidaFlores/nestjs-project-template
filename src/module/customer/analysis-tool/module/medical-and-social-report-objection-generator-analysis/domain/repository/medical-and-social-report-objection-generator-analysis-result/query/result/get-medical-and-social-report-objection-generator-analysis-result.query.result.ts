@@ -4,8 +4,12 @@ import type { MedicalAndSocialReportObjectionGeneratorAnalysisResultId } from '@
 
 export class GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: MedicalAndSocialReportObjectionGeneratorAnalysisResultId;
-  public readonly medicalAndSocialReportObjectionGeneratorCompleteAnalysis: string | null;
-  public readonly medicalAndSocialReportObjectionGeneratorSimplifiedAnalysis: string | null;
+  public readonly medicalAndSocialReportObjectionGeneratorCompleteAnalysis:
+    | string
+    | null;
+  public readonly medicalAndSocialReportObjectionGeneratorSimplifiedAnalysis:
+    | string
+    | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
@@ -13,4 +17,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResul
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult.name;
 }
-

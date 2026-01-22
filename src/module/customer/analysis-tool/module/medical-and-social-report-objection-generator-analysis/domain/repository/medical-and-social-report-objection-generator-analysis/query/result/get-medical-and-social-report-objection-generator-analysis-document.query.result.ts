@@ -14,4 +14,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryRes
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResult.name;
 }
-

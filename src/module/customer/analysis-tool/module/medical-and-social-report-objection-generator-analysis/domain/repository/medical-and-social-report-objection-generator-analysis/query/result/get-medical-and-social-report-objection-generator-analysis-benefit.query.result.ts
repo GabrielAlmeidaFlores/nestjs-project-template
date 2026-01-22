@@ -12,4 +12,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResu
   protected override readonly _type =
     GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResult.name;
 }
-

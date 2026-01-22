@@ -5,7 +5,8 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisNotFoundError exten
     MedicalAndSocialReportObjectionGeneratorAnalysisNotFoundError.name;
 
   public constructor() {
-    super('Análise geradora de objeção de laudo médico e social não encontrada');
+    super(
+      'Análise geradora de objeção de laudo médico e social não encontrada',
+    );
   }
 }
-

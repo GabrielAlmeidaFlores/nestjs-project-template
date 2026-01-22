@@ -28,4 +28,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity exten
       props.medicalAndSocialReportObjectionGeneratorAnalysis;
   }
 }
-
