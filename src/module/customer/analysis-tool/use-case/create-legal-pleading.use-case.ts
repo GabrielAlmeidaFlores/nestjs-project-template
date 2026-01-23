@@ -168,6 +168,10 @@ export class CreateLegalPleadingUseCase {
         documentType: LegalPleadingDocumentTypeEnum.RELATED_COURT_CASE,
       },
       {
+        documentKey: 'judicialProcesses',
+        documentType: LegalPleadingDocumentTypeEnum.RELATED_COURT_CASE,
+      },
+      {
         documentKey: 'supportingDocument',
         documentType: LegalPleadingDocumentTypeEnum.SUPPORTING_DOCUMENT,
       },

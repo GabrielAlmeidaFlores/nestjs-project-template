@@ -42,4 +42,6 @@ RUN yarn install --frozen-lockfile --production=true
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ./assets ./assets
 
+user NODE
+
 CMD ["node", "dist/main"]
