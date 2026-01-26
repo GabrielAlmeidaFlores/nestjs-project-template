@@ -63,7 +63,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryReposit
           organization: true,
         },
         medicalAndSocialReportObjectionGeneratorAnalysisDocument: true,
-        medicalAndSocialReportObjectionGeneratorAnalysisResult: true,
+        msReportObjectionAnalysisResult: true,
       },
     });
 
@@ -106,7 +106,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormQueryReposit
             organization: true,
           },
           medicalAndSocialReportObjectionGeneratorAnalysisDocument: true,
-          medicalAndSocialReportObjectionGeneratorAnalysisResult: true,
+          msReportObjectionAnalysisResult: true,
           medicalAndSocialReportObjectionGeneratorAnalysisBenefit: true,
           medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding: true,
         },

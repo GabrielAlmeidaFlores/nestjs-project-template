@@ -16,16 +16,15 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity exten
     { nullable: true },
   )
   @JoinColumn({
-    // eslint-disable-next-line typeorm-rule/require-column-name-and-match
     name: 'ms_report_objection_analysis_result_id',
   })
-  public medicalAndSocialReportObjectionGeneratorAnalysisResult?:
+  public msReportObjectionAnalysisResult?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity
     | undefined;
 
   @OneToMany(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
-    (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysis,
+    (entity) => entity.msReportObjectionAnalysis,
   )
   public medicalAndSocialReportObjectionGeneratorAnalysisBenefit?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity[]
@@ -34,7 +33,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity exten
   @OneToMany(
     () =>
       MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
-    (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysis,
+    (entity) => entity.msReportObjectionAnalysis,
   )
   public medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity[]
@@ -42,7 +41,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity exten
 
   @OneToMany(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
-    (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysis,
+    (entity) => entity.msReportObjectionAnalysis,
   )
   public medicalAndSocialReportObjectionGeneratorAnalysisDocument?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity[]

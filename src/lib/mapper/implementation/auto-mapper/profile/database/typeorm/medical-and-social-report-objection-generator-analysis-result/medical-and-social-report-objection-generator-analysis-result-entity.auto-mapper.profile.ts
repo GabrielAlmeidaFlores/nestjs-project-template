@@ -26,7 +26,9 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMap
     ): MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity => {
       return new MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity({
         ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisResultId(source.id),
+        id: new MedicalAndSocialReportObjectionGeneratorAnalysisResultId(
+          source.id,
+        ),
       });
     };
 
@@ -44,10 +46,12 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMap
     const convertDomainEntityToOrmEntity = (
       source: MedicalAndSocialReportObjectionGeneratorAnalysisResultEntity,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity => {
-      return MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -60,4 +64,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMap
     );
   }
 }
-

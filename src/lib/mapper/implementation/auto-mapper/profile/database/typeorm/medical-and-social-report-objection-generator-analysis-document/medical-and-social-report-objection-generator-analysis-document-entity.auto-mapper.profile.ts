@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
-import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/medical-and-social-report-objection-generator-analysis-document.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis-document/value-object/medical-and-social-report-objection-generator-analysis-document-id/medical-and-social-report-objection-generator-analysis-document-id.value-object';
 
 @Injectable()
@@ -27,16 +27,20 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoM
       source: MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity => {
       const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
-        source.medicalAndSocialReportObjectionGeneratorAnalysis,
+        source.msReportObjectionAnalysis,
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
         MedicalAndSocialReportObjectionGeneratorAnalysisEntity,
       );
 
-      return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity({
-        ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentId(source.id),
-        medicalAndSocialReportObjectionGeneratorAnalysis,
-      });
+      return new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity(
+        {
+          ...source,
+          id: new MedicalAndSocialReportObjectionGeneratorAnalysisDocumentId(
+            source.id,
+          ),
+          medicalAndSocialReportObjectionGeneratorAnalysis,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
@@ -59,11 +63,14 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoM
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
-      return MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        medicalAndSocialReportObjectionGeneratorAnalysis,
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          msReportObjectionAnalysis:
+            medicalAndSocialReportObjectionGeneratorAnalysis,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -76,4 +83,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoM
     );
   }
 }
-
