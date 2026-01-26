@@ -223,6 +223,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Completa do Procedimento Administrativo do INSS',
       description: 'Análise completa do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -230,6 +231,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Simplificada do Procedimento Administrativo do INSS',
       description:
         'Análise simplificada do procedimento administrativo do INSS.',
     }),
@@ -238,6 +240,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Completa do Caso Judicial',
       description: 'Análise completa do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -245,6 +248,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Análise Simplificada do Caso Judicial',
       description: 'Análise simplificada do caso judicial.',
     }),
   ];
