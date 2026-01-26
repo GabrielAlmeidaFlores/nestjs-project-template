@@ -4,4 +4,5 @@ export enum AnalysisToolRecordTypeEnum {
   RETIREMENT_PLANNING_RPPS = 'planejamento_aposentadoria_rpps',
   JUDICIAL_CASE_ANALYSIS = 'analise_caso_judicial',
   ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS = 'analise_procedimento_administrativo_inss',
+  MEDICAL_QUESTION_GENERATOR = 'gerador_perguntas_medicas',
 }

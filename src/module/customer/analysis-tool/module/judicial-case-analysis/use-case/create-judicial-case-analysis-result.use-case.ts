@@ -158,6 +158,7 @@ export class CreateJudicialCaseAnalysisResultUseCase {
       retirementPlanningRgps: null,
       cnisFastAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =

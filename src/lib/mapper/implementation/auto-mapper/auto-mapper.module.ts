@@ -81,6 +81,17 @@ import { LegalPleadingResultEntityAutoMapperProfile } from '@lib/mapper/implemen
 import { GetLegalProceedingDetailQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-query-result.auto-mapper.profile';
 import { GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/get-legal-proceeding-detail-with-relations-query-result.auto-mapper.profile';
 import { LegalProceedingDetailEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-proceeding-detail/legal-proceeding-detail-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/get-medical-question-generator-query-result.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/get-medical-question-generator-with-relations-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/medical-question-generator-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-document/get-medical-question-generator-document-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-document/medical-question-generator-document-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-inss-benefit/get-medical-question-generator-inss-benefit-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-inss-benefit/medical-question-generator-inss-benefit-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/get-medical-question-generator-legal-proceeding-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/medical-question-generator-legal-proceeding-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/get-medical-question-generator-result-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/medical-question-generator-result-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -296,6 +307,17 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile,
     JudicialCaseAnalysisDocumentEntityAutoMapperProfile,
     GetJudicialCaseAnalysisDocumentQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorQueryResultAutoMapperProfile,
+    GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorResultEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorInssBenefitEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorInssBenefitQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorDocumentEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorDocumentQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

@@ -9,6 +9,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/dom
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -50,6 +51,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly administrativeProcedureInssAnalysis: AdministrativeProcedureInssAnalysisEntity | null;
 
   @Description(
+    'Gerador de perguntas médicas associado ao registro da ferramenta de análise',
+  )
+  public readonly medicalQuestionGenerator: MedicalQuestionGeneratorEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -77,6 +83,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
     this.administrativeProcedureInssAnalysis =
       props.administrativeProcedureInssAnalysis ?? null;
+    this.medicalQuestionGenerator = props.medicalQuestionGenerator ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
