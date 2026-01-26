@@ -13,6 +13,7 @@ import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
@@ -103,6 +104,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CnisFastAnalysisModule,
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
+    MedicalAndSocialReportObjectionGeneratorAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
