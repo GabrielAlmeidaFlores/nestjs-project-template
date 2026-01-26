@@ -18,7 +18,7 @@ jobs:
 
       - name: 🐳 Build Docker Image
         run: |
-          docker build --memory="2g" --cpus="1.5" --no-cache -t ${{ vars.REGISTRY_URL }} .
+          docker build --memory="2g" --no-cache -t ${{ vars.REGISTRY_URL }} .
 
   deploy:
     needs: build
