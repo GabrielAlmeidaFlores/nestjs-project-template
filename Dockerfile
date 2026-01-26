@@ -34,13 +34,19 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN npx puppeteer browsers install chrome
-
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production=true
 
+ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
+RUN mkdir -p /home/node/.cache/puppeteer && chown -R node:node /home/node/.cache
+USER node
+RUN npx puppeteer browsers install chrome
+USER root
+
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ./assets ./assets
+
+ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
 
 USER node
 
