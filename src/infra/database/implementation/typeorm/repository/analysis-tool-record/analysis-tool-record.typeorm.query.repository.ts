@@ -573,6 +573,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         relations: {
           analysisToolClient: {
             analysisToolClientLegalProceeding: true,
+            analysisToolClientInssBenefit: true,
             createdBy: {
               customer: true,
               organization: true,
