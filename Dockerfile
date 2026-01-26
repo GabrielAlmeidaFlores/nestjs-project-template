@@ -46,6 +46,8 @@ USER root
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ./assets ./assets
 
+RUN chown -R node:node /usr/src/app
+
 ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
 
 USER node
