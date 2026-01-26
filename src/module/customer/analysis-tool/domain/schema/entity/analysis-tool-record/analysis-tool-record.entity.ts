@@ -1,3 +1,5 @@
+import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
+
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -56,6 +58,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly administrativeProcedureInssAnalysis: AdministrativeProcedureInssAnalysisEntity | null;
 
   @Description(
+    'Análise geradora de objeção de laudo médico e social associada ao registro da ferramenta de análise',
+  )
+  public readonly medicalAndSocialReportObjectionGeneratorAnalysis: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -84,6 +91,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
     this.administrativeProcedureInssAnalysis =
       props.administrativeProcedureInssAnalysis ?? null;
+    this.medicalAndSocialReportObjectionGeneratorAnalysis =
+      props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

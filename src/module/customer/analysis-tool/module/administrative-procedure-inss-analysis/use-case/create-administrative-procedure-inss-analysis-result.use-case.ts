@@ -150,7 +150,9 @@ export class CreateAdministrativeProcedureInssAnalysisResultUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       administrativeProcedureInssAnalysis,
@@ -161,6 +163,7 @@ export class CreateAdministrativeProcedureInssAnalysisResultUseCase {
       cnisFastAnalysis: null,
       specialActivity: null,
       judicialCaseAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =

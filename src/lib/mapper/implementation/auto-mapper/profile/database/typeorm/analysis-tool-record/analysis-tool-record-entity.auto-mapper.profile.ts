@@ -1,5 +1,6 @@
 import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { Injectable } from '@nestjs/common';
 
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
@@ -7,6 +8,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -82,6 +84,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const medicalAndSocialReportObjectionGeneratorAnalysis =
+        source.medicalAndSocialReportObjectionGeneratorAnalysis !== undefined
+          ? this.mapper.map(
+              source.medicalAndSocialReportObjectionGeneratorAnalysis,
+              MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+              MedicalAndSocialReportObjectionGeneratorAnalysisEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -116,6 +127,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         analysisToolClient,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalAndSocialReportObjectionGeneratorAnalysis,
       });
     };
 
@@ -167,6 +179,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const medicalAndSocialReportObjectionGeneratorAnalysis =
+        source.medicalAndSocialReportObjectionGeneratorAnalysis !== null
+          ? this.mapper.map(
+              source.medicalAndSocialReportObjectionGeneratorAnalysis,
+              MedicalAndSocialReportObjectionGeneratorAnalysisEntity,
+              MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -206,6 +227,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalAndSocialReportObjectionGeneratorAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,

@@ -5,6 +5,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -82,6 +83,18 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'judicial_case_analysis_id' })
   public judicialCaseAnalysis?: JudicialCaseAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({
+    name: 'medical_and_social_report_objection_generator_analysis_id',
+  })
+  public medicalAndSocialReportObjectionGeneratorAnalysis?: MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
