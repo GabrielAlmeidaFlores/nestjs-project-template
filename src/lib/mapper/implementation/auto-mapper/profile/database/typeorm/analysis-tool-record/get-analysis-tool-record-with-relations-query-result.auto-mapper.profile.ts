@@ -7,6 +7,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -22,6 +23,7 @@ import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/custo
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -89,6 +91,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetAdministrativeProcedureInssAnalysisQueryResult,
       );
 
+      const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
+        source.medicalAndSocialReportObjectionGeneratorAnalysis,
+        MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+        GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -105,6 +113,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalAndSocialReportObjectionGeneratorAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -173,6 +182,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         AdministrativeProcedureInssAnalysisTypeormEntity,
       );
 
+      const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
+        source.medicalAndSocialReportObjectionGeneratorAnalysis,
+        GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
+        MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -188,6 +203,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRgps,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalAndSocialReportObjectionGeneratorAnalysis,
         analysisToolClient,
         specialActivity,
         createdBy,

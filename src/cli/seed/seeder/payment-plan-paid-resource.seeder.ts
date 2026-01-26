@@ -223,7 +223,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'Procedimento Administrativo do INSS - Análise Completa',
+      title: 'Análise Completa do Procedimento Administrativo do INSS',
       description: 'Análise completa do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -240,7 +240,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'Caso Judicial - Análise Completa',
+      title: 'Análise Completa do Caso Judicial',
       description: 'Análise completa do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -258,6 +258,34 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       creditCost: 3,
       title: 'Atividade Especial - Análise Completa',
       description: 'Análise completa de Atividade Especial',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a85-9c01-5e2b8d1f96a3'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'Atividade Especial - Análise Simplificada',
+      description: 'Análise simplificada de Atividade Especial',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Completa',
+      description:
+        'Análise completa do gerador de impugnação a laudos médicos e sociais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('79b3f020-6f89-4ebb-8558-f3bc3090b70e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Simplificada',
+      description:
+        'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),
   ];
 
