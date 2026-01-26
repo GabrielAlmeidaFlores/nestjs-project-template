@@ -126,6 +126,7 @@ export class UpdateSpecialActivityUseCase {
       retirementPlanningRgps: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];
@@ -139,7 +140,6 @@ export class UpdateSpecialActivityUseCase {
       transactions.push(...documentTransactions);
     }
 
-    // Atualizar INSS benefits se fornecidos
     if (dto.inssBenefitNumber !== undefined) {
       const inssBenefitTransactions = this.updateInssBenefitOnDatabase(
         specialActivity,
@@ -149,7 +149,6 @@ export class UpdateSpecialActivityUseCase {
       transactions.push(...inssBenefitTransactions);
     }
 
-    // Atualizar legal proceedings se fornecidos
     if (dto.legalProceedingNumber !== undefined) {
       const legalProceedingTransactions = this.updateLegalProceedingOnDatabase(
         specialActivity,
@@ -192,7 +191,6 @@ export class UpdateSpecialActivityUseCase {
   ): Promise<TransactionType[]> {
     const transactions: TransactionType[] = [];
 
-    // Remover documentos antigos (apenas do banco, os arquivos permanecem no bucket)
     for (const existingDoc of existingDocuments) {
       const deleteTransaction =
         this.specialActivityDocumentCommandRepositoryGateway.deleteSpecialActivityDocument(
@@ -201,7 +199,6 @@ export class UpdateSpecialActivityUseCase {
       transactions.push(deleteTransaction);
     }
 
-    // Criar novos documentos
     if (newDocumentDtos !== undefined) {
       for (const docDto of newDocumentDtos) {
         const buffer = docDto.document.base64.decodeToBuffer();
@@ -240,7 +237,6 @@ export class UpdateSpecialActivityUseCase {
   ): TransactionType[] {
     const transactions: TransactionType[] = [];
 
-    // Remover benefits antigos
     for (const existingBenefit of existingBenefits) {
       const deleteTransaction =
         this.specialActivityInssBenefitCommandRepositoryGateway.deleteSpecialActivityInssBenefit(
@@ -249,7 +245,6 @@ export class UpdateSpecialActivityUseCase {
       transactions.push(deleteTransaction);
     }
 
-    // Criar novos benefits
     for (const benefitNumber of newBenefitNumbers) {
       const newBenefit = new SpecialActivityInssBenefitEntity({
         inssBenefitNumber: benefitNumber,
@@ -273,7 +268,6 @@ export class UpdateSpecialActivityUseCase {
   ): TransactionType[] {
     const transactions: TransactionType[] = [];
 
-    // Remover proceedings antigos
     for (const existingProceeding of existingProceedings) {
       const deleteTransaction =
         this.specialActivityLegalProceedingCommandRepositoryGateway.deleteSpecialActivityLegalProceeding(
@@ -282,7 +276,6 @@ export class UpdateSpecialActivityUseCase {
       transactions.push(deleteTransaction);
     }
 
-    // Criar novos proceedings
     for (const proceedingNumber of newProceedingNumbers) {
       const newProceeding = new SpecialActivityLegalProceedingEntity({
         legalProceedingNumber: proceedingNumber,
