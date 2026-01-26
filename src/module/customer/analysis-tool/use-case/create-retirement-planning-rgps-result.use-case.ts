@@ -238,6 +238,7 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       retirementPlanningRgps: retirementPlanningRgpsEntity,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
     });
     const updateAnalysisRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(

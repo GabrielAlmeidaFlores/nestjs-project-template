@@ -7,6 +7,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
+import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -21,6 +22,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/dom
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -80,6 +82,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== undefined
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorTypeormEntity,
+              MedicalQuestionGeneratorEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -104,6 +115,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         analysisToolClient,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
       });
     };
 
@@ -155,6 +167,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== null
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorEntity,
+              MedicalQuestionGeneratorTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -184,6 +205,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         retirementPlanningRgps,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         analysisToolClient,
         createdBy,
         updatedBy,

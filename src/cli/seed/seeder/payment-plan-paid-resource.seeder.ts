@@ -223,6 +223,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Procedimento Administrativo INSS - Completo',
       description: 'Análise completa do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -230,6 +231,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Procedimento Administrativo INSS - Simplificado',
       description:
         'Análise simplificada do procedimento administrativo do INSS.',
     }),
@@ -238,6 +240,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
+      title: 'Caso Judicial - Análise Completa',
       description: 'Análise completa do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -245,7 +248,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
+      title: 'Caso Judicial - Análise Simplificada',
       description: 'Análise simplificada do caso judicial.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e9bfa47e-d159-4b54-8ef4-05dfc6c655d2'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 0,
+      title: 'Gerador de Perguntas Médicas - Análise Completa',
+      description: 'Análise completa do gerador de perguntas médicas.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e9efa46e-d159-4b54-8ef4-05dfc6c655d2'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 0,
+      title: 'Gerador de Perguntas Médicas - Análise Simplificada',
+      description: 'Análise simplificada do gerador de perguntas médicas.',
     }),
   ];
 

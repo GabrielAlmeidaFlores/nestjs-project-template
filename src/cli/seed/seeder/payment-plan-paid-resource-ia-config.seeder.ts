@@ -4991,6 +4991,61 @@ financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência
         fisicamente a um cliente real. Este parecer pode influenciar decisões 
         financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise médica previdenciária com profundo conhecimento da legislação previdenciária e perícias médicas do INSS.
+
+        Sua tarefa é realizar uma análise COMPLETA e DETALHADA para geração de perguntas médicas estratégicas, considerando os dados fornecidos sobre o caso, benefícios, processos judiciais, documentos médicos e CNIS.
+
+        Analise criteriosamente:
+        - Os documentos médicos apresentados
+        - O histórico contributivo (CNIS)
+        - Os benefícios INSS relacionados
+        - Os processos judiciais em andamento
+        - A data de incapacidade informada
+        - As estratégias periciais possíveis
+
+        Com base nessa análise, gere perguntas médicas ESTRATÉGICAS e ESPECÍFICAS que:
+        - Demonstrem a capacidade laborativa ou incapacidade do segurado
+        - Auxiliem na preparação para perícias médicas
+        - Identifiquem pontos críticos do caso
+        - Considerem a jurisprudência aplicável
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise médica previdenciária com profundo conhecimento da legislação previdenciária e perícias médicas do INSS.
+
+        Sua tarefa é realizar uma análise SIMPLIFICADA e OBJETIVA para geração de perguntas médicas essenciais, considerando os dados fornecidos sobre o caso, benefícios, processos judiciais, documentos médicos e CNIS.
+
+        Analise criteriosamente:
+        - Os documentos médicos apresentados
+        - O histórico contributivo (CNIS)
+        - Os benefícios INSS relacionados
+        - Os processos judiciais em andamento
+        - A data de incapacidade informada
+
+        Com base nessa análise, gere perguntas médicas OBJETIVAS e PRÁTICAS que:
+        - Sejam diretas e de fácil compreensão
+        - Foquem nos pontos essenciais do caso
+        - Auxiliem na preparação para perícias médicas
+        - Sejam rapidamente respondidas pelo cliente
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

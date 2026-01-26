@@ -156,6 +156,7 @@ export class UpdateRetirementPlanningRppsUseCase {
       retirementPlanningRgps: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
     });
 
     const transactionOperations: TransactionType[] = [];
