@@ -43,6 +43,7 @@ import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-t
 import { PeriodLeaveDateActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { UpdateLegalPleadingCompleteAnalysisRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading-complete-analysis.request.dto';
+import { UpdateLegalPleadingRequestDto } from '@module/customer/analysis-tool/dto/request/update-legal-pleading.request.dto';
 import { UpdateRetirementPlanningRgpsPeriodRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-period.request.dto';
 import { UpdateRetirementPlanningRgpsResultRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rgps-result.request.dto';
 import { UpdateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/dto/request/update-retirement-planning-rpps-remuneration.request.dto';
@@ -91,6 +92,7 @@ import { ListRetirementPlanningRppsRemunerationResponseDto } from '@module/custo
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { UpdateLegalPleadingCompleteAnalysisResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-complete-analysis.response.dto';
 import { UpdateLegalPleadingStatusToCompleteResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading-to-complete-status.response.dto';
+import { UpdateLegalPleadingResponseDto } from '@module/customer/analysis-tool/dto/response/update-legal-pleading.response.dto';
 import { UpdateRetirementPlanningRgpsPeriodResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-period.response.dto';
 import { UpdateRetirementPlanningRgpsResultResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rgps-result.response.dto';
 import { UpdateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/dto/response/update-retirement-planning-rpps-remuneration.response.dto';
@@ -153,6 +155,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
@@ -179,6 +182,7 @@ export class AnalysisToolController {
     private readonly createAnalysisToolClientUseCase: CreateAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly createLegalPleadingUseCase: CreateLegalPleadingUseCase,
+    private readonly updateLegalPleadingUseCase: UpdateLegalPleadingUseCase,
     private readonly createLegalPleadingResultUseCase: CreateLegalPleadingResultUseCase,
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly getLegalPleadingUseCase: GetLegalPleadingUseCase,
@@ -533,6 +537,38 @@ export class AnalysisToolController {
     return await this.createLegalPleadingUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar peça processual',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'legal-pleading/:legalPleadingId',
+      method: RequestMethod.PATCH,
+      type: UpdateLegalPleadingRequestDto,
+    },
+    tag: ['peca-processual'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Peça processual atualizada com sucesso.',
+      type: UpdateLegalPleadingResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateLegalPleading(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('legalPleadingId', new ParseValueObjectPipe(LegalPleadingId))
+    legalPleadingId: LegalPleadingId,
+    @Body() dto: UpdateLegalPleadingRequestDto,
+  ): Promise<UpdateLegalPleadingResponseDto> {
+    return await this.updateLegalPleadingUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      legalPleadingId,
       dto,
     );
   }
