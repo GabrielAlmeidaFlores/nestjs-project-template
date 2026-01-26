@@ -585,7 +585,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
           medicalAndSocialReportObjectionGeneratorAnalysis: {
-            medicalAndSocialReportObjectionGeneratorAnalysisResult: true,
+            msReportObjectionAnalysisResult: true,
             medicalAndSocialReportObjectionGeneratorAnalysisDocument: true,
           },
           createdBy: {

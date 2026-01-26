@@ -24,18 +24,23 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoM
     const convertOrmEntityToDomainEntity = (
       source: MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
     ): GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult => {
-      return GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult.build({
-        ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisId(source.id),
-        medicalAndSocialReportObjectionGeneratorAnalysisResult:
-          source.medicalAndSocialReportObjectionGeneratorAnalysisResult ?? null,
-        medicalAndSocialReportObjectionGeneratorAnalysisBenefit:
-          source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit ?? [],
-        medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding:
-          source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ?? [],
-        medicalAndSocialReportObjectionGeneratorAnalysisDocument:
-          source.medicalAndSocialReportObjectionGeneratorAnalysisDocument ?? [],
-      });
+      return GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult.build(
+        {
+          ...source,
+          id: new MedicalAndSocialReportObjectionGeneratorAnalysisId(source.id),
+          medicalAndSocialReportObjectionGeneratorAnalysisResult:
+            source.msReportObjectionAnalysisResult ?? null,
+          medicalAndSocialReportObjectionGeneratorAnalysisBenefit:
+            source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit ??
+            [],
+          medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding:
+            source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ??
+            [],
+          medicalAndSocialReportObjectionGeneratorAnalysisDocument:
+            source.medicalAndSocialReportObjectionGeneratorAnalysisDocument ??
+            [],
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
@@ -52,11 +57,13 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoM
     const convertDomainEntityToOrmEntity = (
       source: GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity => {
-      return MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        medicalAndSocialReportObjectionGeneratorAnalysisResult: undefined,
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          msReportObjectionAnalysisResult: undefined,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -69,4 +76,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoM
     );
   }
 }
-

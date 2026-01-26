@@ -27,7 +27,7 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity
 
   @OneToOne(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
-    (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysisResult,
+    (entity) => entity.msReportObjectionAnalysisResult,
   )
   public medicalAndSocialReportObjectionGeneratorAnalysis?:
     | MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity

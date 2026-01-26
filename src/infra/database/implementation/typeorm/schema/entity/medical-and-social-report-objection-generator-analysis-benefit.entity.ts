@@ -19,10 +19,9 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntit
     (entity) => entity.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
   )
   @JoinColumn({
-    // eslint-disable-next-line typeorm-rule/require-column-name-and-match
     name: 'ms_report_objection_analysis_id',
   })
-  public medicalAndSocialReportObjectionGeneratorAnalysis:
+  public msReportObjectionAnalysis:
     | MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity
     | undefined;
 

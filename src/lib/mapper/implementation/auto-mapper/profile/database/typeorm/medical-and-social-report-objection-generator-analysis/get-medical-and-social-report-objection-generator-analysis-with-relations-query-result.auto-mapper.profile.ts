@@ -39,17 +39,19 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult.name,
-          sourceClass: MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.name,
+          sourceClass:
+            MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.name,
         });
       }
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisResult = source.medicalAndSocialReportObjectionGeneratorAnalysisResult
-        ? this.mapper.map(
-            source.medicalAndSocialReportObjectionGeneratorAnalysisResult,
-            MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
-            GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult,
-          )
-        : null;
+      const medicalAndSocialReportObjectionGeneratorAnalysisResult =
+        source.msReportObjectionAnalysisResult
+          ? this.mapper.map(
+              source.msReportObjectionAnalysisResult,
+              MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
+              GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult,
+            )
+          : null;
 
       const createdBy = this.mapper.map(
         source.createdBy,
@@ -63,34 +65,40 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisBenefit = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit ?? [],
-        MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResult,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisBenefit =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit ?? [],
+          MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResult,
+        );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ?? [],
-        MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResult,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding ??
+            [],
+          MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResult,
+        );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisDocument = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisDocument ?? [],
-        MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResult,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisDocument =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisDocument ?? [],
+          MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResult,
+        );
 
-      return GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult.build({
-        ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisId(source.id),
-        medicalAndSocialReportObjectionGeneratorAnalysisResult,
-        medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
-        medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
-        medicalAndSocialReportObjectionGeneratorAnalysisDocument,
-        createdBy,
-        updatedBy,
-      });
+      return GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult.build(
+        {
+          ...source,
+          id: new MedicalAndSocialReportObjectionGeneratorAnalysisId(source.id),
+          medicalAndSocialReportObjectionGeneratorAnalysisResult,
+          medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
+          medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
+          medicalAndSocialReportObjectionGeneratorAnalysisDocument,
+          createdBy,
+          updatedBy,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
@@ -107,13 +115,14 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
     const convertDomainEntityToOrmEntity = (
       source: GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResult,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity => {
-      const medicalAndSocialReportObjectionGeneratorAnalysisResult = source.medicalAndSocialReportObjectionGeneratorAnalysisResult
-        ? this.mapper.map(
-            source.medicalAndSocialReportObjectionGeneratorAnalysisResult,
-            GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult,
-            MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
-          )
-        : undefined;
+      const medicalAndSocialReportObjectionGeneratorAnalysisResult =
+        source.medicalAndSocialReportObjectionGeneratorAnalysisResult
+          ? this.mapper.map(
+              source.medicalAndSocialReportObjectionGeneratorAnalysisResult,
+              GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResult,
+              MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
+            )
+          : undefined;
 
       const updatedBy = this.mapper.map(
         source.updatedBy,
@@ -127,34 +136,40 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
         OrganizationMemberTypeormEntity,
       );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisBenefit = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResult,
-        MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisBenefit =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResult,
+          MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
+        );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResult,
-        MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResult,
+          MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
+        );
 
-      const medicalAndSocialReportObjectionGeneratorAnalysisDocument = this.mapper.mapArray(
-        source.medicalAndSocialReportObjectionGeneratorAnalysisDocument,
-        GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResult,
-        MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
-      );
+      const medicalAndSocialReportObjectionGeneratorAnalysisDocument =
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisDocument,
+          GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResult,
+          MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
+        );
 
-      return MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        medicalAndSocialReportObjectionGeneratorAnalysisResult,
-        medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
-        medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
-        medicalAndSocialReportObjectionGeneratorAnalysisDocument,
-        updatedBy,
-        createdBy,
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          msReportObjectionAnalysisResult:
+            medicalAndSocialReportObjectionGeneratorAnalysisResult,
+          medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
+          medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
+          medicalAndSocialReportObjectionGeneratorAnalysisDocument,
+          updatedBy,
+          createdBy,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -167,4 +182,3 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQue
     );
   }
 }
-

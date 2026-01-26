@@ -27,16 +27,20 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEnti
       source: MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity => {
       const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
-        source.medicalAndSocialReportObjectionGeneratorAnalysis,
+        source.msReportObjectionAnalysis,
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
         MedicalAndSocialReportObjectionGeneratorAnalysisEntity,
       );
 
-      return new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity({
-        ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId(source.id),
-        medicalAndSocialReportObjectionGeneratorAnalysis,
-      });
+      return new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity(
+        {
+          ...source,
+          id: new MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId(
+            source.id,
+          ),
+          medicalAndSocialReportObjectionGeneratorAnalysis,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
@@ -59,11 +63,14 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEnti
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
-      return MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        medicalAndSocialReportObjectionGeneratorAnalysis,
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          msReportObjectionAnalysis:
+            medicalAndSocialReportObjectionGeneratorAnalysis,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -76,4 +83,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEnti
     );
   }
 }
-

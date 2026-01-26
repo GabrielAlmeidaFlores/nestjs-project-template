@@ -27,14 +27,16 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMa
       source: MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
     ): MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity => {
       const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
-        source.medicalAndSocialReportObjectionGeneratorAnalysis,
+        source.msReportObjectionAnalysis,
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
         MedicalAndSocialReportObjectionGeneratorAnalysisEntity,
       );
 
       return new MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity({
         ...source,
-        id: new MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId(source.id),
+        id: new MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId(
+          source.id,
+        ),
         medicalAndSocialReportObjectionGeneratorAnalysis,
       });
     };
@@ -59,11 +61,14 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMa
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
-      return MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        medicalAndSocialReportObjectionGeneratorAnalysis,
-      });
+      return MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          msReportObjectionAnalysis:
+            medicalAndSocialReportObjectionGeneratorAnalysis,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
@@ -76,4 +81,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMa
     );
   }
 }
-
