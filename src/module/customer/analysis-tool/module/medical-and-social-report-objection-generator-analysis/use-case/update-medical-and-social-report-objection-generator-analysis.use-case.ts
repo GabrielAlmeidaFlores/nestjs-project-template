@@ -130,6 +130,7 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       retirementPlanningRpps: null,
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
+      specialActivity: null,
     });
 
     const transactions: TransactionType[] = [];

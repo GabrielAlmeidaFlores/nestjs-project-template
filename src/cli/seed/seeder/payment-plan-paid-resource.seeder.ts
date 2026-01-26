@@ -218,14 +218,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise das regras finais para planejamento de aposentadoria RGPS.',
     }),
-    new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('e9efa47e-d159-4b54-8ef4-05dfc6c655d2'),
-      resource:
-        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
-      creditCost: 1,
-      title: 'Análise Completa do Procedimento Administrativo do INSS',
-      description: 'Análise completa do procedimento administrativo do INSS.',
-    }),
+
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe2-a94bb2b7b703'),
       resource:
@@ -248,7 +241,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'Caso Judicial - Análise Simplificada',
+      title: 'Análise Simplificada do Caso Judicial',
       description: 'Análise simplificada do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
@@ -267,6 +260,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Atividade Especial - Análise Simplificada',
       description: 'Análise simplificada de Atividade Especial',
     }),
+    
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
       resource:

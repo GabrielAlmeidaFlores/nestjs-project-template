@@ -713,7 +713,6 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClient: {
             analysisToolClientInssBenefit: true,
             analysisToolClientLegalProceeding: true,
-            analysisToolClientInssBenefit: true,
             createdBy: {
               customer: true,
               organization: true,
