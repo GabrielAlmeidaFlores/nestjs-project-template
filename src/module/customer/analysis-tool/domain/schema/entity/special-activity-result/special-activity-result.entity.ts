@@ -6,6 +6,8 @@ import type { SpecialActivityResultEntityPropsInterface } from '@module/customer
 export class SpecialActivityResultEntity extends BaseEntity<SpecialActivityResultId> {
   public readonly specialActivityCompleteAnalysis: string | null;
   public readonly specialActivitySimplifiedAnalysis: string | null;
+  public readonly specialActivityCompleteAnalysisDownload: string | null;
+  public readonly specialActivitySimplifiedAnalysisDownload: string | null;
 
   protected readonly _type = SpecialActivityResultEntity.name;
 
@@ -16,5 +18,9 @@ export class SpecialActivityResultEntity extends BaseEntity<SpecialActivityResul
       props.specialActivityCompleteAnalysis ?? null;
     this.specialActivitySimplifiedAnalysis =
       props.specialActivitySimplifiedAnalysis ?? null;
+    this.specialActivityCompleteAnalysisDownload =
+      props.specialActivityCompleteAnalysisDownload ?? null;
+    this.specialActivitySimplifiedAnalysisDownload =
+      props.specialActivitySimplifiedAnalysisDownload ?? null;
   }
 }

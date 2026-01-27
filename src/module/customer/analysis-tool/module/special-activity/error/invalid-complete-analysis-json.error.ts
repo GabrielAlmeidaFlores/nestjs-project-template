@@ -1,8 +1,7 @@
 import { UnexpectedError } from '@core/error/unexpected.error';
 
-export class InvalidCompleteAnalysisJsonError extends UnexpectedError  {
-      protected override readonly _type =
-        InvalidCompleteAnalysisJsonError.name;
+export class InvalidCompleteAnalysisJsonError extends UnexpectedError {
+  protected override readonly _type = InvalidCompleteAnalysisJsonError.name;
 
   public constructor() {
     super(

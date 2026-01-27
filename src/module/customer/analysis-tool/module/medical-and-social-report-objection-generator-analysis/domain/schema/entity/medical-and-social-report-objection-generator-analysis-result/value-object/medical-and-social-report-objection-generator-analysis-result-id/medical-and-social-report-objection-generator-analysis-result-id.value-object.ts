@@ -4,4 +4,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisResultId extends Gu
   protected override readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisResultId.name;
 }
-

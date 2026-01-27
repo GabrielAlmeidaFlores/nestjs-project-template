@@ -16,14 +16,14 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { SpecialActivityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/command/special-activity.command.repository.gateway';
 import { SpecialActivityResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-result/command/special-activity-result.command.repository.gateway';
 import { CreateSpecialActivityResultResponseDto } from '@module/customer/analysis-tool/module/special-activity/dto/response/create-special-activity-result.response.dto';
-import { SpecialActivityNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-not-found.error';
 import { InvalidCompleteAnalysisJsonError } from '@module/customer/analysis-tool/module/special-activity/error/invalid-complete-analysis-json.error';
+import { SpecialActivityDocumentsNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-documents-not-found.errors';
+import { SpecialActivityNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { SpecialActivityDocumentsNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-documents-not-found.errors';
 
 @Injectable()
 export class CreateSpecialActivityResultUseCase {
@@ -123,6 +123,8 @@ export class CreateSpecialActivityResultUseCase {
     const specialActivityResult = new SpecialActivityResultEntity({
       specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
       specialActivitySimplifiedAnalysis: null,
+      specialActivityCompleteAnalysisDownload: null,
+      specialActivitySimplifiedAnalysisDownload: null,
     });
 
     const specialActivity = new SpecialActivityEntity({

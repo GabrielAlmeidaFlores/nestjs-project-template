@@ -8,10 +8,10 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { SpecialActivityController } from '@module/customer/analysis-tool/module/special-activity/special-activity.controller';
 import { CreateSpecialActivityResultUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/create-special-activity-result.use-case';
 import { CreateSpecialActivityUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/create-special-activity.use-case';
-import { GetSpecialActivityByIdUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/get-special-activity-by-id.use-case';
-import { UpdateSpecialActivityUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/update-special-activity.use-case';
 import { DownloadSpecialActivityCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/download-special-activity-complete-analysis.use-case';
 import { DownloadSpecialActivitySimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/download-special-activity-simplified-analysis.use-case';
+import { GetSpecialActivityByIdUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/get-special-activity-by-id.use-case';
+import { UpdateSpecialActivityUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/update-special-activity.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
