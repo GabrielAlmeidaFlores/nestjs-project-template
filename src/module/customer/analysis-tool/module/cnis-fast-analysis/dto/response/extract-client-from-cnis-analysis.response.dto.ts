@@ -8,13 +8,13 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class ExtractClientFromCnisAnalysisResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
-  public name?: string | undefined;
+  public name?: string;
 
   @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
-  public federalDocument?: FederalDocument | undefined;
+  public federalDocument?: FederalDocument;
 
   @ResponseDtoDateProperty({ required: false })
-  public birthDate?: Date | undefined;
+  public birthDate?: Date;
 
   protected override readonly _type =
     ExtractClientFromCnisAnalysisResponseDto.name;
