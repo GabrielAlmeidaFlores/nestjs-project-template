@@ -17,7 +17,6 @@ function findPaymentPlanPaidResourceByType(
   const resource = PAYMENT_PLAN_PAID_RESOURCE_SEED.find(
     (r) => r.resource === resourceType,
   );
-
   if (!resource) {
     throw new EntityNotFoundError();
   }

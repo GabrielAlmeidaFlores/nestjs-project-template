@@ -220,6 +220,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
 
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe4-a97bb2b7b703'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Procedimento Administrativo do INSS - Análise Completa',
+      description:
+        'Análise completa do procedimento administrativo do INSS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe2-a94bb2b7b703'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS,
@@ -253,7 +262,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description: 'Análise completa de Atividade Especial',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a85-9c01-5e2b8d1f96a3'),
+      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a86-9c05-5e2b8d1f96a7'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       creditCost: 3,

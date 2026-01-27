@@ -1,5 +1,14 @@
-import { RequestMethod, HttpStatus, Body, Param } from '@nestjs/common';
+import {
+  RequestMethod,
+  HttpStatus,
+  Body,
+  Param,
+  Query,
+  ParseEnumPipe,
+  StreamableFile,
+} from '@nestjs/common';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { CreateSpecialActivityRequestDto } from '@module/customer/analysis-tool/module/special-activity/dto/request/create-special-activity.request.dto';
 import { UpdateSpecialActivityRequestDto } from '@module/customer/analysis-tool/module/special-activity/dto/request/update-special-activity.request.dto';
@@ -11,6 +20,8 @@ import { CreateSpecialActivityResultUseCase } from '@module/customer/analysis-to
 import { CreateSpecialActivityUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/create-special-activity.use-case';
 import { GetSpecialActivityByIdUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/get-special-activity-by-id.use-case';
 import { UpdateSpecialActivityUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/update-special-activity.use-case';
+import { DownloadSpecialActivityCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/download-special-activity-complete-analysis.use-case';
+import { DownloadSpecialActivitySimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/special-activity/use-case/download-special-activity-simplified-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -31,6 +42,8 @@ export class SpecialActivityController {
     private readonly updateSpecialActivityUseCase: UpdateSpecialActivityUseCase,
     private readonly getSpecialActivityByIdUseCase: GetSpecialActivityByIdUseCase,
     private readonly createSpecialActivityResultUseCase: CreateSpecialActivityResultUseCase,
+    private readonly downloadSpecialActivityCompleteAnalysisUseCase: DownloadSpecialActivityCompleteAnalysisUseCase,
+    private readonly downloadSpecialActivitySimplifiedAnalysisUseCase: DownloadSpecialActivitySimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -151,6 +164,72 @@ export class SpecialActivityController {
       sessionData,
       organizationSessionData,
       specialActivityId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de atividade especial simplificada',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialActivityId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['atividade-especial'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada de atividade especial retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadSpecialActivitySimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('specialActivityId', new ParseValueObjectPipe(SpecialActivityId))
+    specialActivityId: SpecialActivityId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadSpecialActivitySimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialActivityId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de atividade especial completa',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':specialActivityId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['atividade-especial'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa de atividade especial retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadSpecialActivityCompleteAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('specialActivityId', new ParseValueObjectPipe(SpecialActivityId))
+    specialActivityId: SpecialActivityId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadSpecialActivityCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      specialActivityId,
+      format,
     );
   }
 }
