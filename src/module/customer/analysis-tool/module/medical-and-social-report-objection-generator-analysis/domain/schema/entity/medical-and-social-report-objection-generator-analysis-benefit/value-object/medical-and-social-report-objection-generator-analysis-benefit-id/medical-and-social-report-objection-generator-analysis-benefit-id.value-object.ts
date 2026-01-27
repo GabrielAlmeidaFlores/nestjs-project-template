@@ -4,4 +4,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId extends G
   protected override readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisBenefitId.name;
 }
-

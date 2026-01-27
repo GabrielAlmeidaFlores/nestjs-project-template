@@ -225,8 +225,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
       title: 'Procedimento Administrativo do INSS - Análise Completa',
-      description:
-        'Análise completa do procedimento administrativo do INSS.',
+      description: 'Análise completa do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe2-a94bb2b7b703'),
@@ -254,7 +253,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description: 'Análise simplificada do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a85-9c01-5e2b8d1f96a3'),
+      id: new PaymentPlanPaidResourceId('7c4e9b2f-8a1d-4c5e-9b3a-6f2d8e1c5a7b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
       creditCost: 3,
@@ -262,14 +261,32 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description: 'Análise completa de Atividade Especial',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a9e4c7b2-3d6f-4a86-9c05-5e2b8d1f96a7'),
+      id: new PaymentPlanPaidResourceId('5a8f3d1c-6e2b-4d9a-8c4e-7b1f9a3d6c2e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       creditCost: 3,
       title: 'Atividade Especial - Análise Simplificada',
       description: 'Análise simplificada de Atividade Especial',
     }),
-    
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f3b8d7c1-9a4e-4f2b-8d6c-3e1a5b9f7d2c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS_DOWNLOAD,
+      creditCost: 3,
+      title: 'Atividade Especial - Análise Completa para Download',
+      description:
+        'Análise completa de Atividade Especial em formato texto para download',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e2c9f5a6-7b3d-4e8a-9f1c-6d4b2a8e5f7c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
+      creditCost: 3,
+      title: 'Atividade Especial - Análise Simplificada para Download',
+      description:
+        'Análise simplificada de Atividade Especial em formato texto para download',
+    }),
+
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
       resource:

@@ -1,4 +1,5 @@
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
@@ -15,7 +16,6 @@ import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/d
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 
 @ResponseDto()
 export class GetSpecialActivityClientResponseDto extends BaseBuildableDtoObject {

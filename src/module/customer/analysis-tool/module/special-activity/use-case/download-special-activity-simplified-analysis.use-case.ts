@@ -2,17 +2,19 @@ import { Inject, StreamableFile } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result.entity';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
-import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
-import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpecialActivityResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-result/command/special-activity-result.command.repository.gateway';
-import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result.entity';
-import { SpecialActivityNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-not-found.error';
+import { SpecialActivityDocumentsNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-documents-not-found.errors';
 import { SpecialActivityDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-does-not-contain-complete-analysis.error';
 import { SpecialActivityDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-does-not-contain-simplified-analysis.error';
+import { SpecialActivityNotFoundError } from '@module/customer/analysis-tool/module/special-activity/error/special-activity-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -36,6 +38,8 @@ export class DownloadSpecialActivitySimplifiedAnalysisUseCase {
     private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
@@ -60,13 +64,13 @@ export class DownloadSpecialActivitySimplifiedAnalysisUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
         organizationMember.id,
       );
 
@@ -85,42 +89,295 @@ export class DownloadSpecialActivitySimplifiedAnalysisUseCase {
       throw new SpecialActivityNotFoundError();
     }
 
-    if (!specialActivityQueryResult.specialActivityResult) {
-      throw new SpecialActivityDoesNotContainCompleteAnalysisError();
-    }
-
     if (
       specialActivityQueryResult.specialActivityResult
-        .specialActivityCompleteAnalysis === null
+        ?.specialActivityCompleteAnalysis === null ||
+      !specialActivityQueryResult.specialActivityResult
     ) {
-      throw new SpecialActivityDoesNotContainCompleteAnalysisError();
-    }
+      if (specialActivityQueryResult.specialActivityDocuments.length === 0) {
+        throw new SpecialActivityDocumentsNotFoundError();
+      }
 
-    let responseAi =
-      specialActivityQueryResult.specialActivityResult
-        .specialActivitySimplifiedAnalysis;
+      const promptCompleteAnalysisResponse =
+        await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+          PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
+        );
 
-    if (responseAi === null) {
-      const specialActivitySimplifiedAnalysis =
-        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysis(
+      const consumeCompleteAnalysisCreditTransaction =
+        await this.consumeOrganizationCreditUseCase.execute(
+          organizationSessionData.organizationId,
+          PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
+          organizationMember.id,
+        );
+
+      const clientDataBuffer = Buffer.from(
+        JSON.stringify(
+          analysisToolRecordQueryResult.analysisToolClient,
+          null,
+          2,
+        ),
+        'utf-8',
+      );
+
+      const documentBuffers = await Promise.all(
+        specialActivityQueryResult.specialActivityDocuments.map(async (doc) => {
+          const buffer = await this.fileProcessorGateway.getFileBuffer(
+            doc.document,
+          );
+          return buffer;
+        }),
+      );
+
+      const allBuffers = [clientDataBuffer, ...documentBuffers];
+
+      const specialActivityCompleteAnalysisJson =
+        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
+          promptCompleteAnalysisResponse.prompt,
+          allBuffers,
+        );
+
+      let resultEntity: SpecialActivityResultEntity;
+      let saveCompleteAnalysisTransaction;
+
+      if (!specialActivityQueryResult.specialActivityResult) {
+        resultEntity = new SpecialActivityResultEntity({
+          specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
+          specialActivitySimplifiedAnalysis: null,
+          specialActivityCompleteAnalysisDownload: null,
+          specialActivitySimplifiedAnalysisDownload: null,
+        });
+
+        saveCompleteAnalysisTransaction =
+          this.specialActivityResultCommandRepositoryGateway.createSpecialActivityResult(
+            resultEntity,
+          );
+      } else {
+        resultEntity = new SpecialActivityResultEntity({
+          ...specialActivityQueryResult.specialActivityResult,
+          specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
+        });
+
+        saveCompleteAnalysisTransaction =
+          this.specialActivityResultCommandRepositoryGateway.updateSpecialActivityResult(
+            specialActivityQueryResult.specialActivityResult.id,
+            resultEntity,
+          );
+      }
+
+      const transactionCompleteAnalysis =
+        await this.baseTransactionRepositoryGateway.execute([
+          consumeCompleteAnalysisCreditTransaction,
+          saveCompleteAnalysisTransaction,
+        ]);
+      await transactionCompleteAnalysis.commit();
+
+      const updatedAnalysisToolRecordQueryResult =
+        await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialActivityIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          specialActivityId,
+          organizationSessionData.organizationId,
+          sessionData.authIdentityId,
+          SpecialActivityNotFoundError,
+        );
+
+      if (
+        !updatedAnalysisToolRecordQueryResult.specialActivity
+          ?.specialActivityResult
+      ) {
+        throw new SpecialActivityDoesNotContainCompleteAnalysisError();
+      }
+
+      const currentResult =
+        updatedAnalysisToolRecordQueryResult.specialActivity
+          .specialActivityResult;
+
+      if (currentResult.specialActivitySimplifiedAnalysis === null) {
+        const promptSimplifiedAnalysisResponse =
+          await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+            PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+          );
+
+        const consumeSimplifiedAnalysisCreditTransaction =
+          await this.consumeOrganizationCreditUseCase.execute(
+            organizationSessionData.organizationId,
+            PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+            organizationMember.id,
+          );
+
+        const specialActivitySimplifiedAnalysisJson =
+          await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysis(
+            promptSimplifiedAnalysisResponse.prompt,
+            [
+              Buffer.from(
+                currentResult.specialActivityCompleteAnalysis as string,
+                'utf-8',
+              ),
+            ],
+          );
+
+        const simplifiedResultEntity = new SpecialActivityResultEntity({
+          ...currentResult,
+          specialActivitySimplifiedAnalysis:
+            specialActivitySimplifiedAnalysisJson,
+        });
+
+        const saveSimplifiedAnalysisTransaction =
+          this.specialActivityResultCommandRepositoryGateway.updateSpecialActivityResult(
+            currentResult.id,
+            simplifiedResultEntity,
+          );
+
+        const transactionSimplifiedAnalysis =
+          await this.baseTransactionRepositoryGateway.execute([
+            consumeSimplifiedAnalysisCreditTransaction,
+            saveSimplifiedAnalysisTransaction,
+          ]);
+        await transactionSimplifiedAnalysis.commit();
+      }
+
+      const finalAnalysisToolRecordQueryResult =
+        await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialActivityIdAndOrganizationIdAndAuthIdentityIdOrFail(
+          specialActivityId,
+          organizationSessionData.organizationId,
+          sessionData.authIdentityId,
+          SpecialActivityNotFoundError,
+        );
+
+      if (
+        !finalAnalysisToolRecordQueryResult.specialActivity
+          ?.specialActivityResult
+      ) {
+        throw new SpecialActivityDoesNotContainSimplifiedAnalysisError();
+      }
+
+      const finalResult =
+        finalAnalysisToolRecordQueryResult.specialActivity
+          .specialActivityResult;
+
+      const specialActivitySimplifiedAnalysisDownload =
+        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysisDownload(
           promptResponse.prompt,
           [
             Buffer.from(
-              specialActivityQueryResult.specialActivityResult
-                .specialActivityCompleteAnalysis,
+              finalResult.specialActivityCompleteAnalysis as string,
+              'utf-8',
+            ),
+          ],
+        );
+
+      const downloadResultEntity = new SpecialActivityResultEntity({
+        ...finalResult,
+        specialActivitySimplifiedAnalysisDownload,
+      });
+
+      const specialActivityResultTransaction =
+        this.specialActivityResultCommandRepositoryGateway.updateSpecialActivityResult(
+          finalResult.id,
+          downloadResultEntity,
+        );
+
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        consumeCreditTransaction,
+        specialActivityResultTransaction,
+      ]);
+      await transaction.commit();
+
+      const responseAi = specialActivitySimplifiedAnalysisDownload;
+
+      if (responseAi === null) {
+        throw new SpecialActivityDoesNotContainSimplifiedAnalysisError();
+      }
+
+      return this.exportDocumentGateway.downloadFileAsStreamable(
+        responseAi,
+        format,
+        'analise_simplificada_atividade_especial',
+      );
+    }
+    const currentResult = specialActivityQueryResult.specialActivityResult;
+    if (currentResult.specialActivityCompleteAnalysis === null) {
+      throw new SpecialActivityDoesNotContainCompleteAnalysisError();
+    }
+
+    if (currentResult.specialActivitySimplifiedAnalysis === null) {
+      const promptSimplifiedAnalysisResponse =
+        await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+          PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+        );
+
+      const consumeSimplifiedAnalysisCreditTransaction =
+        await this.consumeOrganizationCreditUseCase.execute(
+          organizationSessionData.organizationId,
+          PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
+          organizationMember.id,
+        );
+
+      const specialActivitySimplifiedAnalysisJson =
+        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysis(
+          promptSimplifiedAnalysisResponse.prompt,
+          [Buffer.from(currentResult.specialActivityCompleteAnalysis, 'utf-8')],
+        );
+
+      const simplifiedResultEntity = new SpecialActivityResultEntity({
+        ...currentResult,
+        specialActivitySimplifiedAnalysis:
+          specialActivitySimplifiedAnalysisJson,
+      });
+
+      const saveSimplifiedAnalysisTransaction =
+        this.specialActivityResultCommandRepositoryGateway.updateSpecialActivityResult(
+          currentResult.id,
+          simplifiedResultEntity,
+        );
+
+      const transactionSimplifiedAnalysis =
+        await this.baseTransactionRepositoryGateway.execute([
+          consumeSimplifiedAnalysisCreditTransaction,
+          saveSimplifiedAnalysisTransaction,
+        ]);
+      await transactionSimplifiedAnalysis.commit();
+    }
+
+    const updatedAnalysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsBySpecialActivityIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        specialActivityId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        SpecialActivityNotFoundError,
+      );
+
+    if (
+      !updatedAnalysisToolRecordQueryResult.specialActivity
+        ?.specialActivityResult
+    ) {
+      throw new SpecialActivityDoesNotContainSimplifiedAnalysisError();
+    }
+
+    const finalResult =
+      updatedAnalysisToolRecordQueryResult.specialActivity
+        .specialActivityResult;
+
+    let responseAi = finalResult.specialActivitySimplifiedAnalysisDownload;
+
+    if (responseAi === null) {
+      const specialActivitySimplifiedAnalysisDownload =
+        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysisDownload(
+          promptResponse.prompt,
+          [
+            Buffer.from(
+              finalResult.specialActivityCompleteAnalysis ?? '',
               'utf-8',
             ),
           ],
         );
 
       const specialActivityResult = new SpecialActivityResultEntity({
-        ...specialActivityQueryResult.specialActivityResult,
-        specialActivitySimplifiedAnalysis,
+        ...finalResult,
+        specialActivitySimplifiedAnalysisDownload,
       });
 
       const specialActivityResultTransaction =
         this.specialActivityResultCommandRepositoryGateway.updateSpecialActivityResult(
-          specialActivityQueryResult.specialActivityResult.id,
+          finalResult.id,
           specialActivityResult,
         );
 
@@ -130,7 +387,7 @@ export class DownloadSpecialActivitySimplifiedAnalysisUseCase {
       ]);
       await transaction.commit();
 
-      responseAi = specialActivitySimplifiedAnalysis;
+      responseAi = specialActivitySimplifiedAnalysisDownload;
     }
 
     if (responseAi === null) {

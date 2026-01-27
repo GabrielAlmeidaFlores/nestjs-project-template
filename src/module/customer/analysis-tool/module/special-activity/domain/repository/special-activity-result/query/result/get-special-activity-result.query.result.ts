@@ -6,6 +6,8 @@ export class GetSpecialActivityResultQueryResult extends BaseBuildableObject {
   public readonly id: SpecialActivityResultId;
   public readonly specialActivityCompleteAnalysis: string | null;
   public readonly specialActivitySimplifiedAnalysis: string | null;
+  public readonly specialActivityCompleteAnalysisDownload: string | null;
+  public readonly specialActivitySimplifiedAnalysisDownload: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

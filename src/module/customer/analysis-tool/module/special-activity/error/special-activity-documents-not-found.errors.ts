@@ -5,8 +5,6 @@ export class SpecialActivityDocumentsNotFoundError extends NotFoundError {
     SpecialActivityDocumentsNotFoundError.name;
 
   public constructor() {
-    super(
-      'Não foi encontrado nenhum documento da Atividade Especial',
-    );
+    super('Não foi encontrado nenhum documento da Atividade Especial');
   }
 }

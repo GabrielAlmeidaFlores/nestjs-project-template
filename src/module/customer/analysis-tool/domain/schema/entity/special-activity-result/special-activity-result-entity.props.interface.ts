@@ -4,4 +4,6 @@ import type { SpecialActivityResultId } from '@module/customer/analysis-tool/dom
 export interface SpecialActivityResultEntityPropsInterface extends BaseEntityPropsInterface<SpecialActivityResultId> {
   specialActivityCompleteAnalysis?: string | null;
   specialActivitySimplifiedAnalysis?: string | null;
+  specialActivityCompleteAnalysisDownload?: string | null;
+  specialActivitySimplifiedAnalysisDownload?: string | null;
 }

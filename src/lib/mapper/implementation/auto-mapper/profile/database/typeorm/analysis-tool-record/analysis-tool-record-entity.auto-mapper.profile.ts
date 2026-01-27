@@ -1,6 +1,5 @@
 import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { Injectable } from '@nestjs/common';
 
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
@@ -25,6 +24,7 @@ import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/sch
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -105,14 +105,14 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientEntity,
       );
 
-      const specialActivity = 
-      source.specialActivity !== null
-        ? this.mapper.map(
-            source.specialActivity,
-            SpecialActivityTypeormEntity,
-            SpecialActivityEntity,
-          )
-        : null;
+      const specialActivity =
+        source.specialActivity !== null
+          ? this.mapper.map(
+              source.specialActivity,
+              SpecialActivityTypeormEntity,
+              SpecialActivityEntity,
+            )
+          : null;
 
       return new AnalysisToolRecordEntity({
         ...source,
@@ -200,14 +200,14 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
-      const specialActivity = 
-      source.specialActivity !== null
-        ? this.mapper.map(
-            source.specialActivity,
-            SpecialActivityEntity,
-            SpecialActivityTypeormEntity,
-          )
-        : null;
+      const specialActivity =
+        source.specialActivity !== null
+          ? this.mapper.map(
+              source.specialActivity,
+              SpecialActivityEntity,
+              SpecialActivityTypeormEntity,
+            )
+          : null;
 
       const createdBy = {
         id: source.createdBy.toString(),
