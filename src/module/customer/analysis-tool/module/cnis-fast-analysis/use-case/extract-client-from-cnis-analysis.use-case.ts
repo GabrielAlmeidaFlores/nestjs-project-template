@@ -27,9 +27,9 @@ export class ExtractClientFromCnisAnalysisUseCase {
         : undefined;
 
     return ExtractClientFromCnisAnalysisResponseDto.build({
-      name: cnisData.affiliateIdentification?.nome,
-      federalDocument,
-      birthDate: cnisData.affiliateIdentification?.dataDeNascimento,
+      name: cnisData.affiliateIdentification?.nome ?? null,
+      federalDocument: federalDocument ?? null,
+      birthDate: cnisData.affiliateIdentification?.dataDeNascimento ?? null,
     });
   }
 }
