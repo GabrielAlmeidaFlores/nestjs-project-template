@@ -161,6 +161,7 @@ export class CreateJudicialCaseAnalysisResultUseCase {
       cnisFastAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =

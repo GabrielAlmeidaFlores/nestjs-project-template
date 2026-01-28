@@ -271,6 +271,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c8d9e0f1-2a3b-4c5d-6e7f-8a9b0c1d2e3f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Gerador de Discurso - Análise Completa',
+      description:
+        'Geração de discurso completo a partir de documentos previdenciários (conteúdo em markup/hypertext para edição).',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Gerador de Discurso - Análise Simplificada',
+      description:
+        'Geração de discurso simplificado a partir de documentos previdenciários (conteúdo em markup/hypertext para edição).',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

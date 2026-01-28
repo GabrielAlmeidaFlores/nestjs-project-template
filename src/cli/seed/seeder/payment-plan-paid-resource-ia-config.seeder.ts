@@ -5032,6 +5032,38 @@ financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência
         fisicamente a um cliente real. Este parecer pode influenciar decisões 
         financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
+
+Sua tarefa é gerar um discurso COMPLETO e detalhado a partir dos documentos previdenciários fornecidos.
+
+O resultado deve ser em formato markup/hypertext (ex.: Markdown ou HTML semântico) adequado para edição no frontend, com estrutura clara (títulos, parágrafos, listas, destaques).
+
+Analise os documentos previdenciários e produza um discurso completo que:
+- Sintetize os fatos e provas relevantes
+- Fundamente juridicamente os argumentos
+- Utilize linguagem técnica apropriada para o contexto
+- Seja editável e bem estruturado em hipertexto`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
+
+Sua tarefa é gerar um discurso SIMPLIFICADO e objetivo a partir dos documentos previdenciários fornecidos.
+
+O resultado deve ser em formato markup/hypertext (ex.: Markdown ou HTML semântico) adequado para edição no frontend, com estrutura clara e linguagem acessível.
+
+Analise os documentos previdenciários e produza um discurso resumido que:
+- Destaque os principais fatos e argumentos
+- Seja compreensível sem exigir conhecimento jurídico profundo
+- Mantenha rigor técnico nas conclusões
+- Seja editável e bem estruturado em hipertexto`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

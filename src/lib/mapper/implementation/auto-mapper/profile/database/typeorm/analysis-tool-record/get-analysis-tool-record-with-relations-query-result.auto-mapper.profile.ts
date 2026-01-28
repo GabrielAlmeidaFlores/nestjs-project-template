@@ -11,6 +11,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -22,6 +23,7 @@ import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/custo
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
+import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -89,6 +91,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              SpeechGeneratorTypeormEntity,
+              GetSpeechGeneratorQueryResult,
+            )
+          : null;
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
@@ -105,6 +116,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -173,6 +185,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              GetSpeechGeneratorQueryResult,
+              SpeechGeneratorTypeormEntity,
+            )
+          : null;
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -189,6 +210,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         analysisToolClient,
         createdBy,
         updatedBy,
