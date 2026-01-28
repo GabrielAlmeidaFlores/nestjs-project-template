@@ -1,4 +1,6 @@
 import { createMap, forMember, mapFrom } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
+import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
@@ -6,12 +8,13 @@ import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/r
 
 import type { Mapper } from '@automapper/core';
 
+@Injectable()
 export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
   protected readonly _type =
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile.name;
 
-  public constructor(mapper: Mapper) {
-    this.createMap(mapper);
+  public constructor(@InjectMapper() private readonly mapper: Mapper) {
+    this.createMap(this.mapper);
   }
 
   private createMap(mapper: Mapper): void {
