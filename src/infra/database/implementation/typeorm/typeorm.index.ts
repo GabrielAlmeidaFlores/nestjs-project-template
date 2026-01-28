@@ -84,6 +84,17 @@ import { RetirementPlanningRgpsEarningsHistoryTypeormCommandRepository } from '@
 import { RetirementPlanningRgpsEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.typeorm.query.repository';
 import { RetirementPlanningRppsInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-inss-benefit/retirement-planning-rpps-inss-benefit.typeorm.command.repository';
 import { RetirementPlanningRppsLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.typeorm.command.repository';
+import { RuralTimelineTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline/rural-timeline.typeorm.command.repository';
+import { RuralTimelineTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline/rural-timeline.typeorm.query.repository';
+import { RuralTimelineCnisContributionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period/rural-timeline-cnis-contribution-period.typeorm.command.repository';
+import { RuralTimelineCnisContributionPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-under-minimum/rural-timeline-cnis-contribution-period-under-minimum.typeorm.command.repository';
+import { RuralTimelineDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-document/rural-timeline-document.typeorm.command.repository';
+import { RuralTimelinePeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period/rural-timeline-period.typeorm.command.repository';
+import { RuralTimelinePeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-document/rural-timeline-period-document.typeorm.command.repository';
+import { RuralTimelinePeriodEconomicAspectsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-economic-aspects/rural-timeline-period-economic-aspects.typeorm.command.repository';
+import { RuralTimelinePeriodFamilyGroupMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-family-group-member/rural-timeline-period-family-group-member.typeorm.command.repository';
+import { RuralTimelinePeriodPropertyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-property/rural-timeline-period-property.typeorm.command.repository';
+import { RuralTimelinePeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-residence/rural-timeline-period-residence.typeorm.command.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -329,6 +340,17 @@ export class TypeormIndex {
     JudicialCaseAnalysisDocumentTypeormCommandRepository,
     JudicialCaseAnalysisLegalProceedingTypeormCommandRepository,
     JudicialCaseAnalysisResultTypeormCommandRepository,
+    RuralTimelineTypeormCommandRepository,
+    RuralTimelineTypeormQueryRepository,
+    RuralTimelineDocumentTypeormCommandRepository,
+    RuralTimelinePeriodTypeormCommandRepository,
+    RuralTimelinePeriodPropertyTypeormCommandRepository,
+    RuralTimelinePeriodResidenceTypeormCommandRepository,
+    RuralTimelinePeriodDocumentTypeormCommandRepository,
+    RuralTimelinePeriodEconomicAspectsTypeormCommandRepository,
+    RuralTimelinePeriodFamilyGroupMemberTypeormCommandRepository,
+    RuralTimelineCnisContributionPeriodTypeormCommandRepository,
+    RuralTimelineCnisContributionPeriodUnderMinimumTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
