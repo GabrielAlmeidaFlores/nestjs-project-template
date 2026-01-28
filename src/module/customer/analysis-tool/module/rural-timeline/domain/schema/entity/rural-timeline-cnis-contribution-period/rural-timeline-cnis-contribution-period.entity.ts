@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period/enum/rural-timeline-cnis-contribution-period-status.enum';
 import { RuralTimelineCnisContributionPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period/rural-timeline-cnis-contribution-period.entity.props.interface';
@@ -30,7 +31,7 @@ export class RuralTimelineCnisContributionPeriodEntity extends BaseEntity<RuralT
   public readonly status: RuralTimelineCnisContributionPeriodStatusEnum | null;
 
   @Description('Valor médio de contribuição.')
-  public readonly averageContributionAmount: number | null;
+  public readonly averageContributionAmount: DecimalValue | null;
 
   @Description('Intenção de ajuste de contribuição.')
   public readonly contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;

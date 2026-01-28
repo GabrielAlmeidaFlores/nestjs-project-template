@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RuralTimelineCnisContributionPeriodUnderMinimumEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period-under-minimum/rural-timeline-cnis-contribution-period-under-minimum.entity.props.interface';
 import { RuralTimelineCnisContributionPeriodUnderMinimumId } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period-under-minimum/value-object/rural-timeline-cnis-contribution-period-under-minimum-id/rural-timeline-cnis-contribution-period-under-minimum-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -10,7 +11,7 @@ export class RuralTimelineCnisContributionPeriodUnderMinimumEntity extends BaseE
   public readonly contributionDate: Date;
 
   @Description('Valor da contribuição.')
-  public readonly contributionAmount: number;
+  public readonly contributionAmount: DecimalValue;
 
   @Description('ID do período de contribuição CNIS associado.')
   public readonly ruralTimelineCnisContributionPeriodId: RuralTimelineCnisContributionPeriodId;

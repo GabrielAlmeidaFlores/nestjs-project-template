@@ -1,4 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { RuralTimelineId } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline/value-object/rural-timeline-id/rural-timeline-id.value-object';
 import type { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import type { RuralTimelineCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline-cnis-contribution-period/enum/rural-timeline-cnis-contribution-period-status.enum';
@@ -12,7 +13,7 @@ export interface RuralTimelineCnisContributionPeriodEntityPropsInterface extends
   category?: string | null;
   qualifyingPeriod?: number | null;
   status?: RuralTimelineCnisContributionPeriodStatusEnum | null;
-  averageContributionAmount?: number | null;
+  averageContributionAmount?: DecimalValue | null;
   contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   externalSupplementationIntent: boolean;
 }
