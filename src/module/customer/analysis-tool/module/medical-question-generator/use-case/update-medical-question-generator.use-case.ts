@@ -70,8 +70,6 @@ export class UpdateMedicalQuestionGeneratorUseCase {
         dto?.disabilityDate ??
         medicalQuestionGeneratorQueryResult.disabilityDate,
       medicalQuestionGeneratorResult: null,
-      createdBy: medicalQuestionGeneratorQueryResult.createdBy.id,
-      updatedBy: organizationMember.id,
     });
 
     const transactions: TransactionType[] = [];

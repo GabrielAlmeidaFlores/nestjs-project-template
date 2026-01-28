@@ -6,7 +6,7 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+
 import { MedicalQuestionGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/command/medical-question-generator.command.repository.gateway';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
@@ -54,13 +54,9 @@ export class MedicalQuestionGeneratorTypeormCommandRepository
 
   public deleteMedicalQuestionGenerator(
     id: MedicalQuestionGeneratorId,
-    updatedBy: OrganizationMemberId,
   ): TransactionType {
     return this.update(id.toString(), {
       deletedAt: new Date(),
-      updatedBy: {
-        id: updatedBy.toString(),
-      },
     });
   }
 }

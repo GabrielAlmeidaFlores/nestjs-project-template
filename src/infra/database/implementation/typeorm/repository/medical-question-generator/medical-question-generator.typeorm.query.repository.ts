@@ -80,14 +80,6 @@ export class MedicalQuestionGeneratorTypeormQueryRepository
           medicalQuestionGeneratorInssBenefit: true,
           medicalQuestionGeneratorLegalProceeding: true,
           medicalQuestionGeneratorDocument: true,
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
           analysisToolRecord: {
             analysisToolClient: {
               createdBy: {
@@ -146,14 +138,6 @@ export class MedicalQuestionGeneratorTypeormQueryRepository
           medicalQuestionGeneratorInssBenefit: true,
           medicalQuestionGeneratorLegalProceeding: true,
           medicalQuestionGeneratorDocument: true,
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
         },
       },
       err,

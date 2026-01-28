@@ -95,6 +95,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
     this.administrativeProcedureInssAnalysis =
       props.administrativeProcedureInssAnalysis ?? null;
+    this.medicalQuestionGenerator = props.medicalQuestionGenerator ?? null;
+    this.medicalAndSocialReportObjectionGeneratorAnalysis =
+      props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
+    this.disabilityAssessmentForBpcAnalysis =
+      props.disabilityAssessmentForBpcAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
