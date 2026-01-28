@@ -121,32 +121,23 @@ export class DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile {
             )
           : undefined;
 
-      const disabilityAssessmentForBpcAnalysisBenefit =
-        source.disabilityAssessmentForBpcAnalysisBenefit !== undefined
-          ? this.mapper.mapArray(
-              source.disabilityAssessmentForBpcAnalysisBenefit,
-              DisabilityAssessmentForBpcAnalysisBenefitEntity,
-              DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity,
-            )
-          : undefined;
+      const disabilityAssessmentForBpcAnalysisBenefit = this.mapper.mapArray(
+        source.disabilityAssessmentForBpcAnalysisBenefit,
+        DisabilityAssessmentForBpcAnalysisBenefitEntity,
+        DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity,
+      );
 
       const disabilityAssessmentForBpcAnalysisLegalProceeding =
-        source.disabilityAssessmentForBpcAnalysisLegalProceeding !== undefined
-          ? this.mapper.mapArray(
-              source.disabilityAssessmentForBpcAnalysisLegalProceeding,
-              DisabilityAssessmentForBpcAnalysisLegalProceedingEntity,
-              DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity,
-            )
-          : undefined;
-
-      const disabilityAssessmentForBpcAnalysisDocument =
-        source.disabilityAssessmentForBpcAnalysisDocument !== undefined
-          ? this.mapper.mapArray(
-              source.disabilityAssessmentForBpcAnalysisDocument,
-              DisabilityAssessmentForBpcAnalysisDocumentEntity,
-              DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity,
-            )
-          : undefined;
+        this.mapper.mapArray(
+          source.disabilityAssessmentForBpcAnalysisLegalProceeding,
+          DisabilityAssessmentForBpcAnalysisLegalProceedingEntity,
+          DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity,
+        );
+      const disabilityAssessmentForBpcAnalysisDocument = this.mapper.mapArray(
+        source.disabilityAssessmentForBpcAnalysisDocument,
+        DisabilityAssessmentForBpcAnalysisDocumentEntity,
+        DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity,
+      );
 
       return DisabilityAssessmentForBpcAnalysisTypeormEntity.build({
         ...source,
