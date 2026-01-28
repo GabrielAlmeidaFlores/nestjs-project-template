@@ -17,10 +17,12 @@ import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/
 import { RuralTimelineAnalysisPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period/command/rural-timeline-analysis-period.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/command/rural-timeline-analysis-period-economic-aspects.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.entity';
+import { RuralTimelineAnalysisPeriodResidenceEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.entity';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -44,6 +46,8 @@ export class CreateRuralTimelineAnalysisUseCase {
     private readonly ruralTimelineAnalysisPeriodDocumentCommandRepositoryGateway: RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway,
     @Inject(RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway: RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodResidenceCommandRepositoryGateway: RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -89,8 +93,27 @@ export class CreateRuralTimelineAnalysisUseCase {
       analysisToolClientId: dto.analysisToolClientId,
     });
 
+    const residences: RuralTimelineAnalysisPeriodResidenceEntity[] = [];
+
+    for (const periodDto of dto.periods) {
+      if (periodDto.residence !== undefined) {
+        residences.push(
+          new RuralTimelineAnalysisPeriodResidenceEntity({
+            city: periodDto.residence.city,
+            stateCode: periodDto.residence.stateCode,
+            distanceToPropertyKm: periodDto.residence.distanceToPropertyKm,
+          }),
+        );
+      }
+    }
+
     const periods: RuralTimelineAnalysisPeriodEntity[] = dto.periods.map(
-      (periodDto) => {
+      (periodDto, index) => {
+        const residenceId =
+          periodDto.residence !== undefined
+            ? (residences.find((_, i) => i === index)?.id ?? null)
+            : null;
+
         return new RuralTimelineAnalysisPeriodEntity({
           startDate: periodDto.startDate,
           endDate: periodDto.endDate,
@@ -100,7 +123,7 @@ export class CreateRuralTimelineAnalysisUseCase {
           documentAnalysis: null,
           ruralTimelineId: ruralTimelineAnalysis.id,
           ruralTimelinePeriodPropertyId: null,
-          ruralTimelinePeriodResidenceId: null,
+          ruralTimelinePeriodResidenceId: residenceId,
         });
       },
     );
@@ -185,6 +208,7 @@ export class CreateRuralTimelineAnalysisUseCase {
       ruralTimelineAnalysis,
       periods,
       documents,
+      residences,
       economicAspects,
       analysisToolRecord,
     );
@@ -198,6 +222,7 @@ export class CreateRuralTimelineAnalysisUseCase {
     ruralTimelineAnalysis: RuralTimelineAnalysisEntity,
     periods: RuralTimelineAnalysisPeriodEntity[],
     documents: RuralTimelineAnalysisPeriodDocumentEntity[],
+    residences: RuralTimelineAnalysisPeriodResidenceEntity[],
     economicAspects: RuralTimelineAnalysisPeriodEconomicAspectsEntity[],
     analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
@@ -218,6 +243,12 @@ export class CreateRuralTimelineAnalysisUseCase {
       );
     });
 
+    const residenceTransactions = residences.map((residence) => {
+      return this.ruralTimelineAnalysisPeriodResidenceCommandRepositoryGateway.createRuralTimelineAnalysisPeriodResidence(
+        residence,
+      );
+    });
+
     const economicAspectsTransactions = economicAspects.map(
       (economicAspect) => {
         return this.ruralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway.createRuralTimelineAnalysisPeriodEconomicAspects(
@@ -235,6 +266,7 @@ export class CreateRuralTimelineAnalysisUseCase {
       ruralTimelineAnalysisTransaction,
       ...periodTransactions,
       ...documentTransactions,
+      ...residenceTransactions,
       ...economicAspectsTransactions,
       analysisToolRecordTransaction,
     ]);
