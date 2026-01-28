@@ -6,7 +6,7 @@ import type { MedicalQuestionGeneratorInssBenefitEntityPropsInterface } from '@m
 
 export class MedicalQuestionGeneratorInssBenefitEntity extends BaseEntity<MedicalQuestionGeneratorInssBenefitId> {
   public readonly inssBenefitNumber: string;
-  public readonly medicalQuestionGenerator?: MedicalQuestionGeneratorEntity;
+  public readonly medicalQuestionGenerator: MedicalQuestionGeneratorEntity;
 
   protected readonly _type = MedicalQuestionGeneratorInssBenefitEntity.name;
 

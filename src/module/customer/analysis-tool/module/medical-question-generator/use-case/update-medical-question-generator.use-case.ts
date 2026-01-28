@@ -86,10 +86,6 @@ export class UpdateMedicalQuestionGeneratorUseCase {
         MedicalQuestionGeneratorNotFoundError,
       );
 
-    if (medicalQuestionGeneratorQueryResult === null) {
-      throw new MedicalQuestionGeneratorNotFoundError();
-    }
-
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByMedicalQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
         medicalQuestionGeneratorId,
@@ -100,7 +96,7 @@ export class UpdateMedicalQuestionGeneratorUseCase {
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-        dto.json?.analysisToolClientId ??
+        dto.json.analysisToolClientId ??
           analysisToolRecordQueryResult.analysisToolClient.id,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
