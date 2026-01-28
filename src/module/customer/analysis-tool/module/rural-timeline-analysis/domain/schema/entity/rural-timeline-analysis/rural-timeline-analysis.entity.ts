@@ -6,16 +6,24 @@ import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/r
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RuralTimelineAnalysisEntity extends BaseEntity<RuralTimelineAnalysisId> {
-  @Description('Análise da linha do tempo rural.')
+  @Description(
+    'Análise gerada pela IA sobre a linha do tempo rural do cliente, incluindo avaliação dos períodos de atividade rural e urbana.',
+  )
   public readonly ruralTimelineAnalysis: string | null;
 
-  @Description('Análise dos documentos do período da linha do tempo rural.')
+  @Description(
+    'Análise detalhada dos documentos comprobatórios apresentados para cada período da linha do tempo rural.',
+  )
   public readonly ruralTimelinePeriodDocumentAnalysis: string | null;
 
-  @Description('ID do cliente da ferramenta de análise.')
+  @Description(
+    'ID do cliente da ferramenta de análise previdenciária (dados pessoais, CPF, benefícios, processos).',
+  )
   public readonly analysisToolClientId: AnalysisToolClientId;
 
-  @Description('Regime de trabalho.')
+  @Description(
+    'Regime de trabalho identificado: se o cliente trabalhou somente em atividades rurais ou de forma híbrida (rural e urbana).',
+  )
   public readonly workRegime: RuralTimelineAnalysisWorkRegimeEnum;
 
   protected readonly _type = RuralTimelineAnalysisEntity.name;

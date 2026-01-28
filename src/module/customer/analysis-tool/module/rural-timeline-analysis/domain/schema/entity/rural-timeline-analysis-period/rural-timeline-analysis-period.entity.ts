@@ -11,31 +11,47 @@ import type { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/ana
 import type { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
 
 export class RuralTimelineAnalysisPeriodEntity extends BaseEntity<RuralTimelineAnalysisPeriodId> {
-  @Description('Data de início do período.')
+  @Description(
+    'Data de início do período de atividade rural (formato: DD/MM/AAAA).',
+  )
   public readonly startDate: Date;
 
-  @Description('Data de término do período.')
+  @Description(
+    'Data de término do período de atividade rural (formato: DD/MM/AAAA).',
+  )
   public readonly endDate: Date;
 
-  @Description('Tipo de trabalhador.')
+  @Description(
+    'Tipo de trabalhador rural: Segurado Especial Rural, Pescador Artesanal, Seringueiro/Extrativista ou Empregado Rural.',
+  )
   public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
 
-  @Description('Tipo de regime de trabalho.')
+  @Description(
+    'Regime de trabalho rural: Individual (trabalho próprio) ou Economia Familiar (trabalho em grupo familiar).',
+  )
   public readonly workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
 
-  @Description('Destino da produção.')
+  @Description(
+    'Destino da produção rural: Subsistência (consumo próprio), Comercialização (venda) ou Ambos.',
+  )
   public readonly productionDestination: ProductionDestinationEnum | null;
 
-  @Description('Análise de documentos do período.')
+  @Description(
+    'Análise gerada pela IA sobre os documentos comprobatórios apresentados para este período específico.',
+  )
   public readonly documentAnalysis: string | null;
 
-  @Description('ID da linha do tempo rural associada.')
+  @Description('Linha do tempo rural à qual este período pertence.')
   public readonly ruralTimelineId: RuralTimelineAnalysisId;
 
-  @Description('ID da propriedade do período.')
+  @Description(
+    'Propriedade rural onde a atividade foi exercida (endereço completo, nome do proprietário, tipo de posse).',
+  )
   public readonly ruralTimelinePeriodPropertyId: RuralTimelineAnalysisPeriodPropertyId | null;
 
-  @Description('ID da residência do período.')
+  @Description(
+    'Residência do cliente durante este período (cidade, UF, distância da propriedade rural).',
+  )
   public readonly ruralTimelinePeriodResidenceId: RuralTimelineAnalysisPeriodResidenceId | null;
 
   protected readonly _type = RuralTimelineAnalysisPeriodEntity.name;

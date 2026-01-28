@@ -6,13 +6,17 @@ import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysi
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RuralTimelineAnalysisPeriodResidenceEntity extends BaseEntity<RuralTimelineAnalysisPeriodResidenceId> {
-  @Description('Cidade da residência.')
+  @Description(
+    'Nome da cidade/município onde o cliente residia durante o período de atividade rural.',
+  )
   public readonly city: string;
 
-  @Description('Código do estado.')
+  @Description('Sigla do estado (UF) onde o cliente residia (ex: SP, MG, RS).')
   public readonly stateCode: StateCodeEnum;
 
-  @Description('Distância da propriedade em quilômetros.')
+  @Description(
+    'Distância em quilômetros entre a residência do cliente e a propriedade rural onde trabalhava.',
+  )
   public readonly distanceToPropertyKm: DecimalValue;
 
   protected readonly _type = RuralTimelineAnalysisPeriodResidenceEntity.name;
