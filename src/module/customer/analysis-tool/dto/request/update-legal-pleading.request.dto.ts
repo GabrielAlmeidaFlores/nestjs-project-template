@@ -1,7 +1,6 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
-import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
 import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
@@ -21,31 +20,31 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @RequestDto()
-export class CreateLegalPleadingAddressDataRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public city: string;
+export class UpdateLegalPleadingAddressDataRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoStringProperty({ required: false })
+  public city?: string;
 
-  @RequestDtoStringProperty()
-  public neighborhood: string;
+  @RequestDtoStringProperty({ required: false })
+  public neighborhood?: string;
 
-  @RequestDtoStringProperty()
-  public street: string;
+  @RequestDtoStringProperty({ required: false })
+  public street?: string;
 
-  @RequestDtoEnumProperty(StateCodeEnum)
-  public stateCode: StateCodeEnum;
+  @RequestDtoEnumProperty(StateCodeEnum, { required: false })
+  public stateCode?: StateCodeEnum;
 
-  @RequestDtoValueObjectProperty(PostalCode)
-  public postalCode: PostalCode;
+  @RequestDtoValueObjectProperty(PostalCode, { required: false })
+  public postalCode?: PostalCode;
 
-  @RequestDtoNumberProperty()
-  public addressNumber: number;
+  @RequestDtoNumberProperty({ required: false })
+  public addressNumber?: number;
 
   protected override readonly _type =
-    CreateLegalPleadingAddressDataRequestDto.name;
+    UpdateLegalPleadingAddressDataRequestDto.name;
 }
 
 @RequestDto()
-export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
+export class UpdateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public statementOfFacts?: string;
 
@@ -88,19 +87,16 @@ export class CreateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
   })
   public legalPleadingWritOfMandamusObjective?: LegalPleadingWritOfMandamusObjectiveEnum;
 
-  @RequestDtoValueObjectProperty(AnalysisToolClientId)
-  public analysisToolClientId: AnalysisToolClientId;
-
-  @RequestDtoObjectProperty(() => CreateLegalPleadingAddressDataRequestDto, {
+  @RequestDtoObjectProperty(() => UpdateLegalPleadingAddressDataRequestDto, {
     required: false,
   })
-  public legalPleadingAddress?: CreateLegalPleadingAddressDataRequestDto;
+  public legalPleadingAddress?: UpdateLegalPleadingAddressDataRequestDto;
 
-  protected override readonly _type = CreateLegalPleadingDataRequestDto.name;
+  protected override readonly _type = UpdateLegalPleadingDataRequestDto.name;
 }
 
 @RequestDto()
-export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
+export class UpdateLegalPleadingRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
     required: false,
@@ -131,8 +127,8 @@ export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({ isArray: true, required: false })
   public supportingDocument?: FileModel[];
 
-  @RequestDtoObjectProperty(() => CreateLegalPleadingDataRequestDto)
-  public json: CreateLegalPleadingDataRequestDto;
+  @RequestDtoObjectProperty(() => UpdateLegalPleadingDataRequestDto)
+  public json: UpdateLegalPleadingDataRequestDto;
 
-  protected override readonly _type = CreateLegalPleadingRequestDto.name;
+  protected override readonly _type = UpdateLegalPleadingRequestDto.name;
 }

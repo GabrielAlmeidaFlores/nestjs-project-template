@@ -75,6 +75,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
@@ -115,6 +116,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateAnalysisToolClientUseCase,
     DeleteAnalysisToolClientUseCase,
     CreateLegalPleadingUseCase,
+    UpdateLegalPleadingUseCase,
     CreateLegalPleadingResultUseCase,
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,
