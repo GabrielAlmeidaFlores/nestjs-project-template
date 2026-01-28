@@ -5,8 +5,8 @@ import { Repository } from 'typeorm';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RuralTimelineTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { GetRuralTimelineWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline/query/result/get-rural-timeline-with-relations.query.result';
 import { RuralTimelineQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline/query/rural-timeline.query.repository.gateway';
-import { RuralTimelineEntity } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline/rural-timeline.entity';
 import { RuralTimelineId } from '@module/customer/analysis-tool/module/rural-timeline/domain/schema/entity/rural-timeline/value-object/rural-timeline-id/rural-timeline-id.value-object';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class RuralTimelineTypeormQueryRepository
 
   public async findOneByIdWithRelations(
     id: RuralTimelineId,
-  ): Promise<RuralTimelineEntity | null> {
+  ): Promise<GetRuralTimelineWithRelationsQueryResult | null> {
     const ruralTimelineORM = await this.repository.findOne({
       where: { id: id.toString() },
       relations: [
@@ -49,7 +49,7 @@ export class RuralTimelineTypeormQueryRepository
     return this.mapperGateway.map(
       ruralTimelineORM,
       RuralTimelineTypeormEntity,
-      RuralTimelineEntity,
+      GetRuralTimelineWithRelationsQueryResult,
     );
   }
 }
