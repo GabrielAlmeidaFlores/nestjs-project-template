@@ -25,7 +25,7 @@ export class RuralTimelinePeriodEconomicAspectsTypeormEntity extends BaseTypeorm
     (entity) => entity.ruralTimelinePeriodEconomicAspects,
   )
   @JoinColumn({ name: 'rural_timeline_period_id' })
-  public ruralTimelinePeriod: RuralTimelinePeriodTypeormEntity | undefined;
+  public ruralTimelinePeriod?: RuralTimelinePeriodTypeormEntity | undefined;
 
   protected override readonly _type =
     RuralTimelinePeriodEconomicAspectsTypeormEntity.name;

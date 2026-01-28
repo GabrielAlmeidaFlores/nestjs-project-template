@@ -53,7 +53,7 @@ export class RuralTimelinePeriodDocumentTypeormEntity extends BaseTypeormEntity 
     (entity) => entity.ruralTimelinePeriodDocument,
   )
   @JoinColumn({ name: 'rural_timeline_period_id' })
-  public ruralTimelinePeriod: RuralTimelinePeriodTypeormEntity | undefined;
+  public ruralTimelinePeriod?: RuralTimelinePeriodTypeormEntity | undefined;
 
   protected override readonly _type =
     RuralTimelinePeriodDocumentTypeormEntity.name;

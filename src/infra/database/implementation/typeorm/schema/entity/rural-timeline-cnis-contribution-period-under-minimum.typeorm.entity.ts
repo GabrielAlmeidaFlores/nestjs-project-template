@@ -24,7 +24,7 @@ export class RuralTimelineCnisContributionPeriodUnderMinimumTypeormEntity extend
     (entity) => entity.ruralTimelineCnisContributionPeriodUnderMinimum,
   )
   @JoinColumn({ name: 'rural_timeline_cnis_contribution_period_id' })
-  public ruralTimelineCnisContributionPeriod:
+  public ruralTimelineCnisContributionPeriod?:
     | RuralTimelineCnisContributionPeriodTypeormEntity
     | undefined;
 
