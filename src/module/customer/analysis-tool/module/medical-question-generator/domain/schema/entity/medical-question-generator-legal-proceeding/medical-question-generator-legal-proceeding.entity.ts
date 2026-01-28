@@ -6,7 +6,7 @@ import type { MedicalQuestionGeneratorLegalProceedingEntityPropsInterface } from
 
 export class MedicalQuestionGeneratorLegalProceedingEntity extends BaseEntity<MedicalQuestionGeneratorLegalProceedingId> {
   public readonly legalProceedingNumber: string;
-  public readonly medicalQuestionGenerator?: MedicalQuestionGeneratorEntity;
+  public readonly medicalQuestionGenerator: MedicalQuestionGeneratorEntity;
 
   protected readonly _type = MedicalQuestionGeneratorLegalProceedingEntity.name;
 
