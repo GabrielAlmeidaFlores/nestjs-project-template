@@ -169,6 +169,16 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
+import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
+import { RuralTimelineAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-document.typeorm.entity';
+import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-economic-aspects.typeorm.entity';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-family-group-member.typeorm.entity';
+import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
+import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
+import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
+import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -242,6 +252,16 @@ export class TypeormIndex {
     JudicialCaseAnalysisLegalProceedingTypeormEntity,
     JudicialCaseAnalysisResultTypeormEntity,
     JudicialCaseAnalysisTypeormEntity,
+    RuralTimelineAnalysisTypeormEntity,
+    RuralTimelineAnalysisDocumentTypeormEntity,
+    RuralTimelineAnalysisPeriodTypeormEntity,
+    RuralTimelineAnalysisPeriodPropertyTypeormEntity,
+    RuralTimelineAnalysisPeriodResidenceTypeormEntity,
+    RuralTimelineAnalysisPeriodDocumentTypeormEntity,
+    RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity,
+    RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
+    RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+    RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
