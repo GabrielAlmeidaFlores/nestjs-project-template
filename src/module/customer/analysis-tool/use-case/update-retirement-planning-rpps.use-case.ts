@@ -159,6 +159,7 @@ export class UpdateRetirementPlanningRppsUseCase {
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const transactionOperations: TransactionType[] = [];
