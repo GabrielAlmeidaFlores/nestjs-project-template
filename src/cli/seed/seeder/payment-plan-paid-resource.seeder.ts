@@ -267,6 +267,44 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Gerador de Perguntas Médicas - Análise Simplificada',
       description: 'Análise simplificada do gerador de perguntas médicas.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Completa',
+      description:
+        'Análise completa do gerador de impugnação a laudos médicos e sociais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('79b3f020-6f89-4ebb-8558-f3bc3090b70e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title:
+        'Análise Geradora de Impugnação a Laudos Médicos e Sociais Simplificada',
+      description:
+        'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f8e9d7c6-b5a4-4c3d-9e2f-1a0b9c8d7e6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Completa de Avaliação de Deficiência para BPC',
+      description:
+        'Análise completa da avaliação de deficiência para BPC com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Simplificada de Avaliação de Deficiência para BPC',
+      description:
+        'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

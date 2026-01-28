@@ -54,6 +54,17 @@ import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation
 import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
 import { CustomerTermsAcceptanceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/customer-terms-acceptance-entity.auto-mapper.profile';
 import { GetCustomerTermsAcceptanceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/get-customer-terms-acceptance-query-result.auto-mapper.profile';
+import { DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis-entity.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/get-disability-assessment-for-bpc-analysis-query-result.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis/get-disability-assessment-for-bpc-analysis-with-relations-query-result.auto-mapper.profile';
+import { DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-benefit/disability-assessment-for-bpc-analysis-benefit-entity.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-benefit/get-disability-assessment-for-bpc-analysis-benefit-query-result.auto-mapper.profile';
+import { DisabilityAssessmentForBpcAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-document/disability-assessment-for-bpc-analysis-document-entity.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-document/get-disability-assessment-for-bpc-analysis-document-query-result.auto-mapper.profile';
+import { DisabilityAssessmentForBpcAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-legal-proceeding/disability-assessment-for-bpc-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-legal-proceeding/get-disability-assessment-for-bpc-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result-entity.auto-mapper.profile';
+import { GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/get-disability-assessment-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
@@ -92,6 +103,17 @@ import { GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile 
 import { MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/medical-question-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/get-medical-question-generator-result-query-result.auto-mapper.profile';
 import { MedicalQuestionGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/medical-question-generator-result-entity.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-query-result.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/get-medical-and-social-report-objection-generator-analysis-with-relations-query-result.auto-mapper.profile';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis-entity.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-benefit/get-medical-and-social-report-objection-generator-analysis-benefit-query-result.auto-mapper.profile';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-benefit/medical-and-social-report-objection-generator-analysis-benefit-entity.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-document/get-medical-and-social-report-objection-generator-analysis-document-query-result.auto-mapper.profile';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-document/medical-and-social-report-objection-generator-analysis-document-entity.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-legal-proceeding/get-medical-and-social-report-objection-generator-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-legal-proceeding/medical-and-social-report-objection-generator-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/get-medical-and-social-report-objection-generator-analysis-result-query-result.auto-mapper.profile';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/medical-and-social-report-objection-generator-analysis-result-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -296,6 +318,17 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile,
     AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile,
+    DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisQueryResultAutoMapperProfile,
+    DisabilityAssessmentForBpcAnalysisBenefitEntityAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisBenefitQueryResultAutoMapperProfile,
+    DisabilityAssessmentForBpcAnalysisDocumentEntityAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisDocumentQueryResultAutoMapperProfile,
+    DisabilityAssessmentForBpcAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile,
+    GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
@@ -318,6 +351,17 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile,
     MedicalQuestionGeneratorDocumentEntityAutoMapperProfile,
     GetMedicalQuestionGeneratorDocumentQueryResultAutoMapperProfile,
+    MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperProfile,
+    MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResultAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile,
+    MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile,
+    MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResultAutoMapperProfile,
+    MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })
