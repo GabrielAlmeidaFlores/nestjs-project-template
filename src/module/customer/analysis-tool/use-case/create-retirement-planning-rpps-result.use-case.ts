@@ -164,7 +164,9 @@ export class CreateRetirementPlanningRppsResultUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       cnisFastAnalysis: null,
@@ -175,6 +177,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalQuestionGenerator: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =

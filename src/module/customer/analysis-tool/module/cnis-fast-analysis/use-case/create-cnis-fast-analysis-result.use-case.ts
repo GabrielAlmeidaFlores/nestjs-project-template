@@ -200,7 +200,9 @@ export class CreateCnisFastAnalysisResultUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       cnisFastAnalysis,
@@ -211,6 +213,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalQuestionGenerator: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
