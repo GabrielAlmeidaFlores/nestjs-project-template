@@ -165,6 +165,7 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       medicalAndSocialReportObjectionGeneratorAnalysis,
+      disabilityAssessmentForBpcAnalysis: null,
       retirementPlanningRpps: null,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
