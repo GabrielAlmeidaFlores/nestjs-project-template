@@ -12,6 +12,7 @@ import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/modu
 import type { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
+import type { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 
 export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
@@ -23,6 +24,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   administrativeProcedureInssAnalysis?: AdministrativeProcedureInssAnalysisEntity | null;
   medicalAndSocialReportObjectionGeneratorAnalysis?: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
   disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisEntity | null;
+  ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   createdBy: OrganizationMemberId;
