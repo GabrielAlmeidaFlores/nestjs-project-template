@@ -18,7 +18,6 @@ import { MedicalQuestionGeneratorResultEntity } from '@module/customer/analysis-
 import { CreateMedicalQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/medical-question-generator/dto/response/create-medical-question-generator-result.response.dto';
 import { MedicalQuestionGeneratorDocumentRequiredError } from '@module/customer/analysis-tool/module/medical-question-generator/error/medical-question-generator-document-required.error';
 import { MedicalQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/medical-question-generator/error/medical-question-generator-not-found.error';
-import { MedicalQuestionGeneratorResultAlreadyExistsError } from '@module/customer/analysis-tool/module/medical-question-generator/error/medical-question-generator-result-already-exists.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -92,13 +91,6 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
 
     if (medicalQuestionGeneratorQueryResult === null) {
       throw new MedicalQuestionGeneratorNotFoundError();
-    }
-
-    if (
-      analysisToolRecordQueryResult.medicalQuestionGenerator
-        ?.medicalQuestionGeneratorResult !== null
-    ) {
-      throw new MedicalQuestionGeneratorResultAlreadyExistsError();
     }
 
     if (
@@ -188,7 +180,7 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
     await transaction.commit();
 
     return CreateMedicalQuestionGeneratorResultResponseDto.build({
-      medicalQuestionGeneratorResultId: medicalQuestionGeneratorResult.id,
+      medicalQuestionGeneratorCompleteAnalysis,
     });
   }
 }
