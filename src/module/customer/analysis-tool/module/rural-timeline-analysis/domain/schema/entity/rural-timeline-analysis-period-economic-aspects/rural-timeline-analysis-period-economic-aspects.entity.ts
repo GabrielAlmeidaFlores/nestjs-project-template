@@ -7,13 +7,19 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 
 export class RuralTimelineAnalysisPeriodEconomicAspectsEntity extends BaseEntity<RuralTimelineAnalysisPeriodEconomicAspectsId> {
-  @Description('Tipo de aspecto econômico.')
+  @Description(
+    'Tipo de aspecto econômico verificado: CNPJ ativo, outras rendas, veículos rurais, maquinário agrícola ou empregados.',
+  )
   public readonly type: RuralTimelineAnalysisPeriodEconomicAspectTypeEnum;
 
-  @Description('Conteúdo do aspecto econômico.')
+  @Description(
+    'Descrição detalhada ou justificativa sobre este aspecto econômico da atividade rural.',
+  )
   public readonly content: string | null;
 
-  @Description('ID do período da linha do tempo rural associado.')
+  @Description(
+    'Período de atividade rural ao qual este aspecto econômico se refere.',
+  )
   public readonly ruralTimelinePeriodId: RuralTimelineAnalysisPeriodId;
 
   protected readonly _type =

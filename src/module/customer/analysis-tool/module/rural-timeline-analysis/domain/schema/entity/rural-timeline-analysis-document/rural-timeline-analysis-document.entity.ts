@@ -7,13 +7,15 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 export class RuralTimelineAnalysisDocumentEntity extends BaseEntity<RuralTimelineAnalysisDocumentId> {
-  @Description('Tipo do documento.')
+  @Description(
+    'Tipo do documento: CNIS (Cadastro Nacional de Informações Sociais) contendo histórico de contribuições previdenciárias.',
+  )
   public readonly type: RuralTimelineAnalysisDocumentTypeEnum;
 
-  @Description('Documento.')
+  @Description('Nome do arquivo do documento CNIS enviado para análise.')
   public readonly document: string;
 
-  @Description('ID da linha do tempo rural associada.')
+  @Description('Linha do tempo rural à qual este documento CNIS pertence.')
   public readonly ruralTimelineId: RuralTimelineAnalysisId;
 
   protected readonly _type = RuralTimelineAnalysisDocumentEntity.name;

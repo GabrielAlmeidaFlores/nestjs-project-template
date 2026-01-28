@@ -7,25 +7,39 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 
 export class RuralTimelineAnalysisPeriodDocumentEntity extends BaseEntity<RuralTimelineAnalysisPeriodDocumentId> {
-  @Description('Ano do documento.')
+  @Description(
+    'Ano de emissão ou referência do documento comprobatório (ex: 2015, 2020).',
+  )
   public readonly documentYear: number | null;
 
-  @Description('Tipo do detentor do documento.')
+  @Description(
+    'Identificação do tipo de detentor do documento (próprio cliente, familiar ou terceiro).',
+  )
   public readonly documentHolderType: string | null;
 
-  @Description('Documento é de propriedade própria.')
+  @Description(
+    'Indica se o documento pertence ao próprio cliente (true) ou a outra pessoa (false).',
+  )
   public readonly selfOwned: boolean | null;
 
-  @Description('Propósito probatório do documento.')
+  @Description(
+    'Finalidade probatória do documento, descrevendo o que ele comprova sobre a atividade rural.',
+  )
   public readonly probatoryPurpose: string | null;
 
-  @Description('Documento.')
+  @Description(
+    'Nome do arquivo do documento comprobatório enviado (CTPS, ITR, Declaração Sindicato, etc).',
+  )
   public readonly document: string;
 
-  @Description('Tipo de documento.')
+  @Description(
+    'Tipo/categoria do documento: CTPS, Documento Próprio, Documento Familiar ou Documento de Terceiro.',
+  )
   public readonly type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
 
-  @Description('ID do período da linha do tempo rural associado.')
+  @Description(
+    'Período de atividade rural ao qual este documento comprobatório pertence.',
+  )
   public readonly ruralTimelinePeriodId: RuralTimelineAnalysisPeriodId;
 
   protected readonly _type = RuralTimelineAnalysisPeriodDocumentEntity.name;

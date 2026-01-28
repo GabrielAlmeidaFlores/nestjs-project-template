@@ -7,25 +7,37 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 
 export class RuralTimelineAnalysisPeriodFamilyGroupMemberEntity extends BaseEntity<RuralTimelineAnalysisPeriodFamilyGroupMemberId> {
-  @Description('Nome do membro do grupo familiar.')
+  @Description(
+    'Nome completo do familiar que participou da atividade rural em regime de economia familiar.',
+  )
   public readonly name: string;
 
-  @Description('Documento federal (CPF).')
+  @Description('CPF do membro do grupo familiar envolvido na atividade rural.')
   public readonly federalDocument: string;
 
-  @Description('Tipo de parentesco.')
+  @Description(
+    'Grau de parentesco com o cliente: Cônjuge, Filho(a), Pai/Mãe ou Irmão/Irmã.',
+  )
   public readonly kinship: RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum;
 
-  @Description('Recebe benefício rural.')
+  @Description(
+    'Indica se este familiar recebe ou recebeu benefício previdenciário rural do INSS.',
+  )
   public readonly receivesRuralBenefit: boolean;
 
-  @Description('Número do benefício.')
+  @Description(
+    'Número do benefício rural (NB) recebido pelo familiar, caso aplicável.',
+  )
   public readonly benefitNumber: string;
 
-  @Description('Documento CNIS.')
+  @Description(
+    'Nome do arquivo CNIS do familiar para comprovação de vínculo rural.',
+  )
   public readonly cnisDocument: string | null;
 
-  @Description('ID do período da linha do tempo rural associado.')
+  @Description(
+    'Período de atividade rural ao qual este membro do grupo familiar está associado.',
+  )
   public readonly ruralTimelinePeriodId: RuralTimelineAnalysisPeriodId;
 
   protected readonly _type =

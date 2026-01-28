@@ -9,34 +9,54 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntity<RuralTimelineAnalysisCnisContributionPeriodId> {
-  @Description('ID da linha do tempo rural associada.')
+  @Description(
+    'Linha do tempo rural à qual este período de contribuição CNIS pertence.',
+  )
   public readonly ruralTimelineId: RuralTimelineAnalysisId | null;
 
-  @Description('Fonte da relação de emprego.')
+  @Description(
+    'Origem/fonte do vínculo empregatício registrado no CNIS (nome da empresa ou empregador).',
+  )
   public readonly employmentRelationshipSource: string | null;
 
-  @Description('Data de início do período de contribuição.')
+  @Description(
+    'Data de início do período de contribuição previdenciária registrado no CNIS.',
+  )
   public readonly startDate: Date | null;
 
-  @Description('Data de término do período de contribuição.')
+  @Description(
+    'Data de término do período de contribuição previdenciária registrado no CNIS.',
+  )
   public readonly endDate: Date | null;
 
-  @Description('Categoria do período de contribuição.')
+  @Description(
+    'Categoria/tipo de segurado da contribuição previdenciária (ex: empregado, contribuinte individual, segurado especial).',
+  )
   public readonly category: string | null;
 
-  @Description('Período de carência.')
+  @Description(
+    'Período de carência em meses válido para benefícios previdenciários.',
+  )
   public readonly qualifyingPeriod: number | null;
 
-  @Description('Status do período de contribuição.')
+  @Description(
+    'Status do período de contribuição: Válido (aceito pelo INSS) ou Pendente (aguardando análise/documentação).',
+  )
   public readonly status: RuralTimelineAnalysisCnisContributionPeriodStatusEnum | null;
 
-  @Description('Valor médio de contribuição.')
+  @Description(
+    'Valor médio mensal das contribuições previdenciárias realizadas neste período.',
+  )
   public readonly averageContributionAmount: DecimalValue | null;
 
-  @Description('Intenção de ajuste de contribuição.')
+  @Description(
+    'Intenção de ajuste: Incluir (adicionar período), Excluir (remover período) ou Provisório (aguardando decisão).',
+  )
   public readonly contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
 
-  @Description('Intenção de suplementação externa.')
+  @Description(
+    'Indica se há intenção de realizar suplementação externa de contribuições para completar o período.',
+  )
   public readonly externalSupplementationIntent: boolean;
 
   protected readonly _type =

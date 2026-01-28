@@ -6,31 +6,39 @@ import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RuralTimelineAnalysisPeriodPropertyEntity extends BaseEntity<RuralTimelineAnalysisPeriodPropertyId> {
-  @Description('Nome da propriedade.')
+  @Description(
+    'Nome/identificação da propriedade rural onde a atividade foi exercida (ex: Fazenda São José, Sítio Santa Maria).',
+  )
   public readonly propertyName: string;
 
-  @Description('Nome do proprietário.')
+  @Description('Nome completo do proprietário legal da terra.')
   public readonly ownerName: string;
 
-  @Description('CEP da propriedade.')
+  @Description('CEP (Código de Endereçamento Postal) da propriedade rural.')
   public readonly postalCode: string;
 
-  @Description('Código do estado.')
+  @Description(
+    'Sigla do estado (UF) onde a propriedade está localizada (ex: SP, MG, RS).',
+  )
   public readonly stateCode: StateCodeEnum;
 
-  @Description('Cidade.')
+  @Description('Nome da cidade/município onde a propriedade está localizada.')
   public readonly city: string;
 
-  @Description('Bairro.')
+  @Description('Nome do bairro ou localidade rural da propriedade.')
   public readonly neighborhood: string;
 
-  @Description('Rua.')
+  @Description('Nome da rua, estrada ou caminho de acesso à propriedade.')
   public readonly street: string;
 
-  @Description('Número da rua.')
+  @Description(
+    'Número ou identificação complementar do endereço da propriedade.',
+  )
   public readonly streetNumber: string;
 
-  @Description('Tipo de posse da terra.')
+  @Description(
+    'Tipo de posse da terra: Própria (proprietário), Familiar (de parente) ou Terceiro (arrendada/emprestada).',
+  )
   public readonly landOwnershipType: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum;
 
   protected readonly _type = RuralTimelineAnalysisPeriodPropertyEntity.name;

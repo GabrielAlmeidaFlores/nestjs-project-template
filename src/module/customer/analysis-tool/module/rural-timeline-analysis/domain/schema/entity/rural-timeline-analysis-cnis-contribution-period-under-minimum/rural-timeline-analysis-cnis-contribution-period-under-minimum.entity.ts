@@ -7,13 +7,19 @@ import { Description } from '@shared/system/decorator/property/description/descr
 import type { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
 export class RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity extends BaseEntity<RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId> {
-  @Description('Data da contribuição.')
+  @Description(
+    'Data específica em que foi realizada uma contribuição abaixo do valor mínimo previdenciário.',
+  )
   public readonly contributionDate: Date;
 
-  @Description('Valor da contribuição.')
+  @Description(
+    'Valor da contribuição previdenciária que ficou abaixo do salário mínimo exigido.',
+  )
   public readonly contributionAmount: DecimalValue;
 
-  @Description('ID do período de contribuição CNIS associado.')
+  @Description(
+    'Período de contribuição CNIS ao qual esta contribuição insuficiente pertence.',
+  )
   public readonly ruralTimelineCnisContributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId;
 
   protected readonly _type =
