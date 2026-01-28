@@ -13,6 +13,7 @@ import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/mo
 import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/delete-cnis-fast-analysis.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-simplified-analysis.use-case';
+import { ExtractClientFromCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/extract-client-from-cnis-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/get-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -43,6 +44,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DownloadCnisCompleteAnalysisUseCase,
     DownloadCnisSimplifiedAnalysisUseCase,
     UpdateCnisFastAnalysisUseCase,
+    ExtractClientFromCnisAnalysisUseCase,
   ],
   exports: [DeleteCnisFastAnalysisUseCase],
 })

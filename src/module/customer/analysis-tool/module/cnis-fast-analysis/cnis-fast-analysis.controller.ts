@@ -12,10 +12,12 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { AnalyzeCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/analyze-cnis-document.request.dto';
 import { CreateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/create-cnis-fast-analysis.request.dto';
+import { ExtractClientFromCnisAnalysisRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/extract-client-from-cnis-analysis.request.dto';
 import { UpdateCnisFastAnalysisRequestDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/request/update-cnis-fast-analysis.request.dto';
 import { AnalyzeCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/analyze-cnis-document.response.dto';
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CreateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis.response.dto';
+import { ExtractClientFromCnisAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/extract-client-from-cnis-analysis.response.dto';
 import { GetCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/get-cnis-fast-analysis.response.dto';
 import { UpdateCnisFastAnalysisResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/update-cnis-fast-analysis.response.dto';
 import { AnalyzeCnisDocumentUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/analyze-cnis-document.use-case';
@@ -23,6 +25,7 @@ import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-t
 import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
 import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-complete-analysis.use-case';
 import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-simplified-analysis.use-case';
+import { ExtractClientFromCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/extract-client-from-cnis-analysis.use-case';
 import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/get-cnis-fast-analysis.use-case';
 import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -48,6 +51,7 @@ export class CnisFastAnalysisController {
     private readonly downloadCnisCompleteAnalysisUseCase: DownloadCnisCompleteAnalysisUseCase,
     private readonly downloadCnisSimplifiedAnalysisUseCase: DownloadCnisSimplifiedAnalysisUseCase,
     private readonly updateCnisFastAnalysisUseCase: UpdateCnisFastAnalysisUseCase,
+    private readonly extractClientFromCnisAnalysisUseCase: ExtractClientFromCnisAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -254,5 +258,27 @@ export class CnisFastAnalysisController {
       organizationSessionData,
       cnisFastAnalysisId,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Extrair dados do cliente a partir da análise CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'extract-client',
+      method: RequestMethod.POST,
+      type: ExtractClientFromCnisAnalysisRequestDto,
+    },
+    tag: ['analise-rapida-cnis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Dados do cliente extraídos com sucesso.',
+      type: ExtractClientFromCnisAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async extractClientFromCnisAnalysis(
+    @Body() dto: ExtractClientFromCnisAnalysisRequestDto,
+  ): Promise<ExtractClientFromCnisAnalysisResponseDto> {
+    return await this.extractClientFromCnisAnalysisUseCase.execute(dto);
   }
 }
