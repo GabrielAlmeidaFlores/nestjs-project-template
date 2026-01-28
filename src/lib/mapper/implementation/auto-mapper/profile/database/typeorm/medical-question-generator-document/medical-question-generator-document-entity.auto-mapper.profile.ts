@@ -57,9 +57,16 @@ export class MedicalQuestionGeneratorDocumentEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: MedicalQuestionGeneratorDocumentEntity,
     ): MedicalQuestionGeneratorDocumentTypeormEntity => {
+      const medicalQuestionGenerator = this.mapper.map(
+        source.medicalQuestionGenerator,
+        MedicalQuestionGeneratorEntity,
+        MedicalQuestionGeneratorTypeormEntity,
+      );
+
       return MedicalQuestionGeneratorDocumentTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        medicalQuestionGenerator,
       });
     };
 

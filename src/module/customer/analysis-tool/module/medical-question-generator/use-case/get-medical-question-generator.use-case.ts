@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
 
-import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -112,7 +111,7 @@ export class GetMedicalQuestionGeneratorUseCase {
       if (medicalDocuments.length > 0) {
         const medicalDocumentData = await Promise.all(
           medicalDocuments.map(async (document) => {
-            const fileBuffer = await this.fileProcessorGateway.getFileBuffer(
+            const url = await this.fileProcessorGateway.getFileSignedUrl(
               document.document,
             );
 
@@ -122,7 +121,7 @@ export class GetMedicalQuestionGeneratorUseCase {
               );
 
             return {
-              document: Base64.encodeBuffer(fileBuffer),
+              url,
               originalFileName,
             };
           }),
@@ -130,7 +129,7 @@ export class GetMedicalQuestionGeneratorUseCase {
 
         response.medicalDocuments = medicalDocumentData.map((document) =>
           GetMedicalQuestionGeneratorDocumentResponseDto.build({
-            document: document.document,
+            url: document.url.toString(),
             originalFileName: document.originalFileName.toString(),
             type: MedicalQuestionGeneratorDocumentTypeEnum.MEDICAL,
           }),
@@ -140,7 +139,7 @@ export class GetMedicalQuestionGeneratorUseCase {
       if (cnisDocuments.length > 0) {
         const cnisDocumentData = await Promise.all(
           cnisDocuments.map(async (document) => {
-            const fileBuffer = await this.fileProcessorGateway.getFileBuffer(
+            const url = await this.fileProcessorGateway.getFileSignedUrl(
               document.document,
             );
 
@@ -150,7 +149,7 @@ export class GetMedicalQuestionGeneratorUseCase {
               );
 
             return {
-              document: Base64.encodeBuffer(fileBuffer),
+              url,
               originalFileName,
             };
           }),
@@ -158,7 +157,7 @@ export class GetMedicalQuestionGeneratorUseCase {
 
         response.cnisDocuments = cnisDocumentData.map((document) =>
           GetMedicalQuestionGeneratorDocumentResponseDto.build({
-            document: document.document,
+            url: document.url.toString(),
             originalFileName: document.originalFileName.toString(),
             type: MedicalQuestionGeneratorDocumentTypeEnum.CNIS,
           }),

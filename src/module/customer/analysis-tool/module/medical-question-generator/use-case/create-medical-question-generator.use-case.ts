@@ -20,6 +20,7 @@ import { MedicalQuestionGeneratorInssBenefitCommandRepositoryGateway } from '@mo
 import { MedicalQuestionGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator-legal-proceeding/command/medical-question-generator-legal-proceeding.command.repository.gateway';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
+import { MedicalQuestionGeneratorDocumentTypeEnum } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/enum/medical-question-generator-document-type.enum';
 import { MedicalQuestionGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/medical-question-generator-document.entity';
 import { MedicalQuestionGeneratorDocumentId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/value-object/medical-question-generator-document-id/medical-question-generator-document-id.value-object';
 import { MedicalQuestionGeneratorInssBenefitEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-inss-benefit/medical-question-generator-inss-benefit.entity';
@@ -30,7 +31,6 @@ import { CreateMedicalQuestionGeneratorRequestDto } from '@module/customer/analy
 import { CreateMedicalQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/medical-question-generator/dto/response/create-medical-question-generator.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateMedicalQuestionGeneratorUseCase {
@@ -76,7 +76,7 @@ export class CreateMedicalQuestionGeneratorUseCase {
 
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
-        dto.analysisToolClientId,
+        dto.json.analysisToolClientId,
         organizationSessionData.organizationId,
         AnalysisToolClientNotFoundError,
       );
@@ -91,7 +91,7 @@ export class CreateMedicalQuestionGeneratorUseCase {
 
     const medicalQuestionGenerator = new MedicalQuestionGeneratorEntity({
       id: medicalQuestionGeneratorId,
-      disabilityDate: dto.disabilityDate ?? null,
+      disabilityDate: dto.json.disabilityDate ?? null,
     });
 
     const countRecords =
@@ -118,41 +118,51 @@ export class CreateMedicalQuestionGeneratorUseCase {
       ),
     );
 
-    if (dto.documents && dto.documents.length > 0) {
-      const documentTransactions = await Promise.all(
-        dto.documents.map(async (documentDto) => {
-          const documentId = new MedicalQuestionGeneratorDocumentId();
+    if (dto.cnisDocument !== undefined && dto.cnisDocument.length > 0) {
+      for (const cnisDoc of dto.cnisDocument) {
+        const documentId = new MedicalQuestionGeneratorDocumentId();
 
-          const buffer = documentDto.document.base64.decodeToBuffer();
+        const documentUrl = await this.fileProcessorGateway.uploadFile(cnisDoc);
 
-          const fileModel = FileModel.build({
-            buffer,
-            originalName: documentDto.document.originalFileName,
-            size: buffer.length,
-            encoding: '7bit',
-          });
+        const document = new MedicalQuestionGeneratorDocumentEntity({
+          id: documentId,
+          type: MedicalQuestionGeneratorDocumentTypeEnum.CNIS,
+          document: documentUrl,
+          medicalQuestionGenerator,
+        });
 
-          const documentUrl =
-            await this.fileProcessorGateway.uploadFile(fileModel);
-
-          const document = new MedicalQuestionGeneratorDocumentEntity({
-            id: documentId,
-            type: documentDto.type,
-            document: documentUrl,
-            medicalQuestionGenerator,
-          });
-
-          return this.medicalQuestionGeneratorDocumentCommandRepositoryGateway.createMedicalQuestionGeneratorDocument(
+        transactionOperations.push(
+          this.medicalQuestionGeneratorDocumentCommandRepositoryGateway.createMedicalQuestionGeneratorDocument(
             document,
-          );
-        }),
-      );
-
-      transactionOperations.push(...documentTransactions);
+          ),
+        );
+      }
     }
 
-    if (dto.inssBenefitNumber && dto.inssBenefitNumber.length > 0) {
-      for (const inssBenefitNumber of dto.inssBenefitNumber) {
+    if (dto.medicalDocument !== undefined && dto.medicalDocument.length > 0) {
+      for (const medicalDoc of dto.medicalDocument) {
+        const documentId = new MedicalQuestionGeneratorDocumentId();
+
+        const documentUrl =
+          await this.fileProcessorGateway.uploadFile(medicalDoc);
+
+        const document = new MedicalQuestionGeneratorDocumentEntity({
+          id: documentId,
+          type: MedicalQuestionGeneratorDocumentTypeEnum.MEDICAL,
+          document: documentUrl,
+          medicalQuestionGenerator,
+        });
+
+        transactionOperations.push(
+          this.medicalQuestionGeneratorDocumentCommandRepositoryGateway.createMedicalQuestionGeneratorDocument(
+            document,
+          ),
+        );
+      }
+    }
+
+    if (dto.json.inssBenefitNumber && dto.json.inssBenefitNumber.length > 0) {
+      for (const inssBenefitNumber of dto.json.inssBenefitNumber) {
         const inssBenefitId = new MedicalQuestionGeneratorInssBenefitId();
 
         const inssBenefit = new MedicalQuestionGeneratorInssBenefitEntity({
@@ -169,8 +179,11 @@ export class CreateMedicalQuestionGeneratorUseCase {
       }
     }
 
-    if (dto.legalProceedingNumber && dto.legalProceedingNumber.length > 0) {
-      for (const legalProceedingNumber of dto.legalProceedingNumber) {
+    if (
+      dto.json.legalProceedingNumber &&
+      dto.json.legalProceedingNumber.length > 0
+    ) {
+      for (const legalProceedingNumber of dto.json.legalProceedingNumber) {
         const legalProceedingId =
           new MedicalQuestionGeneratorLegalProceedingId();
 

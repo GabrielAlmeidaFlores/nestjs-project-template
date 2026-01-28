@@ -56,10 +56,16 @@ export class MedicalQuestionGeneratorInssBenefitEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: MedicalQuestionGeneratorInssBenefitEntity,
     ): MedicalQuestionGeneratorInssBenefitTypeormEntity => {
+      const medicalQuestionGenerator = this.mapper.map(
+        source.medicalQuestionGenerator,
+        MedicalQuestionGeneratorEntity,
+        MedicalQuestionGeneratorTypeormEntity,
+      );
+
       return MedicalQuestionGeneratorInssBenefitTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        medicalQuestionGenerator: undefined,
+        medicalQuestionGenerator,
       });
     };
 

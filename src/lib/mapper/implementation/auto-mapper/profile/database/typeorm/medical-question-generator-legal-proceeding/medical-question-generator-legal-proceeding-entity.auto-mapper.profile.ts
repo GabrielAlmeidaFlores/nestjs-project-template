@@ -56,10 +56,16 @@ export class MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: MedicalQuestionGeneratorLegalProceedingEntity,
     ): MedicalQuestionGeneratorLegalProceedingTypeormEntity => {
+      const medicalQuestionGenerator = this.mapper.map(
+        source.medicalQuestionGenerator,
+        MedicalQuestionGeneratorEntity,
+        MedicalQuestionGeneratorTypeormEntity,
+      );
+
       return MedicalQuestionGeneratorLegalProceedingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        medicalQuestionGenerator: undefined,
+        medicalQuestionGenerator,
       });
     };
 

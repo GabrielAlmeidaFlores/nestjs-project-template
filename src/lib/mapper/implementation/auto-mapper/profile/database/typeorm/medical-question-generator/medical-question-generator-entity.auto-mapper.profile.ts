@@ -32,7 +32,6 @@ export class MedicalQuestionGeneratorEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: MedicalQuestionGeneratorTypeormEntity,
     ): MedicalQuestionGeneratorEntity => {
-
       const medicalQuestionGeneratorResult =
         source.medicalQuestionGeneratorResult !== undefined
           ? this.mapper.map(
