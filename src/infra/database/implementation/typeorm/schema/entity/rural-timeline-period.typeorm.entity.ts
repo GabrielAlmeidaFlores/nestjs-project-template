@@ -66,7 +66,7 @@ export class RuralTimelinePeriodTypeormEntity extends BaseTypeormEntity {
     (entity) => entity.ruralTimelinePeriod,
   )
   @JoinColumn({ name: 'rural_timeline_id' })
-  public ruralTimeline: RuralTimelineTypeormEntity | undefined;
+  public ruralTimeline?: RuralTimelineTypeormEntity | undefined;
 
   @OneToOne(
     () => RuralTimelinePeriodPropertyTypeormEntity,

@@ -52,7 +52,7 @@ export class RuralTimelinePeriodFamilyGroupMemberTypeormEntity extends BaseTypeo
     (entity) => entity.ruralTimelinePeriodFamilyGroupMember,
   )
   @JoinColumn({ name: 'rural_timeline_period_id' })
-  public ruralTimelinePeriod: RuralTimelinePeriodTypeormEntity | undefined;
+  public ruralTimelinePeriod?: RuralTimelinePeriodTypeormEntity | undefined;
 
   protected override readonly _type =
     RuralTimelinePeriodFamilyGroupMemberTypeormEntity.name;
