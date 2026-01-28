@@ -7,9 +7,6 @@ import { MedicalQuestionGeneratorInssBenefitTypeormEntity } from '@infra/databas
 import { MedicalQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-legal-proceeding.typeorm.entity';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
-import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
 import { MedicalQuestionGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/medical-question-generator-document.entity';
@@ -35,12 +32,6 @@ export class MedicalQuestionGeneratorEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: MedicalQuestionGeneratorTypeormEntity,
     ): MedicalQuestionGeneratorEntity => {
-      if (!source.createdBy || !source.updatedBy) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass: MedicalQuestionGeneratorEntity.name,
-          sourceClass: MedicalQuestionGeneratorTypeormEntity.name,
-        });
-      }
 
       const medicalQuestionGeneratorResult =
         source.medicalQuestionGeneratorResult !== undefined

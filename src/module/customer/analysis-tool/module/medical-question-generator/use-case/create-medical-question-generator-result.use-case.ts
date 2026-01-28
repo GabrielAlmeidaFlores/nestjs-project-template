@@ -139,8 +139,6 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
       id: medicalQuestionGeneratorQueryResult.id,
       disabilityDate: medicalQuestionGeneratorQueryResult.disabilityDate,
       medicalQuestionGeneratorResult,
-      createdBy: analysisToolRecordQueryResult.createdBy.id,
-      updatedBy: organizationMember.id,
     });
 
     const analysisToolClient = new AnalysisToolClientEntity({
@@ -161,6 +159,8 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
       retirementPlanningRgps: null,
       cnisFastAnalysis: null,
       judicialCaseAnalysis: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      disabilityAssessmentForBpcAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =

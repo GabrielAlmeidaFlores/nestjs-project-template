@@ -92,8 +92,6 @@ export class CreateMedicalQuestionGeneratorUseCase {
     const medicalQuestionGenerator = new MedicalQuestionGeneratorEntity({
       id: medicalQuestionGeneratorId,
       disabilityDate: dto.disabilityDate ?? null,
-      createdBy: organizationMember.id,
-      updatedBy: organizationMember.id,
     });
 
     const countRecords =

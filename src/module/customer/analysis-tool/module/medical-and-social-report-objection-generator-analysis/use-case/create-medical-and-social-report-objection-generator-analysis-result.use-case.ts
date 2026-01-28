@@ -173,6 +173,7 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase
       cnisFastAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
+      medicalQuestionGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =

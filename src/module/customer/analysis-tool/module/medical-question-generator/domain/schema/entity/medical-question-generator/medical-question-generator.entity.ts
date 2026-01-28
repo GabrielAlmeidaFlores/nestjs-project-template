@@ -1,7 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
-
-import type { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import type { MedicalQuestionGeneratorEntityPropsInterface } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity.props.interface';
 import type { MedicalQuestionGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/medical-question-generator-document.entity';
 import type { MedicalQuestionGeneratorInssBenefitEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-inss-benefit/medical-question-generator-inss-benefit.entity';
@@ -14,8 +12,6 @@ export class MedicalQuestionGeneratorEntity extends BaseEntity<MedicalQuestionGe
   public readonly medicalQuestionGeneratorInssBenefit: MedicalQuestionGeneratorInssBenefitEntity[];
   public readonly medicalQuestionGeneratorLegalProceeding: MedicalQuestionGeneratorLegalProceedingEntity[];
   public readonly medicalQuestionGeneratorDocument: MedicalQuestionGeneratorDocumentEntity[];
-  public readonly createdBy: OrganizationMemberId;
-  public readonly updatedBy: OrganizationMemberId;
 
   protected readonly _type = MedicalQuestionGeneratorEntity.name;
 
@@ -31,7 +27,5 @@ export class MedicalQuestionGeneratorEntity extends BaseEntity<MedicalQuestionGe
       props.medicalQuestionGeneratorLegalProceeding ?? [];
     this.medicalQuestionGeneratorDocument =
       props.medicalQuestionGeneratorDocument ?? [];
-    this.createdBy = props.createdBy;
-    this.updatedBy = props.updatedBy;
   }
 }
