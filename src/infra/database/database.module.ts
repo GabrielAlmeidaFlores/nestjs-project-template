@@ -120,17 +120,17 @@ import { RetirementPlanningRppsRemunerationTypeormQueryRepository } from '@infra
 import { RetirementPlanningRppsRemunerationCalculationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.typeorm.command.repository';
 import { RetirementPlanningRppsRemunerationCalculationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation.typeorm.query.repository';
 import { RetirementPlanningRppsResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-result/retirement-planning-rpps-result.typeorm.command.repository';
-import { RuralTimelineTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline/rural-timeline.typeorm.command.repository';
-import { RuralTimelineTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline/rural-timeline.typeorm.query.repository';
-import { RuralTimelineCnisContributionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period/rural-timeline-cnis-contribution-period.typeorm.command.repository';
-import { RuralTimelineCnisContributionPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-under-minimum/rural-timeline-cnis-contribution-period-under-minimum.typeorm.command.repository';
-import { RuralTimelineDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-document/rural-timeline-document.typeorm.command.repository';
-import { RuralTimelinePeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period/rural-timeline-period.typeorm.command.repository';
-import { RuralTimelinePeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-document/rural-timeline-period-document.typeorm.command.repository';
-import { RuralTimelinePeriodEconomicAspectsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-economic-aspects/rural-timeline-period-economic-aspects.typeorm.command.repository';
-import { RuralTimelinePeriodFamilyGroupMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-family-group-member/rural-timeline-period-family-group-member.typeorm.command.repository';
-import { RuralTimelinePeriodPropertyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-property/rural-timeline-period-property.typeorm.command.repository';
-import { RuralTimelinePeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-period-residence/rural-timeline-period-residence.typeorm.command.repository';
+import { RuralTimelineAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.command.repository';
+import { RuralTimelineAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.query.repository';
+import { RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.typeorm.command.repository';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.command.repository';
+import { RuralTimelineAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-document/rural-timeline-analysis-document.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period/rural-timeline-analysis-period.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
 import { TypeormModule } from '@infra/database/implementation/typeorm/typeorm.module';
 import { MapperModule } from '@lib/mapper/mapper.module';
 import { AdminCommandRepositoryGateway } from '@module/admin/account/domain/repository/admin/command/admin.command.repository.gateway';
@@ -227,17 +227,17 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisBenefitCommandRepositor
 import { MedicalAndSocialReportObjectionGeneratorAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis-document/command/medical-and-social-report-objection-generator-analysis-document.command.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis-legal-proceeding/command/medical-and-social-report-objection-generator-analysis-legal-proceeding.command.repository.gateway';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis-result/command/medical-and-social-report-objection-generator-analysis-result.command.repository.gateway';
-import { RuralTimelineCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline/command/rural-timeline.command.repository.gateway';
-import { RuralTimelineQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline/query/rural-timeline.query.repository.gateway';
-import { RuralTimelineCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-cnis-contribution-period/command/rural-timeline-cnis-contribution-period.command.repository.gateway';
-import { RuralTimelineCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-cnis-contribution-period-under-minimum/command/rural-timeline-cnis-contribution-period-under-minimum.command.repository.gateway';
-import { RuralTimelineDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-document/command/rural-timeline-document.command.repository.gateway';
-import { RuralTimelinePeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period/command/rural-timeline-period.command.repository.gateway';
-import { RuralTimelinePeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period-document/command/rural-timeline-period-document.command.repository.gateway';
-import { RuralTimelinePeriodEconomicAspectsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period-economic-aspects/command/rural-timeline-period-economic-aspects.command.repository.gateway';
-import { RuralTimelinePeriodFamilyGroupMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period-family-group-member/command/rural-timeline-period-family-group-member.command.repository.gateway';
-import { RuralTimelinePeriodPropertyCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period-property/command/rural-timeline-period-property.command.repository.gateway';
-import { RuralTimelinePeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline/domain/repository/rural-timeline-period-residence/command/rural-timeline-period-residence.command.repository.gateway';
+import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
+import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
+import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/command/rural-timeline-analysis-cnis-contribution-period-under-minimum.command.repository.gateway';
+import { RuralTimelineAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-document/command/rural-timeline-analysis-document.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period/command/rural-timeline-analysis-period.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/command/rural-timeline-analysis-period-economic-aspects.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/command/rural-timeline-analysis-period-family-group-member.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/command/rural-timeline-analysis-period-property.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
 import { LegalProceedingDetailCommandRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/command/legal-proceeding-detail.command.repository.gateway';
 import { LegalProceedingDetailQueryRepositoryGateway } from '@module/customer/legal-proceeding/domain/repository/legal-proceeding-detail/query/legal-proceeding-detail.query.repository.gateway';
 import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
@@ -769,50 +769,55 @@ const classProvider: ClassProvider[] = [
     useClass: RetirementPlanningRgpsSpecialPeriodTypeormQueryRepository,
   },
   {
-    provide: RuralTimelineCommandRepositoryGateway,
-    useClass: RuralTimelineTypeormCommandRepository,
+    provide: RuralTimelineAnalysisCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisTypeormCommandRepository,
   },
   {
-    provide: RuralTimelineQueryRepositoryGateway,
-    useClass: RuralTimelineTypeormQueryRepository,
+    provide: RuralTimelineAnalysisQueryRepositoryGateway,
+    useClass: RuralTimelineAnalysisTypeormQueryRepository,
   },
   {
-    provide: RuralTimelineDocumentCommandRepositoryGateway,
-    useClass: RuralTimelineDocumentTypeormCommandRepository,
+    provide: RuralTimelineAnalysisDocumentCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisDocumentTypeormCommandRepository,
   },
   {
-    provide: RuralTimelinePeriodCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodTypeormCommandRepository,
+    provide: RuralTimelineAnalysisPeriodCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisPeriodTypeormCommandRepository,
   },
   {
-    provide: RuralTimelinePeriodPropertyCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodPropertyTypeormCommandRepository,
+    provide: RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository,
   },
   {
-    provide: RuralTimelinePeriodResidenceCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodResidenceTypeormCommandRepository,
+    provide: RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository,
   },
   {
-    provide: RuralTimelinePeriodDocumentCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodDocumentTypeormCommandRepository,
+    provide: RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway,
+    useClass: RuralTimelineAnalysisPeriodDocumentTypeormCommandRepository,
   },
   {
-    provide: RuralTimelinePeriodEconomicAspectsCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodEconomicAspectsTypeormCommandRepository,
-  },
-  {
-    provide: RuralTimelinePeriodFamilyGroupMemberCommandRepositoryGateway,
-    useClass: RuralTimelinePeriodFamilyGroupMemberTypeormCommandRepository,
-  },
-  {
-    provide: RuralTimelineCnisContributionPeriodCommandRepositoryGateway,
-    useClass: RuralTimelineCnisContributionPeriodTypeormCommandRepository,
+    provide: RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway,
+    useClass:
+      RuralTimelineAnalysisPeriodEconomicAspectsTypeormCommandRepository,
   },
   {
     provide:
-      RuralTimelineCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
+      RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway,
     useClass:
-      RuralTimelineCnisContributionPeriodUnderMinimumTypeormCommandRepository,
+      RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway,
+    useClass:
+      RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
+    useClass:
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository,
   },
 ];
 
