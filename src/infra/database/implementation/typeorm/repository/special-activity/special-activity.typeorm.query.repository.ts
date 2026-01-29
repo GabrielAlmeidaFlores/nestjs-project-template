@@ -11,13 +11,13 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
-import { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
-import { SpecialActivityQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/special-activity.query.repository.gateway';
+import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { SpecialActivityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/special-activity-analysis.query.repository.gateway';
 
 @Injectable()
 export class SpecialActivityTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialActivityTypeormEntity>
-  implements SpecialActivityQueryRepositoryGateway
+  implements SpecialActivityAnalysisQueryRepositoryGateway
 {
   protected readonly _type = SpecialActivityTypeormQueryRepository.name;
 
@@ -32,7 +32,9 @@ export class SpecialActivityTypeormQueryRepository
   public async listByOrganizationId(
     organizationId: OrganizationId,
     listData: ListDataInputModel,
-  ): Promise<ListDataOutputModel<GetSpecialActivityWithRelationsQueryResult>> {
+  ): Promise<
+    ListDataOutputModel<GetSpecialActivityAnalysisWithRelationsQueryResult>
+  > {
     const data = await this.list(listData, {
       where: {
         analysisToolRecord: {
@@ -71,20 +73,22 @@ export class SpecialActivityTypeormQueryRepository
     const mappedData = this.mapperGateway.mapArray(
       data.resource,
       SpecialActivityTypeormEntity,
-      GetSpecialActivityWithRelationsQueryResult,
+      GetSpecialActivityAnalysisWithRelationsQueryResult,
     );
 
-    return new ListDataOutputModel<GetSpecialActivityWithRelationsQueryResult>({
-      ...data,
-      resource: mappedData,
-    });
+    return new ListDataOutputModel<GetSpecialActivityAnalysisWithRelationsQueryResult>(
+      {
+        ...data,
+        resource: mappedData,
+      },
+    );
   }
 
   public async findOneBySpecialActivityIdAndOrganizationIdWithRelationsOrFail(
     id: SpecialActivityId,
     organizationId: OrganizationId,
     err: Constructor<NotFoundError>,
-  ): Promise<GetSpecialActivityWithRelationsQueryResult> {
+  ): Promise<GetSpecialActivityAnalysisWithRelationsQueryResult> {
     const data = await this.findOneOrFail(
       {
         where: {
@@ -133,7 +137,7 @@ export class SpecialActivityTypeormQueryRepository
     const mappedData = this.mapperGateway.map(
       data,
       SpecialActivityTypeormEntity,
-      GetSpecialActivityWithRelationsQueryResult,
+      GetSpecialActivityAnalysisWithRelationsQueryResult,
     );
 
     return mappedData;

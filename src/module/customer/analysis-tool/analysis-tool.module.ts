@@ -14,7 +14,7 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
-import { SpecialActivityModule } from '@module/customer/analysis-tool/module/special-activity/special-activity.module';
+import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
@@ -103,7 +103,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CnisProcessorModule,
     GenerativeIaModule,
     CnisFastAnalysisModule,
-    SpecialActivityModule,
+    SpecialActivityAnalysisModule,
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
