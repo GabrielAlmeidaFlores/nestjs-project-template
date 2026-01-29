@@ -33,7 +33,7 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-@CustomerControllerRoute('analysis-tool/special-activity')
+@CustomerControllerRoute('analysis-tool/special-activity-analysis')
 export class SpecialActivityAnalysisController {
   protected readonly _type = SpecialActivityAnalysisController.name;
 
