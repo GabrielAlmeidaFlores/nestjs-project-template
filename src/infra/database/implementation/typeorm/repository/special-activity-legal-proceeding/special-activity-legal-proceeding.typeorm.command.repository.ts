@@ -8,12 +8,12 @@ import { SpecialActivityLegalProceedingTypeormEntity } from '@infra/database/imp
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { SpecialActivityLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/special-activity-legal-proceeding.entity';
 import { SpecialActivityLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/value-object/special-activity-legal-proceeding-id.value-object';
-import { SpecialActivityLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-legal-proceeding/command/special-activity-legal-proceeding.command.repository.gateway';
+import { SpecialActivityAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/command/special-activity-analysis-legal-proceeding.command.repository.gateway';
 
 @Injectable()
 export class SpecialActivityLegalProceedingTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialActivityLegalProceedingTypeormEntity>
-  implements SpecialActivityLegalProceedingCommandRepositoryGateway
+  implements SpecialActivityAnalysisLegalProceedingCommandRepositoryGateway
 {
   protected readonly _type =
     SpecialActivityLegalProceedingTypeormCommandRepository.name;

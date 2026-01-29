@@ -7,7 +7,7 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialActivityLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/special-activity-legal-proceeding.entity';
 import { SpecialActivityLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/value-object/special-activity-legal-proceeding-id.value-object';
-import { GetSpecialActivityLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-legal-proceeding/query/result/get-special-activity-legal-proceeding.query.result';
+import { GetSpecialActivityAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/query/result/get-special-activity-analysis-legal-proceeding.query.result';
 
 @Injectable()
 export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
@@ -81,8 +81,8 @@ export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
   private mapOrmEntityToQueryResult(): void {
     const convertOrmEntityToQueryResult = (
       source: SpecialActivityLegalProceedingTypeormEntity,
-    ): GetSpecialActivityLegalProceedingQueryResult => {
-      return GetSpecialActivityLegalProceedingQueryResult.build({
+    ): GetSpecialActivityAnalysisLegalProceedingQueryResult => {
+      return GetSpecialActivityAnalysisLegalProceedingQueryResult.build({
         id: new SpecialActivityLegalProceedingId(source.id),
         legalProceedingNumber: source.legalProceedingNumber,
         createdAt: source.createdAt,
@@ -96,7 +96,7 @@ export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
     createMap(
       this.mapper,
       SpecialActivityLegalProceedingTypeormEntity,
-      GetSpecialActivityLegalProceedingQueryResult,
+      GetSpecialActivityAnalysisLegalProceedingQueryResult,
       mappingFunction,
     );
   }
