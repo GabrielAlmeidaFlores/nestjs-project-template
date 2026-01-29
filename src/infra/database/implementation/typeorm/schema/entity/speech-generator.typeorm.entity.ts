@@ -3,7 +3,9 @@ import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
+import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 
 @Entity({ name: 'speech_generator' })
@@ -14,6 +16,22 @@ export class SpeechGeneratorTypeormEntity extends BaseTypeormEntity {
   )
   public speechGeneratorDocument?:
     | SpeechGeneratorDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => SpeechGeneratorBenefitTypeormEntity,
+    (entity) => entity.speechGenerator,
+  )
+  public speechGeneratorBenefit?:
+    | SpeechGeneratorBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => SpeechGeneratorLegalProceedingTypeormEntity,
+    (entity) => entity.speechGenerator,
+  )
+  public speechGeneratorLegalProceeding?:
+    | SpeechGeneratorLegalProceedingTypeormEntity[]
     | undefined;
 
   @OneToOne(

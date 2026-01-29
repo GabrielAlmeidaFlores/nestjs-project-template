@@ -77,6 +77,14 @@ export class GetSpeechGeneratorUseCase {
               ...speechGeneratorQueryResult.speechGeneratorResult,
             })
           : null,
+      inssBenefitNumber:
+        speechGeneratorQueryResult.speechGeneratorBenefit.map(
+          (t) => t.inssBenefitNumber,
+        ),
+      legalProceedingNumber:
+        speechGeneratorQueryResult.speechGeneratorLegalProceeding.map(
+          (t) => t.legalProceedingNumber,
+        ),
       createdBy: GetSpeechGeneratorResponsibleResponseDto.build({
         id: analysisToolRecordQueryResult.createdBy.customer.id,
         name: analysisToolRecordQueryResult.createdBy.customer.name,
