@@ -214,7 +214,9 @@ CONTEXTO DO PERÍODO RURAL:
       }
 
       const updatedDocument = new RuralTimelineAnalysisPeriodDocumentEntity({
-        id: new RuralTimelineAnalysisPeriodDocumentId(documentQueryResult.id),
+        id: new RuralTimelineAnalysisPeriodDocumentId(
+          documentQueryResult.id.toString(),
+        ),
         documentYear: parsedResult.documentYear,
         documentHolderType: parsedResult.documentHolderType,
         selfOwned: parsedResult.selfOwned,
@@ -228,7 +230,7 @@ CONTEXTO DO PERÍODO RURAL:
 
       analyzedDocuments.push(
         AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto.build({
-          documentId: documentQueryResult.id,
+          documentId: documentQueryResult.id.toString(),
           ...(parsedResult.documentYear !== null && {
             documentYear: parsedResult.documentYear,
           }),

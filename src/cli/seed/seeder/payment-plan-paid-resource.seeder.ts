@@ -298,6 +298,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise com IA de um único documento comprobatório de atividade rural do período.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Consolidada de Documentos do Período Rural',
+      description:
+        'Análise consolidada com IA de todos os documentos comprobatórios de um período de atividade rural.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
