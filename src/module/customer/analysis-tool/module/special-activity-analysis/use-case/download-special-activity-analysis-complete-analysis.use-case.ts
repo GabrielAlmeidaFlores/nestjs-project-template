@@ -1,4 +1,4 @@
-import { Inject, StreamableFile } from '@nestjs/common';
+import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
@@ -20,6 +20,7 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
+@Injectable()
 export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
   protected readonly _type =
     DownloadSpecialActivityAnalysisCompleteAnalysisUseCase.name;
