@@ -39,6 +39,18 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository
     return this.create(mappedData);
   }
 
+  public updateRuralTimelineAnalysisCnisContributionPeriod(
+    props: RuralTimelineAnalysisCnisContributionPeriodEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      RuralTimelineAnalysisCnisContributionPeriodEntity,
+      RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+    );
+
+    return this.update(props.id.toString(), mappedData);
+  }
+
   public deleteRuralTimelineAnalysisCnisContributionPeriod(
     id: RuralTimelineAnalysisCnisContributionPeriodId,
   ): TransactionType {
