@@ -7,7 +7,7 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialActivityInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-inss-benefit/special-activity-inss-benefit.entity';
 import { SpecialActivityInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-inss-benefit/value-object/special-activity-inss-benefit-id.value-object';
-import { GetSpecialActivityInssBenefitQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-inss-benefit/query/result/get-special-activity-inss-benefit.query.result';
+import { GetSpecialActivityAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-inss-benefit/query/result/get-special-activity-analysis-inss-benefit.query.result';
 
 @Injectable()
 export class SpecialActivityInssBenefitEntityAutoMapperProfile {
@@ -81,8 +81,8 @@ export class SpecialActivityInssBenefitEntityAutoMapperProfile {
   private mapOrmEntityToQueryResult(): void {
     const convertOrmEntityToQueryResult = (
       source: SpecialActivityInssBenefitTypeormEntity,
-    ): GetSpecialActivityInssBenefitQueryResult => {
-      return GetSpecialActivityInssBenefitQueryResult.build({
+    ): GetSpecialActivityAnalysisInssBenefitQueryResult => {
+      return GetSpecialActivityAnalysisInssBenefitQueryResult.build({
         id: new SpecialActivityInssBenefitId(source.id),
         inssBenefitNumber: source.inssBenefitNumber,
         createdAt: source.createdAt,
@@ -96,7 +96,7 @@ export class SpecialActivityInssBenefitEntityAutoMapperProfile {
     createMap(
       this.mapper,
       SpecialActivityInssBenefitTypeormEntity,
-      GetSpecialActivityInssBenefitQueryResult,
+      GetSpecialActivityAnalysisInssBenefitQueryResult,
       mappingFunction,
     );
   }

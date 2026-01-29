@@ -232,7 +232,6 @@ Análise processada do CNIS:
                 type: 'object',
                 description: 'Período de atividade especial',
                 properties: {
-
                   label: {
                     type: 'string',
                     description: 'Rótulo descritivo do período',

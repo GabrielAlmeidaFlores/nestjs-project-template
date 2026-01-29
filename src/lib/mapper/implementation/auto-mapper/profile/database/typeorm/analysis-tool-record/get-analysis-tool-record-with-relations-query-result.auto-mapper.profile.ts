@@ -23,7 +23,7 @@ import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/custo
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
-import { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
+import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -76,7 +76,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       const specialActivity = this.mapper.map(
         source.specialActivity,
         SpecialActivityTypeormEntity,
-        GetSpecialActivityWithRelationsQueryResult,
+        GetSpecialActivityAnalysisWithRelationsQueryResult,
       );
 
       const judicialCaseAnalysis = this.mapper.map(
@@ -166,7 +166,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
 
       const specialActivity = this.mapper.map(
         source.specialActivity,
-        GetSpecialActivityWithRelationsQueryResult,
+        GetSpecialActivityAnalysisWithRelationsQueryResult,
         SpecialActivityTypeormEntity,
       );
 

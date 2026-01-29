@@ -8,12 +8,12 @@ import { SpecialActivityDocumentTypeormEntity } from '@infra/database/implementa
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { SpecialActivityDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/special-activity-document.entity';
 import { SpecialActivityDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
-import { SpecialActivityDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-document/command/special-activity-document.command.repository.gateway';
+import { SpecialActivityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-document/command/special-activity-analysis-document.command.repository.gateway';
 
 @Injectable()
 export class SpecialActivityDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialActivityDocumentTypeormEntity>
-  implements SpecialActivityDocumentCommandRepositoryGateway
+  implements SpecialActivityAnalysisDocumentCommandRepositoryGateway
 {
   protected readonly _type =
     SpecialActivityDocumentTypeormCommandRepository.name;
