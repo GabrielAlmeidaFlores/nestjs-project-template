@@ -8,6 +8,10 @@ export abstract class RuralTimelineAnalysisCnisContributionPeriodCommandReposito
     props: RuralTimelineAnalysisCnisContributionPeriodEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisCnisContributionPeriod(
+    props: RuralTimelineAnalysisCnisContributionPeriodEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisCnisContributionPeriod(
     id: RuralTimelineAnalysisCnisContributionPeriodId,
   ): TransactionType;
