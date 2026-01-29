@@ -17,6 +17,7 @@ import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
 import { GenerateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
+import { GetRuralTimelineCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-cnis-analysis.use-case';
 import { ListRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/list-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -41,6 +42,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   providers: [
     CreateRuralTimelineAnalysisUseCase,
     GetRuralTimelineAnalysisUseCase,
+    GetRuralTimelineCnisAnalysisUseCase,
     GenerateRuralTimelineAnalysisUseCase,
     DownloadRuralTimelineCompleteAnalysisUseCase,
     DownloadRuralTimelineSimplifiedAnalysisUseCase,
