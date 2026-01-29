@@ -13,6 +13,7 @@ import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-to
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
+import { ListRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/list-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
@@ -40,6 +41,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
     GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase,
     DeleteRuralTimelineAnalysisPeriodDocumentUseCase,
+    ListRuralTimelineAnalysisCnisContributionPeriodUseCase,
     UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
   ],
   exports: [],
