@@ -2,13 +2,16 @@ import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
 import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -29,6 +32,7 @@ export class RuralTimelineAnalysisController {
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
     private readonly addRuralTimelineAnalysisPeriodDocumentUseCase: AddRuralTimelineAnalysisPeriodDocumentUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodDocumentUseCase: DeleteRuralTimelineAnalysisPeriodDocumentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -131,6 +135,44 @@ export class RuralTimelineAnalysisController {
       ruralTimelineAnalysisId,
       ruralTimelineAnalysisPeriodId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar documento de um período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/document/:ruralTimelineAnalysisPeriodDocumentId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documento deletado do período rural com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'ruralTimelineAnalysisPeriodDocumentId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodDocumentId),
+    )
+    ruralTimelineAnalysisPeriodDocumentId: RuralTimelineAnalysisPeriodDocumentId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodDocumentResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      ruralTimelineAnalysisPeriodDocumentId,
     );
   }
 }
