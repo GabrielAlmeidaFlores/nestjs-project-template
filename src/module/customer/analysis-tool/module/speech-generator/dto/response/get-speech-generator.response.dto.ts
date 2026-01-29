@@ -92,6 +92,12 @@ export class GetSpeechGeneratorResponseDto extends BaseBuildableDtoObject {
   })
   public speechGeneratorResult?: GetSpeechGeneratorResultResponseDto;
 
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
+
   @ResponseDtoObjectProperty(() => GetSpeechGeneratorResponsibleResponseDto)
   public createdBy: GetSpeechGeneratorResponsibleResponseDto;
 

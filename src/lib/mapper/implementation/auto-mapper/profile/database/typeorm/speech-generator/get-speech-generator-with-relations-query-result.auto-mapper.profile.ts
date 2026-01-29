@@ -2,10 +2,14 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
+import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
+import { GetSpeechGeneratorBenefitQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-benefit.query.result';
 import { GetSpeechGeneratorDocumentQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-document.query.result';
+import { GetSpeechGeneratorLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-legal-proceeding.query.result';
 import { GetSpeechGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-with-relations.query.result';
 import { GetSpeechGeneratorResultQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/query/result/get-speech-generator-result.query.result';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
@@ -34,6 +38,18 @@ export class GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile {
         GetSpeechGeneratorDocumentQueryResult,
       );
 
+      const speechGeneratorBenefit = this.mapper.mapArray(
+        source.speechGeneratorBenefit ?? [],
+        SpeechGeneratorBenefitTypeormEntity,
+        GetSpeechGeneratorBenefitQueryResult,
+      );
+
+      const speechGeneratorLegalProceeding = this.mapper.mapArray(
+        source.speechGeneratorLegalProceeding ?? [],
+        SpeechGeneratorLegalProceedingTypeormEntity,
+        GetSpeechGeneratorLegalProceedingQueryResult,
+      );
+
       const speechGeneratorResult =
         source.speechGeneratorResult !== null
           ? this.mapper.map(
@@ -46,6 +62,8 @@ export class GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile {
       return GetSpeechGeneratorWithRelationsQueryResult.build({
         id: new SpeechGeneratorId(source.id),
         speechGeneratorDocument,
+        speechGeneratorBenefit,
+        speechGeneratorLegalProceeding,
         speechGeneratorResult,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -73,6 +91,18 @@ export class GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile {
         SpeechGeneratorDocumentTypeormEntity,
       );
 
+      const speechGeneratorBenefit = this.mapper.mapArray(
+        source.speechGeneratorBenefit,
+        GetSpeechGeneratorBenefitQueryResult,
+        SpeechGeneratorBenefitTypeormEntity,
+      );
+
+      const speechGeneratorLegalProceeding = this.mapper.mapArray(
+        source.speechGeneratorLegalProceeding,
+        GetSpeechGeneratorLegalProceedingQueryResult,
+        SpeechGeneratorLegalProceedingTypeormEntity,
+      );
+
       const speechGeneratorResult =
         source.speechGeneratorResult !== null
           ? this.mapper.map(
@@ -86,6 +116,8 @@ export class GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         speechGeneratorDocument,
+        speechGeneratorBenefit,
+        speechGeneratorLegalProceeding,
         speechGeneratorResult,
       });
     };

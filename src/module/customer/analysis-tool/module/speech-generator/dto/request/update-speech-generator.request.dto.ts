@@ -3,6 +3,7 @@ import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/r
 import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
 import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
+import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -11,6 +12,12 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 export class UpdateSpeechGeneratorJsonRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(AnalysisToolClientId, { required: false })
   public analysisToolClientId?: AnalysisToolClientId;
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
 
   protected override readonly _type = UpdateSpeechGeneratorJsonRequestDto.name;
 }

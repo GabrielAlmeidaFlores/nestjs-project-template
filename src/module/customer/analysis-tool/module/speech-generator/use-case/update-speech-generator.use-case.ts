@@ -14,11 +14,19 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
+import type { GetSpeechGeneratorBenefitQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-benefit.query.result';
+import type { GetSpeechGeneratorLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator-legal-proceeding.query.result';
+import { SpeechGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-benefit/command/speech-generator-benefit.command.repository.gateway';
 import { SpeechGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-document/command/speech-generator-document.command.repository.gateway';
+import { SpeechGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-legal-proceeding/command/speech-generator-legal-proceeding.command.repository.gateway';
+import { SpeechGeneratorBenefitEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-benefit/speech-generator-benefit.entity';
+import { SpeechGeneratorBenefitId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-benefit/value-object/speech-generator-benefit-id/speech-generator-benefit-id.value-object';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { SpeechGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-document/speech-generator-document.entity';
 import { SpeechGeneratorDocumentTypeEnum } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-document/enum/speech-generator-document-type.enum';
 import { SpeechGeneratorDocumentId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-document/value-object/speech-generator-document-id/speech-generator-document-id.value-object';
+import { SpeechGeneratorLegalProceedingEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-legal-proceeding/speech-generator-legal-proceeding.entity';
+import { SpeechGeneratorLegalProceedingId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-legal-proceeding/value-object/speech-generator-legal-proceeding-id/speech-generator-legal-proceeding-id.value-object';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { UpdateSpeechGeneratorRequestDto } from '@module/customer/analysis-tool/module/speech-generator/dto/request/update-speech-generator.request.dto';
 import { UpdateSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/update-speech-generator.response.dto';
@@ -43,6 +51,10 @@ export class UpdateSpeechGeneratorUseCase {
     private readonly speechGeneratorQueryRepositoryGateway: SpeechGeneratorQueryRepositoryGateway,
     @Inject(SpeechGeneratorDocumentCommandRepositoryGateway)
     private readonly speechGeneratorDocumentCommandRepositoryGateway: SpeechGeneratorDocumentCommandRepositoryGateway,
+    @Inject(SpeechGeneratorBenefitCommandRepositoryGateway)
+    private readonly speechGeneratorBenefitCommandRepositoryGateway: SpeechGeneratorBenefitCommandRepositoryGateway,
+    @Inject(SpeechGeneratorLegalProceedingCommandRepositoryGateway)
+    private readonly speechGeneratorLegalProceedingCommandRepositoryGateway: SpeechGeneratorLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -127,6 +139,28 @@ export class UpdateSpeechGeneratorUseCase {
 
     const transactions: TransactionType[] = [];
 
+    if (dto.json?.inssBenefitNumber !== undefined) {
+      const inssBenefitNumberTransactions =
+        this.updateInssBenefitNumberOnDatabase(
+          speechGenerator,
+          speechGeneratorQueryResult.speechGeneratorBenefit,
+          dto.json.inssBenefitNumber,
+        );
+
+      transactions.push(...inssBenefitNumberTransactions);
+    }
+
+    if (dto.json?.legalProceedingNumber !== undefined) {
+      const legalProceedingNumberTransactions =
+        this.updateLegalProceedingNumberOnDatabase(
+          speechGenerator,
+          speechGeneratorQueryResult.speechGeneratorLegalProceeding,
+          dto.json.legalProceedingNumber,
+        );
+
+      transactions.push(...legalProceedingNumberTransactions);
+    }
+
     if (dto.previdenciaryDocuments !== undefined) {
       const docTransactions = await this.updatePrevidenciaryDocumentsOnDatabase(
         speechGenerator,
@@ -187,5 +221,55 @@ export class UpdateSpeechGeneratorUseCase {
     );
 
     return [...deleteTransactions, ...createTransactions];
+  }
+
+  private updateInssBenefitNumberOnDatabase(
+    speechGenerator: SpeechGeneratorEntity,
+    currentInssBenefitNumber: GetSpeechGeneratorBenefitQueryResult[],
+    newInssBenefitNumber: string[],
+  ): TransactionType[] {
+    const deleteCurrent = currentInssBenefitNumber.map((value) => {
+      return this.speechGeneratorBenefitCommandRepositoryGateway.deleteSpeechGeneratorBenefit(
+        new SpeechGeneratorBenefitId(value.id.toString()),
+      );
+    });
+
+    const createNew = newInssBenefitNumber.map((value) => {
+      const entity = new SpeechGeneratorBenefitEntity({
+        inssBenefitNumber: value,
+        speechGenerator,
+      });
+
+      return this.speechGeneratorBenefitCommandRepositoryGateway.createSpeechGeneratorBenefit(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
+  }
+
+  private updateLegalProceedingNumberOnDatabase(
+    speechGenerator: SpeechGeneratorEntity,
+    currentLegalProceedingNumber: GetSpeechGeneratorLegalProceedingQueryResult[],
+    newLegalProceeding: string[],
+  ): TransactionType[] {
+    const deleteCurrent = currentLegalProceedingNumber.map((value) => {
+      return this.speechGeneratorLegalProceedingCommandRepositoryGateway.deleteSpeechGeneratorLegalProceeding(
+        new SpeechGeneratorLegalProceedingId(value.id.toString()),
+      );
+    });
+
+    const createNew = newLegalProceeding.map((value) => {
+      const entity = new SpeechGeneratorLegalProceedingEntity({
+        legalProceedingNumber: value,
+        speechGenerator,
+      });
+
+      return this.speechGeneratorLegalProceedingCommandRepositoryGateway.createSpeechGeneratorLegalProceeding(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
   }
 }

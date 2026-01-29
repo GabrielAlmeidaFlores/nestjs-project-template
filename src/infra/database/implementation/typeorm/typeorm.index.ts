@@ -86,7 +86,9 @@ import { RetirementPlanningRppsInssBenefitTypeormCommandRepository } from '@infr
 import { RetirementPlanningRppsLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rpps-legal-proceeding/retirement-planning-rpps-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
+import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
 import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
+import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
@@ -162,7 +164,9 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
+import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
@@ -243,7 +247,9 @@ export class TypeormIndex {
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+    SpeechGeneratorBenefitTypeormEntity,
     SpeechGeneratorDocumentTypeormEntity,
+    SpeechGeneratorLegalProceedingTypeormEntity,
     SpeechGeneratorResultTypeormEntity,
     SpeechGeneratorTypeormEntity,
     DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity,
@@ -341,6 +347,8 @@ export class TypeormIndex {
     JudicialCaseAnalysisResultTypeormCommandRepository,
     SpeechGeneratorTypeormCommandRepository,
     SpeechGeneratorTypeormQueryRepository,
+    SpeechGeneratorBenefitTypeormCommandRepository,
+    SpeechGeneratorLegalProceedingTypeormCommandRepository,
     SpeechGeneratorResultTypeormCommandRepository,
     SpeechGeneratorDocumentTypeormCommandRepository,
   ];

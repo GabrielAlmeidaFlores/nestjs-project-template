@@ -174,6 +174,10 @@ import { GetSpeechGeneratorDocumentQueryResultAutoMapperProfile } from '@lib/map
 import { SpeechGeneratorDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-document/speech-generator-document-entity.auto-mapper.profile';
 import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
 import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
+import { GetSpeechGeneratorBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-benefit/get-speech-generator-benefit-query-result.auto-mapper.profile';
+import { SpeechGeneratorBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-benefit/speech-generator-benefit-entity.auto-mapper.profile';
+import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/get-speech-generator-legal-proceeding-query-result.auto-mapper.profile';
+import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -210,6 +214,10 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     SpeechGeneratorDocumentEntityAutoMapperProfile,
     GetSpeechGeneratorResultQueryResultAutoMapperProfile,
     SpeechGeneratorResultEntityAutoMapperProfile,
+    GetSpeechGeneratorBenefitQueryResultAutoMapperProfile,
+    SpeechGeneratorBenefitEntityAutoMapperProfile,
+    GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile,
+    SpeechGeneratorLegalProceedingEntityAutoMapperProfile,
     SpeechGeneratorEntityAutoMapperProfile,
     GetSpeechGeneratorQueryResultAutoMapperProfile,
     GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile,
