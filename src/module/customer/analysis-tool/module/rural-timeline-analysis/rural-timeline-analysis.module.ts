@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
+import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { RuralTimelineAnalysisController } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.controller';
+import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
@@ -18,6 +21,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
 @Module({
   imports: [
     AuthModule,
+    CnisAnalyzerModule,
+    CnisProcessorModule,
     DatabaseModule,
     FileProcessorModule,
     GenerativeIaModule,
@@ -29,6 +34,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   providers: [
     CreateRuralTimelineAnalysisUseCase,
     GetRuralTimelineAnalysisUseCase,
+    AddRuralTimelineAnalysisCnisDocumentUseCase,
     AddRuralTimelineAnalysisPeriodDocumentUseCase,
     AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
     GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase,

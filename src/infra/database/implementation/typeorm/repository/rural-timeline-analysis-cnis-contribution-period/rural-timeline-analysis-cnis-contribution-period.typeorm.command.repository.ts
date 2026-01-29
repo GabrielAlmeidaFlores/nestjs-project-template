@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
@@ -42,5 +43,21 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository
     id: RuralTimelineAnalysisCnisContributionPeriodId,
   ): TransactionType {
     return this.delete(id.toString());
+  }
+
+  public deleteAllByRuralTimelineId(
+    ruralTimelineId: RuralTimelineAnalysisId,
+  ): TransactionType {
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo =
+        manager.getRepository<RuralTimelineAnalysisCnisContributionPeriodTypeormEntity>(
+          RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+        );
+
+      await repo.delete({
+        ruralTimeline: { id: ruralTimelineId.toString() },
+      });
+    };
   }
 }
