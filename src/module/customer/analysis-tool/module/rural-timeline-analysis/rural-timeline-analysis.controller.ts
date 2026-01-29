@@ -1,9 +1,13 @@
 import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
+import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
 import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
+import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -24,6 +28,7 @@ export class RuralTimelineAnalysisController {
   public constructor(
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
+    private readonly addRuralTimelineAnalysisPeriodDocumentUseCase: AddRuralTimelineAnalysisPeriodDocumentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -85,6 +90,47 @@ export class RuralTimelineAnalysisController {
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Adicionar documento a um período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/document',
+      method: RequestMethod.POST,
+      type: AddRuralTimelineAnalysisPeriodDocumentRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Documento adicionado ao período rural com sucesso.',
+      type: AddRuralTimelineAnalysisPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async addRuralTimelineAnalysisPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'ruralTimelineAnalysisPeriodId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId),
+    )
+    ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: AddRuralTimelineAnalysisPeriodDocumentRequestDto,
+  ): Promise<AddRuralTimelineAnalysisPeriodDocumentResponseDto> {
+    return await this.addRuralTimelineAnalysisPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      ruralTimelineAnalysisPeriodId,
+      dto,
     );
   }
 }
