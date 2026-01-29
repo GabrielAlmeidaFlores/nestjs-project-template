@@ -4,7 +4,8 @@ import type { RuralTimelineAnalysisWorkRegimeEnum } from '@module/customer/analy
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 export interface RuralTimelineAnalysisEntityPropsInterface extends BaseEntityPropsInterface<RuralTimelineAnalysisId> {
-  ruralTimelineAnalysis?: string | null;
+  ruralTimelineCompleteAnalysis?: string | null;
+  ruralTimelineSimplifiedAnalysis?: string | null;
   ruralTimelinePeriodDocumentAnalysis?: string | null;
   analysisToolClientId: AnalysisToolClientId;
   workRegime: RuralTimelineAnalysisWorkRegimeEnum;

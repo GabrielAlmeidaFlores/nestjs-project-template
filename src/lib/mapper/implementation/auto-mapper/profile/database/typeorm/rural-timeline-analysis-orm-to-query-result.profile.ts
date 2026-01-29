@@ -27,8 +27,12 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
         mapFrom((source) => new RuralTimelineAnalysisId(source.id)),
       ),
       forMember(
-        (destination) => destination.ruralTimelineAnalysis,
-        mapFrom((source) => source.ruralTimelineAnalysis ?? null),
+        (destination) => destination.ruralTimelineCompleteAnalysis,
+        mapFrom((source) => source.ruralTimelineCompleteAnalysis ?? null),
+      ),
+      forMember(
+        (destination) => destination.ruralTimelineSimplifiedAnalysis,
+        mapFrom((source) => source.ruralTimelineSimplifiedAnalysis ?? null),
       ),
       forMember(
         (destination) => destination.ruralTimelinePeriodDocumentAnalysis,

@@ -269,9 +269,15 @@ export class GetRuralTimelineAnalysisUseCase {
     return GetRuralTimelineAnalysisResponseDto.build({
       id: ruralTimelineAnalysisQueryResult.id,
       workRegime: ruralTimelineAnalysisQueryResult.workRegime,
-      ...(ruralTimelineAnalysisQueryResult.ruralTimelineAnalysis !== null && {
-        ruralTimelineAnalysis:
-          ruralTimelineAnalysisQueryResult.ruralTimelineAnalysis,
+      ...(ruralTimelineAnalysisQueryResult.ruralTimelineCompleteAnalysis !==
+        null && {
+        ruralTimelineCompleteAnalysis:
+          ruralTimelineAnalysisQueryResult.ruralTimelineCompleteAnalysis,
+      }),
+      ...(ruralTimelineAnalysisQueryResult.ruralTimelineSimplifiedAnalysis !==
+        null && {
+        ruralTimelineSimplifiedAnalysis:
+          ruralTimelineAnalysisQueryResult.ruralTimelineSimplifiedAnalysis,
       }),
       ...(ruralTimelineAnalysisQueryResult.ruralTimelinePeriodDocumentAnalysis !==
         null && {

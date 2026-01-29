@@ -88,7 +88,8 @@ export class CreateRuralTimelineAnalysisUseCase {
 
     const ruralTimelineAnalysis = new RuralTimelineAnalysisEntity({
       workRegime: dto.workRegime,
-      ruralTimelineAnalysis: null,
+      ruralTimelineCompleteAnalysis: null,
+      ruralTimelineSimplifiedAnalysis: null,
       ruralTimelinePeriodDocumentAnalysis: null,
       analysisToolClientId: dto.analysisToolClientId,
     });

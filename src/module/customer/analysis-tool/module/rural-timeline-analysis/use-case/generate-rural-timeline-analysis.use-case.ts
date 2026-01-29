@@ -158,7 +158,9 @@ export class GenerateRuralTimelineAnalysisUseCase {
 
     const updatedEntity = new RuralTimelineAnalysisEntity({
       id: ruralTimelineAnalysisId,
-      ruralTimelineAnalysis: analysisResult,
+      ruralTimelineCompleteAnalysis: analysisResult,
+      ruralTimelineSimplifiedAnalysis:
+        ruralTimelineAnalysis.ruralTimelineSimplifiedAnalysis,
       ruralTimelinePeriodDocumentAnalysis:
         ruralTimelineAnalysis.ruralTimelinePeriodDocumentAnalysis,
       analysisToolClientId: analysisToolRecordQueryResult.analysisToolClient.id,
@@ -176,7 +178,7 @@ export class GenerateRuralTimelineAnalysisUseCase {
     ]);
 
     return GenerateRuralTimelineAnalysisResponseDto.build({
-      ruralTimelineAnalysis: analysisResult,
+      ruralTimelineCompleteAnalysis: analysisResult,
     });
   }
 }

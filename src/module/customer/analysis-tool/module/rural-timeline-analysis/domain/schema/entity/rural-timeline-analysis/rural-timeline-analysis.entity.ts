@@ -7,9 +7,14 @@ import { Description } from '@shared/system/decorator/property/description/descr
 
 export class RuralTimelineAnalysisEntity extends BaseEntity<RuralTimelineAnalysisId> {
   @Description(
-    'Análise gerada pela IA sobre a linha do tempo rural do cliente, incluindo avaliação dos períodos de atividade rural e urbana.',
+    'Análise completa gerada pela IA sobre a linha do tempo rural do cliente, incluindo avaliação detalhada dos períodos de atividade rural e urbana.',
   )
-  public readonly ruralTimelineAnalysis: string | null;
+  public readonly ruralTimelineCompleteAnalysis: string | null;
+
+  @Description(
+    'Análise simplificada gerada pela IA sobre a linha do tempo rural do cliente, com resumo objetivo dos períodos de atividade.',
+  )
+  public readonly ruralTimelineSimplifiedAnalysis: string | null;
 
   @Description(
     'Análise detalhada dos documentos comprobatórios apresentados para cada período da linha do tempo rural.',
@@ -31,7 +36,10 @@ export class RuralTimelineAnalysisEntity extends BaseEntity<RuralTimelineAnalysi
   public constructor(props: RuralTimelineAnalysisEntityPropsInterface) {
     super(RuralTimelineAnalysisId, props);
 
-    this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
+    this.ruralTimelineCompleteAnalysis =
+      props.ruralTimelineCompleteAnalysis ?? null;
+    this.ruralTimelineSimplifiedAnalysis =
+      props.ruralTimelineSimplifiedAnalysis ?? null;
     this.ruralTimelinePeriodDocumentAnalysis =
       props.ruralTimelinePeriodDocumentAnalysis ?? null;
     this.analysisToolClientId = props.analysisToolClientId;
