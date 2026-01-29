@@ -11,6 +11,7 @@ import type { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/ana
 import type { ProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/production-destination.enum';
 import type { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import type { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
+import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import type { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import type { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import type { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/enum/rural-timeline-analysis-period-family-group-member-kinship-type.enum';
@@ -107,6 +108,7 @@ export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult extends 
 }
 
 export class GetRuralTimelineAnalysisPeriodQueryResult extends BaseBuildableObject {
+  public readonly id: RuralTimelineAnalysisPeriodId;
   public readonly startDate: Date;
   public readonly endDate: Date;
   public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
@@ -137,4 +139,8 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResult extends BaseBuilda
 
   protected override readonly _type =
     GetRuralTimelineAnalysisWithRelationsQueryResult.name;
+
+  public get periods(): GetRuralTimelineAnalysisPeriodQueryResult[] {
+    return this.ruralTimelineAnalysisPeriod;
+  }
 }

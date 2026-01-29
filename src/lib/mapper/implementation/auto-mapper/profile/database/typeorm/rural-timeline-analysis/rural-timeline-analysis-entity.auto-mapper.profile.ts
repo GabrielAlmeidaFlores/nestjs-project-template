@@ -21,6 +21,7 @@ import {
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 
 @Injectable()
 export class RuralTimelineAnalysisEntityAutoMapperProfile {
@@ -149,6 +150,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
         );
 
         return GetRuralTimelineAnalysisPeriodQueryResult.build({
+          id: new RuralTimelineAnalysisPeriodId(period.id),
           startDate: period.startDate,
           endDate: period.endDate,
           workerType: period.workerType,
@@ -210,6 +212,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
         ruralTimelinePeriodDocumentAnalysis:
           source.ruralTimelinePeriodDocumentAnalysis ?? null,
         workRegime: source.workRegime,
+        periods: periods,
         ruralTimelineAnalysisPeriod: periods,
         ruralTimelineDocument: cnisDocuments,
         ruralTimelineCnisContributionPeriod: cnisContributionPeriods,

@@ -12,9 +12,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntity extends BaseEntity<RuralT
   )
   public readonly documentYear: number | null;
 
-  @Description(
-    'Identificação do tipo de detentor do documento (próprio cliente, familiar ou terceiro).',
-  )
+  @Description('Nome do titular do documento')
   public readonly documentHolderType: string | null;
 
   @Description(

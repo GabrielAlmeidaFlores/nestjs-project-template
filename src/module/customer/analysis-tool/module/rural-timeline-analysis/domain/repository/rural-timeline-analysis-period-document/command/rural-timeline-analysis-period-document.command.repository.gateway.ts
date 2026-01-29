@@ -7,6 +7,10 @@ export abstract class RuralTimelineAnalysisPeriodDocumentCommandRepositoryGatewa
     props: RuralTimelineAnalysisPeriodDocumentEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisPeriodDocument(
+    props: RuralTimelineAnalysisPeriodDocumentEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisPeriodDocument(
     id: RuralTimelineAnalysisPeriodDocumentId,
   ): TransactionType;
