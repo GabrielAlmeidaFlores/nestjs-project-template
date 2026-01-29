@@ -9,7 +9,6 @@ import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/custom
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/analyze-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/generate-rural-timeline-analysis-period-document-analysis.request.dto';
-import { ListRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/list-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
@@ -37,6 +36,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -178,14 +178,8 @@ export class RuralTimelineAnalysisController {
       new ParseValueObjectPipe(RuralTimelineAnalysisId),
     )
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Query() query: ListRuralTimelineAnalysisCnisContributionPeriodRequestDto,
+    @Query() dto: ListDataRequestDto,
   ): Promise<ListRuralTimelineAnalysisCnisContributionPeriodResponseDto> {
-    const dto = ListRuralTimelineAnalysisCnisContributionPeriodRequestDto.build(
-      {
-        ...query,
-      },
-    );
-
     return await this.listRuralTimelineAnalysisCnisContributionPeriodUseCase.execute(
       sessionData,
       organizationSessionData,
