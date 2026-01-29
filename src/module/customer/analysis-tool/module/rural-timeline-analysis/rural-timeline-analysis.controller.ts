@@ -3,16 +3,19 @@ import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
+import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/analyze-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/generate-rural-timeline-analysis-period-document-analysis.request.dto';
+import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/analyze-rural-timeline-analysis-period-document.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis-period-document-analysis.response.dto';
 import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
+import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
@@ -37,6 +40,7 @@ export class RuralTimelineAnalysisController {
   public constructor(
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
+    private readonly addRuralTimelineAnalysisCnisDocumentUseCase: AddRuralTimelineAnalysisCnisDocumentUseCase,
     private readonly addRuralTimelineAnalysisPeriodDocumentUseCase: AddRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly analyzeRuralTimelineAnalysisPeriodDocumentUseCase: AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly generateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase,
@@ -102,6 +106,41 @@ export class RuralTimelineAnalysisController {
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Anexar documento CNIS à análise rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-document',
+      method: RequestMethod.POST,
+      type: AddRuralTimelineAnalysisCnisDocumentRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Documento CNIS anexado com sucesso.',
+      type: AddRuralTimelineAnalysisCnisDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async addRuralTimelineAnalysisCnisDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Body() dto: AddRuralTimelineAnalysisCnisDocumentRequestDto,
+  ): Promise<AddRuralTimelineAnalysisCnisDocumentResponseDto> {
+    return await this.addRuralTimelineAnalysisCnisDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      dto,
     );
   }
 
