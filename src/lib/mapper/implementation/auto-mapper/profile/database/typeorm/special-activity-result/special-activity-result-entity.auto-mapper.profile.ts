@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { SpecialActivityResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-result.typeorm.entity';
 import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result.entity';
 import { SpecialActivityResultId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
-import { GetSpecialActivityResultQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-result/query/result/get-special-activity-result.query.result';
+import { GetSpecialActivityAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/query/result/get-special-activity-analysis-result.query.result';
 
 @Injectable()
 export class SpecialActivityResultEntityAutoMapperProfile {
@@ -64,8 +64,8 @@ export class SpecialActivityResultEntityAutoMapperProfile {
   private mapOrmEntityToQueryResult(): void {
     const convertOrmEntityToQueryResult = (
       source: SpecialActivityResultTypeormEntity,
-    ): GetSpecialActivityResultQueryResult => {
-      return GetSpecialActivityResultQueryResult.build({
+    ): GetSpecialActivityAnalysisResultQueryResult => {
+      return GetSpecialActivityAnalysisResultQueryResult.build({
         id: new SpecialActivityResultId(source.id),
         specialActivityCompleteAnalysis: source.specialActivityCompleteAnalysis,
         specialActivitySimplifiedAnalysis:
@@ -85,7 +85,7 @@ export class SpecialActivityResultEntityAutoMapperProfile {
     createMap(
       this.mapper,
       SpecialActivityResultTypeormEntity,
-      GetSpecialActivityResultQueryResult,
+      GetSpecialActivityAnalysisResultQueryResult,
       mappingFunction,
     );
   }

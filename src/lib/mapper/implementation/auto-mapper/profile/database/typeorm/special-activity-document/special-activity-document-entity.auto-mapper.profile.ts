@@ -7,7 +7,7 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialActivityDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/special-activity-document.entity';
 import { SpecialActivityDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
-import { GetSpecialActivityDocumentQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-document/query/result/get-special-activity-document.query.result';
+import { GetSpecialActivityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-document/query/result/get-special-activity-analysis-document.query.result';
 
 @Injectable()
 export class SpecialActivityDocumentEntityAutoMapperProfile {
@@ -81,8 +81,8 @@ export class SpecialActivityDocumentEntityAutoMapperProfile {
   private mapOrmEntityToQueryResult(): void {
     const convertOrmEntityToQueryResult = (
       source: SpecialActivityDocumentTypeormEntity,
-    ): GetSpecialActivityDocumentQueryResult => {
-      return GetSpecialActivityDocumentQueryResult.build({
+    ): GetSpecialActivityAnalysisDocumentQueryResult => {
+      return GetSpecialActivityAnalysisDocumentQueryResult.build({
         id: new SpecialActivityDocumentId(source.id),
         document: source.document,
         type: source.type,
@@ -97,7 +97,7 @@ export class SpecialActivityDocumentEntityAutoMapperProfile {
     createMap(
       this.mapper,
       SpecialActivityDocumentTypeormEntity,
-      GetSpecialActivityDocumentQueryResult,
+      GetSpecialActivityAnalysisDocumentQueryResult,
       mappingFunction,
     );
   }

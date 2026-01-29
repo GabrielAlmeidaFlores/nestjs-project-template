@@ -10,11 +10,11 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result.entity';
-import { GetSpecialActivityWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity/query/result/get-special-activity-with-relations.query.result';
-import { GetSpecialActivityDocumentQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-document/query/result/get-special-activity-document.query.result';
-import { GetSpecialActivityInssBenefitQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-inss-benefit/query/result/get-special-activity-inss-benefit.query.result';
-import { GetSpecialActivityLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-legal-proceeding/query/result/get-special-activity-legal-proceeding.query.result';
-import { GetSpecialActivityResultQueryResult } from '@module/customer/analysis-tool/module/special-activity/domain/repository/special-activity-result/query/result/get-special-activity-result.query.result';
+import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { GetSpecialActivityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-document/query/result/get-special-activity-analysis-document.query.result';
+import { GetSpecialActivityAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-inss-benefit/query/result/get-special-activity-analysis-inss-benefit.query.result';
+import { GetSpecialActivityAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/query/result/get-special-activity-analysis-legal-proceeding.query.result';
+import { GetSpecialActivityAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/query/result/get-special-activity-analysis-result.query.result';
 
 @Injectable()
 export class SpecialActivityEntityAutoMapperProfile {
@@ -101,12 +101,12 @@ export class SpecialActivityEntityAutoMapperProfile {
   private mapOrmEntityToQueryResult(): void {
     const convertOrmEntityToQueryResult = (
       source: SpecialActivityTypeormEntity,
-    ): GetSpecialActivityWithRelationsQueryResult => {
+    ): GetSpecialActivityAnalysisWithRelationsQueryResult => {
       const specialActivityResult = source.specialActivityResult
         ? this.mapper.map(
             source.specialActivityResult,
             SpecialActivityResultTypeormEntity,
-            GetSpecialActivityResultQueryResult,
+            GetSpecialActivityAnalysisResultQueryResult,
           )
         : null;
 
@@ -115,7 +115,7 @@ export class SpecialActivityEntityAutoMapperProfile {
           this.mapper.map(
             doc,
             SpecialActivityDocumentTypeormEntity,
-            GetSpecialActivityDocumentQueryResult,
+            GetSpecialActivityAnalysisDocumentQueryResult,
           ),
         ) ?? [];
 
@@ -124,7 +124,7 @@ export class SpecialActivityEntityAutoMapperProfile {
           this.mapper.map(
             benefit,
             SpecialActivityInssBenefitTypeormEntity,
-            GetSpecialActivityInssBenefitQueryResult,
+            GetSpecialActivityAnalysisInssBenefitQueryResult,
           ),
         ) ?? [];
 
@@ -133,11 +133,11 @@ export class SpecialActivityEntityAutoMapperProfile {
           this.mapper.map(
             proceeding,
             SpecialActivityLegalProceedingTypeormEntity,
-            GetSpecialActivityLegalProceedingQueryResult,
+            GetSpecialActivityAnalysisLegalProceedingQueryResult,
           ),
         ) ?? [];
 
-      return GetSpecialActivityWithRelationsQueryResult.build({
+      return GetSpecialActivityAnalysisWithRelationsQueryResult.build({
         id: new SpecialActivityId(source.id),
         specialActivityResult,
         specialActivityDocuments,
@@ -154,7 +154,7 @@ export class SpecialActivityEntityAutoMapperProfile {
     createMap(
       this.mapper,
       SpecialActivityTypeormEntity,
-      GetSpecialActivityWithRelationsQueryResult,
+      GetSpecialActivityAnalysisWithRelationsQueryResult,
       mappingFunction,
     );
   }
