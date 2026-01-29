@@ -72,12 +72,15 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    void (await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-      ruralTimelineAnalysisId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-      RuralTimelineAnalysisNotFoundError,
-    ));
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        ruralTimelineAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        RuralTimelineAnalysisNotFoundError,
+      );
+
+    const clientName = analysisToolRecordQueryResult.analysisToolClient.name;
 
     const ruralTimelineAnalysis =
       await this.ruralTimelineAnalysisQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdOrFail(
@@ -113,18 +116,32 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
       );
 
+    const periodContext = `
+CONTEXTO DO PERÍODO RURAL:
+- Nome do cliente: ${clientName}
+- Data de início: ${period.startDate.toString()}
+- Data de término: ${period.endDate.toString()}
+- Tipo de trabalhador: ${period.workerType}
+- Regime de trabalho: ${period.workRegimeType}
+- Destino da produção: ${period.productionDestination ?? 'Não informado'}
+`;
+
     const systemInstruction = promptResponse.prompt;
 
     const analyzedDocuments: AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto[] =
       [];
     const updatedDocuments: RuralTimelineAnalysisPeriodDocumentEntity[] = [];
+    const creditTransactions = [];
 
     for (const documentQueryResult of documentsToAnalyze) {
-      void (await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
-        organizationMember.id,
-      ));
+      const creditTransaction =
+        await this.consumeOrganizationCreditUseCase.execute(
+          organizationSessionData.organizationId,
+          PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
+          organizationMember.id,
+        );
+
+      creditTransactions.push(creditTransaction);
 
       const documentBuffer = await this.fileProcessorGateway.getFileBuffer(
         documentQueryResult.document,
@@ -134,6 +151,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
           GenerateResponseInputModel.build({
             systemInstruction,
+            prompt: periodContext,
             promptFiles: [documentBuffer],
             responseConfig: ResponseConfigInputModel.build({
               responseMimeType:
@@ -227,13 +245,17 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
       );
     }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      updatedDocuments.map((doc) =>
+    const allTransactions = [
+      ...creditTransactions,
+      ...updatedDocuments.map((doc) =>
         this.ruralTimelineAnalysisPeriodDocumentCommandRepositoryGateway.updateRuralTimelineAnalysisPeriodDocument(
           doc,
         ),
       ),
-    );
+    ];
+
+    const transaction =
+      await this.baseTransactionRepositoryGateway.execute(allTransactions);
 
     await transaction.commit();
 
