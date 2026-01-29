@@ -1,8 +1,11 @@
-import { Body, HttpStatus, RequestMethod } from '@nestjs/common';
+import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
+import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -11,6 +14,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('analysis-tool/rural-timeline-analysis')
@@ -19,6 +23,7 @@ export class RuralTimelineAnalysisController {
 
   public constructor(
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
+    private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -47,6 +52,39 @@ export class RuralTimelineAnalysisController {
       sessionData,
       organizationSessionData,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter detalhes da análise de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Detalhes da análise de linha do tempo rural obtidos com sucesso.',
+      type: GetRuralTimelineAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRuralTimelineAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+  ): Promise<GetRuralTimelineAnalysisResponseDto> {
+    return await this.getRuralTimelineAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
     );
   }
 }
