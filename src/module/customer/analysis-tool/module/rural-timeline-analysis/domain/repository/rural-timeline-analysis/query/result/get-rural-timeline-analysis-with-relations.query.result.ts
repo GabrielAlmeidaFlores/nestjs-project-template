@@ -133,7 +133,8 @@ export class GetRuralTimelineAnalysisPeriodQueryResult extends BaseBuildableObje
 
 export class GetRuralTimelineAnalysisWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisId;
-  public readonly ruralTimelineAnalysis: string | null;
+  public readonly ruralTimelineCompleteAnalysis: string | null;
+  public readonly ruralTimelineSimplifiedAnalysis: string | null;
   public readonly ruralTimelinePeriodDocumentAnalysis: string | null;
   public readonly workRegime: RuralTimelineAnalysisWorkRegimeEnum;
   public readonly ruralTimelineAnalysisPeriod: GetRuralTimelineAnalysisPeriodQueryResult[];

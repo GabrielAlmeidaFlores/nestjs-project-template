@@ -329,7 +329,10 @@ export class GetRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject 
   public workRegime: RuralTimelineAnalysisWorkRegimeEnum;
 
   @ResponseDtoStringProperty({ required: false })
-  public ruralTimelineAnalysis?: string;
+  public ruralTimelineCompleteAnalysis?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public ruralTimelineSimplifiedAnalysis?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public ruralTimelinePeriodDocumentAnalysis?: string;

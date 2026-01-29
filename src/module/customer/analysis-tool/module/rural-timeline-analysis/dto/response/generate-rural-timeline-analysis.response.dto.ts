@@ -5,7 +5,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class GenerateRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
-  public ruralTimelineAnalysis: string;
+  public ruralTimelineCompleteAnalysis: string;
 
   protected override readonly _type =
     GenerateRuralTimelineAnalysisResponseDto.name;

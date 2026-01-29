@@ -218,7 +218,10 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
       return GetRuralTimelineAnalysisWithRelationsQueryResult.build({
         id: new RuralTimelineAnalysisId(source.id),
-        ruralTimelineAnalysis: source.ruralTimelineAnalysis ?? null,
+        ruralTimelineCompleteAnalysis:
+          source.ruralTimelineCompleteAnalysis ?? null,
+        ruralTimelineSimplifiedAnalysis:
+          source.ruralTimelineSimplifiedAnalysis ?? null,
         ruralTimelinePeriodDocumentAnalysis:
           source.ruralTimelinePeriodDocumentAnalysis ?? null,
         workRegime: source.workRegime,

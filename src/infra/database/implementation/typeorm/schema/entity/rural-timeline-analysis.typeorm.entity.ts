@@ -10,11 +10,18 @@ import { RuralTimelineAnalysisWorkRegimeEnum } from '@module/customer/analysis-t
 @Entity({ name: 'rural_timeline' })
 export class RuralTimelineAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
-    name: 'rural_timeline_analysis',
+    name: 'rural_timeline_complete_analysis',
     type: 'text',
     nullable: true,
   })
-  public ruralTimelineAnalysis?: string | null;
+  public ruralTimelineCompleteAnalysis?: string | null;
+
+  @Column({
+    name: 'rural_timeline_simplified_analysis',
+    type: 'text',
+    nullable: true,
+  })
+  public ruralTimelineSimplifiedAnalysis?: string | null;
 
   @Column({
     name: 'rural_timeline_period_document_analysis',

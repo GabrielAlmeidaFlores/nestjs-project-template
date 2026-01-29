@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
+import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { RuralTimelineAnalysisController } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.controller';
 import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
@@ -11,6 +12,8 @@ import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
+import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-complete-analysis.use-case';
+import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
 import { GenerateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
@@ -27,6 +30,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CnisAnalyzerModule,
     CnisProcessorModule,
     DatabaseModule,
+    ExportDocumentModule,
     FileProcessorModule,
     GenerativeIaModule,
     OrganizationCreditModule,
@@ -38,6 +42,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralTimelineAnalysisUseCase,
     GetRuralTimelineAnalysisUseCase,
     GenerateRuralTimelineAnalysisUseCase,
+    DownloadRuralTimelineCompleteAnalysisUseCase,
+    DownloadRuralTimelineSimplifiedAnalysisUseCase,
     AddRuralTimelineAnalysisCnisDocumentUseCase,
     AddRuralTimelineAnalysisPeriodDocumentUseCase,
     AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
