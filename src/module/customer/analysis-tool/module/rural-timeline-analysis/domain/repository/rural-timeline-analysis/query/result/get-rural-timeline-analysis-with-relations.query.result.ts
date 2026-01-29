@@ -17,6 +17,7 @@ import type { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from
 import type { RuralTimelineAnalysisPeriodLandOwnershipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/enum/rural-timeline-analysis-period-land-ownership-type.enum';
 
 export class GetRuralTimelineAnalysisDocumentQueryResult extends BaseBuildableObject {
+  public readonly id: string;
   public readonly type: RuralTimelineAnalysisDocumentTypeEnum;
   public readonly document: string;
 
@@ -49,6 +50,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
 }
 
 export class GetRuralTimelineAnalysisPeriodDocumentQueryResult extends BaseBuildableObject {
+  public readonly id: string;
   public readonly documentYear: number | null;
   public readonly documentHolderType: string | null;
   public readonly selfOwned: boolean | null;

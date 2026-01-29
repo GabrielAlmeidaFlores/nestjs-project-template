@@ -77,6 +77,9 @@ export class GetRuralTimelineAnalysisResponsibleResponseDto extends BaseBuildabl
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public id: string;
+
   @ResponseDtoNumberProperty({ required: false })
   public documentYear?: number;
 
@@ -193,6 +196,9 @@ export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto extends 
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public id: string;
+
   @ResponseDtoEnumProperty(RuralTimelineAnalysisDocumentTypeEnum)
   public type: RuralTimelineAnalysisDocumentTypeEnum;
 

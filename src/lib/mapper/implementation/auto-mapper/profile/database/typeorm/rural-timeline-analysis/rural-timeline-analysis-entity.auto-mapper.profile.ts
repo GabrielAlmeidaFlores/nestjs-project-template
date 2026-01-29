@@ -91,6 +91,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
         const documents = (period.ruralTimelinePeriodDocument ?? []).map(
           (doc) =>
             GetRuralTimelineAnalysisPeriodDocumentQueryResult.build({
+              id: doc.id,
               documentYear: doc.documentYear ?? null,
               documentHolderType: doc.documentHolderType ?? null,
               selfOwned: doc.selfOwned ?? null,
@@ -164,6 +165,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
       const cnisDocuments = (source.ruralTimelineDocument ?? []).map((doc) =>
         GetRuralTimelineAnalysisDocumentQueryResult.build({
+          id: doc.id,
           type: doc.type,
           document: doc.document,
         }),
