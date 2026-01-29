@@ -88,6 +88,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
         documents.push(
           GetRuralTimelineAnalysisPeriodDocumentResponseDto.build({
+            id: document.id,
             ...(document.documentYear !== null && {
               documentYear: document.documentYear,
             }),
@@ -219,6 +220,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
       cnisDocuments.push(
         GetRuralTimelineAnalysisDocumentResponseDto.build({
+          id: doc.id,
           type: doc.type as RuralTimelineAnalysisDocumentTypeEnum,
           url: url.toString(),
           originalFileName,
