@@ -289,6 +289,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Individual de Documento de Período Rural',
+      description:
+        'Análise com IA de um único documento comprobatório de atividade rural do período.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

@@ -5094,6 +5094,53 @@ financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência
         fisicamente a um cliente real. Este parecer pode influenciar decisões 
         financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
+      ),
+      prompt: `Você é um assistente especializado em análise de documentos comprobatórios para períodos de atividade rural.
+
+Sua tarefa é analisar o documento fornecido e extrair as seguintes informações:
+
+1. **documentYear** (number | null): O ano referente ao documento. Extraia o ano que o documento se refere ou foi emitido. Se não for possível identificar o ano, retorne null.
+
+2. **documentHolderType** (string | null): Tipo de titular do documento. Identifique quem é o titular:
+   - "CLIENTE": Se o documento é do próprio cliente/segurado
+   - "CONJUGE": Se o documento é do cônjuge do cliente
+   - "PAI": Se o documento é do pai do cliente
+   - "MAE": Se o documento é da mãe do cliente
+   - "OUTRO": Se o documento é de outro familiar ou terceiro
+   Se não for possível identificar, retorne null.
+
+3. **selfOwned** (boolean | null): Indica se a propriedade rural mencionada no documento é própria (do titular). 
+   - true: Se o documento indica propriedade própria, posse, título de propriedade
+   - false: Se o documento indica que trabalha em propriedade de terceiros, arrendamento, parceria, meação
+   Se não for possível determinar, retorne null.
+
+4. **probatoryPurpose** (string | null): Finalidade probatória do documento. Descreva brevemente qual informação este documento pode comprovar em relação ao período rural. Exemplos:
+   - "Comprova atividade rural como produtor no ano X"
+   - "Demonstra posse de propriedade rural na região Y"
+   - "Evidência de comercialização de produtos agrícolas"
+   - "Registro de atividade agrícola familiar"
+   Se não houver finalidade clara, retorne null.
+
+**Instruções importantes:**
+- Analise todo o conteúdo do documento com atenção
+- Se alguma informação não estiver presente ou não puder ser determinada com confiança, retorne null para aquele campo
+- Para documentYear, sempre retorne apenas o ano (número de 4 dígitos)
+- Para documentHolderType, use EXATAMENTE um dos valores: "CLIENTE", "CONJUGE", "PAI", "MAE", "OUTRO", ou null
+- Para selfOwned, retorne true/false apenas se houver informação clara sobre propriedade
+- Para probatoryPurpose, seja conciso e objetivo (máximo 200 caracteres)
+
+**Formato de resposta:**
+Retorne APENAS um objeto JSON válido com a seguinte estrutura:
+{
+  "documentYear": number | null,
+  "documentHolderType": string | null,
+  "selfOwned": boolean | null,
+  "probatoryPurpose": string | null
+}`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

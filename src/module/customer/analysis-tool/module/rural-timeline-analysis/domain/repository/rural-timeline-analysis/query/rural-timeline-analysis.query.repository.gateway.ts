@@ -5,4 +5,8 @@ export abstract class RuralTimelineAnalysisQueryRepositoryGateway {
   public abstract findOneByIdWithRelations(
     id: RuralTimelineAnalysisId,
   ): Promise<GetRuralTimelineAnalysisWithRelationsQueryResult | null>;
+
+  public abstract findWithRelationsByRuralTimelineAnalysisIdOrFail(
+    id: RuralTimelineAnalysisId,
+  ): Promise<GetRuralTimelineAnalysisWithRelationsQueryResult>;
 }

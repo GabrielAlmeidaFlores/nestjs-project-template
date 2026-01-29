@@ -38,6 +38,18 @@ export class RuralTimelineAnalysisPeriodDocumentTypeormCommandRepository
     return this.create(mappedData);
   }
 
+  public updateRuralTimelineAnalysisPeriodDocument(
+    props: RuralTimelineAnalysisPeriodDocumentEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      RuralTimelineAnalysisPeriodDocumentEntity,
+      RuralTimelineAnalysisPeriodDocumentTypeormEntity,
+    );
+
+    return this.update(props.id.toString(), mappedData);
+  }
+
   public deleteRuralTimelineAnalysisPeriodDocument(
     id: RuralTimelineAnalysisPeriodDocumentId,
   ): TransactionType {
