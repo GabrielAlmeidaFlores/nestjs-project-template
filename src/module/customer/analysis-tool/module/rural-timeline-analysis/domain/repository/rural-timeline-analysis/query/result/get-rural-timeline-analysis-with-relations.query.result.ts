@@ -8,17 +8,21 @@ import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/mod
 import type { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import type { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
 import type { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/enum/rural-timeline-analysis-document-type.enum';
+import type { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
 import type { ProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/production-destination.enum';
 import type { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import type { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
 import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import type { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
+import type { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import type { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import type { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/enum/rural-timeline-analysis-period-family-group-member-kinship-type.enum';
 import type { RuralTimelineAnalysisPeriodLandOwnershipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/enum/rural-timeline-analysis-period-land-ownership-type.enum';
+import type { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
+import type { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
 
 export class GetRuralTimelineAnalysisDocumentQueryResult extends BaseBuildableObject {
-  public readonly id: string;
+  public readonly id: RuralTimelineAnalysisDocumentId;
   public readonly type: RuralTimelineAnalysisDocumentTypeEnum;
   public readonly document: string;
 
@@ -51,7 +55,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
 }
 
 export class GetRuralTimelineAnalysisPeriodDocumentQueryResult extends BaseBuildableObject {
-  public readonly id: string;
+  public readonly id: RuralTimelineAnalysisPeriodDocumentId;
   public readonly documentYear: number | null;
   public readonly documentHolderType: string | null;
   public readonly selfOwned: boolean | null;
@@ -64,6 +68,7 @@ export class GetRuralTimelineAnalysisPeriodDocumentQueryResult extends BaseBuild
 }
 
 export class GetRuralTimelineAnalysisPeriodResidenceQueryResult extends BaseBuildableObject {
+  public readonly id: RuralTimelineAnalysisPeriodResidenceId;
   public readonly city: string;
   public readonly stateCode: StateCodeEnum;
   public readonly distanceToPropertyKm: DecimalValue;
@@ -73,6 +78,7 @@ export class GetRuralTimelineAnalysisPeriodResidenceQueryResult extends BaseBuil
 }
 
 export class GetRuralTimelineAnalysisPeriodPropertyQueryResult extends BaseBuildableObject {
+  public readonly id: RuralTimelineAnalysisPeriodPropertyId;
   public readonly propertyName: string;
   public readonly ownerName: string;
   public readonly postalCode: string;

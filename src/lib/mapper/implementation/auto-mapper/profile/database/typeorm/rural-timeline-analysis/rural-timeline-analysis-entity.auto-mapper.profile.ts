@@ -21,7 +21,11 @@ import {
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
+import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
+import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
 
 @Injectable()
 export class RuralTimelineAnalysisEntityAutoMapperProfile {
@@ -92,7 +96,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
         const documents = (period.ruralTimelinePeriodDocument ?? []).map(
           (doc) =>
             GetRuralTimelineAnalysisPeriodDocumentQueryResult.build({
-              id: doc.id,
+              id: new RuralTimelineAnalysisPeriodDocumentId(doc.id),
               documentYear: doc.documentYear ?? null,
               documentHolderType: doc.documentHolderType ?? null,
               selfOwned: doc.selfOwned ?? null,
@@ -104,6 +108,9 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
         const residence = period.ruralTimelinePeriodResidence
           ? GetRuralTimelineAnalysisPeriodResidenceQueryResult.build({
+              id: new RuralTimelineAnalysisPeriodResidenceId(
+                period.ruralTimelinePeriodResidence.id,
+              ),
               city: period.ruralTimelinePeriodResidence.city,
               stateCode: period.ruralTimelinePeriodResidence.stateCode,
               distanceToPropertyKm: new DecimalValue(
@@ -114,6 +121,9 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
         const property = period.ruralTimelinePeriodProperty
           ? GetRuralTimelineAnalysisPeriodPropertyQueryResult.build({
+              id: new RuralTimelineAnalysisPeriodPropertyId(
+                period.ruralTimelinePeriodProperty.id,
+              ),
               propertyName: period.ruralTimelinePeriodProperty.propertyName,
               ownerName: period.ruralTimelinePeriodProperty.ownerName,
               postalCode: period.ruralTimelinePeriodProperty.postalCode,
@@ -167,7 +177,7 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
       const cnisDocuments = (source.ruralTimelineDocument ?? []).map((doc) =>
         GetRuralTimelineAnalysisDocumentQueryResult.build({
-          id: doc.id,
+          id: new RuralTimelineAnalysisDocumentId(doc.id),
           type: doc.type,
           document: doc.document,
         }),

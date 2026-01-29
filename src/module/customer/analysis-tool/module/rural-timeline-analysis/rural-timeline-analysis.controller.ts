@@ -6,15 +6,18 @@ import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/analyze-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
+import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/generate-rural-timeline-analysis-period-document-analysis.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/analyze-rural-timeline-analysis-period-document.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
+import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis-period-document-analysis.response.dto';
 import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
+import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -36,6 +39,7 @@ export class RuralTimelineAnalysisController {
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
     private readonly addRuralTimelineAnalysisPeriodDocumentUseCase: AddRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly analyzeRuralTimelineAnalysisPeriodDocumentUseCase: AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
+    private readonly generateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase,
     private readonly deleteRuralTimelineAnalysisPeriodDocumentUseCase: DeleteRuralTimelineAnalysisPeriodDocumentUseCase,
   ) {}
 
@@ -175,6 +179,48 @@ export class RuralTimelineAnalysisController {
     @Body() dto: AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto,
   ): Promise<AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto> {
     return await this.analyzeRuralTimelineAnalysisPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      ruralTimelineAnalysisPeriodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Gerar análise consolidada dos documentos do período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/generate-analysis',
+      method: RequestMethod.POST,
+      type: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise consolidada dos documentos do período gerada com sucesso.',
+      type: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async generateRuralTimelineAnalysisPeriodDocumentAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'ruralTimelineAnalysisPeriodId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId),
+    )
+    ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto,
+  ): Promise<GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto> {
+    return await this.generateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
