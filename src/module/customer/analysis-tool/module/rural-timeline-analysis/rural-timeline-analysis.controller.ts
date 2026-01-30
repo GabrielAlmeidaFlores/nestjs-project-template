@@ -15,10 +15,7 @@ import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/mo
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
-import { AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/analyze-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
-import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/generate-rural-timeline-analysis-period-document-analysis.request.dto';
-import { GenerateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/generate-rural-timeline-analysis.request.dto';
 import { GetRuralTimelineCnisAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/get-rural-timeline-cnis-analysis.request.dto';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
@@ -179,7 +176,6 @@ export class RuralTimelineAnalysisController {
     http: {
       path: ':ruralTimelineAnalysisId/generate-analysis',
       method: RequestMethod.POST,
-      type: GenerateRuralTimelineAnalysisRequestDto,
     },
     tag: ['analise-linha-tempo-rural'],
     successResponse: {
@@ -198,13 +194,11 @@ export class RuralTimelineAnalysisController {
       new ParseValueObjectPipe(RuralTimelineAnalysisId),
     )
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Body() dto: GenerateRuralTimelineAnalysisRequestDto,
   ): Promise<GenerateRuralTimelineAnalysisResponseDto> {
     return await this.generateRuralTimelineAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
-      dto,
     );
   }
 
@@ -438,7 +432,6 @@ export class RuralTimelineAnalysisController {
     http: {
       path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/analyze',
       method: RequestMethod.POST,
-      type: AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto,
     },
     tag: ['analise-linha-tempo-rural'],
     successResponse: {
@@ -462,14 +455,12 @@ export class RuralTimelineAnalysisController {
       new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId),
     )
     ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId,
-    @Body() dto: AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto,
   ): Promise<AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto> {
     return await this.analyzeRuralTimelineAnalysisPeriodDocumentUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
       ruralTimelineAnalysisPeriodId,
-      dto,
     );
   }
 
@@ -479,7 +470,6 @@ export class RuralTimelineAnalysisController {
     http: {
       path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/generate-analysis',
       method: RequestMethod.POST,
-      type: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto,
     },
     tag: ['analise-linha-tempo-rural'],
     successResponse: {
@@ -504,14 +494,12 @@ export class RuralTimelineAnalysisController {
       new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId),
     )
     ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId,
-    @Body() dto: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisRequestDto,
   ): Promise<GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto> {
     return await this.generateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
       ruralTimelineAnalysisPeriodId,
-      dto,
     );
   }
 
