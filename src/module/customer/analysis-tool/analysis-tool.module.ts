@@ -12,6 +12,7 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
+import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
@@ -75,6 +76,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
@@ -107,6 +109,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
+    DisabilityAssessmentForBpcAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
@@ -115,6 +118,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateAnalysisToolClientUseCase,
     DeleteAnalysisToolClientUseCase,
     CreateLegalPleadingUseCase,
+    UpdateLegalPleadingUseCase,
     CreateLegalPleadingResultUseCase,
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,

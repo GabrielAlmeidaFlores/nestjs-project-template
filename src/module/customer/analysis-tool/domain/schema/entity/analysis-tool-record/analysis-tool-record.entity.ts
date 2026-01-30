@@ -9,6 +9,7 @@ import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/dom
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
@@ -62,6 +63,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
 
   @Description(
+    'Avaliação de deficiência para BPC associada ao registro da ferramenta de análise',
+  )
+  public readonly disabilityAssessmentForBpcAnalysis: DisabilityAssessmentForBpcAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -92,6 +98,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.administrativeProcedureInssAnalysis ?? null;
     this.medicalAndSocialReportObjectionGeneratorAnalysis =
       props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
+    this.disabilityAssessmentForBpcAnalysis =
+      props.disabilityAssessmentForBpcAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
