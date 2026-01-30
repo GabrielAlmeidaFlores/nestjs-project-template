@@ -30,19 +30,10 @@ export abstract class AnalysisProcessorGateway {
   public abstract getSpecialActivityCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    asJson?: boolean,
   ): Promise<string | null>;
 
   public abstract getSpecialActivitySimplifiedAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null>;
-
-  public abstract getSpecialActivityCompleteAnalysisDownload(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null>;
-
-  public abstract getSpecialActivitySimplifiedAnalysisDownload(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

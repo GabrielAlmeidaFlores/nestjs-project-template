@@ -5,5 +5,4 @@ export interface SpecialActivityResultEntityPropsInterface extends BaseEntityPro
   specialActivityCompleteAnalysis?: string | null;
   specialActivitySimplifiedAnalysis?: string | null;
   specialActivityCompleteAnalysisDownload?: string | null;
-  specialActivitySimplifiedAnalysisDownload?: string | null;
 }

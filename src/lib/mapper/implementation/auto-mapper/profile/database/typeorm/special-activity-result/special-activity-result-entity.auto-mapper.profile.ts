@@ -72,8 +72,6 @@ export class SpecialActivityResultEntityAutoMapperProfile {
           source.specialActivitySimplifiedAnalysis,
         specialActivityCompleteAnalysisDownload:
           source.specialActivityCompleteAnalysisDownload,
-        specialActivitySimplifiedAnalysisDownload:
-          source.specialActivitySimplifiedAnalysisDownload,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

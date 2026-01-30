@@ -124,7 +124,6 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
       specialActivitySimplifiedAnalysis: null,
       specialActivityCompleteAnalysisDownload: null,
-      specialActivitySimplifiedAnalysisDownload: null,
     });
 
     const specialActivity = new SpecialActivityEntity({

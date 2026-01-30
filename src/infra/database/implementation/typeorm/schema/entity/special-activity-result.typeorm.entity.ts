@@ -20,13 +20,6 @@ export class SpecialActivityResultTypeormEntity extends BaseTypeormEntity {
   public specialActivityCompleteAnalysis: string | null;
 
   @Column({
-    name: 'special_activity_simplified_analysis_download',
-    type: 'text',
-    nullable: true,
-  })
-  public specialActivitySimplifiedAnalysisDownload: string | null;
-
-  @Column({
     name: 'special_activity_complete_analysis_download',
     type: 'longtext',
     nullable: true,
