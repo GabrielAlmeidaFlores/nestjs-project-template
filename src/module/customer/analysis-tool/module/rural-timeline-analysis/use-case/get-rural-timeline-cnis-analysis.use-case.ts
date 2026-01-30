@@ -6,13 +6,13 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
-import { CnisTimelinePeriodTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/enum/cnis-timeline-period-type.enum';
 import { GetRuralTimelineCnisAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/get-rural-timeline-cnis-analysis.request.dto';
 import {
   CnisTimelineContributionSummaryResponseDto,
   CnisTimelinePeriodResponseDto,
   GetRuralTimelineCnisAnalysisResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-cnis-analysis.response.dto';
+import { CnisTimelinePeriodTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/enum/cnis-timeline-period-type.enum';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -36,7 +36,7 @@ export class GetRuralTimelineCnisAnalysisUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    filters: GetRuralTimelineCnisAnalysisRequestDto,
+    dto: GetRuralTimelineCnisAnalysisRequestDto,
   ): Promise<GetRuralTimelineCnisAnalysisResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -137,17 +137,17 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
     let filteredPeriods = periods;
 
-    if (filters.periodTypes && filters.periodTypes.length > 0) {
+    if (dto.periodTypes && dto.periodTypes.length > 0) {
       filteredPeriods = filteredPeriods.filter((p) =>
-        (filters.periodTypes ?? []).includes(p.type),
+        (dto.periodTypes ?? []).includes(p.type),
       );
     }
-    if (filters.startDate) {
-      const startDate = filters.startDate;
+    if (dto.startDate) {
+      const startDate = dto.startDate;
       filteredPeriods = filteredPeriods.filter((p) => p.endDate >= startDate);
     }
-    if (filters.endDate) {
-      const endDate = filters.endDate;
+    if (dto.endDate) {
+      const endDate = dto.endDate;
       filteredPeriods = filteredPeriods.filter((p) => p.startDate <= endDate);
     }
 
