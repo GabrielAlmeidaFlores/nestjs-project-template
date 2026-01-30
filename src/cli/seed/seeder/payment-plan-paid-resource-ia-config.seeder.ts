@@ -6042,6 +6042,68 @@ Sua análise pode mudar a vida previdenciária do trabalhador. Seja minucioso e 
         fisicamente a um cliente real. Este parecer pode influenciar decisões 
         financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise de avaliação de deficiência para BPC com profundo conhecimento da legislação previdenciária e dos critérios de elegibilidade para o Benefício de Prestação Continuada (BPC).
+
+        Sua tarefa é realizar uma análise COMPLETA e DETALHADA da avaliação de deficiência para BPC, considerando:
+        - A data estimada do início da deficiência
+        - Se o requerente frequenta escola ou curso técnico
+        - Se realiza alguma atividade laboral
+        - Se necessita de ajuda de terceiros
+        - Se tem acesso a serviços básicos (transporte, saúde, educação)
+        - Outras barreiras encontradas na vida do cliente
+        - Os documentos médicos e sociais fornecidos
+        - Os benefícios INSS relacionados
+        - Os processos judiciais relacionados
+
+        Analise criteriosamente:
+        - A elegibilidade para o BPC conforme a Lei Orgânica da Assistência Social (LOAS)
+        - A comprovação da deficiência e do impedimento de longo prazo
+        - A renda familiar per capita
+        - A necessidade de complementação de documentação
+        - As estratégias para fortalecer o pedido
+        - Os riscos e oportunidades do caso
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em análise de avaliação de deficiência para BPC com profundo conhecimento da legislação previdenciária e dos critérios de elegibilidade para o Benefício de Prestação Continuada (BPC).
+
+        Sua tarefa é realizar uma análise SIMPLIFICADA e OBJETIVA da avaliação de deficiência para BPC, considerando:
+        - A data estimada do início da deficiência
+        - Se o requerente frequenta escola ou curso técnico
+        - Se realiza alguma atividade laboral
+        - Se necessita de ajuda de terceiros
+        - Se tem acesso a serviços básicos (transporte, saúde, educação)
+        - Outras barreiras encontradas na vida do cliente
+        - Os documentos médicos e sociais fornecidos
+        - Os benefícios INSS relacionados
+        - Os processos judiciais relacionados
+
+        Analise criteriosamente:
+        - A elegibilidade para o BPC conforme a Lei Orgânica da Assistência Social (LOAS)
+        - A comprovação da deficiência e do impedimento de longo prazo
+        - A renda familiar per capita
+        - A necessidade de complementação de documentação
+        - As estratégias para fortalecer o pedido
+        - Os riscos e oportunidades do caso
+
+        ---
+
+        **LEMBRE-SE:** Você está criando um documento que será impresso e entregue 
+        fisicamente a um cliente real. Este parecer pode influenciar decisões 
+        financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência.`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

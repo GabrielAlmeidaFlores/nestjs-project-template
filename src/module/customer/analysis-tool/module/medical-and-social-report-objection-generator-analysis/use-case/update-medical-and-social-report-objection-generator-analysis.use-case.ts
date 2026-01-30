@@ -122,6 +122,7 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       ...analysisToolRecordQueryResult,
       medicalAndSocialReportObjectionGeneratorAnalysis,
       analysisToolClient,
+      disabilityAssessmentForBpcAnalysis: null,
       status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,

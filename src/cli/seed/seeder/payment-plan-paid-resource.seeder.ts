@@ -289,6 +289,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f8e9d7c6-b5a4-4c3d-9e2f-1a0b9c8d7e6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Completa de Avaliação de Deficiência para BPC',
+      description:
+        'Análise completa da avaliação de deficiência para BPC com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Simplificada de Avaliação de Deficiência para BPC',
+      description:
+        'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
