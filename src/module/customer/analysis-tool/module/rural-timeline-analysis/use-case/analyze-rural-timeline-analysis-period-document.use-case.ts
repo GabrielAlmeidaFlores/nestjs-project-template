@@ -15,7 +15,6 @@ import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/r
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
-import { AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/analyze-rural-timeline-analysis-period-document.request.dto';
 import {
   AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto,
   AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto,
@@ -60,7 +59,6 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId,
-    _dto: AnalyzeRuralTimelineAnalysisPeriodDocumentRequestDto,
   ): Promise<AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
