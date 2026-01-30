@@ -5,7 +5,9 @@ import {
   FindManyOptions,
   FindOptionsRelations,
   FindOptionsWhere,
+  IsNull,
   Like,
+  Not,
   Repository,
 } from 'typeorm';
 
@@ -72,6 +74,17 @@ export class AnalysisToolRecordTypeormQueryRepository
         organization: { id: organizationId.toString() },
       },
     };
+
+    const atLeastOneRelationNotNull: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      [
+        { cnisFastAnalysis: Not(IsNull()) },
+        { retirementPlanningRgps: Not(IsNull()) },
+        { retirementPlanningRpps: Not(IsNull()) },
+        { disabilityAssessmentForBpcAnalysis: Not(IsNull()) },
+        { administrativeProcedureInssAnalysis: Not(IsNull()) },
+        { judicialCaseAnalysis: Not(IsNull()) },
+        { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
+      ];
 
     const withUpdatedBy = {
       ...baseWhere,
@@ -142,6 +155,10 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
       ];
     }
+
+    searchParams.where = searchParams.where.flatMap((cond) =>
+      atLeastOneRelationNotNull.map((rel) => ({ ...cond, ...rel })),
+    );
 
     const data = await this.list(listData, searchParams);
 
@@ -874,6 +891,9 @@ export class AnalysisToolRecordTypeormQueryRepository
       'retirementPlanningRgps',
       'administrativeProcedureInssAnalysis',
       'judicialCaseAnalysis',
+      'administrativeProcedureInssAnalysis',
+      'medicalAndSocialReportObjectionGeneratorAnalysis',
+      'disabilityAssessmentForBpcAnalysis',
     ];
   }
 }
