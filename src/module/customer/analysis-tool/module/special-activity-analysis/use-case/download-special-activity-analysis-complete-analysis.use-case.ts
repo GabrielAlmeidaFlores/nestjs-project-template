@@ -64,13 +64,13 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS_DOWNLOAD,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS_DOWNLOAD,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
         organizationMember.id,
       );
 
@@ -144,7 +144,6 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
           specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
           specialActivitySimplifiedAnalysis: null,
           specialActivityCompleteAnalysisDownload: null,
-          specialActivitySimplifiedAnalysisDownload: null,
         });
 
         saveCompleteAnalysisTransaction =
@@ -194,7 +193,7 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
 
       if (responseAi === null) {
         const specialActivityCompleteAnalysisDownload =
-          await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysisDownload(
+          await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
             promptResponse.prompt,
             [
               Buffer.from(
@@ -202,6 +201,7 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
                 'utf-8',
               ),
             ],
+            false,
           );
 
         const specialActivityResult = new SpecialActivityResultEntity({
@@ -243,9 +243,10 @@ export class DownloadSpecialActivityAnalysisCompleteAnalysisUseCase {
 
     if (responseAi === null) {
       const specialActivityCompleteAnalysisDownload =
-        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysisDownload(
+        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
           promptResponse.prompt,
           [Buffer.from(currentResult.specialActivityCompleteAnalysis, 'utf-8')],
+          false,
         );
 
       const specialActivityResult = new SpecialActivityResultEntity({

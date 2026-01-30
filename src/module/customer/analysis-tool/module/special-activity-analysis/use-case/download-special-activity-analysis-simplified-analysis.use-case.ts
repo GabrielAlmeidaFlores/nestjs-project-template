@@ -65,13 +65,13 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
@@ -145,7 +145,6 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
           specialActivityCompleteAnalysis: specialActivityCompleteAnalysisJson,
           specialActivitySimplifiedAnalysis: null,
           specialActivityCompleteAnalysisDownload: null,
-          specialActivitySimplifiedAnalysisDownload: null,
         });
 
         saveCompleteAnalysisTransaction =
@@ -254,8 +253,8 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
         finalAnalysisToolRecordQueryResult.specialActivity
           .specialActivityResult;
 
-      const specialActivitySimplifiedAnalysisDownload =
-        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysisDownload(
+      const specialActivitySimplifiedAnalysis =
+        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
@@ -267,7 +266,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
 
       const downloadResultEntity = new SpecialActivityResultEntity({
         ...finalResult,
-        specialActivitySimplifiedAnalysisDownload,
+        specialActivitySimplifiedAnalysis,
       });
 
       const specialActivityResultTransaction =
@@ -282,7 +281,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
       ]);
       await transaction.commit();
 
-      const responseAi = specialActivitySimplifiedAnalysisDownload;
+      const responseAi = specialActivitySimplifiedAnalysis;
 
       if (responseAi === null) {
         throw new SpecialActivityAnalysisDoesNotContainSimplifiedAnalysisError();
@@ -357,11 +356,11 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
       updatedAnalysisToolRecordQueryResult.specialActivity
         .specialActivityResult;
 
-    let responseAi = finalResult.specialActivitySimplifiedAnalysisDownload;
+    let responseAi = finalResult.specialActivitySimplifiedAnalysis;
 
     if (responseAi === null) {
-      const specialActivitySimplifiedAnalysisDownload =
-        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysisDownload(
+      const specialActivitySimplifiedAnalysis =
+        await this.analysisProcessorGateway.getSpecialActivitySimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
@@ -373,7 +372,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
 
       const specialActivityResult = new SpecialActivityResultEntity({
         ...finalResult,
-        specialActivitySimplifiedAnalysisDownload,
+        specialActivitySimplifiedAnalysis,
       });
 
       const specialActivityResultTransaction =
@@ -388,7 +387,7 @@ export class DownloadSpecialActivityAnalysisSimplifiedAnalysisUseCase {
       ]);
       await transaction.commit();
 
-      responseAi = specialActivitySimplifiedAnalysisDownload;
+      responseAi = specialActivitySimplifiedAnalysis;
     }
 
     if (responseAi === null) {

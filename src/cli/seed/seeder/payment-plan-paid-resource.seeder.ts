@@ -268,24 +268,6 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Atividade Especial - Análise Simplificada',
       description: 'Análise simplificada de Atividade Especial',
     }),
-    new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('f3b8d7c1-9a4e-4f2b-8d6c-3e1a5b9f7d2c'),
-      resource:
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS_DOWNLOAD,
-      creditCost: 3,
-      title: 'Atividade Especial - Análise Completa para Download',
-      description:
-        'Análise completa de Atividade Especial em formato texto para download',
-    }),
-    new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('e2c9f5a6-7b3d-4e8a-9f1c-6d4b2a8e5f7c'),
-      resource:
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_SIMPLIFIED_ANALYSIS_DOWNLOAD,
-      creditCost: 3,
-      title: 'Atividade Especial - Análise Simplificada para Download',
-      description:
-        'Análise simplificada de Atividade Especial em formato texto para download',
-    }),
 
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('0a308887-2dc9-4194-a9dd-b2b94c3ab820'),
