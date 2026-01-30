@@ -153,6 +153,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      disabilityAssessmentForBpcAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
