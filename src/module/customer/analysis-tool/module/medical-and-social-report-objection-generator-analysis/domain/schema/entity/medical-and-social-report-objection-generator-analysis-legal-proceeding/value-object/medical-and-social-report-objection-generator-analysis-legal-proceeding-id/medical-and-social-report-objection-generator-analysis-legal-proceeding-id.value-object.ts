@@ -4,4 +4,3 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId e
   protected override readonly _type =
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingId.name;
 }
-
