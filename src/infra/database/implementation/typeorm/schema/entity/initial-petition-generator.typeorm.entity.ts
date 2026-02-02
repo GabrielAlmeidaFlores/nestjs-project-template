@@ -20,7 +20,6 @@ export class InitialPetitionGeneratorTypeormEntity extends BaseTypeormEntity {
   })
   public initialPetitionGeneratorSimplifiedAnalysis: string | null;
 
-
   protected override readonly _type =
     InitialPetitionGeneratorTypeormEntity.name;
 }

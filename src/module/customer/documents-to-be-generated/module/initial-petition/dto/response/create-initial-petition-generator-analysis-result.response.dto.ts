@@ -6,9 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class CreateInitialPetitionGeneratorResponseDto extends BaseBuildableDtoObject {
-    @ResponseDtoValueObjectProperty(
-      InitialPetitionGeneratorId,
-    )
+  @ResponseDtoValueObjectProperty(InitialPetitionGeneratorId)
   public initialPetitionGeneratorId: InitialPetitionGeneratorId;
 
   @ResponseDtoStringProperty({ required: false })
