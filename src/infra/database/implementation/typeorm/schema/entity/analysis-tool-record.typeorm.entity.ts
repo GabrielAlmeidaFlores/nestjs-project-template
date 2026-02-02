@@ -10,6 +10,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
@@ -71,6 +72,9 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'retirement_planning_rgps_id' })
   public retirementPlanningRgps?: RetirementPlanningRgpsTypeormEntity | null;
 
+  @OneToOne(() => SpecialActivityTypeormEntity, { nullable: true })
+  @JoinColumn({ name: 'special_activity_id' })
+  public specialActivity?: SpecialActivityTypeormEntity | null;
   @OneToOne(
     () => JudicialCaseAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,
