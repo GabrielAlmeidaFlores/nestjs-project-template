@@ -343,6 +343,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Versão simplificada do requerimento administrativo para apresentação ao cliente, com linguagem acessível e sem termos técnicos complexos.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c5d8f7-a0e6-4c3d-b9e4-5f1a2e8b3d0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Parecer Completo',
+      description:
+        'Geração de parecer jurídico completo com análise detalhada e fundamentação técnica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c2d6e9a8-b1f7-4d2e-a0f5-6a2b3f9c4e1d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Parecer Simplificado',
+      description:
+        'Versão simplificada do parecer jurídico para apresentação ao cliente, com linguagem acessível e clara.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
