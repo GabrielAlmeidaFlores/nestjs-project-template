@@ -298,6 +298,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Geração de petição inicial completa com fundamentação jurídica detalhada.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e8f2a5c4-7d3b-5e9a-a6d1-2c8d9b5e3a7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Petição Inicial Simplificada',
+      description:
+        'Versão simplificada da petição inicial para apresentação ao cliente, com linguagem acessível e sem termos técnicos complexos.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f9a3b6d5-8e4c-5a1b-b7e2-3d9e0c6f8b1a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Requerimento Administrativo Completo',
+      description:
+        'Geração de requerimento administrativo completo com fundamentação jurídica detalhada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a0b4c7e6-9f5d-4b2c-a8d3-4e0f1d7a2c9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Requerimento Administrativo Simplificado',
+      description:
+        'Versão simplificada do requerimento administrativo para apresentação ao cliente, com linguagem acessível e sem termos técnicos complexos.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

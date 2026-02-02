@@ -87,7 +87,6 @@ import { OrganizationCreditModule } from '@module/customer/organization-credit/o
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
-import { InitialPetitionGeneratorModule } from '@module/customer/documents-to-be-generated/module/initial-petition/initial-petition-generator.module';
 
 @Module({
   imports: [
@@ -108,7 +107,6 @@ import { InitialPetitionGeneratorModule } from '@module/customer/documents-to-be
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
-    InitialPetitionGeneratorModule,
     DisabilityAssessmentForBpcAnalysisModule,
   ],
   controllers: [AnalysisToolController],

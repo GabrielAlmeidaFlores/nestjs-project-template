@@ -10,12 +10,9 @@ export class InitialPetitionGeneratorEntity extends BaseEntity<InitialPetitionGe
   @Description('Análise simplificada do gerador de petição inicial.')
   public readonly initialPetitionGeneratorSimplifiedAnalysis: string | null;
 
-  protected readonly _type =
-    InitialPetitionGeneratorEntity.name;
+  protected readonly _type = InitialPetitionGeneratorEntity.name;
 
-  public constructor(
-    props: InitialPetitionGeneratorEntityPropsInterface,
-  ) {
+  public constructor(props: InitialPetitionGeneratorEntityPropsInterface) {
     super(InitialPetitionGeneratorId, props);
 
     this.initialPetitionGeneratorCompleteAnalysis =
