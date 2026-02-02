@@ -1,7 +1,7 @@
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
-import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator-analysis-result.command.repository.gateway';
-import { InitialPetitionGeneratorEntity } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.entity';
+import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator.command.repository.gateway';
+import { InitialPetitionGeneratorEntity } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/initial-petition-generator-analysis.entity';
 import { CreateInitialPetitionGeneratorRequestDto } from '@module/customer/documents-to-be-generated/module/initial-petition/dto/request/create-initial-petition-generator-analysis-result.request.dto';
 import { CreateInitialPetitionGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/initial-petition/dto/response/create-initial-petition-generator-analysis-result.response.dto';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -28,30 +28,25 @@ export class CreateInitialPetitionGeneratorUseCase {
   public async execute(
     requestDto: CreateInitialPetitionGeneratorRequestDto,
   ): Promise<CreateInitialPetitionGeneratorResponseDto> {
-    // Buscar prompt do payment plan
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS,
       );
 
-    // Criar buffer com o texto recebido
     const resultTextBuffer = Buffer.from(requestDto.resultText, 'utf-8');
 
-    // Processar com IA
     const initialPetitionGeneratorCompleteAnalysis =
       await this.analysisProcessorGateway.getInitialPetitionGeneratorAnalysisCompleteAnalysis(
         promptResponse.prompt,
         [resultTextBuffer],
       );
 
-    // Criar entidade
     const initialPetitionGenerator =
       new InitialPetitionGeneratorEntity({
         initialPetitionGeneratorCompleteAnalysis:
           initialPetitionGeneratorCompleteAnalysis,
       });
 
-    // Salvar no banco
     const createTransaction =
       this.initialPetitionGeneratorCommandRepositoryGateway.createInitialPetitionGenerator(
         initialPetitionGenerator,
@@ -61,7 +56,6 @@ export class CreateInitialPetitionGeneratorUseCase {
       await this.baseTransactionRepositoryGateway.execute([createTransaction]);
     await transaction.commit();
 
-    // Retornar resposta
     return CreateInitialPetitionGeneratorResponseDto.build({
       initialPetitionGeneratorId: initialPetitionGenerator.id,
       initialPetitionGeneratorCompleteAnalysis:
