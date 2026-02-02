@@ -87,10 +87,12 @@ export class ListAnalysisToolRecordUseCase {
         const analysis =
           analysisToolRecord.cnisFastAnalysis ??
           analysisToolRecord.retirementPlanningRpps ??
-          analysisToolRecord.administrativeProcedureInssAnalysis ??
+          analysisToolRecord.retirementPlanningRgps ??
           analysisToolRecord.judicialCaseAnalysis ??
+          analysisToolRecord.administrativeProcedureInssAnalysis ??
+          analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
           analysisToolRecord.specialActivity ??
-          analysisToolRecord.retirementPlanningRgps;
+          analysisToolRecord.disabilityAssessmentForBpcAnalysis;
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({
