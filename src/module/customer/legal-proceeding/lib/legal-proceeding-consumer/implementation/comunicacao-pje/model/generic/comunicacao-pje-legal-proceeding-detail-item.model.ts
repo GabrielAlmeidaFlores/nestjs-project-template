@@ -1,6 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
+import type { ComunicacaoPjeLegalProceedingDetailItemStatusEnum } from '@module/customer/legal-proceeding/lib/legal-proceeding-consumer/implementation/comunicacao-pje/enum/comunicacao-pje-legal-proceeding-detail-item-status.enum';
 
 export class ComunicacaoPjeLegalProceedingDetailItemModel extends BaseBuildableObject {
   public readonly id: number;
@@ -29,10 +29,10 @@ export class ComunicacaoPjeLegalProceedingDetailItemModel extends BaseBuildableO
 }
 
 export class ComunicacaoPjeLegalProceedingDetailDataItemModel extends BaseBuildableObject {
-  public readonly status: string;
+  public readonly status: string | null;
   public readonly message: string;
   public readonly count: number;
-  public readonly items: ComunicacaoPjeLegalProceedingDetailItemModel[];
+  public readonly items?: ComunicacaoPjeLegalProceedingDetailItemModel[];
   protected override readonly _type =
     ComunicacaoPjeLegalProceedingDetailDataItemModel.name;
 }
