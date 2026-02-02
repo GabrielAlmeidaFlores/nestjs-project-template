@@ -127,34 +127,25 @@ export class MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperPro
           : undefined;
 
       const medicalAndSocialReportObjectionGeneratorAnalysisBenefit =
-        source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit !==
-        undefined
-          ? this.mapper.mapArray(
-              source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
-              MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity,
-              MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
-            )
-          : undefined;
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisBenefit,
+          MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntity,
+          MedicalAndSocialReportObjectionGeneratorAnalysisBenefitTypeormEntity,
+        );
 
       const medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding =
-        source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding !==
-        undefined
-          ? this.mapper.mapArray(
-              source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
-              MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity,
-              MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
-            )
-          : undefined;
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisLegalProceeding,
+          MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntity,
+          MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
+        );
 
       const medicalAndSocialReportObjectionGeneratorAnalysisDocument =
-        source.medicalAndSocialReportObjectionGeneratorAnalysisDocument !==
-        undefined
-          ? this.mapper.mapArray(
-              source.medicalAndSocialReportObjectionGeneratorAnalysisDocument,
-              MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity,
-              MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
-            )
-          : undefined;
+        this.mapper.mapArray(
+          source.medicalAndSocialReportObjectionGeneratorAnalysisDocument,
+          MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntity,
+          MedicalAndSocialReportObjectionGeneratorAnalysisDocumentTypeormEntity,
+        );
 
       return MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity.build(
         {

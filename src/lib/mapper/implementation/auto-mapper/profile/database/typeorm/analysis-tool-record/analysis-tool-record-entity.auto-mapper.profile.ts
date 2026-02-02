@@ -12,6 +12,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -20,6 +21,7 @@ import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/sc
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
@@ -114,6 +116,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientEntity,
       );
 
+      const specialActivity =
+        source.specialActivity !== null
+          ? this.mapper.map(
+              source.specialActivity,
+              SpecialActivityTypeormEntity,
+              SpecialActivityEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         ...source,
         id: new AnalysisToolRecordId(source.id),
@@ -121,6 +132,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        specialActivity,
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
         analysisToolClient,
@@ -209,6 +221,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientTypeormEntity,
       );
 
+      const specialActivity =
+        source.specialActivity !== null
+          ? this.mapper.map(
+              source.specialActivity,
+              SpecialActivityEntity,
+              SpecialActivityTypeormEntity,
+            )
+          : null;
+
       const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;
@@ -224,6 +245,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         medicalAndSocialReportObjectionGeneratorAnalysis,

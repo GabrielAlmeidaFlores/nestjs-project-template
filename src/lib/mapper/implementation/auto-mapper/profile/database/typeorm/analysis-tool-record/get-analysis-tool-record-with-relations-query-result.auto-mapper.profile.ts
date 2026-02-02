@@ -12,6 +12,7 @@ import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -24,6 +25,7 @@ import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/m
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
+import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -73,6 +75,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetRetirementPlanningRgpsWithRelationsQueryResult,
       );
 
+      const specialActivity = this.mapper.map(
+        source.specialActivity,
+        SpecialActivityTypeormEntity,
+        GetSpecialActivityAnalysisWithRelationsQueryResult,
+      );
+
       const judicialCaseAnalysis = this.mapper.map(
         source.judicialCaseAnalysis,
         JudicialCaseAnalysisTypeormEntity,
@@ -110,6 +118,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
+        specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
         medicalAndSocialReportObjectionGeneratorAnalysis,
@@ -164,6 +173,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         RetirementPlanningRgpsTypeormEntity,
       );
 
+      const specialActivity = this.mapper.map(
+        source.specialActivity,
+        GetSpecialActivityAnalysisWithRelationsQueryResult,
+        SpecialActivityTypeormEntity,
+      );
+
       const judicialCaseAnalysis = this.mapper.map(
         source.judicialCaseAnalysis,
         GetJudicialCaseAnalysisQueryResult,
@@ -206,6 +221,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         analysisToolClient,
+        specialActivity,
         createdBy,
         updatedBy,
       });
