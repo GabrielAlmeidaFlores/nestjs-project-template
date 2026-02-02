@@ -2,48 +2,16 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
-import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
-import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
-import { CnisFastAnalysisController } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.controller';
-import { AnalyzeCnisDocumentUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/analyze-cnis-document.use-case';
-import { CreateCnisFastAnalysisResultUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/create-cnis-fast-analysis-result.use-case';
-import { CreateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/create-cnis-fast-analysis.use-case';
-import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/delete-cnis-fast-analysis.use-case';
-import { DownloadCnisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-complete-analysis.use-case';
-import { DownloadCnisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/download-cnis-simplified-analysis.use-case';
-import { ExtractClientFromCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/extract-client-from-cnis-analysis.use-case';
-import { GetCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/get-cnis-fast-analysis.use-case';
-import { UpdateCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/update-cnis-fast-analysis.use-case';
-import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
-import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
-import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+import { InitialPetitionGeneratorController } from '@module/customer/documents-to-be-generated/module/initial-petition/initial-petition-generator.controller';
+import { CreateInitialPetitionGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/create-initial-petition-generator.use-case';
 
 @Module({
-  imports: [
-    AuthModule,
-    DatabaseModule,
-    OrganizationSessionModule,
-    OrganizationCreditModule,
-    PaymentPlanModule,
-    FileProcessorModule,
-    AnalysisProcessorModule,
-    ExportDocumentModule,
-  ],
-  controllers: [CnisFastAnalysisController],
-  providers: [
-    AnalyzeCnisDocumentUseCase,
-    CreateCnisFastAnalysisUseCase,
-    CreateCnisFastAnalysisResultUseCase,
-    GetCnisFastAnalysisUseCase,
-    DeleteCnisFastAnalysisUseCase,
-    DownloadCnisCompleteAnalysisUseCase,
-    DownloadCnisSimplifiedAnalysisUseCase,
-    UpdateCnisFastAnalysisUseCase,
-    ExtractClientFromCnisAnalysisUseCase,
-  ],
-  exports: [DeleteCnisFastAnalysisUseCase],
+  imports: [DatabaseModule, AnalysisProcessorModule, PaymentPlanModule],
+  controllers: [InitialPetitionGeneratorController],
+  providers: [CreateInitialPetitionGeneratorUseCase],
+  exports: [],
 })
-export class CnisFastAnalysisModule {
-  protected readonly _type = CnisFastAnalysisModule.name;
+export class InitialPetitionGeneratorModule {
+  protected readonly _type = InitialPetitionGeneratorModule.name;
 }

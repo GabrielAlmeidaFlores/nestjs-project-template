@@ -8,8 +8,8 @@ import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/bu
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('analysis-tool/generate-initial-petition')
-export class GenerateInitialPetitionController {
-  protected readonly _type = GenerateInitialPetitionController.name;
+export class InitialPetitionGeneratorController {
+  protected readonly _type = InitialPetitionGeneratorController.name;
 
   public constructor(
     private readonly createInitialPetitionGeneratorUseCase: CreateInitialPetitionGeneratorUseCase,
