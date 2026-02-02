@@ -103,6 +103,7 @@ import { GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQuery
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-legal-proceeding/medical-and-social-report-objection-generator-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/get-medical-and-social-report-objection-generator-analysis-result-query-result.auto-mapper.profile';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/medical-and-social-report-objection-generator-analysis-result-entity.auto-mapper.profile';
+import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -335,6 +336,7 @@ import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper
     GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile,
+    InitialPetitionGeneratorEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResultAutoMapperProfile,

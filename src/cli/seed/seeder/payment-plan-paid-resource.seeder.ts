@@ -281,13 +281,22 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa da avaliação de deficiência para BPC com parecer detalhado.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      id: new PaymentPlanPaidResourceId('d9e8f7a6-b5c4-4d3e-a2f1-0b9c8d7e6f5a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
       title: 'Análise Simplificada de Avaliação de Deficiência para BPC',
       description:
         'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c7d3f8a4-9e2b-4f5c-a1d6-3e8b7c4f9a2d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Petição Inicial Completa',
+      description:
+        'Geração de petição inicial completa com fundamentação jurídica detalhada.',
     }),
   ];
 
