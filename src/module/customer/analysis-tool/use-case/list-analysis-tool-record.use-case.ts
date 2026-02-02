@@ -91,6 +91,7 @@ export class ListAnalysisToolRecordUseCase {
           analysisToolRecord.judicialCaseAnalysis ??
           analysisToolRecord.administrativeProcedureInssAnalysis ??
           analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
+          analysisToolRecord.specialActivity ??
           analysisToolRecord.disabilityAssessmentForBpcAnalysis;
 
         if (analysis !== null) {
