@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/generate-initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator-analysis-result.command.repository.gateway';
-import { InitialPetitionGeneratorEntity } from '@module/customer/analysis-tool/module/generate-initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.entity';
-import { InitialPetitionGeneratorId } from '@module/customer/analysis-tool/module/generate-initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/value-object/initial-petition-generator-id/initial-petition-generator-id.value-object';
+import { InitialPetitionGeneratorId } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/value-object/initial-petition-generator-id/initial-petition-generator-id.value-object';
+import { InitialPetitionGeneratorEntity } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/schema/entity/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.entity';
+import { InitialPetitionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/initial-petition/domain/repository/initial-petition-generator-analysis-result/command/initial-petition-generator-analysis-result.command.repository.gateway';
 
 @Injectable()
 export class InitialPetitionGeneratorTypeormCommandRepository
