@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
+import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
+import { EventModule } from '@lib/event/event.module';
 import { AnalysisToolController } from '@module/customer/analysis-tool/analysis-tool.controller';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
@@ -69,6 +71,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
@@ -80,8 +83,10 @@ import { OrganizationCreditModule } from '@module/customer/organization-credit/o
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
+
 @Module({
   imports: [
+    EventModule,
     AuthModule,
     DatabaseModule,
     OrganizationSessionModule,
@@ -92,6 +97,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ExportDocumentModule,
     RemunerationCalculatorModule,
     CnisAnalyzerModule,
+    CnisProcessorModule,
     GenerativeIaModule,
     CnisFastAnalysisModule,
   ],
@@ -102,6 +108,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateAnalysisToolClientUseCase,
     DeleteAnalysisToolClientUseCase,
     CreateLegalPleadingUseCase,
+    UpdateLegalPleadingUseCase,
     CreateLegalPleadingResultUseCase,
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,

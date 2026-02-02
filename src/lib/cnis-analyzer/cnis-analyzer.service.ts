@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import moment from 'moment';
 
 import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { calculatePotencialRestrito } from '@lib/cnis-analyzer/calculate-potencial-restrito';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { especiesData } from '@lib/cnis-analyzer/data/especies-data';
 import { indicadorsData } from '@lib/cnis-analyzer/data/indicadors-data';
@@ -160,40 +160,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const duracaoTotalEmDias =
       somaVinculosNaoConcomitantes + somaVinculosPrincipais;
 
-    const somaPotencial = consolidadoResumido.reduce(
-      (acc, curr) =>
-        acc +
-        this.daysBetween(
-          curr.validContributionTime?.data?.dataInicio,
-          curr.validContributionTime?.data?.dataFim,
-        ),
-      0,
-    );
-    const anosPotencial = moment.duration(somaPotencial, 'days').years();
-    const mesesPotencial = moment.duration(somaPotencial, 'days').months();
-    const diasPotencial = moment.duration(somaPotencial, 'days').days();
-
-    const somaPotencialRestrito = consolidadoResumido
-      .filter((vinculo) => !vinculo.isPendencia)
-      .reduce(
-        (acc, curr) =>
-          acc +
-          this.daysBetween(
-            curr.validContributionTime?.data?.dataInicio,
-            curr.validContributionTime?.data?.dataFim,
-          ),
-        0,
-      );
-
-    const potencialValido = `${anosPotencial}a ${mesesPotencial}m ${diasPotencial}d`;
-
-    const anosRestrito = moment.duration(somaPotencialRestrito, 'days').years();
-    const mesesRestrito = moment
-      .duration(somaPotencialRestrito, 'days')
-      .months();
-    const diasRestrito = moment.duration(somaPotencialRestrito, 'days').days();
-
-    const restritoValido = `${anosRestrito}a ${mesesRestrito}m ${diasRestrito}d`;
+    const { potencialValido, restritoValido } =
+      calculatePotencialRestrito(data);
 
     const indicadoresDePendencia = this.calculateImpactoLiquidoDePendencias(
       consolidadoResumido,
@@ -488,37 +456,56 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return resultadoFinal;
     }
 
+    // Agrupa itens que se sobrepõem direta ou indiretamente
     const group: {
       original: ConcomitanciaDetalhesInterface;
       start: Date | null;
       end: Date | null;
     }[] = [];
     const firstItem = items[0];
-    let endOfGroup = firstItem?.end ? firstItem.end.getTime() : 0;
-    group.push(
-      firstItem ?? {
-        original: {} as ConcomitanciaDetalhesInterface,
-        start: null,
-        end: null,
-      },
-    );
-    for (let i = 1; i < items.length; i++) {
-      const it = items[i];
-      const inicioIt = it?.start ? it.start.getTime() : 0;
-      if (inicioIt <= endOfGroup) {
-        group.push(
-          it ?? {
-            original: {} as ConcomitanciaDetalhesInterface,
-            start: null,
-            end: null,
-          },
-        );
-        const fimIt = it?.end ? it.end.getTime() : endOfGroup;
-        if (fimIt > endOfGroup) {
-          endOfGroup = fimIt;
+    if (!firstItem) {
+      return resultadoFinal;
+    }
+
+    group.push(firstItem);
+    let endOfGroup = firstItem.end ? firstItem.end.getTime() : 0;
+    let changed = true;
+
+    // Continua adicionando itens enquanto houver sobreposição com o grupo
+    // Isso garante que itens que se sobrepõem indiretamente sejam agrupados
+    while (changed) {
+      changed = false;
+      for (let i = 1; i < items.length; i++) {
+        const it = items[i];
+        if (!it) {
+          continue;
         }
-      } else {
-        break;
+
+        // Verifica se já está no grupo
+        const alreadyInGroup = group.some(
+          (g) => g.original.seq === it.original.seq,
+        );
+        if (alreadyInGroup) {
+          continue;
+        }
+
+        const inicioIt = it.start ? it.start.getTime() : 0;
+        const fimIt = it.end ? it.end.getTime() : 0;
+
+        // Verifica se se sobrepõe com algum item do grupo
+        const overlaps = group.some((g) => {
+          const gStart = g.start ? g.start.getTime() : 0;
+          const gEnd = g.end ? g.end.getTime() : 0;
+          return inicioIt <= gEnd && fimIt >= gStart;
+        });
+
+        if (overlaps) {
+          group.push(it);
+          if (fimIt > endOfGroup) {
+            endOfGroup = fimIt;
+          }
+          changed = true;
+        }
       }
     }
 
@@ -657,17 +644,20 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         e.getTime() >= inicioPrincipal.getTime() &&
         e.getTime() <= fimPrincipal.getTime()
       ) {
+        // Item começa antes e termina dentro: ajusta apenas o fim
         novoFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
       } else if (
         s.getTime() >= inicioPrincipal.getTime() &&
         s.getTime() <= fimPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
+        // Item começa dentro e termina depois: ajusta apenas o início
         novoInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
       } else if (
         s.getTime() < inicioPrincipal.getTime() &&
         e.getTime() > fimPrincipal.getTime()
       ) {
+        // Item que envolve completamente o principal: cria apenas as partes antes e depois
         const antesFim = this.daysBeforeOrAfter(inicioPrincipal, 'before');
         if (s.getTime() <= antesFim.getTime()) {
           const parteAntes = {
@@ -684,6 +674,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
               dataFim: antesFim,
             },
           } as ConcomitanciaDetalhesInterface;
+          // Recalcula o tempo para a parte antes
+          const recalculadoAntes = this.diffYmdInclusive(s, antesFim);
+          parteAntes.contributionTime.anos = recalculadoAntes.years;
+          parteAntes.contributionTime.meses = recalculadoAntes.months;
+          parteAntes.contributionTime.dias = recalculadoAntes.days;
+          parteAntes.contributionTime.abreviado = recalculadoAntes.formatted;
           secundariosAjustados.push(parteAntes);
         }
         const depoisInicio = this.daysBeforeOrAfter(fimPrincipal, 'after');
@@ -702,27 +698,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
               dataFim: e,
             },
           } as ConcomitanciaDetalhesInterface;
+          // Recalcula o tempo para a parte depois
+          const recalculadoDepois = this.diffYmdInclusive(depoisInicio, e);
+          parteDepois.contributionTime.anos = recalculadoDepois.years;
+          parteDepois.contributionTime.meses = recalculadoDepois.months;
+          parteDepois.contributionTime.dias = recalculadoDepois.days;
+          parteDepois.contributionTime.abreviado = recalculadoDepois.formatted;
           secundariosAjustados.push(parteDepois);
         }
-        const zero = {
-          ...orig,
-          tipo: 'secundario' as const,
-          contributionTime: {
-            ...orig.contributionTime,
-            dataInicio: s,
-            dataFim: e,
-            abreviado: '0 anos 0 meses 0 dias',
-            dias: 0,
-            meses: 0,
-            anos: 0,
-          },
-          ajustado: true,
-          dataAjustada: {
-            dataInicio: s,
-            dataFim: e,
-          },
-        } as ConcomitanciaDetalhesInterface;
-        grupoProcessado.push(zero);
+        // Não adiciona item zerado, apenas as partes válidas
         continue;
       }
 
@@ -741,6 +725,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dataFim: novoFim,
           },
         } as ConcomitanciaDetalhesInterface;
+        // Recalcula o tempo para o ajustado
+        const recalculado = this.diffYmdInclusive(novoInicio, novoFim);
+        ajustado.contributionTime.anos = recalculado.years;
+        ajustado.contributionTime.meses = recalculado.months;
+        ajustado.contributionTime.dias = recalculado.days;
+        ajustado.contributionTime.abreviado = recalculado.formatted;
         grupoProcessado.push(ajustado);
         secundariosAjustados.push(ajustado);
       } else {
@@ -911,8 +901,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         continue;
       }
 
-      const startA = this.toDate(vinculoA.dataAjustada?.dataInicio);
-      const endA = this.toDate(vinculoA.dataAjustada?.dataFim);
+      // Usa dataAjustada se existir, senão usa contributionTime (fallback)
+      const startA = this.toDate(
+        vinculoA.dataAjustada?.dataInicio ??
+          vinculoA.contributionTime.dataInicio,
+      );
+      const endA = this.toDate(
+        vinculoA.dataAjustada?.dataFim ?? vinculoA.contributionTime.dataFim,
+      );
       if (!startA || !endA) {
         continue;
       }
@@ -922,12 +918,19 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         if (!vinculoB) {
           continue;
         }
-        const startB = this.toDate(vinculoB.dataAjustada?.dataInicio);
-        const endB = this.toDate(vinculoB.dataAjustada?.dataFim);
+        // Usa dataAjustada se existir, senão usa contributionTime (fallback)
+        const startB = this.toDate(
+          vinculoB.dataAjustada?.dataInicio ??
+            vinculoB.contributionTime.dataInicio,
+        );
+        const endB = this.toDate(
+          vinculoB.dataAjustada?.dataFim ?? vinculoB.contributionTime.dataFim,
+        );
         if (!startB || !endB) {
           continue;
         }
 
+        // Verifica se há sobreposição
         if (startA <= endB && endA >= startB) {
           const duracaoA = this.daysBetween(startA, endA);
           const duracaoB = this.daysBetween(startB, endB);
@@ -968,19 +971,105 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             continue;
           }
 
-          if (loserStart.getTime() < winnerStart.getTime()) {
+          // Determina o tipo de sobreposição e ajusta o perdedor
+          const loserCompletelyInside =
+            loserStart.getTime() >= winnerStart.getTime() &&
+            loserEnd.getTime() <= winnerEnd.getTime();
+          const loserCompletelyOutside =
+            loserStart.getTime() < winnerStart.getTime() &&
+            loserEnd.getTime() > winnerEnd.getTime();
+          const loserBefore =
+            loserStart.getTime() < winnerStart.getTime() &&
+            loserEnd.getTime() >= winnerStart.getTime() &&
+            loserEnd.getTime() <= winnerEnd.getTime();
+          const loserAfter =
+            loserStart.getTime() >= winnerStart.getTime() &&
+            loserStart.getTime() <= winnerEnd.getTime() &&
+            loserEnd.getTime() > winnerEnd.getTime();
+
+          if (loserCompletelyInside) {
+            // Perdedor totalmente dentro: zera o tempo
+            const novoFim = loserStart;
+            loser.dataAjustada = {
+              dataInicio: novoFim,
+              dataFim: novoFim,
+            };
+            loser.contributionTime.anos = 0;
+            loser.contributionTime.meses = 0;
+            loser.contributionTime.dias = 0;
+            loser.contributionTime.abreviado = '0a 0m 0d';
+          } else if (loserCompletelyOutside) {
+            // Perdedor envolve completamente: cria duas partes (antes e depois)
+            const antesFim = this.daysBeforeOrAfter(winnerStart, 'before');
+            const depoisInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
+
+            if (loserStart.getTime() <= antesFim.getTime()) {
+              // Parte antes
+              loser.dataAjustada = {
+                dataInicio: loserStart,
+                dataFim: antesFim,
+              };
+              const recalculadoAntes = this.diffYmdInclusive(
+                loserStart,
+                antesFim,
+              );
+              loser.contributionTime.anos = recalculadoAntes.years;
+              loser.contributionTime.meses = recalculadoAntes.months;
+              loser.contributionTime.dias = recalculadoAntes.days;
+              loser.contributionTime.abreviado = recalculadoAntes.formatted;
+            } else if (depoisInicio.getTime() <= loserEnd.getTime()) {
+              // Parte depois
+              loser.dataAjustada = {
+                dataInicio: depoisInicio,
+                dataFim: loserEnd,
+              };
+              const recalculadoDepois = this.diffYmdInclusive(
+                depoisInicio,
+                loserEnd,
+              );
+              loser.contributionTime.anos = recalculadoDepois.years;
+              loser.contributionTime.meses = recalculadoDepois.months;
+              loser.contributionTime.dias = recalculadoDepois.days;
+              loser.contributionTime.abreviado = recalculadoDepois.formatted;
+            } else {
+              // Não há partes válidas: zera
+              loser.dataAjustada = {
+                dataInicio: loserStart,
+                dataFim: loserEnd,
+              };
+              loser.contributionTime.anos = 0;
+              loser.contributionTime.meses = 0;
+              loser.contributionTime.dias = 0;
+              loser.contributionTime.abreviado = '0a 0m 0d';
+            }
+          } else if (loserBefore) {
+            // Perdedor começa antes e termina dentro: ajusta apenas o fim
             const novoFim = this.daysBeforeOrAfter(winnerStart, 'before');
             loser.dataAjustada = {
               dataInicio: loserStart,
               dataFim: novoFim,
             };
-          } else {
+            const recalculado = this.diffYmdInclusive(loserStart, novoFim);
+            loser.contributionTime.anos = recalculado.years;
+            loser.contributionTime.meses = recalculado.months;
+            loser.contributionTime.dias = recalculado.days;
+            loser.contributionTime.abreviado = recalculado.formatted;
+          } else if (loserAfter) {
+            // Perdedor começa dentro e termina depois: ajusta apenas o início
             const novoInicio = this.daysBeforeOrAfter(winnerEnd, 'after');
             loser.dataAjustada = {
               dataInicio: novoInicio,
               dataFim: loserEnd,
             };
+            const recalculado = this.diffYmdInclusive(novoInicio, loserEnd);
+            loser.contributionTime.anos = recalculado.years;
+            loser.contributionTime.meses = recalculado.months;
+            loser.contributionTime.dias = recalculado.days;
+            loser.contributionTime.abreviado = recalculado.formatted;
           }
+
+          // Garante que ajustado está marcado
+          loser.ajustado = true;
         }
       }
     }

@@ -1,6 +1,6 @@
 {
   "name": "agiliza-previ-back",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A AGILIZAPREV é uma solução SaaS voltada para análises previdenciárias, automatizando processos e integrando inteligência artificial para auxiliar advogados especializados em direito previdenciário.",
   "author": "",
   "private": true,
@@ -45,6 +45,7 @@
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/event-emitter": "^3.0.1",
     "@nestjs/jwt": "^10.0.0",
     "@nestjs/platform-fastify": "^10.0.0",
     "@nestjs/schedule": "^6.1.0",
