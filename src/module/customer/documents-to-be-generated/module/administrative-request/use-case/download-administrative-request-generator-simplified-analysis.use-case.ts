@@ -29,7 +29,7 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(DocumentGeneratorProcessorGateway)
-    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
+    private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
@@ -60,7 +60,7 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
 
     if (responseAi === null) {
       const administrativeRequestGeneratorSimplifiedAnalysis =
-        await this.documentProcessorGateway.getAdministrativeRequestGeneratorSimplifiedAnalysis(
+        await this.documentGeneratorProcessorGateway.getAdministrativeRequestGeneratorSimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(

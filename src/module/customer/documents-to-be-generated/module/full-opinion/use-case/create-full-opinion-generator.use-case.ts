@@ -15,7 +15,7 @@ export class CreateFullOpinionGeneratorUseCase {
 
   public constructor(
 @Inject(DocumentGeneratorProcessorGateway)
-    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
+    private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(FullOpinionGeneratorCommandRepositoryGateway)
     private readonly fullOpinionGeneratorCommandRepositoryGateway: FullOpinionGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -35,7 +35,7 @@ export class CreateFullOpinionGeneratorUseCase {
     const resultTextBuffer = Buffer.from(requestDto.resultText, 'utf-8');
 
     const fullOpinionGeneratorCompleteAnalysis =
-      await this.documentProcessorGateway.getFullOpinionGeneratorCompleteAnalysis(
+      await this.documentGeneratorProcessorGateway.getFullOpinionGeneratorCompleteAnalysis(
         promptResponse.prompt,
         [resultTextBuffer],
       );

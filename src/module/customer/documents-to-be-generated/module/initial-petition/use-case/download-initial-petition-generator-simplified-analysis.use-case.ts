@@ -29,7 +29,7 @@ export class DownloadInitialPetitionGeneratorSimplifiedAnalysisUseCase {
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(DocumentGeneratorProcessorGateway)
-    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
+    private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
@@ -60,7 +60,7 @@ export class DownloadInitialPetitionGeneratorSimplifiedAnalysisUseCase {
 
     if (responseAi === null) {
       const initialPetitionGeneratorSimplifiedAnalysis =
-        await this.documentProcessorGateway.getInitialPetitionGeneratorSimplifiedAnalysis(
+        await this.documentGeneratorProcessorGateway.getInitialPetitionGeneratorSimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
