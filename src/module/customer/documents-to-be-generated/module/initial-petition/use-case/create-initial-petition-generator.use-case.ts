@@ -15,7 +15,7 @@ export class CreateInitialPetitionGeneratorUseCase {
 
   public constructor(
 @Inject(DocumentGeneratorProcessorGateway)
-    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
+    private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(InitialPetitionGeneratorCommandRepositoryGateway)
     private readonly initialPetitionGeneratorCommandRepositoryGateway: InitialPetitionGeneratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -35,7 +35,7 @@ export class CreateInitialPetitionGeneratorUseCase {
     const resultTextBuffer = Buffer.from(requestDto.resultText, 'utf-8');
 
     const initialPetitionGeneratorCompleteAnalysis =
-      await this.documentProcessorGateway.getInitialPetitionGeneratorCompleteAnalysis(
+      await this.documentGeneratorProcessorGateway.getInitialPetitionGeneratorCompleteAnalysis(
         promptResponse.prompt,
         [resultTextBuffer],
       );

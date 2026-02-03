@@ -29,7 +29,7 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
 @Inject(DocumentGeneratorProcessorGateway)
-    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
+    private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
@@ -60,7 +60,7 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
 
     if (responseAi === null) {
       const fullOpinionGeneratorSimplifiedAnalysis =
-        await this.documentProcessorGateway.getFullOpinionGeneratorSimplifiedAnalysis(
+        await this.documentGeneratorProcessorGateway.getFullOpinionGeneratorSimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
