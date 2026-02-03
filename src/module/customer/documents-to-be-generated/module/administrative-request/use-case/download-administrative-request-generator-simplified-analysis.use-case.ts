@@ -1,7 +1,6 @@
 import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { AdministrativeRequestGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/command/administrative-request-generator.command.repository.gateway';
@@ -13,6 +12,7 @@ import { AdministrativeRequestGeneratorDoesNotContainSimplifiedAnalysisError } f
 import { AdministrativeRequestGeneratorNotFoundError } from '@module/customer/documents-to-be-generated/module/administrative-request/error/administrative-request-generator-not-found.error';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 
 @Injectable()
 export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
@@ -28,8 +28,8 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
-    @Inject(AnalysisProcessorGateway)
-    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(DocumentGeneratorProcessorGateway)
+    private readonly documentProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
@@ -60,7 +60,7 @@ export class DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase {
 
     if (responseAi === null) {
       const administrativeRequestGeneratorSimplifiedAnalysis =
-        await this.analysisProcessorGateway.getAdministrativeRequestGeneratorAnalysisSimplifiedAnalysis(
+        await this.documentProcessorGateway.getAdministrativeRequestGeneratorSimplifiedAnalysis(
           promptResponse.prompt,
           [
             Buffer.from(
