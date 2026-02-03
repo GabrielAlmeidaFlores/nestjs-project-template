@@ -8,8 +8,7 @@ import { FullOpinionGeneratorId } from '@module/customer/documents-to-be-generat
 
 @Injectable()
 export class FullOpinionGeneratorEntityAutoMapperProfile {
-  protected readonly _type =
-    FullOpinionGeneratorEntityAutoMapperProfile.name;
+  protected readonly _type = FullOpinionGeneratorEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

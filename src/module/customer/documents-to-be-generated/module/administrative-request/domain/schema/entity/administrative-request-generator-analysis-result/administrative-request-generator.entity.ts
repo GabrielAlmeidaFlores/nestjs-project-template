@@ -7,11 +7,14 @@ export class AdministrativeRequestGeneratorEntity extends BaseEntity<Administrat
   @Description('Análise completa do gerador de requerimento administrativo.')
   public readonly administrativeRequestGeneratorCompleteAnalysis: string | null;
 
-  @Description('Análise simplificada do gerador de requerimento administrativo.')
-  public readonly administrativeRequestGeneratorSimplifiedAnalysis: string | null;
+  @Description(
+    'Análise simplificada do gerador de requerimento administrativo.',
+  )
+  public readonly administrativeRequestGeneratorSimplifiedAnalysis:
+    | string
+    | null;
 
-  protected readonly _type =
-    AdministrativeRequestGeneratorEntity.name;
+  protected readonly _type = AdministrativeRequestGeneratorEntity.name;
 
   public constructor(
     props: AdministrativeRequestGeneratorEntityPropsInterface,

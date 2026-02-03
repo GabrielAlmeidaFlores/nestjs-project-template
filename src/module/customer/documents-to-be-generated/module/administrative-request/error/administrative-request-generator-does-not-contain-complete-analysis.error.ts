@@ -5,6 +5,8 @@ export class AdministrativeRequestGeneratorDoesNotContainCompleteAnalysisError e
     AdministrativeRequestGeneratorDoesNotContainCompleteAnalysisError.name;
 
   public constructor() {
-    super('A análise do gerador de requerimento administrativo não contém uma análise completa.');
+    super(
+      'A análise do gerador de requerimento administrativo não contém uma análise completa.',
+    );
   }
 }

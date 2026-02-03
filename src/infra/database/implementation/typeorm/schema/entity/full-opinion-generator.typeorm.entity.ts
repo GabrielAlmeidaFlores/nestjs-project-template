@@ -20,6 +20,5 @@ export class FullOpinionGeneratorTypeormEntity extends BaseTypeormEntity {
   })
   public fullOpinionGeneratorSimplifiedAnalysis: string | null;
 
-  protected override readonly _type =
-    FullOpinionGeneratorTypeormEntity.name;
+  protected override readonly _type = FullOpinionGeneratorTypeormEntity.name;
 }

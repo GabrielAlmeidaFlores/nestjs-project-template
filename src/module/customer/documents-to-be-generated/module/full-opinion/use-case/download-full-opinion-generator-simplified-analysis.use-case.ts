@@ -3,6 +3,7 @@ import { Inject, Injectable, StreamableFile } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 import { FullOpinionGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/command/full-opinion-generator.command.repository.gateway';
 import { FullOpinionGeneratorQueryRepositoryGateway } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/repository/full-opinion-generator-analysis-result/query/full-opinion-generator.query.repository.gateway';
 import { FullOpinionGeneratorEntity } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/schema/entity/full-opinion-generator-analysis-result/full-opinion-generator.entity';
@@ -12,7 +13,6 @@ import { FullOpinionGeneratorDoesNotContainSimplifiedAnalysisError } from '@modu
 import { FullOpinionGeneratorNotFoundError } from '@module/customer/documents-to-be-generated/module/full-opinion/error/full-opinion-generator-not-found.error';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
-import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 
 @Injectable()
 export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
@@ -28,7 +28,7 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
-@Inject(DocumentGeneratorProcessorGateway)
+    @Inject(DocumentGeneratorProcessorGateway)
     private readonly documentGeneratorProcessorGateway: DocumentGeneratorProcessorGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
@@ -49,9 +49,7 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
         FullOpinionGeneratorNotFoundError,
       );
 
-    if (
-      fullOpinionGenerator.fullOpinionGeneratorCompleteAnalysis === null
-    ) {
+    if (fullOpinionGenerator.fullOpinionGeneratorCompleteAnalysis === null) {
       throw new FullOpinionGeneratorDoesNotContainCompleteAnalysisError();
     }
 
@@ -70,11 +68,10 @@ export class DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase {
           ],
         );
 
-      const updatedFullOpinionGenerator =
-        new FullOpinionGeneratorEntity({
-          ...fullOpinionGenerator,
-          fullOpinionGeneratorSimplifiedAnalysis,
-        });
+      const updatedFullOpinionGenerator = new FullOpinionGeneratorEntity({
+        ...fullOpinionGenerator,
+        fullOpinionGeneratorSimplifiedAnalysis,
+      });
 
       const updateTransaction =
         this.fullOpinionGeneratorCommandRepositoryGateway.updateFullOpinionGenerator(
