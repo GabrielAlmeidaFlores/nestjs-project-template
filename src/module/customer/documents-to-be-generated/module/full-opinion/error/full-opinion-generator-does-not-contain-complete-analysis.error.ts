@@ -5,6 +5,8 @@ export class FullOpinionGeneratorDoesNotContainCompleteAnalysisError extends Inv
     FullOpinionGeneratorDoesNotContainCompleteAnalysisError.name;
 
   public constructor() {
-    super('A análise do gerador de parecer completo não contém uma análise completa.');
+    super(
+      'A análise do gerador de parecer completo não contém uma análise completa.',
+    );
   }
 }

@@ -14,4 +14,6 @@ import { DocumentGeneratorProcessorService } from '@module/customer/documents-to
   ],
   exports: [DocumentGeneratorProcessorGateway],
 })
-export class DocumentGeneratorProcessorModule {}
+export class DocumentGeneratorProcessorModule {
+  protected readonly _type = DocumentGeneratorProcessorModule.name;
+}

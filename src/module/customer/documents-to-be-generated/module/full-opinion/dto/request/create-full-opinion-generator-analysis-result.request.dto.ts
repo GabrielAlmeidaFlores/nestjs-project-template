@@ -7,6 +7,5 @@ export class CreateFullOpinionGeneratorRequestDto extends BaseBuildableDtoObject
   @RequestDtoStringProperty({ required: true })
   public resultText: string;
 
-  protected override readonly _type =
-    CreateFullOpinionGeneratorRequestDto.name;
+  protected override readonly _type = CreateFullOpinionGeneratorRequestDto.name;
 }

@@ -1,16 +1,24 @@
+import {
+  RequestMethod,
+  HttpStatus,
+  Body,
+  Param,
+  Query,
+  StreamableFile,
+  ParseEnumPipe,
+} from '@nestjs/common';
+
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { FullOpinionGeneratorId } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/schema/entity/full-opinion-generator-analysis-result/value-object/full-opinion-generator-id/full-opinion-generator-id.value-object';
 import { CreateFullOpinionGeneratorRequestDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/request/create-full-opinion-generator-analysis-result.request.dto';
 import { CreateFullOpinionGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/response/create-full-opinion-generator-analysis-result.response.dto';
-import { FullOpinionGeneratorId } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/schema/entity/full-opinion-generator-analysis-result/value-object/full-opinion-generator-id/full-opinion-generator-id.value-object';
 import { CreateFullOpinionGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/create-full-opinion-generator.use-case';
 import { DownloadFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-complete-analysis.use-case';
 import { DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-simplified-analysis.use-case';
-import { RequestMethod, HttpStatus, Body, Param, Query, StreamableFile, ParseEnumPipe } from '@nestjs/common';
-
-import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
-import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('documents-to-be-generated/generate-full-opinion')
 export class FullOpinionGeneratorController {
@@ -42,9 +50,7 @@ export class FullOpinionGeneratorController {
     @Body()
     dto: CreateFullOpinionGeneratorRequestDto,
   ): Promise<CreateFullOpinionGeneratorResponseDto> {
-    return await this.createFullOpinionGeneratorUseCase.execute(
-      dto,
-    );
+    return await this.createFullOpinionGeneratorUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({

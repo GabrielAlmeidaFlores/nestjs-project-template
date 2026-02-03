@@ -15,8 +15,7 @@ export class FullOpinionGeneratorTypeormCommandRepository
   extends BaseTypeormCommandRepository<FullOpinionGeneratorTypeormEntity>
   implements FullOpinionGeneratorCommandRepositoryGateway
 {
-  protected readonly _type =
-    FullOpinionGeneratorTypeormCommandRepository.name;
+  protected readonly _type = FullOpinionGeneratorTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(FullOpinionGeneratorTypeormEntity)

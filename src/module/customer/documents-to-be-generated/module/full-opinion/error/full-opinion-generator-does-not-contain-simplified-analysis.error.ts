@@ -5,6 +5,8 @@ export class FullOpinionGeneratorDoesNotContainSimplifiedAnalysisError extends I
     FullOpinionGeneratorDoesNotContainSimplifiedAnalysisError.name;
 
   public constructor() {
-    super('A análise do gerador de parecer completo não contém uma análise simplificada.');
+    super(
+      'A análise do gerador de parecer completo não contém uma análise simplificada.',
+    );
   }
 }

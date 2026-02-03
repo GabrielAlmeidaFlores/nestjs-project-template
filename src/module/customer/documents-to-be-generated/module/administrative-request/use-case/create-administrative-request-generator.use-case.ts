@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 import { AdministrativeRequestGeneratorCommandRepositoryGateway } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/repository/administrative-request-generator-analysis-result/command/administrative-request-generator.command.repository.gateway';
 import { AdministrativeRequestGeneratorEntity } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/schema/entity/administrative-request-generator-analysis-result/administrative-request-generator.entity';
 import { CreateAdministrativeRequestGeneratorRequestDto } from '@module/customer/documents-to-be-generated/module/administrative-request/dto/request/create-administrative-request-generator-analysis-result.request.dto';
 import { CreateAdministrativeRequestGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/administrative-request/dto/response/create-administrative-request-generator-analysis-result.response.dto';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
-import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 
 @Injectable()
 export class CreateAdministrativeRequestGeneratorUseCase {
@@ -40,10 +40,11 @@ export class CreateAdministrativeRequestGeneratorUseCase {
         [resultTextBuffer],
       );
 
-    const administrativeRequestGenerator = new AdministrativeRequestGeneratorEntity({
-      administrativeRequestGeneratorCompleteAnalysis:
-        administrativeRequestGeneratorCompleteAnalysis,
-    });
+    const administrativeRequestGenerator =
+      new AdministrativeRequestGeneratorEntity({
+        administrativeRequestGeneratorCompleteAnalysis:
+          administrativeRequestGeneratorCompleteAnalysis,
+      });
 
     const createTransaction =
       this.administrativeRequestGeneratorCommandRepositoryGateway.createAdministrativeRequestGenerator(

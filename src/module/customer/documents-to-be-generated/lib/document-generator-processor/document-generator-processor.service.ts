@@ -5,9 +5,7 @@ import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/gen
 import { DocumentGeneratorProcessorGateway } from '@module/customer/documents-to-be-generated/lib/document-generator-processor/document-generator-processor.gateway';
 
 @Injectable()
-export class DocumentGeneratorProcessorService
-  implements DocumentGeneratorProcessorGateway
-{
+export class DocumentGeneratorProcessorService implements DocumentGeneratorProcessorGateway {
   protected readonly _type = DocumentGeneratorProcessorService.name;
 
   public constructor(

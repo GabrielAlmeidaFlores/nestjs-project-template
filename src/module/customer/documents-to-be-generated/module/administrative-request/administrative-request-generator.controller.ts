@@ -1,18 +1,28 @@
+import {
+  RequestMethod,
+  HttpStatus,
+  Body,
+  Param,
+  Query,
+  StreamableFile,
+  ParseEnumPipe,
+} from '@nestjs/common';
+
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { AdministrativeRequestGeneratorId } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/schema/entity/administrative-request-generator-analysis-result/value-object/administrative-request-generator-id/administrative-request-generator-id.value-object';
 import { CreateAdministrativeRequestGeneratorRequestDto } from '@module/customer/documents-to-be-generated/module/administrative-request/dto/request/create-administrative-request-generator-analysis-result.request.dto';
 import { CreateAdministrativeRequestGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/administrative-request/dto/response/create-administrative-request-generator-analysis-result.response.dto';
-import { AdministrativeRequestGeneratorId } from '@module/customer/documents-to-be-generated/module/administrative-request/domain/schema/entity/administrative-request-generator-analysis-result/value-object/administrative-request-generator-id/administrative-request-generator-id.value-object';
 import { CreateAdministrativeRequestGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/create-administrative-request-generator.use-case';
 import { DownloadAdministrativeRequestGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-complete-analysis.use-case';
 import { DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-simplified-analysis.use-case';
-import { RequestMethod, HttpStatus, Body, Param, Query, StreamableFile, ParseEnumPipe } from '@nestjs/common';
-
-import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
-import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
+import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
-@CustomerControllerRoute('documents-to-be-generated/generate-administrative-request')
+@CustomerControllerRoute(
+  'documents-to-be-generated/generate-administrative-request',
+)
 export class AdministrativeRequestGeneratorController {
   protected readonly _type = AdministrativeRequestGeneratorController.name;
 
@@ -33,7 +43,8 @@ export class AdministrativeRequestGeneratorController {
     tag: ['gerador-requerimento-administrativo'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Análise do gerador de requerimento administrativo criada com sucesso.',
+      description:
+        'Análise do gerador de requerimento administrativo criada com sucesso.',
       type: CreateAdministrativeRequestGeneratorResponseDto,
     },
     guard: [],
@@ -42,13 +53,12 @@ export class AdministrativeRequestGeneratorController {
     @Body()
     dto: CreateAdministrativeRequestGeneratorRequestDto,
   ): Promise<CreateAdministrativeRequestGeneratorResponseDto> {
-    return await this.createAdministrativeRequestGeneratorUseCase.execute(
-      dto,
-    );
+    return await this.createAdministrativeRequestGeneratorUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise simplificada do gerador de requerimento administrativo',
+    summary:
+      'Baixar análise simplificada do gerador de requerimento administrativo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':administrativeRequestGeneratorId/download/simplified-version',
@@ -79,7 +89,8 @@ export class AdministrativeRequestGeneratorController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise completa do gerador de requerimento administrativo',
+    summary:
+      'Baixar análise completa do gerador de requerimento administrativo',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':administrativeRequestGeneratorId/download/complete-version',
