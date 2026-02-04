@@ -174,6 +174,7 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
       specialActivity: null,
+      perCapitaIncomeForBpcAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =

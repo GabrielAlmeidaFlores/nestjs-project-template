@@ -7,4 +7,5 @@ export enum AnalysisToolRecordTypeEnum {
   ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS = 'analise_procedimento_administrativo_inss',
   MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS = 'analise_geradora_objeção_laudo_medico_social',
   DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS = 'avaliacao_deficiencia_para_bpc',
+  PER_CAPITA_INCOME_FOR_BPC_ANALYSIS = 'analise_renda_per_capita_para_bpc',
 }

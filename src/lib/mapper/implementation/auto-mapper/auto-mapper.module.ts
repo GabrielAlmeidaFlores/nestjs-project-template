@@ -68,6 +68,8 @@ import { GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
+import { PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis-entity.auto-mapper.profile';
+import { PerCapitaIncomeForBpcAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-benefit/get-judicial-case-analysis-benefit-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-benefit/judicial-case-analysis-benefit-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-document/get-judicial-case-analysis-document-query-result.auto-mapper.profile';
@@ -328,6 +330,8 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile,
+    PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile,
+    PerCapitaIncomeForBpcAnalysisDocumentEntityAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,
