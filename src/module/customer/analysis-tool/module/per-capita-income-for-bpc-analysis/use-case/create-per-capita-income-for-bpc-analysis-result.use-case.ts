@@ -89,8 +89,14 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         PerCapitaIncomeForBpcAnalysisNotFoundError,
       );
 
+    console.log('=== ANALYSIS TOOL RECORD QUERY RESULT ===');
+    console.log(JSON.stringify(analysisToolRecordQueryResult, null, 2));
+
     const perCapitaIncomeForBpcAnalysisQueryResult =
       analysisToolRecordQueryResult.perCapitaIncomeForBpcAnalysis;
+
+    console.log('=== PER CAPITA INCOME FOR BPC ANALYSIS ===');
+    console.log(JSON.stringify(perCapitaIncomeForBpcAnalysisQueryResult, null, 2));
 
     if (perCapitaIncomeForBpcAnalysisQueryResult === null) {
       throw new PerCapitaIncomeForBpcAnalysisNotFoundError();
@@ -107,6 +113,10 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument;
     const documentBuffers: Buffer[] = [];
 
+    console.log('=== DOCUMENTS FROM MAIN ANALYSIS ===');
+    console.log('Documents count:', documents?.length ?? 0);
+    console.log('Documents:', JSON.stringify(documents, null, 2));
+
     if (documents !== undefined && documents !== null) {
       for (const doc of documents) {
         const buffer = await this.fileProcessorGateway.getFileBuffer(
@@ -116,8 +126,14 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       }
     }
 
+    // Preparar dados dos membros da família
     const familyMembers =
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember;
+
+    console.log('=== FAMILY MEMBERS ===');
+    console.log('Family members count:', familyMembers?.length ?? 0);
+    console.log('Family members:', JSON.stringify(familyMembers, null, 2));
+
     const familyMembersData =
       familyMembers !== undefined && familyMembers !== null
         ? familyMembers.map((member) => ({
@@ -128,15 +144,44 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
             hasIncome: member.hasIncome,
             monthlyIncomeAmount: member.monthlyIncomeAmount,
             incomeType: member.incomeType,
+            documentsCount:
+              member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument?.length ?? 0,
           }))
         : [];
+
+    // Preparar buffers dos documentos dos family members
+    const familyMemberDocumentBuffers: Buffer[] = [];
+    if (familyMembers !== undefined && familyMembers !== null) {
+      for (const member of familyMembers) {
+        const memberDocuments =
+          member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument;
+        console.log(`=== DOCUMENTS FOR FAMILY MEMBER: ${member.fullName} ===`);
+        console.log('Documents count:', memberDocuments?.length ?? 0);
+        console.log('Documents:', JSON.stringify(memberDocuments, null, 2));
+        if (memberDocuments !== undefined && memberDocuments !== null) {
+          for (const doc of memberDocuments) {
+            const buffer = await this.fileProcessorGateway.getFileBuffer(
+              doc.document,
+            );
+            familyMemberDocumentBuffers.push(buffer);
+          }
+        }
+      }
+    }
 
     // Preparar dados completos para análise
     const analysisData = {
       client: analysisToolRecordQueryResult.analysisToolClient,
       familyMembers: familyMembersData,
-      documentsCount: documents.length,
+      documentsCount: documentBuffers.length,
+      familyMemberDocumentsCount: familyMemberDocumentBuffers.length,
     };
+
+    console.log('=== CONSOLIDATED ANALYSIS DATA ===');
+    console.log('Main documents count:', documentBuffers.length);
+    console.log('Family member documents count:', familyMemberDocumentBuffers.length);
+    console.log('Total buffers being sent to IA:', 2 + documentBuffers.length + familyMemberDocumentBuffers.length);
+    console.log('Analysis data:', JSON.stringify(analysisData, null, 2));
 
     const analysisDataBuffer = Buffer.from(
       JSON.stringify(analysisData, null, 2),
@@ -147,7 +192,12 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
     const completeAnalysis =
       await this.analysisProcessorGateway.getPerCapitaIncomeForBpcCompleteAnalysis(
         promptResponse.prompt,
-        [analysisDataBuffer, clientDataBuffer, ...documentBuffers],
+        [
+          analysisDataBuffer,
+          clientDataBuffer,
+          ...documentBuffers,
+          ...familyMemberDocumentBuffers,
+        ],
       );
 
     // Criar resultado da análise
