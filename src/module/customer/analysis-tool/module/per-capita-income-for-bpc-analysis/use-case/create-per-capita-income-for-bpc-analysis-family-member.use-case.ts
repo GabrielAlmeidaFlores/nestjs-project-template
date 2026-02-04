@@ -16,6 +16,7 @@ import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@mod
 import { PerCapitaIncomeForBpcAnalysisNotFoundError } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/error/per-capita-income-for-bpc-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
@@ -106,10 +107,12 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
             'base64',
           );
 
-          const fileModel = {
-            originalname: documentDto.document.originalFileName,
+          const fileModel = FileModel.build({
             buffer: fileBuffer,
-          } as any;
+            originalName: documentDto.document.originalFileName,
+            size: fileBuffer.length,
+            encoding: '7bit',
+          });
 
           const documentFile =
             await this.fileProcessorGateway.uploadFile(fileModel);
