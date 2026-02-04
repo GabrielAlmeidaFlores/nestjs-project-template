@@ -237,7 +237,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do procedimento administrativo do INSS.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3f7d9e2-8a4b-4f1c-9e3d-7b6a5c8f1d2e'),
+      id: new PaymentPlanPaidResourceId('c5d6e7f8-a9b0-4c1d-8e2f-3a4b5c6d7e8f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
@@ -306,6 +306,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Análise Simplificada de Avaliação de Deficiência para BPC',
       description:
         'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d7e8f9a0-b1c2-4d3e-9f0a-4b5c6d7e8f9a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Completa de Renda Per Capita para BPC',
+      description:
+        'Análise completa da renda per capita familiar para verificação de elegibilidade ao BPC.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Simplificada de Renda Per Capita para BPC',
+      description:
+        'Análise simplificada da renda per capita familiar para BPC com parecer objetivo.',
     }),
   ];
 

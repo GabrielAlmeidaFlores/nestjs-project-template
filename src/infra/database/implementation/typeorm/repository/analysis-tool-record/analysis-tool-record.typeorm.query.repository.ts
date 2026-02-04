@@ -832,6 +832,73 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    perCapitaIncomeForBpcAnalysisId: import('@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object').PerCapitaIncomeForBpcAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          perCapitaIncomeForBpcAnalysis: {
+            id: perCapitaIncomeForBpcAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          perCapitaIncomeForBpcAnalysis: {
+            perCapitaIncomeForBpcAnalysisResult: true,
+            perCapitaIncomeForBpcAnalysisDocument: true,
+            perCapitaIncomeForBpcAnalysisFamilyMember: {
+              perCapitaIncomeForBpcAnalysisFamilyMemberDocument: true,
+            },
+            perCapitaIncomeForBpcAnalysisBenefit: true,
+            perCapitaIncomeForBpcAnalysisLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async getStatisticsByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
@@ -971,6 +1038,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'administrativeProcedureInssAnalysis',
       'medicalAndSocialReportObjectionGeneratorAnalysis',
       'disabilityAssessmentForBpcAnalysis',
+      'perCapitaIncomeForBpcAnalysis',
     ];
   }
 }

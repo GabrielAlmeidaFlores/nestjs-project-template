@@ -78,6 +78,14 @@ import { PaymentPlanTypeormQueryRepository } from '@infra/database/implementatio
 import { PaymentPlanEnabledPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource.typeorm.command.repository';
 import { PaymentPlanPaidResourceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.command.repository';
 import { PaymentPlanPaidResourceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/payment-plan-paid-resource/payment-plan-paid-resource.typeorm.query.repository';
+import { PerCapitaIncomeForBpcAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.typeorm.query.repository';
+import { PerCapitaIncomeForBpcAnalysisBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-benefit/per-capita-income-for-bpc-analysis-benefit.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-family-member/per-capita-income-for-bpc-analysis-family-member.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
+import { PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result.typeorm.command.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps-analysis-result.typeorm.command.repository';
 import { RetirementPlanningRgpsAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-analysis-result/retirement-planning-rgps.typeorm.query.repository';
 import { RetirementPlanningRgpsEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/retirement-planning-rgps-earnings-history/retirement-planning-rgps-earnings-history.typeorm.command.repository';
@@ -174,6 +182,13 @@ import { DatabaseApplicationVariable } from '@shared/system/constant/application
 import type { Provider } from '@nestjs/common';
 import type { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import type { DataSourceOptions } from 'typeorm';
+import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-result.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-document.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-family-member.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-family-member-document.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-benefit.entity';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-legal-proceeding.entity';
 
 export class TypeormIndex {
   public static readonly entities: EntityClassOrSchema[] = [
@@ -257,6 +272,13 @@ export class TypeormIndex {
     DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity,
     DisabilityAssessmentForBpcAnalysisResultTypeormEntity,
     DisabilityAssessmentForBpcAnalysisTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisResultTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisBenefitTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -351,6 +373,14 @@ export class TypeormIndex {
     SpecialActivityDocumentTypeormCommandRepository,
     SpecialActivityInssBenefitTypeormCommandRepository,
     SpecialActivityLegalProceedingTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisTypeormQueryRepository,
+    PerCapitaIncomeForBpcAnalysisBenefitTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository,
+    PerCapitaIncomeForBpcAnalysisResultTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
