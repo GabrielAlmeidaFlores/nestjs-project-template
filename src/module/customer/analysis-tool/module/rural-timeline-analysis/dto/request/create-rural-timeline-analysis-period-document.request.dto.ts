@@ -10,6 +10,12 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class CreateRuralTimelineAnalysisPeriodDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoObjectProperty(() => Base64FileRequestDto)
+  public document: Base64FileRequestDto;
+
+  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodDocumentTypeEnum)
+  public type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
+
   @RequestDtoNumberProperty({ required: false })
   public documentYear?: number;
 
@@ -21,12 +27,6 @@ export class CreateRuralTimelineAnalysisPeriodDocumentRequestDto extends BaseBui
 
   @RequestDtoStringProperty({ required: false })
   public probatoryPurpose?: string;
-
-  @RequestDtoObjectProperty(() => Base64FileRequestDto)
-  public document: Base64FileRequestDto;
-
-  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodDocumentTypeEnum)
-  public type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
 
   protected override readonly _type =
     CreateRuralTimelineAnalysisPeriodDocumentRequestDto.name;
