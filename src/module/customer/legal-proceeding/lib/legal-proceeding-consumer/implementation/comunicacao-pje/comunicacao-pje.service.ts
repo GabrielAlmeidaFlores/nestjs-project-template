@@ -71,14 +71,14 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
       detailJson,
     ) as ComunicacaoPjeLegalProceedingDetailDataModel;
 
-    const items = detailParsed.data.items;
+    const items = detailParsed.data.items ?? [];
     const lastItem = items.length > 0 ? items[items.length - 1] : null;
 
     const recipient = (lastItem?.destinatarios ?? []) as unknown as object[];
     const recipientLawyer = (lastItem?.destinatarioadvogados ??
       []) as unknown as object[];
 
-    const latestItem = detailParsed.data.items[0];
+    const latestItem = items[0];
 
     let status: LegalProceedingStatusEnum | null = null;
 
@@ -164,7 +164,7 @@ export class ComunicacaoPjeService implements LegalProceedingConsumerGateway {
       detailJson,
     ) as ComunicacaoPjeLegalProceedingDetailDataModel;
 
-    const items = detailParsed.data.items;
+    const items = detailParsed.data.items ?? [];
 
     return items.map((rawItem) =>
       LegalProceedingActionOutputModel.build({

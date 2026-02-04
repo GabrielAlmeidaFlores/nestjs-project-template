@@ -128,6 +128,7 @@ export class UpdateJudicialCaseAnalysisUseCase {
       cnisFastAnalysis: null,
       retirementPlanningRgps: null,
       retirementPlanningRpps: null,
+      specialActivity: null,
       administrativeProcedureInssAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
