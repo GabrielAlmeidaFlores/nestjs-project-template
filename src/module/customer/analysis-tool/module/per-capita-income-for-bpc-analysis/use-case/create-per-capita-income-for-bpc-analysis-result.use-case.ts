@@ -104,30 +104,32 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
 
     // Preparar dados dos documentos
     const documents =
-      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument ??
-      [];
+      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument;
     const documentBuffers: Buffer[] = [];
 
-    for (const doc of documents) {
-      const buffer = await this.fileProcessorGateway.getFileBuffer(
-        doc.document,
-      );
-      documentBuffers.push(buffer);
+    if (documents !== undefined && documents !== null) {
+      for (const doc of documents) {
+        const buffer = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        documentBuffers.push(buffer);
+      }
     }
 
-    // Preparar dados dos membros da família
     const familyMembers =
-      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember ??
-      [];
-    const familyMembersData = familyMembers.map((member: any) => ({
-      fullName: member.fullName,
-      birthDate: member.birthDate,
-      kinship: member.kinship,
-      livesInSameResidence: member.livesInSameResidence,
-      hasIncome: member.hasIncome,
-      monthlyIncomeAmount: member.monthlyIncomeAmount,
-      incomeType: member.incomeType,
-    }));
+      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember;
+    const familyMembersData =
+      familyMembers !== undefined && familyMembers !== null
+        ? familyMembers.map((member) => ({
+            fullName: member.fullName,
+            birthDate: member.birthDate,
+            kinship: member.kinship,
+            livesInSameResidence: member.livesInSameResidence,
+            hasIncome: member.hasIncome,
+            monthlyIncomeAmount: member.monthlyIncomeAmount,
+            incomeType: member.incomeType,
+          }))
+        : [];
 
     // Preparar dados completos para análise
     const analysisData = {

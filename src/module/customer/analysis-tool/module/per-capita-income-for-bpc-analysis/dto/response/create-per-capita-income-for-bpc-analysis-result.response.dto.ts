@@ -5,10 +5,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class CreatePerCapitaIncomeForBpcAnalysisResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
-  public readonly completeAnalysis: string | null;
+  public readonly completeAnalysis?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public readonly simplifiedAnalysis: string | null;
+  public readonly simplifiedAnalysis?: string;
 
   protected override readonly _type =
     CreatePerCapitaIncomeForBpcAnalysisResultResponseDto.name;
