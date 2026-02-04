@@ -15,11 +15,10 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { PerCapitaIncomeForBpcAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/command/per-capita-income-for-bpc-analysis.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/per-capita-income-for-bpc-analysis.query.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-document/command/per-capita-income-for-bpc-analysis-document.command.repository.gateway';
-
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
-import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
 import { PerCapitaIncomeForBpcAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/enum/per-capita-income-for-bpc-analysis-document-type.enum';
+import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
 import { UpdatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/update-per-capita-income-for-bpc-analysis.request.dto';
 import { UpdatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis.response.dto';
 import { PerCapitaIncomeForBpcAnalysisNotFoundError } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/error/per-capita-income-for-bpc-analysis-not-found.error';
@@ -125,22 +124,20 @@ export class UpdatePerCapitaIncomeForBpcAnalysisUseCase {
     const transactions: TransactionType[] = [];
 
     if (dto.cnisDocument !== undefined) {
-      const cnisDocumentTransactions =
-        await this.createDocumentOnDatabase(
-          perCapitaIncomeForBpcAnalysis,
-          dto.cnisDocument,
-          PerCapitaIncomeForBpcAnalysisDocumentTypeEnum.CNIS,
-        );
+      const cnisDocumentTransactions = await this.createDocumentOnDatabase(
+        perCapitaIncomeForBpcAnalysis,
+        dto.cnisDocument,
+        PerCapitaIncomeForBpcAnalysisDocumentTypeEnum.CNIS,
+      );
       transactions.push(cnisDocumentTransactions);
     }
 
     if (dto.cadUnicoDocument !== undefined) {
-      const cadUnicoDocumentTransactions =
-        await this.createDocumentOnDatabase(
-          perCapitaIncomeForBpcAnalysis,
-          dto.cadUnicoDocument,
-          PerCapitaIncomeForBpcAnalysisDocumentTypeEnum.CAD_UNICO,
-        );
+      const cadUnicoDocumentTransactions = await this.createDocumentOnDatabase(
+        perCapitaIncomeForBpcAnalysis,
+        dto.cadUnicoDocument,
+        PerCapitaIncomeForBpcAnalysisDocumentTypeEnum.CAD_UNICO,
+      );
       transactions.push(cadUnicoDocumentTransactions);
     }
 

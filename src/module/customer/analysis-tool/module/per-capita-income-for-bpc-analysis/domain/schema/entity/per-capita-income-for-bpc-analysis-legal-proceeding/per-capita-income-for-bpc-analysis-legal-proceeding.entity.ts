@@ -24,7 +24,6 @@ export class PerCapitaIncomeForBpcAnalysisLegalProceedingEntity extends BaseEnti
     super(PerCapitaIncomeForBpcAnalysisLegalProceedingId, props);
 
     this.legalProceedingNumber = props.legalProceedingNumber;
-    this.perCapitaIncomeForBpcAnalysis =
-      props.perCapitaIncomeForBpcAnalysis;
+    this.perCapitaIncomeForBpcAnalysis = props.perCapitaIncomeForBpcAnalysis;
   }
 }

@@ -26,7 +26,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 
 @Injectable()
 export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
-  protected readonly _type = CreatePerCapitaIncomeForBpcAnalysisResultUseCase.name;
+  protected readonly _type =
+    CreatePerCapitaIncomeForBpcAnalysisResultUseCase.name;
 
   public constructor(
     @Inject(FileProcessorGateway)
@@ -102,16 +103,22 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
     );
 
     // Preparar dados dos documentos
-    const documents = perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument ?? [];
+    const documents =
+      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument ??
+      [];
     const documentBuffers: Buffer[] = [];
 
     for (const doc of documents) {
-      const buffer = await this.fileProcessorGateway.getFileBuffer(doc.document);
+      const buffer = await this.fileProcessorGateway.getFileBuffer(
+        doc.document,
+      );
       documentBuffers.push(buffer);
     }
 
     // Preparar dados dos membros da família
-    const familyMembers = perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember ?? [];
+    const familyMembers =
+      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember ??
+      [];
     const familyMembersData = familyMembers.map((member: any) => ({
       fullName: member.fullName,
       birthDate: member.birthDate,
@@ -142,23 +149,25 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       );
 
     // Criar resultado da análise
-    const perCapitaIncomeForBpcAnalysisResult = new PerCapitaIncomeForBpcAnalysisResultEntity({
-      completeAnalysis,
-      simplifiedAnalysis: null,
-      perCapitaIncomeForBpcAnalysis: new PerCapitaIncomeForBpcAnalysisEntity({
+    const perCapitaIncomeForBpcAnalysisResult =
+      new PerCapitaIncomeForBpcAnalysisResultEntity({
+        completeAnalysis,
+        simplifiedAnalysis: null,
+        perCapitaIncomeForBpcAnalysis: new PerCapitaIncomeForBpcAnalysisEntity({
+          id: perCapitaIncomeForBpcAnalysisQueryResult.id,
+          perCapitaIncomeForBpcAnalysisResult: null,
+          createdBy: analysisToolRecordQueryResult.createdBy.id,
+          updatedBy: analysisToolRecordQueryResult.updatedBy.id,
+        }),
+      });
+
+    const perCapitaIncomeForBpcAnalysis =
+      new PerCapitaIncomeForBpcAnalysisEntity({
         id: perCapitaIncomeForBpcAnalysisQueryResult.id,
-        perCapitaIncomeForBpcAnalysisResult: null,
+        perCapitaIncomeForBpcAnalysisResult,
         createdBy: analysisToolRecordQueryResult.createdBy.id,
         updatedBy: analysisToolRecordQueryResult.updatedBy.id,
-      }),
-    });
-
-    const perCapitaIncomeForBpcAnalysis = new PerCapitaIncomeForBpcAnalysisEntity({
-      id: perCapitaIncomeForBpcAnalysisQueryResult.id,
-      perCapitaIncomeForBpcAnalysisResult,
-      createdBy: analysisToolRecordQueryResult.createdBy.id,
-      updatedBy: analysisToolRecordQueryResult.updatedBy.id,
-    });
+      });
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
