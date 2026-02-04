@@ -7,6 +7,7 @@ import { FullOpinionGeneratorController } from '@module/customer/documents-to-be
 import { CreateFullOpinionGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/create-full-opinion-generator.use-case';
 import { DownloadFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-complete-analysis.use-case';
 import { DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-simplified-analysis.use-case';
+import { UpdateFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/update-full-opinion-generator-complete-analysis.use-case';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.mo
     CreateFullOpinionGeneratorUseCase,
     DownloadFullOpinionGeneratorCompleteAnalysisUseCase,
     DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase,
+    UpdateFullOpinionGeneratorCompleteAnalysisUseCase,
   ],
   exports: [CreateFullOpinionGeneratorUseCase],
 })
