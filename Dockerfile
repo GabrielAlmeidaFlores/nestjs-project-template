@@ -3,7 +3,7 @@ FROM node:22.15.0 AS builder
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY . .
 RUN yarn build
@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --production=true
+RUN yarn install --frozen-lockfile --production=true && yarn cache clean
 
 ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
 RUN mkdir -p /home/node/.cache/puppeteer && chown -R node:node /home/node/.cache
