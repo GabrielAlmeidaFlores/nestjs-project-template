@@ -13,7 +13,8 @@ import { PerCapitaIncomeForBpcAnalysisLegalProceedingId } from '@module/customer
 @Injectable()
 export class PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository
   extends BaseTypeormCommandRepository<PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity>
-  implements PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway
+  implements
+    PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway
 {
   protected readonly _type =
     PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormCommandRepository.name;

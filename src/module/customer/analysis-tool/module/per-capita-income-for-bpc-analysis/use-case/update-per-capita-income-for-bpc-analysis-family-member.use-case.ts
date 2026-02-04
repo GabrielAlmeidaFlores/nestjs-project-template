@@ -32,7 +32,9 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
     private readonly perCapitaIncomeForBpcAnalysisQueryRepositoryGateway: PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway,
     @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway)
     private readonly perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway,
-    @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway,
+    )
     private readonly perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

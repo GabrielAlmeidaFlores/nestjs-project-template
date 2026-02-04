@@ -16,7 +16,8 @@ export class PerCapitaIncomeForBpcAnalysisTypeormCommandRepository
   extends BaseTypeormCommandRepository<PerCapitaIncomeForBpcAnalysisTypeormEntity>
   implements PerCapitaIncomeForBpcAnalysisCommandRepositoryGateway
 {
-  protected readonly _type = PerCapitaIncomeForBpcAnalysisTypeormCommandRepository.name;
+  protected readonly _type =
+    PerCapitaIncomeForBpcAnalysisTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(PerCapitaIncomeForBpcAnalysisTypeormEntity)

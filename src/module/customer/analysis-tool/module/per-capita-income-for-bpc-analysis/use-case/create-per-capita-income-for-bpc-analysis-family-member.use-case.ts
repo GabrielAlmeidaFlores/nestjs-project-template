@@ -1,4 +1,4 @@
-  import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
@@ -29,7 +29,9 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway)
     private readonly perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway,
-    @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway)
+    @Inject(
+      PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway,
+    )
     private readonly perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,

@@ -14,7 +14,8 @@ export class PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity>
   implements PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway
 {
-  protected readonly _type = PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository.name;
+  protected readonly _type =
+    PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity)
@@ -39,6 +40,8 @@ export class PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository
   public createManyPerCapitaIncomeForBpcAnalysisDocument(
     props: PerCapitaIncomeForBpcAnalysisDocumentEntity[],
   ): TransactionType[] {
-    return props.map((item) => this.createPerCapitaIncomeForBpcAnalysisDocument(item));
+    return props.map((item) =>
+      this.createPerCapitaIncomeForBpcAnalysisDocument(item),
+    );
   }
 }

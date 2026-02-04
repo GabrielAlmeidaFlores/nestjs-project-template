@@ -10,11 +10,12 @@ export class PerCapitaIncomeForBpcAnalysisBenefitEntity extends BaseEntity<PerCa
   )
   public readonly inssBenefitNumber: string;
 
-  @Description('Análise de renda per capita para BPC associada ao benefício INSS.')
+  @Description(
+    'Análise de renda per capita para BPC associada ao benefício INSS.',
+  )
   public readonly perCapitaIncomeForBpcAnalysis: PerCapitaIncomeForBpcAnalysisEntity;
 
-  protected readonly _type =
-    PerCapitaIncomeForBpcAnalysisBenefitEntity.name;
+  protected readonly _type = PerCapitaIncomeForBpcAnalysisBenefitEntity.name;
 
   public constructor(
     props: PerCapitaIncomeForBpcAnalysisBenefitEntityPropsInterface,
@@ -22,7 +23,6 @@ export class PerCapitaIncomeForBpcAnalysisBenefitEntity extends BaseEntity<PerCa
     super(PerCapitaIncomeForBpcAnalysisBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
-    this.perCapitaIncomeForBpcAnalysis =
-      props.perCapitaIncomeForBpcAnalysis;
+    this.perCapitaIncomeForBpcAnalysis = props.perCapitaIncomeForBpcAnalysis;
   }
 }

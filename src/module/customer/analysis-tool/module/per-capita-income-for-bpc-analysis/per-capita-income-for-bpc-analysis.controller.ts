@@ -1,29 +1,29 @@
 import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
 
-import { CreatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis.request.dto';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis-family-member.request.dto';
-import { UpdatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/update-per-capita-income-for-bpc-analysis.request.dto';
+import { CreatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis.request.dto';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/update-per-capita-income-for-bpc-analysis-family-member.request.dto';
-import { CreatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis.response.dto';
+import { UpdatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/update-per-capita-income-for-bpc-analysis.request.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis-family-member.response.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis-result.response.dto';
-import { UpdatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis.response.dto';
+import { CreatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis.response.dto';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis-family-member.response.dto';
-import { CreatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis.use-case';
+import { UpdatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis.response.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-family-member.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisResultUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-result.use-case';
-import { UpdatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/update-per-capita-income-for-bpc-analysis.use-case';
+import { CreatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis.use-case';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/update-per-capita-income-for-bpc-analysis-family-member.use-case';
-import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { UpdatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/update-per-capita-income-for-bpc-analysis.use-case';
+import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
+import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
+import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
+import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
-import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
-import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
-import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 
 @CustomerControllerRoute('analysis-tool/per-capita-income-for-bpc-analysis')
 export class PerCapitaIncomeForBpcAnalysisController {
@@ -37,23 +37,22 @@ export class PerCapitaIncomeForBpcAnalysisController {
     private readonly updatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase: UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase,
   ) {}
 
-    @BuildEndpointSpecification({
-      summary: 'Criar análise de renda per capita para BPC',
-      userLevel: [UserLevelEnum.CUSTOMER],
-      http: {
-        path: '',
-        method: RequestMethod.POST,
-        type: CreatePerCapitaIncomeForBpcAnalysisRequestDto,
-      },
-      tag: ['analise-de-renda-per-capita-para-bpc'],
-      successResponse: {
-        statusCode: HttpStatus.OK,
-        description:
-          'Análise de renda per capita para BPC criada com sucesso.',
-        type: CreatePerCapitaIncomeForBpcAnalysisResponseDto,
-      },
-      guard: [AuthGuard, OrganizationSessionGuard],
-    })
+  @BuildEndpointSpecification({
+    summary: 'Criar análise de renda per capita para BPC',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: '',
+      method: RequestMethod.POST,
+      type: CreatePerCapitaIncomeForBpcAnalysisRequestDto,
+    },
+    tag: ['analise-de-renda-per-capita-para-bpc'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de renda per capita para BPC criada com sucesso.',
+      type: CreatePerCapitaIncomeForBpcAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
   public async createPerCapitaIncomeForBpcAnalysis(
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
@@ -68,7 +67,8 @@ export class PerCapitaIncomeForBpcAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Criar membros da família para análise de renda per capita para BPC',
+    summary:
+      'Criar membros da família para análise de renda per capita para BPC',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '/family-member',
@@ -136,7 +136,8 @@ export class PerCapitaIncomeForBpcAnalysisController {
     tag: ['analise-de-renda-per-capita-para-bpc'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Análise de renda per capita para BPC atualizada com sucesso.',
+      description:
+        'Análise de renda per capita para BPC atualizada com sucesso.',
       type: UpdatePerCapitaIncomeForBpcAnalysisResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -158,7 +159,8 @@ export class PerCapitaIncomeForBpcAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar membros da família para análise de renda per capita para BPC',
+    summary:
+      'Atualizar membros da família para análise de renda per capita para BPC',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '/:perCapitaIncomeForBpcAnalysisId/family-member',
