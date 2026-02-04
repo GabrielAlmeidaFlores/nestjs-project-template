@@ -178,6 +178,11 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } fro
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence-entity.auto-mapper.profile';
+import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
+import { SpecialActivityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/special-activity-document-entity.auto-mapper.profile';
+import { SpecialActivityInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/special-activity-inss-benefit-entity.auto-mapper.profile';
+import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
+import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -307,6 +312,11 @@ import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@li
     GetRetirementPlanningRgpsQueryResultAutoMapperProfile,
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
     RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile,
+    SpecialActivityEntityAutoMapperProfile,
+    SpecialActivityResultEntityAutoMapperProfile,
+    SpecialActivityDocumentEntityAutoMapperProfile,
+    SpecialActivityInssBenefitEntityAutoMapperProfile,
+    SpecialActivityLegalProceedingEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile,
