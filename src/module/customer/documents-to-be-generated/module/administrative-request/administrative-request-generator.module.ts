@@ -7,6 +7,7 @@ import { AdministrativeRequestGeneratorController } from '@module/customer/docum
 import { CreateAdministrativeRequestGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/create-administrative-request-generator.use-case';
 import { DownloadAdministrativeRequestGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-complete-analysis.use-case';
 import { DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/download-administrative-request-generator-simplified-analysis.use-case';
+import { UpdateAdministrativeRequestGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/administrative-request/use-case/update-administrative-request-generator-complete-analysis.use-case';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.mo
     CreateAdministrativeRequestGeneratorUseCase,
     DownloadAdministrativeRequestGeneratorCompleteAnalysisUseCase,
     DownloadAdministrativeRequestGeneratorSimplifiedAnalysisUseCase,
+    UpdateAdministrativeRequestGeneratorCompleteAnalysisUseCase,
   ],
   exports: [CreateAdministrativeRequestGeneratorUseCase],
 })

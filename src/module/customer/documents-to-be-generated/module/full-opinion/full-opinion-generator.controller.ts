@@ -11,10 +11,13 @@ import {
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { FullOpinionGeneratorId } from '@module/customer/documents-to-be-generated/module/full-opinion/domain/schema/entity/full-opinion-generator-analysis-result/value-object/full-opinion-generator-id/full-opinion-generator-id.value-object';
 import { CreateFullOpinionGeneratorRequestDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/request/create-full-opinion-generator-analysis-result.request.dto';
+import { UpdateFullOpinionGeneratorCompleteAnalysisRequestDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/request/update-full-opinion-generator-complete-analysis.request.dto';
 import { CreateFullOpinionGeneratorResponseDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/response/create-full-opinion-generator-analysis-result.response.dto';
+import { UpdateFullOpinionGeneratorCompleteAnalysisResponseDto } from '@module/customer/documents-to-be-generated/module/full-opinion/dto/response/update-full-opinion-generator-complete-analysis.response.dto';
 import { CreateFullOpinionGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/create-full-opinion-generator.use-case';
 import { DownloadFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-complete-analysis.use-case';
 import { DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/download-full-opinion-generator-simplified-analysis.use-case';
+import { UpdateFullOpinionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/full-opinion/use-case/update-full-opinion-generator-complete-analysis.use-case';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
@@ -28,6 +31,7 @@ export class FullOpinionGeneratorController {
     private readonly createFullOpinionGeneratorUseCase: CreateFullOpinionGeneratorUseCase,
     private readonly downloadFullOpinionGeneratorCompleteAnalysisUseCase: DownloadFullOpinionGeneratorCompleteAnalysisUseCase,
     private readonly downloadFullOpinionGeneratorSimplifiedAnalysisUseCase: DownloadFullOpinionGeneratorSimplifiedAnalysisUseCase,
+    private readonly updateFullOpinionGeneratorCompleteAnalysisUseCase: UpdateFullOpinionGeneratorCompleteAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -112,6 +116,38 @@ export class FullOpinionGeneratorController {
     return await this.downloadFullOpinionGeneratorCompleteAnalysisUseCase.execute(
       fullOpinionGeneratorId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar análise completa do gerador de parecer completo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':fullOpinionGeneratorId/complete-analysis',
+      method: RequestMethod.PATCH,
+      type: UpdateFullOpinionGeneratorCompleteAnalysisRequestDto,
+    },
+    tag: ['gerador-parecer-completo'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise completa do gerador de parecer completo atualizada com sucesso.',
+      type: UpdateFullOpinionGeneratorCompleteAnalysisResponseDto,
+    },
+    guard: [],
+  })
+  public async updateFullOpinionGeneratorCompleteAnalysis(
+    @Param(
+      'fullOpinionGeneratorId',
+      new ParseValueObjectPipe(FullOpinionGeneratorId),
+    )
+    fullOpinionGeneratorId: FullOpinionGeneratorId,
+    @Body()
+    dto: UpdateFullOpinionGeneratorCompleteAnalysisRequestDto,
+  ): Promise<UpdateFullOpinionGeneratorCompleteAnalysisResponseDto> {
+    return await this.updateFullOpinionGeneratorCompleteAnalysisUseCase.execute(
+      fullOpinionGeneratorId,
+      dto,
     );
   }
 }

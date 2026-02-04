@@ -7,6 +7,7 @@ import { InitialPetitionGeneratorController } from '@module/customer/documents-t
 import { CreateInitialPetitionGeneratorUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/create-initial-petition-generator.use-case';
 import { DownloadInitialPetitionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/download-initial-petition-generator-complete-analysis.use-case';
 import { DownloadInitialPetitionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/download-initial-petition-generator-simplified-analysis.use-case';
+import { UpdateInitialPetitionGeneratorCompleteAnalysisUseCase } from '@module/customer/documents-to-be-generated/module/initial-petition/use-case/update-initial-petition-generator-complete-analysis.use-case';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.mo
     CreateInitialPetitionGeneratorUseCase,
     DownloadInitialPetitionGeneratorCompleteAnalysisUseCase,
     DownloadInitialPetitionGeneratorSimplifiedAnalysisUseCase,
+    UpdateInitialPetitionGeneratorCompleteAnalysisUseCase,
   ],
   exports: [CreateInitialPetitionGeneratorUseCase],
 })
