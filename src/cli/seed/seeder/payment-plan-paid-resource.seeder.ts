@@ -245,7 +245,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description: 'Análise completa do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      id: new PaymentPlanPaidResourceId('f94f5d7f-d7fb-4b92-a00c-f84f6329c132'),
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
@@ -324,7 +324,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      id: new PaymentPlanPaidResourceId('5798a2ae-9656-4b82-acdf-cc68cc4b8659'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_COMPLETE_ANALYSIS,
       creditCost: 5,
@@ -342,7 +342,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise com IA de um único documento comprobatório de atividade rural do período.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      id: new PaymentPlanPaidResourceId('784afb91-db0b-40b3-9af4-6f453c70d6de'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS,
       creditCost: 3,
