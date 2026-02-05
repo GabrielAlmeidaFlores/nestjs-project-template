@@ -129,6 +129,7 @@ export class UpdateSpecialActivityAnalysisUseCase {
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       disabilityAssessmentForBpcAnalysis: null,
       perCapitaIncomeForBpcAnalysis: null,
+      medicalQuestionGenerator: null,
     });
 
     const transactions: TransactionType[] = [];

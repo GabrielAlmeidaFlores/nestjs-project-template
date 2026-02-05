@@ -130,6 +130,7 @@ export class UpdateJudicialCaseAnalysisUseCase {
       retirementPlanningRpps: null,
       specialActivity: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 

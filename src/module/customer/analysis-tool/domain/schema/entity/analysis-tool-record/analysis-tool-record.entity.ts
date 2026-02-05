@@ -13,6 +13,7 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -59,6 +60,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly administrativeProcedureInssAnalysis: AdministrativeProcedureInssAnalysisEntity | null;
 
   @Description(
+    'Gerador de perguntas médicas associado ao registro da ferramenta de análise',
+  )
+  public readonly medicalQuestionGenerator: MedicalQuestionGeneratorEntity | null;
+
+  @Description(
     'Análise geradora de objeção de laudo médico e social associada ao registro da ferramenta de análise',
   )
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
@@ -102,6 +108,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
     this.administrativeProcedureInssAnalysis =
       props.administrativeProcedureInssAnalysis ?? null;
+    this.medicalQuestionGenerator = props.medicalQuestionGenerator ?? null;
     this.medicalAndSocialReportObjectionGeneratorAnalysis =
       props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
     this.disabilityAssessmentForBpcAnalysis =
