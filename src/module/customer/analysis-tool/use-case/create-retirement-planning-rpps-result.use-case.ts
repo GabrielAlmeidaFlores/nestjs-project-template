@@ -174,6 +174,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      specialActivity: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
       medicalQuestionGenerator: null,

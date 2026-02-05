@@ -161,6 +161,7 @@ export class CreateAdministrativeProcedureInssAnalysisResultUseCase {
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
       cnisFastAnalysis: null,
+      specialActivity: null,
       judicialCaseAnalysis: null,
       medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,

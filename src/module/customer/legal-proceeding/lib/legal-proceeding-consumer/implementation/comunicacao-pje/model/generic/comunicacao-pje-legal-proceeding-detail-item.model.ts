@@ -32,7 +32,7 @@ export class ComunicacaoPjeLegalProceedingDetailDataItemModel extends BaseBuilda
   public readonly status: string | null;
   public readonly message: string;
   public readonly count: number;
-  public readonly items: ComunicacaoPjeLegalProceedingDetailItemModel[];
+  public readonly items?: ComunicacaoPjeLegalProceedingDetailItemModel[];
   protected override readonly _type =
     ComunicacaoPjeLegalProceedingDetailDataItemModel.name;
 }
