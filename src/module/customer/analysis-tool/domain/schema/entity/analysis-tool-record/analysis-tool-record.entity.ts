@@ -6,6 +6,7 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
@@ -41,6 +42,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Planejamento de aposentadoria RGPS associado ao registro da ferramenta de análise',
   )
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
+
+  @Description(
+    'Atividade especial associada ao registro da ferramenta de análise',
+  )
+  public readonly specialActivity: SpecialActivityEntity | null;
 
   @Description(
     'Análise de caso judicial associada ao registro da ferramenta de análise',
@@ -92,6 +98,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
     this.retirementPlanningRpps = props.retirementPlanningRpps ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
+    this.specialActivity = props.specialActivity ?? null;
     this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
     this.administrativeProcedureInssAnalysis =
       props.administrativeProcedureInssAnalysis ?? null;
