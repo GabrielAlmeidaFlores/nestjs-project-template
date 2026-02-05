@@ -131,6 +131,7 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       retirementPlanningRpps: null,
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
+      medicalQuestionGenerator: null,
       specialActivity: null,
     });
 

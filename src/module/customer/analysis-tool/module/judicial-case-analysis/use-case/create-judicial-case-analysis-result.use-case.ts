@@ -161,6 +161,7 @@ export class CreateJudicialCaseAnalysisResultUseCase {
       cnisFastAnalysis: null,
       specialActivity: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
     });
 
