@@ -9,6 +9,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
@@ -27,6 +28,7 @@ import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cn
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -86,6 +88,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== undefined
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorTypeormEntity,
+              MedicalQuestionGeneratorEntity,
+            )
+          : null;
+
       const medicalAndSocialReportObjectionGeneratorAnalysis =
         source.medicalAndSocialReportObjectionGeneratorAnalysis !== undefined
           ? this.mapper.map(
@@ -138,6 +149,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         analysisToolClient,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
       });
@@ -188,6 +200,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.administrativeProcedureInssAnalysis,
               AdministrativeProcedureInssAnalysisEntity,
               AdministrativeProcedureInssAnalysisTypeormEntity,
+            )
+          : null;
+
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== null
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorEntity,
+              MedicalQuestionGeneratorTypeormEntity,
             )
           : null;
 
@@ -248,6 +269,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         analysisToolClient,

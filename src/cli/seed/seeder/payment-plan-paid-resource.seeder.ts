@@ -253,6 +253,22 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description: 'Análise simplificada do caso judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e9bfa47e-d159-4b54-8ef4-05dfc6c655d2'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 0,
+      title: 'Gerador de Perguntas Médicas - Análise Completa',
+      description: 'Análise completa do gerador de perguntas médicas.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d5c8e1f2-a3b4-4c5d-8e6f-7a8b9c0d1e2f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 0,
+      title: 'Gerador de Perguntas Médicas - Análise Simplificada',
+      description: 'Análise simplificada do gerador de perguntas médicas.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('7c4e9b2f-8a1d-4c5e-9b3a-6f2d8e1c5a7b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
@@ -290,7 +306,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('f8e9d7c6-b5a4-4c3d-9e2f-1a0b9c8d7e6f'),
+      id: new PaymentPlanPaidResourceId('a7b8c9d0-e1f2-4a3b-8c5d-6e7f8a9b0c1d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
@@ -299,7 +315,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa da avaliação de deficiência para BPC com parecer detalhado.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'),
+      id: new PaymentPlanPaidResourceId('b8c9d0e1-f2a3-4b4c-9d5e-7f8a9b0c1d2e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
