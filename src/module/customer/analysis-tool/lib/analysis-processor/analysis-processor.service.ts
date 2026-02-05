@@ -439,6 +439,29 @@ Análise processada do CNIS:
     );
   }
 
+  public async getMedicalQuestionGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMedicalQuestionGeneratorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
   public async getJudicialCaseAnalysisCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],

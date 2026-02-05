@@ -103,6 +103,17 @@ import { GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQuery
 import { MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-legal-proceeding/medical-and-social-report-objection-generator-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/get-medical-and-social-report-objection-generator-analysis-result-query-result.auto-mapper.profile';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-and-social-report-objection-generator-analysis-result/medical-and-social-report-objection-generator-analysis-result-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/get-medical-question-generator-query-result.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/get-medical-question-generator-with-relations-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator/medical-question-generator-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-document/get-medical-question-generator-document-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-document/medical-question-generator-document-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-inss-benefit/get-medical-question-generator-inss-benefit-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-inss-benefit/medical-question-generator-inss-benefit-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/get-medical-question-generator-legal-proceeding-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-legal-proceeding/medical-question-generator-legal-proceeding-entity.auto-mapper.profile';
+import { GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/get-medical-question-generator-result-query-result.auto-mapper.profile';
+import { MedicalQuestionGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/medical-question-generator-result/medical-question-generator-result-entity.auto-mapper.profile';
 import { GetOrganizationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/get-organization-query-result.auto-mapper.profile';
 import { OrganizationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization/organization-entity.auto-mapper.profile';
 import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-purchase-query-result.auto-mapper.profile';
@@ -169,6 +180,17 @@ import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperPr
 import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/rural-timeline-analysis-document-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-orm-to-query-result.profile';
+import { RuralTimelineAnalysisPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period/rural-timeline-analysis-period-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence-entity.auto-mapper.profile';
 import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
 import { SpecialActivityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/special-activity-document-entity.auto-mapper.profile';
 import { SpecialActivityInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/special-activity-inss-benefit-entity.auto-mapper.profile';
@@ -343,6 +365,17 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile,
     JudicialCaseAnalysisDocumentEntityAutoMapperProfile,
     GetJudicialCaseAnalysisDocumentQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorQueryResultAutoMapperProfile,
+    GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorResultEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorInssBenefitEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorInssBenefitQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorLegalProceedingEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile,
+    MedicalQuestionGeneratorDocumentEntityAutoMapperProfile,
+    GetMedicalQuestionGeneratorDocumentQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisEntityAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisDocumentEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisDocumentQueryResultAutoMapperProfile,
@@ -354,6 +387,17 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    RuralTimelineAnalysisEntityAutoMapperProfile,
+    RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile,
+    RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile,
+    RuralTimelineAnalysisDocumentEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile,
+    RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile,
   ],
   exports: [AutoMapperService],
 })

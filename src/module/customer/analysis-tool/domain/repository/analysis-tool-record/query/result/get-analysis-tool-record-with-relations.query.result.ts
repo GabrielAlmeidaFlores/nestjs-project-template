@@ -14,6 +14,7 @@ import type { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/c
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import type { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import type { GetPerCapitaIncomeForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis.query.result';
+import type { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
 import type { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
@@ -26,6 +27,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly specialActivity: GetSpecialActivityAnalysisWithRelationsQueryResult | null;
   public readonly judicialCaseAnalysis: GetJudicialCaseAnalysisQueryResult | null;
   public readonly administrativeProcedureInssAnalysis: GetAdministrativeProcedureInssAnalysisQueryResult | null;
+  public readonly medicalQuestionGenerator: GetMedicalQuestionGeneratorWithRelationsQueryResult | null;
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult | null;
   public readonly disabilityAssessmentForBpcAnalysis: GetDisabilityAssessmentForBpcAnalysisQueryResult | null;
   public readonly perCapitaIncomeForBpcAnalysis: GetPerCapitaIncomeForBpcAnalysisQueryResult | null;

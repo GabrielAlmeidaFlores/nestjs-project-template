@@ -9,6 +9,7 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
@@ -29,6 +30,7 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -85,6 +87,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.administrativeProcedureInssAnalysis,
               AdministrativeProcedureInssAnalysisTypeormEntity,
               AdministrativeProcedureInssAnalysisEntity,
+            )
+          : null;
+
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== undefined
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorTypeormEntity,
+              MedicalQuestionGeneratorEntity,
             )
           : null;
 
@@ -146,6 +157,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         analysisToolClient,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
@@ -197,6 +209,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
               source.administrativeProcedureInssAnalysis,
               AdministrativeProcedureInssAnalysisEntity,
               AdministrativeProcedureInssAnalysisTypeormEntity,
+            )
+          : null;
+
+      const medicalQuestionGenerator =
+        source.medicalQuestionGenerator !== null
+          ? this.mapper.map(
+              source.medicalQuestionGenerator,
+              MedicalQuestionGeneratorEntity,
+              MedicalQuestionGeneratorTypeormEntity,
             )
           : null;
 
@@ -263,6 +284,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
