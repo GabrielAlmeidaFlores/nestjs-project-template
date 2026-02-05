@@ -307,6 +307,33 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada da avaliação de deficiência para BPC com parecer resumido.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'Análise Completa da Linha do Tempo Rural',
+      description:
+        'Análise completa com IA de toda a linha do tempo rural, incluindo todos os períodos, documentos e contribuições CNIS.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 1,
+      title: 'Análise Individual de Documento de Período Rural',
+      description:
+        'Análise com IA de um único documento comprobatório de atividade rural do período.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS,
+      creditCost: 3,
+      title: 'Análise Consolidada de Documentos do Período Rural',
+      description:
+        'Análise consolidada com IA de todos os documentos comprobatórios de um período de atividade rural.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
