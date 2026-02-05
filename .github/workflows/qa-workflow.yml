@@ -9,20 +9,24 @@ env:
   WORKING_DIRECTORY: /workspace/container/docker/qa/agiliza-previ/agiliza-previ-back
 
 jobs:
-
   build:
-    runs-on: quality-assurance
+    runs-on: [self-hosted, linux, x64, quality-assurance]
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🐳 Build Docker Image
+      - name: 🐳 Build Docker Image (limited resources)
         run: |
-          docker build --memory="2g" --no-cache -t ${{ vars.REGISTRY_URL }} .
+          docker build \
+            --no-cache \
+            --memory=2g \
+            --cpu-period=100000 \
+            --cpu-quota=10000 \
+            -t ${{ vars.REGISTRY_URL }} .
 
   deploy:
     needs: build
-    runs-on: quality-assurance
+    runs-on: [self-hosted, linux, x64, quality-assurance]
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
