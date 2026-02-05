@@ -23,7 +23,7 @@ jobs:
             --memory=1g \
             --cpu-period=100000 \
             --cpu-quota=10000 \
-            -t ${{ vars.REGISTRY_URL }} .
+            -t ${{ vars.REGISTRY_URL }}:dev .
 
   deploy:
     needs: build
