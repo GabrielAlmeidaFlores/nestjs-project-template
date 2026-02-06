@@ -14,11 +14,13 @@ import { CreateAudienceQuestionGeneratorRequestDto } from '@module/customer/anal
 import { UpdateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/update-audience-question-generator.request.dto';
 import { CreateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator-result.response.dto';
 import { CreateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator.response.dto';
+import { GetAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/get-audience-question-generator.response.dto';
 import { UpdateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/update-audience-question-generator.response.dto';
 import { CreateAudienceQuestionGeneratorResultUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator-result.use-case';
 import { CreateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator.use-case';
 import { DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-complete-analysis.use-case';
 import { DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-simplified-analysis.use-case';
+import { GetAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/get-audience-question-generator.use-case';
 import { UpdateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -41,6 +43,7 @@ export class AudienceQuestionGeneratorController {
     private readonly updateAudienceQuestionGeneratorUseCase: UpdateAudienceQuestionGeneratorUseCase,
     private readonly downloadAudienceQuestionGeneratorCompleteAnalysisUseCase: DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase,
     private readonly downloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase: DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase,
+    private readonly getAudienceQuestionGeneratorUseCase: GetAudienceQuestionGeneratorUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -105,6 +108,39 @@ export class AudienceQuestionGeneratorController {
       sessionData,
       organizationSessionData,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter gerador de perguntas para audiência por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':audienceQuestionGeneratorId',
+      method: RequestMethod.GET,
+    },
+    tag: ['gerador-perguntas-audiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Dados do gerador de perguntas para audiência retornados com sucesso.',
+      type: GetAudienceQuestionGeneratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getAudienceQuestionGenerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'audienceQuestionGeneratorId',
+      new ParseValueObjectPipe(AudienceQuestionGeneratorId),
+    )
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+  ): Promise<GetAudienceQuestionGeneratorResponseDto> {
+    return await this.getAudienceQuestionGeneratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      audienceQuestionGeneratorId,
     );
   }
 
