@@ -151,6 +151,7 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
       retirementPlanningRgps: null,
       cnisFastAnalysis: null,
       judicialCaseAnalysis: null,
+      audienceQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       disabilityAssessmentForBpcAnalysis: null,
       specialActivity: null,

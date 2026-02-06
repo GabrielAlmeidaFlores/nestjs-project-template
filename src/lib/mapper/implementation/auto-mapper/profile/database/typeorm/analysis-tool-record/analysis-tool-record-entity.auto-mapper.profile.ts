@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
@@ -24,6 +25,7 @@ import { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/dom
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
+import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -115,6 +117,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const audienceQuestionGenerator =
+        source.audienceQuestionGenerator !== undefined
+          ? this.mapper.map(
+              source.audienceQuestionGenerator,
+              AudienceQuestionGeneratorTypeormEntity,
+              AudienceQuestionGeneratorEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -152,6 +163,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
+        audienceQuestionGenerator,
       });
     };
 
@@ -230,6 +242,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const audienceQuestionGenerator =
+        source.audienceQuestionGenerator !== null
+          ? this.mapper.map(
+              source.audienceQuestionGenerator,
+              AudienceQuestionGeneratorEntity,
+              AudienceQuestionGeneratorTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -263,6 +284,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        audienceQuestionGenerator,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,

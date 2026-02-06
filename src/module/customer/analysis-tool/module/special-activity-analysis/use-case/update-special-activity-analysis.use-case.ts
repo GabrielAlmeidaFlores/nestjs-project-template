@@ -126,6 +126,7 @@ export class UpdateSpecialActivityAnalysisUseCase {
       retirementPlanningRgps: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      audienceQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       disabilityAssessmentForBpcAnalysis: null,
       medicalQuestionGenerator: null,
