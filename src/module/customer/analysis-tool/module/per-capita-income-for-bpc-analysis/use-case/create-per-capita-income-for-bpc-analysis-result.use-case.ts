@@ -74,10 +74,22 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       );
 
-    const consumeCreditTransaction =
+    const simplifiedPromptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      );
+
+    const consumeCompleteCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
+        organizationMember.id,
+      );
+
+    const consumeSimplifiedCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
@@ -89,14 +101,8 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         PerCapitaIncomeForBpcAnalysisNotFoundError,
       );
 
-    console.log('=== ANALYSIS TOOL RECORD QUERY RESULT ===');
-    console.log(JSON.stringify(analysisToolRecordQueryResult, null, 2));
-
     const perCapitaIncomeForBpcAnalysisQueryResult =
       analysisToolRecordQueryResult.perCapitaIncomeForBpcAnalysis;
-
-    console.log('=== PER CAPITA INCOME FOR BPC ANALYSIS ===');
-    console.log(JSON.stringify(perCapitaIncomeForBpcAnalysisQueryResult, null, 2));
 
     if (perCapitaIncomeForBpcAnalysisQueryResult === null) {
       throw new PerCapitaIncomeForBpcAnalysisNotFoundError();
@@ -113,10 +119,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument;
     const documentBuffers: Buffer[] = [];
 
-    console.log('=== DOCUMENTS FROM MAIN ANALYSIS ===');
-    console.log('Documents count:', documents?.length ?? 0);
-    console.log('Documents:', JSON.stringify(documents, null, 2));
-
     if (documents !== undefined && documents !== null) {
       for (const doc of documents) {
         const buffer = await this.fileProcessorGateway.getFileBuffer(
@@ -129,10 +131,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
     // Preparar dados dos membros da família
     const familyMembers =
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember;
-
-    console.log('=== FAMILY MEMBERS ===');
-    console.log('Family members count:', familyMembers?.length ?? 0);
-    console.log('Family members:', JSON.stringify(familyMembers, null, 2));
 
     const familyMembersData =
       familyMembers !== undefined && familyMembers !== null
@@ -155,9 +153,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       for (const member of familyMembers) {
         const memberDocuments =
           member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument;
-        console.log(`=== DOCUMENTS FOR FAMILY MEMBER: ${member.fullName} ===`);
-        console.log('Documents count:', memberDocuments?.length ?? 0);
-        console.log('Documents:', JSON.stringify(memberDocuments, null, 2));
         if (memberDocuments !== undefined && memberDocuments !== null) {
           for (const doc of memberDocuments) {
             const buffer = await this.fileProcessorGateway.getFileBuffer(
@@ -177,12 +172,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       familyMemberDocumentsCount: familyMemberDocumentBuffers.length,
     };
 
-    console.log('=== CONSOLIDATED ANALYSIS DATA ===');
-    console.log('Main documents count:', documentBuffers.length);
-    console.log('Family member documents count:', familyMemberDocumentBuffers.length);
-    console.log('Total buffers being sent to IA:', 2 + documentBuffers.length + familyMemberDocumentBuffers.length);
-    console.log('Analysis data:', JSON.stringify(analysisData, null, 2));
-
     const analysisDataBuffer = Buffer.from(
       JSON.stringify(analysisData, null, 2),
       'utf-8',
@@ -200,17 +189,23 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         ],
       );
 
+    // Gerar análise simplificada via IA
+    const simplifiedAnalysis =
+      await this.analysisProcessorGateway.getPerCapitaIncomeForBpcSimplifiedAnalysis(
+        simplifiedPromptResponse.prompt,
+        [
+          analysisDataBuffer,
+          clientDataBuffer,
+          ...documentBuffers,
+          ...familyMemberDocumentBuffers,
+        ],
+      );
+
     // Criar resultado da análise
     const perCapitaIncomeForBpcAnalysisResult =
       new PerCapitaIncomeForBpcAnalysisResultEntity({
         completeAnalysis,
-        simplifiedAnalysis: null,
-        perCapitaIncomeForBpcAnalysis: new PerCapitaIncomeForBpcAnalysisEntity({
-          id: perCapitaIncomeForBpcAnalysisQueryResult.id,
-          perCapitaIncomeForBpcAnalysisResult: null,
-          createdBy: analysisToolRecordQueryResult.createdBy.id,
-          updatedBy: analysisToolRecordQueryResult.updatedBy.id,
-        }),
+        simplifiedAnalysis,
       });
 
     const perCapitaIncomeForBpcAnalysis =
@@ -264,23 +259,32 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       );
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
+      consumeCompleteCreditTransaction,
+      consumeSimplifiedCreditTransaction,
       createPerCapitaIncomeForBpcAnalysisResultTransaction,
       updatePerCapitaIncomeForBpcAnalysisTransaction,
       updateAnalysisToolRecordTransaction,
     ]);
     await transaction.commit();
 
-    const analysisAsHtml =
+    const completeAnalysisAsHtml =
       perCapitaIncomeForBpcAnalysisResult.completeAnalysis !== null
         ? await this.exportDocumentGateway.convertMarkdownToHtml(
             perCapitaIncomeForBpcAnalysisResult.completeAnalysis,
           )
         : null;
 
+    const simplifiedAnalysisAsHtml =
+      perCapitaIncomeForBpcAnalysisResult.simplifiedAnalysis !== null
+        ? await this.exportDocumentGateway.convertMarkdownToHtml(
+            perCapitaIncomeForBpcAnalysisResult.simplifiedAnalysis,
+          )
+        : null;
+
     return CreatePerCapitaIncomeForBpcAnalysisResultResponseDto.build({
       ...perCapitaIncomeForBpcAnalysisResult,
-      completeAnalysis: analysisAsHtml,
+      completeAnalysis: completeAnalysisAsHtml,
+      simplifiedAnalysis: simplifiedAnalysisAsHtml,
     });
   }
 }

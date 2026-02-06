@@ -8,6 +8,9 @@ import { PerCapitaIncomeForBpcAnalysisController } from '@module/customer/analys
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-family-member.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisResultUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-result.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis.use-case';
+import { DownloadPerCapitaIncomeForBpcCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/download-per-capita-income-for-bpc-complete-analysis.use-case';
+import { DownloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/download-per-capita-income-for-bpc-simplified-analysis.use-case';
+import { GetPerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/get-per-capita-income-for-bpc-analysis.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -31,6 +34,9 @@ import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/
     CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase,
     CreatePerCapitaIncomeForBpcAnalysisResultUseCase,
     UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase,
+    GetPerCapitaIncomeForBpcAnalysisUseCase,
+    DownloadPerCapitaIncomeForBpcCompleteAnalysisUseCase,
+    DownloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase,
   ],
   exports: [],
 })

@@ -3,16 +3,20 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-benefit.entity';
 import { PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-document.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-family-member.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-legal-proceeding.entity';
 import { PerCapitaIncomeForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-result.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { PerCapitaIncomeForBpcAnalysisBenefitEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-benefit/per-capita-income-for-bpc-analysis-benefit.entity';
 import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/per-capita-income-for-bpc-analysis-family-member.entity';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.entity';
 import { PerCapitaIncomeForBpcAnalysisResultEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-result/per-capita-income-for-bpc-analysis-result.entity';
 
 @Injectable()
@@ -62,10 +66,25 @@ export class GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResultAutoMapperP
         GetOrganizationMemberWithCustomerRelationQueryResult,
       );
 
-      const perCapitaIncomeForBpcAnalysisFamilyMember = this.mapper.mapArray(
-        source.perCapitaIncomeForBpcAnalysisFamilyMember ?? [],
-        PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
-        PerCapitaIncomeForBpcAnalysisFamilyMemberEntity,
+      const perCapitaIncomeForBpcAnalysisFamilyMember = (source.perCapitaIncomeForBpcAnalysisFamilyMember ?? []).map(
+        (familyMember) => {
+          const mappedFamilyMember = this.mapper.map(
+            familyMember,
+            PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
+            PerCapitaIncomeForBpcAnalysisFamilyMemberEntity,
+          ) as PerCapitaIncomeForBpcAnalysisFamilyMemberEntity & {
+            perCapitaIncomeForBpcAnalysisFamilyMemberDocument?: Array<{ document: string }>;
+          };
+
+          if (familyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument) {
+            mappedFamilyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument =
+              familyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument.map(
+                (doc) => ({ document: doc.document }),
+              );
+          }
+
+          return mappedFamilyMember;
+        },
       );
 
       const perCapitaIncomeForBpcAnalysisDocument = this.mapper.mapArray(
@@ -74,14 +93,34 @@ export class GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResultAutoMapperP
         PerCapitaIncomeForBpcAnalysisDocumentEntity,
       );
 
+      const perCapitaIncomeForBpcAnalysisBenefit = source.perCapitaIncomeForBpcAnalysisBenefit
+        ? this.mapper.mapArray(
+            source.perCapitaIncomeForBpcAnalysisBenefit,
+            PerCapitaIncomeForBpcAnalysisBenefitTypeormEntity,
+            PerCapitaIncomeForBpcAnalysisBenefitEntity,
+          )
+        : undefined;
+
+      const perCapitaIncomeForBpcAnalysisLegalProceeding = source.perCapitaIncomeForBpcAnalysisLegalProceeding
+        ? this.mapper.mapArray(
+            source.perCapitaIncomeForBpcAnalysisLegalProceeding,
+            PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity,
+            PerCapitaIncomeForBpcAnalysisLegalProceedingEntity,
+          )
+        : undefined;
+
       return GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult.build({
-        ...source,
         id: new PerCapitaIncomeForBpcAnalysisId(source.id),
         perCapitaIncomeForBpcAnalysisResult,
         createdBy,
         updatedBy,
         perCapitaIncomeForBpcAnalysisFamilyMember,
         perCapitaIncomeForBpcAnalysisDocument,
+        ...(perCapitaIncomeForBpcAnalysisBenefit !== undefined && { perCapitaIncomeForBpcAnalysisBenefit }),
+        ...(perCapitaIncomeForBpcAnalysisLegalProceeding !== undefined && { perCapitaIncomeForBpcAnalysisLegalProceeding }),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
