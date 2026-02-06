@@ -23,8 +23,8 @@ export class CreateRuralTimelineAnalysisPeriodFamilyGroupMemberRequestDto extend
   @RequestDtoBooleanProperty()
   public receivesRuralBenefit: boolean;
 
-  @RequestDtoStringProperty()
-  public benefitNumber: string;
+  @RequestDtoStringProperty({ required: false })
+  public benefitNumber?: string;
 
   @RequestDtoObjectProperty(() => Base64FileRequestDto, { required: false })
   public cnisDocument?: Base64FileRequestDto;
