@@ -15,6 +15,9 @@ import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cn
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
+import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
+import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
+import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
@@ -76,6 +79,7 @@ import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
 import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
 import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
+import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
 import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
 import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
 import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
@@ -104,11 +108,14 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CnisProcessorModule,
     GenerativeIaModule,
     CnisFastAnalysisModule,
+    SpecialActivityAnalysisModule,
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
+    MedicalQuestionGeneratorModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
     SpeechGeneratorModule,
     DisabilityAssessmentForBpcAnalysisModule,
+    RuralTimelineAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
@@ -117,6 +124,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateAnalysisToolClientUseCase,
     DeleteAnalysisToolClientUseCase,
     CreateLegalPleadingUseCase,
+    UpdateLegalPleadingUseCase,
     CreateLegalPleadingResultUseCase,
     ListAnalysisToolRecordUseCase,
     GetLegalPleadingUseCase,

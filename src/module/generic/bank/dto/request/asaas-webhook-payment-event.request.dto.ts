@@ -137,8 +137,8 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty()
   public invoiceNumber: string;
 
-  @RequestDtoStringProperty()
-  public externalReference: string;
+  @RequestDtoStringProperty({ required: false })
+  public externalReference?: string;
 
   @RequestDtoBooleanProperty()
   public deleted: boolean;

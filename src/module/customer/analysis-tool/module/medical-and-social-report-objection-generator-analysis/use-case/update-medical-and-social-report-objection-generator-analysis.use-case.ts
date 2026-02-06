@@ -132,6 +132,8 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
       speechGenerator: null,
+      medicalQuestionGenerator: null,
+      specialActivity: null,
     });
 
     const transactions: TransactionType[] = [];

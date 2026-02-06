@@ -27,6 +27,17 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getSpecialActivityCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    asJson?: boolean,
+  ): Promise<string | null>;
+
+  public abstract getSpecialActivitySimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract validateCnisDocument(cnisDocument: Buffer): Promise<boolean>;
 
   public abstract parseCnisDocument(cnisDocument: Buffer): Promise<CnisModel>;
@@ -52,6 +63,16 @@ export abstract class AnalysisProcessorGateway {
   ): Promise<string | null>;
 
   public abstract getAdministrativeProcedureInssAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMedicalQuestionGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getMedicalQuestionGeneratorSimplifiedAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;

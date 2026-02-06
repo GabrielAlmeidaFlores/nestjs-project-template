@@ -238,8 +238,10 @@ export class CreateRetirementPlanningRgpsResultUseCase {
       createdBy: analysisRecord.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: retirementPlanningRgpsEntity,
+      specialActivity: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       speechGenerator: null,
     });

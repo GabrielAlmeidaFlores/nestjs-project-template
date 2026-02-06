@@ -270,7 +270,7 @@ export class GeminiService implements GenerativeIaGateway {
       callCount++;
     }
 
-    return 'Maximum function call limit reached. Please try again with a simpler query.';
+    return 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.';
   }
 
   private async buildPartWithFileContent(
