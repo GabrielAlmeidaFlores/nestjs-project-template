@@ -15,6 +15,32 @@ export class LoggingInterceptor implements NestInterceptor {
   private static readonly MAX_RESPONSE_LOG_LENGTH = 1000;
   private static readonly MAX_STACK_LOG_LENGTH = 500;
   private static readonly MAX_ARRAY_DISPLAY_LENGTH = 10;
+  private static readonly SENSITIVE_FIELDS = [
+    'password',
+    'senha',
+    'token',
+    'accessToken',
+    'refreshToken',
+    'access_token',
+    'refresh_token',
+    'secret',
+    'apiKey',
+    'api_key',
+    'authorization',
+    'auth',
+    'cookie',
+    'creditCard',
+    'credit_card',
+    'cardNumber',
+    'card_number',
+    'cvv',
+    'cpf',
+    'cnpj',
+    'rg',
+    'ssn',
+    'privateKey',
+    'private_key',
+  ];
 
   protected readonly _type = LoggingInterceptor.name;
   private readonly logger = new Logger(LoggingInterceptor.name);
@@ -34,6 +60,10 @@ export class LoggingInterceptor implements NestInterceptor {
     const paramsObj = params as Record<string, unknown>;
     const queryObj = query as Record<string, unknown>;
     const bodyObj = body as Record<string, unknown> | undefined;
+
+    const sanitizedParams = this.sanitizeData(paramsObj);
+    const sanitizedQuery = this.sanitizeData(queryObj);
+    const sanitizedBody = this.sanitizeData(bodyObj);
 
     const hasParams = Object.keys(paramsObj).length > 0;
     const hasQuery = Object.keys(queryObj).length > 0;
@@ -64,14 +94,17 @@ export class LoggingInterceptor implements NestInterceptor {
 
           this.logger.log(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📥 REQUEST | 📤 RESPONSE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📥 REQUEST
+
 🔹 Method: ${method}
 🔹 URL: ${url}
 🔹 IP: ${ip}
-🔹 User-Agent: ${userAgent}${hasParams ? `\n🔹 Params: ${JSON.stringify(paramsObj, null, 2)}` : ''}${hasQuery ? `\n🔹 Query: ${JSON.stringify(queryObj, null, 2)}` : ''}${hasBody ? `\n🔹 Body: ${JSON.stringify(this.sanitizeBody(bodyObj), null, 2)}` : ''}
+🔹 User-Agent: ${userAgent}${hasParams ? `\n🔹 Params: ${JSON.stringify(sanitizedParams, null, 2)}` : ''}${hasQuery ? `\n🔹 Query: ${JSON.stringify(sanitizedQuery, null, 2)}` : ''}${hasBody ? `\n🔹 Body: ${JSON.stringify(sanitizedBody, null, 2)}` : ''}
+
+📤 RESPONSE
+
 🔹 Status: ${statusCode}
-🔹 Duration: ${duration}ms${hasResponse ? `\n🔹 Response: ${truncatedResponse}${isTruncated ? '... (truncated)' : ''}` : ''}
+🔹 Duration: ${duration}ms${hasResponse ? `\n🔹 Response:\n${truncatedResponse}${isTruncated ? '\n... (truncated)' : ''}` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           `);
         },
@@ -88,12 +121,15 @@ export class LoggingInterceptor implements NestInterceptor {
 
           this.logger.error(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📥 REQUEST | ❌ ERROR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📥 REQUEST
+
 🔹 Method: ${method}
 🔹 URL: ${url}
 🔹 IP: ${ip}
-🔹 User-Agent: ${userAgent}${hasParams ? `\n🔹 Params: ${JSON.stringify(paramsObj, null, 2)}` : ''}${hasQuery ? `\n🔹 Query: ${JSON.stringify(queryObj, null, 2)}` : ''}${hasBody ? `\n🔹 Body: ${JSON.stringify(this.sanitizeBody(bodyObj), null, 2)}` : ''}
+🔹 User-Agent: ${userAgent}${hasParams ? `\n🔹 Params: ${JSON.stringify(sanitizedParams, null, 2)}` : ''}${hasQuery ? `\n🔹 Query: ${JSON.stringify(sanitizedQuery, null, 2)}` : ''}${hasBody ? `\n🔹 Body: ${JSON.stringify(sanitizedBody, null, 2)}` : ''}
+
+❌ ERROR
+
 🔹 Duration: ${duration}ms
 🔹 Error: ${error.message}
 🔹 Stack: ${stackTrace}
@@ -104,45 +140,64 @@ export class LoggingInterceptor implements NestInterceptor {
     );
   }
 
-  private sanitizeBody(body: unknown): unknown {
-    if (typeof body !== 'object' || body === null) {
-      return body;
+  /**
+   * Sanitiza dados sensíveis de forma recursiva
+   */
+  private sanitizeData(data: unknown): unknown {
+    if (typeof data !== 'object' || data === null) {
+      return data;
     }
 
-    const sanitized = { ...body } as Record<string, unknown>;
-    const sensitiveFields = [
-      'password',
-      'token',
-      'secret',
-      'apiKey',
-      'authorization',
-    ];
+    if (Array.isArray(data)) {
+      return data.map((item) => this.sanitizeData(item));
+    }
 
-    for (const field of sensitiveFields) {
-      if (field in sanitized) {
-        sanitized[field] = '***REDACTED***';
+    const sanitized: Record<string, unknown> = {};
+
+    for (const [key, value] of Object.entries(data)) {
+      const keyLower = key.toLowerCase();
+
+      // Verifica se o campo é sensível (mas ignora IDs)
+      const isId = keyLower.endsWith('id');
+      const isSensitive =
+        !isId &&
+        LoggingInterceptor.SENSITIVE_FIELDS.some((field) =>
+          keyLower.includes(field.toLowerCase()),
+        );
+
+      if (isSensitive) {
+        sanitized[key] = '***';
+      } else if (typeof value === 'object' && value !== null) {
+        sanitized[key] = this.sanitizeData(value);
+      } else {
+        sanitized[key] = value;
       }
     }
 
     return sanitized;
   }
 
+  /**
+   * Sanitiza response para não logar dados muito grandes
+   */
   private sanitizeResponse(data: unknown): unknown {
-    if (typeof data !== 'object' || data === null) {
-      return data;
+    const sanitized = this.sanitizeData(data);
+
+    if (typeof sanitized !== 'object' || sanitized === null) {
+      return sanitized;
     }
 
-    const sanitized = { ...data } as Record<string, unknown>;
+    const result = { ...sanitized } as Record<string, unknown>;
 
-    for (const [key, value] of Object.entries(sanitized)) {
+    for (const [key, value] of Object.entries(result)) {
       if (
         Array.isArray(value) &&
         value.length > LoggingInterceptor.MAX_ARRAY_DISPLAY_LENGTH
       ) {
-        sanitized[key] = `[Array with ${value.length} items]`;
+        result[key] = `[Array with ${value.length} items]`;
       }
     }
 
-    return sanitized;
+    return result;
   }
 }
