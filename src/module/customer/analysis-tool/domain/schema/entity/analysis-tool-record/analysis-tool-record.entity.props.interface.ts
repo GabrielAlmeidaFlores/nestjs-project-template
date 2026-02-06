@@ -9,6 +9,7 @@ import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-too
 import type { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import type { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
+import type { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -28,6 +29,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   medicalQuestionGenerator?: MedicalQuestionGeneratorEntity | null;
   medicalAndSocialReportObjectionGeneratorAnalysis?: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
   disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisEntity | null;
+  audienceQuestionGenerator?: AudienceQuestionGeneratorEntity | null;
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;

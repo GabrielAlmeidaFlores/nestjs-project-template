@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
+import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
@@ -118,6 +119,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'disability_assessment_for_bpc_analysis_id' })
   public disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => AudienceQuestionGeneratorTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'audience_question_generator_id' })
+  public audienceQuestionGenerator?: AudienceQuestionGeneratorTypeormEntity | null;
 
   @OneToOne(
     () => RuralTimelineAnalysisTypeormEntity,

@@ -11,6 +11,7 @@ import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.module';
+import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
@@ -110,6 +111,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     SpecialActivityAnalysisModule,
     JudicialCaseAnalysisModule,
     AdministrativeProcedureInssAnalysisModule,
+    AudienceQuestionGeneratorModule,
     MedicalQuestionGeneratorModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
     DisabilityAssessmentForBpcAnalysisModule,

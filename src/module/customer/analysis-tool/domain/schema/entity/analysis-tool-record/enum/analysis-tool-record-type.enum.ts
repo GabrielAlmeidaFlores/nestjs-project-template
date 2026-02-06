@@ -9,4 +9,5 @@ export enum AnalysisToolRecordTypeEnum {
   MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS = 'analise_geradora_objeção_laudo_medico_social',
   DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS = 'avaliacao_deficiencia_para_bpc',
   RURAL_TIMELINE_ANALYSIS = 'analise_linha_tempo_rural',
+  AUDIENCE_QUESTION_GENERATOR = 'gerador_perguntas_audiencia',
 }
