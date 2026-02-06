@@ -49,8 +49,6 @@ export class PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormCommandRepository
   public deletePerCapitaIncomeForBpcAnalysisFamilyMember(
     id: PerCapitaIncomeForBpcAnalysisFamilyMemberId,
   ): TransactionType {
-    return this.update(id.toString(), {
-      deletedAt: new Date(),
-    });
+    return this.delete(id.toString());
   }
 }

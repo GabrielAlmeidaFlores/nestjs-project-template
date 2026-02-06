@@ -14,6 +14,7 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntity } from '@module
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis-family-member.request.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis-family-member.response.dto';
 import { PerCapitaIncomeForBpcAnalysisNotFoundError } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/error/per-capita-income-for-bpc-analysis-not-found.error';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -43,6 +44,7 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     dto: CreatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto,
   ): Promise<CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto> {
     const organizationMember =
@@ -57,7 +59,7 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        dto.perCapitaIncomeForBpcAnalysisId,
+        perCapitaIncomeForBpcAnalysisId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         PerCapitaIncomeForBpcAnalysisNotFoundError,
@@ -78,8 +80,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
       });
 
     const transactions: TransactionType[] = [];
-    const familyMembersEntities: PerCapitaIncomeForBpcAnalysisFamilyMemberEntity[] =
-      [];
 
     for (const familyMemberDto of dto.familyMembers) {
       const familyMemberEntity =
@@ -94,13 +94,13 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
           perCapitaIncomeForBpcAnalysis,
         });
 
-      familyMembersEntities.push(familyMemberEntity);
+      transactions.push(
+        this.perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisFamilyMember(
+          familyMemberEntity,
+        ),
+      );
 
-      // Processar documentos se existirem
       if (familyMemberDto.documents && familyMemberDto.documents.length > 0) {
-        const documentEntities: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntity[] =
-          [];
-
         for (const documentDto of familyMemberDto.documents) {
           const fileBuffer = Buffer.from(
             documentDto.document.base64.toString(),
@@ -124,27 +124,22 @@ export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
               perCapitaIncomeForBpcAnalysisFamilyMember: familyMemberEntity,
             });
 
-          documentEntities.push(documentEntity);
-        }
-
-        const createDocumentsTransaction =
-          this.perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway.createManyPerCapitaIncomeForBpcAnalysisFamilyMemberDocument(
-            documentEntities,
+          transactions.push(
+            this.perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisFamilyMemberDocument(
+              documentEntity,
+            ),
           );
-
-        transactions.push(...createDocumentsTransaction);
+        }
       }
     }
 
-    const createFamilyMembersTransaction =
-      this.perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway.createManyPerCapitaIncomeForBpcAnalysisFamilyMember(
-        familyMembersEntities,
-      );
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactions,
+    );
+    await transaction.commit();
 
-    transactions.push(...createFamilyMembersTransaction);
-
-    await this.baseTransactionRepositoryGateway.execute(transactions);
-
-    return CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.build({});
+    return CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.build({
+      perCapitaIncomeForBpcAnalysisId: perCapitaIncomeForBpcAnalysis.id,
+    });
   }
 }

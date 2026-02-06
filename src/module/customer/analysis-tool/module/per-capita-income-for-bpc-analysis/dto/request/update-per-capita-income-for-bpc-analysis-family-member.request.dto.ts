@@ -1,7 +1,5 @@
-import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/enum/per-capita-income-for-bpc-analysis-family-member-income-type.enum';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberKinshipEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/enum/per-capita-income-for-bpc-analysis-family-member-kinship.enum';
-import { PerCapitaIncomeForBpcAnalysisFamilyMemberId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/value-object/per-capita-income-for-bpc-analysis-family-member-id/per-capita-income-for-bpc-analysis-family-member-id.value-object';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member-document/enum/per-capita-income-for-bpc-analysis-family-member-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -10,7 +8,6 @@ import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-
 import { RequestDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-number-property/request-dto-number-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
-import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
@@ -33,28 +30,23 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberDocumentRequestDto e
 
 @RequestDto()
 export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberItemRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(PerCapitaIncomeForBpcAnalysisFamilyMemberId, {
-    required: false,
-  })
-  public readonly familyMemberId?: PerCapitaIncomeForBpcAnalysisFamilyMemberId;
+  @RequestDtoStringProperty({ required: true })
+  public readonly fullName: string;
 
-  @RequestDtoStringProperty({ required: false })
-  public readonly fullName?: string;
-
-  @RequestDtoDateProperty({ required: false })
-  public readonly birthDate?: Date;
+  @RequestDtoDateProperty({ required: true })
+  public readonly birthDate: Date;
 
   @RequestDtoEnumProperty(
     PerCapitaIncomeForBpcAnalysisFamilyMemberKinshipEnum,
-    { required: false },
+    { required: true },
   )
-  public readonly kinship?: PerCapitaIncomeForBpcAnalysisFamilyMemberKinshipEnum;
+  public readonly kinship: PerCapitaIncomeForBpcAnalysisFamilyMemberKinshipEnum;
 
-  @RequestDtoBooleanProperty({ required: false })
-  public readonly livesInSameResidence?: boolean;
+  @RequestDtoBooleanProperty({ required: true })
+  public readonly livesInSameResidence: boolean;
 
-  @RequestDtoBooleanProperty({ required: false })
-  public readonly hasIncome?: boolean;
+  @RequestDtoBooleanProperty({ required: true })
+  public readonly hasIncome: boolean;
 
   @RequestDtoNumberProperty({ required: false })
   public readonly monthlyIncomeAmount?: number;
@@ -80,9 +72,6 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberItemRequestDto exten
 
 @RequestDto()
 export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(PerCapitaIncomeForBpcAnalysisId)
-  public readonly perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId;
-
   @RequestDtoObjectProperty(
     () => UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberItemRequestDto,
     {
