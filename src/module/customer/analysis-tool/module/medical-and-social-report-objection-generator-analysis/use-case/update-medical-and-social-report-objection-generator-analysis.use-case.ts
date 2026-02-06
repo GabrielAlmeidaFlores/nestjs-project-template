@@ -119,20 +119,26 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdAt: analysisToolRecordQueryResult.createdAt,
+      updatedAt: analysisToolRecordQueryResult.updatedAt,
+      deletedAt: analysisToolRecordQueryResult.deletedAt,
       medicalAndSocialReportObjectionGeneratorAnalysis,
       analysisToolClient,
-      disabilityAssessmentForBpcAnalysis: null,
-      status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       cnisFastAnalysis: null,
-      retirementPlanningRgps: null,
       retirementPlanningRpps: null,
+      retirementPlanningRgps: null,
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
       medicalQuestionGenerator: null,
       specialActivity: null,
+      disabilityAssessmentForBpcAnalysis: null,
+      ruralTimelineAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];
