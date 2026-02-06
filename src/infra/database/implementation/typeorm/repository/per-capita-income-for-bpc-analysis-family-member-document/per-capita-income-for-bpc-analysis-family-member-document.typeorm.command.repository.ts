@@ -8,6 +8,7 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity } from '
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member-document/command/per-capita-income-for-bpc-analysis-family-member-document.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document.entity';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member-document/value-object/per-capita-income-for-bpc-analysis-family-member-document-id/per-capita-income-for-bpc-analysis-family-member-document-id.value-object';
 
 @Injectable()
 export class PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepository
@@ -46,5 +47,11 @@ export class PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormCommandRepo
     return props.map((item) =>
       this.createPerCapitaIncomeForBpcAnalysisFamilyMemberDocument(item),
     );
+  }
+
+  public deletePerCapitaIncomeForBpcAnalysisFamilyMemberDocument(
+    id: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

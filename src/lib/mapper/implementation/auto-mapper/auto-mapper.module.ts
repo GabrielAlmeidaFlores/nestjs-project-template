@@ -140,8 +140,15 @@ import { PaymentPlanEnabledPaidResourceToEnabledQueryResultAutoMapperProfile } f
 import { PaymentPlanPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/payment-plan-paid-resource-entity.auto-mapper.profile';
 import { GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/get-payment-plan-paid-resource-ia-config-with-relations-query-result.auto-mapper.profile';
 import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config-entity.auto-mapper.profile';
+import { GetPerCapitaIncomeForBpcAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis/get-per-capita-income-for-bpc-analysis-query-result.auto-mapper.profile';
+import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis/get-per-capita-income-for-bpc-analysis-with-relations-query-result.auto-mapper.profile';
 import { PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis-entity.auto-mapper.profile';
+import { GetPerCapitaIncomeForBpcAnalysisBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-benefit/get-per-capita-income-for-bpc-analysis-benefit-query-result.auto-mapper.profile';
 import { PerCapitaIncomeForBpcAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document-entity.auto-mapper.profile';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-family-member/per-capita-income-for-bpc-analysis-family-member-entity.auto-mapper.profile';
+import { GetPerCapitaIncomeForBpcAnalysisFamilyMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-family-member/get-per-capita-income-for-bpc-analysis-family-member-query-result.auto-mapper.profile';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-family-member-document/per-capita-income-for-bpc-analysis-family-member-document-entity.auto-mapper.profile';
+import { GetPerCapitaIncomeForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/per-capita-income-for-bpc-analysis-legal-proceeding/get-per-capita-income-for-bpc-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRgpsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-query-result.auto-mapper.profile';
 import { GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/get-retirement-planning-rgps-with-relations-query-result.auto-mapper.profile';
 import { RetirementPlanningRgpsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rgps/retirement-planning-rgps-entity.auto-mapper.profile';
@@ -353,7 +360,14 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile,
+    GetPerCapitaIncomeForBpcAnalysisQueryResultAutoMapperProfile,
+    GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResultAutoMapperProfile,
+    GetPerCapitaIncomeForBpcAnalysisBenefitQueryResultAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisDocumentEntityAutoMapperProfile,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberEntityAutoMapperProfile,
+    GetPerCapitaIncomeForBpcAnalysisFamilyMemberQueryResultAutoMapperProfile,
+    PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntityAutoMapperProfile,
+    GetPerCapitaIncomeForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile,
     JudicialCaseAnalysisEntityAutoMapperProfile,
     GetJudicialCaseAnalysisQueryResultAutoMapperProfile,
     GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile,

@@ -6,8 +6,8 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/per-capita-income-for-bpc-analysis.query.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member/command/per-capita-income-for-bpc-analysis-family-member.command.repository.gateway';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member/query/per-capita-income-for-bpc-analysis-family-member.query.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-family-member-document/command/per-capita-income-for-bpc-analysis-family-member-document.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/per-capita-income-for-bpc-analysis-family-member.entity';
@@ -15,6 +15,7 @@ import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntity } from '@module
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/update-per-capita-income-for-bpc-analysis-family-member.request.dto';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis-family-member.response.dto';
 import { PerCapitaIncomeForBpcAnalysisNotFoundError } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/error/per-capita-income-for-bpc-analysis-not-found.error';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -29,8 +30,8 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
-    @Inject(PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway)
-    private readonly perCapitaIncomeForBpcAnalysisQueryRepositoryGateway: PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway,
+    @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway)
+    private readonly perCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway,
     @Inject(PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway)
     private readonly perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway,
     @Inject(
@@ -46,6 +47,7 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
   public async execute(
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     dto: UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto,
   ): Promise<UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto> {
     const organizationMember =
@@ -60,7 +62,7 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
 
     const analysisToolRecordQueryResult =
       await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-        dto.perCapitaIncomeForBpcAnalysisId,
+        perCapitaIncomeForBpcAnalysisId,
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         PerCapitaIncomeForBpcAnalysisNotFoundError,
@@ -73,12 +75,20 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
       throw new PerCapitaIncomeForBpcAnalysisNotFoundError();
     }
 
-    const perCapitaIncomeForBpcAnalysisWithDetails =
-      await this.perCapitaIncomeForBpcAnalysisQueryRepositoryGateway.findOneByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdOrFail(
-        dto.perCapitaIncomeForBpcAnalysisId,
-        organizationSessionData.organizationId,
-        PerCapitaIncomeForBpcAnalysisNotFoundError,
+    const currentFamilyMembers =
+      await this.perCapitaIncomeForBpcAnalysisFamilyMemberQueryRepositoryGateway.findByPerCapitaIncomeForBpcAnalysisId(
+        perCapitaIncomeForBpcAnalysisId,
       );
+
+    const transactionOperations: TransactionType[] = [];
+
+    for (const currentFamilyMember of currentFamilyMembers) {
+      transactionOperations.push(
+        this.perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway.deletePerCapitaIncomeForBpcAnalysisFamilyMember(
+          currentFamilyMember.id,
+        ),
+      );
+    }
 
     const perCapitaIncomeForBpcAnalysis =
       new PerCapitaIncomeForBpcAnalysisEntity({
@@ -87,32 +97,7 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
         updatedBy: organizationMember.id,
       });
 
-    const transactions: TransactionType[] = [];
-
-    // Deletar todos os family members existentes
-    const existingFamilyMembers =
-      perCapitaIncomeForBpcAnalysisWithDetails.perCapitaIncomeForBpcAnalysisFamilyMember;
-
-    for (const existingMember of existingFamilyMembers) {
-      const deleteTransaction =
-        this.perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway.deletePerCapitaIncomeForBpcAnalysisFamilyMember(
-          existingMember.id,
-        );
-      transactions.push(deleteTransaction);
-    }
-
-    // Criar novos family members
     for (const familyMemberDto of dto.familyMembers) {
-      if (
-        familyMemberDto.fullName === undefined ||
-        familyMemberDto.birthDate === undefined ||
-        familyMemberDto.kinship === undefined ||
-        familyMemberDto.livesInSameResidence === undefined ||
-        familyMemberDto.hasIncome === undefined
-      ) {
-        continue;
-      }
-
       const familyMemberEntity =
         new PerCapitaIncomeForBpcAnalysisFamilyMemberEntity({
           fullName: familyMemberDto.fullName,
@@ -125,17 +110,13 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
           perCapitaIncomeForBpcAnalysis,
         });
 
-      const createTransaction =
+      transactionOperations.push(
         this.perCapitaIncomeForBpcAnalysisFamilyMemberCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisFamilyMember(
           familyMemberEntity,
-        );
-      transactions.push(createTransaction);
+        ),
+      );
 
-      // Processar documentos se existirem
       if (familyMemberDto.documents && familyMemberDto.documents.length > 0) {
-        const documentEntities: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntity[] =
-          [];
-
         for (const documentDto of familyMemberDto.documents) {
           const fileBuffer = Buffer.from(
             documentDto.document.base64.toString(),
@@ -159,20 +140,23 @@ export class UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase {
               perCapitaIncomeForBpcAnalysisFamilyMember: familyMemberEntity,
             });
 
-          documentEntities.push(documentEntity);
-        }
-
-        const createDocumentsTransaction =
-          this.perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway.createManyPerCapitaIncomeForBpcAnalysisFamilyMemberDocument(
-            documentEntities,
+          transactionOperations.push(
+            this.perCapitaIncomeForBpcAnalysisFamilyMemberDocumentCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisFamilyMemberDocument(
+              documentEntity,
+            ),
           );
-
-        transactions.push(...createDocumentsTransaction);
+        }
       }
     }
 
-    await this.baseTransactionRepositoryGateway.execute(transactions);
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionOperations,
+    );
 
-    return UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.build({});
+    await transaction.commit();
+
+    return UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.build({
+      perCapitaIncomeForBpcAnalysisId,
+    });
   }
 }
