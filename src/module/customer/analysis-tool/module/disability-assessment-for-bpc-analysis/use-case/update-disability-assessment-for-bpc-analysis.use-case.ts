@@ -193,11 +193,7 @@ export class UpdateDisabilityAssessmentForBpcAnalysisUseCase {
 
     if (dto.medicalAndSocialDocuments !== undefined) {
       const currentMedicalAndSocialDocuments =
-        disabilityAssessmentForBpcAnalysisQueryResult.disabilityAssessmentForBpcAnalysisDocument.filter(
-          (value) =>
-            value.type ===
-            DisabilityAssessmentForBpcAnalysisDocumentTypeEnum.MEDICAL_AND_SOCIAL_DOCUMENTS,
-        );
+        disabilityAssessmentForBpcAnalysisQueryResult.disabilityAssessmentForBpcAnalysisDocument;
 
       const medicalAndSocialDocumentsTransactions =
         await this.updateMedicalAndSocialDocumentsOnDatabase(

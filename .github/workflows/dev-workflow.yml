@@ -1,0 +1,51 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ['develop-2']
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: /workspace/container/docker/dev/agiliza-previ/agiliza-previ-back
+
+jobs:
+
+  build:
+    runs-on: [self-hosted, linux, x64, development]
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐳 Build Docker Image (limited resources)
+        run: |
+          docker build \
+            --no-cache \
+            --memory=1g \
+            --cpu-period=100000 \
+            --cpu-quota=10000 \
+            -t ${{ vars.REGISTRY_URL }}:dev .
+
+  deploy:
+    needs: build
+    runs-on: [self-hosted, linux, x64, development]
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Extract App Version
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: ⚙️ SSH - Update Container Environment Variables
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo -e '${{ vars.DEV_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+
+      - name: 🛑 SSH - Stop Old Docker Container
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh || true
+
+      - name: 🚀 SSH - Start New Docker Container
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          bash ${{ env.WORKING_DIRECTORY }}/start.container.sh

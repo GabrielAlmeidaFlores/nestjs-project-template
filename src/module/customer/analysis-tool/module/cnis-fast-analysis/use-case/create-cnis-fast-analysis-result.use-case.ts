@@ -210,8 +210,10 @@ export class CreateCnisFastAnalysisResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      specialActivity: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       speechGenerator: null,
     });

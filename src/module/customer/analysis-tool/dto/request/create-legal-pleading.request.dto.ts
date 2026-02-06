@@ -126,6 +126,9 @@ export class CreateLegalPleadingRequestDto extends BaseBuildableDtoObject {
   public relatedCourtCase?: FileModel[];
 
   @RequestDtoFileProperty({ isArray: true, required: false })
+  public judicialProcesses?: FileModel[];
+
+  @RequestDtoFileProperty({ isArray: true, required: false })
   public supportingDocument?: FileModel[];
 
   @RequestDtoObjectProperty(() => CreateLegalPleadingDataRequestDto)
