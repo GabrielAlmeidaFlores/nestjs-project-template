@@ -225,7 +225,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseD
 }
 
 @ResponseDto()
-export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends BaseBuildableDtoObject {
+export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public employmentRelationshipSource?: string;
 
@@ -263,7 +263,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends B
   public underMinimumPeriods?: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto[];
 
   protected override readonly _type =
-    GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.name;
+    RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.name;
 }
 
 @ResponseDto()
@@ -356,10 +356,10 @@ export class GetRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject 
   public cnisDocuments?: GetRuralTimelineAnalysisDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(
-    () => GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
+    () => RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto,
     { isArray: true, required: false },
   )
-  public cnisContributionPeriods?: GetRuralTimelineAnalysisCnisContributionPeriodResponseDto[];
+  public cnisContributionPeriods?: RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto[];
 
   @ResponseDtoObjectProperty(
     () => GetRuralTimelineAnalysisResponsibleResponseDto,

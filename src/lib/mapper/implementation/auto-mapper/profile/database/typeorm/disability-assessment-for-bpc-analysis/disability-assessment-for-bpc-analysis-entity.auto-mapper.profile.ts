@@ -43,7 +43,7 @@ export class DisabilityAssessmentForBpcAnalysisEntityAutoMapperProfile {
       }
 
       const disabilityAssessmentForBpcAnalysisResult =
-        source.disabilityAssessmentForBpcAnalysisResult !== null
+        source.disabilityAssessmentForBpcAnalysisResult !== undefined
           ? this.mapper.map(
               source.disabilityAssessmentForBpcAnalysisResult,
               DisabilityAssessmentForBpcAnalysisResultTypeormEntity,
