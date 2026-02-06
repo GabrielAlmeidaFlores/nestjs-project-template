@@ -3,14 +3,23 @@ import {
   HttpStatus,
   Body,
   Param,
+  Query,
+  ParseEnumPipe,
+  StreamableFile,
 } from '@nestjs/common';
 
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CreateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/create-audience-question-generator.request.dto';
+import { UpdateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/update-audience-question-generator.request.dto';
 import { CreateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator-result.response.dto';
 import { CreateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator.response.dto';
+import { UpdateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/update-audience-question-generator.response.dto';
 import { CreateAudienceQuestionGeneratorResultUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator-result.use-case';
 import { CreateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator.use-case';
+import { DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-complete-analysis.use-case';
+import { DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-simplified-analysis.use-case';
+import { UpdateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -29,7 +38,46 @@ export class AudienceQuestionGeneratorController {
   public constructor(
     private readonly createAudienceQuestionGeneratorUseCase: CreateAudienceQuestionGeneratorUseCase,
     private readonly createAudienceQuestionGeneratorResultUseCase: CreateAudienceQuestionGeneratorResultUseCase,
+    private readonly updateAudienceQuestionGeneratorUseCase: UpdateAudienceQuestionGeneratorUseCase,
+    private readonly downloadAudienceQuestionGeneratorCompleteAnalysisUseCase: DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase,
+    private readonly downloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase: DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase,
   ) {}
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar gerador de perguntas para audiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':audienceQuestionGeneratorId',
+      method: RequestMethod.PATCH,
+      type: UpdateAudienceQuestionGeneratorRequestDto,
+    },
+    tag: ['gerador-perguntas-audiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Gerador de perguntas para audiência atualizado com sucesso.',
+      type: UpdateAudienceQuestionGeneratorResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateAudienceQuestionGenerator(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: UpdateAudienceQuestionGeneratorRequestDto,
+    @Param(
+      'audienceQuestionGeneratorId',
+      new ParseValueObjectPipe(AudienceQuestionGeneratorId),
+    )
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+  ): Promise<UpdateAudienceQuestionGeneratorResponseDto> {
+    return await this.updateAudienceQuestionGeneratorUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      audienceQuestionGeneratorId,
+      dto,
+    );
+  }
+
 
   @BuildEndpointSpecification({
     summary: 'Criar gerador de perguntas para audiência',
@@ -57,6 +105,78 @@ export class AudienceQuestionGeneratorController {
       sessionData,
       organizationSessionData,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise simplificada do gerador de perguntas para audiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':audienceQuestionGeneratorId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['gerador-perguntas-audiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada do gerador de perguntas para audiência retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadAudienceQuestionGeneratorSimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'audienceQuestionGeneratorId',
+      new ParseValueObjectPipe(AudienceQuestionGeneratorId),
+    )
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      audienceQuestionGeneratorId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise completa do gerador de perguntas para audiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':audienceQuestionGeneratorId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['gerador-perguntas-audiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa do gerador de perguntas para audiência retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadAudienceQuestionGeneratorCompletedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'audienceQuestionGeneratorId',
+      new ParseValueObjectPipe(AudienceQuestionGeneratorId),
+    )
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadAudienceQuestionGeneratorCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      audienceQuestionGeneratorId,
+      format,
     );
   }
 

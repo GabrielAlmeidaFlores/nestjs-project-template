@@ -8,6 +8,7 @@ import { AudienceQuestionGeneratorDocumentTypeormEntity } from '@infra/database/
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { AudienceQuestionGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-document/command/audience-question-generator-document.command.repository.gateway';
 import { AudienceQuestionGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-document/audience-question-generator-document.entity';
+import { AudienceQuestionGeneratorDocumentId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-document/value-object/audience-question-generator-document-id/audience-question-generator-document-id.value-object';
 
 @Injectable()
 export class AudienceQuestionGeneratorDocumentTypeormCommandRepository
@@ -35,5 +36,11 @@ export class AudienceQuestionGeneratorDocumentTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public deleteAudienceQuestionGeneratorDocument(
+    id: AudienceQuestionGeneratorDocumentId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }
