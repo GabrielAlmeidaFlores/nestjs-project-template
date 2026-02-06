@@ -89,9 +89,18 @@ export class PerCapitaIncomeForBpcAnalysisTypeormQueryRepository
         createdBy: { organization: { id: organizationId.toString() } },
       },
       relations: [
+        'createdBy',
+        'createdBy.customer',
+        'createdBy.organization',
+        'updatedBy',
+        'updatedBy.customer',
+        'updatedBy.organization',
         'perCapitaIncomeForBpcAnalysisFamilyMember',
+        'perCapitaIncomeForBpcAnalysisFamilyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument',
         'perCapitaIncomeForBpcAnalysisDocument',
         'perCapitaIncomeForBpcAnalysisResult',
+        'perCapitaIncomeForBpcAnalysisBenefit',
+        'perCapitaIncomeForBpcAnalysisLegalProceeding',
       ],
     });
 

@@ -1,4 +1,14 @@
-import { Body, HttpStatus, Param, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  ParseEnumPipe,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
+
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis-family-member.request.dto';
@@ -7,10 +17,14 @@ import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto } from '@modu
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis-family-member.response.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis-result.response.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis.response.dto';
+import { GetPerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/get-per-capita-income-for-bpc-analysis.response.dto';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/update-per-capita-income-for-bpc-analysis-family-member.response.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-family-member.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisResultUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis-result.use-case';
 import { CreatePerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/create-per-capita-income-for-bpc-analysis.use-case';
+import { DownloadPerCapitaIncomeForBpcCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/download-per-capita-income-for-bpc-complete-analysis.use-case';
+import { DownloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/download-per-capita-income-for-bpc-simplified-analysis.use-case';
+import { GetPerCapitaIncomeForBpcAnalysisUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/get-per-capita-income-for-bpc-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -19,6 +33,7 @@ import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 import { UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/use-case/update-per-capita-income-for-bpc-analysis-family-member.use-case';
 
@@ -30,7 +45,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     private readonly createPerCapitaIncomeForBpcAnalysisUseCase: CreatePerCapitaIncomeForBpcAnalysisUseCase,
     private readonly createPerCapitaIncomeForBpcAnalysisFamilyMemberUseCase: CreatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase,
     private readonly createPerCapitaIncomeForBpcAnalysisResultUseCase: CreatePerCapitaIncomeForBpcAnalysisResultUseCase,
+    private readonly getPerCapitaIncomeForBpcAnalysisUseCase: GetPerCapitaIncomeForBpcAnalysisUseCase,
     private readonly updatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase: UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberUseCase,
+    private readonly downloadPerCapitaIncomeForBpcCompleteAnalysisUseCase: DownloadPerCapitaIncomeForBpcCompleteAnalysisUseCase,
+    private readonly downloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase: DownloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -100,11 +118,11 @@ export class PerCapitaIncomeForBpcAnalysisController {
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '/:perCapitaIncomeForBpcAnalysisId/result',
-      method: RequestMethod.PATCH,
+      method: RequestMethod.POST,
     },
     tag: ['analise-de-renda-per-capita-para-bpc'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'Resultado da análise criado com sucesso.',
       type: CreatePerCapitaIncomeForBpcAnalysisResultResponseDto,
     },
@@ -121,6 +139,78 @@ export class PerCapitaIncomeForBpcAnalysisController {
       sessionData,
       organizationSessionData,
       perCapitaIncomeForBpcAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de renda per capita para BPC simplificada',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':perCapitaIncomeForBpcAnalysisId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-de-renda-per-capita-para-bpc'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise simplificada de renda per capita para BPC retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadPerCapitaIncomeForBpcSimplifiedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      perCapitaIncomeForBpcAnalysisId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Baixar análise de renda per capita para BPC completa',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':perCapitaIncomeForBpcAnalysisId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-de-renda-per-capita-para-bpc'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Arquivo da análise completa de renda per capita para BPC retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadPerCapitaIncomeForBpcCompletedAnalysisById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadPerCapitaIncomeForBpcCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      perCapitaIncomeForBpcAnalysisId,
+      format,
     );
   }
 
@@ -156,6 +246,35 @@ export class PerCapitaIncomeForBpcAnalysisController {
       organizationSessionData,
       perCapitaIncomeForBpcAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Buscar análise de renda per capita para BPC por ID',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: '/:perCapitaIncomeForBpcAnalysisId',
+      method: RequestMethod.GET,
+    },
+    tag: ['analise-de-renda-per-capita-para-bpc'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de renda per capita para BPC encontrada com sucesso.',
+      type: GetPerCapitaIncomeForBpcAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getPerCapitaIncomeForBpcAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('perCapitaIncomeForBpcAnalysisId')
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
+  ): Promise<GetPerCapitaIncomeForBpcAnalysisResponseDto> {
+    return await this.getPerCapitaIncomeForBpcAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      perCapitaIncomeForBpcAnalysisId,
     );
   }
 }
