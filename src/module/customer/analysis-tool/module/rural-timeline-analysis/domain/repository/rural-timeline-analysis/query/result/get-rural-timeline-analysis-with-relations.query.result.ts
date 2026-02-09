@@ -146,8 +146,4 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResult extends BaseBuilda
 
   protected override readonly _type =
     GetRuralTimelineAnalysisWithRelationsQueryResult.name;
-
-  public get periods(): GetRuralTimelineAnalysisPeriodQueryResult[] {
-    return this.ruralTimelineAnalysisPeriod;
-  }
 }
