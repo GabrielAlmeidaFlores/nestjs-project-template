@@ -37,8 +37,9 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity extends B
     name: 'benefit_number',
     type: 'varchar',
     length: 100,
+    nullable: true,
   })
-  public benefitNumber: string;
+  public benefitNumber: string | null;
 
   @Column({
     name: 'cnis_document',
