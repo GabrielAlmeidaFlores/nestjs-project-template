@@ -18,7 +18,7 @@ import {
   GetRuralTimelineAnalysisPeriodEconomicAspectsResponseDto,
   GetRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto,
   GetRuralTimelineAnalysisDocumentResponseDto,
-  GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
+  RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -228,7 +228,7 @@ export class GetRuralTimelineAnalysisUseCase {
       );
     }
 
-    const cnisContributionPeriods: GetRuralTimelineAnalysisCnisContributionPeriodResponseDto[] =
+    const cnisContributionPeriods: RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto[] =
       [];
 
     for (const period of ruralTimelineAnalysisQueryResult.ruralTimelineCnisContributionPeriod) {
@@ -243,7 +243,7 @@ export class GetRuralTimelineAnalysisUseCase {
         );
 
       cnisContributionPeriods.push(
-        GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
+        RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.build({
           ...(period.employmentRelationshipSource !== null && {
             employmentRelationshipSource: period.employmentRelationshipSource,
           }),
