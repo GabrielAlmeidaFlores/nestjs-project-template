@@ -14,6 +14,7 @@ import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
@@ -31,6 +32,7 @@ import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/modul
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 
 @Injectable()
 export class AnalysisToolRecordEntityAutoMapperProfile {
@@ -117,6 +119,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const ruralTimelineAnalysis =
+        source.ruralTimeline !== undefined
+          ? this.mapper.map(
+              source.ruralTimeline,
+              RuralTimelineAnalysisTypeormEntity,
+              RuralTimelineAnalysisEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsTypeormEntity,
@@ -161,6 +172,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        ruralTimelineAnalysis,
       });
     };
 
@@ -239,6 +251,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const ruralTimeline =
+        source.ruralTimelineAnalysis !== null
+          ? this.mapper.map(
+              source.ruralTimelineAnalysis,
+              RuralTimelineAnalysisEntity,
+              RuralTimelineAnalysisTypeormEntity,
+            )
+          : null;
+
       const retirementPlanningRgps = this.mapper.map(
         source.retirementPlanningRgps,
         RetirementPlanningRgpsEntity,
@@ -288,6 +309,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
+        ruralTimeline,
         analysisToolClient,
         createdBy,
         updatedBy,

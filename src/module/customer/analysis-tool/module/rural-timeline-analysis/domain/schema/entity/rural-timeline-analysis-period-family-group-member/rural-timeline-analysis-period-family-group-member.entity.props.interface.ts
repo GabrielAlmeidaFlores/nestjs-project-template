@@ -8,7 +8,7 @@ export interface RuralTimelineAnalysisPeriodFamilyGroupMemberEntityPropsInterfac
   federalDocument: string;
   kinship: RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum;
   receivesRuralBenefit: boolean;
-  benefitNumber: string;
+  benefitNumber?: string | null;
   cnisDocument?: string | null;
   ruralTimelinePeriodId: RuralTimelineAnalysisPeriodId;
 }

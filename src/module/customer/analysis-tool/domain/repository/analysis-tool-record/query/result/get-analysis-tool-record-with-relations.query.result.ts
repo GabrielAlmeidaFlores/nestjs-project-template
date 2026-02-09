@@ -15,6 +15,7 @@ import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analys
 import type { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import type { GetPerCapitaIncomeForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis.query.result';
 import type { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
+import type { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import type { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
@@ -31,6 +32,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult | null;
   public readonly disabilityAssessmentForBpcAnalysis: GetDisabilityAssessmentForBpcAnalysisQueryResult | null;
   public readonly perCapitaIncomeForBpcAnalysis: GetPerCapitaIncomeForBpcAnalysisQueryResult | null;
+  public readonly ruralTimelineAnalysis: GetRuralTimelineAnalysisWithRelationsQueryResult | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

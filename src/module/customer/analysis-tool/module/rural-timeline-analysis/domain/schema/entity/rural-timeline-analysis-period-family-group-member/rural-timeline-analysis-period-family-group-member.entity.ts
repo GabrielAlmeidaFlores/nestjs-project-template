@@ -28,7 +28,7 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberEntity extends BaseEnti
   @Description(
     'Número do benefício rural (NB) recebido pelo familiar, caso aplicável.',
   )
-  public readonly benefitNumber: string;
+  public readonly benefitNumber: string | null;
 
   @Description(
     'Nome do arquivo CNIS do familiar para comprovação de vínculo rural.',
@@ -52,7 +52,7 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberEntity extends BaseEnti
     this.federalDocument = props.federalDocument;
     this.kinship = props.kinship;
     this.receivesRuralBenefit = props.receivesRuralBenefit;
-    this.benefitNumber = props.benefitNumber;
+    this.benefitNumber = props.benefitNumber ?? null;
     this.cnisDocument = props.cnisDocument ?? null;
     this.ruralTimelinePeriodId = props.ruralTimelinePeriodId;
   }

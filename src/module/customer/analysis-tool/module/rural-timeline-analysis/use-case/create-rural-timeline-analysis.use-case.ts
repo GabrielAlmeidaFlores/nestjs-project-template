@@ -228,7 +228,7 @@ export class CreateRuralTimelineAnalysisUseCase {
               federalDocument: memberDto.federalDocument,
               kinship: memberDto.kinship,
               receivesRuralBenefit: memberDto.receivesRuralBenefit,
-              benefitNumber: memberDto.benefitNumber,
+              benefitNumber: memberDto.benefitNumber ?? null,
               cnisDocument: cnisFileName,
               ruralTimelinePeriodId: period.id,
             }),
