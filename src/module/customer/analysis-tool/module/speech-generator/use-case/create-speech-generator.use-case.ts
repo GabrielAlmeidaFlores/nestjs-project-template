@@ -14,10 +14,14 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
+import { SpeechGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-benefit/command/speech-generator-benefit.command.repository.gateway';
 import { SpeechGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-document/command/speech-generator-document.command.repository.gateway';
+import { SpeechGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-legal-proceeding/command/speech-generator-legal-proceeding.command.repository.gateway';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
+import { SpeechGeneratorBenefitEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-benefit/speech-generator-benefit.entity';
 import { SpeechGeneratorDocumentTypeEnum } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-document/enum/speech-generator-document-type.enum';
 import { SpeechGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-document/speech-generator-document.entity';
+import { SpeechGeneratorLegalProceedingEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-legal-proceeding/speech-generator-legal-proceeding.entity';
 import { CreateSpeechGeneratorRequestDto } from '@module/customer/analysis-tool/module/speech-generator/dto/request/create-speech-generator.request.dto';
 import { CreateSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/create-speech-generator.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -36,6 +40,10 @@ export class CreateSpeechGeneratorUseCase {
     private readonly speechGeneratorCommandRepositoryGateway: SpeechGeneratorCommandRepositoryGateway,
     @Inject(SpeechGeneratorDocumentCommandRepositoryGateway)
     private readonly speechGeneratorDocumentCommandRepositoryGateway: SpeechGeneratorDocumentCommandRepositoryGateway,
+    @Inject(SpeechGeneratorBenefitCommandRepositoryGateway)
+    private readonly speechGeneratorBenefitCommandRepositoryGateway: SpeechGeneratorBenefitCommandRepositoryGateway,
+    @Inject(SpeechGeneratorLegalProceedingCommandRepositoryGateway)
+    private readonly speechGeneratorLegalProceedingCommandRepositoryGateway: SpeechGeneratorLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -96,6 +104,28 @@ export class CreateSpeechGeneratorUseCase {
         }),
     );
 
+    const speechGeneratorBenefits =
+      dto.json.inssBenefitNumber !== undefined
+        ? dto.json.inssBenefitNumber.map(
+            (inssBenefitNumber) =>
+              new SpeechGeneratorBenefitEntity({
+                inssBenefitNumber,
+                speechGenerator,
+              }),
+          )
+        : [];
+
+    const speechGeneratorLegalProceedings =
+      dto.json.legalProceedingNumber !== undefined
+        ? dto.json.legalProceedingNumber.map(
+            (legalProceedingNumber) =>
+              new SpeechGeneratorLegalProceedingEntity({
+                legalProceedingNumber,
+                speechGenerator,
+              }),
+          )
+        : [];
+
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
@@ -115,6 +145,8 @@ export class CreateSpeechGeneratorUseCase {
     await this.createOnDatabase(
       speechGenerator,
       speechGeneratorDocuments,
+      speechGeneratorBenefits,
+      speechGeneratorLegalProceedings,
       analysisToolRecord,
     );
 
@@ -126,12 +158,27 @@ export class CreateSpeechGeneratorUseCase {
   private async createOnDatabase(
     speechGenerator: SpeechGeneratorEntity,
     speechGeneratorDocuments: SpeechGeneratorDocumentEntity[],
+    speechGeneratorBenefits: SpeechGeneratorBenefitEntity[],
+    speechGeneratorLegalProceedings: SpeechGeneratorLegalProceedingEntity[],
     analysisToolRecord: AnalysisToolRecordEntity,
   ): Promise<void> {
     const documentTransactions = speechGeneratorDocuments.map((value) =>
       this.speechGeneratorDocumentCommandRepositoryGateway.createSpeechGeneratorDocument(
         value,
       ),
+    );
+
+    const benefitTransactions = speechGeneratorBenefits.map((value) =>
+      this.speechGeneratorBenefitCommandRepositoryGateway.createSpeechGeneratorBenefit(
+        value,
+      ),
+    );
+
+    const legalProceedingTransactions = speechGeneratorLegalProceedings.map(
+      (value) =>
+        this.speechGeneratorLegalProceedingCommandRepositoryGateway.createSpeechGeneratorLegalProceeding(
+          value,
+        ),
     );
 
     const speechGeneratorTransaction =
@@ -147,6 +194,8 @@ export class CreateSpeechGeneratorUseCase {
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       speechGeneratorTransaction,
       ...documentTransactions,
+      ...benefitTransactions,
+      ...legalProceedingTransactions,
       analysisToolRecordTransaction,
     ]);
 

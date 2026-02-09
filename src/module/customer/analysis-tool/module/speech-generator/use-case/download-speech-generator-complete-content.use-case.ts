@@ -14,8 +14,7 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 
 @Injectable()
 export class DownloadSpeechGeneratorCompleteContentUseCase {
-  protected readonly _type =
-    DownloadSpeechGeneratorCompleteContentUseCase.name;
+  protected readonly _type = DownloadSpeechGeneratorCompleteContentUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)

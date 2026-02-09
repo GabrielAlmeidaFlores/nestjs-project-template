@@ -56,9 +56,10 @@ export class SpeechGeneratorEntityAutoMapperProfile {
           : null;
 
       return new SpeechGeneratorEntity({
-        ...source,
         id: new SpeechGeneratorId(source.id),
         speechGeneratorDocument,
+        speechGeneratorBenefit: null,
+        speechGeneratorLegalProceeding: null,
         speechGeneratorResult,
         createdBy: new OrganizationMemberId(source.createdBy.id),
         updatedBy: new OrganizationMemberId(source.updatedBy.id),
@@ -88,7 +89,8 @@ export class SpeechGeneratorEntityAutoMapperProfile {
       } as OrganizationMemberTypeormEntity;
 
       const speechGeneratorDocument =
-        source.speechGeneratorDocument !== undefined
+        source.speechGeneratorDocument !== undefined &&
+        source.speechGeneratorDocument.length > 0
           ? this.mapper.mapArray(
               source.speechGeneratorDocument,
               SpeechGeneratorDocumentEntity,
@@ -109,6 +111,8 @@ export class SpeechGeneratorEntityAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         speechGeneratorDocument,
+        speechGeneratorBenefit: undefined,
+        speechGeneratorLegalProceeding: undefined,
         speechGeneratorResult,
         createdBy,
         updatedBy,

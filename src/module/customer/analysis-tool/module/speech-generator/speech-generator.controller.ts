@@ -12,11 +12,13 @@ import {
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { CreateSpeechGeneratorRequestDto } from '@module/customer/analysis-tool/module/speech-generator/dto/request/create-speech-generator.request.dto';
+import { UpdateSpeechGeneratorResultCompleteContentRequestDto } from '@module/customer/analysis-tool/module/speech-generator/dto/request/update-speech-generator-result-complete-content.request.dto';
 import { UpdateSpeechGeneratorRequestDto } from '@module/customer/analysis-tool/module/speech-generator/dto/request/update-speech-generator.request.dto';
 import { CreateSpeechGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/create-speech-generator-result.response.dto';
 import { CreateSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/create-speech-generator.response.dto';
 import { DeleteSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/delete-speech-generator.response';
 import { GetSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/get-speech-generator.response.dto';
+import { UpdateSpeechGeneratorResultCompleteContentResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/update-speech-generator-result-complete-content.response.dto';
 import { UpdateSpeechGeneratorResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/update-speech-generator.response.dto';
 import { CreateSpeechGeneratorResultUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/create-speech-generator-result.use-case';
 import { CreateSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/create-speech-generator.use-case';
@@ -24,6 +26,7 @@ import { DeleteSpeechGeneratorUseCase } from '@module/customer/analysis-tool/mod
 import { DownloadSpeechGeneratorCompleteContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/download-speech-generator-complete-content.use-case';
 import { DownloadSpeechGeneratorSimplifiedContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/download-speech-generator-simplified-content.use-case';
 import { GetSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/get-speech-generator.use-case';
+import { UpdateSpeechGeneratorResultCompleteContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/update-speech-generator-result-complete-content.use-case';
 import { UpdateSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/update-speech-generator.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -47,6 +50,7 @@ export class SpeechGeneratorController {
     private readonly downloadSpeechGeneratorCompleteContentUseCase: DownloadSpeechGeneratorCompleteContentUseCase,
     private readonly downloadSpeechGeneratorSimplifiedContentUseCase: DownloadSpeechGeneratorSimplifiedContentUseCase,
     private readonly updateSpeechGeneratorUseCase: UpdateSpeechGeneratorUseCase,
+    private readonly updateSpeechGeneratorResultCompleteContentUseCase: UpdateSpeechGeneratorResultCompleteContentUseCase,
     private readonly deleteSpeechGeneratorUseCase: DeleteSpeechGeneratorUseCase,
   ) {}
 
@@ -166,6 +170,38 @@ export class SpeechGeneratorController {
       sessionData,
       organizationSessionData,
       speechGeneratorId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar conteúdo completo do resultado do gerador de discurso',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':speechGeneratorId/result/complete-content',
+      method: RequestMethod.PATCH,
+      type: UpdateSpeechGeneratorResultCompleteContentRequestDto,
+    },
+    tag: ['gerador-discurso'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Conteúdo completo do resultado atualizado com sucesso.',
+      type: UpdateSpeechGeneratorResultCompleteContentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateSpeechGeneratorResultCompleteContent(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param('speechGeneratorId', new ParseValueObjectPipe(SpeechGeneratorId))
+    speechGeneratorId: SpeechGeneratorId,
+    @Body() dto: UpdateSpeechGeneratorResultCompleteContentRequestDto,
+  ): Promise<UpdateSpeechGeneratorResultCompleteContentResponseDto> {
+    return await this.updateSpeechGeneratorResultCompleteContentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      speechGeneratorId,
+      dto,
     );
   }
 

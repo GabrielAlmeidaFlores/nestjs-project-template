@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
@@ -14,8 +15,8 @@ import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analys
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
 import { SpeechGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-result/command/speech-generator-result.command.repository.gateway';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
-import { SpeechGeneratorResultEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/speech-generator-result.entity';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
+import { SpeechGeneratorResultEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/speech-generator-result.entity';
 import { CreateSpeechGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/speech-generator/dto/response/create-speech-generator-result.response.dto';
 import { SpeechGeneratorDocumentRequiredError } from '@module/customer/analysis-tool/module/speech-generator/error/speech-generator-document-required.error';
 import { SpeechGeneratorNotFoundError } from '@module/customer/analysis-tool/module/speech-generator/error/speech-generator-not-found.error';
@@ -53,6 +54,8 @@ export class CreateSpeechGeneratorResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -73,11 +76,6 @@ export class CreateSpeechGeneratorResultUseCase {
     const promptCompleteResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_COMPLETE_ANALYSIS,
-      );
-
-    const promptSimplifiedResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
       );
 
     const consumeCreditTransaction =
@@ -121,21 +119,19 @@ export class CreateSpeechGeneratorResultUseCase {
     );
     const files = [...documentsBuffer, clientDataBuffer];
 
-    const speechGeneratorCompleteContent =
+    const speechGeneratorCompleteContentMarkdown =
       await this.analysisProcessorGateway.getSpeechGeneratorCompleteAnalysis(
         promptCompleteResponse.prompt,
         files,
       );
 
-    const speechGeneratorSimplifiedContent =
-      await this.analysisProcessorGateway.getSpeechGeneratorSimplifiedAnalysis(
-        promptSimplifiedResponse.prompt,
-        files,
-      );
+    if (speechGeneratorCompleteContentMarkdown === null) {
+      throw new Error('Failed to generate speech generator complete content');
+    }
 
     const speechGeneratorResult = new SpeechGeneratorResultEntity({
-      speechGeneratorCompleteContent,
-      speechGeneratorSimplifiedContent,
+      speechGeneratorCompleteContent: speechGeneratorCompleteContentMarkdown,
+      speechGeneratorSimplifiedContent: null,
     });
 
     const speechGenerator = new SpeechGeneratorEntity({
@@ -185,11 +181,27 @@ export class CreateSpeechGeneratorResultUseCase {
     ]);
     await transaction.commit();
 
+    const completeContentMarkdown =
+      speechGeneratorResult.speechGeneratorCompleteContent;
+    const completeContentHtml =
+      completeContentMarkdown !== null
+        ? await this.markdownConverterGateway.convertToHtml(
+            completeContentMarkdown,
+          )
+        : null;
+
+    const simplifiedContentMarkdown =
+      speechGeneratorResult.speechGeneratorSimplifiedContent;
+    const simplifiedContentHtml =
+      simplifiedContentMarkdown !== null
+        ? await this.markdownConverterGateway.convertToHtml(
+            simplifiedContentMarkdown,
+          )
+        : null;
+
     return CreateSpeechGeneratorResultResponseDto.build({
-      speechGeneratorCompleteContent:
-        speechGeneratorResult.speechGeneratorCompleteContent ?? null,
-      speechGeneratorSimplifiedContent:
-        speechGeneratorResult.speechGeneratorSimplifiedContent ?? null,
+      speechGeneratorCompleteContent: completeContentHtml,
+      speechGeneratorSimplifiedContent: simplifiedContentHtml,
     });
   }
 }

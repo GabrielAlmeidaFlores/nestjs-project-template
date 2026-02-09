@@ -3,6 +3,7 @@ import { Inject } from '@nestjs/common';
 import { EntityNotFoundError } from '@cli/seed/error/entity-not-found.error';
 import { PAYMENT_PLAN_PAID_RESOURCE_SEED } from '@cli/seed/seeder/payment-plan-paid-resource.seeder';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
+import { PaymentPlanPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/payment-plan-paid-resource.query.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/command/payment-plan-paid-resource-ia-config.command.repository.gateway';
 import { PaymentPlanPaidResourceIaConfigQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource-ia-config/query/payment-plan-paid-resource-ia-config.query.repository.gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -6101,37 +6102,47 @@ Sua análise pode mudar a vida previdenciária do trabalhador. Seja minucioso e 
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_COMPLETE_ANALYSIS,
       ),
-      prompt: `Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
+      prompt: `# Especialista em Direito Previdenciário e Redação de Discursos
 
-Sua tarefa é gerar um discurso COMPLETO e detalhado a partir dos documentos previdenciários fornecidos.
+Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
 
-O resultado deve ser em formato markup/hypertext (ex.: Markdown ou HTML semântico) adequado para edição no frontend, com estrutura clara (títulos, parágrafos, listas, destaques).
+## Tarefa
 
-Analise os documentos previdenciários e produza um discurso completo que:
-- Sintetize os fatos e provas relevantes
-- Fundamente juridicamente os argumentos
-- Utilize linguagem técnica apropriada para o contexto
-- Seja editável e bem estruturado em hipertexto`,
+Sua tarefa é gerar um discurso **COMPLETO** e detalhado a partir dos documentos previdenciários fornecidos.
+
+## Requisitos do Discurso
+
+Analise os documentos previdenciários e gere um discurso resumido em markdown que:
+
+- **Sintetize** os fatos e provas relevantes
+- **Fundamente** juridicamente os argumentos
+- **Utilize** linguagem técnica apropriada para o contexto
+- **Seja** editável e bem estruturado em Markdown`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
       ),
-      prompt: `Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
+      prompt: `# Especialista em Direito Previdenciário e Redação de Discursos
 
-Sua tarefa é gerar um discurso SIMPLIFICADO e objetivo a partir dos documentos previdenciários fornecidos.
+Você é um especialista em direito previdenciário e redação de discursos para alegações e recursos.
 
-O resultado deve ser em formato markup/hypertext (ex.: Markdown ou HTML semântico) adequado para edição no frontend, com estrutura clara e linguagem acessível.
+## Tarefa
 
-Analise os documentos previdenciários e produza um discurso resumido que:
-- Destaque os principais fatos e argumentos
-- Seja compreensível sem exigir conhecimento jurídico profundo
-- Mantenha rigor técnico nas conclusões
-- Seja editável e bem estruturado em hipertexto`,
+Sua tarefa é gerar um discurso **SIMPLIFICADO** e objetivo a partir dos documentos previdenciários fornecidos.
+
+## Requisitos do Discurso
+
+Analise os documentos previdenciários e gere um discurso resumido em markdown que:
+
+- **Destaque** os principais fatos e argumentos
+- **Seja** compreensível sem exigir conhecimento jurídico profundo
+- **Mantenha** rigor técnico nas conclusões
+- **Seja** editável e bem estruturado em Markdown`,
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
-        PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       ),
       prompt: `Você é um especialista em análise de avaliação de deficiência para BPC com profundo conhecimento da legislação previdenciária e dos critérios de elegibilidade para o Benefício de Prestação Continuada (BPC).
 
@@ -6429,18 +6440,37 @@ export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {
     public readonly paymentPlanPaidResourceIaConfigCommandRepository: PaymentPlanPaidResourceIaConfigCommandRepositoryGateway,
     @Inject(PaymentPlanPaidResourceIaConfigQueryRepositoryGateway)
     public readonly paymentPlanPaidResourceIaConfigQueryRepository: PaymentPlanPaidResourceIaConfigQueryRepositoryGateway,
+    @Inject(PaymentPlanPaidResourceQueryRepositoryGateway)
+    public readonly paymentPlanPaidResourceQueryRepository: PaymentPlanPaidResourceQueryRepositoryGateway,
   ) {}
 
   public async execute(): Promise<Array<TransactionType>> {
     const transactions: Array<TransactionType> = [];
 
     for (const configData of PAYMENT_PLAN_PAID_RESOURCE_IA_CONFIG_SEED) {
-      const existing =
-        await this.paymentPlanPaidResourceIaConfigQueryRepository.findOnePaymentPlanPaidResourceIaConfigByPaidResourceId(
-          configData.paymentPlanPaidResource.id,
+      const resourceFromDb =
+        await this.paymentPlanPaidResourceQueryRepository.findOnePaymentPlanPaidResourceByResourceType(
+          configData.paymentPlanPaidResource.resource,
         );
 
-      const entity = new PaymentPlanPaidResourceIaConfigEntity(configData);
+      if (!resourceFromDb) {
+        continue;
+      }
+
+      const existing =
+        await this.paymentPlanPaidResourceIaConfigQueryRepository.findOnePaymentPlanPaidResourceIaConfigByPaidResourceId(
+          resourceFromDb.id,
+        );
+
+      const resourceEntity = new PaymentPlanPaidResourceEntity({
+        ...resourceFromDb,
+        deletedAt: null,
+      });
+
+      const entity = new PaymentPlanPaidResourceIaConfigEntity({
+        ...configData,
+        paymentPlanPaidResource: resourceEntity,
+      });
 
       let action =
         this.paymentPlanPaidResourceIaConfigCommandRepository.createPaymentPlanPaidResourceIaConfig(

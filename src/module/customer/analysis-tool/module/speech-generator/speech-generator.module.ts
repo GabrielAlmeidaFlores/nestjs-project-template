@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { MarkdownConverterModule } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -11,6 +12,7 @@ import { DeleteSpeechGeneratorUseCase } from '@module/customer/analysis-tool/mod
 import { DownloadSpeechGeneratorCompleteContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/download-speech-generator-complete-content.use-case';
 import { DownloadSpeechGeneratorSimplifiedContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/download-speech-generator-simplified-content.use-case';
 import { GetSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/get-speech-generator.use-case';
+import { UpdateSpeechGeneratorResultCompleteContentUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/update-speech-generator-result-complete-content.use-case';
 import { UpdateSpeechGeneratorUseCase } from '@module/customer/analysis-tool/module/speech-generator/use-case/update-speech-generator.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
@@ -27,6 +29,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisProcessorModule,
     FileProcessorModule,
     ExportDocumentModule,
+    MarkdownConverterModule,
   ],
   controllers: [SpeechGeneratorController],
   providers: [
@@ -34,6 +37,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateSpeechGeneratorResultUseCase,
     GetSpeechGeneratorUseCase,
     UpdateSpeechGeneratorUseCase,
+    UpdateSpeechGeneratorResultCompleteContentUseCase,
     DownloadSpeechGeneratorCompleteContentUseCase,
     DownloadSpeechGeneratorSimplifiedContentUseCase,
     DeleteSpeechGeneratorUseCase,

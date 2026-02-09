@@ -155,6 +155,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       disabilityAssessmentForBpcAnalysis: null,
       medicalQuestionGenerator: null,
+      speechGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =
