@@ -115,11 +115,11 @@ export class GetPerCapitaIncomeForBpcAnalysisUseCase {
           ...analysisToolRecordQueryResult.analysisToolClient,
         }),
       legalProceedingNumber:
-        perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisLegalProceeding?.map(
+        perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisLegalProceeding.map(
           (t) => t.legalProceedingNumber,
         ),
       inssBenefitNumber:
-        perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisBenefit?.map(
+        perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisBenefit.map(
           (t) => t.inssBenefitNumber,
         ),
       perCapitaIncomeForBpcAnalysisResult:
