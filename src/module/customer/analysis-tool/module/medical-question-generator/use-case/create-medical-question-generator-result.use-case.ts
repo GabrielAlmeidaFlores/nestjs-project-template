@@ -140,20 +140,26 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
+      createdAt: analysisToolRecordQueryResult.createdAt,
+      updatedAt: analysisToolRecordQueryResult.updatedAt,
+      deletedAt: analysisToolRecordQueryResult.deletedAt,
       analysisToolClient,
       medicalQuestionGenerator,
-      administrativeProcedureInssAnalysis: null,
-      retirementPlanningRpps: null,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
-      retirementPlanningRgps: null,
       cnisFastAnalysis: null,
+      retirementPlanningRpps: null,
+      retirementPlanningRgps: null,
+      administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
-      disabilityAssessmentForBpcAnalysis: null,
       specialActivity: null,
+      disabilityAssessmentForBpcAnalysis: null,
+      ruralTimelineAnalysis: null,
       perCapitaIncomeForBpcAnalysis: null,
     });
 

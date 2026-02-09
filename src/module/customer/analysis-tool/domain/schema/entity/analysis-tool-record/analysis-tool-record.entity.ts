@@ -14,6 +14,7 @@ import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/modul
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -80,6 +81,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly perCapitaIncomeForBpcAnalysis: PerCapitaIncomeForBpcAnalysisEntity | null;
 
   @Description(
+    'Análise de linha do tempo rural associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralTimelineAnalysis: RuralTimelineAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -115,6 +121,7 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.disabilityAssessmentForBpcAnalysis ?? null;
     this.perCapitaIncomeForBpcAnalysis =
       props.perCapitaIncomeForBpcAnalysis ?? null;
+    this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
