@@ -225,7 +225,6 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
         ruralTimelinePeriodDocumentAnalysis:
           source.ruralTimelinePeriodDocumentAnalysis ?? null,
         workRegime: source.workRegime,
-        periods: periods,
         ruralTimelineAnalysisPeriod: periods,
         ruralTimelineDocument: cnisDocuments,
         ruralTimelineCnisContributionPeriod: cnisContributionPeriods,
