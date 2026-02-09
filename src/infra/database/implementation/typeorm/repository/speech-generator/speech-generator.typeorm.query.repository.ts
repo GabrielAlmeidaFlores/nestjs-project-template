@@ -95,6 +95,8 @@ export class SpeechGeneratorTypeormQueryRepository
         },
         relations: {
           speechGeneratorDocument: true,
+          speechGeneratorBenefit: true,
+          speechGeneratorLegalProceeding: true,
           speechGeneratorResult: true,
           analysisToolRecord: {
             analysisToolClient: true,

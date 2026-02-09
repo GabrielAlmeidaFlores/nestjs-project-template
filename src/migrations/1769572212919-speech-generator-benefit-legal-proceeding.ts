@@ -1,8 +1,6 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SpeechGeneratorBenefitLegalProceeding1769572212919
-  implements MigrationInterface
-{
+export class SpeechGeneratorBenefitLegalProceeding1769572212919 implements MigrationInterface {
   name = 'SpeechGeneratorBenefitLegalProceeding1769572212919';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -27,9 +25,7 @@ export class SpeechGeneratorBenefitLegalProceeding1769572212919
     await queryRunner.query(
       `ALTER TABLE \`speech_generator_benefit\` DROP FOREIGN KEY \`FK_speech_generator_benefit_speech_generator_id\``,
     );
-    await queryRunner.query(
-      `DROP TABLE \`speech_generator_legal_proceeding\``,
-    );
+    await queryRunner.query(`DROP TABLE \`speech_generator_legal_proceeding\``);
     await queryRunner.query(`DROP TABLE \`speech_generator_benefit\``);
   }
 }

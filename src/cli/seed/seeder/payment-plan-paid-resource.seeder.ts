@@ -306,7 +306,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada do gerador de impugnação a laudos médicos e sociais.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c8d9e0f1-2a3b-4c5d-6e7f-8a9b0c1d2e3f'),
+      id: new PaymentPlanPaidResourceId('ac86628d-5082-4fea-ab1f-4e5086dd9ecf'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 1,
@@ -315,7 +315,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Geração de discurso completo a partir de documentos previdenciários (conteúdo em markup/hypertext para edição).',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a'),
+      id: new PaymentPlanPaidResourceId('22f73a10-71d6-4adf-ae00-914183a5381d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPEECH_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -30,6 +31,8 @@ export class GetSpeechGeneratorUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(SpeechGeneratorQueryRepositoryGateway)
     private readonly speechGeneratorQueryRepositoryGateway: SpeechGeneratorQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -62,6 +65,35 @@ export class GetSpeechGeneratorUseCase {
         SpeechGeneratorNotFoundError,
       );
 
+    let speechGeneratorResultDto = null;
+    if (speechGeneratorQueryResult.speechGeneratorResult !== null) {
+      const completeContentMarkdown =
+        speechGeneratorQueryResult.speechGeneratorResult
+          .speechGeneratorCompleteContent;
+      const completeContent =
+        completeContentMarkdown !== null
+          ? await this.markdownConverterGateway.convertToHtml(
+              completeContentMarkdown,
+            )
+          : null;
+
+      const simplifiedContentMarkdown =
+        speechGeneratorQueryResult.speechGeneratorResult
+          .speechGeneratorSimplifiedContent;
+      const simplifiedContent =
+        simplifiedContentMarkdown !== null
+          ? await this.markdownConverterGateway.convertToHtml(
+              simplifiedContentMarkdown,
+            )
+          : null;
+
+      speechGeneratorResultDto = GetSpeechGeneratorResultResponseDto.build({
+        ...speechGeneratorQueryResult.speechGeneratorResult,
+        speechGeneratorCompleteContent: completeContent,
+        speechGeneratorSimplifiedContent: simplifiedContent,
+      });
+    }
+
     const response = GetSpeechGeneratorResponseDto.build({
       id: speechGeneratorQueryResult.id,
       status: analysisToolRecordQueryResult.status,
@@ -71,16 +103,10 @@ export class GetSpeechGeneratorUseCase {
         id: analysisToolRecordQueryResult.analysisToolClient.id,
         name: analysisToolRecordQueryResult.analysisToolClient.name,
       }),
-      speechGeneratorResult:
-        speechGeneratorQueryResult.speechGeneratorResult !== null
-          ? GetSpeechGeneratorResultResponseDto.build({
-              ...speechGeneratorQueryResult.speechGeneratorResult,
-            })
-          : null,
-      inssBenefitNumber:
-        speechGeneratorQueryResult.speechGeneratorBenefit.map(
-          (t) => t.inssBenefitNumber,
-        ),
+      speechGeneratorResult: speechGeneratorResultDto,
+      inssBenefitNumber: speechGeneratorQueryResult.speechGeneratorBenefit.map(
+        (t) => t.inssBenefitNumber,
+      ),
       legalProceedingNumber:
         speechGeneratorQueryResult.speechGeneratorLegalProceeding.map(
           (t) => t.legalProceedingNumber,
