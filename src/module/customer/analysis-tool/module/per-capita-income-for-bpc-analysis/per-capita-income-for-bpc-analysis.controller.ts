@@ -64,7 +64,7 @@ export class PerCapitaIncomeForBpcAnalysisController {
     },
     tag: ['analise-de-renda-per-capita-para-bpc'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'Análise de renda per capita para BPC criada com sucesso.',
       type: CreatePerCapitaIncomeForBpcAnalysisResponseDto,
     },
@@ -94,7 +94,7 @@ export class PerCapitaIncomeForBpcAnalysisController {
     },
     tag: ['analise-de-renda-per-capita-para-bpc'],
     successResponse: {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       description: 'Membros da família criados com sucesso.',
       type: CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto,
     },
@@ -104,7 +104,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Param('perCapitaIncomeForBpcAnalysisId')
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     @Body() dto: CreatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto,
   ): Promise<CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto> {
@@ -135,7 +138,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Param('perCapitaIncomeForBpcAnalysisId')
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
   ): Promise<CreatePerCapitaIncomeForBpcAnalysisResultResponseDto> {
     return await this.createPerCapitaIncomeForBpcAnalysisResultUseCase.execute(
@@ -238,7 +244,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Param('perCapitaIncomeForBpcAnalysisId')
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     @Body() dto: UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberRequestDto,
   ): Promise<UpdatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto> {
@@ -271,7 +280,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Param('perCapitaIncomeForBpcAnalysisId')
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
     @Body() dto: UpdatePerCapitaIncomeForBpcAnalysisRequestDto,
   ): Promise<UpdatePerCapitaIncomeForBpcAnalysisResponseDto> {
@@ -303,7 +315,10 @@ export class PerCapitaIncomeForBpcAnalysisController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Param('perCapitaIncomeForBpcAnalysisId')
+    @Param(
+      'perCapitaIncomeForBpcAnalysisId',
+      new ParseValueObjectPipe(PerCapitaIncomeForBpcAnalysisId),
+    )
     perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
   ): Promise<GetPerCapitaIncomeForBpcAnalysisResponseDto> {
     return await this.getPerCapitaIncomeForBpcAnalysisUseCase.execute(
