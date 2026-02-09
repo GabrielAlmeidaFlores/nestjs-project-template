@@ -35,9 +35,11 @@ export class PerCapitaIncomeForBpcAnalysisFamilyMemberEntityAutoMapperProfile {
       return new PerCapitaIncomeForBpcAnalysisFamilyMemberEntity({
         ...source,
         id: new PerCapitaIncomeForBpcAnalysisFamilyMemberId(source.id),
-        monthlyIncomeAmount: source.monthlyIncomeAmount
-          ? parseFloat(source.monthlyIncomeAmount)
-          : null,
+        monthlyIncomeAmount:
+          source.monthlyIncomeAmount !== null &&
+          source.monthlyIncomeAmount !== undefined
+            ? parseFloat(source.monthlyIncomeAmount)
+            : null,
         perCapitaIncomeForBpcAnalysis,
       });
     };

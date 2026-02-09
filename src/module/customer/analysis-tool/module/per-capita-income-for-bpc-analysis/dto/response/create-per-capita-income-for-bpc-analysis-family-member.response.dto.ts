@@ -5,8 +5,8 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto extends BaseBuildableDtoObject {
-    @ResponseDtoValueObjectProperty(PerCapitaIncomeForBpcAnalysisId)
-    public perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId;
+  @ResponseDtoValueObjectProperty(PerCapitaIncomeForBpcAnalysisId)
+  public perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId;
   protected override readonly _type =
     CreatePerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.name;
 }

@@ -83,30 +83,52 @@ export class PerCapitaIncomeForBpcAnalysisTypeormQueryRepository
     organizationId: OrganizationId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult> {
-    const result = await this.repository.findOne({
-      where: {
-        id: perCapitaIncomeForBpcAnalysisId.toString(),
-        createdBy: { organization: { id: organizationId.toString() } },
+    const result = await this.findOneOrFail(
+      {
+        where: {
+          id: perCapitaIncomeForBpcAnalysisId.toString(),
+          analysisToolRecord: {
+            createdBy: { organization: { id: organizationId.toString() } },
+          },
+        },
+        relations: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+          perCapitaIncomeForBpcAnalysisFamilyMember: {
+            perCapitaIncomeForBpcAnalysisFamilyMemberDocument: true,
+          },
+          perCapitaIncomeForBpcAnalysisDocument: true,
+          perCapitaIncomeForBpcAnalysisResult: true,
+          perCapitaIncomeForBpcAnalysisBenefit: true,
+          perCapitaIncomeForBpcAnalysisLegalProceeding: true,
+          analysisToolRecord: {
+            analysisToolClient: {
+              createdBy: {
+                customer: true,
+              },
+              updatedBy: {
+                customer: true,
+              },
+              analysisToolClientInssBenefit: true,
+              analysisToolClientLegalProceeding: true,
+            },
+            createdBy: {
+              customer: true,
+            },
+            updatedBy: {
+              customer: true,
+            },
+          },
+        },
       },
-      relations: [
-        'createdBy',
-        'createdBy.customer',
-        'createdBy.organization',
-        'updatedBy',
-        'updatedBy.customer',
-        'updatedBy.organization',
-        'perCapitaIncomeForBpcAnalysisFamilyMember',
-        'perCapitaIncomeForBpcAnalysisFamilyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument',
-        'perCapitaIncomeForBpcAnalysisDocument',
-        'perCapitaIncomeForBpcAnalysisResult',
-        'perCapitaIncomeForBpcAnalysisBenefit',
-        'perCapitaIncomeForBpcAnalysisLegalProceeding',
-      ],
-    });
-
-    if (result === null) {
-      throw new err();
-    }
+      err,
+    );
 
     return this.mapperGateway.map(
       result,

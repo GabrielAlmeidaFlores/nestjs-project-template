@@ -14,10 +14,14 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { PerCapitaIncomeForBpcAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/command/per-capita-income-for-bpc-analysis.command.repository.gateway';
+import { PerCapitaIncomeForBpcAnalysisBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-benefit/command/per-capita-income-for-bpc-analysis-benefit.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-document/command/per-capita-income-for-bpc-analysis-document.command.repository.gateway';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-legal-proceeding/command/per-capita-income-for-bpc-analysis-legal-proceeding.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
+import { PerCapitaIncomeForBpcAnalysisBenefitEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-benefit/per-capita-income-for-bpc-analysis-benefit.entity';
 import { PerCapitaIncomeForBpcAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/enum/per-capita-income-for-bpc-analysis-document-type.enum';
 import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
+import { PerCapitaIncomeForBpcAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-legal-proceeding/per-capita-income-for-bpc-analysis-legal-proceeding.entity';
 import { CreatePerCapitaIncomeForBpcAnalysisRequestDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/request/create-per-capita-income-for-bpc-analysis.request.dto';
 import { CreatePerCapitaIncomeForBpcAnalysisResponseDto } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/dto/response/create-per-capita-income-for-bpc-analysis.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -38,6 +42,12 @@ export class CreatePerCapitaIncomeForBpcAnalysisUseCase {
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway)
     private readonly perCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway,
+    @Inject(PerCapitaIncomeForBpcAnalysisBenefitCommandRepositoryGateway)
+    private readonly perCapitaIncomeForBpcAnalysisBenefitCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisBenefitCommandRepositoryGateway,
+    @Inject(
+      PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway,
+    )
+    private readonly perCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway: PerCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -112,6 +122,26 @@ export class CreatePerCapitaIncomeForBpcAnalysisUseCase {
       );
     }
 
+    const perCapitaIncomeForBpcAnalysisBenefit =
+      dto.json.inssBenefitNumber !== undefined
+        ? dto.json.inssBenefitNumber.map((value) => {
+            return new PerCapitaIncomeForBpcAnalysisBenefitEntity({
+              inssBenefitNumber: value,
+              perCapitaIncomeForBpcAnalysis,
+            });
+          })
+        : [];
+
+    const perCapitaIncomeForBpcAnalysisLegalProceeding =
+      dto.json.legalProceedingNumber !== undefined
+        ? dto.json.legalProceedingNumber.map((value) => {
+            return new PerCapitaIncomeForBpcAnalysisLegalProceedingEntity({
+              legalProceedingNumber: value,
+              perCapitaIncomeForBpcAnalysis,
+            });
+          })
+        : [];
+
     const countRecords =
       await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
@@ -138,6 +168,20 @@ export class CreatePerCapitaIncomeForBpcAnalysisUseCase {
         documents,
       );
 
+    const createBenefitTransaction = perCapitaIncomeForBpcAnalysisBenefit.map(
+      (value) =>
+        this.perCapitaIncomeForBpcAnalysisBenefitCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisBenefit(
+          value,
+        ),
+    );
+
+    const createLegalProceedingTransaction =
+      perCapitaIncomeForBpcAnalysisLegalProceeding.map((value) =>
+        this.perCapitaIncomeForBpcAnalysisLegalProceedingCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisLegalProceeding(
+          value,
+        ),
+      );
+
     const createAnalysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
         analysisToolRecord,
@@ -146,6 +190,8 @@ export class CreatePerCapitaIncomeForBpcAnalysisUseCase {
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       createPerCapitaIncomeForBpcAnalysisTransaction,
       ...createDocumentsTransaction,
+      ...createBenefitTransaction,
+      ...createLegalProceedingTransaction,
       createAnalysisToolRecordTransaction,
     ]);
 

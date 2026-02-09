@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-document.typeorm.entity';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis-family-member.typeorm.entity';
@@ -9,6 +10,7 @@ import { PerCapitaIncomeForBpcAnalysisResultTypeormEntity } from '@infra/databas
 import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
 import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
@@ -92,27 +94,81 @@ export class PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: PerCapitaIncomeForBpcAnalysisEntity,
     ): PerCapitaIncomeForBpcAnalysisTypeormEntity => {
-      const result = new PerCapitaIncomeForBpcAnalysisTypeormEntity();
-
-      result.id = source.id.toString();
-      result.createdBy = {
+      const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;
-      result.updatedBy = {
+
+      const updatedBy = {
         id: source.updatedBy.toString(),
       } as OrganizationMemberTypeormEntity;
-      result.createdAt = source.createdAt;
-      result.updatedAt = source.updatedAt;
-      result.deletedAt = source.deletedAt ?? null;
 
-      return result;
+      const analysisToolRecord =
+        source.analysisToolRecord !== null
+          ? this.mapper.map(
+              source.analysisToolRecord,
+              AnalysisToolRecordEntity,
+              AnalysisToolRecordTypeormEntity,
+            )
+          : undefined;
+
+      let perCapitaIncomeForBpcAnalysisResult:
+        | PerCapitaIncomeForBpcAnalysisResultTypeormEntity
+        | undefined;
+
+      if (source.perCapitaIncomeForBpcAnalysisResult !== null) {
+        perCapitaIncomeForBpcAnalysisResult = this.mapper.map(
+          source.perCapitaIncomeForBpcAnalysisResult,
+          PerCapitaIncomeForBpcAnalysisResultEntity,
+          PerCapitaIncomeForBpcAnalysisResultTypeormEntity,
+        );
+
+        // Set the back reference for bidirectional OneToOne relationship
+        perCapitaIncomeForBpcAnalysisResult.perCapitaIncomeForBpcAnalysis = {
+          id: source.id.toString(),
+        } as PerCapitaIncomeForBpcAnalysisTypeormEntity;
+      } else {
+        perCapitaIncomeForBpcAnalysisResult = undefined;
+      }
+
+      const perCapitaIncomeForBpcAnalysisFamilyMember =
+        source.perCapitaIncomeForBpcAnalysisFamilyMember !== null
+          ? this.mapper.mapArray(
+              source.perCapitaIncomeForBpcAnalysisFamilyMember,
+              PerCapitaIncomeForBpcAnalysisFamilyMemberEntity,
+              PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
+            )
+          : undefined;
+
+      const perCapitaIncomeForBpcAnalysisDocument =
+        source.perCapitaIncomeForBpcAnalysisDocument !== null
+          ? this.mapper.mapArray(
+              source.perCapitaIncomeForBpcAnalysisDocument,
+              PerCapitaIncomeForBpcAnalysisDocumentEntity,
+              PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity,
+            )
+          : undefined;
+
+      return PerCapitaIncomeForBpcAnalysisTypeormEntity.build({
+        id: source.id.toString(),
+        analysisToolRecord,
+        perCapitaIncomeForBpcAnalysisResult,
+        perCapitaIncomeForBpcAnalysisFamilyMember,
+        perCapitaIncomeForBpcAnalysisDocument,
+        createdBy,
+        updatedBy,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+      });
     };
+
+    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
 
     createMap(
       this.mapper,
       PerCapitaIncomeForBpcAnalysisEntity,
       PerCapitaIncomeForBpcAnalysisTypeormEntity,
-      constructUsing(convertDomainEntityToOrmEntity),
+      mappingFunction,
     );
   }
 }

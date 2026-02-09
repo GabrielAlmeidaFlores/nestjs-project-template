@@ -85,15 +85,15 @@ export class DownloadPerCapitaIncomeForBpcSimplifiedAnalysisUseCase {
     }
 
     if (
-      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisResult
-        .completeAnalysis === null
+      perCapitaIncomeForBpcAnalysisQueryResult
+        .perCapitaIncomeForBpcAnalysisResult.completeAnalysis === null
     ) {
       throw new PerCapitaIncomeForBpcAnalysisDoesNotContainCompleteAnalysisError();
     }
 
     let responseAi =
-      perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisResult
-        .simplifiedAnalysis;
+      perCapitaIncomeForBpcAnalysisQueryResult
+        .perCapitaIncomeForBpcAnalysisResult.simplifiedAnalysis;
 
     if (responseAi === null) {
       const perCapitaIncomeSimplifiedAnalysis =

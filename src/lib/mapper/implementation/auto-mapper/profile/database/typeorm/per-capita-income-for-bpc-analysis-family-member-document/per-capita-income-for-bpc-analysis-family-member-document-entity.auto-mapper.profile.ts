@@ -59,11 +59,13 @@ export class PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentEntityAutoMapperPr
         PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
       );
 
-      return PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        perCapitaIncomeForBpcAnalysisFamilyMember,
-      });
+      return PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity.build(
+        {
+          ...source,
+          id: source.id.toString(),
+          perCapitaIncomeForBpcAnalysisFamilyMember,
+        },
+      );
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);

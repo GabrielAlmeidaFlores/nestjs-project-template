@@ -9,9 +9,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @RequestDto()
-export class CreatePerCapitaIncomeForBpcAnalysisJsonRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(AnalysisToolClientId)
-  public analysisToolClientId: AnalysisToolClientId;
+export class UpdatePerCapitaIncomeForBpcAnalysisJsonRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(AnalysisToolClientId, { required: false })
+  public analysisToolClientId?: AnalysisToolClientId;
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
@@ -20,11 +20,11 @@ export class CreatePerCapitaIncomeForBpcAnalysisJsonRequestDto extends BaseBuild
   public inssBenefitNumber?: string[];
 
   protected override readonly _type =
-    CreatePerCapitaIncomeForBpcAnalysisJsonRequestDto.name;
+    UpdatePerCapitaIncomeForBpcAnalysisJsonRequestDto.name;
 }
 
 @RequestDto()
-export class CreatePerCapitaIncomeForBpcAnalysisRequestDto extends BaseBuildableDtoObject {
+export class UpdatePerCapitaIncomeForBpcAnalysisRequestDto extends BaseBuildableDtoObject {
   @RequestDtoFileProperty({
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
     required: false,
@@ -38,10 +38,11 @@ export class CreatePerCapitaIncomeForBpcAnalysisRequestDto extends BaseBuildable
   public cadUnicoDocument?: FileModel;
 
   @RequestDtoObjectProperty(
-    () => CreatePerCapitaIncomeForBpcAnalysisJsonRequestDto,
+    () => UpdatePerCapitaIncomeForBpcAnalysisJsonRequestDto,
+    { required: false },
   )
-  public json: CreatePerCapitaIncomeForBpcAnalysisJsonRequestDto;
+  public json?: UpdatePerCapitaIncomeForBpcAnalysisJsonRequestDto;
 
   protected override readonly _type =
-    CreatePerCapitaIncomeForBpcAnalysisRequestDto.name;
+    UpdatePerCapitaIncomeForBpcAnalysisRequestDto.name;
 }
