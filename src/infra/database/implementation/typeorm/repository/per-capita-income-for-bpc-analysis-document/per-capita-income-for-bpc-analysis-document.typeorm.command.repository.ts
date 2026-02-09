@@ -8,6 +8,7 @@ import { PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity } from '@infra/datab
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { PerCapitaIncomeForBpcAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis-document/command/per-capita-income-for-bpc-analysis-document.command.repository.gateway';
 import { PerCapitaIncomeForBpcAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/per-capita-income-for-bpc-analysis-document.entity';
+import { PerCapitaIncomeForBpcAnalysisDocumentId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/value-object/per-capita-income-for-bpc-analysis-document-id/per-capita-income-for-bpc-analysis-document-id.value-object';
 
 @Injectable()
 export class PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository
@@ -43,5 +44,11 @@ export class PerCapitaIncomeForBpcAnalysisDocumentTypeormCommandRepository
     return props.map((item) =>
       this.createPerCapitaIncomeForBpcAnalysisDocument(item),
     );
+  }
+
+  public deletePerCapitaIncomeForBpcAnalysisDocument(
+    id: PerCapitaIncomeForBpcAnalysisDocumentId,
+  ): TransactionType {
+    return this.delete(id.toString());
   }
 }

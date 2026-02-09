@@ -69,24 +69,26 @@ export class GetPerCapitaIncomeForBpcAnalysisUseCase {
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember.map(
         async (familyMember) => {
           const documents = await Promise.all(
-            (familyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument ||
-              []).map(async (doc: { document: string }) => {
-              const document = await this.fileProcessorGateway.getFileBuffer(
-                doc.document,
-              );
-
-              const originalFileName =
-                await this.fileProcessorGateway.getOriginalFileName(
+            familyMember.perCapitaIncomeForBpcAnalysisFamilyMemberDocument.map(
+              async (doc) => {
+                const document = await this.fileProcessorGateway.getFileBuffer(
                   doc.document,
                 );
 
-              return GetPerCapitaIncomeForBpcAnalysisFamilyMemberDocumentResponseDto.build(
-                {
-                  document: Base64.encodeBuffer(document).toString(),
-                  originalFileName: originalFileName.toString(),
-                },
-              );
-            }),
+                const originalFileName =
+                  await this.fileProcessorGateway.getOriginalFileName(
+                    doc.document,
+                  );
+
+                return GetPerCapitaIncomeForBpcAnalysisFamilyMemberDocumentResponseDto.build(
+                  {
+                    document: Base64.encodeBuffer(document).toString(),
+                    originalFileName: originalFileName.toString(),
+                    type: doc.type,
+                  },
+                );
+              },
+            ),
           );
 
           return GetPerCapitaIncomeForBpcAnalysisFamilyMemberResponseDto.build({
@@ -95,14 +97,8 @@ export class GetPerCapitaIncomeForBpcAnalysisUseCase {
             kinship: familyMember.kinship,
             livesInSameResidence: familyMember.livesInSameResidence,
             hasIncome: familyMember.hasIncome,
-            monthlyIncomeAmount:
-              familyMember.monthlyIncomeAmount !== null
-                ? familyMember.monthlyIncomeAmount
-                : null,
-            incomeType:
-              familyMember.incomeType !== null
-                ? familyMember.incomeType
-                : null,
+            monthlyIncomeAmount: familyMember.monthlyIncomeAmount,
+            incomeType: familyMember.incomeType,
             documents,
           });
         },
@@ -121,11 +117,11 @@ export class GetPerCapitaIncomeForBpcAnalysisUseCase {
       legalProceedingNumber:
         perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisLegalProceeding?.map(
           (t) => t.legalProceedingNumber,
-        ) ?? null,
+        ),
       inssBenefitNumber:
         perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisBenefit?.map(
           (t) => t.inssBenefitNumber,
-        ) ?? null,
+        ),
       perCapitaIncomeForBpcAnalysisResult:
         perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisResult !==
         null
@@ -161,6 +157,7 @@ export class GetPerCapitaIncomeForBpcAnalysisUseCase {
             return GetPerCapitaIncomeForBpcAnalysisDocumentResponseDto.build({
               url: url.toString(),
               originalFileName: originalFileName.toString(),
+              type: document.type,
             });
           },
         ),

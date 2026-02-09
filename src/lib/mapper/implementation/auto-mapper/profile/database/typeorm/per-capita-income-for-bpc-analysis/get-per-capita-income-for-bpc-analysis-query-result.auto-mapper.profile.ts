@@ -25,18 +25,9 @@ export class GetPerCapitaIncomeForBpcAnalysisQueryResultAutoMapperProfile {
       source: PerCapitaIncomeForBpcAnalysisTypeormEntity,
     ): GetPerCapitaIncomeForBpcAnalysisQueryResult => {
       return GetPerCapitaIncomeForBpcAnalysisQueryResult.build({
-        ...source,
         id: new PerCapitaIncomeForBpcAnalysisId(source.id),
-        perCapitaIncomeForBpcAnalysisDocument:
-          source.perCapitaIncomeForBpcAnalysisDocument ?? [],
-        perCapitaIncomeForBpcAnalysisFamilyMember:
-          source.perCapitaIncomeForBpcAnalysisFamilyMember ?? [],
-        perCapitaIncomeForBpcAnalysisBenefit:
-          source.perCapitaIncomeForBpcAnalysisBenefit ?? [],
-        perCapitaIncomeForBpcAnalysisLegalProceeding:
-          source.perCapitaIncomeForBpcAnalysisLegalProceeding ?? [],
-        perCapitaIncomeForBpcAnalysisResult:
-          source.perCapitaIncomeForBpcAnalysisResult ?? null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
       });
     };

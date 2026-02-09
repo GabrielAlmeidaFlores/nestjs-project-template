@@ -74,22 +74,10 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       );
 
-    const simplifiedPromptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
-      );
-
     const consumeCompleteCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
-        organizationMember.id,
-      );
-
-    const consumeSimplifiedCreditTransaction =
-      await this.consumeOrganizationCreditUseCase.execute(
-        organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
         organizationMember.id,
       );
 
@@ -108,63 +96,49 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       throw new PerCapitaIncomeForBpcAnalysisNotFoundError();
     }
 
-    // Preparar dados do cliente
     const clientDataBuffer = Buffer.from(
       JSON.stringify(analysisToolRecordQueryResult.analysisToolClient, null, 2),
       'utf-8',
     );
 
-    // Preparar dados dos documentos
     const documents =
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisDocument;
     const documentBuffers: Buffer[] = [];
 
-    if (documents !== undefined && documents !== null) {
-      for (const doc of documents) {
-        const buffer = await this.fileProcessorGateway.getFileBuffer(
-          doc.document,
-        );
-        documentBuffers.push(buffer);
-      }
+    for (const doc of documents) {
+      const buffer = await this.fileProcessorGateway.getFileBuffer(
+        doc.document,
+      );
+      documentBuffers.push(buffer);
     }
 
-    // Preparar dados dos membros da família
     const familyMembers =
       perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisFamilyMember;
 
-    const familyMembersData =
-      familyMembers !== undefined && familyMembers !== null
-        ? familyMembers.map((member) => ({
-            fullName: member.fullName,
-            birthDate: member.birthDate,
-            kinship: member.kinship,
-            livesInSameResidence: member.livesInSameResidence,
-            hasIncome: member.hasIncome,
-            monthlyIncomeAmount: member.monthlyIncomeAmount,
-            incomeType: member.incomeType,
-            documentsCount:
-              member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument?.length ?? 0,
-          }))
-        : [];
+    const familyMembersData = familyMembers.map((member) => ({
+      fullName: member.fullName,
+      birthDate: member.birthDate,
+      kinship: member.kinship,
+      livesInSameResidence: member.livesInSameResidence,
+      hasIncome: member.hasIncome,
+      monthlyIncomeAmount: member.monthlyIncomeAmount,
+      incomeType: member.incomeType,
+      documentsCount:
+        member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument.length,
+    }));
 
-    // Preparar buffers dos documentos dos family members
     const familyMemberDocumentBuffers: Buffer[] = [];
-    if (familyMembers !== undefined && familyMembers !== null) {
-      for (const member of familyMembers) {
-        const memberDocuments =
-          member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument;
-        if (memberDocuments !== undefined && memberDocuments !== null) {
-          for (const doc of memberDocuments) {
-            const buffer = await this.fileProcessorGateway.getFileBuffer(
-              doc.document,
-            );
-            familyMemberDocumentBuffers.push(buffer);
-          }
-        }
+    for (const member of familyMembers) {
+      const memberDocuments =
+        member.perCapitaIncomeForBpcAnalysisFamilyMemberDocument;
+      for (const doc of memberDocuments) {
+        const buffer = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        familyMemberDocumentBuffers.push(buffer);
       }
     }
 
-    // Preparar dados completos para análise
     const analysisData = {
       client: analysisToolRecordQueryResult.analysisToolClient,
       familyMembers: familyMembersData,
@@ -177,7 +151,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
       'utf-8',
     );
 
-    // Gerar análise completa via IA
     const completeAnalysis =
       await this.analysisProcessorGateway.getPerCapitaIncomeForBpcCompleteAnalysis(
         promptResponse.prompt,
@@ -189,29 +162,18 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
         ],
       );
 
-    // Gerar análise simplificada via IA
-    const simplifiedAnalysis =
-      await this.analysisProcessorGateway.getPerCapitaIncomeForBpcSimplifiedAnalysis(
-        simplifiedPromptResponse.prompt,
-        [
-          analysisDataBuffer,
-          clientDataBuffer,
-          ...documentBuffers,
-          ...familyMemberDocumentBuffers,
-        ],
-      );
-
-    // Criar resultado da análise
     const perCapitaIncomeForBpcAnalysisResult =
       new PerCapitaIncomeForBpcAnalysisResultEntity({
         completeAnalysis,
-        simplifiedAnalysis,
+        simplifiedAnalysis: null,
       });
 
     const perCapitaIncomeForBpcAnalysis =
       new PerCapitaIncomeForBpcAnalysisEntity({
         id: perCapitaIncomeForBpcAnalysisQueryResult.id,
         perCapitaIncomeForBpcAnalysisResult,
+        perCapitaIncomeForBpcAnalysisFamilyMember: [],
+        perCapitaIncomeForBpcAnalysisDocument: [],
         createdBy: analysisToolRecordQueryResult.createdBy.id,
         updatedBy: analysisToolRecordQueryResult.updatedBy.id,
       });
@@ -250,6 +212,7 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
     const createPerCapitaIncomeForBpcAnalysisResultTransaction =
       this.perCapitaIncomeForBpcAnalysisResultCommandRepositoryGateway.createPerCapitaIncomeForBpcAnalysisResult(
         perCapitaIncomeForBpcAnalysisResult,
+        perCapitaIncomeForBpcAnalysis.id,
       );
 
     const updatePerCapitaIncomeForBpcAnalysisTransaction =
@@ -260,7 +223,6 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCompleteCreditTransaction,
-      consumeSimplifiedCreditTransaction,
       createPerCapitaIncomeForBpcAnalysisResultTransaction,
       updatePerCapitaIncomeForBpcAnalysisTransaction,
       updateAnalysisToolRecordTransaction,
@@ -274,17 +236,9 @@ export class CreatePerCapitaIncomeForBpcAnalysisResultUseCase {
           )
         : null;
 
-    const simplifiedAnalysisAsHtml =
-      perCapitaIncomeForBpcAnalysisResult.simplifiedAnalysis !== null
-        ? await this.exportDocumentGateway.convertMarkdownToHtml(
-            perCapitaIncomeForBpcAnalysisResult.simplifiedAnalysis,
-          )
-        : null;
-
     return CreatePerCapitaIncomeForBpcAnalysisResultResponseDto.build({
       ...perCapitaIncomeForBpcAnalysisResult,
-      completeAnalysis: completeAnalysisAsHtml,
-      simplifiedAnalysis: simplifiedAnalysisAsHtml,
+      PerCapitaIncomeForBpcCompleteAnalysisResult: completeAnalysisAsHtml,
     });
   }
 }

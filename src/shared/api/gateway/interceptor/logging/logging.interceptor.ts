@@ -78,11 +78,8 @@ export class LoggingInterceptor implements NestInterceptor {
           const duration = Date.now() - now;
           const statusCode = response.statusCode;
 
-          const responseString = JSON.stringify(
-            this.sanitizeResponse(responseData),
-            null,
-            2,
-          );
+          const responseString =
+            JSON.stringify(this.sanitizeResponse(responseData), null, 2) || '';
           const isTruncated =
             responseString.length > LoggingInterceptor.MAX_RESPONSE_LOG_LENGTH;
           const truncatedResponse = responseString.substring(

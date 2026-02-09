@@ -47,7 +47,6 @@ export class DownloadPerCapitaIncomeForBpcCompleteAnalysisUseCase {
         organizationSessionData.organizationId,
         PerCapitaIncomeForBpcAnalysisNotFoundError,
       );
-
     if (
       !perCapitaIncomeForBpcAnalysisQueryResult.perCapitaIncomeForBpcAnalysisResult
     ) {

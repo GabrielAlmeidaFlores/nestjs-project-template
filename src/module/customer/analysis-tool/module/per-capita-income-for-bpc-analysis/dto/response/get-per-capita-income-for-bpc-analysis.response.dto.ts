@@ -6,9 +6,11 @@ import { CustomerId } from '@module/customer/account/domain/schema/entity/custom
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { PerCapitaIncomeForBpcAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-document/enum/per-capita-income-for-bpc-analysis-document-type.enum';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberIncomeTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/enum/per-capita-income-for-bpc-analysis-family-member-income-type.enum';
 import { PerCapitaIncomeForBpcAnalysisFamilyMemberKinshipEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member/enum/per-capita-income-for-bpc-analysis-family-member-kinship.enum';
-import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeEnum } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis-family-member-document/enum/per-capita-income-for-bpc-analysis-family-member-document-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -52,10 +54,10 @@ export class GetPerCapitaIncomeForBpcAnalysisClientResponseDto extends BaseBuild
 @ResponseDto()
 export class GetPerCapitaIncomeForBpcAnalysisResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
-  public perCapitaIncomeForBpcCompleteAnalysis?: string;
+  public completeAnalysis?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public perCapitaIncomeForBpcSimplifiedAnalysis?: string;
+  public simplifiedAnalysis?: string;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
@@ -90,6 +92,9 @@ export class GetPerCapitaIncomeForBpcAnalysisDocumentResponseDto extends BaseBui
   @ResponseDtoStringProperty()
   public originalFileName: string;
 
+  @ResponseDtoEnumProperty(PerCapitaIncomeForBpcAnalysisDocumentTypeEnum)
+  public type: PerCapitaIncomeForBpcAnalysisDocumentTypeEnum;
+
   protected override readonly _type =
     GetPerCapitaIncomeForBpcAnalysisDocumentResponseDto.name;
 }
@@ -101,6 +106,11 @@ export class GetPerCapitaIncomeForBpcAnalysisFamilyMemberDocumentResponseDto ext
 
   @ResponseDtoStringProperty()
   public originalFileName: string;
+
+  @ResponseDtoEnumProperty(
+    PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeEnum,
+  )
+  public type: PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeEnum;
 
   protected override readonly _type =
     GetPerCapitaIncomeForBpcAnalysisFamilyMemberDocumentResponseDto.name;
@@ -209,4 +219,3 @@ export class GetPerCapitaIncomeForBpcAnalysisResponseDto extends BaseBuildableDt
   protected override readonly _type =
     GetPerCapitaIncomeForBpcAnalysisResponseDto.name;
 }
-

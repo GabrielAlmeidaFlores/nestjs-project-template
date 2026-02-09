@@ -16,7 +16,6 @@ export class PerCapitaIncomeForBpcAnalysisTypeormEntity extends BaseTypeormEntit
     (entity) => entity.perCapitaIncomeForBpcAnalysis,
     { nullable: true },
   )
-  @JoinColumn({ name: 'per_capita_income_for_bpc_analysis_result_id' })
   public perCapitaIncomeForBpcAnalysisResult?:
     | PerCapitaIncomeForBpcAnalysisResultTypeormEntity
     | undefined;
