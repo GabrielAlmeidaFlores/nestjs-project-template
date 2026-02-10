@@ -25,6 +25,7 @@ import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysi
 import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis-period-document-analysis.response.dto';
 import { GenerateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis.response.dto';
+import { GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-consolidated-document-analysis.response.dto';
 import { GetRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { GetRuralTimelineCnisAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-cnis-analysis.response.dto';
 import { ListRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/list-rural-timeline-analysis-cnis-contribution-period.response.dto';
@@ -38,6 +39,7 @@ import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/a
 import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
 import { GenerateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis.use-case';
+import { GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-consolidated-document-analysis.use-case';
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { GetRuralTimelineCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-cnis-analysis.use-case';
 import { ListRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/list-rural-timeline-analysis-cnis-contribution-period.use-case';
@@ -69,6 +71,7 @@ export class RuralTimelineAnalysisController {
     private readonly addRuralTimelineAnalysisPeriodDocumentUseCase: AddRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly analyzeRuralTimelineAnalysisPeriodDocumentUseCase: AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly generateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase: GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase,
+    private readonly generateRuralTimelineConsolidatedDocumentAnalysisUseCase: GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase,
     private readonly deleteRuralTimelineAnalysisPeriodDocumentUseCase: DeleteRuralTimelineAnalysisPeriodDocumentUseCase,
     private readonly listRuralTimelineAnalysisCnisContributionPeriodUseCase: ListRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly updateRuralTimelineAnalysisCnisContributionPeriodUseCase: UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
@@ -196,6 +199,39 @@ export class RuralTimelineAnalysisController {
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
   ): Promise<GenerateRuralTimelineAnalysisResponseDto> {
     return await this.generateRuralTimelineAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Gerar análise consolidada de todos os documentos dos períodos',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/generate-consolidated-document-analysis',
+      method: RequestMethod.POST,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Análise consolidada de todos os documentos dos períodos gerada com sucesso.',
+      type: GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async generateRuralTimelineConsolidatedDocumentAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+  ): Promise<GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto> {
+    return await this.generateRuralTimelineConsolidatedDocumentAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
