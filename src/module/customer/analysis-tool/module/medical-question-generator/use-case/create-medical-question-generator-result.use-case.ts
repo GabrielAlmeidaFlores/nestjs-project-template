@@ -158,6 +158,7 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
       judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       specialActivity: null,
+      speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });
