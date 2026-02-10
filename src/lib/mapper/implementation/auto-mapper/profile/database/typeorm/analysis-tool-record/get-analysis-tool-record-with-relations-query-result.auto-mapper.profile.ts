@@ -9,10 +9,13 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -25,7 +28,10 @@ import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/m
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
+import { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
+import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -93,16 +99,37 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetAdministrativeProcedureInssAnalysisQueryResult,
       );
 
+      const medicalQuestionGenerator = this.mapper.map(
+        source.medicalQuestionGenerator,
+        MedicalQuestionGeneratorTypeormEntity,
+        GetMedicalQuestionGeneratorWithRelationsQueryResult,
+      );
+
       const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
         source.medicalAndSocialReportObjectionGeneratorAnalysis,
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
         GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              SpeechGeneratorTypeormEntity,
+              GetSpeechGeneratorQueryResult,
+            )
+          : null;
+
       const disabilityAssessmentForBpcAnalysis = this.mapper.map(
         source.disabilityAssessmentForBpcAnalysis,
         DisabilityAssessmentForBpcAnalysisTypeormEntity,
         GetDisabilityAssessmentForBpcAnalysisQueryResult,
+      );
+
+      const ruralTimelineAnalysis = this.mapper.map(
+        source.ruralTimeline,
+        RuralTimelineAnalysisTypeormEntity,
+        GetRuralTimelineAnalysisWithRelationsQueryResult,
       );
 
       const analysisToolClient = this.mapper.map(
@@ -121,8 +148,11 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         specialActivity,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        ruralTimelineAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -191,16 +221,37 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         AdministrativeProcedureInssAnalysisTypeormEntity,
       );
 
+      const medicalQuestionGenerator = this.mapper.map(
+        source.medicalQuestionGenerator,
+        GetMedicalQuestionGeneratorWithRelationsQueryResult,
+        MedicalQuestionGeneratorTypeormEntity,
+      );
+
       const medicalAndSocialReportObjectionGeneratorAnalysis = this.mapper.map(
         source.medicalAndSocialReportObjectionGeneratorAnalysis,
         GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              GetSpeechGeneratorQueryResult,
+              SpeechGeneratorTypeormEntity,
+            )
+          : null;
+
       const disabilityAssessmentForBpcAnalysis = this.mapper.map(
         source.disabilityAssessmentForBpcAnalysis,
         GetDisabilityAssessmentForBpcAnalysisQueryResult,
         DisabilityAssessmentForBpcAnalysisTypeormEntity,
+      );
+
+      const ruralTimeline = this.mapper.map(
+        source.ruralTimelineAnalysis,
+        GetRuralTimelineAnalysisWithRelationsQueryResult,
+        RuralTimelineAnalysisTypeormEntity,
       );
 
       const analysisToolClient = this.mapper.map(
@@ -218,8 +269,11 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         retirementPlanningRgps,
         judicialCaseAnalysis,
         administrativeProcedureInssAnalysis,
+        medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        ruralTimeline,
         analysisToolClient,
         specialActivity,
         createdBy,

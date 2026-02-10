@@ -1,0 +1,82 @@
+import { Mapper, constructUsing, createMap } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
+import { Injectable } from '@nestjs/common';
+
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
+import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
+
+@Injectable()
+export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile {
+  protected readonly _type =
+    RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile.name;
+
+  public constructor(@InjectMapper() private readonly mapper: Mapper) {
+    this.createMappings();
+  }
+
+  private createMappings(): void {
+    this.mapOrmEntityToDomainEntity();
+    this.mapDomainEntityToOrmEntity();
+  }
+
+  private mapOrmEntityToDomainEntity(): void {
+    const convertOrmEntityToDomainEntity = (
+      source: RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+    ): RuralTimelineAnalysisCnisContributionPeriodEntity => {
+      const ruralTimeline = source.ruralTimeline
+        ? this.mapper.map(
+            source.ruralTimeline,
+            RuralTimelineAnalysisTypeormEntity,
+            RuralTimelineAnalysisEntity,
+          )
+        : null;
+
+      return new RuralTimelineAnalysisCnisContributionPeriodEntity({
+        ...source,
+        id: new RuralTimelineAnalysisCnisContributionPeriodId(source.id),
+        ruralTimelineId: ruralTimeline?.id ?? null,
+        averageContributionAmount:
+          source.averageContributionAmount !== null &&
+          source.averageContributionAmount !== undefined
+            ? new DecimalValue(source.averageContributionAmount)
+            : null,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
+
+    createMap(
+      this.mapper,
+      RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+      RuralTimelineAnalysisCnisContributionPeriodEntity,
+      mappingFunction,
+    );
+  }
+
+  private mapDomainEntityToOrmEntity(): void {
+    const convertDomainEntityToOrmEntity = (
+      source: RuralTimelineAnalysisCnisContributionPeriodEntity,
+    ): RuralTimelineAnalysisCnisContributionPeriodTypeormEntity => {
+      return RuralTimelineAnalysisCnisContributionPeriodTypeormEntity.build({
+        ...source,
+        id: source.id.toString(),
+        averageContributionAmount: source.averageContributionAmount
+          ? source.averageContributionAmount.toString()
+          : null,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
+
+    createMap(
+      this.mapper,
+      RuralTimelineAnalysisCnisContributionPeriodEntity,
+      RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+      mappingFunction,
+    );
+  }
+}

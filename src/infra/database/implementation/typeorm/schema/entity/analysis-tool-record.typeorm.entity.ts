@@ -7,10 +7,13 @@ import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/ty
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 
@@ -86,6 +89,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   public judicialCaseAnalysis?: JudicialCaseAnalysisTypeormEntity | null;
 
   @OneToOne(
+    () => MedicalQuestionGeneratorTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'medical_question_generator_id' })
+  public medicalQuestionGenerator?: MedicalQuestionGeneratorTypeormEntity | null;
+
+  @OneToOne(
     () => MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,
     {
@@ -98,6 +111,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   public medicalAndSocialReportObjectionGeneratorAnalysis?: MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity | null;
 
   @OneToOne(
+    () => SpeechGeneratorTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'speech_generator_id' })
+  public speechGenerator?: SpeechGeneratorTypeormEntity | null;
+
+  @OneToOne(
     () => DisabilityAssessmentForBpcAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,
     {
@@ -106,6 +129,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   )
   @JoinColumn({ name: 'disability_assessment_for_bpc_analysis_id' })
   public disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisTypeormEntity | null;
+
+  @OneToOne(
+    () => RuralTimelineAnalysisTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'rural_timeline_id' })
+  public ruralTimeline?: RuralTimelineAnalysisTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
