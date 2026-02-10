@@ -133,6 +133,7 @@ export class UpdateSpecialActivityAnalysisUseCase {
       judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       medicalQuestionGenerator: null,
+      speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });

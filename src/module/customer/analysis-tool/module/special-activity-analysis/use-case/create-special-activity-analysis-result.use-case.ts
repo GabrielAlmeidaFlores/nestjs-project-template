@@ -159,6 +159,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       medicalQuestionGenerator: null,
+      speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });
