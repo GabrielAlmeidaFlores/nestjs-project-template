@@ -6,7 +6,7 @@ import type { RetirementPlanningRgpsPeriodDocumentId } from '@module/customer/an
 export class GetRetirementPlanningRgpsPeriodDocumentQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsPeriodDocumentId;
   public readonly document: string;
-  public readonly retirementPlanningRgpsPeriodId!: RetirementPlanningRgpsPeriodId | null;
+  public readonly retirementPlanningRgpsPeriodId: RetirementPlanningRgpsPeriodId | null;
 
   protected override readonly _type =
     GetRetirementPlanningRgpsPeriodDocumentQueryResult.name;

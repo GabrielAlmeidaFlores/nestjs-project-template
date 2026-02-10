@@ -134,7 +134,9 @@ export class UpdateAdministrativeProcedureInssAnalysisUseCase {
       retirementPlanningRpps: null,
       specialActivity: null,
       judicialCaseAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const transactions: TransactionType[] = [];

@@ -144,7 +144,9 @@ export class UpdateCnisFastAnalysisUseCase {
       specialActivity: null,
       judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const transactions: TransactionType[] = [];

@@ -115,19 +115,27 @@ export class UpdateSpecialActivityAnalysisUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdAt: analysisToolRecordQueryResult.createdAt,
+      updatedAt: analysisToolRecordQueryResult.updatedAt,
+      deletedAt: analysisToolRecordQueryResult.deletedAt,
       analysisToolClient,
       specialActivity,
-      status: AnalysisStatusEnum.IN_PROGRESS,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       cnisFastAnalysis: null,
       retirementPlanningRpps: null,
       retirementPlanningRgps: null,
-      judicialCaseAnalysis: null,
       administrativeProcedureInssAnalysis: null,
+      judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      medicalQuestionGenerator: null,
+      speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
+      ruralTimelineAnalysis: null,
     });
 
     const transactions: TransactionType[] = [];
