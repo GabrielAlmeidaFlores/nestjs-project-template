@@ -51,7 +51,7 @@ export class GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile {
       );
 
       const speechGeneratorResult =
-        source.speechGeneratorResult !== null
+        source.speechGeneratorResult !== undefined
           ? this.mapper.map(
               source.speechGeneratorResult,
               SpeechGeneratorResultTypeormEntity,
