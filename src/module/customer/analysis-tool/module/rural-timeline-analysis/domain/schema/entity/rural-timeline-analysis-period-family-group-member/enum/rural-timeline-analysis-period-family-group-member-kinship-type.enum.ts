@@ -1,6 +1,7 @@
 export enum RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum {
-  SPOUSE = 'spouse',
-  CHILD = 'child',
-  PARENT = 'parent',
-  SIBLING = 'sibling',
+  SPOUSE = 'SPOUSE',
+  SON = 'SON',
+  FATHER_MOTHER = 'FATHER_MOTHER',
+  BROTHER_SISTER = 'BROTHER_SISTER',
+  OTHER = 'OTHER',
 }
