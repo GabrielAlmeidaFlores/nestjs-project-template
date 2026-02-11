@@ -61,13 +61,32 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
     const convertDomainEntityToOrmEntity = (
       source: RuralTimelineAnalysisCnisContributionPeriodEntity,
     ): RuralTimelineAnalysisCnisContributionPeriodTypeormEntity => {
-      return RuralTimelineAnalysisCnisContributionPeriodTypeormEntity.build({
-        ...source,
-        id: source.id.toString(),
-        averageContributionAmount: source.averageContributionAmount
-          ? source.averageContributionAmount.toString()
-          : null,
-      });
+      const ormEntity =
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity.build({
+          id: source.id.toString(),
+          employmentRelationshipSource: source.employmentRelationshipSource,
+          startDate: source.startDate,
+          endDate: source.endDate,
+          category: source.category,
+          qualifyingPeriod: source.qualifyingPeriod,
+          status: source.status,
+          averageContributionAmount: source.averageContributionAmount
+            ? source.averageContributionAmount.toString()
+            : null,
+          contributionAdjustmentIntent: source.contributionAdjustmentIntent,
+          externalSupplementationIntent: source.externalSupplementationIntent,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        });
+
+      if (source.ruralTimelineId) {
+        ormEntity.ruralTimeline = {
+          id: source.ruralTimelineId.toString(),
+        } as unknown as RuralTimelineAnalysisTypeormEntity;
+      }
+
+      return ormEntity;
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
