@@ -18,7 +18,6 @@ import { AudienceQuestionGeneratorResultEntity } from '@module/customer/analysis
 import { CreateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator-result.response.dto';
 import { AudienceQuestionDocumentRequiredError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-document-required.error';
 import { AudienceQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-not-found.error';
-import { AudienceQuestionGeneratorResultAlreadyExistsError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-result-already-exists.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -94,12 +93,6 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       throw new AudienceQuestionGeneratorNotFoundError();
     }
 
-    if (
-      analysisToolRecordQueryResult.audienceQuestionGenerator
-        ?.audienceQuestionGeneratorResult !== null
-    ) {
-      throw new AudienceQuestionGeneratorResultAlreadyExistsError();
-    }
 
     if (
       audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorDocument
@@ -130,7 +123,8 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
 
     const audienceQuestionGeneratorResult =
       new AudienceQuestionGeneratorResultEntity({
-        audienceQuestionGeneratorCompleteAnalysis: audienceQuestionCompleteAnalysis,
+        audienceQuestionGeneratorCompleteAnalysis:
+          audienceQuestionCompleteAnalysis,
       });
 
     const audienceQuestionGenerator = new AudienceQuestionGeneratorEntity({
@@ -191,7 +185,8 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
     await transaction.commit();
 
     return CreateAudienceQuestionGeneratorResultResponseDto.build({
-      audienceQuestionGeneratorResultId: audienceQuestionGeneratorResult.id,
+      audienceQuestionGeneratorCompleteAnalysis:
+        audienceQuestionGeneratorResult.audienceQuestionGeneratorCompleteAnalysis,
     });
   }
 }

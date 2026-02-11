@@ -5,8 +5,6 @@ export class AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError extend
     AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError.name;
 
   public constructor() {
-    super(
-      'O gerador de perguntas para audiência não contém análise completa',
-    );
+    super('O gerador de perguntas para audiência não contém análise completa');
   }
 }

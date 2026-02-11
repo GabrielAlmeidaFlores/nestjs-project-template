@@ -14,12 +14,20 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AudienceQuestionGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/command/audience-question-generator.command.repository.gateway';
 import { AudienceQuestionGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/audience-question-generator.query.repository.gateway';
+import { GetAudienceQuestionGeneratorBenefitQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-benefit/query/result/get-audience-question-generator-benefit.query.result';
 import { GetAudienceQuestionGeneratorDocumentQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-document.query.result';
+import { GetAudienceQuestionGeneratorLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-legal-proceeding/query/result/get-audience-question-generator-legal-proceeding.query.result';
+import { AudienceQuestionGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-benefit/command/audience-question-generator-benefit.command.repository.gateway';
 import { AudienceQuestionGeneratorDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-document/command/audience-question-generator-document.command.repository.gateway';
+import { AudienceQuestionGeneratorLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-legal-proceeding/command/audience-question-generator-legal-proceeding.command.repository.gateway';
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
+import { AudienceQuestionGeneratorBenefitEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-benefit/audience-question-generator-benefit.entity';
+import { AudienceQuestionGeneratorBenefitId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-benefit/value-object/audience-question-generator-benefit-id/audience-question-generator-benefit-id.value-object';
 import { AudienceQuestionGeneratorDocumentEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-document/audience-question-generator-document.entity';
 import { AudienceQuestionGeneratorDocumentId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-document/value-object/audience-question-generator-document-id/audience-question-generator-document-id.value-object';
+import { AudienceQuestionGeneratorLegalProceedingEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-legal-proceeding/audience-question-generator-legal-proceeding.entity';
+import { AudienceQuestionGeneratorLegalProceedingId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-legal-proceeding/value-object/audience-question-generator-legal-proceeding-id/audience-question-generator-legal-proceeding-id.value-object';
 import { UpdateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/update-audience-question-generator.request.dto';
 import { UpdateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/update-audience-question-generator.response.dto';
 import { AudienceQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-not-found.error';
@@ -42,6 +50,10 @@ export class UpdateAudienceQuestionGeneratorUseCase {
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(AudienceQuestionGeneratorDocumentCommandRepositoryGateway)
     private readonly audienceQuestionGeneratorDocumentCommandRepositoryGateway: AudienceQuestionGeneratorDocumentCommandRepositoryGateway,
+    @Inject(AudienceQuestionGeneratorBenefitCommandRepositoryGateway)
+    private readonly audienceQuestionGeneratorBenefitCommandRepositoryGateway: AudienceQuestionGeneratorBenefitCommandRepositoryGateway,
+    @Inject(AudienceQuestionGeneratorLegalProceedingCommandRepositoryGateway)
+    private readonly audienceQuestionGeneratorLegalProceedingCommandRepositoryGateway: AudienceQuestionGeneratorLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -136,16 +148,38 @@ export class UpdateAudienceQuestionGeneratorUseCase {
       transactions.push(...audienceQuestionDocumentTransactions);
     }
 
+    if (dto.json?.inssBenefitNumber !== undefined) {
+      const audienceQuestionGeneratorBenefitTransactions =
+        this.updateAudienceQuestionGeneratorBenefitOnDatabase(
+          audienceQuestionGenerator,
+          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit,
+          dto.json.inssBenefitNumber,
+        );
+
+      transactions.push(...audienceQuestionGeneratorBenefitTransactions);
+    }
+
+    if (dto.json?.legalProceedingNumber !== undefined) {
+      const audienceQuestionGeneratorLegalProceedingTransactions =
+        this.updateAudienceQuestionGeneratorLegalProceedingOnDatabase(
+          audienceQuestionGenerator,
+          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding,
+          dto.json.legalProceedingNumber,
+        );
+
+      transactions.push(...audienceQuestionGeneratorLegalProceedingTransactions);
+    }
+
     const updateAnalysisToolRecordTransaction =
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
-          analysisToolRecord.id,
-          analysisToolRecord,
+        analysisToolRecord.id,
+        analysisToolRecord,
       );
 
     const updateAudienceQuestionGeneratorTransaction =
       this.audienceQuestionGeneratorCommandRepositoryGateway.updateAudienceQuestionGenerator(
-          audienceQuestionGenerator.id,
-          audienceQuestionGenerator,
+        audienceQuestionGenerator.id,
+        audienceQuestionGenerator,
       );
 
     transactions.push(
@@ -189,6 +223,60 @@ export class UpdateAudienceQuestionGeneratorUseCase {
       });
 
       return this.audienceQuestionGeneratorDocumentCommandRepositoryGateway.createAudienceQuestionGeneratorDocument(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
+  }
+
+  private updateAudienceQuestionGeneratorBenefitOnDatabase(
+    audienceQuestionGenerator: AudienceQuestionGeneratorEntity,
+    audienceQuestionGeneratorBenefitQueryResult: GetAudienceQuestionGeneratorBenefitQueryResult[],
+    inssBenefitNumber: string[],
+  ): TransactionType[] {
+    const deleteCurrent = audienceQuestionGeneratorBenefitQueryResult.map(
+      (value) => {
+        return this.audienceQuestionGeneratorBenefitCommandRepositoryGateway.deleteAudienceQuestionGeneratorBenefit(
+          new AudienceQuestionGeneratorBenefitId(value.id.toString()),
+        );
+      },
+    );
+
+    const createNew = inssBenefitNumber.map((benefitNumber) => {
+      const entity = new AudienceQuestionGeneratorBenefitEntity({
+        inssBenefitNumber: benefitNumber,
+        audienceQuestionGenerator,
+      });
+
+      return this.audienceQuestionGeneratorBenefitCommandRepositoryGateway.createAudienceQuestionGeneratorBenefit(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
+  }
+
+  private updateAudienceQuestionGeneratorLegalProceedingOnDatabase(
+    audienceQuestionGenerator: AudienceQuestionGeneratorEntity,
+    audienceQuestionGeneratorLegalProceedingQueryResult: GetAudienceQuestionGeneratorLegalProceedingQueryResult[],
+    legalProceedingNumber: string[],
+  ): TransactionType[] {
+    const deleteCurrent = audienceQuestionGeneratorLegalProceedingQueryResult.map(
+      (value) => {
+        return this.audienceQuestionGeneratorLegalProceedingCommandRepositoryGateway.deleteAudienceQuestionGeneratorLegalProceeding(
+          new AudienceQuestionGeneratorLegalProceedingId(value.id.toString()),
+        );
+      },
+    );
+
+    const createNew = legalProceedingNumber.map((proceedingNumber) => {
+      const entity = new AudienceQuestionGeneratorLegalProceedingEntity({
+        legalProceedingNumber: proceedingNumber,
+        audienceQuestionGenerator,
+      });
+
+      return this.audienceQuestionGeneratorLegalProceedingCommandRepositoryGateway.createAudienceQuestionGeneratorLegalProceeding(
         entity,
       );
     });

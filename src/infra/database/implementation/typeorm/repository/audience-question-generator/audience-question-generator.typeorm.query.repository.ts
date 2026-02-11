@@ -61,6 +61,8 @@ export class AudienceQuestionGeneratorTypeormQueryRepository
         },
         audienceQuestionGeneratorDocument: true,
         audienceQuestionGeneratorResult: true,
+        audienceQuestionGeneratorBenefit: true,
+        audienceQuestionGeneratorLegalProceeding: true,
       },
     });
 
@@ -109,6 +111,8 @@ export class AudienceQuestionGeneratorTypeormQueryRepository
           },
           audienceQuestionGeneratorDocument: true,
           audienceQuestionGeneratorResult: true,
+          audienceQuestionGeneratorBenefit: true,
+          audienceQuestionGeneratorLegalProceeding: true,
         },
       },
       err,

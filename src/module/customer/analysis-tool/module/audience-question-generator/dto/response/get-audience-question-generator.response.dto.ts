@@ -98,13 +98,10 @@ export class GetAudienceQuestionGeneratorResponseDto extends BaseBuildableDtoObj
   @ResponseDtoValueObjectProperty(AudienceQuestionGeneratorId)
   public id: AudienceQuestionGeneratorId;
 
-  @ResponseDtoObjectProperty(
-    () => GetAudienceQuestionGeneratorDocumentResponseDto,
-    {
-      required: false,
-      isArray: true,
-    },
-  )
+  @ResponseDtoObjectProperty(() => GetAudienceQuestionGeneratorDocumentResponseDto, {
+    required: false,
+    isArray: true,
+  })
   public audienceQuestionDocuments?:
     | GetAudienceQuestionGeneratorDocumentResponseDto[]
     | undefined;
@@ -112,17 +109,18 @@ export class GetAudienceQuestionGeneratorResponseDto extends BaseBuildableDtoObj
   @ResponseDtoEnumProperty(AnalysisStatusEnum)
   public status: AnalysisStatusEnum;
 
-  @ResponseDtoObjectProperty(
-    () => GetAudienceQuestionGeneratorClientResponseDto,
-  )
+  @ResponseDtoObjectProperty(() => GetAudienceQuestionGeneratorClientResponseDto)
   public analysisToolClient: GetAudienceQuestionGeneratorClientResponseDto;
 
-  @ResponseDtoObjectProperty(
-    () => GetAudienceQuestionGeneratorResultResponseDto,
-    {
-      required: false,
-    },
-  )
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
+  @ResponseDtoObjectProperty(() => GetAudienceQuestionGeneratorResultResponseDto, {
+    required: false,
+  })
   public audienceQuestionGeneratorResult?: GetAudienceQuestionGeneratorResultResponseDto;
 
   @ResponseDtoObjectProperty(

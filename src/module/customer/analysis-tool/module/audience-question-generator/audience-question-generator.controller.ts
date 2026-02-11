@@ -57,7 +57,8 @@ export class AudienceQuestionGeneratorController {
     tag: ['gerador-perguntas-audiencia'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Gerador de perguntas para audiência atualizado com sucesso.',
+      description:
+        'Gerador de perguntas para audiência atualizado com sucesso.',
       type: UpdateAudienceQuestionGeneratorResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -80,7 +81,6 @@ export class AudienceQuestionGeneratorController {
       dto,
     );
   }
-
 
   @BuildEndpointSpecification({
     summary: 'Criar gerador de perguntas para audiência',
@@ -145,7 +145,8 @@ export class AudienceQuestionGeneratorController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Baixar análise simplificada do gerador de perguntas para audiência',
+    summary:
+      'Baixar análise simplificada do gerador de perguntas para audiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':audienceQuestionGeneratorId/download/simplified-version',
@@ -226,7 +227,8 @@ export class AudienceQuestionGeneratorController {
     tag: ['gerador-perguntas-audiencia'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Resultado do gerador de perguntas para audiência criado com sucesso.',
+      description:
+        'Resultado do gerador de perguntas para audiência criado com sucesso.',
       type: CreateAudienceQuestionGeneratorResultResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],

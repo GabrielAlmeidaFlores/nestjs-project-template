@@ -34,7 +34,8 @@ export class SpeechGeneratorEntity extends BaseEntity<SpeechGeneratorId> {
 
     this.speechGeneratorDocument = props.speechGeneratorDocument ?? [];
     this.speechGeneratorBenefit = props.speechGeneratorBenefit ?? [];
-    this.speechGeneratorLegalProceeding = props.speechGeneratorLegalProceeding ?? [];
+    this.speechGeneratorLegalProceeding =
+      props.speechGeneratorLegalProceeding ?? [];
     this.speechGeneratorResult = props.speechGeneratorResult ?? null;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;

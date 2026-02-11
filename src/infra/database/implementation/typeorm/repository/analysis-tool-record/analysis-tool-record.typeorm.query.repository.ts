@@ -873,6 +873,16 @@ export class AnalysisToolRecordTypeormQueryRepository
           audienceQuestionGenerator: {
             audienceQuestionGeneratorResult: true,
             audienceQuestionGeneratorDocument: true,
+            audienceQuestionGeneratorBenefit: true,
+            audienceQuestionGeneratorLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
           },
           createdBy: {
             customer: true,
