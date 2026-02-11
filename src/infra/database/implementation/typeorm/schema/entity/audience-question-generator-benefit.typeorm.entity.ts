@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
+import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 
 @Entity({ name: 'audience_question_generator_benefit' })
 export class AudienceQuestionGeneratorBenefitTypeormEntity extends BaseTypeormEntity {
@@ -17,7 +17,9 @@ export class AudienceQuestionGeneratorBenefitTypeormEntity extends BaseTypeormEn
     (entity) => entity.audienceQuestionGeneratorBenefit,
   )
   @JoinColumn({ name: 'audience_question_generator_id' })
-  public audienceQuestionGenerator: AudienceQuestionGeneratorTypeormEntity | undefined;
+  public audienceQuestionGenerator:
+    | AudienceQuestionGeneratorTypeormEntity
+    | undefined;
 
   protected override readonly _type =
     AudienceQuestionGeneratorBenefitTypeormEntity.name;

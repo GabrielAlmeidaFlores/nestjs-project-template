@@ -5,13 +5,18 @@ import { AudienceQuestionGeneratorLegalProceedingId } from '@module/customer/ana
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class AudienceQuestionGeneratorLegalProceedingEntity extends BaseEntity<AudienceQuestionGeneratorLegalProceedingId> {
-  @Description('Número do processo judicial relacionado ao gerador de perguntas de audiência.')
+  @Description(
+    'Número do processo judicial relacionado ao gerador de perguntas de audiência.',
+  )
   public readonly legalProceedingNumber: string;
 
-  @Description('Gerador de perguntas de audiência associado ao processo judicial.')
+  @Description(
+    'Gerador de perguntas de audiência associado ao processo judicial.',
+  )
   public readonly audienceQuestionGenerator: AudienceQuestionGeneratorEntity;
 
-  protected readonly _type = AudienceQuestionGeneratorLegalProceedingEntity.name;
+  protected readonly _type =
+    AudienceQuestionGeneratorLegalProceedingEntity.name;
 
   public constructor(
     props: AudienceQuestionGeneratorLegalProceedingEntityPropsInterface,
