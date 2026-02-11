@@ -58,13 +58,23 @@ export class RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMa
     const convertDomainEntityToOrmEntity = (
       source: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity,
     ): RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity => {
-      return RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity.build(
-        {
-          ...source,
-          id: source.id.toString(),
-          contributionAmount: source.contributionAmount.toString(),
-        },
-      );
+      const ormEntity =
+        RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity.build(
+          {
+            id: source.id.toString(),
+            contributionDate: source.contributionDate,
+            contributionAmount: source.contributionAmount.toString(),
+            createdAt: source.createdAt,
+            updatedAt: source.updatedAt,
+            deletedAt: source.deletedAt,
+          },
+        );
+
+      ormEntity.ruralTimelineCnisContributionPeriod = {
+        id: source.ruralTimelineCnisContributionPeriodId.toString(),
+      } as unknown as RuralTimelineAnalysisCnisContributionPeriodTypeormEntity;
+
+      return ormEntity;
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);

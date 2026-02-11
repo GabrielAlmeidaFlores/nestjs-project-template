@@ -53,10 +53,24 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: RuralTimelineAnalysisPeriodDocumentEntity,
     ): RuralTimelineAnalysisPeriodDocumentTypeormEntity => {
-      return RuralTimelineAnalysisPeriodDocumentTypeormEntity.build({
-        ...source,
+      const ormEntity = RuralTimelineAnalysisPeriodDocumentTypeormEntity.build({
         id: source.id.toString(),
+        documentYear: source.documentYear,
+        documentHolderType: source.documentHolderType,
+        selfOwned: source.selfOwned,
+        probatoryPurpose: source.probatoryPurpose,
+        document: source.document,
+        type: source.type,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
+
+      ormEntity.ruralTimelinePeriod = {
+        id: source.ruralTimelinePeriodId.toString(),
+      } as unknown as RuralTimelineAnalysisPeriodTypeormEntity;
+
+      return ormEntity;
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
