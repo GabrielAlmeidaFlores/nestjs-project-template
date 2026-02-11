@@ -22,6 +22,6 @@ export class SpeechGeneratorDocumentEntity extends BaseEntity<SpeechGeneratorDoc
 
     this.document = props.document;
     this.type = props.type;
-    this.speechGenerator = props.speechGenerator;
+    this.speechGenerator = props.speechGenerator ?? null;
   }
 }
