@@ -271,17 +271,21 @@ export class GetRuralTimelineAnalysisPeriodResponseDto extends BaseBuildableDtoO
   @ResponseDtoStringProperty()
   public id: string;
 
-  @ResponseDtoDateProperty()
-  public startDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public startDate?: Date;
 
-  @ResponseDtoDateProperty()
-  public endDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public endDate?: Date;
 
-  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodWorkerTypeEnum)
-  public workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
+  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodWorkerTypeEnum, {
+    required: false,
+  })
+  public workerType?: RuralTimelineAnalysisPeriodWorkerTypeEnum;
 
-  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodWorkRegimeTypeEnum)
-  public workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodWorkRegimeTypeEnum, {
+    required: false,
+  })
+  public workRegimeType?: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
 
   @ResponseDtoEnumProperty(ProductionDestinationEnum, { required: false })
   public productionDestination?: ProductionDestinationEnum;

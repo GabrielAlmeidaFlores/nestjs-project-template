@@ -8,13 +8,13 @@ import type { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/ana
 import type { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
 
 export interface RuralTimelineAnalysisPeriodEntityPropsInterface extends BaseEntityPropsInterface<RuralTimelineAnalysisPeriodId> {
-  startDate: Date;
-  endDate: Date;
-  workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
-  workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  workerType?: RuralTimelineAnalysisPeriodWorkerTypeEnum | null;
+  workRegimeType?: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum | null;
   productionDestination?: ProductionDestinationEnum | null;
   documentAnalysis?: string | null;
-  ruralTimelineId: RuralTimelineAnalysisId;
+  ruralTimelineId?: RuralTimelineAnalysisId | null;
   ruralTimelinePeriodPropertyId?: RuralTimelineAnalysisPeriodPropertyId | null;
   ruralTimelinePeriodResidenceId?: RuralTimelineAnalysisPeriodResidenceId | null;
 }

@@ -115,10 +115,10 @@ export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult extends 
 
 export class GetRuralTimelineAnalysisPeriodQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisPeriodId;
-  public readonly startDate: Date;
-  public readonly endDate: Date;
-  public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
-  public readonly workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  public readonly startDate: Date | null;
+  public readonly endDate: Date | null;
+  public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum | null;
+  public readonly workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum | null;
   public readonly productionDestination: ProductionDestinationEnum | null;
   public readonly documentAnalysis: string | null;
   public readonly ruralTimelineAnalysisPeriodDocument: GetRuralTimelineAnalysisPeriodDocumentQueryResult[];
