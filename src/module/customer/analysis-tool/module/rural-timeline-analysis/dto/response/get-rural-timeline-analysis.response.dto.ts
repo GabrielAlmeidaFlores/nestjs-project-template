@@ -268,6 +268,9 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public id: string;
+
   @ResponseDtoDateProperty()
   public startDate: Date;
 

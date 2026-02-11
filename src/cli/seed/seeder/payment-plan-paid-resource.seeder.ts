@@ -386,6 +386,60 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada com perguntas essenciais para preparar o cliente para audiências.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c7d3f8a4-9e2b-4f5c-a1d6-3e8b7c4f9a2d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Petição Inicial Completa',
+      description:
+        'Geração de petição inicial completa com fundamentação jurídica detalhada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e8f2a5c4-7d3b-5e9a-a6d1-2c8d9b5e3a7f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Petição Inicial Simplificada',
+      description:
+        'Versão simplificada da petição inicial para apresentação ao cliente, com linguagem acessível e sem termos técnicos complexos.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f9a3b6d5-8e4c-5a1b-b7e2-3d9e0c6f8b1a'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Requerimento Administrativo Completo',
+      description:
+        'Geração de requerimento administrativo completo com fundamentação jurídica detalhada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a0b4c7e6-9f5d-4b2c-a8d3-4e0f1d7a2c9b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Requerimento Administrativo Simplificado',
+      description:
+        'Versão simplificada do requerimento administrativo para apresentação ao cliente, com linguagem acessível e sem termos técnicos complexos.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b1c5d8f7-a0e6-4c3d-b9e4-5f1a2e8b3d0c'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Parecer Completo',
+      description:
+        'Geração de parecer jurídico completo com análise detalhada e fundamentação técnica.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c2d6e9a8-b1f7-4d2e-a0f5-6a2b3f9c4e1d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Geração de Parecer Simplificado',
+      description:
+        'Versão simplificada do parecer jurídico para apresentação ao cliente, com linguagem acessível e clara.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

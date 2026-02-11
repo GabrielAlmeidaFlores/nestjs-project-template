@@ -6,5 +6,5 @@ import type { SpeechGeneratorDocumentId } from '@module/customer/analysis-tool/m
 export interface SpeechGeneratorDocumentEntityPropsInterface extends BaseEntityPropsInterface<SpeechGeneratorDocumentId> {
   document: string;
   type: SpeechGeneratorDocumentTypeEnum;
-  speechGenerator: SpeechGeneratorEntity | null | undefined;
+  speechGenerator?: SpeechGeneratorEntity | null;
 }
