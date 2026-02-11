@@ -96,7 +96,7 @@ export class DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase {
     if (responseAi === null) {
       const completeAnalysisBuffer = Buffer.from(
         audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
-          .audienceQuestionGeneratorCompleteAnalysis ?? '',
+          .audienceQuestionGeneratorCompleteAnalysis,
         'utf-8',
       );
 
