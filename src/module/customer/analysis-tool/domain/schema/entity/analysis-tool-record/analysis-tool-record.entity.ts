@@ -13,6 +13,8 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
@@ -70,6 +72,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
 
   @Description(
+    'Gerador de discurso associado ao registro da ferramenta de análise',
+  )
+  public readonly speechGenerator: SpeechGeneratorEntity | null;
+
+  @Description(
     'Avaliação de deficiência para BPC associada ao registro da ferramenta de análise',
   )
   public readonly disabilityAssessmentForBpcAnalysis: DisabilityAssessmentForBpcAnalysisEntity | null;
@@ -78,6 +85,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     'Gerador de perguntas de audiência associado ao registro da ferramenta de análise',
   )
   public readonly audienceQuestionGenerator: AudienceQuestionGeneratorEntity | null;
+
+  @Description(
+    'Análise de linha do tempo rural associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralTimelineAnalysis: RuralTimelineAnalysisEntity | null;
 
   @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
@@ -112,8 +124,10 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.medicalQuestionGenerator = props.medicalQuestionGenerator ?? null;
     this.medicalAndSocialReportObjectionGeneratorAnalysis =
       props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
+    this.speechGenerator = props.speechGenerator ?? null;
     this.disabilityAssessmentForBpcAnalysis =
       props.disabilityAssessmentForBpcAnalysis ?? null;
+    this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

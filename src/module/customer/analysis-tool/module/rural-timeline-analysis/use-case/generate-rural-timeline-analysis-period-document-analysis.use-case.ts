@@ -77,7 +77,7 @@ export class GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase {
         ruralTimelineAnalysisId,
       );
 
-    const period = ruralTimelineAnalysis.periods.find(
+    const period = ruralTimelineAnalysis.ruralTimelineAnalysisPeriod.find(
       (p) => p.id.toString() === ruralTimelineAnalysisPeriodId.toString(),
     );
 

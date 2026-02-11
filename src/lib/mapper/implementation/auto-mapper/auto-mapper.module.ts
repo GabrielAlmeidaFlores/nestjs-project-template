@@ -201,6 +201,17 @@ import { SpecialActivityDocumentEntityAutoMapperProfile } from '@lib/mapper/impl
 import { SpecialActivityInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/special-activity-inss-benefit-entity.auto-mapper.profile';
 import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
 import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
+import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
+import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
+import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
+import { GetSpeechGeneratorBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-benefit/get-speech-generator-benefit-query-result.auto-mapper.profile';
+import { SpeechGeneratorBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-benefit/speech-generator-benefit-entity.auto-mapper.profile';
+import { GetSpeechGeneratorDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-document/get-speech-generator-document-query-result.auto-mapper.profile';
+import { SpeechGeneratorDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-document/speech-generator-document-entity.auto-mapper.profile';
+import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/get-speech-generator-legal-proceeding-query-result.auto-mapper.profile';
+import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
+import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
+import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -233,6 +244,17 @@ import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implem
     CnisFastAnalysisResultEntityAutoMapperProfile,
     GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisResultQueryResultAutoMapperProfile,
+    GetSpeechGeneratorDocumentQueryResultAutoMapperProfile,
+    SpeechGeneratorDocumentEntityAutoMapperProfile,
+    GetSpeechGeneratorResultQueryResultAutoMapperProfile,
+    SpeechGeneratorResultEntityAutoMapperProfile,
+    GetSpeechGeneratorBenefitQueryResultAutoMapperProfile,
+    SpeechGeneratorBenefitEntityAutoMapperProfile,
+    GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile,
+    SpeechGeneratorLegalProceedingEntityAutoMapperProfile,
+    SpeechGeneratorEntityAutoMapperProfile,
+    GetSpeechGeneratorQueryResultAutoMapperProfile,
+    GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile,
     GetAnalysisToolClientWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisInssBenefitQueryResultAutoMapperProfile,
     GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile,

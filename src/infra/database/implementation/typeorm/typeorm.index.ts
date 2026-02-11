@@ -111,6 +111,12 @@ import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database
 import { SpecialActivityInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-inss-benefit/special-activity-inss-benefit.typeorm.command.repository';
 import { SpecialActivityLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-legal-proceeding/special-activity-legal-proceeding.typeorm.command.repository';
 import { SpecialActivityResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-result/special-activity-result.typeorm.command.repository';
+import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
+import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
+import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
+import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-document/speech-generator-document.typeorm.command.repository';
+import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
+import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
 import { AdministrativeProcedureInssAnalysisBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-benefit.entity';
 import { AdministrativeProcedureInssAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-document.entity';
@@ -208,6 +214,11 @@ import { SpecialActivityInssBenefitTypeormEntity } from '@infra/database/impleme
 import { SpecialActivityLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-legal-proceeding.typeorm.entity';
 import { SpecialActivityResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-result.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
+import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
+import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
+import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
+import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { DatabaseApplicationVariable } from '@shared/system/constant/application-variable/source/database.application-variable';
 
 import type { Provider } from '@nestjs/common';
@@ -309,6 +320,11 @@ export class TypeormIndex {
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultTypeormEntity,
     MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
+    SpeechGeneratorBenefitTypeormEntity,
+    SpeechGeneratorDocumentTypeormEntity,
+    SpeechGeneratorLegalProceedingTypeormEntity,
+    SpeechGeneratorResultTypeormEntity,
+    SpeechGeneratorTypeormEntity,
     DisabilityAssessmentForBpcAnalysisBenefitTypeormEntity,
     DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity,
     DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity,
@@ -406,6 +422,12 @@ export class TypeormIndex {
     JudicialCaseAnalysisDocumentTypeormCommandRepository,
     JudicialCaseAnalysisLegalProceedingTypeormCommandRepository,
     JudicialCaseAnalysisResultTypeormCommandRepository,
+    SpeechGeneratorTypeormCommandRepository,
+    SpeechGeneratorTypeormQueryRepository,
+    SpeechGeneratorBenefitTypeormCommandRepository,
+    SpeechGeneratorLegalProceedingTypeormCommandRepository,
+    SpeechGeneratorResultTypeormCommandRepository,
+    SpeechGeneratorDocumentTypeormCommandRepository,
     RuralTimelineAnalysisTypeormCommandRepository,
     RuralTimelineAnalysisTypeormQueryRepository,
     RuralTimelineAnalysisDocumentTypeormCommandRepository,

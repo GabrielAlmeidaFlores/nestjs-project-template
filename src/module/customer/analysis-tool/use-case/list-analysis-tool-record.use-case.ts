@@ -92,7 +92,8 @@ export class ListAnalysisToolRecordUseCase {
           analysisToolRecord.administrativeProcedureInssAnalysis ??
           analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
           analysisToolRecord.specialActivity ??
-          analysisToolRecord.disabilityAssessmentForBpcAnalysis;
+          analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
+          analysisToolRecord.ruralTimelineAnalysis;
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({

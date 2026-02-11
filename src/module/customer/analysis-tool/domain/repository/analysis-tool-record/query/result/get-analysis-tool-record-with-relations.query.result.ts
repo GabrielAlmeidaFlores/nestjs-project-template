@@ -15,7 +15,9 @@ import type { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/c
 import type { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import type { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import type { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
+import type { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import type { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import type { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 
 export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AnalysisToolRecordId;
@@ -30,7 +32,9 @@ export class GetAnalysisToolRecordWithRelationsQueryResult extends BaseBuildable
   public readonly audienceQuestionGenerator: GetAudienceQuestionGeneratorWithRelationsQueryResult | null;
   public readonly medicalQuestionGenerator: GetMedicalQuestionGeneratorWithRelationsQueryResult | null;
   public readonly medicalAndSocialReportObjectionGeneratorAnalysis: GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult | null;
+  public readonly speechGenerator: GetSpeechGeneratorQueryResult | null;
   public readonly disabilityAssessmentForBpcAnalysis: GetDisabilityAssessmentForBpcAnalysisQueryResult | null;
+  public readonly ruralTimelineAnalysis: GetRuralTimelineAnalysisWithRelationsQueryResult | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
