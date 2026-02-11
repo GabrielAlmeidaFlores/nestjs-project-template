@@ -19,6 +19,5 @@ export class SpeechGeneratorBenefitTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'speech_generator_id' })
   public speechGenerator?: SpeechGeneratorTypeormEntity | undefined;
 
-  protected override readonly _type =
-    SpeechGeneratorBenefitTypeormEntity.name;
+  protected override readonly _type = SpeechGeneratorBenefitTypeormEntity.name;
 }

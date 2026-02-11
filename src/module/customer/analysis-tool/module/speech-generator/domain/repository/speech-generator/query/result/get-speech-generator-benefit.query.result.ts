@@ -9,6 +9,5 @@ export class GetSpeechGeneratorBenefitQueryResult extends BaseBuildableObject {
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
 
-  protected override readonly _type =
-    GetSpeechGeneratorBenefitQueryResult.name;
+  protected override readonly _type = GetSpeechGeneratorBenefitQueryResult.name;
 }

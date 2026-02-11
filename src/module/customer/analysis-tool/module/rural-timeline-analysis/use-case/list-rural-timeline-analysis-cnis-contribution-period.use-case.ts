@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { ListRuralTimelineAnalysisCnisContributionPeriodQueryParam } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/param/list-rural-timeline-analysis-cnis-contribution-period.query.param';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
-import { GetRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis-cnis-contribution-period.response.dto';
+import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
+import {
+  GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
+  GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
+} from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { ListRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/list-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -52,11 +57,38 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
         listParam,
       );
 
-    const resource = listQueryResult.resource.map((item) =>
-      GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
-        ...item,
-      }),
-    );
+    const resource = listQueryResult.resource.map((item) => {
+      const underMinimumPeriods = (
+        item.ruralTimelineCnisContributionPeriodUnderMinimum ?? []
+      ).map((underMin) =>
+        GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto.build(
+          {
+            contributionDate: underMin.contributionDate,
+            contributionAmount: new DecimalValue(underMin.contributionAmount),
+          },
+        ),
+      );
+
+      return GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
+        id: new RuralTimelineAnalysisCnisContributionPeriodId(item.id),
+        employmentRelationshipSource: item.employmentRelationshipSource ?? null,
+        startDate: item.startDate ?? null,
+        endDate: item.endDate ?? null,
+        category: item.category ?? null,
+        qualifyingPeriod: item.qualifyingPeriod ?? null,
+        status: item.status ?? null,
+        averageContributionAmount:
+          item.averageContributionAmount !== null &&
+          item.averageContributionAmount !== undefined
+            ? new DecimalValue(item.averageContributionAmount)
+            : null,
+        contributionAdjustmentIntent: item.contributionAdjustmentIntent,
+        externalSupplementationIntent: item.externalSupplementationIntent,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
+      });
+    });
 
     return ListRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
       ...listQueryResult,
