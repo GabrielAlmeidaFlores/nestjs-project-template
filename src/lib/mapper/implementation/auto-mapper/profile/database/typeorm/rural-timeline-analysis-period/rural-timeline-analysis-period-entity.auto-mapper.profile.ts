@@ -78,9 +78,11 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
         deletedAt: source.deletedAt,
       });
 
-      ormEntity.ruralTimeline = {
-        id: source.ruralTimelineId.toString(),
-      } as unknown as RuralTimelineAnalysisTypeormEntity;
+      if (source.ruralTimelineId) {
+        ormEntity.ruralTimeline = {
+          id: source.ruralTimelineId.toString(),
+        } as unknown as RuralTimelineAnalysisTypeormEntity;
+      }
 
       return ormEntity;
     };
