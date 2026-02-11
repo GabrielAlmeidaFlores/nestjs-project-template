@@ -88,15 +88,11 @@ export class SpeechGeneratorEntityAutoMapperProfile {
         id: source.updatedBy.toString(),
       } as OrganizationMemberTypeormEntity;
 
-      const speechGeneratorDocument =
-        source.speechGeneratorDocument !== undefined &&
-        source.speechGeneratorDocument.length > 0
-          ? this.mapper.mapArray(
-              source.speechGeneratorDocument,
-              SpeechGeneratorDocumentEntity,
-              SpeechGeneratorDocumentTypeormEntity,
-            )
-          : undefined;
+      const speechGeneratorDocument = this.mapper.mapArray(
+        source.speechGeneratorDocument,
+        SpeechGeneratorDocumentEntity,
+        SpeechGeneratorDocumentTypeormEntity,
+      );
 
       const speechGeneratorResult =
         source.speechGeneratorResult !== null
