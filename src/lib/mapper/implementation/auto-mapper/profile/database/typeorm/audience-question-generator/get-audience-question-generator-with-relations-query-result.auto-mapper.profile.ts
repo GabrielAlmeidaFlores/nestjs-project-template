@@ -123,50 +123,35 @@ export class GetAudienceQuestionGeneratorWithRelationsQueryResultAutoMapperProfi
             )
           : undefined;
 
-      const createdBy =
-        source.createdBy !== null
-          ? this.mapper.map(
-              source.createdBy,
-              GetOrganizationMemberWithCustomerRelationQueryResult,
-              OrganizationMemberTypeormEntity,
-            )
-          : undefined;
+      const createdBy = this.mapper.map(
+        source.createdBy,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
+        OrganizationMemberTypeormEntity,
+      );
 
-      const updatedBy =
-        source.updatedBy !== null
-          ? this.mapper.map(
-              source.updatedBy,
-              GetOrganizationMemberWithCustomerRelationQueryResult,
-              OrganizationMemberTypeormEntity,
-            )
-          : undefined;
+      const updatedBy = this.mapper.map(
+        source.updatedBy,
+        GetOrganizationMemberWithCustomerRelationQueryResult,
+        OrganizationMemberTypeormEntity,
+      );
 
-      const audienceQuestionGeneratorDocument =
-        source.audienceQuestionGeneratorDocument !== null
-          ? this.mapper.mapArray(
-              source.audienceQuestionGeneratorDocument,
-              GetAudienceQuestionGeneratorDocumentQueryResult,
-              AudienceQuestionGeneratorDocumentTypeormEntity,
-            )
-          : undefined;
+      const audienceQuestionGeneratorDocument = this.mapper.mapArray(
+        source.audienceQuestionGeneratorDocument,
+        GetAudienceQuestionGeneratorDocumentQueryResult,
+        AudienceQuestionGeneratorDocumentTypeormEntity,
+      );
 
-      const audienceQuestionGeneratorBenefit =
-        source.audienceQuestionGeneratorBenefit !== null
-          ? this.mapper.mapArray(
-              source.audienceQuestionGeneratorBenefit,
-              GetAudienceQuestionGeneratorBenefitQueryResult,
-              AudienceQuestionGeneratorBenefitTypeormEntity,
-            )
-          : undefined;
+      const audienceQuestionGeneratorBenefit = this.mapper.mapArray(
+        source.audienceQuestionGeneratorBenefit,
+        GetAudienceQuestionGeneratorBenefitQueryResult,
+        AudienceQuestionGeneratorBenefitTypeormEntity,
+      );
 
-      const audienceQuestionGeneratorLegalProceeding =
-        source.audienceQuestionGeneratorLegalProceeding !== null
-          ? this.mapper.mapArray(
-              source.audienceQuestionGeneratorLegalProceeding,
-              GetAudienceQuestionGeneratorLegalProceedingQueryResult,
-              AudienceQuestionGeneratorLegalProceedingTypeormEntity,
-            )
-          : undefined;
+      const audienceQuestionGeneratorLegalProceeding = this.mapper.mapArray(
+        source.audienceQuestionGeneratorLegalProceeding,
+        GetAudienceQuestionGeneratorLegalProceedingQueryResult,
+        AudienceQuestionGeneratorLegalProceedingTypeormEntity,
+      );
 
       return AudienceQuestionGeneratorTypeormEntity.build({
         ...source,
