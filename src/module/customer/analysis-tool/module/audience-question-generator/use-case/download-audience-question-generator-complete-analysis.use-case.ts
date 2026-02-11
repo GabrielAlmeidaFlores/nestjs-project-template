@@ -6,10 +6,10 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { AudienceQuestionGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/audience-question-generator.query.repository.gateway';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
+import { AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-complete-analysis.error';
 import { AudienceQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-complete-analysis.error';
 
 @Injectable()
 export class DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase {

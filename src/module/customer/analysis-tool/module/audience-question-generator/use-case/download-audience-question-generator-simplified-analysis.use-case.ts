@@ -10,14 +10,14 @@ import { AudienceQuestionGeneratorQueryRepositoryGateway } from '@module/custome
 import { AudienceQuestionGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-result/command/audience-question-generator-result.command.repository.gateway';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { AudienceQuestionGeneratorResultEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-result/audience-question-generator-result.entity';
+import { AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-complete-analysis.error';
+import { AudienceQuestionGeneratorDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-simplified-analysis.error';
 import { AudienceQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-complete-analysis.error';
-import { AudienceQuestionGeneratorDoesNotContainSimplifiedAnalysisError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-does-not-contain-simplified-analysis.error';
 
 @Injectable()
 export class DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase {
@@ -111,8 +111,7 @@ export class DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase {
           id: audienceQuestionGeneratorQueryResult
             .audienceQuestionGeneratorResult.id,
           audienceQuestionGeneratorCompleteAnalysis:
-            audienceQuestionGeneratorQueryResult
-              .audienceQuestionGeneratorResult
+            audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
               .audienceQuestionGeneratorCompleteAnalysis,
           audienceQuestionGeneratorSimplifiedAnalysis:
             audienceQuestionSimplifiedAnalysis,
@@ -120,8 +119,8 @@ export class DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase {
 
       const updateAudienceQuestionGeneratorResultTransaction =
         this.audienceQuestionGeneratorResultCommandRepositoryGateway.updateAudienceQuestionGeneratorResult(
-            audienceQuestionGeneratorResult.id,
-            audienceQuestionGeneratorResult,
+          audienceQuestionGeneratorResult.id,
+          audienceQuestionGeneratorResult,
         );
 
       const transaction = await this.baseTransactionRepositoryGateway.execute([

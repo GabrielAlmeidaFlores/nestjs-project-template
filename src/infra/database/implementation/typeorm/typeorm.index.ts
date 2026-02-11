@@ -16,7 +16,9 @@ import { AnalysisToolRecordTypeormCommandRepository } from '@infra/database/impl
 import { AnalysisToolRecordTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/analysis-tool-record/analysis-tool-record.typeorm.query.repository';
 import { AudienceQuestionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator/audience-question-generator.typeorm.command.repository';
 import { AudienceQuestionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator/audience-question-generator.typeorm.query.repository';
+import { AudienceQuestionGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator-benefit/audience-question-generator-benefit.typeorm.command.repository';
 import { AudienceQuestionGeneratorDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator-document/audience-question-generator-document.typeorm.command.repository';
+import { AudienceQuestionGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator-legal-proceeding/audience-question-generator-legal-proceeding.typeorm.command.repository';
 import { AudienceQuestionGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/audience-question-generator-result/audience-question-generator-result.typeorm.command.repository';
 import { AuthIdentityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.command.repository';
 import { AuthIdentityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/auth-identity/auth-identity.typeorm.query.repository';
@@ -127,7 +129,9 @@ import { AnalysisToolClientInssBenefitTypeormEntity } from '@infra/database/impl
 import { AnalysisToolClientLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client-legal-proceeding.typeorm.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { AudienceQuestionGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-benefit.typeorm.entity';
 import { AudienceQuestionGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-document.typeorm.entity';
+import { AudienceQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-legal-proceeding.typeorm.entity';
 import { AudienceQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-result.typeorm.entity';
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
@@ -253,7 +257,9 @@ export class TypeormIndex {
     LegalPleadingHistoryTypeormEntity,
     LegalPleadingResultTypeormEntity,
     AnalysisToolRecordTypeormEntity,
+    AudienceQuestionGeneratorBenefitTypeormEntity,
     AudienceQuestionGeneratorDocumentTypeormEntity,
+    AudienceQuestionGeneratorLegalProceedingTypeormEntity,
     AudienceQuestionGeneratorResultTypeormEntity,
     AudienceQuestionGeneratorTypeormEntity,
     CustomerTermsTypeormEntity,
@@ -338,7 +344,9 @@ export class TypeormIndex {
     AuthIdentityTypeormCommandRepository,
     AudienceQuestionGeneratorTypeormCommandRepository,
     AudienceQuestionGeneratorTypeormQueryRepository,
+    AudienceQuestionGeneratorBenefitTypeormCommandRepository,
     AudienceQuestionGeneratorDocumentTypeormCommandRepository,
+    AudienceQuestionGeneratorLegalProceedingTypeormCommandRepository,
     AudienceQuestionGeneratorResultTypeormCommandRepository,
     AdministrativeProcedureInssAnalysisTypeormCommandRepository,
     AdministrativeProcedureInssAnalysisTypeormQueryRepository,

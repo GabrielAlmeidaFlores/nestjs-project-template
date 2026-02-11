@@ -14,7 +14,9 @@ export class AudienceQuestionGeneratorDocumentEntity extends BaseEntity<Audience
 
   protected readonly _type = AudienceQuestionGeneratorDocumentEntity.name;
 
-  public constructor(props: AudienceQuestionGeneratorDocumentEntityPropsInterface) {
+  public constructor(
+    props: AudienceQuestionGeneratorDocumentEntityPropsInterface,
+  ) {
     super(AudienceQuestionGeneratorDocumentId, props);
 
     this.document = props.document;

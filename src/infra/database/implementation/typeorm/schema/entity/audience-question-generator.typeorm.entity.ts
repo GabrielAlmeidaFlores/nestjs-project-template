@@ -1,7 +1,9 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { AudienceQuestionGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-benefit.typeorm.entity';
 import { AudienceQuestionGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-document.typeorm.entity';
+import { AudienceQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-legal-proceeding.typeorm.entity';
 import { AudienceQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator-result.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
@@ -24,6 +26,22 @@ export class AudienceQuestionGeneratorTypeormEntity extends BaseTypeormEntity {
   )
   public audienceQuestionGeneratorDocument?:
     | AudienceQuestionGeneratorDocumentTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => AudienceQuestionGeneratorBenefitTypeormEntity,
+    (entity) => entity.audienceQuestionGenerator,
+  )
+  public audienceQuestionGeneratorBenefit?:
+    | AudienceQuestionGeneratorBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => AudienceQuestionGeneratorLegalProceedingTypeormEntity,
+    (entity) => entity.audienceQuestionGenerator,
+  )
+  public audienceQuestionGeneratorLegalProceeding?:
+    | AudienceQuestionGeneratorLegalProceedingTypeormEntity[]
     | undefined;
 
   @OneToOne(

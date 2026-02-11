@@ -13,10 +13,14 @@ export class AudienceQuestionGeneratorResultEntity extends BaseEntity<AudienceQu
 
   protected readonly _type = AudienceQuestionGeneratorResultEntity.name;
 
-  public constructor(props: AudienceQuestionGeneratorResultEntityPropsInterface) {
+  public constructor(
+    props: AudienceQuestionGeneratorResultEntityPropsInterface,
+  ) {
     super(AudienceQuestionGeneratorResultId, props);
 
-    this.audienceQuestionGeneratorCompleteAnalysis = props.audienceQuestionGeneratorCompleteAnalysis ?? null;
-    this.audienceQuestionGeneratorSimplifiedAnalysis = props.audienceQuestionGeneratorSimplifiedAnalysis ?? null;
+    this.audienceQuestionGeneratorCompleteAnalysis =
+      props.audienceQuestionGeneratorCompleteAnalysis ?? null;
+    this.audienceQuestionGeneratorSimplifiedAnalysis =
+      props.audienceQuestionGeneratorSimplifiedAnalysis ?? null;
   }
 }
