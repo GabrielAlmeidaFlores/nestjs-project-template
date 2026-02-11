@@ -9,7 +9,9 @@ import type { SpeechGeneratorResultEntity } from '@module/customer/analysis-tool
 export interface SpeechGeneratorEntityPropsInterface extends BaseEntityPropsInterface<SpeechGeneratorId> {
   speechGeneratorDocument?: SpeechGeneratorDocumentEntity[] | null;
   speechGeneratorBenefit?: SpeechGeneratorBenefitEntity[] | null;
-  speechGeneratorLegalProceeding?: SpeechGeneratorLegalProceedingEntity[] | null;
+  speechGeneratorLegalProceeding?:
+    | SpeechGeneratorLegalProceedingEntity[]
+    | null;
   speechGeneratorResult?: SpeechGeneratorResultEntity | null;
   createdBy: OrganizationMemberId;
   updatedBy: OrganizationMemberId;

@@ -43,7 +43,6 @@ export class RuralTimelineAnalysisTypeormQueryRepository
           ruralTimelineCnisContributionPeriodUnderMinimum: true,
         },
       },
-      relationLoadStrategy: 'query',
     });
 
     if (!ruralTimelineORM) {
