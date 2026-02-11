@@ -179,6 +179,7 @@ export class CreateRetirementPlanningRppsResultUseCase {
       administrativeProcedureInssAnalysis: null,
       medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =

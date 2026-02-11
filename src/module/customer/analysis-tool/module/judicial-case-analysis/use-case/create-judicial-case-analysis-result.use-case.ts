@@ -163,6 +163,7 @@ export class CreateJudicialCaseAnalysisResultUseCase {
       administrativeProcedureInssAnalysis: null,
       medicalQuestionGenerator: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =

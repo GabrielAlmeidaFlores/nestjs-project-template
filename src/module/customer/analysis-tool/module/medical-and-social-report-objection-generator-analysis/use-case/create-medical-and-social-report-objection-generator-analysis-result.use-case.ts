@@ -177,6 +177,7 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisResultUseCase
       retirementPlanningRgps: null,
       administrativeProcedureInssAnalysis: null,
       judicialCaseAnalysis: null,
+      speechGenerator: null,
       medicalQuestionGenerator: null,
       specialActivity: null,
       perCapitaIncomeForBpcAnalysis: null,

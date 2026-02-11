@@ -153,6 +153,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
       periods.push(
         GetRuralTimelineAnalysisPeriodResponseDto.build({
+          id: period.id.toString(),
           startDate: period.startDate,
           endDate: period.endDate,
           workerType: period.workerType,
