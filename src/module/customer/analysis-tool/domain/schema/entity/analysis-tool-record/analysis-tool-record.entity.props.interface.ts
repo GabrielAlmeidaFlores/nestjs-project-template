@@ -16,6 +16,7 @@ import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@mo
 import type { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import type { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import type { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import type { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 
 export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsInterface<AnalysisToolRecordId> {
   code: AnalysisToolRecordCode;
@@ -28,6 +29,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   administrativeProcedureInssAnalysis?: AdministrativeProcedureInssAnalysisEntity | null;
   medicalQuestionGenerator?: MedicalQuestionGeneratorEntity | null;
   medicalAndSocialReportObjectionGeneratorAnalysis?: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
+  speechGenerator?: SpeechGeneratorEntity | null;
   disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisEntity | null;
   perCapitaIncomeForBpcAnalysis?: PerCapitaIncomeForBpcAnalysisEntity | null;
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;

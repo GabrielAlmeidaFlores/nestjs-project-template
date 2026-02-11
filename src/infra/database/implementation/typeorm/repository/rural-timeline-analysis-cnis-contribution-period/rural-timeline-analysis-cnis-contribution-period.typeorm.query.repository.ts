@@ -52,7 +52,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
     _authIdentityId: AuthIdentityId,
     listData: ListRuralTimelineAnalysisCnisContributionPeriodQueryParam,
   ): Promise<
-    ListDataOutputModel<RuralTimelineAnalysisCnisContributionPeriodEntity>
+    ListDataOutputModel<RuralTimelineAnalysisCnisContributionPeriodTypeormEntity>
   > {
     const where = listData.ruralTimelineAnalysis
       ? {
@@ -62,20 +62,19 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
         }
       : {};
 
-    const result = await this.list(listData, { where });
+    const result = await this.list(listData, {
+      where,
+      relations: {
+        ruralTimelineCnisContributionPeriodUnderMinimum: true,
+      },
+    });
 
-    const resource = this.mapperGateway.mapArray(
-      result.resource,
-      RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
-      RuralTimelineAnalysisCnisContributionPeriodEntity,
-    );
-
-    return new ListDataOutputModel<RuralTimelineAnalysisCnisContributionPeriodEntity>(
+    return new ListDataOutputModel<RuralTimelineAnalysisCnisContributionPeriodTypeormEntity>(
       {
         page: result.page,
         limit: result.limit,
         totalItems: result.totalItems,
-        resource,
+        resource: result.resource,
       },
     );
   }

@@ -16,6 +16,7 @@ import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementat
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { GetOrganizationMemberWithCustomerRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-relation.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -32,6 +33,7 @@ import { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/cus
 import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
+import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
 
 @Injectable()
 export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
@@ -111,6 +113,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              SpeechGeneratorTypeormEntity,
+              GetSpeechGeneratorQueryResult,
+            )
+          : null;
+
       const disabilityAssessmentForBpcAnalysis = this.mapper.map(
         source.disabilityAssessmentForBpcAnalysis,
         DisabilityAssessmentForBpcAnalysisTypeormEntity,
@@ -147,6 +158,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         administrativeProcedureInssAnalysis,
         medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
@@ -230,6 +242,15 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity,
       );
 
+      const speechGenerator =
+        source.speechGenerator !== null
+          ? this.mapper.map(
+              source.speechGenerator,
+              GetSpeechGeneratorQueryResult,
+              SpeechGeneratorTypeormEntity,
+            )
+          : null;
+
       const disabilityAssessmentForBpcAnalysis = this.mapper.map(
         source.disabilityAssessmentForBpcAnalysis,
         GetDisabilityAssessmentForBpcAnalysisQueryResult,
@@ -265,6 +286,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         administrativeProcedureInssAnalysis,
         medicalQuestionGenerator,
         medicalAndSocialReportObjectionGeneratorAnalysis,
+        speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,

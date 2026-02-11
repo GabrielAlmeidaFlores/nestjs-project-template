@@ -19,6 +19,7 @@ import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/m
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
+import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
 import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
 import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
@@ -113,6 +114,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AdministrativeProcedureInssAnalysisModule,
     MedicalQuestionGeneratorModule,
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
+    SpeechGeneratorModule,
     DisabilityAssessmentForBpcAnalysisModule,
     PerCapitaIncomeForBpcAnalysisModule,
     RuralTimelineAnalysisModule,
