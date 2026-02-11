@@ -16,6 +16,7 @@ import { AdministrativeProcedureInssAnalysisLegalProceedingEntityAutoMapperProfi
 import { GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-legal-proceeding/get-administrative-procedure-inss-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/administrative-procedure-inss-analysis-result-entity.auto-mapper.profile';
 import { GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/get-administrative-procedure-inss-analysis-result-query-result.auto-mapper.profile';
+import { AdministrativeRequestGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-request-generator-analysis-result/administrative-request-generator-analysis-result-entity.auto-mapper.profile';
 import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
 import { GetAnalysisToolClientQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-query-result.auto-mapper.profile';
 import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-limited-relations-query-result.auto-mapper.profile';
@@ -65,6 +66,8 @@ import { DisabilityAssessmentForBpcAnalysisLegalProceedingEntityAutoMapperProfil
 import { GetDisabilityAssessmentForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-legal-proceeding/get-disability-assessment-for-bpc-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result-entity.auto-mapper.profile';
 import { GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/get-disability-assessment-for-bpc-analysis-result-query-result.auto-mapper.profile';
+import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result-entity.auto-mapper.profile';
+import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
@@ -400,6 +403,9 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResultAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisWithRelationsQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisResultEntityAutoMapperProfile,
+    InitialPetitionGeneratorEntityAutoMapperProfile,
+    AdministrativeRequestGeneratorEntityAutoMapperProfile,
+    FullOpinionGeneratorEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisResultQueryResultAutoMapperProfile,
     MedicalAndSocialReportObjectionGeneratorAnalysisBenefitEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisBenefitQueryResultAutoMapperProfile,
