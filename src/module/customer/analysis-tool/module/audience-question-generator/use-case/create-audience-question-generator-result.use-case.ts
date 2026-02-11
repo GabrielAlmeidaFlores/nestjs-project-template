@@ -93,7 +93,6 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       throw new AudienceQuestionGeneratorNotFoundError();
     }
 
-
     if (
       audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorDocument
         .length === 0

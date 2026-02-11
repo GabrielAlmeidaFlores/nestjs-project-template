@@ -19,7 +19,8 @@ import { AudienceQuestionGeneratorResultEntity } from '@module/customer/analysis
 
 @Injectable()
 export class AudienceQuestionGeneratorEntityAutoMapperProfile {
-  protected readonly _type = AudienceQuestionGeneratorEntityAutoMapperProfile.name;
+  protected readonly _type =
+    AudienceQuestionGeneratorEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();

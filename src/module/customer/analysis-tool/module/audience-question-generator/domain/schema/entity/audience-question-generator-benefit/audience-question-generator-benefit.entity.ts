@@ -5,7 +5,9 @@ import { AudienceQuestionGeneratorBenefitId } from '@module/customer/analysis-to
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class AudienceQuestionGeneratorBenefitEntity extends BaseEntity<AudienceQuestionGeneratorBenefitId> {
-  @Description('Número do benefício INSS associado ao gerador de perguntas de audiência.')
+  @Description(
+    'Número do benefício INSS associado ao gerador de perguntas de audiência.',
+  )
   public readonly inssBenefitNumber: string;
 
   @Description('Gerador de perguntas de audiência associado ao benefício INSS.')
@@ -13,7 +15,9 @@ export class AudienceQuestionGeneratorBenefitEntity extends BaseEntity<AudienceQ
 
   protected readonly _type = AudienceQuestionGeneratorBenefitEntity.name;
 
-  public constructor(props: AudienceQuestionGeneratorBenefitEntityPropsInterface) {
+  public constructor(
+    props: AudienceQuestionGeneratorBenefitEntityPropsInterface,
+  ) {
     super(AudienceQuestionGeneratorBenefitId, props);
 
     this.inssBenefitNumber = props.inssBenefitNumber;
