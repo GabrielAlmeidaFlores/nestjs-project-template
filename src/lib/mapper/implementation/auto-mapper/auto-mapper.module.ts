@@ -139,6 +139,7 @@ import { PaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enabled-paid-resource/get-payment-plan-enabled-paid-resource-query-result.auto-mapper.profile';
 import { PaymentPlanEnabledPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-entity.auto-mapper.profile';
 import { PaymentPlanEnabledPaidResourceToEnabledQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-enabled-paid-resource/payment-plan-enabled-paid-resource-to-enabled-query-result.auto.mapper.profile';
+import { GetPaymentPlanPaidResourceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/get-payment-plan-paid-resource-query-result.auto-mapper.profile';
 import { PaymentPlanPaidResourceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource/payment-plan-paid-resource-entity.auto-mapper.profile';
 import { GetPaymentPlanPaidResourceIaConfigWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/get-payment-plan-paid-resource-ia-config-with-relations-query-result.auto-mapper.profile';
 import { PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/payment-plan-paid-resource-ia-config/payment-plan-paid-resource-ia-config-entity.auto-mapper.profile';
@@ -206,10 +207,15 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } fro
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence-entity.auto-mapper.profile';
+import { GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/get-special-activity-analysis-with-relations-query-result.auto-mapper.profile';
 import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
+import { GetSpecialActivityAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/get-special-activity-analysis-document-query-result.auto-mapper.profile';
 import { SpecialActivityDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/special-activity-document-entity.auto-mapper.profile';
+import { GetSpecialActivityAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/get-special-activity-analysis-inss-benefit-query-result.auto-mapper.profile';
 import { SpecialActivityInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-inss-benefit/special-activity-inss-benefit-entity.auto-mapper.profile';
+import { GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/get-special-activity-analysis-legal-proceeding-query-result.auto-mapper.profile';
 import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
+import { GetSpecialActivityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/get-special-activity-analysis-result-query-result.auto-mapper.profile';
 import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
@@ -301,6 +307,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile,
     GetLegalProceedingDetailWithRelationsQueryResultAutoMapperProfile,
     PaymentPlanPaidResourceEntityAutoMapperProfile,
+    GetPaymentPlanPaidResourceQueryResultAutoMapperProfile,
     PaymentPlanEntityAutoMapperProfile,
     GetPaymentPlanQueryResultAutoMapperProfile,
     GetOrganizationCreditPurchaseQueryResultAutoMapperProfile,
@@ -362,10 +369,15 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetRetirementPlanningRgpsWithRelationsQueryResultAutoMapperProfile,
     RetirementPlanningRgpsEarningsHistoryEntityAutoMapperProfile,
     SpecialActivityEntityAutoMapperProfile,
+    GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile,
     SpecialActivityResultEntityAutoMapperProfile,
+    GetSpecialActivityAnalysisResultQueryResultAutoMapperProfile,
     SpecialActivityDocumentEntityAutoMapperProfile,
+    GetSpecialActivityAnalysisDocumentQueryResultAutoMapperProfile,
     SpecialActivityInssBenefitEntityAutoMapperProfile,
+    GetSpecialActivityAnalysisInssBenefitQueryResultAutoMapperProfile,
     SpecialActivityLegalProceedingEntityAutoMapperProfile,
+    GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile,
     AdministrativeProcedureInssAnalysisEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile,

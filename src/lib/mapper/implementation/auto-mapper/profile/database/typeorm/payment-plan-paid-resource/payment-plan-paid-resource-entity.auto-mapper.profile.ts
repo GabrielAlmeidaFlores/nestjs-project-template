@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { PaymentPlanPaidResourceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/payment-plan-paid-resource.typeorm.entity';
-import { GetPaymentPlanPaidResourceQueryResult } from '@module/customer/payment-plan/domain/repository/payment-plan-paid-resource/query/result/get-payment-plan-paid-resource.query.result';
 import { PaymentPlanPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/payment-plan-paid-resource.entity';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
 
@@ -19,7 +18,6 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -66,31 +64,6 @@ export class PaymentPlanPaidResourceEntityAutoMapperProfile {
       this.mapper,
       PaymentPlanPaidResourceEntity,
       PaymentPlanPaidResourceTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToQueryResult = (
-      source: PaymentPlanPaidResourceTypeormEntity,
-    ): GetPaymentPlanPaidResourceQueryResult => {
-      return GetPaymentPlanPaidResourceQueryResult.build({
-        id: new PaymentPlanPaidResourceId(source.id),
-        resource: source.resource,
-        creditCost: source.creditCost,
-        title: source.title,
-        description: source.description,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-      });
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
-
-    createMap(
-      this.mapper,
-      PaymentPlanPaidResourceTypeormEntity,
-      GetPaymentPlanPaidResourceQueryResult,
       mappingFunction,
     );
   }

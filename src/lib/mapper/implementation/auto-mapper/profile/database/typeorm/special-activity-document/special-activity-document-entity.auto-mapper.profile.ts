@@ -7,7 +7,6 @@ import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typ
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
 import { SpecialActivityDocumentEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/special-activity-document.entity';
 import { SpecialActivityDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
-import { GetSpecialActivityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-document/query/result/get-special-activity-analysis-document.query.result';
 
 @Injectable()
 export class SpecialActivityDocumentEntityAutoMapperProfile {
@@ -21,7 +20,6 @@ export class SpecialActivityDocumentEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -74,30 +72,6 @@ export class SpecialActivityDocumentEntityAutoMapperProfile {
       this.mapper,
       SpecialActivityDocumentEntity,
       SpecialActivityDocumentTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToQueryResult = (
-      source: SpecialActivityDocumentTypeormEntity,
-    ): GetSpecialActivityAnalysisDocumentQueryResult => {
-      return GetSpecialActivityAnalysisDocumentQueryResult.build({
-        id: new SpecialActivityDocumentId(source.id),
-        document: source.document,
-        type: source.type,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
-
-    createMap(
-      this.mapper,
-      SpecialActivityDocumentTypeormEntity,
-      GetSpecialActivityAnalysisDocumentQueryResult,
       mappingFunction,
     );
   }
