@@ -46,14 +46,14 @@ export class AsaasWebhookInterestRequestDto extends BaseBuildableDtoObject {
 
 @RequestDto()
 export class AsaasWebhookCreditCardRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public creditCardNumber: string;
+  @RequestDtoStringProperty({ required: false })
+  public creditCardNumber?: string;
 
-  @RequestDtoStringProperty()
-  public creditCardBrand: string;
+  @RequestDtoStringProperty({ required: false })
+  public creditCardBrand?: string;
 
-  @RequestDtoStringProperty()
-  public creditCardToken: string;
+  @RequestDtoStringProperty({ required: false })
+  public creditCardToken?: string;
 
   protected override readonly _type = AsaasWebhookCreditCardRequestDto.name;
 }
@@ -170,14 +170,20 @@ export class AsaasWebhookPaymentRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: false })
   public lastBankSlipViewedDate?: string;
 
-  @RequestDtoObjectProperty(() => AsaasWebhookDiscountRequestDto)
-  public discount: AsaasWebhookDiscountRequestDto;
+  @RequestDtoObjectProperty(() => AsaasWebhookDiscountRequestDto, {
+    required: false,
+  })
+  public discount?: AsaasWebhookDiscountRequestDto;
 
-  @RequestDtoObjectProperty(() => AsaasWebhookFineRequestDto)
-  public fine: AsaasWebhookFineRequestDto;
+  @RequestDtoObjectProperty(() => AsaasWebhookFineRequestDto, {
+    required: false,
+  })
+  public fine?: AsaasWebhookFineRequestDto;
 
-  @RequestDtoObjectProperty(() => AsaasWebhookInterestRequestDto)
-  public interest: AsaasWebhookInterestRequestDto;
+  @RequestDtoObjectProperty(() => AsaasWebhookInterestRequestDto, {
+    required: false,
+  })
+  public interest?: AsaasWebhookInterestRequestDto;
 
   @RequestDtoBooleanProperty()
   public postalService: boolean;
