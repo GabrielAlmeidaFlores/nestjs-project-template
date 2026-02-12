@@ -11,6 +11,7 @@ import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementatio
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
@@ -31,6 +32,7 @@ import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analy
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 
@@ -149,6 +151,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         AnalysisToolClientEntity,
       );
 
+      const perCapitaIncomeForBpcAnalysis = this.mapper.map(
+        source.perCapitaIncomeForBpcAnalysis,
+        PerCapitaIncomeForBpcAnalysisTypeormEntity,
+        PerCapitaIncomeForBpcAnalysisEntity,
+      );
+
       const specialActivity =
         source.specialActivity !== null
           ? this.mapper.map(
@@ -175,6 +183,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
       });
     };
@@ -278,6 +287,12 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         RetirementPlanningRgpsTypeormEntity,
       );
 
+      const perCapitaIncomeForBpcAnalysis = this.mapper.map(
+        source.perCapitaIncomeForBpcAnalysis,
+        PerCapitaIncomeForBpcAnalysisEntity,
+        PerCapitaIncomeForBpcAnalysisTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientEntity,
@@ -315,6 +330,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         analysisToolClient,
         createdBy,
