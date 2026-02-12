@@ -5,9 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
-import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+
 @Injectable()
 export class RuralTimelineAnalysisEntityAutoMapperProfile {
   protected readonly _type = RuralTimelineAnalysisEntityAutoMapperProfile.name;
@@ -19,7 +19,6 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -65,24 +64,6 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
       this.mapper,
       RuralTimelineAnalysisEntity,
       RuralTimelineAnalysisTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const mappingFunction = constructUsing(
-      (source: RuralTimelineAnalysisTypeormEntity) =>
-        this.mapper.map(
-          source,
-          RuralTimelineAnalysisTypeormEntity,
-          GetRuralTimelineAnalysisWithRelationsQueryResult,
-        ),
-    );
-
-    createMap(
-      this.mapper,
-      RuralTimelineAnalysisTypeormEntity,
-      GetRuralTimelineAnalysisWithRelationsQueryResult,
       mappingFunction,
     );
   }

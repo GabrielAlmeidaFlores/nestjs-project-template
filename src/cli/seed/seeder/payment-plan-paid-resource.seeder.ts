@@ -369,6 +369,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise consolidada com IA de todos os documentos comprobatórios de um período de atividade rural.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b0f0af5b-d7d5-4e9d-81ae-2dab050e2483'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS,
+      creditCost: 5,
+      title: 'Análise Consolidada de Todos os Documentos Rurais',
+      description:
+        'Análise consolidada com IA de todos os documentos comprobatórios de todos os períodos da linha do tempo rural.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('d7e8f9a0-b1c2-4d3e-9f0a-4b5c6d7e8f9a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,

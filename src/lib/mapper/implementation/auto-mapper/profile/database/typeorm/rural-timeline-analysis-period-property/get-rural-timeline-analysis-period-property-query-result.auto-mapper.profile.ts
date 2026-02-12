@@ -43,38 +43,40 @@ export class GetRuralTimelineAnalysisPeriodPropertyQueryResultAutoMapperProfile 
         (destination) => destination.postalCode,
 
         mapFrom((source) =>
-          source.postalCode ? new PostalCode(source.postalCode) : null,
+          source.postalCode !== null && source.postalCode !== undefined
+            ? new PostalCode(source.postalCode)
+            : null,
         ),
       ),
       forMember(
         (destination) => destination.stateCode,
 
-        mapFrom((source) => source.stateCode ?? null),
+        mapFrom((source) => source.stateCode),
       ),
       forMember(
         (destination) => destination.city,
 
-        mapFrom((source) => source.city ?? null),
+        mapFrom((source) => source.city),
       ),
       forMember(
         (destination) => destination.neighborhood,
 
-        mapFrom((source) => source.neighborhood ?? null),
+        mapFrom((source) => source.neighborhood),
       ),
       forMember(
         (destination) => destination.street,
 
-        mapFrom((source) => source.street ?? null),
+        mapFrom((source) => source.street),
       ),
       forMember(
         (destination) => destination.streetNumber,
 
-        mapFrom((source) => source.streetNumber ?? null),
+        mapFrom((source) => source.streetNumber),
       ),
       forMember(
         (destination) => destination.landOwnershipType,
 
-        mapFrom((source) => source.landOwnershipType ?? null),
+        mapFrom((source) => source.landOwnershipType),
       ),
     );
   }
