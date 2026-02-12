@@ -54,7 +54,7 @@ jobs:
       - name: 🧩 Save Container ENVs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          echo -e '${{ vars.develop_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
+          echo -e '${{ vars.DEV_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
         
       - name: 🚀 Deploy Docker
         run: |
