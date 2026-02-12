@@ -2,13 +2,13 @@ name: CI/CD
 
 on:
   push:
-    branches: ['develop-2']
+    branches: ['qa']
   workflow_dispatch:
 
 env:
   PROJECT_NAME: agiliza-previ-backend
-  ACTION_ENV: develop-2
-  WORKING_DIRECTORY: /workspace/container/docker/develop/agiliza-previ
+  ACTION_ENV: qa
+  WORKING_DIRECTORY: /workspace/container/docker/qa/agiliza-previ
 
 jobs:
   build:
@@ -54,7 +54,7 @@ jobs:
       - name: 🧩 Save Container ENVs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          echo -e '${{ vars.develop-2_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
+          echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
         
       - name: 🚀 Deploy Docker
         run: |
