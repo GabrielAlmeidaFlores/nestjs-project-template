@@ -2,45 +2,70 @@ name: CI/CD
 
 on:
   push:
-    branches: ['qa']
+    branches: ['develop-2']
   workflow_dispatch:
 
 env:
-  WORKING_DIRECTORY: /workspace/container/docker/qa/agiliza-previ/agiliza-previ-back
+  PROJECT_NAME: agiliza-previ-backend
+  ACTION_ENV: develop-2
+  WORKING_DIRECTORY: /workspace/container/docker/develop/agiliza-previ
 
 jobs:
-
   build:
-    runs-on: quality-assurance
+    runs-on: ubuntu-latest
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
+
+      - name: ⚙️ Configure Docker for Insecure Registry
+        run: |
+          REGISTRY_HOST=$(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1)
+          echo "{ \"insecure-registries\": [\"$REGISTRY_HOST\"] }" | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: 🔐 Docker Login to Registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
 
       - name: 🐳 Build Docker Image
         run: |
-          docker build --memory="2g" --no-cache -t ${{ vars.REGISTRY_URL }} .
-
+          docker build --no-cache -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} .
+          
+      - name: 📤 Push Docker Image
+        run: |
+          docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
+  
   deploy:
     needs: build
-    runs-on: quality-assurance
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🏷️ Extract App Version
-        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
-
-      - name: ⚙️ SSH - Update Container Environment Variables
+      - name: 🔐 Docker Login to Registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
+        
+      - name: 📥 Pull Docker Image
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          echo -e '${{ vars.QA_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.container.env
+          docker compose pull ${{ env.PROJECT_NAME }}
 
-      - name: 🛑 SSH - Stop Old Docker Container
+      - name: 🧩 Save Container ENVs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          bash ${{ env.WORKING_DIRECTORY }}/remove.container.sh || true
-
-      - name: 🚀 SSH - Start New Docker Container
+          echo -e '${{ vars.develop-2_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
+        
+      - name: 🚀 Deploy Docker
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          bash ${{ env.WORKING_DIRECTORY }}/start.container.sh
+          docker compose up -d ${{ env.PROJECT_NAME }}
+
+      - name: 🧾 Docker Status & Logs
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          sleep 30
+          docker compose logs --tail=50 ${{ env.PROJECT_NAME }}
+
+      - name: 🧹 Post-Deploy Cleanup
+        run: docker image prune -f
