@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_NAME: agiliza-previ-backend
   ACTION_ENV: develop
-  WORKING_DIRECTORY: /workspace/container/docker/develop/agiliza-previ
+  WORKING_DIRECTORY: /workspace/container/docker/dev/agiliza-previ
 
 jobs:
   build:
