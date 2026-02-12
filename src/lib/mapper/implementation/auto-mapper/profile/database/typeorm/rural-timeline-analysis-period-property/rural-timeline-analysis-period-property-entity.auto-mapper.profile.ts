@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPropertyEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.entity';
 import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
@@ -27,6 +28,7 @@ export class RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile {
       return new RuralTimelineAnalysisPeriodPropertyEntity({
         ...source,
         id: new RuralTimelineAnalysisPeriodPropertyId(source.id),
+        postalCode: source.postalCode ? new PostalCode(source.postalCode) : null,
       });
     };
 
@@ -47,6 +49,7 @@ export class RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile {
       return RuralTimelineAnalysisPeriodPropertyTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        postalCode: source.postalCode?.toString() ?? null,
       });
     };
 

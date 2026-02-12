@@ -178,29 +178,50 @@ export class GetRuralTimelineAnalysisUseCase {
           property:
             period.ruralTimelineAnalysisPeriodProperty !== null
               ? GetRuralTimelineAnalysisPeriodPropertyResponseDto.build({
-                  propertyName:
-                    period.ruralTimelineAnalysisPeriodProperty.propertyName,
-                  ownerName:
-                    period.ruralTimelineAnalysisPeriodProperty.ownerName,
-                  postalCode:
-                    period.ruralTimelineAnalysisPeriodProperty.postalCode,
-                  stateCode:
-                    period.ruralTimelineAnalysisPeriodProperty.stateCode,
-                  city: period.ruralTimelineAnalysisPeriodProperty.city,
+                  ...(period.ruralTimelineAnalysisPeriodProperty
+                    .propertyName !== null && {
+                    propertyName:
+                      period.ruralTimelineAnalysisPeriodProperty.propertyName,
+                  }),
+                  ...(period.ruralTimelineAnalysisPeriodProperty.ownerName !==
+                    null && {
+                    ownerName:
+                      period.ruralTimelineAnalysisPeriodProperty.ownerName,
+                  }),
+                  ...(period.ruralTimelineAnalysisPeriodProperty.postalCode !==
+                    null && {
+                    postalCode:
+                      period.ruralTimelineAnalysisPeriodProperty.postalCode,
+                  }),
+                  ...(period.ruralTimelineAnalysisPeriodProperty.stateCode !==
+                    null && {
+                    stateCode:
+                      period.ruralTimelineAnalysisPeriodProperty.stateCode,
+                  }),
+                  ...(period.ruralTimelineAnalysisPeriodProperty.city !==
+                    null && {
+                    city: period.ruralTimelineAnalysisPeriodProperty.city,
+                  }),
                   ...(period.ruralTimelineAnalysisPeriodProperty
                     .neighborhood !== null && {
                     neighborhood:
                       period.ruralTimelineAnalysisPeriodProperty.neighborhood,
                   }),
-                  street: period.ruralTimelineAnalysisPeriodProperty.street,
+                  ...(period.ruralTimelineAnalysisPeriodProperty.street !==
+                    null && {
+                    street: period.ruralTimelineAnalysisPeriodProperty.street,
+                  }),
                   ...(period.ruralTimelineAnalysisPeriodProperty
                     .streetNumber !== null && {
                     streetNumber:
                       period.ruralTimelineAnalysisPeriodProperty.streetNumber,
                   }),
-                  landOwnershipType:
-                    period.ruralTimelineAnalysisPeriodProperty
-                      .landOwnershipType,
+                  ...(period.ruralTimelineAnalysisPeriodProperty
+                    .landOwnershipType !== null && {
+                    landOwnershipType:
+                      period.ruralTimelineAnalysisPeriodProperty
+                        .landOwnershipType,
+                  }),
                 })
               : null,
           ...(documents.length > 0 && { documents }),

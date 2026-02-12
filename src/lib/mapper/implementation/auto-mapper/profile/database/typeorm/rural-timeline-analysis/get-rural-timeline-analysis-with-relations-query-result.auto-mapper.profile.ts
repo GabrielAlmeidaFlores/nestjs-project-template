@@ -2,8 +2,16 @@ import { createMap, forMember, mapFrom } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
+import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
+import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
-import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import {
+  GetRuralTimelineAnalysisWithRelationsQueryResult,
+  GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+  GetRuralTimelineAnalysisDocumentQueryResult,
+  GetRuralTimelineAnalysisPeriodQueryResult,
+} from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 import type { Mapper } from '@automapper/core';
@@ -53,6 +61,42 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
       forMember(
         (destination) => destination.deletedAt,
         mapFrom((source) => source.deletedAt ?? null),
+      ),
+      forMember(
+        (destination) => destination.ruralTimelineAnalysisPeriod,
+        mapFrom((source) =>
+          (source.ruralTimelinePeriod ?? []).map((period) =>
+            mapper.map(
+              period,
+              RuralTimelineAnalysisPeriodTypeormEntity,
+              GetRuralTimelineAnalysisPeriodQueryResult,
+            ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) => destination.ruralTimelineDocument,
+        mapFrom((source) =>
+          (source.ruralTimelineDocument ?? []).map((doc) =>
+            mapper.map(
+              doc,
+              RuralTimelineAnalysisDocumentTypeormEntity,
+              GetRuralTimelineAnalysisDocumentQueryResult,
+            ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) => destination.ruralTimelineCnisContributionPeriod,
+        mapFrom((source) =>
+          (source.ruralTimelineCnisContributionPeriod ?? []).map((period) =>
+            mapper.map(
+              period,
+              RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+              GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+            ),
+          ),
+        ),
       ),
     );
   }
