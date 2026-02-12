@@ -28,7 +28,9 @@ export class RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile {
       return new RuralTimelineAnalysisPeriodPropertyEntity({
         ...source,
         id: new RuralTimelineAnalysisPeriodPropertyId(source.id),
-        postalCode: source.postalCode ? new PostalCode(source.postalCode) : null,
+        postalCode: source.postalCode
+          ? new PostalCode(source.postalCode)
+          : null,
       });
     };
 
