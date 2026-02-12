@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_NAME: agiliza-previ-backend
-  ACTION_ENV: develop-2
+  ACTION_ENV: develop
   WORKING_DIRECTORY: /workspace/container/docker/develop/agiliza-previ
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
       - name: 🧩 Save Container ENVs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          echo -e '${{ vars.develop-2_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
+          echo -e '${{ vars.develop_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
         
       - name: 🚀 Deploy Docker
         run: |
