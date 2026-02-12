@@ -4,6 +4,7 @@ import { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/anal
 import { CreateRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-economic-aspects.request.dto';
 import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-family-group-member.request.dto';
+import { CreateRuralTimelineAnalysisPeriodPropertyRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-property.request.dto';
 import { CreateRuralTimelineAnalysisPeriodResidenceRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-residence.request.dto';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
@@ -37,6 +38,12 @@ export class CreateRuralTimelineAnalysisPeriodRequestDto extends BaseBuildableDt
     { required: false },
   )
   public residence?: CreateRuralTimelineAnalysisPeriodResidenceRequestDto;
+
+  @RequestDtoObjectProperty(
+    () => CreateRuralTimelineAnalysisPeriodPropertyRequestDto,
+    { required: false },
+  )
+  public property?: CreateRuralTimelineAnalysisPeriodPropertyRequestDto;
 
   @RequestDtoObjectProperty(
     () => CreateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,

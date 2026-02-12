@@ -3,6 +3,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import type { RuralTimelineAnalysisWorkRegimeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/enum/rural-timeline-work-regime.enum';
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import type { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
@@ -79,15 +80,15 @@ export class GetRuralTimelineAnalysisPeriodResidenceQueryResult extends BaseBuil
 
 export class GetRuralTimelineAnalysisPeriodPropertyQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisPeriodPropertyId;
-  public readonly propertyName: string;
-  public readonly ownerName: string;
-  public readonly postalCode: string;
-  public readonly stateCode: StateCodeEnum;
-  public readonly city: string;
+  public readonly propertyName: string | null;
+  public readonly ownerName: string | null;
+  public readonly postalCode: PostalCode | null;
+  public readonly stateCode: StateCodeEnum | null;
+  public readonly city: string | null;
   public readonly neighborhood: string | null;
-  public readonly street: string;
+  public readonly street: string | null;
   public readonly streetNumber: string | null;
-  public readonly landOwnershipType: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum;
+  public readonly landOwnershipType: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum | null;
 
   protected override readonly _type =
     GetRuralTimelineAnalysisPeriodPropertyQueryResult.name;

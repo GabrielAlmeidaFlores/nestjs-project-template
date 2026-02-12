@@ -35,7 +35,6 @@ import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/a
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
-import { GetCidTenQueryResultAutoMapperProfile as GetCidTenQueryResultTypeormAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten.query.result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-query-result.auto-mapper.profile';
 import { GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/get-cnis-fast-analysis-with-relations-query-result.auto-mapper.profile';
@@ -196,11 +195,11 @@ import { GetRetirementPlanningRppsRemunerationCalculationQueryResultAutoMapperPr
 import { RetirementPlanningRppsRemunerationCalculationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-remuneration-calculation/retirement-planning-rpps-remuneration-calculation-entity.auto-mapper.profile';
 import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/get-retirement-planning-rpps-result-query-result.auto-mapper.profile';
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/get-rural-timeline-analysis-with-relations-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/rural-timeline-analysis-document-entity.auto-mapper.profile';
-import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-orm-to-query-result.profile';
 import { RuralTimelineAnalysisPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period/rural-timeline-analysis-period-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document-entity.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects-entity.auto-mapper.profile';
@@ -341,7 +340,6 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetRetirementPlanningRppsPeriodSpecialTimeQueryResultAutoMapperProfile,
     CidTenEntityAutoMapperProfile,
     GetCidTenQueryResultAutoMapperProfile,
-    GetCidTenQueryResultTypeormAutoMapperProfile,
     RetirementPlanningRppsInssBenefitEntityAutoMapperProfile,
     GetRetirementPlanningRppsInssBenefitQueryResultAutoMapperProfile,
     RetirementPlanningRppsLegalProceedingEntityAutoMapperProfile,
