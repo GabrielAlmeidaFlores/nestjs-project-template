@@ -80,10 +80,10 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
     const allDocumentBuffers: Buffer[] = [];
     const periodsWithDocuments: Array<{
       periodId: string;
-      startDate: Date;
-      endDate: Date;
-      workerType: string;
-      workRegimeType: string;
+      startDate: Date | null;
+      endDate: Date | null;
+      workerType: string | null;
+      workRegimeType: string | null;
       documentAnalysis: string | null;
       documents: Array<{ type: string; year: number | null }>;
     }> = [];

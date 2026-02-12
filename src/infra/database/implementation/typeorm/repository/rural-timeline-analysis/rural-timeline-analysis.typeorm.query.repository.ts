@@ -30,19 +30,17 @@ export class RuralTimelineAnalysisTypeormQueryRepository
   ): Promise<GetRuralTimelineAnalysisWithRelationsQueryResult | null> {
     const ruralTimelineORM = await this.repository.findOne({
       where: { id: id.toString() },
-      relations: {
-        ruralTimelineDocument: true,
-        ruralTimelinePeriod: {
-          ruralTimelinePeriodProperty: true,
-          ruralTimelinePeriodResidence: true,
-          ruralTimelinePeriodDocument: true,
-          ruralTimelinePeriodEconomicAspects: true,
-          ruralTimelinePeriodFamilyGroupMember: true,
-        },
-        ruralTimelineCnisContributionPeriod: {
-          ruralTimelineCnisContributionPeriodUnderMinimum: true,
-        },
-      },
+      relations: [
+        'ruralTimelineDocument',
+        'ruralTimelinePeriod',
+        'ruralTimelinePeriod.ruralTimelinePeriodProperty',
+        'ruralTimelinePeriod.ruralTimelinePeriodResidence',
+        'ruralTimelinePeriod.ruralTimelinePeriodDocument',
+        'ruralTimelinePeriod.ruralTimelinePeriodEconomicAspects',
+        'ruralTimelinePeriod.ruralTimelinePeriodFamilyGroupMember',
+        'ruralTimelineCnisContributionPeriod',
+        'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodUnderMinimum',
+      ],
     });
 
     if (!ruralTimelineORM) {

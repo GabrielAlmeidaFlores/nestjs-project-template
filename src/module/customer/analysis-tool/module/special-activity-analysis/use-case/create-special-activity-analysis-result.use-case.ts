@@ -162,6 +162,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       medicalQuestionGenerator: null,
       speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
+      perCapitaIncomeForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });
 

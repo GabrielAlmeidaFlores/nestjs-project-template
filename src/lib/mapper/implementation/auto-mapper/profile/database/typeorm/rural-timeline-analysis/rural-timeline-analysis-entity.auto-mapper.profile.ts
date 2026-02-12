@@ -161,10 +161,10 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
 
         return GetRuralTimelineAnalysisPeriodQueryResult.build({
           id: new RuralTimelineAnalysisPeriodId(period.id),
-          startDate: period.startDate,
-          endDate: period.endDate,
-          workerType: period.workerType,
-          workRegimeType: period.workRegimeType,
+          startDate: period.startDate ?? null,
+          endDate: period.endDate ?? null,
+          workerType: period.workerType ?? null,
+          workRegimeType: period.workRegimeType ?? null,
           productionDestination: period.productionDestination ?? null,
           documentAnalysis: period.documentAnalysis ?? null,
           ruralTimelineAnalysisPeriodDocument: documents,

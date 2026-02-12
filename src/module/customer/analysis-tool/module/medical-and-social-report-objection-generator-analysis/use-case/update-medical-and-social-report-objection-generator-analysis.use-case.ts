@@ -139,6 +139,7 @@ export class UpdateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       speechGenerator: null,
       medicalQuestionGenerator: null,
       specialActivity: null,
+      perCapitaIncomeForBpcAnalysis: null,
       disabilityAssessmentForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });

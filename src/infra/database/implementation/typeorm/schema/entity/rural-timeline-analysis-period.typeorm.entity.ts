@@ -23,28 +23,32 @@ export class RuralTimelineAnalysisPeriodTypeormEntity extends BaseTypeormEntity 
   @Column({
     name: 'start_date',
     type: 'date',
+    nullable: true,
   })
-  public startDate: Date;
+  public startDate?: Date | null;
 
   @Column({
     name: 'end_date',
     type: 'date',
+    nullable: true,
   })
-  public endDate: Date;
+  public endDate?: Date | null;
 
   @Column({
     name: 'worker_type',
     type: 'varchar',
     length: 50,
+    nullable: true,
   })
-  public workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
+  public workerType?: RuralTimelineAnalysisPeriodWorkerTypeEnum | null;
 
   @Column({
     name: 'work_regime_type',
     type: 'varchar',
     length: 50,
+    nullable: true,
   })
-  public workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  public workRegimeType?: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum | null;
 
   @Column({
     name: 'production_destination',

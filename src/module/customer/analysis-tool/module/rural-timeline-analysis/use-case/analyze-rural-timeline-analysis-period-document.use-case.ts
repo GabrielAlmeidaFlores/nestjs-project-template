@@ -117,8 +117,8 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
     const periodContext = `
 CONTEXTO DO PERÍODO RURAL:
 - Nome do cliente: ${clientName}
-- Data de início: ${period.startDate.toString()}
-- Data de término: ${period.endDate.toString()}
+- Data de início: ${period.startDate?.toString() ?? 'Não informada'}
+- Data de término: ${period.endDate?.toString() ?? 'Não informada'}
 - Tipo de trabalhador: ${period.workerType}
 - Regime de trabalho: ${period.workRegimeType}
 - Destino da produção: ${period.productionDestination ?? 'Não informado'}
