@@ -13,17 +13,21 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class CreateRuralTimelineAnalysisPeriodRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty()
-  public startDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public startDate?: Date;
 
-  @RequestDtoDateProperty()
-  public endDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public endDate?: Date;
 
-  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodWorkerTypeEnum)
-  public workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
+  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodWorkerTypeEnum, {
+    required: false,
+  })
+  public workerType?: RuralTimelineAnalysisPeriodWorkerTypeEnum;
 
-  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodWorkRegimeTypeEnum)
-  public workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodWorkRegimeTypeEnum, {
+    required: false,
+  })
+  public workRegimeType?: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
 
   @RequestDtoEnumProperty(ProductionDestinationEnum, { required: false })
   public productionDestination?: ProductionDestinationEnum;

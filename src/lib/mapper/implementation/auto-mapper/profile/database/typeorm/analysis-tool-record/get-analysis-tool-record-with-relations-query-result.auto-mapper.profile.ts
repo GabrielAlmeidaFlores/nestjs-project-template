@@ -12,6 +12,7 @@ import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementatio
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { PerCapitaIncomeForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/per-capita-income-for-bpc-analysis.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
@@ -31,6 +32,7 @@ import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/custom
 import { GetJudicialCaseAnalysisQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis/query/result/get-judicial-case-analysis.query.result';
 import { GetMedicalAndSocialReportObjectionGeneratorAnalysisQueryResult } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/repository/medical-and-social-report-objection-generator-analysis/query/result/get-medical-and-social-report-objection-generator-analysis.query.result';
 import { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
+import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { GetSpecialActivityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/result/get-special-activity-analysis-with-relations.query.result';
 import { GetSpeechGeneratorQueryResult } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/result/get-speech-generator.query.result';
@@ -134,6 +136,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetAudienceQuestionGeneratorWithRelationsQueryResult,
       );
 
+      const perCapitaIncomeForBpcAnalysis = this.mapper.map(
+        source.perCapitaIncomeForBpcAnalysis,
+        PerCapitaIncomeForBpcAnalysisTypeormEntity,
+        GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
+      );
+
       const ruralTimelineAnalysis = this.mapper.map(
         source.ruralTimeline,
         RuralTimelineAnalysisTypeormEntity,
@@ -161,6 +169,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
+        perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         analysisToolClient,
         createdBy,
@@ -263,6 +272,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         AudienceQuestionGeneratorTypeormEntity,
       );
 
+      const perCapitaIncomeForBpcAnalysis = this.mapper.map(
+        source.perCapitaIncomeForBpcAnalysis,
+        GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
+        PerCapitaIncomeForBpcAnalysisTypeormEntity,
+      );
+
       const ruralTimeline = this.mapper.map(
         source.ruralTimelineAnalysis,
         GetRuralTimelineAnalysisWithRelationsQueryResult,
@@ -289,6 +304,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
         audienceQuestionGenerator,
+        perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         analysisToolClient,
         specialActivity,

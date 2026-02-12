@@ -113,6 +113,10 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       const startDate = period.startDate;
       const endDate = period.endDate;
 
+      if (!startDate || !endDate) {
+        continue;
+      }
+
       if (earliestDate === null || startDate < earliestDate) {
         earliestDate = startDate;
       }

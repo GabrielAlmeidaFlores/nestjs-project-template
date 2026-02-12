@@ -14,22 +14,22 @@ export class RuralTimelineAnalysisPeriodEntity extends BaseEntity<RuralTimelineA
   @Description(
     'Data de início do período de atividade rural (formato: DD/MM/AAAA).',
   )
-  public readonly startDate: Date;
+  public readonly startDate: Date | null;
 
   @Description(
     'Data de término do período de atividade rural (formato: DD/MM/AAAA).',
   )
-  public readonly endDate: Date;
+  public readonly endDate: Date | null;
 
   @Description(
     'Tipo de trabalhador rural: Segurado Especial Rural, Pescador Artesanal, Seringueiro/Extrativista ou Empregado Rural.',
   )
-  public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum;
+  public readonly workerType: RuralTimelineAnalysisPeriodWorkerTypeEnum | null;
 
   @Description(
     'Regime de trabalho rural: Individual (trabalho próprio) ou Economia Familiar (trabalho em grupo familiar).',
   )
-  public readonly workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum;
+  public readonly workRegimeType: RuralTimelineAnalysisPeriodWorkRegimeTypeEnum | null;
 
   @Description(
     'Destino da produção rural: Subsistência (consumo próprio), Comercialização (venda) ou Ambos.',
@@ -42,7 +42,7 @@ export class RuralTimelineAnalysisPeriodEntity extends BaseEntity<RuralTimelineA
   public readonly documentAnalysis: string | null;
 
   @Description('Linha do tempo rural à qual este período pertence.')
-  public readonly ruralTimelineId: RuralTimelineAnalysisId;
+  public readonly ruralTimelineId: RuralTimelineAnalysisId | null;
 
   @Description(
     'Propriedade rural onde a atividade foi exercida (endereço completo, nome do proprietário, tipo de posse).',
@@ -59,13 +59,13 @@ export class RuralTimelineAnalysisPeriodEntity extends BaseEntity<RuralTimelineA
   public constructor(props: RuralTimelineAnalysisPeriodEntityPropsInterface) {
     super(RuralTimelineAnalysisPeriodId, props);
 
-    this.startDate = props.startDate;
-    this.endDate = props.endDate;
-    this.workerType = props.workerType;
-    this.workRegimeType = props.workRegimeType;
+    this.startDate = props.startDate ?? null;
+    this.endDate = props.endDate ?? null;
+    this.workerType = props.workerType ?? null;
+    this.workRegimeType = props.workRegimeType ?? null;
     this.productionDestination = props.productionDestination ?? null;
     this.documentAnalysis = props.documentAnalysis ?? null;
-    this.ruralTimelineId = props.ruralTimelineId;
+    this.ruralTimelineId = props.ruralTimelineId ?? null;
     this.ruralTimelinePeriodPropertyId =
       props.ruralTimelinePeriodPropertyId ?? null;
     this.ruralTimelinePeriodResidenceId =

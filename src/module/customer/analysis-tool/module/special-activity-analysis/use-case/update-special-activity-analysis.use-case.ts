@@ -136,6 +136,7 @@ export class UpdateSpecialActivityAnalysisUseCase {
       medicalQuestionGenerator: null,
       speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
+      perCapitaIncomeForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
     });
 
