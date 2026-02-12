@@ -122,12 +122,11 @@ export class CreateRuralTimelineAnalysisUseCase {
             : null;
 
         return new RuralTimelineAnalysisPeriodEntity({
-          startDate: periodDto.startDate,
-          endDate: periodDto.endDate,
-          workerType: periodDto.workerType,
-          workRegimeType: periodDto.workRegimeType,
+          startDate: periodDto.startDate ?? null,
+          endDate: periodDto.endDate ?? null,
+          workerType: periodDto.workerType ?? null,
+          workRegimeType: periodDto.workRegimeType ?? null,
           productionDestination: periodDto.productionDestination ?? null,
-          documentAnalysis: null,
           ruralTimelineId: ruralTimelineAnalysis.id,
           ruralTimelinePeriodPropertyId: null,
           ruralTimelinePeriodResidenceId: residenceId,
