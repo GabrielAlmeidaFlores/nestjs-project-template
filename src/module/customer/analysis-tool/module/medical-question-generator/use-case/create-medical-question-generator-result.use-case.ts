@@ -161,6 +161,7 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
       speechGenerator: null,
       disabilityAssessmentForBpcAnalysis: null,
       ruralTimelineAnalysis: null,
+      perCapitaIncomeForBpcAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
