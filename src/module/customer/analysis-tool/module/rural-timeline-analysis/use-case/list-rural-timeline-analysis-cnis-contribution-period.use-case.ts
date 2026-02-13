@@ -56,16 +56,15 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
       );
 
     const resource = listQueryResult.resource.map((item) => {
-      const underMinimumPeriods = (
-        item.ruralTimelineCnisContributionPeriodUnderMinimum ?? []
-      ).map((underMin) =>
-        GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto.build(
-          {
-            contributionDate: underMin.contributionDate,
-            contributionAmount: underMin.contributionAmount,
-          },
-        ),
-      );
+      const underMinimumPeriods =
+        item.ruralTimelineCnisContributionPeriodUnderMinimum.map((underMin) =>
+          GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto.build(
+            {
+              contributionDate: underMin.contributionDate,
+              contributionAmount: underMin.contributionAmount,
+            },
+          ),
+        );
 
       return GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
         id: item.id,
