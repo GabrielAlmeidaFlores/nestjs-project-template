@@ -2,9 +2,9 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
-import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
@@ -25,16 +25,19 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisTypeormEntity,
     ): RuralTimelineAnalysisEntity => {
-      const analysisToolRecord = this.mapper.map(
-        source.analysisToolRecord,
-        AnalysisToolRecordTypeormEntity,
-        AnalysisToolRecordEntity,
-      );
+      if (!source.analysisToolRecord?.analysisToolClient) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: RuralTimelineAnalysisEntity.name,
+          sourceClass: RuralTimelineAnalysisTypeormEntity.name,
+        });
+      }
 
       return new RuralTimelineAnalysisEntity({
         ...source,
         id: new RuralTimelineAnalysisId(source.id),
-        analysisToolClientId: analysisToolRecord.analysisToolClient.id,
+        analysisToolClientId: new AnalysisToolClientId(
+          source.analysisToolRecord.analysisToolClient.id,
+        ),
       });
     };
 
