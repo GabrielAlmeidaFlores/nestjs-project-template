@@ -115,94 +115,104 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       );
 
     if (existingPeriods.resource.length > 0) {
-      const deleteOperations = existingPeriods.resource.map((period) =>
-        this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.deleteRuralTimelineAnalysisCnisContributionPeriod(
-          period.id,
-        ),
-      );
-      const deleteTransaction =
-        await this.baseTransactionRepositoryGateway.execute(deleteOperations);
-      await deleteTransaction.commit();
+      const batchSize = 10;
+      for (let i = 0; i < existingPeriods.resource.length; i += batchSize) {
+        const batch = existingPeriods.resource.slice(i, i + batchSize);
+        const deleteOperations = batch.map((period) =>
+          this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.deleteRuralTimelineAnalysisCnisContributionPeriod(
+            period.id,
+          ),
+        );
+        const deleteTransaction =
+          await this.baseTransactionRepositoryGateway.execute(deleteOperations);
+        await deleteTransaction.commit();
+      }
     }
 
-    const transactionOperations = [
-      this.ruralTimelineAnalysisDocumentCommandRepositoryGateway.createRuralTimelineAnalysisDocument(
-        cnisDocumentEntity,
-      ),
-    ];
-
-    for (const contributionPeriod of cnisAnalysis.tempoDeContribuicao) {
-      if (contributionPeriod.dados === undefined) {
-        continue;
-      }
-
-      const contributionPeriodEntity =
-        new RuralTimelineAnalysisCnisContributionPeriodEntity({
-          ruralTimelineId: ruralTimelineAnalysisId,
-          employmentRelationshipSource:
-            contributionPeriod.origemDoVinculo ?? null,
-          startDate: contributionPeriod.dados.data?.dataInicio ?? null,
-          endDate: contributionPeriod.dados.data?.dataFim ?? null,
-          category: contributionPeriod.tipoDoVinculo ?? null,
-          qualifyingPeriod: contributionPeriod.dados.meses,
-          status: RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
-          averageContributionAmount: null,
-          contributionAdjustmentIntent:
-            ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
-          externalSupplementationIntent: false,
-        });
-
-      transactionOperations.push(
-        this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriod(
-          contributionPeriodEntity,
+    const documentTransaction =
+      await this.baseTransactionRepositoryGateway.execute([
+        this.ruralTimelineAnalysisDocumentCommandRepositoryGateway.createRuralTimelineAnalysisDocument(
+          cnisDocumentEntity,
         ),
-      );
+      ]);
+    await documentTransaction.commit();
 
-      const matchingSocialSecurityRelation =
-        cnisData.socialSecurityRelations?.find(
-          (relation) =>
-            relation.socialSecurityAffiliationInfo.origemDoVinculo ===
-              contributionPeriod.origemDoVinculo &&
-            contributionPeriod.dados !== undefined &&
-            relation.socialSecurityAffiliationInfo.dataInicio ===
-              contributionPeriod.dados.data?.dataInicio,
+    const batchSize = 5;
+    const contributionPeriods = cnisAnalysis.tempoDeContribuicao.filter(
+      (period) => period.dados !== undefined,
+    );
+
+    for (let i = 0; i < contributionPeriods.length; i += batchSize) {
+      const batch = contributionPeriods.slice(i, i + batchSize);
+      const batchOperations = [];
+
+      for (const contributionPeriod of batch) {
+        const contributionPeriodEntity =
+          new RuralTimelineAnalysisCnisContributionPeriodEntity({
+            ruralTimelineId: ruralTimelineAnalysisId,
+            employmentRelationshipSource:
+              contributionPeriod.origemDoVinculo ?? null,
+            startDate: contributionPeriod.dados?.data?.dataInicio ?? null,
+            endDate: contributionPeriod.dados?.data?.dataFim ?? null,
+            category: contributionPeriod.tipoDoVinculo ?? null,
+            qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
+            status: RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
+            averageContributionAmount: null,
+            contributionAdjustmentIntent:
+              ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
+            externalSupplementationIntent: false,
+          });
+
+        batchOperations.push(
+          this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriod(
+            contributionPeriodEntity,
+          ),
         );
 
-      if (
-        matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
-      ) {
-        for (const earnings of matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory) {
-          if (
-            earnings.competencia !== undefined &&
-            earnings.remuneracao !== undefined
-          ) {
-            const underMinimumEntity =
-              new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
-                {
-                  contributionDate: earnings.competencia,
-                  contributionAmount: new DecimalValue(
-                    parseFloat(earnings.remuneracao),
-                  ),
-                  ruralTimelineCnisContributionPeriodId:
-                    contributionPeriodEntity.id,
-                },
-              );
+        const matchingSocialSecurityRelation =
+          cnisData.socialSecurityRelations?.find(
+            (relation) =>
+              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
+                contributionPeriod.origemDoVinculo &&
+              contributionPeriod.dados !== undefined &&
+              relation.socialSecurityAffiliationInfo.dataInicio ===
+                contributionPeriod.dados.data?.dataInicio,
+          );
 
-            transactionOperations.push(
-              this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
-                underMinimumEntity,
-              ),
-            );
+        if (
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
+        ) {
+          for (const earnings of matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory) {
+            if (
+              earnings.competencia !== undefined &&
+              earnings.remuneracao !== undefined
+            ) {
+              const underMinimumEntity =
+                new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
+                  {
+                    contributionDate: earnings.competencia,
+                    contributionAmount: new DecimalValue(
+                      parseFloat(earnings.remuneracao),
+                    ),
+                    ruralTimelineCnisContributionPeriodId:
+                      contributionPeriodEntity.id,
+                  },
+                );
+
+              batchOperations.push(
+                this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+                  underMinimumEntity,
+                ),
+              );
+            }
           }
         }
       }
+
+      const batchTransaction =
+        await this.baseTransactionRepositoryGateway.execute(batchOperations);
+      await batchTransaction.commit();
     }
-
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      transactionOperations,
-    );
-
-    await transaction.commit();
 
     return AddRuralTimelineAnalysisCnisDocumentResponseDto.build({
       cnisDocumentId: cnisDocumentEntity.id.toString(),
