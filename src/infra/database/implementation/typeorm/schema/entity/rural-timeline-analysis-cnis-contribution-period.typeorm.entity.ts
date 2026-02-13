@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
 
@@ -20,6 +21,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
     name: 'start_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public startDate?: Date | null;
 
@@ -27,6 +29,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
     name: 'end_date',
     type: 'date',
     nullable: true,
+    transformer: DateTransformer,
   })
   public endDate?: Date | null;
 
