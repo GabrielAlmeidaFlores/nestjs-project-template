@@ -54,7 +54,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteLegalPleadingUseCase,
     ListLegalPleadingHistoryUseCase,
   ],
-  exports: [],
+  exports: [DeleteLegalPleadingUseCase],
 })
 export class LegalPleadingModule {
   protected readonly _type = LegalPleadingModule.name;
