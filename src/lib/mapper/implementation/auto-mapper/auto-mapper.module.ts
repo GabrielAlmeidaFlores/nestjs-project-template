@@ -198,14 +198,23 @@ import { GetRetirementPlanningRppsResultQueryResultAutoMapperProfile } from '@li
 import { RetirementPlanningRppsResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/retirement-planning-rpps-result/retirement-planning-rpps-result-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/get-rural-timeline-analysis-with-relations-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/get-rural-timeline-analysis-cnis-contribution-period-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/get-rural-timeline-analysis-cnis-contribution-period-under-minimum-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/get-rural-timeline-analysis-document-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/rural-timeline-analysis-document-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period/get-rural-timeline-analysis-period-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period/rural-timeline-analysis-period-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-document/get-rural-timeline-analysis-period-document-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodEconomicAspectsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-economic-aspects/get-rural-timeline-analysis-period-economic-aspects-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/get-rural-timeline-analysis-period-family-group-member-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodPropertyQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/get-rural-timeline-analysis-period-property-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodResidenceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/get-rural-timeline-analysis-period-residence-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/get-special-activity-analysis-with-relations-query-result.auto-mapper.profile';
 import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
@@ -452,14 +461,23 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     MedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingEntityAutoMapperProfile,
     GetMedicalAndSocialReportObjectionGeneratorAnalysisLegalProceedingQueryResultAutoMapperProfile,
     RuralTimelineAnalysisEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapperProfile,
     RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResultAutoMapperProfile,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisDocumentEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodEconomicAspectsQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodPropertyQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodResidenceQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile,
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile,
   ],
