@@ -108,8 +108,16 @@ export class GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase {
 
     const systemInstruction = promptResponse.prompt;
 
+    const analyzedDocuments = period.ruralTimelineAnalysisPeriodDocument.filter(
+      (doc) =>
+        doc.documentYear !== null ||
+        doc.documentHolderType !== null ||
+        doc.selfOwned !== null ||
+        doc.probatoryPurpose !== null,
+    );
+
     const documentBuffers = await Promise.all(
-      period.ruralTimelineAnalysisPeriodDocument.map(async (doc) => {
+      analyzedDocuments.map(async (doc) => {
         const buffer = await this.fileProcessorGateway.getFileBuffer(
           doc.document,
         );
