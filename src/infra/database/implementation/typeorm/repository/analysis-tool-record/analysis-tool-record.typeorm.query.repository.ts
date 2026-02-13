@@ -89,6 +89,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { administrativeProcedureInssAnalysis: Not(IsNull()) },
         { judicialCaseAnalysis: Not(IsNull()) },
         { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
+        { speechGenerator: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1207,6 +1208,7 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
+        speechGenerator: true,
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1228,6 +1230,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'medicalAndSocialReportObjectionGeneratorAnalysis',
       'disabilityAssessmentForBpcAnalysis',
       'perCapitaIncomeForBpcAnalysis',
+      'speechGenerator',
     ];
   }
 }
