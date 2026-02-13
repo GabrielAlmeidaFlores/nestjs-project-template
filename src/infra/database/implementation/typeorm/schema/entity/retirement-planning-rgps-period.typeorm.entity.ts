@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { ReasonPendencyEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
 
 @Entity({ name: 'retirement_planning_rgps_period' })
@@ -17,6 +18,7 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'period_start',
     type: 'date',
+    transformer: DateTransformer,
     nullable: true,
   })
   public periodStart: Date | null;
@@ -24,6 +26,7 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'period_end',
     type: 'date',
+    transformer: DateTransformer,
     nullable: true,
   })
   public periodEnd: Date | null;
