@@ -9,6 +9,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { ListRuralTimelineAnalysisCnisContributionPeriodQueryParam } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/param/list-rural-timeline-analysis-cnis-contribution-period.query.param';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
+import { GetRuralTimelineAnalysisCnisContributionPeriodQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -69,12 +70,20 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
       },
     });
 
-    return new ListDataOutputModel<RuralTimelineAnalysisCnisContributionPeriodTypeormEntity>(
+    const mappedResource = result.resource.map((item) =>
+      this.mapperGateway.map(
+        item,
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+        GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+      ),
+    );
+
+    return new ListDataOutputModel<GetRuralTimelineAnalysisCnisContributionPeriodQueryResult>(
       {
         page: result.page,
         limit: result.limit,
         totalItems: result.totalItems,
-        resource: result.resource,
+        resource: mappedResource,
       },
     );
   }
