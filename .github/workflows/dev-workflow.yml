@@ -66,6 +66,3 @@ jobs:
           cd ${{ env.WORKING_DIRECTORY }}
           sleep 30
           docker compose logs --tail=50 ${{ env.PROJECT_NAME }}
-
-      - name: 🧹 Post-Deploy Cleanup
-        run: docker image prune -f
