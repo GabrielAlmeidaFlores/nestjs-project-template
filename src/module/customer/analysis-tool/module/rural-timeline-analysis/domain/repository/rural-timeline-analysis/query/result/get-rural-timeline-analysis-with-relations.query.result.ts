@@ -52,6 +52,9 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
   public readonly contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   public readonly externalSupplementationIntent: boolean;
   public readonly ruralTimelineCnisContributionPeriodUnderMinimum: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult[];
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date | null;
 
   protected override readonly _type =
     GetRuralTimelineAnalysisCnisContributionPeriodQueryResult.name;
