@@ -1,8 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
-import { SpecialActivityDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/enum/special-activity-document-type.enum';
-import { SpecialActivityDocumentEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/special-activity-document-entity.props.interface';
-import { SpecialActivityDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import { SpecialActivityDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/enum/special-activity-document-type.enum';
+import { SpecialActivityDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/special-activity-document-entity.props.interface';
+import { SpecialActivityDocumentId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class SpecialActivityDocumentEntity extends BaseEntity<SpecialActivityDocumentId> {

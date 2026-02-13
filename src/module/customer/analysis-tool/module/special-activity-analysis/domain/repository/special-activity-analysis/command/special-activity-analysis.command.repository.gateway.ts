@@ -1,6 +1,6 @@
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-import type { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
-import type { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import type { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import type { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 
 export abstract class SpecialActivityAnalysisCommandRepositoryGateway {
   public abstract createSpecialActivity(

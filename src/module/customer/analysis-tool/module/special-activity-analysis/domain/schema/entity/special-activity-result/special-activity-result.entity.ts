@@ -1,8 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { SpecialActivityResultId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
+import { SpecialActivityResultId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { SpecialActivityResultEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result-entity.props.interface';
+import type { SpecialActivityResultEntityPropsInterface } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/special-activity-result-entity.props.interface';
 
 export class SpecialActivityResultEntity extends BaseEntity<SpecialActivityResultId> {
   @Description('Análise completa da atividade especial em formato JSON')

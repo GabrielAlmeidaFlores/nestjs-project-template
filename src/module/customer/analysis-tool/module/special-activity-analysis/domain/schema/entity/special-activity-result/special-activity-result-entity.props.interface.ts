@@ -1,5 +1,5 @@
 import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
-import type { SpecialActivityResultId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
+import type { SpecialActivityResultId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
 
 export interface SpecialActivityResultEntityPropsInterface extends BaseEntityPropsInterface<SpecialActivityResultId> {
   specialActivityCompleteAnalysis?: string | null;
