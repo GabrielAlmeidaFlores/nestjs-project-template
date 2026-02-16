@@ -4,6 +4,7 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { AudienceQuestionGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/command/audience-question-generator.command.repository.gateway';
 import { AudienceQuestionGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/audience-question-generator.query.repository.gateway';
 import { AudienceQuestionGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-result/command/audience-question-generator-result.command.repository.gateway';
@@ -32,6 +33,8 @@ export class UpdateAudienceQuestionGeneratorResultUseCase {
     private readonly audienceQuestionGeneratorResultCommandRepositoryGateway: AudienceQuestionGeneratorResultCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
   ) {}
@@ -71,9 +74,13 @@ export class UpdateAudienceQuestionGeneratorResultUseCase {
       throw new AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError();
     }
 
+    const markdownContent = this.exportDocumentGateway.convertHtmlToMarkdown(
+      dto.result,
+    );
+
     const audienceQuestionGeneratorResult = new AudienceQuestionGeneratorResultEntity({
       id: audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult.id,
-      audienceQuestionGeneratorCompleteAnalysis: dto.result,
+      audienceQuestionGeneratorCompleteAnalysis: markdownContent,
       audienceQuestionGeneratorSimplifiedAnalysis:
         audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
           .audienceQuestionGeneratorSimplifiedAnalysis,
