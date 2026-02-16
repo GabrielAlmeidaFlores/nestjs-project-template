@@ -144,6 +144,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
             paymentReceipt,
             description: dto.payment.description,
             paymentDate: paymentDate ?? clientPaymentDate,
+            bankSlipUrl: dto.payment.bankSlipUrl ?? null,
           }),
         );
 
@@ -162,6 +163,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         paymentDate: paymentDate ?? clientPaymentDate,
         installmentNumber: dto.payment.installmentNumber ?? null,
         description: dto.payment.description,
+        bankSlipUrl: dto.payment.bankSlipUrl ?? null,
       });
 
       const createTransaction =

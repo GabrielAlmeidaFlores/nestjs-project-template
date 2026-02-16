@@ -13,7 +13,7 @@ import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.r
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
-export class UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto extends BaseBuildableDtoObject {
+export class CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({
     description:
       'Origem/fonte do vínculo empregatício registrado no CNIS (nome da empresa ou empregador).',
@@ -64,20 +64,20 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto extends
     description:
       'Intenção de ajuste: Incluir (adicionar período), Excluir (remover período) ou Provisório (aguardando decisão).',
     enum: ContributionAdjustmentIntentTypeEnum,
-    required: false,
+    required: true,
   })
-  public contributionAdjustmentIntent?: ContributionAdjustmentIntentTypeEnum;
+  public contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
 
   @RequestDtoBooleanProperty({
     description:
       'Indica se há intenção de realizar suplementação externa de contribuições para completar o período.',
-    required: false,
+    required: true,
   })
-  public externalSupplementationIntent?: boolean;
+  public externalSupplementationIntent: boolean;
 
   @RequestDtoObjectProperty(() => Base64FileRequestDto, { required: false })
   public cnisDocument?: Base64FileRequestDto;
 
   protected override readonly _type =
-    UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto.name;
+    CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto.name;
 }

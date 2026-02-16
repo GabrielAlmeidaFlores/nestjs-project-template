@@ -59,6 +59,11 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
   )
   public readonly externalSupplementationIntent: boolean;
 
+  @Description(
+    'Referência do documento CNIS associado a este período de contribuição.',
+  )
+  public readonly cnisDocument: string | null;
+
   protected readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodEntity.name;
 
@@ -78,5 +83,6 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
     this.averageContributionAmount = props.averageContributionAmount ?? null;
     this.contributionAdjustmentIntent = props.contributionAdjustmentIntent;
     this.externalSupplementationIntent = props.externalSupplementationIntent;
+    this.cnisDocument = props.cnisDocument ?? null;
   }
 }
