@@ -9,6 +9,7 @@ import {
   GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
 import type { Mapper } from '@automapper/core';
 
@@ -26,6 +27,13 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
       mapper,
       RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
       GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+      forMember(
+        (destination) => destination.id,
+        mapFrom(
+          (source) =>
+            new RuralTimelineAnalysisCnisContributionPeriodId(source.id),
+        ),
+      ),
       forMember(
         (destination) => destination.employmentRelationshipSource,
         mapFrom((source) => source.employmentRelationshipSource ?? null),
@@ -80,6 +88,18 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
               ),
           ),
         ),
+      ),
+      forMember(
+        (destination) => destination.createdAt,
+        mapFrom((source) => source.createdAt),
+      ),
+      forMember(
+        (destination) => destination.updatedAt,
+        mapFrom((source) => source.updatedAt),
+      ),
+      forMember(
+        (destination) => destination.deletedAt,
+        mapFrom((source) => source.deletedAt ?? null),
       ),
     );
   }
