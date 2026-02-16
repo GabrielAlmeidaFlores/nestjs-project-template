@@ -14,10 +14,12 @@ import { CreateInsuranceQualityAnalysisRequestDto } from '@module/customer/analy
 import { UpdateInsuranceQualityAnalysisRequestDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/request/update-insurance-quality-analysis.request.dto';
 import { CreateInsuranceQualityAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/create-insurance-quality-analysis-result.response.dto';
 import { CreateInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/create-insurance-quality-analysis.response.dto';
+import { DeleteInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/delete-insurance-quality-analysis.response';
 import { GetInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/get-insurance-quality-analysis.response.dto';
 import { UpdateInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/update-insurance-quality-analysis.response.dto';
 import { CreateInsuranceQualityAnalysisResultUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis-result.use-case';
 import { CreateInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis.use-case';
+import { DeleteInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/delete-insurance-quality-analysis.use-case';
 import { DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/download-insurance-quality-analysis-complete-analysis.use-case';
 import { DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/download-insurance-quality-analysis-simplified-analysis.use-case';
 import { GetInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/get-insurance-quality-analysis.use-case';
@@ -41,6 +43,7 @@ export class InsuranceQualityAnalysisController {
     private readonly createInsuranceQualityAnalysisUseCase: CreateInsuranceQualityAnalysisUseCase,
     private readonly updateInsuranceQualityAnalysisUseCase: UpdateInsuranceQualityAnalysisUseCase,
     private readonly getInsuranceQualityAnalysisUseCase: GetInsuranceQualityAnalysisUseCase,
+    private readonly deleteInsuranceQualityAnalysisUseCase: DeleteInsuranceQualityAnalysisUseCase,
     private readonly createInsuranceQualityAnalysisResultUseCase: CreateInsuranceQualityAnalysisResultUseCase,
     private readonly downloadInsuranceQualityAnalysisCompleteAnalysisUseCase: DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase,
     private readonly downloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase: DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase,
@@ -238,6 +241,38 @@ export class InsuranceQualityAnalysisController {
     insuranceQualityAnalysisId: InsuranceQualityAnalysisId,
   ): Promise<CreateInsuranceQualityAnalysisResultResponseDto> {
     return await this.createInsuranceQualityAnalysisResultUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      insuranceQualityAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar análise de qualidade de segurado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':insuranceQualityAnalysisId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-qualidade-segurado'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de qualidade de segurado deletada com sucesso.',
+      type: DeleteInsuranceQualityAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteInsuranceQualityAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'insuranceQualityAnalysisId',
+      new ParseValueObjectPipe(InsuranceQualityAnalysisId),
+    )
+    insuranceQualityAnalysisId: InsuranceQualityAnalysisId,
+  ): Promise<DeleteInsuranceQualityAnalysisResponseDto> {
+    return await this.deleteInsuranceQualityAnalysisUseCase.execute(
       sessionData,
       organizationSessionData,
       insuranceQualityAnalysisId,

@@ -47,6 +47,7 @@ export class InsuranceQualityAnalysisTypeormQueryRepository
       },
       relations: {
         insuranceQualityAnalysisResult: true,
+        insuranceQualityAnalysisDocument: true,
         analysisToolRecord: {
           analysisToolClient: {
             analysisToolClientLegalProceeding: true,
@@ -101,6 +102,7 @@ export class InsuranceQualityAnalysisTypeormQueryRepository
         },
         relations: {
           insuranceQualityAnalysisResult: true,
+          insuranceQualityAnalysisDocument: true,
           analysisToolRecord: {
             analysisToolClient: {
               analysisToolClientLegalProceeding: true,
@@ -153,6 +155,7 @@ export class InsuranceQualityAnalysisTypeormQueryRepository
         },
         relations: {
           insuranceQualityAnalysisResult: true,
+          insuranceQualityAnalysisDocument: true,
           insuranceQualityAnalysisInssBenefit: true,
           insuranceQualityAnalysisLegalProceeding: true,
           analysisToolRecord: {

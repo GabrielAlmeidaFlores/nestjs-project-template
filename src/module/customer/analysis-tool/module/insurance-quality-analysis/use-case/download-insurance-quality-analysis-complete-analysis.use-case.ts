@@ -14,6 +14,7 @@ import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
+import { GetInsuranceQualityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-document.query.result';
 import { InsuranceQualityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-result/command/insurance-quality-analysis-result.command.repository.gateway';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
@@ -117,9 +118,7 @@ export class DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase {
       );
 
       const documentBuffers = await this.getAnalysisDocumentBuffers(
-        insuranceQualityAnalysisQueryResult.cnisDocument,
-        insuranceQualityAnalysisQueryResult.ruralDocument,
-        insuranceQualityAnalysisQueryResult.complementaryDocument,
+        insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument,
       );
 
       analysisSummary =
@@ -153,10 +152,6 @@ export class DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase {
           analysisToolRecordQueryResult.analysisToolClient.id,
         createdAt: insuranceQualityAnalysisQueryResult.createdAt,
         updatedAt: insuranceQualityAnalysisQueryResult.updatedAt,
-        cnisDocument: insuranceQualityAnalysisQueryResult.cnisDocument,
-        ruralDocument: insuranceQualityAnalysisQueryResult.ruralDocument,
-        complementaryDocument:
-          insuranceQualityAnalysisQueryResult.complementaryDocument,
         analysisBenefitNumber:
           insuranceQualityAnalysisQueryResult.analysisBenefitNumber,
         analysisBenefitType:
@@ -248,10 +243,6 @@ export class DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase {
       await transaction.commit();
     }
 
-    if (analysisSummary === null) {
-      throw new InsuranceQualityAnalysisDoesNotContainCompleteAnalysisError();
-    }
-
     return await this.exportDocumentGateway.downloadFileAsStreamable(
       analysisSummary,
       format,
@@ -260,28 +251,12 @@ export class DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase {
   }
 
   private async getAnalysisDocumentBuffers(
-    cnisDocument: string | null,
-    ruralDocument: string | null,
-    complementaryDocument: string | null,
+    documents: GetInsuranceQualityAnalysisDocumentQueryResult[],
   ): Promise<Buffer[]> {
-    const buffers: Buffer[] = [];
-
-    if (cnisDocument !== null) {
-      buffers.push(await this.fileProcessorGateway.getFileBuffer(cnisDocument));
-    }
-
-    if (ruralDocument !== null) {
-      buffers.push(
-        await this.fileProcessorGateway.getFileBuffer(ruralDocument),
-      );
-    }
-
-    if (complementaryDocument !== null) {
-      buffers.push(
-        await this.fileProcessorGateway.getFileBuffer(complementaryDocument),
-      );
-    }
-
-    return buffers;
+    return await Promise.all(
+      documents.map(async (document) => {
+        return await this.fileProcessorGateway.getFileBuffer(document.document);
+      }),
+    );
   }
 }

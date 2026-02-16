@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
+import { EventModule } from '@lib/event/event.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { InsuranceQualityAnalysisController } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.controller';
 import { CreateInsuranceQualityAnalysisResultUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis-result.use-case';
 import { CreateInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/create-insurance-quality-analysis.use-case';
+import { DeleteInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/delete-insurance-quality-analysis.use-case';
 import { DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/download-insurance-quality-analysis-complete-analysis.use-case';
 import { DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/download-insurance-quality-analysis-simplified-analysis.use-case';
 import { GetInsuranceQualityAnalysisUseCase } from '@module/customer/analysis-tool/module/insurance-quality-analysis/use-case/get-insurance-quality-analysis.use-case';
@@ -27,6 +29,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     FileProcessorModule,
     AnalysisProcessorModule,
     ExportDocumentModule,
+    EventModule,
     GenerativeIaModule,
   ],
   controllers: [InsuranceQualityAnalysisController],
@@ -34,6 +37,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateInsuranceQualityAnalysisUseCase,
     UpdateInsuranceQualityAnalysisUseCase,
     GetInsuranceQualityAnalysisUseCase,
+    DeleteInsuranceQualityAnalysisUseCase,
     CreateInsuranceQualityAnalysisResultUseCase,
     DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase,
     DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase,
@@ -42,6 +46,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateInsuranceQualityAnalysisUseCase,
     UpdateInsuranceQualityAnalysisUseCase,
     GetInsuranceQualityAnalysisUseCase,
+    DeleteInsuranceQualityAnalysisUseCase,
     CreateInsuranceQualityAnalysisResultUseCase,
     DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase,
     DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase,

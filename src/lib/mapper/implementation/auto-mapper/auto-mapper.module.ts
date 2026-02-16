@@ -69,6 +69,8 @@ import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/impleme
 import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/get-insurance-quality-analysis-with-relations-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/insurance-quality-analysis-entity.auto-mapper.profile';
+import { GetInsuranceQualityAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-document/get-insurance-quality-analysis-document-query-result.auto-mapper.profile';
+import { InsuranceQualityAnalysisDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-document/insurance-quality-analysis-document-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-inss-benefit/get-insurance-quality-analysis-inss-benefit-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-legal-proceeding/get-insurance-quality-analysis-legal-proceeding-query-result.auto-mapper.profile';
@@ -278,8 +280,10 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisResultQueryResultAutoMapperProfile,
     InsuranceQualityAnalysisEntityAutoMapperProfile,
+    InsuranceQualityAnalysisDocumentEntityAutoMapperProfile,
     InsuranceQualityAnalysisResultEntityAutoMapperProfile,
     GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile,
+    GetInsuranceQualityAnalysisDocumentQueryResultAutoMapperProfile,
     GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile,
     InsuranceQualityAnalysisInssBenefitEntityAutoMapperProfile,
     GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile,

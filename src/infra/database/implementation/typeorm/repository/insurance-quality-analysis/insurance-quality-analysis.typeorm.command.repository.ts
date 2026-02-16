@@ -13,7 +13,8 @@ import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/modul
 @Injectable()
 export class InsuranceQualityAnalysisTypeormCommandRepository
   extends BaseTypeormCommandRepository<InsuranceQualityAnalysisTypeormEntity>
-  implements InsuranceQualityAnalysisCommandRepositoryGateway {
+  implements InsuranceQualityAnalysisCommandRepositoryGateway
+{
   protected readonly _type =
     InsuranceQualityAnalysisTypeormCommandRepository.name;
 
@@ -53,6 +54,8 @@ export class InsuranceQualityAnalysisTypeormCommandRepository
   public deleteInsuranceQualityAnalysis(
     id: InsuranceQualityAnalysisId,
   ): TransactionType {
-    return this.delete(id.toString())
+    return this.update(id.toString(), {
+      deletedAt: new Date(),
+    });
   }
 }
