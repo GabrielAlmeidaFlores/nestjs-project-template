@@ -220,6 +220,25 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
 
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c9db74d2-2b6f-4b32-9c7f-2f3a7b1e8c50'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Qualidade de Segurado e Carência - Análise Completa',
+      description:
+        'Análise completa de qualidade de segurado e carência com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a0f3c5e4-9d2a-4a1a-8c2f-7b6d5e3a4c12'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Qualidade de Segurado e Carência - Análise Simplificada',
+      description:
+        'Análise simplificada de qualidade de segurado e carência com parecer resumido.',
+    }),
+
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe4-a97bb2b7b703'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
@@ -385,6 +404,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'Gerador de Perguntas para Audiência - Análise Simplificada',
       description:
         'Análise simplificada com perguntas essenciais para preparar o cliente para audiências.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b0f0af5b-d7d5-4e9d-81ae-2dab050e2483'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS,
+      creditCost: 5,
+      title: 'Análise Consolidada de Todos os Documentos Rurais',
+      description:
+        'Análise consolidada com IA de todos os documentos comprobatórios de todos os períodos da linha do tempo rural.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('d7e8f9a0-b1c2-4d3e-9f0a-4b5c6d7e8f9a'),

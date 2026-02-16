@@ -3,7 +3,8 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
-import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-special-time-type.enum';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { RetirementPlanningPeriodSpecialTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-special-time-type.enum';
 
 @Entity({ name: 'retirement_planning_rpps_period_special_time' })
 export class RetirementPlanningRppsPeriodSpecialTimeTypeormEntity extends BaseTypeormEntity {
@@ -18,6 +19,7 @@ export class RetirementPlanningRppsPeriodSpecialTimeTypeormEntity extends BaseTy
   @Column({
     name: 'start_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: false,
   })
   public startDate: Date;
@@ -25,6 +27,7 @@ export class RetirementPlanningRppsPeriodSpecialTimeTypeormEntity extends BaseTy
   @Column({
     name: 'end_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: false,
   })
   public endDate: Date;

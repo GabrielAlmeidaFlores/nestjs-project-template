@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
-import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
-import { LegalPleadingAddressId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/value-object/legal-pleading-address/legal-pleading-address-id.value-object';
+import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import { LegalPleadingAddressId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-address/value-object/legal-pleading-address/legal-pleading-address-id.value-object';
 
 @Injectable()
 export class LegalPleadingAddressEntityAutoMapperProfile {

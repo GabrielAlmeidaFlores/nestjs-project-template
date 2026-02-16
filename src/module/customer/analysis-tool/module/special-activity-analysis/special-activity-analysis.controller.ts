@@ -8,8 +8,8 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
-import { SpecialActivityId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
 import { CreateSpecialActivityAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-activity-analysis/dto/request/create-special-activity-analysis.request.dto';
 import { UpdateSpecialActivityAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-activity-analysis/dto/request/update-special-activity-analysis.request.dto';
 import { CreateSpecialActivityAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/special-activity-analysis/dto/response/create-special-activity-analysis-result.response.dto';

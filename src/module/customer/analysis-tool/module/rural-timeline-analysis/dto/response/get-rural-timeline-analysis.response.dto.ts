@@ -4,6 +4,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
@@ -122,32 +123,34 @@ export class GetRuralTimelineAnalysisPeriodResidenceResponseDto extends BaseBuil
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodPropertyResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public propertyName: string;
+  @ResponseDtoStringProperty({ required: false })
+  public propertyName?: string;
 
-  @ResponseDtoStringProperty()
-  public ownerName: string;
+  @ResponseDtoStringProperty({ required: false })
+  public ownerName?: string;
 
-  @ResponseDtoStringProperty()
-  public postalCode: string;
+  @ResponseDtoValueObjectProperty(PostalCode, { required: false })
+  public postalCode?: PostalCode;
 
-  @ResponseDtoEnumProperty(StateCodeEnum)
-  public stateCode: StateCodeEnum;
+  @ResponseDtoEnumProperty(StateCodeEnum, { required: false })
+  public stateCode?: StateCodeEnum;
 
-  @ResponseDtoStringProperty()
-  public city: string;
+  @ResponseDtoStringProperty({ required: false })
+  public city?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public neighborhood?: string;
 
-  @ResponseDtoStringProperty()
-  public street: string;
+  @ResponseDtoStringProperty({ required: false })
+  public street?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public streetNumber?: string;
 
-  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodLandOwnershipTypeEnum)
-  public landOwnershipType: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum;
+  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodLandOwnershipTypeEnum, {
+    required: false,
+  })
+  public landOwnershipType?: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum;
 
   protected override readonly _type =
     GetRuralTimelineAnalysisPeriodPropertyResponseDto.name;

@@ -2,12 +2,14 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 
 @Entity({ name: 'retirement_planning_rpps_remuneration' })
 export class RetirementPlanningRppsRemunerationTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'remuneration_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: false,
   })
   public remunerationDate: Date;

@@ -89,10 +89,19 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
     }> = [];
 
     for (const period of ruralTimelineAnalysis.ruralTimelineAnalysisPeriod) {
-      if (period.ruralTimelineAnalysisPeriodDocument.length > 0) {
+      const analyzedDocuments =
+        period.ruralTimelineAnalysisPeriodDocument.filter(
+          (doc) =>
+            doc.documentYear !== null ||
+            doc.documentHolderType !== null ||
+            doc.selfOwned !== null ||
+            doc.probatoryPurpose !== null,
+        );
+
+      if (analyzedDocuments.length > 0) {
         const periodDocuments = [];
 
-        for (const doc of period.ruralTimelineAnalysisPeriodDocument) {
+        for (const doc of analyzedDocuments) {
           const buffer = await this.fileProcessorGateway.getFileBuffer(
             doc.document,
           );

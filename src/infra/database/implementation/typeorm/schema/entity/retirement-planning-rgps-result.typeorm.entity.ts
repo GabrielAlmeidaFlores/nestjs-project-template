@@ -35,8 +35,8 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'client_last_affiliation_date',
     type: 'date',
-    nullable: true,
     transformer: DateTransformer,
+    nullable: true,
   })
   public clientLastAffiliationDate: Date | null;
 

@@ -11,64 +11,73 @@ export class RuralTimelineAnalysisPeriodPropertyTypeormEntity extends BaseTypeor
     name: 'property_name',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public propertyName: string;
+  public propertyName?: string | null;
 
   @Column({
     name: 'owner_name',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public ownerName: string;
+  public ownerName?: string | null;
 
   @Column({
     name: 'postal_code',
     type: 'varchar',
-    length: 20,
+    length: 8,
+    nullable: true,
   })
-  public postalCode: string;
+  public postalCode?: string | null;
 
   @Column({
     name: 'state_code',
     type: 'varchar',
     length: 2,
+    nullable: true,
   })
-  public stateCode: StateCodeEnum;
+  public stateCode?: StateCodeEnum | null;
 
   @Column({
     name: 'city',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public city: string;
+  public city?: string | null;
 
   @Column({
     name: 'neighborhood',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public neighborhood: string;
+  public neighborhood?: string | null;
 
   @Column({
     name: 'street',
     type: 'varchar',
     length: 255,
+    nullable: true,
   })
-  public street: string;
+  public street?: string | null;
 
   @Column({
     name: 'street_number',
     type: 'varchar',
     length: 50,
+    nullable: true,
   })
-  public streetNumber: string;
+  public streetNumber?: string | null;
 
   @Column({
     name: 'land_ownership_type',
     type: 'varchar',
     length: 50,
+    nullable: true,
   })
-  public landOwnershipType: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum;
+  public landOwnershipType?: RuralTimelineAnalysisPeriodLandOwnershipTypeEnum | null;
 
   @OneToOne(
     () => RuralTimelineAnalysisPeriodTypeormEntity,

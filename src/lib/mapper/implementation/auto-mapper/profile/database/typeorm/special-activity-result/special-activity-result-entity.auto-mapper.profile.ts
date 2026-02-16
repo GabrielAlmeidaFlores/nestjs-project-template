@@ -3,9 +3,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SpecialActivityResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-result.typeorm.entity';
-import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/special-activity-result.entity';
-import { SpecialActivityResultId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
-import { GetSpecialActivityAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/query/result/get-special-activity-analysis-result.query.result';
+import { SpecialActivityResultEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/special-activity-result.entity';
+import { SpecialActivityResultId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
 
 @Injectable()
 export class SpecialActivityResultEntityAutoMapperProfile {
@@ -18,7 +17,6 @@ export class SpecialActivityResultEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -57,33 +55,6 @@ export class SpecialActivityResultEntityAutoMapperProfile {
       this.mapper,
       SpecialActivityResultEntity,
       SpecialActivityResultTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToQueryResult = (
-      source: SpecialActivityResultTypeormEntity,
-    ): GetSpecialActivityAnalysisResultQueryResult => {
-      return GetSpecialActivityAnalysisResultQueryResult.build({
-        id: new SpecialActivityResultId(source.id),
-        specialActivityCompleteAnalysis: source.specialActivityCompleteAnalysis,
-        specialActivitySimplifiedAnalysis:
-          source.specialActivitySimplifiedAnalysis,
-        specialActivityCompleteAnalysisDownload:
-          source.specialActivityCompleteAnalysisDownload,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
-
-    createMap(
-      this.mapper,
-      SpecialActivityResultTypeormEntity,
-      GetSpecialActivityAnalysisResultQueryResult,
       mappingFunction,
     );
   }

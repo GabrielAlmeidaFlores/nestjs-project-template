@@ -4,10 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { SpecialActivityLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-legal-proceeding.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
-import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
-import { SpecialActivityLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/special-activity-legal-proceeding.entity';
-import { SpecialActivityLegalProceedingId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-legal-proceeding/value-object/special-activity-legal-proceeding-id.value-object';
-import { GetSpecialActivityAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/query/result/get-special-activity-analysis-legal-proceeding.query.result';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import { SpecialActivityLegalProceedingEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-legal-proceeding/special-activity-legal-proceeding.entity';
+import { SpecialActivityLegalProceedingId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-legal-proceeding/value-object/special-activity-legal-proceeding-id.value-object';
 
 @Injectable()
 export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
@@ -21,7 +20,6 @@ export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
   private createMappings(): void {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
-    this.mapOrmEntityToQueryResult();
   }
 
   private mapOrmEntityToDomainEntity(): void {
@@ -74,29 +72,6 @@ export class SpecialActivityLegalProceedingEntityAutoMapperProfile {
       this.mapper,
       SpecialActivityLegalProceedingEntity,
       SpecialActivityLegalProceedingTypeormEntity,
-      mappingFunction,
-    );
-  }
-
-  private mapOrmEntityToQueryResult(): void {
-    const convertOrmEntityToQueryResult = (
-      source: SpecialActivityLegalProceedingTypeormEntity,
-    ): GetSpecialActivityAnalysisLegalProceedingQueryResult => {
-      return GetSpecialActivityAnalysisLegalProceedingQueryResult.build({
-        id: new SpecialActivityLegalProceedingId(source.id),
-        legalProceedingNumber: source.legalProceedingNumber,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
-    };
-
-    const mappingFunction = constructUsing(convertOrmEntityToQueryResult);
-
-    createMap(
-      this.mapper,
-      SpecialActivityLegalProceedingTypeormEntity,
-      GetSpecialActivityAnalysisLegalProceedingQueryResult,
       mappingFunction,
     );
   }

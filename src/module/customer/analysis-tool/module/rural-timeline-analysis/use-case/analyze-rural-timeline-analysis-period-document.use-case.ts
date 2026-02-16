@@ -114,15 +114,73 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
       );
 
-    const periodContext = `
-CONTEXTO DO PERÍODO RURAL:
-- Nome do cliente: ${clientName}
-- Data de início: ${period.startDate?.toString() ?? 'Não informada'}
-- Data de término: ${period.endDate?.toString() ?? 'Não informada'}
-- Tipo de trabalhador: ${period.workerType}
-- Regime de trabalho: ${period.workRegimeType}
-- Destino da produção: ${period.productionDestination ?? 'Não informado'}
-`;
+    const periodContext = JSON.stringify({
+      cliente: {
+        nome: clientName,
+      },
+      periodo: {
+        dataInicio: period.startDate?.toISOString() ?? null,
+        dataTermino: period.endDate?.toISOString() ?? null,
+        tipoTrabalhador: period.workerType ?? null,
+        regimeTrabalho: period.workRegimeType ?? null,
+        destinoProducao: period.productionDestination ?? null,
+        analiseDocumentos: period.documentAnalysis ?? null,
+      },
+      propriedade: period.ruralTimelineAnalysisPeriodProperty
+        ? {
+            nomePropriedade:
+              period.ruralTimelineAnalysisPeriodProperty.propertyName ?? null,
+            nomeProprietario:
+              period.ruralTimelineAnalysisPeriodProperty.ownerName ?? null,
+            cep:
+              period.ruralTimelineAnalysisPeriodProperty.postalCode?.toString() ??
+              null,
+            estado:
+              period.ruralTimelineAnalysisPeriodProperty.stateCode ?? null,
+            cidade: period.ruralTimelineAnalysisPeriodProperty.city ?? null,
+            bairro:
+              period.ruralTimelineAnalysisPeriodProperty.neighborhood ?? null,
+            rua: period.ruralTimelineAnalysisPeriodProperty.street ?? null,
+            numero:
+              period.ruralTimelineAnalysisPeriodProperty.streetNumber ?? null,
+            tipoPosse:
+              period.ruralTimelineAnalysisPeriodProperty.landOwnershipType ??
+              null,
+          }
+        : null,
+      residencia: period.ruralTimelineAnalysisPeriodResidence
+        ? {
+            cidade: period.ruralTimelineAnalysisPeriodResidence.city,
+            estado: period.ruralTimelineAnalysisPeriodResidence.stateCode,
+            distanciaPropriedadeKm:
+              period.ruralTimelineAnalysisPeriodResidence.distanceToPropertyKm.toString(),
+          }
+        : null,
+      aspectosEconomicos: period.ruralTimelineAnalysisPeriodEconomicAspects.map(
+        (aspect) => ({
+          tipo: aspect.type,
+          conteudo: aspect.content ?? null,
+        }),
+      ),
+      grupoFamiliar: period.ruralTimelineAnalysisPeriodFamilyGroupMember.map(
+        (member) => ({
+          nome: member.name,
+          cpf: member.federalDocument.toString(),
+          parentesco: member.kinship,
+          recebeBeneficioRural: member.receivesRuralBenefit,
+          numeroBeneficio: member.benefitNumber ?? null,
+          documentoCnis: member.cnisDocument ?? null,
+        }),
+      ),
+      documentos: period.ruralTimelineAnalysisPeriodDocument.map((doc) => ({
+        id: doc.id.toString(),
+        ano: doc.documentYear ?? null,
+        tipoPossuidorDocumento: doc.documentHolderType ?? null,
+        pertenceCliente: doc.selfOwned ?? null,
+        finalidadeProbatoria: doc.probatoryPurpose ?? null,
+        tipoDocumento: doc.type,
+      })),
+    });
 
     const systemInstruction = promptResponse.prompt;
 
@@ -164,8 +222,14 @@ CONTEXTO DO PERÍODO RURAL:
                   },
                   documentHolderType: {
                     type: ['string', 'null'],
+                    enum: [
+                      'client',
+                      'family_group_member',
+                      'third_party',
+                      null,
+                    ],
                     description:
-                      'Nome do titular do documento (string ou null)',
+                      'Tipo de titular do documento: client (cliente), family_group_member (membro do grupo familiar) ou third_party (terceiro)',
                   },
                   selfOwned: {
                     type: ['boolean', 'null'],
