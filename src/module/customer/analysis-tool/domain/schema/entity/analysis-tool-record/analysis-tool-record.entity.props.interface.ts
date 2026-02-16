@@ -11,6 +11,7 @@ import type { SpecialActivityEntity } from '@module/customer/analysis-tool/domai
 import type { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import type { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import type { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import type { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import type { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import type { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
@@ -33,6 +34,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   disabilityAssessmentForBpcAnalysis?: DisabilityAssessmentForBpcAnalysisEntity | null;
   perCapitaIncomeForBpcAnalysis?: PerCapitaIncomeForBpcAnalysisEntity | null;
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
+  insuranceQualityAnalysis?: InsuranceQualityAnalysisEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   createdBy: OrganizationMemberId;

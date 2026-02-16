@@ -67,6 +67,14 @@ import { DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile } from 
 import { GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/get-disability-assessment-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result-entity.auto-mapper.profile';
 import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
+import { GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/get-insurance-quality-analysis-with-relations-query-result.auto-mapper.profile';
+import { InsuranceQualityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/insurance-quality-analysis-entity.auto-mapper.profile';
+import { GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-inss-benefit/get-insurance-quality-analysis-inss-benefit-query-result.auto-mapper.profile';
+import { InsuranceQualityAnalysisInssBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit-entity.auto-mapper.profile';
+import { GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-legal-proceeding/get-insurance-quality-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding-entity.auto-mapper.profile';
+import { GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/get-insurance-quality-analysis-result-query-result.auto-mapper.profile';
+import { InsuranceQualityAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis-result/insurance-quality-analysis-result-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-query-result.auto-mapper.profile';
 import { GetJudicialCaseAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/get-judicial-case-analysis-with-relations-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis/judicial-case-analysis-entity.auto-mapper.profile';
@@ -269,6 +277,14 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     CnisFastAnalysisResultEntityAutoMapperProfile,
     GetCnisFastAnalysisWithRelationsQueryResultAutoMapperProfile,
     GetCnisFastAnalysisResultQueryResultAutoMapperProfile,
+    InsuranceQualityAnalysisEntityAutoMapperProfile,
+    InsuranceQualityAnalysisResultEntityAutoMapperProfile,
+    GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile,
+    GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile,
+    InsuranceQualityAnalysisInssBenefitEntityAutoMapperProfile,
+    GetInsuranceQualityAnalysisInssBenefitQueryResultAutoMapperProfile,
+    InsuranceQualityAnalysisLegalProceedingEntityAutoMapperProfile,
+    GetInsuranceQualityAnalysisLegalProceedingQueryResultAutoMapperProfile,
     GetSpeechGeneratorDocumentQueryResultAutoMapperProfile,
     SpeechGeneratorDocumentEntityAutoMapperProfile,
     GetSpeechGeneratorResultQueryResultAutoMapperProfile,
