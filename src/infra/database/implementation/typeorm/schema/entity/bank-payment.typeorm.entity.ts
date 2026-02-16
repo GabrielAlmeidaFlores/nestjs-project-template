@@ -53,6 +53,9 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'pix_copy_paste', type: 'text', nullable: true })
   public pixCopyPaste: string | null;
 
+  @Column({ name: 'bank_slip_url', type: 'text', nullable: true })
+  public bankSlipUrl: string | null;
+
   @OneToMany(
     () => OrganizationPaymentPlanBankPaymentTypeormEntity,
     (entity) => entity.bankPayment,

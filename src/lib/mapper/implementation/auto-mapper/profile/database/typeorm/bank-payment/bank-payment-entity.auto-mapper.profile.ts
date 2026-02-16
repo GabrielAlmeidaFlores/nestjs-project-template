@@ -39,6 +39,9 @@ export class BankPaymentEntityAutoMapperProfile {
             ? new Base64(source.pixQrCode)
             : null,
         pixCopyPaste: source.pixCopyPaste,
+        bankSlipUrl: source.bankSlipUrl,
+        description: source.description,
+        paymentReceipt: source.paymentReceipt,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -68,9 +71,10 @@ export class BankPaymentEntityAutoMapperProfile {
         paymentDate: source.paymentDate,
         installmentNumber: source.installmentNumber,
         pixQrCode: source.pixQrCode?.toString() ?? null,
+        pixCopyPaste: source.pixCopyPaste,
+        bankSlipUrl: source.bankSlipUrl,
         description: source.description,
         paymentReceipt: source.paymentReceipt,
-        pixCopyPaste: source.pixCopyPaste,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
