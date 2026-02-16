@@ -39,6 +39,9 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
   @Description('URL do boleto bancário')
   public readonly bankSlipUrl: string | null;
 
+  @Description('Código do boleto bancário (linha digitável)')
+  public readonly bankSlipCode: string | null;
+
   @Description('Descrição do pagamento')
   public readonly description: string | null;
 
@@ -60,6 +63,7 @@ export class BankPaymentEntity extends BaseEntity<BankPaymentId> {
     this.pixQrCode = props.pixQrCode ?? null;
     this.pixCopyPaste = props.pixCopyPaste ?? null;
     this.bankSlipUrl = props.bankSlipUrl ?? null;
+    this.bankSlipCode = props.bankSlipCode ?? null;
     this.description = props.description ?? null;
     this.paymentReceipt = props.paymentReceipt ?? null;
   }

@@ -16,6 +16,7 @@ export interface BankPaymentEntityPropsInterface extends BaseEntityPropsInterfac
   pixQrCode?: Base64 | null;
   pixCopyPaste?: string | null;
   bankSlipUrl?: string | null;
+  bankSlipCode?: string | null;
   description?: string | null;
   paymentReceipt?: string | null;
 }

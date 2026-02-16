@@ -42,6 +42,7 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
             : null,
         pixCopyPaste: source.pixCopyPaste,
         bankSlipUrl: source.bankSlipUrl,
+        bankSlipCode: source.bankSlipCode,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
@@ -75,6 +76,7 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
         pixQrCode: source.pixQrCode?.toString() ?? null,
         pixCopyPaste: source.pixCopyPaste,
         bankSlipUrl: source.bankSlipUrl,
+        bankSlipCode: source.bankSlipCode,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,

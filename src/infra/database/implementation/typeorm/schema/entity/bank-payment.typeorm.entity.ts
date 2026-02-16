@@ -56,6 +56,9 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'bank_slip_url', type: 'text', nullable: true })
   public bankSlipUrl: string | null;
 
+  @Column({ name: 'bank_slip_code', type: 'text', nullable: true })
+  public bankSlipCode: string | null;
+
   @OneToMany(
     () => OrganizationPaymentPlanBankPaymentTypeormEntity,
     (entity) => entity.bankPayment,

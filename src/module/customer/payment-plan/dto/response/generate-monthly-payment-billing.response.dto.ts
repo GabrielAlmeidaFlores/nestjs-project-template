@@ -16,6 +16,9 @@ export class GenerateMonthlyPaymentBillingResponseDto extends BaseBuildableDtoOb
   @ResponseDtoStringProperty({ required: false })
   public bankSlipUrl?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public bankSlipCode?: string;
+
   protected override readonly _type =
     GenerateMonthlyPaymentBillingResponseDto.name;
 }

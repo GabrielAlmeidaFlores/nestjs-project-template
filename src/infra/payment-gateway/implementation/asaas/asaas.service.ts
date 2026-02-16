@@ -135,7 +135,12 @@ export class AsaasService extends PaymentGateway {
 
     const billing = await this.makeRequest<
       Record<string, unknown>,
-      { id: string; installment?: string; value: number; bankSlipUrl?: string }
+      {
+        id: string;
+        installment?: string;
+        value: number;
+        bankSlipUrl?: string;
+      }
     >('payments', 'post', data);
 
     let billingPixData:
@@ -152,12 +157,32 @@ export class AsaasService extends PaymentGateway {
       >(`payments/${billing.id}/pixQrCode`, 'get');
     } catch {}
 
+    let billingIdentificationData:
+      | {
+          identificationField: string;
+          nossoNumero: string;
+          barCode: string;
+        }
+      | undefined = undefined;
+
+    try {
+      billingIdentificationData = await this.makeRequest<
+        Record<string, unknown>,
+        {
+          identificationField: string;
+          nossoNumero: string;
+          barCode: string;
+        }
+      >(`payments/${billing.id}/identificationField`, 'get');
+    } catch {}
+
     const outputData: {
       id: string;
       value: DecimalValue;
       pixQrCode?: Base64;
       pixCopyPaste?: string;
       installment?: string;
+      bankSlipCode?: string;
       bankSlipUrl?: string;
     } = {
       id: billing.id,
@@ -175,6 +200,10 @@ export class AsaasService extends PaymentGateway {
 
     if (billing.bankSlipUrl !== undefined) {
       outputData.bankSlipUrl = billing.bankSlipUrl;
+    }
+
+    if (billingIdentificationData !== undefined) {
+      outputData.bankSlipCode = billingIdentificationData.identificationField;
     }
 
     return CreateBillingOutputModel.build(outputData);

@@ -129,6 +129,7 @@ export class GenerateYearlyPaymentBillingUseCase {
         pixQrCode: createBillingResult.pixQrCode ?? null,
         pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
         bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
+        bankSlipCode: createBillingResult.bankSlipCode ?? null,
       });
 
       const paymentPlanEnabledResources =
@@ -172,6 +173,7 @@ export class GenerateYearlyPaymentBillingUseCase {
       return GenerateYearlyPaymentBillingResponseDto.build({
         bankPaymentId: bankPayment.id.toString(),
         bankSlipUrl: bankPayment.bankSlipUrl ?? null,
+        bankSlipCode: bankPayment.bankSlipCode ?? null,
       });
     }
   }

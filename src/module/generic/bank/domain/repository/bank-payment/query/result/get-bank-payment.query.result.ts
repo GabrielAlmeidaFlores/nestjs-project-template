@@ -18,6 +18,7 @@ export class GetBankPaymentQueryResult extends BaseBuildableObject {
   public readonly pixQrCode: Base64 | null;
   public readonly pixCopyPaste: string | null;
   public readonly bankSlipUrl: string | null;
+  public readonly bankSlipCode: string | null;
   public readonly description: string | null;
   public readonly paymentReceipt: string | null;
   public readonly createdAt: Date;
