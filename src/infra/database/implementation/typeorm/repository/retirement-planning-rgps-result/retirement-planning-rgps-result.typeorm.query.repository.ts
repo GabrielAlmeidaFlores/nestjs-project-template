@@ -7,9 +7,9 @@ import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RetirementPlanningRgpsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-result.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { GetRetirementPlanningRgpsResultQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/query/result/get-retirement-planning-rgps-result.query.result';
-import { RetirementPlanningRgpsResultQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rgps-result/query/retirement-planning-rgps.query.repository.gateway';
-import { RetirementPlanningRgpsResultId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps-result/value-object/retirement-planning-rgps-result-id.value-object';
+import { GetRetirementPlanningRgpsResultQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-result/query/result/get-retirement-planning-rgps-result.query.result';
+import { RetirementPlanningRgpsResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-result/query/retirement-planning-rgps.query.repository.gateway';
+import { RetirementPlanningRgpsResultId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-result/value-object/retirement-planning-rgps-result-id.value-object';
 
 @Injectable()
 export class RetirementPlanningRgpsResultTypeormQueryRepository
