@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -33,7 +32,7 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
-  ) {}
+  ) { }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -74,7 +73,7 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     }
 
     const contributionPeriodId =
-      new RuralTimelineAnalysisCnisContributionPeriodId(new Guid());
+      new RuralTimelineAnalysisCnisContributionPeriodId()
 
     const newEntity = new RuralTimelineAnalysisCnisContributionPeriodEntity({
       id: contributionPeriodId,
