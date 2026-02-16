@@ -7,6 +7,7 @@ import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
@@ -26,6 +27,7 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
@@ -166,6 +168,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const insuranceQualityAnalysis =
+        source.insuranceQualityAnalysis !== null
+          ? this.mapper.map(
+              source.insuranceQualityAnalysis,
+              InsuranceQualityAnalysisTypeormEntity,
+              InsuranceQualityAnalysisEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         ...source,
         id: new AnalysisToolRecordId(source.id),
@@ -185,6 +196,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
+        insuranceQualityAnalysis,
       });
     };
 
@@ -308,6 +320,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const insuranceQualityAnalysis =
+        source.insuranceQualityAnalysis !== null
+          ? this.mapper.map(
+              source.insuranceQualityAnalysis,
+              InsuranceQualityAnalysisEntity,
+              InsuranceQualityAnalysisTypeormEntity,
+            )
+          : null;
+
       const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;
@@ -332,6 +353,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         disabilityAssessmentForBpcAnalysis,
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
+        insuranceQualityAnalysis,
         analysisToolClient,
         createdBy,
         updatedBy,
