@@ -68,13 +68,13 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS,
         organizationMember.id,
       );
 

@@ -390,7 +390,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('f3e7d2a8-9b4c-4f6e-8a1d-5c2b7e9a3f1d'),
       resource:
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
       title: 'Gerador de Perguntas para Audiência - Análise Completa',
       description:
@@ -399,7 +399,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a8c6e1f9-2d4b-4e7a-9c3d-6f1b8a5e2c7d'),
       resource:
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
       title: 'Gerador de Perguntas para Audiência - Análise Simplificada',
       description:
