@@ -11,6 +11,7 @@ import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/an
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
 import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-complete-analysis.use-case';
 import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
@@ -54,6 +55,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase,
     DeleteRuralTimelineAnalysisPeriodDocumentUseCase,
     ListRuralTimelineAnalysisCnisContributionPeriodUseCase,
+    CreateRuralTimelineAnalysisCnisContributionPeriodUseCase,
     UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
   ],
   exports: [],
