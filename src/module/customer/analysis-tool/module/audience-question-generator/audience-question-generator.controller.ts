@@ -12,16 +12,19 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CreateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/create-audience-question-generator.request.dto';
 import { UpdateAudienceQuestionGeneratorRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/update-audience-question-generator.request.dto';
+import { UpdateAudienceQuestionGeneratorResultRequestDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/request/update-audience-question-generator-result.request.dto';
 import { CreateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator-result.response.dto';
 import { CreateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator.response.dto';
 import { GetAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/get-audience-question-generator.response.dto';
 import { UpdateAudienceQuestionGeneratorResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/update-audience-question-generator.response.dto';
+import { UpdateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/update-audience-question-generator-result.response.dto';
 import { CreateAudienceQuestionGeneratorResultUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator-result.use-case';
 import { CreateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/create-audience-question-generator.use-case';
 import { DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-complete-analysis.use-case';
 import { DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-simplified-analysis.use-case';
 import { GetAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/get-audience-question-generator.use-case';
 import { UpdateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator.use-case';
+import { UpdateAudienceQuestionGeneratorResultUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator-result.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -41,6 +44,7 @@ export class AudienceQuestionGeneratorController {
     private readonly createAudienceQuestionGeneratorUseCase: CreateAudienceQuestionGeneratorUseCase,
     private readonly createAudienceQuestionGeneratorResultUseCase: CreateAudienceQuestionGeneratorResultUseCase,
     private readonly updateAudienceQuestionGeneratorUseCase: UpdateAudienceQuestionGeneratorUseCase,
+    private readonly updateAudienceQuestionGeneratorResultUseCase: UpdateAudienceQuestionGeneratorResultUseCase,
     private readonly downloadAudienceQuestionGeneratorCompleteAnalysisUseCase: DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase,
     private readonly downloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase: DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase,
     private readonly getAudienceQuestionGeneratorUseCase: GetAudienceQuestionGeneratorUseCase,
@@ -247,6 +251,42 @@ export class AudienceQuestionGeneratorController {
       sessionData,
       organizationSessionData,
       audienceQuestionGeneratorId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar resultado do gerador de perguntas para audiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':audienceQuestionGeneratorId/result',
+      method: RequestMethod.PATCH,
+      type: UpdateAudienceQuestionGeneratorResultRequestDto,
+    },
+    tag: ['gerador-perguntas-audiencia'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Resultado do gerador de perguntas para audiência atualizado com sucesso.',
+      type: UpdateAudienceQuestionGeneratorResultResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateAudienceQuestionGeneratorResult(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'audienceQuestionGeneratorId',
+      new ParseValueObjectPipe(AudienceQuestionGeneratorId),
+    )
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+    @Body() dto: UpdateAudienceQuestionGeneratorResultRequestDto,
+  ): Promise<UpdateAudienceQuestionGeneratorResultResponseDto> {
+    return await this.updateAudienceQuestionGeneratorResultUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      audienceQuestionGeneratorId,
+      dto,
     );
   }
 }

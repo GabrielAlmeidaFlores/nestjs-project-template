@@ -7597,7 +7597,7 @@ Gere uma análise estruturada em markdown com os seguintes tópicos:
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS,
       ),
       prompt: `# Especialista em Preparação para Audiências Previdenciárias
 
@@ -7659,7 +7659,7 @@ Organize as perguntas em categorias com justificativas técnicas de cada questio
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
-        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_SIMPLIFIED_ANALYSIS,
       ),
       prompt: `Você é um especialista em direito previdenciário com experiência em preparação de clientes para audiências.
 
