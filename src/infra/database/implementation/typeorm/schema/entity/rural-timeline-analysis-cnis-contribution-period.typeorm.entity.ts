@@ -78,6 +78,14 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   })
   public externalSupplementationIntent: boolean;
 
+  @Column({
+    name: 'cnis_document',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public cnisDocument?: string | null;
+
   @ManyToOne(
     () => RuralTimelineAnalysisTypeormEntity,
     (entity) => entity.ruralTimelineCnisContributionPeriod,
