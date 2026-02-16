@@ -3,9 +3,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
-import { GetInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/get-insurance-quality-analysis.response.dto';
+import {
+  GetInsuranceQualityAnalysisDocumentResponseDto,
+  GetInsuranceQualityAnalysisResponseDto,
+} from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/get-insurance-quality-analysis.response.dto';
 import { InsuranceQualityAnalysisNotFoundError } from '@module/customer/analysis-tool/module/insurance-quality-analysis/error/insurance-quality-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -15,6 +19,8 @@ export class GetInsuranceQualityAnalysisUseCase {
   protected readonly _type = GetInsuranceQualityAnalysisUseCase.name;
 
   public constructor(
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -57,13 +63,9 @@ export class GetInsuranceQualityAnalysisUseCase {
     const analysisResult =
       insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisResult;
 
-    return GetInsuranceQualityAnalysisResponseDto.build({
+    const response = GetInsuranceQualityAnalysisResponseDto.build({
       insuranceQualityAnalysisId,
       analysisToolClientId: analysisToolRecordQueryResult.analysisToolClient.id,
-      cnisDocument: insuranceQualityAnalysisQueryResult.cnisDocument ?? null,
-      ruralDocument: insuranceQualityAnalysisQueryResult.ruralDocument ?? null,
-      complementaryDocument:
-        insuranceQualityAnalysisQueryResult.complementaryDocument ?? null,
       analysisBenefitNumber:
         insuranceQualityAnalysisQueryResult.analysisBenefitNumber ?? null,
       analysisBenefitType:
@@ -95,5 +97,41 @@ export class GetInsuranceQualityAnalysisUseCase {
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
     });
+
+    if (
+      insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument
+        .length > 0
+    ) {
+      const documentUrls = await Promise.all(
+        insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument.map(
+          async (document) => {
+            const url = await this.fileProcessorGateway.getFileSignedUrl(
+              document.document,
+            );
+
+            const originalFileName =
+              await this.fileProcessorGateway.getOriginalFileName(
+                document.document,
+              );
+
+            return {
+              type: document.type,
+              url,
+              originalFileName,
+            };
+          },
+        ),
+      );
+
+      response.documents = documentUrls.map((document) =>
+        GetInsuranceQualityAnalysisDocumentResponseDto.build({
+          type: document.type,
+          url: document.url.toString(),
+          originalFileName: document.originalFileName.toString(),
+        }),
+      );
+    }
+
+    return response;
   }
 }

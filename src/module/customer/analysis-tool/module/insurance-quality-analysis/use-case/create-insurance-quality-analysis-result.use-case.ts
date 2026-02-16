@@ -12,6 +12,7 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
+import { GetInsuranceQualityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-document.query.result';
 import { InsuranceQualityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-result/command/insurance-quality-analysis-result.command.repository.gateway';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
@@ -107,9 +108,7 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
     );
 
     const documentBuffers = await this.getAnalysisDocumentBuffers(
-      insuranceQualityAnalysisQueryResult.cnisDocument,
-      insuranceQualityAnalysisQueryResult.ruralDocument,
-      insuranceQualityAnalysisQueryResult.complementaryDocument,
+      insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument,
     );
 
     const analysisSummary =
@@ -131,10 +130,6 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
       createdAt: insuranceQualityAnalysisQueryResult.createdAt,
       updatedAt: insuranceQualityAnalysisQueryResult.updatedAt,
       analysisToolClientId: analysisToolRecordQueryResult.analysisToolClient.id,
-      cnisDocument: insuranceQualityAnalysisQueryResult.cnisDocument,
-      ruralDocument: insuranceQualityAnalysisQueryResult.ruralDocument,
-      complementaryDocument:
-        insuranceQualityAnalysisQueryResult.complementaryDocument,
       analysisBenefitNumber:
         insuranceQualityAnalysisQueryResult.analysisBenefitNumber,
       analysisBenefitType:
@@ -171,18 +166,6 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
       insuranceQualityAnalysis,
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
-      cnisFastAnalysis: null,
-      retirementPlanningRpps: null,
-      retirementPlanningRgps: null,
-      administrativeProcedureInssAnalysis: null,
-      judicialCaseAnalysis: null,
-      medicalQuestionGenerator: null,
-      medicalAndSocialReportObjectionGeneratorAnalysis: null,
-      specialActivity: null,
-      speechGenerator: null,
-      disabilityAssessmentForBpcAnalysis: null,
-      ruralTimelineAnalysis: null,
-      perCapitaIncomeForBpcAnalysis: null,
     });
 
     const updateAnalysisToolRecordTransaction =
@@ -217,28 +200,12 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
   }
 
   private async getAnalysisDocumentBuffers(
-    cnisDocument: string | null,
-    ruralDocument: string | null,
-    complementaryDocument: string | null,
+    documents: GetInsuranceQualityAnalysisDocumentQueryResult[],
   ): Promise<Buffer[]> {
-    const buffers: Buffer[] = [];
-
-    if (cnisDocument !== null) {
-      buffers.push(await this.fileProcessorGateway.getFileBuffer(cnisDocument));
-    }
-
-    if (ruralDocument !== null) {
-      buffers.push(
-        await this.fileProcessorGateway.getFileBuffer(ruralDocument),
-      );
-    }
-
-    if (complementaryDocument !== null) {
-      buffers.push(
-        await this.fileProcessorGateway.getFileBuffer(complementaryDocument),
-      );
-    }
-
-    return buffers;
+    return await Promise.all(
+      documents.map(async (document) => {
+        return await this.fileProcessorGateway.getFileBuffer(document.document);
+      }),
+    );
   }
 }

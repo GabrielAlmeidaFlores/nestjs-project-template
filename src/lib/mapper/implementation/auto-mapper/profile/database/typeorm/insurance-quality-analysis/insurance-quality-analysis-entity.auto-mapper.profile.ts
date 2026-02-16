@@ -46,9 +46,6 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
         analysisToolClientId: new AnalysisToolClientId(
           source.analysisToolRecord.analysisToolClient.id,
         ),
-        cnisDocument: source.cnisDocument,
-        ruralDocument: source.ruralDocument,
-        complementaryDocument: source.complementaryDocument,
         analysisBenefitNumber: source.analysisBenefitNumber,
         analysisBenefitType: source.analysisBenefitType,
         analysisBenefitConcessionDate: source.analysisBenefitConcessionDate,
@@ -91,6 +88,7 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
         insuranceQualityAnalysisResult,
         insuranceQualityAnalysisInssBenefit: undefined,
         insuranceQualityAnalysisLegalProceeding: undefined,
+        insuranceQualityAnalysisDocument: undefined,
       });
     };
 

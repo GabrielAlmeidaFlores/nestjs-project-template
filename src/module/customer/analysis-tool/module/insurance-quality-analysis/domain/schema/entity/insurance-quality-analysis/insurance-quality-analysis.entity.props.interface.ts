@@ -5,9 +5,6 @@ import type { InsuranceQualityAnalysisResultEntity } from '@module/customer/anal
 
 export interface InsuranceQualityAnalysisEntityPropsInterface extends BaseEntityPropsInterface<InsuranceQualityAnalysisId> {
   analysisToolClientId: AnalysisToolClientId;
-  cnisDocument?: string | null;
-  ruralDocument?: string | null;
-  complementaryDocument?: string | null;
   analysisBenefitNumber?: string | null;
   analysisBenefitType?: string | null;
   analysisBenefitConcessionDate?: Date | null;

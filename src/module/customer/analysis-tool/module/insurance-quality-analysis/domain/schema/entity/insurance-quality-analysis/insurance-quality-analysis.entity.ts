@@ -9,15 +9,6 @@ export class InsuranceQualityAnalysisEntity extends BaseEntity<InsuranceQualityA
   @Description('ID do cliente da ferramenta de análise.')
   public readonly analysisToolClientId: AnalysisToolClientId;
 
-  @Description('Documento CNIS relacionado à análise.')
-  public readonly cnisDocument: string | null;
-
-  @Description('Documento de atividade rural relacionado à análise.')
-  public readonly ruralDocument: string | null;
-
-  @Description('Documento complementar relacionado à análise.')
-  public readonly complementaryDocument: string | null;
-
   @Description('Número do benefício analisado.')
   public readonly analysisBenefitNumber: string | null;
 
@@ -54,9 +45,6 @@ export class InsuranceQualityAnalysisEntity extends BaseEntity<InsuranceQualityA
     super(InsuranceQualityAnalysisId, props);
 
     this.analysisToolClientId = props.analysisToolClientId;
-    this.cnisDocument = props.cnisDocument ?? null;
-    this.ruralDocument = props.ruralDocument ?? null;
-    this.complementaryDocument = props.complementaryDocument ?? null;
     this.analysisBenefitNumber = props.analysisBenefitNumber ?? null;
     this.analysisBenefitType = props.analysisBenefitType ?? null;
     this.analysisBenefitConcessionDate =

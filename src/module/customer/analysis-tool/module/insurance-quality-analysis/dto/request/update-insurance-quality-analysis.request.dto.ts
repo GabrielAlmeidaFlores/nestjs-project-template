@@ -1,7 +1,10 @@
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
+import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
+import { InsuranceQualityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-document/enum/insurance-quality-analysis-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
+import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
 import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
 import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
@@ -48,29 +51,41 @@ export class UpdateInsuranceQualityAnalysisJsonRequestDto extends BaseBuildableD
   @RequestDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
 
+  @RequestDtoObjectProperty(() => UpdateAnalysisToolClientRequestDto, {
+    required: false,
+  })
+  public analysisToolClient?: UpdateAnalysisToolClientRequestDto;
+
   protected override readonly _type =
     UpdateInsuranceQualityAnalysisJsonRequestDto.name;
 }
 
 @RequestDto()
+export class UpdateInsuranceQualityAnalysisDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(InsuranceQualityAnalysisDocumentTypeEnum)
+  public type: InsuranceQualityAnalysisDocumentTypeEnum;
+
+  @RequestDtoFileProperty({
+    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
+    required: true,
+    isArray: true,
+  })
+  public files: FileModel[];
+
+  protected override readonly _type =
+    UpdateInsuranceQualityAnalysisDocumentRequestDto.name;
+}
+
+@RequestDto()
 export class UpdateInsuranceQualityAnalysisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-    required: false,
-  })
-  public cnisDocument?: FileModel;
-
-  @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-    required: false,
-  })
-  public ruralDocument?: FileModel;
-
-  @RequestDtoFileProperty({
-    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-    required: false,
-  })
-  public complementaryDocument?: FileModel;
+  @RequestDtoObjectProperty(
+    () => UpdateInsuranceQualityAnalysisDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public documents?: UpdateInsuranceQualityAnalysisDocumentRequestDto[];
 
   @RequestDtoObjectProperty(
     () => UpdateInsuranceQualityAnalysisJsonRequestDto,

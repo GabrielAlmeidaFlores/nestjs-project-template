@@ -39,6 +39,7 @@ import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormCommandReposito
 import { DisabilityAssessmentForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.query.repository';
+import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-document/insurance-quality-analysis-document.typeorm.command.repository';
 import { InsuranceQualityAnalysisInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-inss-benefit/insurance-quality-analysis-inss-benefit.typeorm.command.repository';
 import { InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-legal-proceeding/insurance-quality-analysis-legal-proceeding.typeorm.command.repository';
 import { InsuranceQualityAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-result/insurance-quality-analysis-result.typeorm.command.repository';
@@ -155,6 +156,7 @@ import { DisabilityAssessmentForBpcAnalysisResultTypeormEntity } from '@infra/da
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { FullOpinionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/full-opinion-generator.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
+import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
 import { InsuranceQualityAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-inss-benefit.typeorm.entity';
 import { InsuranceQualityAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-legal-proceeding.typeorm.entity';
 import { InsuranceQualityAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-result.typeorm.entity';
@@ -323,6 +325,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
+    InsuranceQualityAnalysisDocumentTypeormEntity,
     InsuranceQualityAnalysisResultTypeormEntity,
     InsuranceQualityAnalysisInssBenefitTypeormEntity,
     InsuranceQualityAnalysisLegalProceedingTypeormEntity,
@@ -467,6 +470,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository,
     InsuranceQualityAnalysisTypeormCommandRepository,
+    InsuranceQualityAnalysisDocumentTypeormCommandRepository,
     InsuranceQualityAnalysisInssBenefitTypeormCommandRepository,
     InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository,
     InsuranceQualityAnalysisTypeormQueryRepository,
