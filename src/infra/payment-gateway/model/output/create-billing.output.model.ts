@@ -9,6 +9,7 @@ export class CreateBillingOutputModel extends BaseBuildableObject {
   public readonly installment?: string;
   public readonly pixQrCode?: Base64;
   public readonly pixCopyPaste?: string;
+  public readonly bankSlipUrl?: string;
 
   protected override readonly _type = CreateBillingOutputModel.name;
 }
