@@ -220,6 +220,25 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
     }),
 
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c9db74d2-2b6f-4b32-9c7f-2f3a7b1e8c50'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_COMPLETE_ANALYSIS,
+      creditCost: 1,
+      title: 'Qualidade de Segurado e Carência - Análise Completa',
+      description:
+        'Análise completa de qualidade de segurado e carência com parecer detalhado.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a0f3c5e4-9d2a-4a1a-8c2f-7b6d5e3a4c12'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Qualidade de Segurado e Carência - Análise Simplificada',
+      description:
+        'Análise simplificada de qualidade de segurado e carência com parecer resumido.',
+    }),
+
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('87c9db53-a1bb-46da-8fe4-a97bb2b7b703'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
