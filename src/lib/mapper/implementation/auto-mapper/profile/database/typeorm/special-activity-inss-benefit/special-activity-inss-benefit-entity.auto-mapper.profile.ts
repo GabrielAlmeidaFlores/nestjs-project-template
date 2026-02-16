@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { SpecialActivityInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-benefit.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
-import { SpecialActivityEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity/special-activity-entity';
-import { SpecialActivityInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-inss-benefit/special-activity-inss-benefit.entity';
-import { SpecialActivityInssBenefitId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-inss-benefit/value-object/special-activity-inss-benefit-id.value-object';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import { SpecialActivityInssBenefitEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-inss-benefit/special-activity-inss-benefit.entity';
+import { SpecialActivityInssBenefitId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-inss-benefit/value-object/special-activity-inss-benefit-id.value-object';
 
 @Injectable()
 export class SpecialActivityInssBenefitEntityAutoMapperProfile {
