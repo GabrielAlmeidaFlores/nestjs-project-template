@@ -103,6 +103,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       pixQrCode: createBillingResult.pixQrCode ?? null,
       pixCopyPaste: createBillingResult.pixCopyPaste ?? null,
       bankSlipUrl: createBillingResult.bankSlipUrl ?? null,
+      bankSlipCode: createBillingResult.bankSlipCode ?? null,
     });
 
     const paymentPlanEnabledResources =
@@ -160,6 +161,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       pixQrCode: bankPayment.pixQrCode?.toString() ?? null,
       pixCopyPaste: bankPayment.pixCopyPaste ?? null,
       bankSlipUrl: bankPayment.bankSlipUrl ?? null,
+      bankSlipCode: bankPayment.bankSlipCode ?? null,
     });
   }
 }

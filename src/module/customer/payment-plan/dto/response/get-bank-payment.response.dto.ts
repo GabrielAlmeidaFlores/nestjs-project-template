@@ -34,5 +34,8 @@ export class GetBankPaymentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public bankSlipUrl?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public bankSlipCode?: string;
+
   protected override readonly _type = GetBankPaymentResponseDto.name;
 }
