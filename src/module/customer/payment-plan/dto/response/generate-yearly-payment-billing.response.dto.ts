@@ -9,6 +9,12 @@ export class GenerateYearlyPaymentBillingResponseDto extends BaseBuildableDtoObj
   })
   public bankPaymentId: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public bankSlipUrl?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public bankSlipCode?: string;
+
   protected override readonly _type =
     GenerateYearlyPaymentBillingResponseDto.name;
 }
