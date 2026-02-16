@@ -1,7 +1,7 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { SpecialActivityDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/enum/special-activity-document-type.enum';
-import type { SpecialActivityDocumentId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
+import type { SpecialActivityDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/enum/special-activity-document-type.enum';
+import type { SpecialActivityDocumentId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/value-object/special-activity-document-id.value-object';
 
 export class GetSpecialActivityAnalysisDocumentQueryResult extends BaseBuildableObject {
   public readonly id: SpecialActivityDocumentId;

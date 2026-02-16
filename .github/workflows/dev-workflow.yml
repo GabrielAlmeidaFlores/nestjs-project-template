@@ -59,13 +59,10 @@ jobs:
       - name: 🚀 Deploy Docker
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          docker compose up -d ${{ env.PROJECT_NAME }}
+          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
 
       - name: 🧾 Docker Status & Logs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
           sleep 30
           docker compose logs --tail=50 ${{ env.PROJECT_NAME }}
-
-      - name: 🧹 Post-Deploy Cleanup
-        run: docker image prune -f

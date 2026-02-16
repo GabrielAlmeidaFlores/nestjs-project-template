@@ -14,79 +14,29 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
+import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
+import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisModule } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.module';
 import { MedicalQuestionGeneratorModule } from '@module/customer/analysis-tool/module/medical-question-generator/medical-question-generator.module';
 import { PerCapitaIncomeForBpcAnalysisModule } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.module';
+import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/module/retirement-planning-rgps/retirement-planning-rgps.module';
+import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
-import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/use-case/analyze-apprentice-student.use-case';
-import { AnalyzeCtpsOutsideCnisUseCase } from '@module/customer/analysis-tool/use-case/analyze-ctps-outside-cnis.use-case';
-import { AnalyzeInformalWorkUseCase } from '@module/customer/analysis-tool/use-case/analyze-informal-work.use-case';
-import { AnalyzeLaborCourtDecisionUseCase } from '@module/customer/analysis-tool/use-case/analyze-labor-court-decision.use-case';
-import { AnalyzeMilitaryServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-military-service.use-case';
-import { AnalyzePublicServiceUseCase } from '@module/customer/analysis-tool/use-case/analyze-public-service.use-case';
-import { AnalyzeRetirementPlanningRgpsPppUseCase } from '@module/customer/analysis-tool/use-case/analyze-retirement-planning-rgps-ppp.use-case';
-import { AnalyzeRuralTimeUseCase } from '@module/customer/analysis-tool/use-case/analyze-rural-time.use-case';
-import { AnalyzeWorkAbroadUseCase } from '@module/customer/analysis-tool/use-case/analyze-work-abroad.use-case';
-import { CompareRetirementPlanningRgpsCnisCtpsUseCase } from '@module/customer/analysis-tool/use-case/compare-retirement-planning-rgps-cnis-ctps.use-case';
-import { ConvertRetirementPlanningRgpsSpecialPeriodUseCase } from '@module/customer/analysis-tool/use-case/convert-retirement-planning-rgps-special-period.use-case';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
-import { CreateLegalPleadingDocumentAnalysisUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-document-analysis.use-case';
-import { CreateLegalPleadingResultUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading-result.use-case';
-import { CreateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/create-legal-pleading.use-case';
-import { CreateMultipleRetirementPlanningRgpsPeriodsUseCase } from '@module/customer/analysis-tool/use-case/create-multiple-retirement-planning-rgps-periods.use-case';
-import { CreateRetirementPlanningRgpsCnisUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-cnis.use-case';
-import { CreateRetirementPlanningRgpsPeriodDocumentUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period-document.use-case';
-import { CreateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-period.use-case';
-import { CreateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-result.use-case';
-import { CreateRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps-time-accelerator.use-case';
-import { CreateRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rgps.use-case';
-import { CreateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-remuneration.use-case';
-import { CreateRetirementPlanningRppsResultUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps-result.use-case';
-import { CreateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/create-retirement-planning-rpps.use-case';
 import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
-import { DeleteLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/delete-legal-pleading.use-case';
-import { DeleteRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/delete-retirement-planning-rgps-time-accelerator.use-case';
-import { DeleteRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/delete-retirement-planning-rpps.use-case';
-import { DownloadLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-complete-analysis.use-case';
-import { DownloadLegalPleadingSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/use-case/download-legal-pleading-simplified-analysis.use-case';
 import { GetAnalysisToolClientLegalProceedingUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client-legal-proceeding.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetAnalysisToolRecordStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-record-statistics.use-case';
-import { GetLegalPleadingStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading-statistics.use-case';
-import { GetLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/get-legal-pleading.use-case';
-import { GetRetirementPlanningRgpsDetailsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-details.use-case';
-import { GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-below-minimum.use-case';
-import { GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-overdue.use-case';
-import { GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-period-earnings-without-leave-date.use-case';
-import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps-time-accelerator-from-analysis.use-case';
-import { GetRetirementPlanningRgpsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rgps.use-case';
-import { GetRetirementPlanningRppsRemunerationCalculationUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps-remuneration-calculation.use-case';
-import { GetRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/get-retirement-planning-rpps.use-case';
 import { ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client-legal-proceeding-with-combined-filters.use-case';
 import { ListAnalysisToolClientLegalProceedingUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client-legal-proceeding.use-case';
 import { ListAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-client.use-case';
 import { ListAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/list-analysis-tool-record.use-case';
 import { ListCidTenUseCase } from '@module/customer/analysis-tool/use-case/list-cid-ten.use-case';
-import { ListLegalPleadingHistoryUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading-history.use-case';
-import { ListLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/list-legal-pleading.use-case';
-import { ListRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-period.use-case';
-import { ListRetirementPlanningRgpsTimeAcceleratorUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rgps-time-accelerator.use-case';
-import { ListRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/list-retirement-planning-rpps-remuneration.use-case';
-import { PeriodConsiderationActionUseCase } from '@module/customer/analysis-tool/use-case/period-consideration-action.use-case';
-import { PeriodLeaveDateActionUseCase } from '@module/customer/analysis-tool/use-case/period-leave-date-action.use-case';
 import { UpdateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/update-analysis-tool-client.use-case';
-import { UpdateLegalPleadingCompleteAnalysisUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-complete-analysis.use-case';
-import { UpdateLegalPleadingStatusToCompleteUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading-status-to-complete.use-case';
-import { UpdateLegalPleadingUseCase } from '@module/customer/analysis-tool/use-case/update-legal-pleading.use-case';
-import { UpdateRetirementPlanningRgpsClientUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-client.use-case';
-import { UpdateRetirementPlanningRgpsPeriodUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-period.use-case';
-import { UpdateRetirementPlanningRgpsResultUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rgps-result.use-case';
-import { UpdateRetirementPlanningRppsRemunerationUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps-remuneration.use-case';
-import { UpdateRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/update-retirement-planning-rpps.use-case';
 import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/get-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { ListAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/customer/analysis-tool/use-case-gateway/list-analysis-tool-client-legal-proceeding.use-case-gateway';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -118,44 +68,25 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     MedicalAndSocialReportObjectionGeneratorAnalysisModule,
     SpeechGeneratorModule,
     DisabilityAssessmentForBpcAnalysisModule,
+    InsuranceQualityAnalysisModule,
     PerCapitaIncomeForBpcAnalysisModule,
+    LegalPleadingModule,
     RuralTimelineAnalysisModule,
+    RetirementPlanningRgpsModule,
+    RetirementPlanningRppsModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
-    CreateRetirementPlanningRgpsResultUseCase,
     ListAnalysisToolClientUseCase,
     CreateAnalysisToolClientUseCase,
     DeleteAnalysisToolClientUseCase,
-    CreateLegalPleadingUseCase,
-    UpdateLegalPleadingUseCase,
-    CreateLegalPleadingResultUseCase,
     ListAnalysisToolRecordUseCase,
-    GetLegalPleadingUseCase,
     GetAnalysisToolRecordStatisticsUseCase,
-    GetLegalPleadingStatisticsUseCase,
-    ListLegalPleadingUseCase,
-    CreateLegalPleadingDocumentAnalysisUseCase,
-    DownloadLegalPleadingSimplifiedAnalysisUseCase,
-    DownloadLegalPleadingCompleteAnalysisUseCase,
-    UpdateLegalPleadingCompleteAnalysisUseCase,
-    UpdateLegalPleadingStatusToCompleteUseCase,
     UpdateAnalysisToolClientUseCase,
     DeleteAnalysisToolRecordUseCase,
-    DeleteLegalPleadingUseCase,
-    DeleteRetirementPlanningRppsUseCase,
     GetAnalysisToolClientUseCase,
     GetAnalysisToolClientLegalProceedingUseCase,
-    CreateRetirementPlanningRppsUseCase,
-    CreateRetirementPlanningRppsRemunerationUseCase,
-    CreateRetirementPlanningRppsResultUseCase,
-    GetRetirementPlanningRppsUseCase,
-    GetRetirementPlanningRppsRemunerationCalculationUseCase,
-    ListRetirementPlanningRppsRemunerationUseCase,
-    UpdateRetirementPlanningRppsRemunerationUseCase,
-    UpdateRetirementPlanningRppsUseCase,
     ListCidTenUseCase,
-    ListLegalPleadingHistoryUseCase,
     ListAnalysisToolClientLegalProceedingUseCase,
     ListAnalysisToolClientLegalProceedingWithCombinedFiltersUseCase,
     {
@@ -166,50 +97,10 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
       provide: GetAnalysisToolClientLegalProceedingUseCaseGateway,
       useClass: GetAnalysisToolClientLegalProceedingUseCase,
     },
-
-    UpdateRetirementPlanningRgpsResultUseCase,
-    UpdateRetirementPlanningRgpsClientUseCase,
-    CreateRetirementPlanningRgpsUseCase,
-    CreateRetirementPlanningRgpsCnisUseCase,
-    CreateRetirementPlanningRgpsPeriodUseCase,
-    UpdateRetirementPlanningRgpsPeriodUseCase,
-    CreateRetirementPlanningRgpsPeriodDocumentUseCase,
-    ListRetirementPlanningRgpsPeriodUseCase,
-    GetRetirementPlanningRgpsPeriodEarningsBelowMinimumUseCase,
-    GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase,
-    CompareRetirementPlanningRgpsCnisCtpsUseCase,
-    CreateRetirementPlanningRgpsTimeAcceleratorUseCase,
-    ListRetirementPlanningRgpsTimeAcceleratorUseCase,
-    DeleteRetirementPlanningRgpsTimeAcceleratorUseCase,
-    AnalyzeRuralTimeUseCase,
-    AnalyzeApprenticeStudentUseCase,
-    AnalyzeWorkAbroadUseCase,
-    AnalyzeRetirementPlanningRgpsPppUseCase,
-    ConvertRetirementPlanningRgpsSpecialPeriodUseCase,
-    AnalyzeInformalWorkUseCase,
-    AnalyzeLaborCourtDecisionUseCase,
-    AnalyzeMilitaryServiceUseCase,
-    AnalyzePublicServiceUseCase,
-    AnalyzeCtpsOutsideCnisUseCase,
-    GetRetirementPlanningRgpsUseCase,
-    CreateMultipleRetirementPlanningRgpsPeriodsUseCase,
-    GetRetirementPlanningRgpsPeriodEarningsWithoutLeaveDateUseCase,
-    PeriodLeaveDateActionUseCase,
-    PeriodConsiderationActionUseCase,
-    GetRetirementPlanningRgpsPeriodEarningsOverdueUseCase,
-    GetRetirementPlanningRgpsDetailsUseCase,
   ],
   exports: [
     ListAnalysisToolClientLegalProceedingUseCaseGateway,
     GetAnalysisToolClientLegalProceedingUseCaseGateway,
-    CreateRetirementPlanningRppsUseCase,
-    CreateRetirementPlanningRppsRemunerationUseCase,
-    CreateRetirementPlanningRppsResultUseCase,
-    GetRetirementPlanningRppsUseCase,
-    GetRetirementPlanningRppsRemunerationCalculationUseCase,
-    ListRetirementPlanningRppsRemunerationUseCase,
-    UpdateRetirementPlanningRppsRemunerationUseCase,
-    UpdateRetirementPlanningRppsUseCase,
   ],
 })
 export class AnalysisToolModule {

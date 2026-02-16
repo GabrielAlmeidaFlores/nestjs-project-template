@@ -130,23 +130,17 @@ export class PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysisResult = undefined;
       }
 
-      const perCapitaIncomeForBpcAnalysisFamilyMember =
-        source.perCapitaIncomeForBpcAnalysisFamilyMember !== null
-          ? this.mapper.mapArray(
-              source.perCapitaIncomeForBpcAnalysisFamilyMember,
-              PerCapitaIncomeForBpcAnalysisFamilyMemberEntity,
-              PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
-            )
-          : undefined;
+      const perCapitaIncomeForBpcAnalysisFamilyMember = this.mapper.mapArray(
+        source.perCapitaIncomeForBpcAnalysisFamilyMember,
+        PerCapitaIncomeForBpcAnalysisFamilyMemberEntity,
+        PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
+      );
 
-      const perCapitaIncomeForBpcAnalysisDocument =
-        source.perCapitaIncomeForBpcAnalysisDocument !== null
-          ? this.mapper.mapArray(
-              source.perCapitaIncomeForBpcAnalysisDocument,
-              PerCapitaIncomeForBpcAnalysisDocumentEntity,
-              PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity,
-            )
-          : undefined;
+      const perCapitaIncomeForBpcAnalysisDocument = this.mapper.mapArray(
+        source.perCapitaIncomeForBpcAnalysisDocument,
+        PerCapitaIncomeForBpcAnalysisDocumentEntity,
+        PerCapitaIncomeForBpcAnalysisDocumentTypeormEntity,
+      );
 
       return PerCapitaIncomeForBpcAnalysisTypeormEntity.build({
         id: source.id.toString(),

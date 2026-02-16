@@ -1,6 +1,6 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { SpecialActivityResultId } from '@module/customer/analysis-tool/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
+import type { SpecialActivityResultId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-result/value-object/special-activity-result-id.value-object';
 
 export class GetSpecialActivityAnalysisResultQueryResult extends BaseBuildableObject {
   public readonly id: SpecialActivityResultId;

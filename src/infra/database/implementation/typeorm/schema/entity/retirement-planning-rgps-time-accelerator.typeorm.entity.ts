@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 
 @Entity({ name: 'retirement_planning_rgps_time_accelerator' })
 export class RetirementPlanningRgpsTimeAcceleratorTypeormEntity extends BaseTypeormEntity {
@@ -20,10 +21,20 @@ export class RetirementPlanningRgpsTimeAcceleratorTypeormEntity extends BaseType
   @Column({ name: 'institution', type: 'varchar', length: 255, nullable: true })
   public institution: string | null;
 
-  @Column({ name: 'period_start', type: 'date', nullable: true })
+  @Column({
+    name: 'period_start',
+    type: 'date',
+    transformer: DateTransformer,
+    nullable: true,
+  })
   public periodStart: Date | null;
 
-  @Column({ name: 'period_end', type: 'date', nullable: true })
+  @Column({
+    name: 'period_end',
+    type: 'date',
+    transformer: DateTransformer,
+    nullable: true,
+  })
   public periodEnd: Date | null;
 
   @Column({

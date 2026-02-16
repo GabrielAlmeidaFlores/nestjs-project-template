@@ -11,9 +11,10 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cid-ten.typeorm.entity';
 import { RetirementPlanningRppsPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-document.typeorm.entity';
 import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period.typeorm.entity';
-import { RetirementPlanningDisabilityCategoryEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-category.enum';
-import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
-import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { RetirementPlanningDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-category.enum';
+import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
+import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
 @Entity({ name: 'retirement_planning_rpps_period_disability' })
 export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTypeormEntity {
@@ -36,6 +37,7 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   @Column({
     name: 'start_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: false,
   })
   public startDate: Date;
@@ -43,6 +45,7 @@ export class RetirementPlanningRppsPeriodDisabilityTypeormEntity extends BaseTyp
   @Column({
     name: 'end_date',
     type: 'date',
+    transformer: DateTransformer,
     nullable: false,
   })
   public endDate: Date;
