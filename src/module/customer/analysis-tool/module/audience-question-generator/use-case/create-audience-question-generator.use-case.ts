@@ -131,7 +131,7 @@ export class CreateAudienceQuestionGeneratorUseCase {
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
       code: new AnalysisToolRecordCode(countRecords + 1),
-      type: AnalysisToolRecordTypeEnum.AUDIENCE_QUESTION_GENERATOR,
+      type: AnalysisToolRecordTypeEnum.AUDIENCE_QUESTIONS_GENERATOR,
       audienceQuestionGenerator,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,

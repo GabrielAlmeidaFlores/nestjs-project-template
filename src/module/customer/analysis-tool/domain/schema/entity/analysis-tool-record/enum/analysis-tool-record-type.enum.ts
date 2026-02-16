@@ -11,6 +11,6 @@ export enum AnalysisToolRecordTypeEnum {
   DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS = 'avaliacao_deficiencia_para_bpc',
   PER_CAPITA_INCOME_FOR_BPC_ANALYSIS = 'analise_renda_per_capita_para_bpc',
   RURAL_TIMELINE_ANALYSIS = 'analise_linha_tempo_rural',
-  AUDIENCE_QUESTION_GENERATOR = 'gerador_perguntas_audiencia',
+  AUDIENCE_QUESTIONS_GENERATOR = 'gerador_perguntas_audiencia',
   INSURANCE_QUALITY_ANALYSIS = 'analise_qualidade_segurado',
 }
