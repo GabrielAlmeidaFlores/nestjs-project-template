@@ -92,6 +92,8 @@ export class AnalysisToolRecordTypeormQueryRepository
         { judicialCaseAnalysis: Not(IsNull()) },
         { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
         { speechGenerator: Not(IsNull()) },
+        { audienceQuestionGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1343,7 +1345,38 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
-        speechGenerator: true,
+        speechGenerator: {
+          speechGeneratorDocument: true,
+          speechGeneratorResult: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+        audienceQuestionGenerator: {
+          audienceQuestionGeneratorDocument: true,
+          audienceQuestionGeneratorResult: true,
+          audienceQuestionGeneratorBenefit: true,
+          audienceQuestionGeneratorLegalProceeding: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+        medicalQuestionGenerator: {
+          medicalQuestionGeneratorDocument: true,
+          medicalQuestionGeneratorResult: true,
+          medicalQuestionGeneratorInssBenefit: true,
+          medicalQuestionGeneratorLegalProceeding: true,
+        },
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1367,7 +1400,6 @@ export class AnalysisToolRecordTypeormQueryRepository
       'perCapitaIncomeForBpcAnalysis',
       'ruralTimeline',
       'insuranceQualityAnalysis',
-      'speechGenerator',
     ];
   }
 }
