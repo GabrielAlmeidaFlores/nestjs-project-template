@@ -16,4 +16,5 @@ export interface RuralTimelineAnalysisCnisContributionPeriodEntityPropsInterface
   averageContributionAmount?: DecimalValue | null;
   contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   externalSupplementationIntent: boolean;
+  cnisDocument?: string | null;
 }
