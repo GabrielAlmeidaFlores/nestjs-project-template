@@ -49,21 +49,22 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto extends
   })
   public qualifyingPeriod?: number;
 
-  @RequestDtoEnumProperty({
-    description:
-      'Status do período de contribuição: Válido (aceito pelo INSS) ou Pendente (aguardando análise/documentação).',
-    enum: RuralTimelineAnalysisCnisContributionPeriodStatusEnum,
-    required: false,
-  })
+  @RequestDtoEnumProperty(
+    RuralTimelineAnalysisCnisContributionPeriodStatusEnum,
+    {
+      description:
+        'Status do período de contribuição: Válido (aceito pelo INSS) ou Pendente (aguardando análise/documentação).',
+      required: false,
+    },
+  )
   public status?: RuralTimelineAnalysisCnisContributionPeriodStatusEnum;
 
   @RequestDtoValueObjectProperty(DecimalValue, { required: false })
   public averageContributionAmount?: DecimalValue;
 
-  @RequestDtoEnumProperty({
+  @RequestDtoEnumProperty(ContributionAdjustmentIntentTypeEnum, {
     description:
       'Intenção de ajuste: Incluir (adicionar período), Excluir (remover período) ou Provisório (aguardando decisão).',
-    enum: ContributionAdjustmentIntentTypeEnum,
     required: false,
   })
   public contributionAdjustmentIntent?: ContributionAdjustmentIntentTypeEnum;
