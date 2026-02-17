@@ -95,11 +95,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
     const documentsToAnalyze =
       period.ruralTimelineAnalysisPeriodDocument.filter(
-        (doc) =>
-          doc.documentYear === null &&
-          doc.documentHolderType === null &&
-          doc.selfOwned === null &&
-          doc.probatoryPurpose === null,
+        (doc) => doc.documentYear === null && doc.probatoryPurpose === null,
       );
 
     if (documentsToAnalyze.length === 0) {
