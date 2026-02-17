@@ -264,6 +264,19 @@ export class GetRuralTimelineAnalysisUseCase {
           ),
         );
 
+      let cnisDocumentUrl: string | undefined;
+      let cnisDocumentOriginalFileName: string | undefined;
+
+      if (period.cnisDocument !== null && period.cnisDocument !== undefined) {
+        cnisDocumentUrl = (
+          await this.fileProcessorGateway.getFileSignedUrl(period.cnisDocument)
+        ).toString();
+        cnisDocumentOriginalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(
+            period.cnisDocument,
+          );
+      }
+
       cnisContributionPeriods.push(
         RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.build({
           ...(period.employmentRelationshipSource !== null && {
@@ -283,6 +296,12 @@ export class GetRuralTimelineAnalysisUseCase {
           }),
           contributionAdjustmentIntent: period.contributionAdjustmentIntent,
           externalSupplementationIntent: period.externalSupplementationIntent,
+          ...(cnisDocumentUrl !== null &&
+            cnisDocumentUrl !== undefined && { cnisDocumentUrl }),
+          ...(cnisDocumentOriginalFileName !== null &&
+            cnisDocumentOriginalFileName !== undefined && {
+              cnisDocumentOriginalFileName,
+            }),
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
         }),
       );
