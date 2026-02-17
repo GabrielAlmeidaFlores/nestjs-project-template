@@ -6,7 +6,7 @@ import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/i
 import { InsuranceQualityAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-inss-benefit.typeorm.entity';
 import { InsuranceQualityAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-legal-proceeding.typeorm.entity';
 import { InsuranceQualityAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-result.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'insurance_quality_analysis' })
 export class InsuranceQualityAnalysisTypeormEntity extends BaseTypeormEntity {
@@ -30,7 +30,7 @@ export class InsuranceQualityAnalysisTypeormEntity extends BaseTypeormEntity {
     name: 'analysis_benefit_concession_date',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public analysisBenefitConcessionDate: Date | null;
 
@@ -38,7 +38,7 @@ export class InsuranceQualityAnalysisTypeormEntity extends BaseTypeormEntity {
     name: 'analysis_benefit_cessation_date',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public analysisBenefitCessationDate: Date | null;
 

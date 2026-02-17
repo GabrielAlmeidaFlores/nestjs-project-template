@@ -45,6 +45,10 @@ export class GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile 
         mapFrom((source) => source.probatoryPurpose ?? null),
       ),
       forMember(
+        (destination) => destination.analyzedAt,
+        mapFrom((source) => source.analyzedAt ?? null),
+      ),
+      forMember(
         (destination) => destination.document,
         mapFrom((source) => source.document),
       ),

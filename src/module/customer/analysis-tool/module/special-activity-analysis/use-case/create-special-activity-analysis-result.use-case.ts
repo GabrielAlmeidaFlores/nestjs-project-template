@@ -156,6 +156,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       retirementPlanningRpps: null,
       retirementPlanningRgps: null,
       administrativeProcedureInssAnalysis: null,
+      audienceQuestionGenerator: null,
       judicialCaseAnalysis: null,
       medicalAndSocialReportObjectionGeneratorAnalysis: null,
       medicalQuestionGenerator: null,

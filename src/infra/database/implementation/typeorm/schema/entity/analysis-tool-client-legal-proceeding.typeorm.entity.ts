@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalProceedingDetailTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-proceeding-detail.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { LegalProceedingStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/enum/legal-proceeding-status.enum';
 
 @Entity({ name: 'analysis_tool_client_legal_proceeding' })
@@ -35,7 +35,7 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
     name: 'last_updated',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public lastUpdated: Date | null;
 
@@ -43,7 +43,7 @@ export class AnalysisToolClientLegalProceedingTypeormEntity extends BaseTypeormE
     name: 'deadline',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public deadline: Date | null;
 

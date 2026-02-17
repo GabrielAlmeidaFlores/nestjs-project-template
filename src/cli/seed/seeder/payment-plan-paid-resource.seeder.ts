@@ -388,6 +388,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise consolidada com IA de todos os documentos comprobatórios de um período de atividade rural.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('f3e7d2a8-9b4c-4f6e-8a1d-5c2b7e9a3f1d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_COMPLETE_ANALYSIS,
+      creditCost: 2,
+      title: 'Gerador de Perguntas para Audiência - Análise Completa',
+      description:
+        'Análise completa com geração de perguntas estratégicas para preparação de audiências judiciais e administrativas.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a8c6e1f9-2d4b-4e7a-9c3d-6f1b8a5e2c7d'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.AUDIENCE_QUESTIONS_GENERATOR_SIMPLIFIED_ANALYSIS,
+      creditCost: 1,
+      title: 'Gerador de Perguntas para Audiência - Análise Simplificada',
+      description:
+        'Análise simplificada com perguntas essenciais para preparar o cliente para audiências.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('b0f0af5b-d7d5-4e9d-81ae-2dab050e2483'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS,

@@ -14,14 +14,14 @@ import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
 import { DisabilityAssessmentForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-result.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'disability_assessment_for_bpc_analysis' })
 export class DisabilityAssessmentForBpcAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'estimated_disability_start_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: true,
   })
   public estimatedDisabilityStartDate?: Date | null;

@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-period.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'retirement_planning_rgps_earnings_history' })
 export class RetirementPlanningRgpsEarningsHistoryTypeormEntity extends BaseTypeormEntity {
@@ -11,7 +11,7 @@ export class RetirementPlanningRgpsEarningsHistoryTypeormEntity extends BaseType
     name: 'competence',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public competence: Date | null;
 
@@ -33,7 +33,7 @@ export class RetirementPlanningRgpsEarningsHistoryTypeormEntity extends BaseType
   @Column({
     name: 'payment_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: true,
   })
   public paymentDate: Date | null;

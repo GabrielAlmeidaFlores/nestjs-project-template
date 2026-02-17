@@ -35,6 +35,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
   ): Promise<RuralTimelineAnalysisCnisContributionPeriodEntity | null> {
     const result = await this.findOne({
       where: { id: id.toString() },
+      relations: { ruralTimeline: true },
     });
 
     if (result === null) {
