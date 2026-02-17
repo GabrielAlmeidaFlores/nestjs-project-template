@@ -1,6 +1,10 @@
 const { ESLintUtils } = require('@typescript-eslint/utils');
 
-const DATE_COLUMN_TYPES = new Set(['date', 'datetime']);
+const COLUMN_TYPE_TO_TRANSFORMER = {
+  date: 'DateOnlyTransformer',
+  datetime: 'DateTransformer',
+  timestamp: 'DateTransformer',
+};
 
 function isColumnDecoratorCall(node) {
   return (
@@ -37,14 +41,14 @@ function getLiteralStringValue(node) {
   return null;
 }
 
-function isDateTransformer(node) {
+function getTransformerName(node) {
   if (!node) {
-    return false;
+    return null;
   }
   if (node.type === 'Identifier') {
-    return node.name === 'DateTransformer';
+    return node.name;
   }
-  return false;
+  return null;
 }
 
 module.exports = ESLintUtils.RuleCreator.withoutDocs({
@@ -53,7 +57,7 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     type: 'problem',
     docs: {
       description:
-        'Require DateTransformer on TypeORM Column definitions with type date or datetime',
+        'Require correct date transformer on TypeORM Column definitions (DateOnlyTransformer for date, DateTransformer for datetime/timestamp)',
       category: 'Best Practices',
       recommended: true,
       suggestion: false,
@@ -61,7 +65,9 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
     schema: [],
     messages: {
       missingTransformer:
-        'Columns with type "{{type}}" must include transformer: DateTransformer.',
+        'Columns with type "{{type}}" must include transformer: {{requiredTransformer}}.',
+      wrongTransformer:
+        'Columns with type "{{type}}" must use {{requiredTransformer}}, not {{actualTransformer}}. Use DateOnlyTransformer for DATE columns (YYYY-MM-DD) and DateTransformer for DATETIME/TIMESTAMP columns.',
     },
   },
   defaultOptions: [],
@@ -87,7 +93,8 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           ? getLiteralStringValue(typeProperty.value)
           : null;
 
-        if (!typeValue || !DATE_COLUMN_TYPES.has(typeValue)) {
+        const requiredTransformer = COLUMN_TYPE_TO_TRANSFORMER[typeValue];
+        if (!requiredTransformer) {
           return;
         }
 
@@ -96,11 +103,26 @@ module.exports = ESLintUtils.RuleCreator.withoutDocs({
           ? transformerProperty.value
           : null;
 
-        if (!isDateTransformer(transformerValue)) {
+        const actualTransformer = getTransformerName(transformerValue);
+
+        if (!actualTransformer) {
           context.report({
             node: transformerProperty ?? typeProperty,
             messageId: 'missingTransformer',
-            data: { type: typeValue },
+            data: { type: typeValue, requiredTransformer },
+          });
+          return;
+        }
+
+        if (actualTransformer !== requiredTransformer) {
+          context.report({
+            node: transformerProperty,
+            messageId: 'wrongTransformer',
+            data: {
+              type: typeValue,
+              requiredTransformer,
+              actualTransformer,
+            },
           });
         }
       },

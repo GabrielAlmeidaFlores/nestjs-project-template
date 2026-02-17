@@ -76,6 +76,10 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
         mapFrom((source) => source.externalSupplementationIntent),
       ),
       forMember(
+        (destination) => destination.cnisDocument,
+        mapFrom((source) => source.cnisDocument ?? null),
+      ),
+      forMember(
         (destination) =>
           destination.ruralTimelineCnisContributionPeriodUnderMinimum,
         mapFrom((source) =>

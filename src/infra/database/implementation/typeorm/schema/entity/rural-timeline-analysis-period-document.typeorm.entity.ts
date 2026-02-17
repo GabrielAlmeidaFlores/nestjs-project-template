@@ -2,6 +2,8 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 
 @Entity({ name: 'rural_timeline_period_document' })
@@ -19,7 +21,7 @@ export class RuralTimelineAnalysisPeriodDocumentTypeormEntity extends BaseTypeor
     length: 100,
     nullable: true,
   })
-  public documentHolderType?: string | null;
+  public documentHolderType?: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
 
   @Column({
     name: 'self_owned',
@@ -34,6 +36,14 @@ export class RuralTimelineAnalysisPeriodDocumentTypeormEntity extends BaseTypeor
     nullable: true,
   })
   public probatoryPurpose?: string | null;
+
+  @Column({
+    name: 'analyzed_at',
+    type: 'timestamp',
+    nullable: true,
+    transformer: DateTransformer,
+  })
+  public analyzedAt?: Date | null;
 
   @Column({
     name: 'document',
