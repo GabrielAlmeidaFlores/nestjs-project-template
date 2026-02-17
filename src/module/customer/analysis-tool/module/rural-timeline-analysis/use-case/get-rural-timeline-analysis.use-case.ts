@@ -267,7 +267,7 @@ export class GetRuralTimelineAnalysisUseCase {
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
-      if (period.cnisDocument !== null && period.cnisDocument !== undefined) {
+      if (period.cnisDocument !== null) {
         cnisDocumentUrl = (
           await this.fileProcessorGateway.getFileSignedUrl(period.cnisDocument)
         ).toString();
@@ -296,12 +296,10 @@ export class GetRuralTimelineAnalysisUseCase {
           }),
           contributionAdjustmentIntent: period.contributionAdjustmentIntent,
           externalSupplementationIntent: period.externalSupplementationIntent,
-          ...(cnisDocumentUrl !== null &&
-            cnisDocumentUrl !== undefined && { cnisDocumentUrl }),
-          ...(cnisDocumentOriginalFileName !== null &&
-            cnisDocumentOriginalFileName !== undefined && {
-              cnisDocumentOriginalFileName,
-            }),
+          ...(cnisDocumentUrl !== undefined && { cnisDocumentUrl }),
+          ...(cnisDocumentOriginalFileName !== undefined && {
+            cnisDocumentOriginalFileName,
+          }),
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
         }),
       );
