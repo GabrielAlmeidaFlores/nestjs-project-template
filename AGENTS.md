@@ -329,6 +329,84 @@ export class ProcessAnalysisUseCase {
 - Self-contained (no external dependencies for business rules)
 - Easy to understand (read top-to-bottom)
 
+#### ⚠️ CRITICAL: Transaction Pattern (MANDATORY)
+
+**EVERY write operation (create, update, delete) MUST explicitly commit the transaction.**
+
+When using `BaseTransactionRepositoryGateway`, you must ALWAYS:
+
+1. Store the transaction result in a variable
+2. Call `.commit()` to persist changes to the database
+
+**❌ WRONG - Transaction Never Commits:**
+
+```typescript
+// This looks like it works but NOTHING is saved to the database!
+await this.baseTransactionRepositoryGateway.execute(
+  this.repository.updateSomething(entity),
+);
+
+return response; // ❌ Changes are LOST!
+```
+
+**✅ CORRECT - Transaction Commits Properly:**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute(
+  this.repository.updateSomething(entity),
+);
+
+await transaction.commit(); // ✅ Changes are SAVED!
+
+return response;
+```
+
+**Multiple Operations Pattern:**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute([
+  this.repository1.create(entity1),
+  this.repository2.update(entity2),
+  creditTransaction, // Can mix different transaction types
+]);
+
+await transaction.commit(); // All or nothing - atomic transaction
+```
+
+**Why This Matters:**
+
+1. **Data Loss Prevention**: Without `.commit()`, ALL changes are silently discarded
+2. **False Success**: API returns 200 OK but nothing was saved
+3. **Debugging Nightmare**: Changes appear to work but database remains unchanged
+4. **User Frustration**: Users see success but data doesn't persist
+
+**Common Symptoms of Missing Commit:**
+
+- ✅ Endpoint returns success (200 OK)
+- ✅ No errors in logs
+- ✅ Response DTO looks correct
+- ❌ Database query shows old data
+- ❌ GET request returns unchanged data
+- ❌ Changes disappear after request completes
+
+**Transaction Rollback (Optional):**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute([...]);
+
+try {
+  // Do additional validation or operations
+  await someOtherOperation();
+
+  await transaction.commit();  // Only commit if everything succeeds
+} catch (error) {
+  await transaction.rollback();  // Explicitly rollback on error
+  throw error;
+}
+```
+
+**CRITICAL RULE**: If you call `execute()`, you MUST call `commit()`. No exceptions!
+
 ### 3. Infrastructure Layer Rules
 
 #### TypeORM Entities
