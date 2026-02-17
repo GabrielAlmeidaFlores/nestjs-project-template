@@ -91,6 +91,11 @@ export class AnalysisToolRecordTypeormQueryRepository
         { judicialCaseAnalysis: Not(IsNull()) },
         { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
         { speechGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
+        { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
+        { specialActivity: Not(IsNull()) },
+        { insuranceQualityAnalysis: Not(IsNull()) },
+        { ruralTimeline: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1270,7 +1275,6 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
-        speechGenerator: true,
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1290,6 +1294,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'judicialCaseAnalysis',
       'administrativeProcedureInssAnalysis',
       'medicalAndSocialReportObjectionGeneratorAnalysis',
+      'medicalQuestionGenerator',
       'disabilityAssessmentForBpcAnalysis',
       'perCapitaIncomeForBpcAnalysis',
       'ruralTimeline',
