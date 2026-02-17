@@ -933,11 +933,7 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
   })
   public sensitiveData: string;
 
-  // Foreign key
-  @Column({ name: 'client_id', type: 'uuid' })
-  public clientId: string;
-
-  // ManyToOne relationship
+  // ManyToOne relationship (TypeORM creates client_id FK automatically)
   @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
   @JoinColumn({ name: 'client_id' })
   public client?: ClientTypeormEntity;
@@ -967,6 +963,94 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - `DateTransformer` - Converts MySQL strings to Date objects (REQUIRED for all date/timestamp columns)
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
+
+#### ⚠️ CRITICAL: Foreign Key Relationships Pattern
+
+**NEVER add a separate `@Column` for foreign key IDs when using `@ManyToOne` relations.**
+
+TypeORM automatically creates the foreign key column in the database when you use `@JoinColumn`. Adding a duplicate `@Column` violates TypeORM best practices and breaks the architecture.
+
+**❌ WRONG - DO NOT DO THIS:**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  // ❌ WRONG: Duplicate column for FK
+  @Column({ name: 'client_id', type: 'uuid' })
+  public clientId: string;
+
+  // The relation already manages this column!
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+}
+```
+
+**✅ CORRECT - Follow This Pattern:**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  // ✅ CORRECT: Only define the relation with @JoinColumn
+  // TypeORM automatically creates the 'client_id' column in database
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+}
+```
+
+**How to Access Foreign Key IDs:**
+
+**Option 1: Load the relation (RECOMMENDED for this codebase)**
+
+```typescript
+// In Repository
+const result = await this.findOne({
+  where: { id: id.toString() },
+  relations: { client: true }, // Load the relation
+});
+
+// In AutoMapper - Extract ID from loaded relation
+const convert = (source: AnalysisTypeormEntity): AnalysisEntity => {
+  return new AnalysisEntity({
+    id: new AnalysisId(source.id),
+    clientId: source.client?.id ? new ClientId(source.client.id) : null,
+    // ...other fields
+  });
+};
+```
+
+**Option 2: Use TypeORM's @RelationId decorator (AVOID in this codebase)**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+
+  // TypeORM populates this automatically (without loading relation)
+  @RelationId((entity: AnalysisTypeormEntity) => entity.client)
+  public clientId?: string;
+}
+```
+
+**Why This Matters:**
+
+1. **Database Integrity**: TypeORM manages FK constraints properly through relations
+2. **Single Source of Truth**: The relation is the authoritative source, not a duplicate column
+3. **AutoMapper Dependency**: Domain entities need the ID, which must come from loaded relations
+4. **Prevents Sync Issues**: Duplicate columns can get out of sync with the relation
+5. **TypeORM Best Practice**: This is the standard recommended pattern
+
+**Common Mistake Scenario:**
+
+```
+Problem: Use case gets 404 error when entity exists in database
+Root Cause: Repository doesn't load relation → AutoMapper can't extract ID →
+           Domain entity has null ID → Validation fails
+Solution: Add `relations: { relationName: true }` to repository query
+```
 
 ### 6. Controller and Endpoint Patterns
 
