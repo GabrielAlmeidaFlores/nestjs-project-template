@@ -3,7 +3,7 @@ import { Column, Entity, OneToOne } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'retirement_planning_rgps_result' })
 export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity {
@@ -27,7 +27,7 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'client_birth_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: true,
   })
   public clientBirthDate: Date | null;
@@ -35,7 +35,7 @@ export class RetirementPlanningRgpsResultTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'client_last_affiliation_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: true,
   })
   public clientLastAffiliationDate: Date | null;

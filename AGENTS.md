@@ -976,6 +976,7 @@ export type TransactionType = (executor: unknown) => Promise<void>;
 ```typescript
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
@@ -993,7 +994,16 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'status', type: 'varchar', length: 50 })
   public status: AnalysisStatusEnum;
 
-  // Date columns - ALWAYS use DateTransformer
+  // DATE columns - ALWAYS use DateOnlyTransformer
+  @Column({
+    name: 'birth_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public birthDate: Date | null;
+
+  // TIMESTAMP/DATETIME columns - ALWAYS use DateTransformer
   @Column({
     name: 'completed_at',
     type: 'timestamp',
@@ -1029,7 +1039,8 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - ✅ Database columns: `snake_case` (e.g., `created_at`, `client_id`)
 - ✅ TypeScript properties: `camelCase` (e.g., `createdAt`, `clientId`)
 - ✅ Always use `@Column({ name: 'snake_case' })`
-- ✅ **Date/timestamp columns MUST use `DateTransformer`**
+- ✅ **Date columns (`type: 'date'`) MUST use `DateOnlyTransformer`**
+- ✅ **Timestamp/datetime columns (`type: 'timestamp'` or `type: 'datetime'`) MUST use `DateTransformer`**
 - ✅ Sensitive data columns MUST use `CryptographyTransformer`
 - ✅ Relations are optional: `type?` with `| undefined`
 - ✅ Extend `BaseTypeormEntity`
@@ -1038,9 +1049,23 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 
 **Available Transformers**:
 
-- `DateTransformer` - Converts MySQL strings to Date objects (REQUIRED for all date/timestamp columns)
+- `DateOnlyTransformer` - Formats dates as 'YYYY-MM-DD' for MySQL DATE columns (REQUIRED for `type: 'date'`)
+- `DateTransformer` - Formats dates as ISO strings for MySQL TIMESTAMP/DATETIME columns (REQUIRED for `type: 'timestamp'` or `type: 'datetime'`)
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
+
+**⚠️ CRITICAL: Choosing the Correct Date Transformer**
+
+MySQL has different date/time column types that require different transformers:
+
+- **`type: 'date'`** → Use `DateOnlyTransformer` (stores 'YYYY-MM-DD', e.g., '2000-03-10')
+- **`type: 'timestamp'` or `type: 'datetime'`** → Use `DateTransformer` (stores full ISO datetime)
+
+Using the wrong transformer will cause database errors like:
+
+```
+QueryFailedError: Incorrect date value: '2000-03-10T03:00:00.000Z' for column 'start_date'
+```
 
 #### ⚠️ CRITICAL: Foreign Key Relationships Pattern
 
