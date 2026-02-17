@@ -1,13 +1,13 @@
 export const DateTransformer = {
-  to(value?: Date | null): string | null | undefined {
+  to(value?: Date | null): string | null {
     if (value === null || value === undefined) {
-      return value;
+      return null;
     }
     return value.toISOString();
   },
-  from(value?: string | null): Date | null | undefined {
+  from(value?: string | null): Date | null {
     if (value === null || value === undefined) {
-      return value;
+      return null;
     }
     return new Date(value);
   },
