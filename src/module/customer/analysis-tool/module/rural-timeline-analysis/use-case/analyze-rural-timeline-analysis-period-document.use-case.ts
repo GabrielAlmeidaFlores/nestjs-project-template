@@ -13,6 +13,7 @@ import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/an
 import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import {
@@ -95,7 +96,10 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
     const documentsToAnalyze =
       period.ruralTimelineAnalysisPeriodDocument.filter(
-        (doc) => doc.documentYear === null && doc.probatoryPurpose === null,
+        (doc) =>
+          doc.type !== RuralTimelineAnalysisPeriodDocumentTypeEnum.CTPS &&
+          doc.documentYear === null &&
+          doc.probatoryPurpose === null,
       );
 
     if (documentsToAnalyze.length === 0) {
