@@ -1,4 +1,5 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity.props.interface';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
@@ -15,7 +16,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntity extends BaseEntity<RuralT
   @Description(
     'Tipo de titular do documento: client (cliente), family_group_member (membro do grupo familiar) ou third_party (terceiro).',
   )
-  public readonly documentHolderType: string | null;
+  public readonly documentHolderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
 
   @Description(
     'Indica se o documento pertence ao próprio cliente (true) ou a outra pessoa (false).',

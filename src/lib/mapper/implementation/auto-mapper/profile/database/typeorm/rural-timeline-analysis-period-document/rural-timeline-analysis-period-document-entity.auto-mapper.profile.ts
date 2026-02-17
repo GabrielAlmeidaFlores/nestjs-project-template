@@ -6,6 +6,7 @@ import { RuralTimelineAnalysisPeriodDocumentTypeormEntity } from '@infra/databas
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 
 @Injectable()
@@ -33,9 +34,18 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
       );
 
       return new RuralTimelineAnalysisPeriodDocumentEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodDocumentId(source.id),
+        documentYear: source.documentYear ?? null,
+        documentHolderType:
+          source.documentHolderType as RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null,
+        selfOwned: source.selfOwned ?? null,
+        probatoryPurpose: source.probatoryPurpose ?? null,
+        document: source.document,
+        type: source.type,
         ruralTimelinePeriodId: ruralTimelinePeriod.id,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

@@ -8,6 +8,8 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
+import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
@@ -60,10 +62,14 @@ export class AddRuralTimelineAnalysisPeriodDocumentUseCase {
       dto.file,
     );
 
+    const { selfOwned, documentHolderType } = this.inferMetadataFromType(
+      dto.json.type,
+    );
+
     const document = new RuralTimelineAnalysisPeriodDocumentEntity({
       documentYear: null,
-      documentHolderType: null,
-      selfOwned: null,
+      documentHolderType,
+      selfOwned,
       probatoryPurpose: null,
       document: uploadedFileName,
       type: dto.json.type,
@@ -81,5 +87,41 @@ export class AddRuralTimelineAnalysisPeriodDocumentUseCase {
     return AddRuralTimelineAnalysisPeriodDocumentResponseDto.build({
       id: document.id,
     });
+  }
+
+  private inferMetadataFromType(
+    type: RuralTimelineAnalysisPeriodDocumentTypeEnum,
+  ): {
+    selfOwned: boolean | null;
+    documentHolderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
+  } {
+    switch (type) {
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.SELF_OWNED_DOCUMENT:
+        return {
+          selfOwned: true,
+          documentHolderType:
+            RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.CLIENT,
+        };
+
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.FAMILY_GROUP_OWNED_DOCUMENT:
+        return {
+          selfOwned: false,
+          documentHolderType:
+            RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.FAMILY_GROUP_MEMBER,
+        };
+
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.THIRD_PARTY_OWNED_DOCUMENT:
+        return {
+          selfOwned: false,
+          documentHolderType:
+            RuralTimelineAnalysisPeriodDocumentHolderTypeEnum.THIRD_PARTY,
+        };
+
+      case RuralTimelineAnalysisPeriodDocumentTypeEnum.CTPS:
+        return { selfOwned: null, documentHolderType: null };
+
+      default:
+        return { selfOwned: null, documentHolderType: null };
+    }
   }
 }
