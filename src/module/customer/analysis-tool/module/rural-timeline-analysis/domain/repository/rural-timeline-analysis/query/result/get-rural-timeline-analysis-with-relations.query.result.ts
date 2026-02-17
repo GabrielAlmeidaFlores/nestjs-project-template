@@ -15,6 +15,7 @@ import type { ProductionDestinationEnum } from '@module/customer/analysis-tool/m
 import type { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import type { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
 import type { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
+import type { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import type { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import type { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import type { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
@@ -51,6 +52,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
   public readonly averageContributionAmount: DecimalValue | null;
   public readonly contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   public readonly externalSupplementationIntent: boolean;
+  public readonly cnisDocument: string | null;
   public readonly ruralTimelineCnisContributionPeriodUnderMinimum: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
@@ -63,9 +65,10 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
 export class GetRuralTimelineAnalysisPeriodDocumentQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisPeriodDocumentId;
   public readonly documentYear: number | null;
-  public readonly documentHolderType: string | null;
+  public readonly documentHolderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
   public readonly selfOwned: boolean | null;
   public readonly probatoryPurpose: string | null;
+  public readonly analyzedAt: Date | null;
   public readonly document: string;
   public readonly type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
 
