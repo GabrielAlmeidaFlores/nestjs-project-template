@@ -90,11 +90,13 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
       cnisDocument: cnisDocumentLocation,
     });
 
-    await this.baseTransactionRepositoryGateway.execute(
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
       this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriod(
         newEntity,
       ),
     );
+
+    await transaction.commit();
 
     return CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.buildFromEntity(
       contributionPeriodId,

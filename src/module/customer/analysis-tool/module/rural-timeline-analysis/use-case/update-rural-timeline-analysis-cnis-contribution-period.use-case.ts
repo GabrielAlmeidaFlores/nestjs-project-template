@@ -122,11 +122,13 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase {
       },
     );
 
-    await this.baseTransactionRepositoryGateway.execute(
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
       this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.updateRuralTimelineAnalysisCnisContributionPeriod(
         updatedEntity,
       ),
     );
+
+    await transaction.commit();
 
     const response =
       new UpdateRuralTimelineAnalysisCnisContributionPeriodResponseDto();
