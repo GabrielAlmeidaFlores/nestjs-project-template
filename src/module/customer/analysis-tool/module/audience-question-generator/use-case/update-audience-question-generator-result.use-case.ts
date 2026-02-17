@@ -70,7 +70,10 @@ export class UpdateAudienceQuestionGeneratorResultUseCase {
         AudienceQuestionGeneratorNotFoundError,
       );
 
-    if (audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult === null) {
+    if (
+      audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult ===
+      null
+    ) {
       throw new AudienceQuestionGeneratorDoesNotContainCompleteAnalysisError();
     }
 
@@ -78,13 +81,15 @@ export class UpdateAudienceQuestionGeneratorResultUseCase {
       dto.result,
     );
 
-    const audienceQuestionGeneratorResult = new AudienceQuestionGeneratorResultEntity({
-      id: audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult.id,
-      audienceQuestionGeneratorCompleteAnalysis: markdownContent,
-      audienceQuestionGeneratorSimplifiedAnalysis:
-        audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
-          .audienceQuestionGeneratorSimplifiedAnalysis,
-    });
+    const audienceQuestionGeneratorResult =
+      new AudienceQuestionGeneratorResultEntity({
+        id: audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
+          .id,
+        audienceQuestionGeneratorCompleteAnalysis: markdownContent,
+        audienceQuestionGeneratorSimplifiedAnalysis:
+          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorResult
+            .audienceQuestionGeneratorSimplifiedAnalysis,
+      });
 
     const audienceQuestionGenerator = new AudienceQuestionGeneratorEntity({
       id: audienceQuestionGeneratorQueryResult.id,

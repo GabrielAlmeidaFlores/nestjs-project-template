@@ -10,8 +10,8 @@ import { CreateAudienceQuestionGeneratorUseCase } from '@module/customer/analysi
 import { DownloadAudienceQuestionGeneratorCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-complete-analysis.use-case';
 import { DownloadAudienceQuestionGeneratorSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/download-audience-question-generator-simplified-analysis.use-case';
 import { GetAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/get-audience-question-generator.use-case';
-import { UpdateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator.use-case';
 import { UpdateAudienceQuestionGeneratorResultUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator-result.use-case';
+import { UpdateAudienceQuestionGeneratorUseCase } from '@module/customer/analysis-tool/module/audience-question-generator/use-case/update-audience-question-generator.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
