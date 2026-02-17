@@ -98,8 +98,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
       period.ruralTimelineAnalysisPeriodDocument.filter(
         (doc) =>
           doc.type !== RuralTimelineAnalysisPeriodDocumentTypeEnum.CTPS &&
-          doc.documentYear === null &&
-          doc.probatoryPurpose === null,
+          doc.analyzedAt === null,
       );
 
     if (documentsToAnalyze.length === 0) {
@@ -258,6 +257,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         documentHolderType: documentQueryResult.documentHolderType,
         selfOwned: documentQueryResult.selfOwned,
         probatoryPurpose: parsedResult.probatoryPurpose,
+        analyzedAt: new Date(),
         document: documentQueryResult.document,
         type: documentQueryResult.type,
         ruralTimelinePeriodId: ruralTimelineAnalysisPeriodId,
