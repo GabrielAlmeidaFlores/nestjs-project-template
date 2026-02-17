@@ -52,6 +52,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
   public readonly averageContributionAmount: DecimalValue | null;
   public readonly contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   public readonly externalSupplementationIntent: boolean;
+  public readonly cnisDocument: string | null;
   public readonly ruralTimelineCnisContributionPeriodUnderMinimum: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
