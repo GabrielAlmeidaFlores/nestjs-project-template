@@ -23,6 +23,9 @@ export class SetAuthTokenCookieUseCase implements SetAuthTokenCookieUseCaseGatew
     authIdentityId: AuthIdentityId,
     userLevel: UserLevelEnum,
   ): Promise<void> {
+    reply.clearCookie(ApiCookieEnum.AUTH_TOKEN);
+    reply.clearCookie(ApiCookieEnum.ORGANIZATION);
+
     const jwtSession = await this.authIdentitySessionGateway.createSession(
       authIdentityId,
       userLevel,
