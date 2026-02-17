@@ -92,6 +92,11 @@ export class AnalysisToolRecordTypeormQueryRepository
         { judicialCaseAnalysis: Not(IsNull()) },
         { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
         { speechGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
+        { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
+        { specialActivity: Not(IsNull()) },
+        { insuranceQualityAnalysis: Not(IsNull()) },
+        { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { medicalQuestionGenerator: Not(IsNull()) },
       ];
@@ -1345,38 +1350,7 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
-        speechGenerator: {
-          speechGeneratorDocument: true,
-          speechGeneratorResult: true,
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-        },
-        audienceQuestionGenerator: {
-          audienceQuestionGeneratorDocument: true,
-          audienceQuestionGeneratorResult: true,
-          audienceQuestionGeneratorBenefit: true,
-          audienceQuestionGeneratorLegalProceeding: true,
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-        },
-        medicalQuestionGenerator: {
-          medicalQuestionGeneratorDocument: true,
-          medicalQuestionGeneratorResult: true,
-          medicalQuestionGeneratorInssBenefit: true,
-          medicalQuestionGeneratorLegalProceeding: true,
-        },
+        speechGenerator: true,
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1396,6 +1370,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'judicialCaseAnalysis',
       'administrativeProcedureInssAnalysis',
       'medicalAndSocialReportObjectionGeneratorAnalysis',
+      'medicalQuestionGenerator',
       'disabilityAssessmentForBpcAnalysis',
       'perCapitaIncomeForBpcAnalysis',
       'ruralTimeline',
