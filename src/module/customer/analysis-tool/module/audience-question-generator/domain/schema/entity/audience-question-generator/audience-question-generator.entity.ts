@@ -50,11 +50,11 @@ export class AudienceQuestionGeneratorEntity extends BaseEntity<AudienceQuestion
     this.audienceQuestionGeneratorResult =
       props.audienceQuestionGeneratorResult ?? null;
     this.audienceQuestionGeneratorBenefit =
-      props.audienceQuestionGeneratorBenefit ?? [];
+      props.audienceQuestionGeneratorBenefit ?? null;
     this.audienceQuestionGeneratorLegalProceeding =
-      props.audienceQuestionGeneratorLegalProceeding ?? [];
+      props.audienceQuestionGeneratorLegalProceeding ?? null;
     this.audienceQuestionGeneratorDocument =
-      props.audienceQuestionGeneratorDocument ?? [];
+      props.audienceQuestionGeneratorDocument ?? null;
     this.createdBy = props.createdBy;
     this.updatedBy = props.updatedBy;
   }
