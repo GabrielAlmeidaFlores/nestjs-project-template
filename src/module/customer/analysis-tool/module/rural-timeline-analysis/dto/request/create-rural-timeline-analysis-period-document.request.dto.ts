@@ -1,3 +1,4 @@
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -19,8 +20,10 @@ export class CreateRuralTimelineAnalysisPeriodDocumentRequestDto extends BaseBui
   @RequestDtoNumberProperty({ required: false })
   public documentYear?: number;
 
-  @RequestDtoStringProperty({ required: false })
-  public documentHolderType?: string;
+  @RequestDtoEnumProperty(RuralTimelineAnalysisPeriodDocumentHolderTypeEnum, {
+    required: false,
+  })
+  public documentHolderType?: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum;
 
   @RequestDtoBooleanProperty({ required: false })
   public selfOwned?: boolean;

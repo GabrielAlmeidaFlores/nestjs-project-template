@@ -220,34 +220,13 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
                     description:
                       'Ano de emissão ou referência do documento (número ou null)',
                   },
-                  documentHolderType: {
-                    type: ['string', 'null'],
-                    enum: [
-                      'client',
-                      'family_group_member',
-                      'third_party',
-                      null,
-                    ],
-                    description:
-                      'Tipo de titular do documento: client (cliente), family_group_member (membro do grupo familiar) ou third_party (terceiro)',
-                  },
-                  selfOwned: {
-                    type: ['boolean', 'null'],
-                    description:
-                      'Se o documento pertence ao próprio cliente (boolean ou null)',
-                  },
                   probatoryPurpose: {
                     type: ['string', 'null'],
                     description:
                       'Finalidade probatória do documento (string ou null)',
                   },
                 },
-                required: [
-                  'documentYear',
-                  'documentHolderType',
-                  'selfOwned',
-                  'probatoryPurpose',
-                ],
+                required: ['documentYear', 'probatoryPurpose'],
               },
             }),
           }),
@@ -259,16 +238,12 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
       let parsedResult: {
         documentYear: number | null;
-        documentHolderType: string | null;
-        selfOwned: boolean | null;
         probatoryPurpose: string | null;
       };
 
       try {
         parsedResult = JSON.parse(analysisResult) as {
           documentYear: number | null;
-          documentHolderType: string | null;
-          selfOwned: boolean | null;
           probatoryPurpose: string | null;
         };
       } catch {
@@ -280,8 +255,8 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
           documentQueryResult.id.toString(),
         ),
         documentYear: parsedResult.documentYear,
-        documentHolderType: parsedResult.documentHolderType,
-        selfOwned: parsedResult.selfOwned,
+        documentHolderType: documentQueryResult.documentHolderType,
+        selfOwned: documentQueryResult.selfOwned,
         probatoryPurpose: parsedResult.probatoryPurpose,
         document: documentQueryResult.document,
         type: documentQueryResult.type,
@@ -296,11 +271,11 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
           ...(parsedResult.documentYear !== null && {
             documentYear: parsedResult.documentYear,
           }),
-          ...(parsedResult.documentHolderType !== null && {
-            documentHolderType: parsedResult.documentHolderType,
+          ...(documentQueryResult.documentHolderType !== null && {
+            documentHolderType: documentQueryResult.documentHolderType,
           }),
-          ...(parsedResult.selfOwned !== null && {
-            selfOwned: parsedResult.selfOwned,
+          ...(documentQueryResult.selfOwned !== null && {
+            selfOwned: documentQueryResult.selfOwned,
           }),
           ...(parsedResult.probatoryPurpose !== null && {
             probatoryPurpose: parsedResult.probatoryPurpose,

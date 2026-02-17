@@ -17,6 +17,7 @@ import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis
 import { ProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/production-destination.enum';
 import { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
+import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
 import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/enum/rural-timeline-analysis-period-family-group-member-kinship-type.enum';
@@ -84,8 +85,10 @@ export class GetRuralTimelineAnalysisPeriodDocumentResponseDto extends BaseBuild
   @ResponseDtoNumberProperty({ required: false })
   public documentYear?: number;
 
-  @ResponseDtoStringProperty({ required: false })
-  public documentHolderType?: string;
+  @ResponseDtoEnumProperty(RuralTimelineAnalysisPeriodDocumentHolderTypeEnum, {
+    required: false,
+  })
+  public documentHolderType?: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum;
 
   @ResponseDtoBooleanProperty({ required: false })
   public selfOwned?: boolean;
