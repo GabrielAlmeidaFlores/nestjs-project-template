@@ -28,6 +28,7 @@ import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/sche
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
+import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
@@ -91,6 +92,8 @@ export class AnalysisToolRecordTypeormQueryRepository
         { judicialCaseAnalysis: Not(IsNull()) },
         { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
         { speechGenerator: Not(IsNull()) },
+        { audienceQuestionGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -897,6 +900,78 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsByAudienceQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          audienceQuestionGenerator: {
+            id: audienceQuestionGeneratorId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          audienceQuestionGenerator: {
+            audienceQuestionGeneratorResult: true,
+            audienceQuestionGeneratorDocument: true,
+            audienceQuestionGeneratorBenefit: true,
+            audienceQuestionGeneratorLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async findWithRelationsByMedicalQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
     medicalQuestionGeneratorId: MedicalQuestionGeneratorId,
     organizationId: OrganizationId,
@@ -1270,7 +1345,38 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
         },
-        speechGenerator: true,
+        speechGenerator: {
+          speechGeneratorDocument: true,
+          speechGeneratorResult: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+        audienceQuestionGenerator: {
+          audienceQuestionGeneratorDocument: true,
+          audienceQuestionGeneratorResult: true,
+          audienceQuestionGeneratorBenefit: true,
+          audienceQuestionGeneratorLegalProceeding: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+        medicalQuestionGenerator: {
+          medicalQuestionGeneratorDocument: true,
+          medicalQuestionGeneratorResult: true,
+          medicalQuestionGeneratorInssBenefit: true,
+          medicalQuestionGeneratorLegalProceeding: true,
+        },
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1294,7 +1400,6 @@ export class AnalysisToolRecordTypeormQueryRepository
       'perCapitaIncomeForBpcAnalysis',
       'ruralTimeline',
       'insuranceQualityAnalysis',
-      'speechGenerator',
     ];
   }
 }

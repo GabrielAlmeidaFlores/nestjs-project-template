@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
@@ -24,6 +25,7 @@ import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis/query/result/get-administrative-procedure-inss-analysis.query.result';
+import { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-with-relations.query.result';
@@ -130,6 +132,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetDisabilityAssessmentForBpcAnalysisQueryResult,
       );
 
+      const audienceQuestionGenerator = this.mapper.map(
+        source.audienceQuestionGenerator,
+        AudienceQuestionGeneratorTypeormEntity,
+        GetAudienceQuestionGeneratorWithRelationsQueryResult,
+      );
+
       const perCapitaIncomeForBpcAnalysis = this.mapper.map(
         source.perCapitaIncomeForBpcAnalysis,
         PerCapitaIncomeForBpcAnalysisTypeormEntity,
@@ -168,6 +176,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
@@ -266,6 +275,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         DisabilityAssessmentForBpcAnalysisTypeormEntity,
       );
 
+      const audienceQuestionGenerator = this.mapper.map(
+        source.audienceQuestionGenerator,
+        GetAudienceQuestionGeneratorWithRelationsQueryResult,
+        AudienceQuestionGeneratorTypeormEntity,
+      );
+
       const perCapitaIncomeForBpcAnalysis = this.mapper.map(
         source.perCapitaIncomeForBpcAnalysis,
         GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
@@ -303,6 +318,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,

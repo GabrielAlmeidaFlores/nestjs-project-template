@@ -67,6 +67,16 @@ export abstract class AnalysisProcessorGateway {
     files: Buffer[],
   ): Promise<string | null>;
 
+  public abstract getAudienceQuestionGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getAudienceQuestionGeneratorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
   public abstract getMedicalQuestionGeneratorCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],

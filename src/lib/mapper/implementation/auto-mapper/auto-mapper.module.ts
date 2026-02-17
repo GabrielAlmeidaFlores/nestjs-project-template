@@ -28,6 +28,17 @@ import { GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile } from
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-with-relations-query-result.auto-mapper.profile';
 import { AnalysisToolRecordEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/analysis-tool-record-entity.auto-mapper.profile';
 import { GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-relations-query-result.auto-mapper.profile';
+import { AudienceQuestionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator/audience-question-generator-entity.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator/get-audience-question-generator-query-result.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator/get-audience-question-generator-with-relations-query-result.auto-mapper.profile';
+import { AudienceQuestionGeneratorBenefitEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-benefit/audience-question-generator-benefit-entity.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorBenefitQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-benefit/get-audience-question-generator-benefit-query-result.auto-mapper.profile';
+import { AudienceQuestionGeneratorDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-document/audience-question-generator-document-entity.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-document/get-audience-question-generator-document-query-result.auto-mapper.profile';
+import { AudienceQuestionGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-legal-proceeding/audience-question-generator-legal-proceeding-entity.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-legal-proceeding/get-audience-question-generator-legal-proceeding-query-result.auto-mapper.profile';
+import { AudienceQuestionGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-result/audience-question-generator-result-entity.auto-mapper.profile';
+import { GetAudienceQuestionGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator-result/get-audience-question-generator-result-query-result.auto-mapper.profile';
 import { AuthIdentityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/auth-identity-entity.auto-mapper.profile';
 import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-query-result.auto-mapper.profile';
 import { GetAuthIdentityWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-with-relations-query-result.auto-mapper.profile';
@@ -331,6 +342,17 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetAuthIdentityWithRelationsQueryResultAutoMapperProfile,
     AdminEntityAutoMapperProfile,
     GetAdminQueryResultAutoMapperProfile,
+    AudienceQuestionGeneratorEntityAutoMapperProfile,
+    GetAudienceQuestionGeneratorQueryResultAutoMapperProfile,
+    GetAudienceQuestionGeneratorWithRelationsQueryResultAutoMapperProfile,
+    AudienceQuestionGeneratorResultEntityAutoMapperProfile,
+    GetAudienceQuestionGeneratorResultQueryResultAutoMapperProfile,
+    AudienceQuestionGeneratorDocumentEntityAutoMapperProfile,
+    GetAudienceQuestionGeneratorDocumentQueryResultAutoMapperProfile,
+    AudienceQuestionGeneratorBenefitEntityAutoMapperProfile,
+    GetAudienceQuestionGeneratorBenefitQueryResultAutoMapperProfile,
+    AudienceQuestionGeneratorLegalProceedingEntityAutoMapperProfile,
+    GetAudienceQuestionGeneratorLegalProceedingQueryResultAutoMapperProfile,
     GetLegalProceedingDetailQueryResultAutoMapperProfile,
     LegalProceedingDetailEntityAutoMapperProfile,
     GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile,
