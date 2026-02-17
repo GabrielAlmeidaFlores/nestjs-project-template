@@ -86,6 +86,13 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   })
   public cnisDocument?: string | null;
 
+  @Column({
+    name: 'rural_timeline_id',
+    type: 'uuid',
+    nullable: true,
+  })
+  public ruralTimelineId?: string | null;
+
   @ManyToOne(
     () => RuralTimelineAnalysisTypeormEntity,
     (entity) => entity.ruralTimelineCnisContributionPeriod,
