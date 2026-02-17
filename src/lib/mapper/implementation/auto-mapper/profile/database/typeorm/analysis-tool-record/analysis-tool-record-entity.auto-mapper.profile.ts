@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AdministrativeProcedureInssAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis.entity';
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
@@ -25,6 +26,7 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
 import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
+import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
@@ -132,6 +134,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const audienceQuestionGenerator =
+        source.audienceQuestionGenerator !== undefined
+          ? this.mapper.map(
+              source.audienceQuestionGenerator,
+              AudienceQuestionGeneratorTypeormEntity,
+              AudienceQuestionGeneratorEntity,
+            )
+          : null;
+
       const ruralTimelineAnalysis =
         source.ruralTimeline !== undefined
           ? this.mapper.map(
@@ -194,6 +205,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         medicalAndSocialReportObjectionGeneratorAnalysis,
         speechGenerator,
         disabilityAssessmentForBpcAnalysis,
+        audienceQuestionGenerator,
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
@@ -284,6 +296,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const audienceQuestionGenerator =
+        source.audienceQuestionGenerator !== null
+          ? this.mapper.map(
+              source.audienceQuestionGenerator,
+              AudienceQuestionGeneratorEntity,
+              AudienceQuestionGeneratorTypeormEntity,
+            )
+          : null;
+
       const ruralTimeline =
         source.ruralTimelineAnalysis !== null
           ? this.mapper.map(
@@ -341,6 +362,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        audienceQuestionGenerator,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,

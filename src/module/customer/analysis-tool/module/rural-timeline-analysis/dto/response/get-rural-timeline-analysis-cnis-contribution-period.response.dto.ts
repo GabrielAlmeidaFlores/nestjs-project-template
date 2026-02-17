@@ -59,6 +59,12 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends B
   @ResponseDtoBooleanProperty()
   public externalSupplementationIntent: boolean;
 
+  @ResponseDtoStringProperty({ required: false })
+  public cnisDocumentUrl?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public cnisDocumentOriginalFileName?: string;
+
   @ResponseDtoObjectProperty(
     () => GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
     { isArray: true, required: false },

@@ -168,12 +168,14 @@ export class GenerateRuralTimelineAnalysisUseCase {
       deletedAt: null,
     });
 
-    await this.baseTransactionRepositoryGateway.execute([
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.ruralTimelineAnalysisCommandRepositoryGateway.updateRuralTimeline(
         updatedEntity,
       ),
       creditTransaction,
     ]);
+
+    await transaction.commit();
 
     return GenerateRuralTimelineAnalysisResponseDto.build({
       ruralTimelineCompleteAnalysis: analysisResult,

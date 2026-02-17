@@ -329,6 +329,84 @@ export class ProcessAnalysisUseCase {
 - Self-contained (no external dependencies for business rules)
 - Easy to understand (read top-to-bottom)
 
+#### ⚠️ CRITICAL: Transaction Pattern (MANDATORY)
+
+**EVERY write operation (create, update, delete) MUST explicitly commit the transaction.**
+
+When using `BaseTransactionRepositoryGateway`, you must ALWAYS:
+
+1. Store the transaction result in a variable
+2. Call `.commit()` to persist changes to the database
+
+**❌ WRONG - Transaction Never Commits:**
+
+```typescript
+// This looks like it works but NOTHING is saved to the database!
+await this.baseTransactionRepositoryGateway.execute(
+  this.repository.updateSomething(entity),
+);
+
+return response; // ❌ Changes are LOST!
+```
+
+**✅ CORRECT - Transaction Commits Properly:**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute(
+  this.repository.updateSomething(entity),
+);
+
+await transaction.commit(); // ✅ Changes are SAVED!
+
+return response;
+```
+
+**Multiple Operations Pattern:**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute([
+  this.repository1.create(entity1),
+  this.repository2.update(entity2),
+  creditTransaction, // Can mix different transaction types
+]);
+
+await transaction.commit(); // All or nothing - atomic transaction
+```
+
+**Why This Matters:**
+
+1. **Data Loss Prevention**: Without `.commit()`, ALL changes are silently discarded
+2. **False Success**: API returns 200 OK but nothing was saved
+3. **Debugging Nightmare**: Changes appear to work but database remains unchanged
+4. **User Frustration**: Users see success but data doesn't persist
+
+**Common Symptoms of Missing Commit:**
+
+- ✅ Endpoint returns success (200 OK)
+- ✅ No errors in logs
+- ✅ Response DTO looks correct
+- ❌ Database query shows old data
+- ❌ GET request returns unchanged data
+- ❌ Changes disappear after request completes
+
+**Transaction Rollback (Optional):**
+
+```typescript
+const transaction = await this.baseTransactionRepositoryGateway.execute([...]);
+
+try {
+  // Do additional validation or operations
+  await someOtherOperation();
+
+  await transaction.commit();  // Only commit if everything succeeds
+} catch (error) {
+  await transaction.rollback();  // Explicitly rollback on error
+  throw error;
+}
+```
+
+**CRITICAL RULE**: If you call `execute()`, you MUST call `commit()`. No exceptions!
+
 ### 3. Infrastructure Layer Rules
 
 #### TypeORM Entities
@@ -898,6 +976,7 @@ export type TransactionType = (executor: unknown) => Promise<void>;
 ```typescript
 import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 
@@ -915,7 +994,16 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'status', type: 'varchar', length: 50 })
   public status: AnalysisStatusEnum;
 
-  // Date columns - ALWAYS use DateTransformer
+  // DATE columns - ALWAYS use DateOnlyTransformer
+  @Column({
+    name: 'birth_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public birthDate: Date | null;
+
+  // TIMESTAMP/DATETIME columns - ALWAYS use DateTransformer
   @Column({
     name: 'completed_at',
     type: 'timestamp',
@@ -933,11 +1021,7 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
   })
   public sensitiveData: string;
 
-  // Foreign key
-  @Column({ name: 'client_id', type: 'uuid' })
-  public clientId: string;
-
-  // ManyToOne relationship
+  // ManyToOne relationship (TypeORM creates client_id FK automatically)
   @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
   @JoinColumn({ name: 'client_id' })
   public client?: ClientTypeormEntity;
@@ -955,7 +1039,8 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - ✅ Database columns: `snake_case` (e.g., `created_at`, `client_id`)
 - ✅ TypeScript properties: `camelCase` (e.g., `createdAt`, `clientId`)
 - ✅ Always use `@Column({ name: 'snake_case' })`
-- ✅ **Date/timestamp columns MUST use `DateTransformer`**
+- ✅ **Date columns (`type: 'date'`) MUST use `DateOnlyTransformer`**
+- ✅ **Timestamp/datetime columns (`type: 'timestamp'` or `type: 'datetime'`) MUST use `DateTransformer`**
 - ✅ Sensitive data columns MUST use `CryptographyTransformer`
 - ✅ Relations are optional: `type?` with `| undefined`
 - ✅ Extend `BaseTypeormEntity`
@@ -964,9 +1049,111 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 
 **Available Transformers**:
 
-- `DateTransformer` - Converts MySQL strings to Date objects (REQUIRED for all date/timestamp columns)
+- `DateOnlyTransformer` - Formats dates as 'YYYY-MM-DD' for MySQL DATE columns (REQUIRED for `type: 'date'`)
+- `DateTransformer` - Formats dates as ISO strings for MySQL TIMESTAMP/DATETIME columns (REQUIRED for `type: 'timestamp'` or `type: 'datetime'`)
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
+
+**⚠️ CRITICAL: Choosing the Correct Date Transformer**
+
+MySQL has different date/time column types that require different transformers:
+
+- **`type: 'date'`** → Use `DateOnlyTransformer` (stores 'YYYY-MM-DD', e.g., '2000-03-10')
+- **`type: 'timestamp'` or `type: 'datetime'`** → Use `DateTransformer` (stores full ISO datetime)
+
+Using the wrong transformer will cause database errors like:
+
+```
+QueryFailedError: Incorrect date value: '2000-03-10T03:00:00.000Z' for column 'start_date'
+```
+
+#### ⚠️ CRITICAL: Foreign Key Relationships Pattern
+
+**NEVER add a separate `@Column` for foreign key IDs when using `@ManyToOne` relations.**
+
+TypeORM automatically creates the foreign key column in the database when you use `@JoinColumn`. Adding a duplicate `@Column` violates TypeORM best practices and breaks the architecture.
+
+**❌ WRONG - DO NOT DO THIS:**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  // ❌ WRONG: Duplicate column for FK
+  @Column({ name: 'client_id', type: 'uuid' })
+  public clientId: string;
+
+  // The relation already manages this column!
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+}
+```
+
+**✅ CORRECT - Follow This Pattern:**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  // ✅ CORRECT: Only define the relation with @JoinColumn
+  // TypeORM automatically creates the 'client_id' column in database
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+}
+```
+
+**How to Access Foreign Key IDs:**
+
+**Option 1: Load the relation (RECOMMENDED for this codebase)**
+
+```typescript
+// In Repository
+const result = await this.findOne({
+  where: { id: id.toString() },
+  relations: { client: true }, // Load the relation
+});
+
+// In AutoMapper - Extract ID from loaded relation
+const convert = (source: AnalysisTypeormEntity): AnalysisEntity => {
+  return new AnalysisEntity({
+    id: new AnalysisId(source.id),
+    clientId: source.client?.id ? new ClientId(source.client.id) : null,
+    // ...other fields
+  });
+};
+```
+
+**Option 2: Use TypeORM's @RelationId decorator (AVOID in this codebase)**
+
+```typescript
+@Entity({ name: 'analysis' })
+export class AnalysisTypeormEntity extends BaseTypeormEntity {
+  @ManyToOne(() => ClientTypeormEntity, (entity) => entity.analyses)
+  @JoinColumn({ name: 'client_id' })
+  public client?: ClientTypeormEntity;
+
+  // TypeORM populates this automatically (without loading relation)
+  @RelationId((entity: AnalysisTypeormEntity) => entity.client)
+  public clientId?: string;
+}
+```
+
+**Why This Matters:**
+
+1. **Database Integrity**: TypeORM manages FK constraints properly through relations
+2. **Single Source of Truth**: The relation is the authoritative source, not a duplicate column
+3. **AutoMapper Dependency**: Domain entities need the ID, which must come from loaded relations
+4. **Prevents Sync Issues**: Duplicate columns can get out of sync with the relation
+5. **TypeORM Best Practice**: This is the standard recommended pattern
+
+**Common Mistake Scenario:**
+
+```
+Problem: Use case gets 404 error when entity exists in database
+Root Cause: Repository doesn't load relation → AutoMapper can't extract ID →
+           Domain entity has null ID → Validation fails
+Solution: Add `relations: { relationName: true }` to repository query
+```
 
 ### 6. Controller and Endpoint Patterns
 
@@ -1250,9 +1437,11 @@ export enum AnalysisStatusEnum {
 
 - ✅ Enum names: `PascalCase` with `Enum` suffix
 - ✅ Enum keys: `UPPER_SNAKE_CASE`
-- ✅ Enum values: `lowercase` strings with `snake_case`
+- ✅ Enum values: String format - may use either `lowercase snake_case` or `UPPER_SNAKE_CASE`
 - ✅ Store as strings in database (not numbers)
+- ✅ When adding values to an existing enum, follow the existing pattern in that file for consistency
 - ❌ NO numeric enums
+- ❌ NO accents, special symbols, or spaces in enum values (use only alphanumeric and underscores)
 
 ### 11. AutoMapper Profile Patterns
 

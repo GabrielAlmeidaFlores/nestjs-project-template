@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
-import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
@@ -27,18 +27,13 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     ): RuralTimelineAnalysisCnisContributionPeriodEntity => {
-      const ruralTimeline = source.ruralTimeline
-        ? this.mapper.map(
-            source.ruralTimeline,
-            RuralTimelineAnalysisTypeormEntity,
-            RuralTimelineAnalysisEntity,
-          )
-        : null;
-
       return new RuralTimelineAnalysisCnisContributionPeriodEntity({
         ...source,
         id: new RuralTimelineAnalysisCnisContributionPeriodId(source.id),
-        ruralTimelineId: ruralTimeline?.id ?? null,
+        ruralTimelineId:
+          source.ruralTimeline?.id !== undefined
+            ? new RuralTimelineAnalysisId(source.ruralTimeline.id)
+            : null,
         averageContributionAmount:
           source.averageContributionAmount !== null &&
           source.averageContributionAmount !== undefined
@@ -75,6 +70,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
             : null,
           contributionAdjustmentIntent: source.contributionAdjustmentIntent,
           externalSupplementationIntent: source.externalSupplementationIntent,
+          cnisDocument: source.cnisDocument,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
           deletedAt: source.deletedAt,
