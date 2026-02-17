@@ -9,14 +9,14 @@ import { RetirementPlanningRppsPeriodTypeormEntity } from '@infra/database/imple
 import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration-calculation.typeorm.entity';
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'retirement_planning_rpps' })
 export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'career_start_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: false,
   })
   public careerStartDate: Date;
@@ -24,7 +24,7 @@ export class RetirementPlanningRppsTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'public_service_start_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: false,
   })
   public publicServiceStartDate: Date;

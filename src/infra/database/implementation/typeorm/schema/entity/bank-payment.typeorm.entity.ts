@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { OrganizationPaymentPlanBankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-bank-payment.typeorm.entity';
+import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 
@@ -38,10 +39,15 @@ export class BankPaymentTypeormEntity extends BaseTypeormEntity {
   })
   public status: PaymentStatusEnum;
 
-  @Column({ name: 'due_date', type: 'timestamp' })
+  @Column({ name: 'due_date', type: 'timestamp', transformer: DateTransformer })
   public dueDate: Date;
 
-  @Column({ name: 'payment_date', type: 'timestamp', nullable: true })
+  @Column({
+    name: 'payment_date',
+    type: 'timestamp',
+    nullable: true,
+    transformer: DateTransformer,
+  })
   public paymentDate: Date | null;
 
   @Column({ name: 'installment_number', type: 'int', nullable: true })

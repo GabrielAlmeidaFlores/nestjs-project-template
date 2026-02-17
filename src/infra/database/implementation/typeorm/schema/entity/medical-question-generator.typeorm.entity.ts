@@ -6,14 +6,14 @@ import { MedicalQuestionGeneratorDocumentTypeormEntity } from '@infra/database/i
 import { MedicalQuestionGeneratorInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-inss-benefit.typeorm.entity';
 import { MedicalQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-legal-proceeding.typeorm.entity';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'medical_question_generator' })
 export class MedicalQuestionGeneratorTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'disability_date',
     type: 'date',
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
     nullable: true,
   })
   public disabilityDate?: Date | null;
