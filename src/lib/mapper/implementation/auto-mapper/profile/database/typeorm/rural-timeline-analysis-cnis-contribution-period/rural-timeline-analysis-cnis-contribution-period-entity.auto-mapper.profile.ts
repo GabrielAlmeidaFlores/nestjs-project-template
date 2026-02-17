@@ -70,6 +70,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
             : null,
           contributionAdjustmentIntent: source.contributionAdjustmentIntent,
           externalSupplementationIntent: source.externalSupplementationIntent,
+          cnisDocument: source.cnisDocument,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
           deletedAt: source.deletedAt,
