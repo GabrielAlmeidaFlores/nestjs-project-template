@@ -1,9 +1,17 @@
 import type { ValueTransformer } from 'typeorm';
 
 export const DateOnlyTransformer: ValueTransformer = {
-  to(value?: Date | null): string | null {
+  to(value?: Date | string | null): string | null {
     if (value === null || value === undefined) {
       return null;
+    }
+
+    if (typeof value === 'string') {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        return null;
+      }
+      value = date;
     }
 
     if (!(value instanceof Date)) {
