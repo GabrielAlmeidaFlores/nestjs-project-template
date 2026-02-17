@@ -633,6 +633,14 @@ const classProvider: ClassProvider[] = [
     useClass: InsuranceQualityAnalysisResultTypeormCommandRepository,
   },
   {
+    provide: InsuranceQualityAnalysisInssBenefitCommandRepositoryGateway,
+    useClass: InsuranceQualityAnalysisInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: InsuranceQualityAnalysisLegalProceedingCommandRepositoryGateway,
+    useClass: InsuranceQualityAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
     provide: AnalysisToolClientCommandRepositoryGateway,
     useClass: AnalysisToolClientTypeormCommandRepository,
   },
