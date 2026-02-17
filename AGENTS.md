@@ -1250,9 +1250,11 @@ export enum AnalysisStatusEnum {
 
 - ✅ Enum names: `PascalCase` with `Enum` suffix
 - ✅ Enum keys: `UPPER_SNAKE_CASE`
-- ✅ Enum values: `lowercase` strings with `snake_case`
+- ✅ Enum values: String format - may use either `lowercase snake_case` or `UPPER_SNAKE_CASE`
 - ✅ Store as strings in database (not numbers)
+- ✅ When adding values to an existing enum, follow the existing pattern in that file for consistency
 - ❌ NO numeric enums
+- ❌ NO accents, special symbols, or spaces in enum values (use only alphanumeric and underscores)
 
 ### 11. AutoMapper Profile Patterns
 
