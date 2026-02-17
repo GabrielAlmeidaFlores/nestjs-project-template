@@ -139,7 +139,10 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
     periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
-    let filteredPeriods = periods;
+    const { periods: periodsWithOverlapsAndGaps, totalOverlapMonths } =
+      this.generateOverlapsAndGaps(periods);
+
+    let filteredPeriods = periodsWithOverlapsAndGaps;
 
     if (dto.periodTypes && dto.periodTypes.length > 0) {
       filteredPeriods = filteredPeriods.filter((p) =>
@@ -166,7 +169,7 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       ),
       urbanMonths:
         totalUrbanMonths % GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
-      overlapMonths: 0,
+      overlapMonths: totalOverlapMonths,
       pendingYears: Math.floor(
         totalPendingMonths / GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
       ),
@@ -194,5 +197,167 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       monthsDiff +
       1
     );
+  }
+
+  private generateOverlapsAndGaps(
+    sortedPeriods: CnisTimelinePeriodResponseDto[],
+  ): {
+    periods: CnisTimelinePeriodResponseDto[];
+    totalOverlapMonths: number;
+  } {
+    const result: CnisTimelinePeriodResponseDto[] = [];
+    let totalOverlapMonths = 0;
+
+    const overlaps = this.detectAllOverlaps(sortedPeriods);
+    for (const overlap of overlaps) {
+      const months = this.calculateMonthsBetweenDates(
+        overlap.startDate,
+        overlap.endDate,
+      );
+      totalOverlapMonths += months;
+    }
+
+    const gaps = this.detectGaps(sortedPeriods);
+
+    result.push(...sortedPeriods);
+    result.push(...overlaps);
+    result.push(...gaps);
+
+    result.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
+    return {
+      periods: result,
+      totalOverlapMonths,
+    };
+  }
+
+  private detectAllOverlaps(
+    periods: CnisTimelinePeriodResponseDto[],
+  ): CnisTimelinePeriodResponseDto[] {
+    const overlaps: CnisTimelinePeriodResponseDto[] = [];
+    const processedOverlaps = new Set<string>();
+
+    for (let i = 0; i < periods.length; i++) {
+      for (let j = i + 1; j < periods.length; j++) {
+        const period1 = periods[i];
+        const period2 = periods[j];
+
+        if (!period1 || !period2) {
+          continue;
+        }
+
+        if (
+          this.periodsOverlap(
+            period1.startDate,
+            period1.endDate,
+            period2.startDate,
+            period2.endDate,
+          )
+        ) {
+          const overlapStart = this.maxDate(
+            period1.startDate,
+            period2.startDate,
+          );
+          const overlapEnd = this.minDate(period1.endDate, period2.endDate);
+          const overlapKey = `${overlapStart.getTime()}-${overlapEnd.getTime()}`;
+
+          if (!processedOverlaps.has(overlapKey)) {
+            processedOverlaps.add(overlapKey);
+
+            const description = this.buildOverlapDescription(period1, period2);
+
+            overlaps.push(
+              CnisTimelinePeriodResponseDto.build({
+                type: CnisTimelinePeriodTypeEnum.OVERLAP,
+                startDate: overlapStart,
+                endDate: overlapEnd,
+                description,
+              }),
+            );
+          }
+        }
+      }
+    }
+
+    return overlaps;
+  }
+
+  private detectGaps(
+    sortedPeriods: CnisTimelinePeriodResponseDto[],
+  ): CnisTimelinePeriodResponseDto[] {
+    const gaps: CnisTimelinePeriodResponseDto[] = [];
+
+    for (let i = 0; i < sortedPeriods.length - 1; i++) {
+      const currentPeriod = sortedPeriods[i];
+      const nextPeriod = sortedPeriods[i + 1];
+
+      if (!currentPeriod || !nextPeriod) {
+        continue;
+      }
+
+      const dayAfterCurrent = this.addDays(currentPeriod.endDate, 1);
+
+      if (dayAfterCurrent < nextPeriod.startDate) {
+        const gapStart = dayAfterCurrent;
+        const gapEnd = this.addDays(nextPeriod.startDate, -1);
+
+        gaps.push(
+          CnisTimelinePeriodResponseDto.build({
+            type: CnisTimelinePeriodTypeEnum.GAP,
+            startDate: gapStart,
+            endDate: gapEnd,
+            description: 'Intervalo sem atividade registrada',
+          }),
+        );
+      }
+    }
+
+    return gaps;
+  }
+
+  private buildOverlapDescription(
+    period1: CnisTimelinePeriodResponseDto,
+    period2: CnisTimelinePeriodResponseDto,
+  ): string {
+    const type1Name = this.getPeriodTypeName(period1.type);
+    const type2Name = this.getPeriodTypeName(period2.type);
+
+    return `Sobreposição entre ${type1Name} e ${type2Name}`;
+  }
+
+  private getPeriodTypeName(type: CnisTimelinePeriodTypeEnum): string {
+    switch (type) {
+      case CnisTimelinePeriodTypeEnum.RURAL:
+        return 'período rural';
+      case CnisTimelinePeriodTypeEnum.URBAN:
+        return 'período urbano';
+      case CnisTimelinePeriodTypeEnum.PENDING:
+        return 'período pendente';
+      default:
+        return 'período';
+    }
+  }
+
+  private periodsOverlap(
+    start1: Date,
+    end1: Date,
+    start2: Date,
+    end2: Date,
+  ): boolean {
+    return start1 <= end2 && start2 <= end1;
+  }
+
+  private maxDate(date1: Date, date2: Date): Date {
+    return date1 > date2 ? date1 : date2;
+  }
+
+  private minDate(date1: Date, date2: Date): Date {
+    return date1 < date2 ? date1 : date2;
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
   }
 }
