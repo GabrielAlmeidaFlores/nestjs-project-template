@@ -94,7 +94,10 @@ export class ListAnalysisToolRecordUseCase {
           analysisToolRecord.specialActivity ??
           analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
           analysisToolRecord.ruralTimelineAnalysis ??
-          analysisToolRecord.speechGenerator;
+          analysisToolRecord.speechGenerator ??
+          analysisToolRecord.medicalQuestionGenerator ??
+          analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
+          analysisToolRecord.insuranceQualityAnalysis;
 
         if (analysis !== null) {
           const data = GetAnalysisToolRecordResponseDto.build({
