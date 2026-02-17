@@ -67,6 +67,7 @@ export class GetRuralTimelineAnalysisPeriodDocumentQueryResult extends BaseBuild
   public readonly documentHolderType: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
   public readonly selfOwned: boolean | null;
   public readonly probatoryPurpose: string | null;
+  public readonly analyzedAt: Date | null;
   public readonly document: string;
   public readonly type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
 

@@ -29,6 +29,11 @@ export class RuralTimelineAnalysisPeriodDocumentEntity extends BaseEntity<RuralT
   public readonly probatoryPurpose: string | null;
 
   @Description(
+    'Data e hora em que o documento foi analisado pela IA. Utilizado para evitar re-análises desnecessárias.',
+  )
+  public readonly analyzedAt: Date | null;
+
+  @Description(
     'Nome do arquivo do documento comprobatório enviado (CTPS, ITR, Declaração Sindicato, etc).',
   )
   public readonly document: string;
@@ -54,6 +59,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntity extends BaseEntity<RuralT
     this.documentHolderType = props.documentHolderType ?? null;
     this.selfOwned = props.selfOwned ?? null;
     this.probatoryPurpose = props.probatoryPurpose ?? null;
+    this.analyzedAt = props.analyzedAt ?? null;
     this.document = props.document;
     this.type = props.type;
     this.ruralTimelinePeriodId = props.ruralTimelinePeriodId;

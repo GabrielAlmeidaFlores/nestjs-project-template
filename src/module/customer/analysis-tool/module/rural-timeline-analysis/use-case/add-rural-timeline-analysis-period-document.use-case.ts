@@ -71,6 +71,7 @@ export class AddRuralTimelineAnalysisPeriodDocumentUseCase {
       documentHolderType,
       selfOwned,
       probatoryPurpose: null,
+      analyzedAt: null,
       document: uploadedFileName,
       type: dto.json.type,
       ruralTimelinePeriodId: ruralTimelineAnalysisPeriodId,

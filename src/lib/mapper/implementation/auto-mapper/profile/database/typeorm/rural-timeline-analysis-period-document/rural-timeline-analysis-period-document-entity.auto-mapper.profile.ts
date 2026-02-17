@@ -23,7 +23,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
   }
 
   private mapOrmEntityToDomainEntity(): void {
-    const convertOrmEntityToDomainEntity = (
+    const convert = (
       source: RuralTimelineAnalysisPeriodDocumentTypeormEntity,
     ): RuralTimelineAnalysisPeriodDocumentEntity => {
       const ruralTimelinePeriod = this.mapper.map(
@@ -38,6 +38,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
         documentHolderType: source.documentHolderType ?? null,
         selfOwned: source.selfOwned ?? null,
         probatoryPurpose: source.probatoryPurpose ?? null,
+        analyzedAt: source.analyzedAt ?? null,
         document: source.document,
         type: source.type,
         ruralTimelinePeriodId: ruralTimelinePeriod.id,
@@ -47,7 +48,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
       });
     };
 
-    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
+    const mappingFunction = constructUsing(convert);
 
     createMap(
       this.mapper,
@@ -58,7 +59,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
   }
 
   private mapDomainEntityToOrmEntity(): void {
-    const convertDomainEntityToOrmEntity = (
+    const convert = (
       source: RuralTimelineAnalysisPeriodDocumentEntity,
     ): RuralTimelineAnalysisPeriodDocumentTypeormEntity => {
       const ormEntity = RuralTimelineAnalysisPeriodDocumentTypeormEntity.build({
@@ -67,6 +68,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
         documentHolderType: source.documentHolderType,
         selfOwned: source.selfOwned,
         probatoryPurpose: source.probatoryPurpose,
+        analyzedAt: source.analyzedAt,
         document: source.document,
         type: source.type,
         createdAt: source.createdAt,
@@ -81,7 +83,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
       return ormEntity;
     };
 
-    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
+    const mappingFunction = constructUsing(convert);
 
     createMap(
       this.mapper,

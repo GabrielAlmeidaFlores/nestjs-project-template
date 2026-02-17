@@ -9,6 +9,7 @@ export interface RuralTimelineAnalysisPeriodDocumentEntityPropsInterface extends
   documentHolderType?: RuralTimelineAnalysisPeriodDocumentHolderTypeEnum | null;
   selfOwned?: boolean | null;
   probatoryPurpose?: string | null;
+  analyzedAt?: Date | null;
   document: string;
   type: RuralTimelineAnalysisPeriodDocumentTypeEnum;
   ruralTimelinePeriodId: RuralTimelineAnalysisPeriodId;
