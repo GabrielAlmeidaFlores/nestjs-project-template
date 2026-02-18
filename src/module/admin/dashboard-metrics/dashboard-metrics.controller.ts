@@ -8,14 +8,14 @@ import { CurrentYearLegalPleadingsCountResponseDto } from '@module/admin/dashboa
 import { CurrentYearRevenueResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-revenue.response.dto';
 import { CurrentYearUsersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-users-count.response.dto';
 import { LegalPleadingItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/legal-pleading-item.response.dto';
-import { PlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/plan-sales-count.response.dto';
+import { PaymentPlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count.response.dto';
 import { TotalSubscribersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/total-subscribers-count.response.dto';
 import { UserItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/user-item.response.dto';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
 import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
-import { GetPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-plan-sales-count.use-case';
+import { GetPaymentPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-payment-plan-sales-count.use-case';
 import { GetTotalSubscribersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-total-subscribers-count.use-case';
 import { ListAllUsersUseCase } from '@module/admin/dashboard-metrics/use-case/list-all-users.use-case';
 import { ListCurrentYearAnalysesUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-analyses.use-case';
@@ -34,7 +34,7 @@ export class DashboardMetricsController {
     private readonly getTotalSubscribersCountUseCase: GetTotalSubscribersCountUseCase,
     private readonly getCurrentYearRevenueUseCase: GetCurrentYearRevenueUseCase,
     private readonly getCurrentYearUsersCountUseCase: GetCurrentYearUsersCountUseCase,
-    private readonly getPlanSalesCountUseCase: GetPlanSalesCountUseCase,
+    private readonly getPaymentPlanSalesCountUseCase: GetPaymentPlanSalesCountUseCase,
     private readonly getCurrentYearLegalPleadingsCountUseCase: GetCurrentYearLegalPleadingsCountUseCase,
     private readonly listCurrentYearLegalPleadingsUseCase: ListCurrentYearLegalPleadingsUseCase,
     private readonly getCurrentYearAnalysesCountUseCase: GetCurrentYearAnalysesCountUseCase,
@@ -110,12 +110,12 @@ export class DashboardMetricsController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Quantidade de vendas por plano obtida com sucesso.',
-      type: PlanSalesCountResponseDto,
+      type: PaymentPlanSalesCountResponseDto,
     },
     guard: [AuthGuard],
   })
-  public async getPlanSalesCount(): Promise<PlanSalesCountResponseDto> {
-    return this.getPlanSalesCountUseCase.execute();
+  public async getPaymentPlanSalesCount(): Promise<PaymentPlanSalesCountResponseDto> {
+    return this.getPaymentPlanSalesCountUseCase.execute();
   }
 
   @BuildEndpointSpecification({
