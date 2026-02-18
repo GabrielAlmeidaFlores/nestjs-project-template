@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import { PlanSalesCountItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/plan-sales-count-item.response.dto';
-import { PlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/plan-sales-count.response.dto';
+import { PaymentPlanSalesCountItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count-item.response.dto';
+import { PaymentPlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count.response.dto';
 import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/organization-payment-plan.query.repository.gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 
 @Injectable()
-export class GetPlanSalesCountUseCase {
-  protected readonly _type = GetPlanSalesCountUseCase.name;
+export class GetPaymentPlanSalesCountUseCase {
+  protected readonly _type = GetPaymentPlanSalesCountUseCase.name;
 
   public constructor(
     @Inject(PaymentPlanQueryRepositoryGateway)
@@ -17,7 +17,7 @@ export class GetPlanSalesCountUseCase {
     private readonly organizationPaymentPlanQueryRepository: OrganizationPaymentPlanQueryRepositoryGateway,
   ) {}
 
-  public async execute(): Promise<PlanSalesCountResponseDto> {
+  public async execute(): Promise<PaymentPlanSalesCountResponseDto> {
     const MAX_ITEMS = 1000;
     const activePlans =
       await this.paymentPlanQueryRepository.listActivePaymentPlan(
@@ -34,16 +34,16 @@ export class GetPlanSalesCountUseCase {
       ]),
     );
 
-    const plans = activePlans.resource.map((plan) =>
-      PlanSalesCountItemResponseDto.build({
+    const paymentPlans = activePlans.resource.map((plan) =>
+      PaymentPlanSalesCountItemResponseDto.build({
         paymentPlanId: plan.id,
-        planName: plan.name,
+        paymentPlanName: plan.name,
         salesCount: salesMap.get(plan.id.toString()) ?? 0,
       }),
     );
 
-    return PlanSalesCountResponseDto.build({
-      plans,
+    return PaymentPlanSalesCountResponseDto.build({
+      paymentPlans,
     });
   }
 }

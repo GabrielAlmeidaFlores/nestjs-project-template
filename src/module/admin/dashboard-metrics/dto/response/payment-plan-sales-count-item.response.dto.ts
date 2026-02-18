@@ -6,15 +6,15 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class PlanSalesCountItemResponseDto extends BaseBuildableDtoObject {
+export class PaymentPlanSalesCountItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(PaymentPlanId)
   public paymentPlanId: PaymentPlanId;
 
   @ResponseDtoStringProperty()
-  public planName: string;
+  public paymentPlanName: string;
 
   @ResponseDtoNumberProperty()
   public salesCount: number;
 
-  protected override readonly _type = PlanSalesCountItemResponseDto.name;
+  protected override readonly _type = PaymentPlanSalesCountItemResponseDto.name;
 }
