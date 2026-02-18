@@ -84,15 +84,13 @@ export class GetAudienceQuestionGeneratorUseCase {
         ...analysisToolRecordQueryResult.updatedBy.customer,
       }),
       inssBenefitNumber:
-        (
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit ??
-          []
-        ).map((benefit) => benefit.inssBenefitNumber),
+        audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit.map(
+          (benefit) => benefit.inssBenefitNumber,
+        ),
       legalProceedingNumber:
-        (
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding ??
-          []
-        ).map((legalProceeding) => legalProceeding.legalProceedingNumber),
+        audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding.map(
+          (legalProceeding) => legalProceeding.legalProceedingNumber,
+        ),
     });
 
     if (
