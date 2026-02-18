@@ -222,7 +222,7 @@ export class OrganizationPaymentPlanTypeormQueryRepository
     const salesByPlan = new Map<string, number>();
 
     for (const plan of allPlans) {
-      if (plan.paymentPlan?.id) {
+      if (plan.paymentPlan?.id !== undefined) {
         const currentCount = salesByPlan.get(plan.paymentPlan.id) ?? 0;
         salesByPlan.set(plan.paymentPlan.id, currentCount + 1);
       }

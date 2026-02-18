@@ -33,9 +33,7 @@ export class ListCurrentYearAnalysesUseCase {
 
     const mappedResource = analysesData.resource.map((analysis) => {
       const clientName =
-        analysis.analysisToolClient?.name ??
-        analysis.createdBy.customer.name ??
-        'Cliente não identificado';
+        analysis.analysisToolClient?.name ?? analysis.createdBy.customer.name;
       const organizationName = analysis.createdBy.organization.name;
 
       return AnalysisItemResponseDto.build({

@@ -1329,57 +1329,6 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
   }
 
-  private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
-    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
-      {
-        createdBy: {
-          customer: true,
-          organization: true,
-        },
-        updatedBy: {
-          customer: true,
-          organization: true,
-        },
-        analysisToolClient: {
-          createdBy: {
-            customer: true,
-            organization: true,
-          },
-          updatedBy: {
-            customer: true,
-            organization: true,
-          },
-          analysisToolClientInssBenefit: true,
-          analysisToolClientLegalProceeding: true,
-        },
-        speechGenerator: true,
-      };
-
-    for (const key of this.getEntityRelationsKey()) {
-      relationsClause[key] = true as never;
-    }
-
-    return relationsClause;
-  }
-
-  private getEntityRelationsKey(): (keyof AnalysisToolRecordTypeormEntity)[] {
-    return [
-      'cnisFastAnalysis',
-      'retirementPlanningRpps',
-      'retirementPlanningRgps',
-      'specialActivity',
-      'administrativeProcedureInssAnalysis',
-      'judicialCaseAnalysis',
-      'administrativeProcedureInssAnalysis',
-      'medicalAndSocialReportObjectionGeneratorAnalysis',
-      'medicalQuestionGenerator',
-      'disabilityAssessmentForBpcAnalysis',
-      'perCapitaIncomeForBpcAnalysis',
-      'ruralTimeline',
-      'insuranceQualityAnalysis',
-    ];
-  }
-
   public async countAllAnalysesForYear(year: number): Promise<number> {
     const JANUARY = 0;
     const DECEMBER = 11;
@@ -1472,7 +1421,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       });
     }
 
-    if (listData.searchBy) {
+    if (listData.searchBy !== null) {
       searchParams.where = (
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
       ).map((where) => ({
@@ -1481,7 +1430,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       }));
     }
 
-    if (listData.type) {
+    if (listData.type !== null) {
       searchParams.where = (
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
       ).map((where) => ({
@@ -1568,16 +1517,16 @@ export class AnalysisToolRecordTypeormQueryRepository
       },
     };
 
-    if (listData.searchBy) {
+    if (listData.searchBy !== null) {
       (
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
       ).code = Like(`%${listData.searchBy}%`);
     }
 
-    if (listData.type) {
+    if (listData.type !== null) {
       (
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
-      ).type = listData.type as AnalysisToolRecordTypeEnum;
+      ).type = listData.type;
     }
 
     const skip = (listData.page - 1) * listData.limit;
@@ -1603,5 +1552,56 @@ export class AnalysisToolRecordTypeormQueryRepository
       page: listData.page,
       limit: listData.limit,
     });
+  }
+
+  private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
+    const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
+      {
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
+        speechGenerator: true,
+      };
+
+    for (const key of this.getEntityRelationsKey()) {
+      relationsClause[key] = true as never;
+    }
+
+    return relationsClause;
+  }
+
+  private getEntityRelationsKey(): (keyof AnalysisToolRecordTypeormEntity)[] {
+    return [
+      'cnisFastAnalysis',
+      'retirementPlanningRpps',
+      'retirementPlanningRgps',
+      'specialActivity',
+      'administrativeProcedureInssAnalysis',
+      'judicialCaseAnalysis',
+      'administrativeProcedureInssAnalysis',
+      'medicalAndSocialReportObjectionGeneratorAnalysis',
+      'medicalQuestionGenerator',
+      'disabilityAssessmentForBpcAnalysis',
+      'perCapitaIncomeForBpcAnalysis',
+      'ruralTimeline',
+      'insuranceQualityAnalysis',
+    ];
   }
 }
