@@ -130,10 +130,8 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase {
 
     await transaction.commit();
 
-    const response =
-      new UpdateRuralTimelineAnalysisCnisContributionPeriodResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
+      ruralTimelineAnalysisCnisContributionPeriodId: updatedEntity.id,
+    });
   }
 }

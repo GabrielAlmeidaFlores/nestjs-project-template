@@ -42,6 +42,18 @@ export class RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormComma
     return this.create(mappedData);
   }
 
+  public updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+    props: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity,
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
+    );
+
+    return this.update(props.id.toString(), mappedData);
+  }
+
   public deleteRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
     id: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
   ): TransactionType {

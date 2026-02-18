@@ -39,6 +39,18 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepositor
     return this.create(mappedData);
   }
 
+  public updateRuralTimelineAnalysisPeriodFamilyGroupMember(
+    props: RuralTimelineAnalysisPeriodFamilyGroupMemberEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      RuralTimelineAnalysisPeriodFamilyGroupMemberEntity,
+      RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
+    );
+
+    return this.update(props.id.toString(), mappedData);
+  }
+
   public deleteRuralTimelineAnalysisPeriodFamilyGroupMember(
     id: RuralTimelineAnalysisPeriodFamilyGroupMemberId,
   ): TransactionType {
