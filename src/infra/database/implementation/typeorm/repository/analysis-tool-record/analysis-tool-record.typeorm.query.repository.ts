@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
 import {
+  Between,
   FindManyOptions,
   FindOptionsRelations,
   FindOptionsWhere,
@@ -23,6 +24,7 @@ import {
   AnalysisToolRecordStatisticsQueryResult,
   MonthlyStatisticsQueryResult,
 } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics.query.result';
+import { GetAnalysisToolRecordWithFullRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-full-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -1376,5 +1378,230 @@ export class AnalysisToolRecordTypeormQueryRepository
       'ruralTimeline',
       'insuranceQualityAnalysis',
     ];
+  }
+
+  public async countAllAnalysesForYear(year: number): Promise<number> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const count = await this.repository.count({
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+    });
+
+    return count;
+  }
+
+  public async listAllAnalysesForYear(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
+  > {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const relationsClause = this.getRelationsClauseOperation();
+
+    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
+      where: [],
+      relations: relationsClause,
+    };
+
+    const baseWhere: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    const atLeastOneRelationNotNull: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      [
+        { cnisFastAnalysis: Not(IsNull()) },
+        { retirementPlanningRgps: Not(IsNull()) },
+        { retirementPlanningRpps: Not(IsNull()) },
+        { disabilityAssessmentForBpcAnalysis: Not(IsNull()) },
+        { administrativeProcedureInssAnalysis: Not(IsNull()) },
+        { judicialCaseAnalysis: Not(IsNull()) },
+        { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
+        { speechGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
+        { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
+        { specialActivity: Not(IsNull()) },
+        { insuranceQualityAnalysis: Not(IsNull()) },
+        { ruralTimeline: Not(IsNull()) },
+        { audienceQuestionGenerator: Not(IsNull()) },
+      ];
+
+    for (const relationalClause of atLeastOneRelationNotNull) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).push({
+        ...baseWhere,
+        ...relationalClause,
+      });
+    }
+
+    if (listData.searchBy) {
+      searchParams.where = (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).map((where) => ({
+        ...where,
+        code: Like(`%${listData.searchBy}%`),
+      }));
+    }
+
+    if (listData.type) {
+      searchParams.where = (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).map((where) => ({
+        ...where,
+        type: listData.type as AnalysisToolRecordTypeEnum,
+      }));
+    }
+
+    const skip = (listData.page - 1) * listData.limit;
+
+    const [items, total] = await this.repository.findAndCount({
+      ...searchParams,
+      skip,
+      take: listData.limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      items,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel({
+      resource: mappedData,
+      totalItems: total,
+      page: listData.page,
+      limit: listData.limit,
+    });
+  }
+
+  public async listAllAnalysesForYearWithFullRelations(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithFullRelationsQueryResult>
+  > {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+      relations: {
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+        analysisToolClient: {
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
+      },
+    };
+
+    if (listData.searchBy) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
+      ).code = Like(`%${listData.searchBy}%`);
+    }
+
+    if (listData.type) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
+      ).type = listData.type as AnalysisToolRecordTypeEnum;
+    }
+
+    const skip = (listData.page - 1) * listData.limit;
+
+    const [items, total] = await this.repository.findAndCount({
+      ...searchParams,
+      skip,
+      take: listData.limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      items,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithFullRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel({
+      resource: mappedData,
+      totalItems: total,
+      page: listData.page,
+      limit: listData.limit,
+    });
   }
 }
