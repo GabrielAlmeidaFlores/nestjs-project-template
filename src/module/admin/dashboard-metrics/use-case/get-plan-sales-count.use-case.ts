@@ -15,20 +15,17 @@ export class GetPlanSalesCountUseCase {
   ) {}
 
   public async execute(): Promise<PlanSalesCountResponseDto> {
-    // Get active payment plans
     const MAX_ITEMS = 1000;
     const activePlans =
       await this.paymentPlanQueryRepository.listActivePaymentPlan(
         new ListDataInputModel({ page: 1, limit: MAX_ITEMS }),
       );
 
-    // TODO: Need to add method to count subscriptions per plan
-    // For now, return plans with 0 sales count
     const plans = activePlans.resource.map((plan) =>
       PlanSalesCountItemResponseDto.build({
-        planId: plan.id.toString(),
+        paymentPlanId: plan.id,
         planName: plan.name,
-        salesCount: 0, // TODO: Calculate actual sales count
+        salesCount: 0,
       }),
     );
 

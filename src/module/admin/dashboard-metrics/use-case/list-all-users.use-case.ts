@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { UserItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/user-item.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 
@@ -28,10 +29,10 @@ export class ListAllUsersUseCase {
 
     const users = paginatedCustomers.map((item: GetCustomerQueryResult) =>
       UserItemResponseDto.build({
-        id: item.id.toString(),
+        customerId: item.id,
         name: item.name,
-        email: 'N/A', // TODO: Add method to gateway to get customers with auth identity
-        phoneNumber: item.phoneNumber.toString(),
+        email: new Email('nao-disponivel@example.com'),
+        phoneNumber: item.phoneNumber,
         createdAt: item.createdAt,
       }),
     );

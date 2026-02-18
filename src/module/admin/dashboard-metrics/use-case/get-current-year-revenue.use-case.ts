@@ -15,8 +15,6 @@ export class GetCurrentYearRevenueUseCase {
 
   public async execute(): Promise<CurrentYearRevenueResponseDto> {
     const year = new Date().getFullYear();
-
-    // Get all bank payments and calculate revenue for current year
     const MAX_ITEMS = 100000;
     const allPayments = await this.bankPaymentQueryRepository.listBankPayment(
       new ListDataInputModel({ page: 1, limit: MAX_ITEMS }),

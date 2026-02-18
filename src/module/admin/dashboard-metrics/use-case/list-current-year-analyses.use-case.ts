@@ -11,11 +11,6 @@ export class ListCurrentYearAnalysesUseCase {
   public execute(
     pagination: ListDataInputModel,
   ): ListDataOutputModel<AnalysisItemResponseDto> {
-    // TODO: Implement listing of all analyses across all organizations
-    // Need to add admin-specific method to AnalysisToolRecordQueryRepositoryGateway
-    // that doesn't require organizationId/authIdentityId filtering
-    // Method signature: listAllByYearRange(startDate: Date, endDate: Date, pagination: ListDataInputModel)
-
     return new ListDataOutputModel({
       page: pagination.page,
       limit: pagination.limit,

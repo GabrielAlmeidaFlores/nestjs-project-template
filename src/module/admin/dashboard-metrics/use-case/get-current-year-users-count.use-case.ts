@@ -14,8 +14,6 @@ export class GetCurrentYearUsersCountUseCase {
 
   public async execute(): Promise<CurrentYearUsersCountResponseDto> {
     const year = new Date().getFullYear();
-
-    // Get all customers and filter by current year
     const allCustomers = await this.customerQueryRepository.listAll();
 
     const JANUARY = 0;
