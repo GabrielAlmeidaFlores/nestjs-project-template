@@ -8,6 +8,10 @@ export abstract class RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCom
     props: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+    props: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
     id: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
   ): TransactionType;

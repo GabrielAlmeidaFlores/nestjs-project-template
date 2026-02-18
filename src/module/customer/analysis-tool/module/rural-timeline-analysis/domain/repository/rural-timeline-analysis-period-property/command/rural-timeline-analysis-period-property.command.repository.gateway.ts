@@ -7,6 +7,10 @@ export abstract class RuralTimelineAnalysisPeriodPropertyCommandRepositoryGatewa
     props: RuralTimelineAnalysisPeriodPropertyEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisPeriodProperty(
+    props: RuralTimelineAnalysisPeriodPropertyEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisPeriodProperty(
     id: RuralTimelineAnalysisPeriodPropertyId,
   ): TransactionType;
