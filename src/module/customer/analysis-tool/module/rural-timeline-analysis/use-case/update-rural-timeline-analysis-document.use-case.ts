@@ -20,7 +20,6 @@ import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum.entity';
-import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/enum/rural-timeline-analysis-document-type.enum';
 import { RuralTimelineAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/rural-timeline-analysis-document.entity';
 import { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
 import { UpdateRuralTimelineAnalysisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-document.request.dto';
@@ -30,6 +29,8 @@ import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-to
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
+
+import type { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 
 @Injectable()
 export class UpdateRuralTimelineAnalysisDocumentUseCase {
@@ -104,7 +105,6 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
     }
 
     let documentLocation: string = existingDocument.document;
-    let shouldRegenerateCnisPeriods = false;
 
     if (dto.document !== undefined) {
       const fileBuffer = dto.document.base64.decodeToBuffer();
@@ -119,18 +119,15 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
         fileModel,
         existingDocument.document,
       );
-
-      if (
-        existingDocument.type === RuralTimelineAnalysisDocumentTypeEnum.CNIS
-      ) {
-        shouldRegenerateCnisPeriods = true;
-      }
     }
+
+    const finalType = dto.type ?? existingDocument.type;
+    const shouldRegenerateCnisPeriods = dto.document !== undefined;
 
     const updatedEntity = new RuralTimelineAnalysisDocumentEntity({
       id: documentId,
       ruralTimelineId: existingDocument.ruralTimelineId,
-      type: dto.type ?? existingDocument.type,
+      type: finalType,
       document: documentLocation,
       createdAt: existingDocument.createdAt,
       updatedAt: existingDocument.updatedAt,
@@ -139,7 +136,7 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
       this.ruralTimelineAnalysisDocumentCommandRepositoryGateway.updateRuralTimelineAnalysisDocument(
-        updatedEntity,
+        [updatedEntity],
       ),
     );
 
@@ -165,25 +162,7 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     documentBuffer: Buffer,
-    analysisToolRecordQueryResult: {
-      analysisToolClient: {
-        id: any;
-        name: string | null;
-        federalDocument: any;
-        email: any;
-        corporateEmail: any;
-        inssPassword: string | null;
-        phoneNumber: any;
-        birthDate: Date | null;
-        gender: any;
-        clientType: any;
-        createdAt: Date;
-        updatedAt: Date;
-        deletedAt: Date | null;
-        createdBy: { id: any };
-        updatedBy: { id: any };
-      };
-    },
+    analysisToolRecordQueryResult: GetAnalysisToolRecordWithRelationsQueryResult,
   ): Promise<void> {
     const cnisData =
       await this.cnisProcessorGateway.parseCnisDocument(documentBuffer);

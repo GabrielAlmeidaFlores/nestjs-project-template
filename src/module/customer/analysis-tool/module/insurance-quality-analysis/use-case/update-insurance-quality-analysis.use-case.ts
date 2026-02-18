@@ -30,9 +30,9 @@ import { InsuranceQualityAnalysisLegalProceedingId } from '@module/customer/anal
 import { UpdateInsuranceQualityAnalysisRequestDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/request/update-insurance-quality-analysis.request.dto';
 import { UpdateInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/update-insurance-quality-analysis.response.dto';
 import { InsuranceQualityAnalysisNotFoundError } from '@module/customer/analysis-tool/module/insurance-quality-analysis/error/insurance-quality-analysis-not-found.error';
-import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
