@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
-import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository, Between } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { NotFoundError } from '@core/error/not-found.error';
@@ -12,6 +12,7 @@ import { OrganizationId } from '@module/customer/account/domain/schema/entity/or
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
+import { GetLegalPleadingWithFullRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-full-relations.query.result';
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import {
   LegalPleadingMonthlyStatisticsQueryResult,
@@ -397,6 +398,138 @@ export class LegalPleadingTypeormQueryRepository
     return LegalPleadingStatisticsQueryResult.build({
       totalCount,
       monthlyStatistics,
+    });
+  }
+
+  public async countAllLegalPleadingsForYear(year: number): Promise<number> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const count = await this.repository.count({
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+    });
+
+    return count;
+  }
+
+  public async listAllLegalPleadingsForYear(
+    year: number,
+    listData: ListLegalPleadingQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetLegalPleadingWithFullRelationsQueryResult>
+  > {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const where: Array<FindOptionsWhere<LegalPleadingTypeormEntity>> = [];
+
+    const baseWhere: FindOptionsWhere<LegalPleadingTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    if (listData.status !== null) {
+      baseWhere.status = listData.status;
+    }
+
+    if (listData.searchBy !== null) {
+      where.push({
+        ...baseWhere,
+        code: Like(listData.searchBy),
+      });
+
+      where.push({
+        ...baseWhere,
+        analysisToolClient: {
+          name: Like(listData.searchBy),
+        },
+      });
+
+      where.push({
+        ...baseWhere,
+        analysisToolClient: {
+          federalDocument: listData.searchBy,
+        },
+      });
+    } else {
+      where.push(baseWhere);
+    }
+
+    const data = await this.list(listData, {
+      where,
+      relations: {
+        analysisToolClient: {
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+        createdBy: {
+          customer: true,
+          organization: true,
+        },
+        updatedBy: {
+          customer: true,
+          organization: true,
+        },
+        legalPleadingDocument: true,
+        legalPleadingAddress: true,
+        legalPleadingResult: true,
+        legalPleadingHistory: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return new ListDataOutputModel({
+      resource: this.mapperGateway.mapArray(
+        data.resource,
+        LegalPleadingTypeormEntity,
+        GetLegalPleadingWithFullRelationsQueryResult,
+      ),
+      page: data.page,
+      totalItems: data.totalItems,
+      limit: data.limit,
     });
   }
 }
