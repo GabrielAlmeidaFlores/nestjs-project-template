@@ -30,6 +30,7 @@ import { InsuranceQualityAnalysisLegalProceedingId } from '@module/customer/anal
 import { UpdateInsuranceQualityAnalysisRequestDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/request/update-insurance-quality-analysis.request.dto';
 import { UpdateInsuranceQualityAnalysisResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/update-insurance-quality-analysis.response.dto';
 import { InsuranceQualityAnalysisNotFoundError } from '@module/customer/analysis-tool/module/insurance-quality-analysis/error/insurance-quality-analysis-not-found.error';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -202,7 +203,7 @@ export class UpdateInsuranceQualityAnalysisUseCase {
     if (dto.documents !== undefined) {
       const documentsByType = new Map<
         InsuranceQualityAnalysisDocumentTypeEnum,
-        FileModel[]
+        Base64FileRequestDto[]
       >();
 
       for (const document of dto.documents) {
@@ -328,7 +329,7 @@ export class UpdateInsuranceQualityAnalysisUseCase {
   private async updateDocumentsOnDatabase(
     insuranceQualityAnalysis: InsuranceQualityAnalysisEntity,
     existingDocuments: GetInsuranceQualityAnalysisWithRelationsQueryResult['insuranceQualityAnalysisDocument'],
-    newDocuments: FileModel[],
+    newDocuments: Base64FileRequestDto[],
     type: InsuranceQualityAnalysisDocumentTypeEnum,
   ): Promise<TransactionType[]> {
     const deleteTransactions = existingDocuments.map((document) => {
@@ -337,8 +338,18 @@ export class UpdateInsuranceQualityAnalysisUseCase {
       );
     });
 
+    const fileModels = newDocuments.map((base64File) => {
+      const buffer = base64File.base64.decodeToBuffer();
+      return FileModel.build({
+        buffer,
+        originalName: base64File.originalFileName,
+        size: buffer.length,
+        encoding: 'base64',
+      });
+    });
+
     const uploadedDocuments = await Promise.all(
-      newDocuments.map(async (document) => {
+      fileModels.map(async (document) => {
         return await this.fileProcessorGateway.uploadFile(document);
       }),
     );

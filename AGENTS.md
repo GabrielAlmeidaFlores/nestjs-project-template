@@ -938,6 +938,102 @@ interface BaseDtoPropertyDecoratorPropsInterface {
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use `.build()` static method for instantiation
 
+#### Base64 File Upload Pattern ⚠️ CRITICAL
+
+**NEVER use `@RequestDtoFileProperty` with `FileModel` for file uploads in Request DTOs.**
+
+The codebase uses a **base64-first approach** for file uploads to ensure consistency and proper validation.
+
+**❌ WRONG - Using FileModel (Old Pattern):**
+
+```typescript
+import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
+import { FileModel } from '@shared/system/model/generic/file.model';
+
+@RequestDto()
+export class WrongDocumentDto extends BaseBuildableDtoObject {
+  @RequestDtoFileProperty({
+    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
+    required: false,
+    isArray: true,
+  })
+  public files?: FileModel[]; // ❌ WRONG: Should use Base64FileRequestDto
+
+  protected override readonly _type = WrongDocumentDto.name;
+}
+```
+
+**✅ CORRECT - Using Base64FileRequestDto (Standard Pattern):**
+
+```typescript
+import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@RequestDto()
+export class CorrectDocumentDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(DocumentTypeEnum)
+  public type: DocumentTypeEnum;
+
+  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
+    required: false,
+    isArray: true,
+  })
+  public files?: Base64FileRequestDto[]; // ✅ CORRECT: Uses Base64FileRequestDto
+
+  protected override readonly _type = CorrectDocumentDto.name;
+}
+```
+
+**Base64FileRequestDto Structure:**
+
+```typescript
+// Located at: @shared/api/util/dto/request/base64-file.request.dto
+@RequestDto()
+export class Base64FileRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly base64: Base64;  // Base64 value object
+
+  @RequestDtoStringProperty({ required: true })
+  public readonly originalFileName: string;  // Original file name
+
+  protected override readonly _type = Base64FileRequestDto.name;
+}
+```
+
+**Usage Example:**
+
+```typescript
+// Frontend sends:
+{
+  "type": "CNIS_DOCUMENT",
+  "files": [
+    {
+      "base64": "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MK...",
+      "originalFileName": "cnis-document.pdf"
+    }
+  ]
+}
+```
+
+**Why Base64 Pattern?**
+
+1. **Consistency**: All file uploads follow the same pattern
+2. **Validation**: `Base64` value object validates base64 encoding
+3. **Security**: Controlled file types and sizes
+4. **Traceability**: Original filename preserved for debugging
+5. **API First**: Works seamlessly with REST APIs (no multipart/form-data complexity)
+
+**Migration Notes:**
+
+If you find existing DTOs using `@RequestDtoFileProperty` with `FileModel[]`:
+1. Replace `FileModel[]` with `Base64FileRequestDto[]`
+2. Import `Base64FileRequestDto` from `@shared/api/util/dto/request/base64-file.request.dto`
+3. Remove `@RequestDtoFileProperty` decorator
+4. Use `@RequestDtoObjectProperty(() => Base64FileRequestDto)` instead
+5. Remove unused imports: `FileModel`, `MimeTypeEnum`, `RequestDtoFileProperty`
+
 ### 4. Repository Method Naming Patterns
 
 #### Query Repository (Read Operations)
