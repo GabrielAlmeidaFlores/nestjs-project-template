@@ -83,16 +83,14 @@ export class GetAudienceQuestionGeneratorUseCase {
       updatedBy: GetAudienceQuestionGeneratorResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.updatedBy.customer,
       }),
-      inssBenefitNumber:
-        (
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit ??
-          []
-        ).map((benefit) => benefit.inssBenefitNumber),
-      legalProceedingNumber:
-        (
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding ??
-          []
-        ).map((legalProceeding) => legalProceeding.legalProceedingNumber),
+      inssBenefitNumber: (
+        audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit ??
+        []
+      ).map((benefit) => benefit.inssBenefitNumber),
+      legalProceedingNumber: (
+        audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding ??
+        []
+      ).map((legalProceeding) => legalProceeding.legalProceedingNumber),
     });
 
     if (
