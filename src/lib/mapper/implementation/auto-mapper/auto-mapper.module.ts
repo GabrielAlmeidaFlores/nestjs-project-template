@@ -100,6 +100,7 @@ import { GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile } fr
 import { JudicialCaseAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-legal-proceeding/judicial-case-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/get-judicial-case-analysis-result-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/judicial-case-analysis-result-entity.auto-mapper.profile';
+import { GetLegalPleadingWithFullRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-full-relations-query-result.auto-mapper.profile';
 import { GetLegalPleadingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-relations-query-result.auto-mapper.profile';
 import { GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-responsible-and-client-relations-query-result.auto-mapper.profile';
 import { LegalPleadingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/legal-pleading-entity.auto-mapper.profile';
@@ -321,6 +322,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     LegalPleadingDocumentEntityAutoMapperProfile,
     LegalPleadingHistoryEntityAutoMapperProfile,
     LegalPleadingHistoryQueryResultAutoMapperProfile,
+    GetLegalPleadingWithFullRelationsQueryResultAutoMapperProfile,
     GetLegalPleadingWithRelationsQueryResultAutoMapperProfile,
     GetLegalPleadingAddressQueryResultAutoMapperProfile,
     GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile,

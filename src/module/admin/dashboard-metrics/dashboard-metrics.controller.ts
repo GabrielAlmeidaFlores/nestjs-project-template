@@ -4,22 +4,22 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { AnalysisItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/analysis-item.response.dto';
 import { CurrentYearAnalysesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-count.response.dto';
-import { CurrentYearPiecesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-pieces-count.response.dto';
+import { CurrentYearLegalPleadingsCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-legal-pleadings-count.response.dto';
 import { CurrentYearRevenueResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-revenue.response.dto';
 import { CurrentYearUsersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-users-count.response.dto';
-import { PieceItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/piece-item.response.dto';
+import { LegalPleadingItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/legal-pleading-item.response.dto';
 import { PlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/plan-sales-count.response.dto';
 import { TotalSubscribersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/total-subscribers-count.response.dto';
 import { UserItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/user-item.response.dto';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
-import { GetCurrentYearPiecesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-pieces-count.use-case';
+import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
 import { GetPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-plan-sales-count.use-case';
 import { GetTotalSubscribersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-total-subscribers-count.use-case';
 import { ListAllUsersUseCase } from '@module/admin/dashboard-metrics/use-case/list-all-users.use-case';
 import { ListCurrentYearAnalysesUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-analyses.use-case';
-import { ListCurrentYearPiecesUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-pieces.use-case';
+import { ListCurrentYearLegalPleadingsUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-legal-pleadings.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -35,8 +35,8 @@ export class DashboardMetricsController {
     private readonly getCurrentYearRevenueUseCase: GetCurrentYearRevenueUseCase,
     private readonly getCurrentYearUsersCountUseCase: GetCurrentYearUsersCountUseCase,
     private readonly getPlanSalesCountUseCase: GetPlanSalesCountUseCase,
-    private readonly getCurrentYearPiecesCountUseCase: GetCurrentYearPiecesCountUseCase,
-    private readonly listCurrentYearPiecesUseCase: ListCurrentYearPiecesUseCase,
+    private readonly getCurrentYearLegalPleadingsCountUseCase: GetCurrentYearLegalPleadingsCountUseCase,
+    private readonly listCurrentYearLegalPleadingsUseCase: ListCurrentYearLegalPleadingsUseCase,
     private readonly getCurrentYearAnalysesCountUseCase: GetCurrentYearAnalysesCountUseCase,
     private readonly listCurrentYearAnalysesUseCase: ListCurrentYearAnalysesUseCase,
     private readonly listAllUsersUseCase: ListAllUsersUseCase,
@@ -119,43 +119,45 @@ export class DashboardMetricsController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Obter número total de peças geradas no ano atual',
+    summary: 'Obter número total de peças processuais geradas no ano atual',
     userLevel: [UserLevelEnum.ADMIN],
     http: {
-      path: 'pieces/count/current-year',
+      path: 'legal-pleadings/count/current-year',
       method: RequestMethod.GET,
     },
     tag: ['dashboard-admin'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Número total de peças do ano atual obtido com sucesso.',
-      type: CurrentYearPiecesCountResponseDto,
+      description:
+        'Número total de peças processuais do ano atual obtido com sucesso.',
+      type: CurrentYearLegalPleadingsCountResponseDto,
     },
     guard: [AuthGuard],
   })
-  public getCurrentYearPiecesCount(): CurrentYearPiecesCountResponseDto {
-    return this.getCurrentYearPiecesCountUseCase.execute();
+  public async getCurrentYearLegalPleadingsCount(): Promise<CurrentYearLegalPleadingsCountResponseDto> {
+    return this.getCurrentYearLegalPleadingsCountUseCase.execute();
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar peças geradas no ano atual',
+    summary: 'Listar peças processuais geradas no ano atual',
     userLevel: [UserLevelEnum.ADMIN],
     http: {
-      path: 'pieces/current-year',
+      path: 'legal-pleadings/current-year',
       method: RequestMethod.GET,
     },
     tag: ['dashboard-admin'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Lista de peças do ano atual obtida com sucesso.',
-      type: PieceItemResponseDto,
+      description:
+        'Lista de peças processuais do ano atual obtida com sucesso.',
+      type: LegalPleadingItemResponseDto,
     },
     guard: [AuthGuard],
   })
-  public listCurrentYearPieces(
+  public async listCurrentYearLegalPleadings(
     @Query() dto: ListDataRequestDto,
-  ): ListDataOutputModel<PieceItemResponseDto> {
-    return this.listCurrentYearPiecesUseCase.execute(
+  ): Promise<ListDataOutputModel<LegalPleadingItemResponseDto>> {
+    return this.listCurrentYearLegalPleadingsUseCase.execute(
       new ListDataInputModel(dto),
     );
   }
