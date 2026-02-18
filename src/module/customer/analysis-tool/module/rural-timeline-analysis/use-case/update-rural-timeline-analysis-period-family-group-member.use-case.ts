@@ -127,10 +127,8 @@ export class UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase {
 
     await transaction.commit();
 
-    const response =
-      new UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto.build({
+      ruralTimelineAnalysisPeriodFamilyGroupMemberId: updatedEntity.id,
+    });
   }
 }

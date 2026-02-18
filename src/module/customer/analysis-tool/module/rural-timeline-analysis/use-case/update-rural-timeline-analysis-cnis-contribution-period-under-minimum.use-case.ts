@@ -102,10 +102,11 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCas
 
     await transaction.commit();
 
-    const response =
-      new UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto.build(
+      {
+        ruralTimelineAnalysisCnisContributionPeriodUnderMinimumId:
+          updatedEntity.id,
+      },
+    );
   }
 }

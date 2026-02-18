@@ -112,9 +112,8 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
 
     await transaction.commit();
 
-    const response = new UpdateRuralTimelineAnalysisDocumentResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisDocumentResponseDto.build({
+      ruralTimelineAnalysisDocumentId: updatedEntity.id,
+    });
   }
 }
