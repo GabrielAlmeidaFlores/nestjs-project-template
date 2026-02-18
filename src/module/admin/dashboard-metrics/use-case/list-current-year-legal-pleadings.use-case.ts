@@ -35,7 +35,7 @@ export class ListCurrentYearLegalPleadingsUseCase {
 
     const items = legalPleadings.resource.map((legalPleading) => {
       return LegalPleadingItemResponseDto.build({
-        id: legalPleading.id.toString(),
+        legalPleadingId: legalPleading.id,
         documentType: legalPleading.petitionType ?? 'N/A',
         clientName:
           legalPleading.analysisToolClient.name ?? 'Cliente não informado',
