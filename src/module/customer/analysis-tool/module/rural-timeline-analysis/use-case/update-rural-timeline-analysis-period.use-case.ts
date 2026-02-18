@@ -101,9 +101,8 @@ export class UpdateRuralTimelineAnalysisPeriodUseCase {
 
     await transaction.commit();
 
-    const response = new UpdateRuralTimelineAnalysisPeriodResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisPeriodResponseDto.build({
+      ruralTimelineAnalysisPeriodId: updatedEntity.id,
+    });
   }
 }

@@ -88,10 +88,8 @@ export class UpdateRuralTimelineAnalysisPeriodResidenceUseCase {
 
     await transaction.commit();
 
-    const response =
-      new UpdateRuralTimelineAnalysisPeriodResidenceResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisPeriodResidenceResponseDto.build({
+      ruralTimelineAnalysisPeriodResidenceId: updatedEntity.id,
+    });
   }
 }

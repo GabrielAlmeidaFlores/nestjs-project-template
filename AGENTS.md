@@ -569,8 +569,10 @@ export class AnalysisController {
 - ✅ Separate Request and Response DTOs
 - ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
 - ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
+- ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
+- ❌ NO success booleans or generic messages in update response DTOs (return the ID instead)
 
 **Example**:
 
@@ -625,6 +627,24 @@ export class WrongAnalysisResponseDto extends BaseBuildableDtoObject {
   public status: string;
 
   protected override readonly _type = WrongAnalysisResponseDto.name;
+}
+
+// ❌ WRONG - Update response with success boolean
+@ResponseDto()
+export class WrongUpdateAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoBooleanProperty() // ❌ WRONG: Should return the ID, not success
+  public success: boolean;
+
+  protected override readonly _type = WrongUpdateAnalysisResponseDto.name;
+}
+
+// ✅ CORRECT - Update response with ID value object
+@ResponseDto()
+export class UpdateAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Returns the ID
+  public analysisId: AnalysisId;
+
+  protected override readonly _type = UpdateAnalysisResponseDto.name;
 }
 ```
 

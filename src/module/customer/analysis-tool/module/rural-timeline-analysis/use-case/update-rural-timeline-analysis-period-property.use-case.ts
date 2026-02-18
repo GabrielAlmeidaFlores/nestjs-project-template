@@ -94,9 +94,8 @@ export class UpdateRuralTimelineAnalysisPeriodPropertyUseCase {
 
     await transaction.commit();
 
-    const response = new UpdateRuralTimelineAnalysisPeriodPropertyResponseDto();
-    response.success = true;
-
-    return response;
+    return UpdateRuralTimelineAnalysisPeriodPropertyResponseDto.build({
+      ruralTimelineAnalysisPeriodPropertyId: updatedEntity.id,
+    });
   }
 }
