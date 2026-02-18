@@ -1375,6 +1375,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'perCapitaIncomeForBpcAnalysis',
       'ruralTimeline',
       'insuranceQualityAnalysis',
+      'audienceQuestionGenerator',
     ];
   }
 }
