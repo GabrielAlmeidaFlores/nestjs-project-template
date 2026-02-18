@@ -61,10 +61,10 @@ export class UpdateInsuranceQualityAnalysisDocumentRequestDto extends BaseBuilda
 
   @RequestDtoFileProperty({
     allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
-    required: true,
+    required: false,
     isArray: true,
   })
-  public files: FileModel[];
+  public files?: FileModel[];
 
   protected override readonly _type =
     UpdateInsuranceQualityAnalysisDocumentRequestDto.name;
