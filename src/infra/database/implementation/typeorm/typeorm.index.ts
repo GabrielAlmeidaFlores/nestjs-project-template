@@ -255,7 +255,7 @@ export class TypeormIndex {
     password: DatabaseApplicationVariable.DATABASE_PASSWORD,
     database: DatabaseApplicationVariable.DATABASE_NAME,
     entities: TypeormIndex.entities,
-    synchronize: DatabaseApplicationVariable.DATABASE_SYNCHRONIZE,
+    synchronize: false,
   };
 
   protected readonly _type = TypeormIndex.name;
