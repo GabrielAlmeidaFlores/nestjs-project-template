@@ -1,6 +1,5 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
-import type { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import type { GetInsuranceQualityAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/result/get-insurance-quality-analysis-document.query.result';
 import type { GetInsuranceQualityAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-inss-benefit/query/result/get-insurance-quality-analysis-inss-benefit.query.result';
 import type { GetInsuranceQualityAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-legal-proceeding/query/result/get-insurance-quality-analysis-legal-proceeding.query.result';
@@ -21,7 +20,6 @@ export class GetInsuranceQualityAnalysisWithRelationsQueryResult extends BaseBui
   public readonly analysisRuralActivityDetails: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
-  public readonly analysisToolClient: GetAnalysisToolClientWithRelationsQueryResult;
   public readonly insuranceQualityAnalysisResult: GetInsuranceQualityAnalysisResultQueryResult | null;
   public readonly insuranceQualityAnalysisInssBenefit: GetInsuranceQualityAnalysisInssBenefitQueryResult[];
   public readonly insuranceQualityAnalysisLegalProceeding: GetInsuranceQualityAnalysisLegalProceedingQueryResult[];
