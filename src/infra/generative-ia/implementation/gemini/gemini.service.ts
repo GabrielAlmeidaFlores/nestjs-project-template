@@ -3,6 +3,10 @@ import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
 import jsPDF from 'jspdf';
 
+import { GenerativeIaApiKeyInvalidError } from '@infra/generative-ia/error/generative-ia-api-key-invalid.error';
+import { GenerativeIaConnectionError } from '@infra/generative-ia/error/generative-ia-connection.error';
+import { GenerativeIaFunctionHandlerNotFoundError } from '@infra/generative-ia/error/generative-ia-function-handler-not-found.error';
+import { GenerativeIaQuotaExceededError } from '@infra/generative-ia/error/generative-ia-quota-exceeded.error';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
@@ -173,15 +177,38 @@ export class GeminiService implements GenerativeIaGateway {
       );
     }
 
-    const result =
-      await this.googleGenerativeAI.models.generateContent(contentConfig);
+    try {
+      const result =
+        await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-    return result.text ?? null;
+      return result.text ?? null;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message.includes('fetch failed')) {
+          throw new GenerativeIaConnectionError({
+            originalError: error.message,
+          });
+        }
+
+        if (
+          error.message.includes('API key') ||
+          error.message.includes('api key')
+        ) {
+          throw new GenerativeIaApiKeyInvalidError();
+        }
+
+        if (
+          error.message.includes('quota') ||
+          error.message.includes('limit')
+        ) {
+          throw new GenerativeIaQuotaExceededError();
+        }
+      }
+
+      throw error;
+    }
   }
 
-  /**
-   * Handles automatic function calling loop with Gemini
-   */
   private async generateWithFunctionCalling(
     contentConfig: GenerateContentParameters,
     toolHandlers: Record<
@@ -198,76 +225,104 @@ export class GeminiService implements GenerativeIaGateway {
       : [contentConfig.contents];
 
     while (callCount < MAX_FUNCTION_CALLS) {
-      const result = await this.googleGenerativeAI.models.generateContent({
-        ...contentConfig,
-        contents: conversationHistory as never,
-      });
+      try {
+        const result = await this.googleGenerativeAI.models.generateContent({
+          ...contentConfig,
+          contents: conversationHistory as never,
+        });
 
-      const functionCalls = result.functionCalls;
+        const functionCalls = result.functionCalls;
 
-      if (functionCalls === undefined || functionCalls.length === 0) {
-        return result.text ?? null;
-      }
-
-      const candidates = result.candidates;
-      if (candidates?.[0]?.content !== undefined) {
-        conversationHistory.push(candidates[0].content);
-      }
-
-      const functionResponses: Array<unknown> = [];
-
-      for (const functionCall of functionCalls) {
-        const functionName = functionCall.name ?? '';
-        const functionParams = functionCall.args ?? {};
-
-        try {
-          const handler = toolHandlers[functionName] as
-            | ((params: Record<string, unknown>) => Promise<unknown>)
-            | undefined;
-
-          if (handler === undefined) {
-            throw new Error(`Handler not found for function: ${functionName}`);
-          }
-
-          const functionResult = await handler(functionParams);
-
-          functionResponses.push({
-            functionResponse: {
-              name: functionName,
-              response: functionResult,
-            },
-          });
-        } catch (error: unknown) {
-          let errorMessage = 'Unknown error';
-          const MAX_ERROR_MESSAGE_LENGTH = 200;
-
-          if (error instanceof Error) {
-            errorMessage = error.message
-              .replace(/["']/g, '')
-              .replace(/\\/g, '/')
-              .substring(0, MAX_ERROR_MESSAGE_LENGTH);
-          }
-
-          functionResponses.push({
-            functionResponse: {
-              name: functionName,
-              response: {
-                success: false,
-                error: errorMessage,
-                message:
-                  'Erro ao executar a ferramenta. Por favor, tente novamente ou reformule sua pergunta.',
-              },
-            },
-          });
+        if (functionCalls === undefined || functionCalls.length === 0) {
+          return result.text ?? null;
         }
+
+        const candidates = result.candidates;
+        if (candidates?.[0]?.content !== undefined) {
+          conversationHistory.push(candidates[0].content);
+        }
+
+        const functionResponses: Array<unknown> = [];
+
+        for (const functionCall of functionCalls) {
+          const functionName = functionCall.name ?? '';
+          const functionParams = functionCall.args ?? {};
+
+          try {
+            const handler = toolHandlers[functionName] as
+              | ((params: Record<string, unknown>) => Promise<unknown>)
+              | undefined;
+
+            if (handler === undefined) {
+              throw new GenerativeIaFunctionHandlerNotFoundError({
+                functionName,
+              });
+            }
+
+            const functionResult = await handler(functionParams);
+
+            functionResponses.push({
+              functionResponse: {
+                name: functionName,
+                response: functionResult,
+              },
+            });
+          } catch (error: unknown) {
+            let errorMessage = 'Unknown error';
+            const MAX_ERROR_MESSAGE_LENGTH = 200;
+
+            if (error instanceof Error) {
+              errorMessage = error.message
+                .replace(/["']/g, '')
+                .replace(/\\/g, '/')
+                .substring(0, MAX_ERROR_MESSAGE_LENGTH);
+            }
+
+            functionResponses.push({
+              functionResponse: {
+                name: functionName,
+                response: {
+                  success: false,
+                  error: errorMessage,
+                  message:
+                    'Erro ao executar a ferramenta. Por favor, tente novamente ou reformule sua pergunta.',
+                },
+              },
+            });
+          }
+        }
+
+        conversationHistory.push({
+          role: 'user',
+          parts: functionResponses,
+        });
+
+        callCount++;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if (error.message.includes('fetch failed')) {
+            throw new GenerativeIaConnectionError({
+              originalError: error.message,
+            });
+          }
+
+          if (
+            error.message.includes('API key') ||
+            error.message.includes('api key')
+          ) {
+            throw new GenerativeIaApiKeyInvalidError();
+          }
+
+          if (
+            error.message.includes('quota') ||
+            error.message.includes('limit')
+          ) {
+            throw new GenerativeIaQuotaExceededError();
+          }
+        }
+
+        throw error;
       }
-
-      conversationHistory.push({
-        role: 'user',
-        parts: functionResponses,
-      });
-
-      callCount++;
     }
 
     return 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.';

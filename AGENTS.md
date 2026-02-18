@@ -1688,6 +1688,62 @@ yarn migration:revert     # Revert last migration
 - Be specific and actionable
 - Example: `'Análise não encontrada'` instead of `'Not found'`
 
+### Comments
+
+- ❌ **NO comments in code** - Code should be self-documenting through clear naming and structure
+- ❌ NO inline comments (e.g., `// This is a comment`)
+- ❌ NO block comments (e.g., `/* This is a block comment */`)
+- ❌ NO JSDoc comments (e.g., `/** Documentation */`)
+- ✅ Use descriptive variable/function names instead of comments
+- ✅ Break complex logic into well-named private methods
+- ✅ Use TypeScript types to document intent
+
+**Why no comments?**:
+
+- Clean Architecture and DDD promote self-documenting code
+- Well-named functions, variables, and types provide better documentation
+- Comments can become outdated and misleading
+- Code structure should explain the "what" and "how"
+- Domain concepts should explain the "why"
+
+**Example**:
+
+```typescript
+// ❌ BAD - Using comments
+public async execute(dto: ProcessAnalysisRequestDto): Promise<ProcessAnalysisResponseDto> {
+  // Fetch the analysis from the database
+  const analysis = await this.repository.findById(dto.id);
+
+  // Check if analysis exists
+  if (!analysis) {
+    throw new AnalysisNotFoundError();
+  }
+
+  // Process the analysis data
+  const result = this.processData(analysis);
+
+  return result;
+}
+
+// ✅ GOOD - Self-documenting code
+public async execute(dto: ProcessAnalysisRequestDto): Promise<ProcessAnalysisResponseDto> {
+  const analysis = await this.fetchAnalysisOrThrow(dto.id);
+  const processedData = this.processAnalysisData(analysis);
+
+  return this.buildResponse(processedData);
+}
+
+private async fetchAnalysisOrThrow(id: AnalysisId): Promise<AnalysisEntity> {
+  const analysis = await this.repository.findById(id);
+
+  if (!analysis) {
+    throw new AnalysisNotFoundError();
+  }
+
+  return analysis;
+}
+```
+
 ---
 
 ## Common Pitfalls & Solutions
