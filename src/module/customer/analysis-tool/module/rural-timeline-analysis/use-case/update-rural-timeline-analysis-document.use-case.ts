@@ -136,7 +136,7 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
       this.ruralTimelineAnalysisDocumentCommandRepositoryGateway.updateRuralTimelineAnalysisDocument(
-        [updatedEntity],
+        updatedEntity,
       ),
     );
 
