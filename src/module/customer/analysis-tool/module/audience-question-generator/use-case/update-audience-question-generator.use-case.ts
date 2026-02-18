@@ -111,7 +111,9 @@ export class UpdateAudienceQuestionGeneratorUseCase {
 
     const audienceQuestionGenerator = new AudienceQuestionGeneratorEntity({
       id: audienceQuestionGeneratorQueryResult.id,
-      createdBy: audienceQuestionGeneratorQueryResult.createdBy.id,
+      createdBy:
+        audienceQuestionGeneratorQueryResult.createdBy?.id ??
+        organizationMember.id,
       updatedBy: organizationMember.id,
     });
 
@@ -152,7 +154,8 @@ export class UpdateAudienceQuestionGeneratorUseCase {
       const audienceQuestionGeneratorBenefitTransactions =
         this.updateAudienceQuestionGeneratorBenefitOnDatabase(
           audienceQuestionGenerator,
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit,
+          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorBenefit ??
+            [],
           dto.json.inssBenefitNumber,
         );
 
@@ -163,7 +166,8 @@ export class UpdateAudienceQuestionGeneratorUseCase {
       const audienceQuestionGeneratorLegalProceedingTransactions =
         this.updateAudienceQuestionGeneratorLegalProceedingOnDatabase(
           audienceQuestionGenerator,
-          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding,
+          audienceQuestionGeneratorQueryResult.audienceQuestionGeneratorLegalProceeding ??
+            [],
           dto.json.legalProceedingNumber,
         );
 
