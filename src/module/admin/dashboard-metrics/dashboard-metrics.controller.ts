@@ -57,7 +57,7 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public getTotalSubscribersCount(): TotalSubscribersCountResponseDto {
+  public async getTotalSubscribersCount(): Promise<TotalSubscribersCountResponseDto> {
     return this.getTotalSubscribersCountUseCase.execute();
   }
 
@@ -175,7 +175,7 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public getCurrentYearAnalysesCount(): CurrentYearAnalysesCountResponseDto {
+  public async getCurrentYearAnalysesCount(): Promise<CurrentYearAnalysesCountResponseDto> {
     return this.getCurrentYearAnalysesCountUseCase.execute();
   }
 
@@ -194,9 +194,9 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public listCurrentYearAnalyses(
+  public async listCurrentYearAnalyses(
     @Query() dto: ListDataRequestDto,
-  ): ListDataOutputModel<AnalysisItemResponseDto> {
+  ): Promise<ListDataOutputModel<AnalysisItemResponseDto>> {
     return this.listCurrentYearAnalysesUseCase.execute(
       new ListDataInputModel(dto),
     );

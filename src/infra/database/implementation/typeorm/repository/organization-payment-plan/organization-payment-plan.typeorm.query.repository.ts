@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
@@ -10,6 +10,7 @@ import { OrganizationPaymentPlanQueryRepositoryGateway } from '@module/customer/
 import { GetOrganizationPaymentPlanWithRelationsQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan-with-relations.query.result';
 import { GetOrganizationPaymentPlanQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/query/result/get-organization-payment-plan.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 
 @Injectable()
@@ -191,6 +192,47 @@ export class OrganizationPaymentPlanTypeormQueryRepository
       data,
       OrganizationPaymentPlanTypeormEntity,
       GetOrganizationPaymentPlanWithRelationsQueryResult,
+    );
+  }
+
+  public async countActiveSubscriptions(): Promise<number> {
+    const count = await this.repository.count({
+      where: {
+        canceled: false,
+        deletedAt: IsNull(),
+      },
+    });
+
+    return count;
+  }
+
+  public async countSalesPerPaymentPlan(): Promise<
+    Array<{ paymentPlanId: PaymentPlanId; salesCount: number }>
+  > {
+    const allPlans = await this.repository.find({
+      where: {
+        canceled: false,
+        deletedAt: IsNull(),
+      },
+      relations: {
+        paymentPlan: true,
+      },
+    });
+
+    const salesByPlan = new Map<string, number>();
+
+    for (const plan of allPlans) {
+      if (plan.paymentPlan?.id) {
+        const currentCount = salesByPlan.get(plan.paymentPlan.id) ?? 0;
+        salesByPlan.set(plan.paymentPlan.id, currentCount + 1);
+      }
+    }
+
+    return Array.from(salesByPlan.entries()).map(
+      ([paymentPlanId, salesCount]) => ({
+        paymentPlanId: new PaymentPlanId(paymentPlanId),
+        salesCount,
+      }),
     );
   }
 }
