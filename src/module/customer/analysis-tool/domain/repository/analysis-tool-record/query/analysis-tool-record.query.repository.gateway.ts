@@ -3,6 +3,7 @@ import type { NotFoundError } from '@core/error/not-found.error';
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
 import type { AnalysisToolRecordStatisticsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics.query.result';
+import type { GetAnalysisToolRecordWithFullRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-full-relations.query.result';
 import type { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import type { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -161,4 +162,20 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     authIdentityId: AuthIdentityId,
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
+
+  public abstract countAllAnalysesForYear(year: number): Promise<number>;
+
+  public abstract listAllAnalysesForYear(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
+  >;
+
+  public abstract listAllAnalysesForYearWithFullRelations(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithFullRelationsQueryResult>
+  >;
 }

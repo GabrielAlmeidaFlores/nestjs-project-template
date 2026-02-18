@@ -27,6 +27,7 @@ import { AnalysisToolClientLegalProceedingEntityAutoMapperProfile } from '@lib/m
 import { GetAnalysisToolClientLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-query-result.auto-mapper.profile';
 import { GetAnalysisToolClientLegalProceedingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client-legal-proceeding/get-analysis-tool-client-legal-proceeding-with-relations-query-result.auto-mapper.profile';
 import { AnalysisToolRecordEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/analysis-tool-record-entity.auto-mapper.profile';
+import { GetAnalysisToolRecordWithFullRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-full-relations-query-result.auto-mapper.profile';
 import { GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-record/get-analysis-tool-record-with-relations-query-result.auto-mapper.profile';
 import { AudienceQuestionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator/audience-question-generator-entity.auto-mapper.profile';
 import { GetAudienceQuestionGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/audience-question-generator/get-audience-question-generator-query-result.auto-mapper.profile';
@@ -99,6 +100,7 @@ import { GetJudicialCaseAnalysisLegalProceedingQueryResultAutoMapperProfile } fr
 import { JudicialCaseAnalysisLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-legal-proceeding/judicial-case-analysis-legal-proceeding-entity.auto-mapper.profile';
 import { GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/get-judicial-case-analysis-result-query-result.auto-mapper.profile';
 import { JudicialCaseAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/judicial-case-analysis-result/judicial-case-analysis-result-entity.auto-mapper.profile';
+import { GetLegalPleadingWithFullRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-full-relations-query-result.auto-mapper.profile';
 import { GetLegalPleadingWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-relations-query-result.auto-mapper.profile';
 import { GetLegalPleadingWithResponsibleAndClientRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/get-legal-pleading-with-responsible-and-client-relations-query-result.auto-mapper.profile';
 import { LegalPleadingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/legal-pleading/legal-pleading-entity.auto-mapper.profile';
@@ -320,6 +322,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     LegalPleadingDocumentEntityAutoMapperProfile,
     LegalPleadingHistoryEntityAutoMapperProfile,
     LegalPleadingHistoryQueryResultAutoMapperProfile,
+    GetLegalPleadingWithFullRelationsQueryResultAutoMapperProfile,
     GetLegalPleadingWithRelationsQueryResultAutoMapperProfile,
     GetLegalPleadingAddressQueryResultAutoMapperProfile,
     GetLegalPleadingDocumentWithRelationsQueryResultAutoMapperProfile,
@@ -331,6 +334,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetAnalysisToolClientQueryResultAutoMapperProfile,
     AnalysisToolRecordEntityAutoMapperProfile,
     GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile,
+    GetAnalysisToolRecordWithFullRelationsQueryResultAutoMapperProfile,
     CustomerTermsEntityAutoMapperProfile,
     CustomerTermsAcceptanceEntityAutoMapperProfile,
     GetCustomerTermsQueryResultAutoMapperProfile,
