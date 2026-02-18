@@ -206,9 +206,11 @@ export class UpdateInsuranceQualityAnalysisUseCase {
       >();
 
       for (const document of dto.documents) {
-        const currentFiles = documentsByType.get(document.type) ?? [];
-        currentFiles.push(...document.files);
-        documentsByType.set(document.type, currentFiles);
+        if (document.files && document.files.length > 0) {
+          const currentFiles = documentsByType.get(document.type) ?? [];
+          currentFiles.push(...document.files);
+          documentsByType.set(document.type, currentFiles);
+        }
       }
 
       for (const [type, files] of documentsByType.entries()) {
