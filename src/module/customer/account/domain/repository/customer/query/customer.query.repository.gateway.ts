@@ -37,4 +37,8 @@ export abstract class CustomerQueryRepositoryGateway {
   ): Promise<GetCustomerWithAuthIdentityRelationQueryResult | null>;
 
   public abstract listAll(): Promise<Array<GetCustomerQueryResult>>;
+
+  public abstract listAllCustomersWithAuthIdentity(): Promise<
+    Array<GetCustomerWithAuthIdentityRelationQueryResult>
+  >;
 }

@@ -567,6 +567,8 @@ export class AnalysisController {
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use response decorators for OpenAPI docs
 - ✅ Separate Request and Response DTOs
+- ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
+- ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
 
@@ -586,21 +588,43 @@ export class ProcessAnalysisRequestDto extends BaseBuildableDtoObject {
   protected override readonly _type = ProcessAnalysisRequestDto.name;
 }
 
-// Response DTO
+// Response DTO - CORRECT: Using value objects and enums with proper naming
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis/enum/analysis-status.enum';
+import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class ProcessAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Value object preserved
+  public analysisId: AnalysisId; // ✅ CORRECT: Property name matches class name (camelCase)
+
+  @ResponseDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value object preserved
+  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Full name "paymentPlanId", NOT shortened "planId"
+
+  @ResponseDtoEnumProperty(AnalysisStatusEnum) // ✅ CORRECT: Enum preserved
+  public analysisStatus: AnalysisStatusEnum; // ✅ CORRECT: Property name matches enum name pattern
 
   @ResponseDtoNumberProperty()
-  public result: number;
+  public result: number; // ✅ CORRECT: Primitive for calculations
 
   protected override readonly _type = ProcessAnalysisResponseDto.name;
+}
+
+// ❌ WRONG - Converting value objects to primitives
+@ResponseDto()
+export class WrongAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisId value object
+  public id: string;
+
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisStatusEnum
+  public status: string;
+
+  protected override readonly _type = WrongAnalysisResponseDto.name;
 }
 ```
 
