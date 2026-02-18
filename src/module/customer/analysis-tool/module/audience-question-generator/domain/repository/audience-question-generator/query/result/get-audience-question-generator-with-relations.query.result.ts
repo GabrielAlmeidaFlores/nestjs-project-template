@@ -10,15 +10,11 @@ import type { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool
 export class GetAudienceQuestionGeneratorWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: AudienceQuestionGeneratorId;
   public readonly audienceQuestionGeneratorResult: GetAudienceQuestionGeneratorResultQueryResult | null;
-  public readonly audienceQuestionGeneratorBenefit:
-    | GetAudienceQuestionGeneratorBenefitQueryResult[]
-    | null;
-  public readonly audienceQuestionGeneratorLegalProceeding:
-    | GetAudienceQuestionGeneratorLegalProceedingQueryResult[]
-    | null;
+  public readonly audienceQuestionGeneratorBenefit: GetAudienceQuestionGeneratorBenefitQueryResult[];
+  public readonly audienceQuestionGeneratorLegalProceeding: GetAudienceQuestionGeneratorLegalProceedingQueryResult[];
   public readonly audienceQuestionGeneratorDocument: GetAudienceQuestionGeneratorDocumentQueryResult[];
-  public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult | null;
-  public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult | null;
+  public readonly createdBy: GetOrganizationMemberWithCustomerRelationQueryResult;
+  public readonly updatedBy: GetOrganizationMemberWithCustomerRelationQueryResult;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
