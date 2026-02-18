@@ -78,17 +78,24 @@ export class LoggingInterceptor implements NestInterceptor {
           const duration = Date.now() - now;
           const statusCode = response.statusCode;
 
-          const responseString = JSON.stringify(
-            this.sanitizeResponse(responseData),
-            null,
-            2,
-          );
-          const isTruncated =
-            responseString.length > LoggingInterceptor.MAX_RESPONSE_LOG_LENGTH;
-          const truncatedResponse = responseString.substring(
-            0,
-            LoggingInterceptor.MAX_RESPONSE_LOG_LENGTH,
-          );
+          let responseString = '';
+          let isTruncated = false;
+          let truncatedResponse = '';
+
+          try {
+            const sanitizedResponse = this.sanitizeResponse(responseData);
+            responseString = JSON.stringify(sanitizedResponse, null, 2);
+            isTruncated =
+              responseString.length >
+              LoggingInterceptor.MAX_RESPONSE_LOG_LENGTH;
+            truncatedResponse = responseString.substring(
+              0,
+              LoggingInterceptor.MAX_RESPONSE_LOG_LENGTH,
+            );
+          } catch {
+            truncatedResponse = '[Error serializing response]';
+          }
+
           const hasResponse =
             typeof responseData === 'object' && responseData !== null;
 
@@ -140,9 +147,6 @@ export class LoggingInterceptor implements NestInterceptor {
     );
   }
 
-  /**
-   * Sanitiza dados sensíveis de forma recursiva
-   */
   private sanitizeData(data: unknown): unknown {
     if (typeof data !== 'object' || data === null) {
       return data;
@@ -157,7 +161,6 @@ export class LoggingInterceptor implements NestInterceptor {
     for (const [key, value] of Object.entries(data)) {
       const keyLower = key.toLowerCase();
 
-      // Verifica se o campo é sensível (mas ignora IDs)
       const isId = keyLower.endsWith('id');
       const isSensitive =
         !isId &&
@@ -177,9 +180,6 @@ export class LoggingInterceptor implements NestInterceptor {
     return sanitized;
   }
 
-  /**
-   * Sanitiza response para não logar dados muito grandes
-   */
   private sanitizeResponse(data: unknown): unknown {
     const sanitized = this.sanitizeData(data);
 
