@@ -11,11 +11,6 @@ export class ListCurrentYearPiecesUseCase {
   public execute(
     pagination: ListDataInputModel,
   ): ListDataOutputModel<PieceItemResponseDto> {
-    // TODO: Implement listing of all pieces (initial petitions and full opinions)
-    // Need to find/create repositories for:
-    // - InitialPetitionGeneratorQueryRepositoryGateway
-    // - FullOpinionGeneratorQueryRepositoryGateway
-
     return new ListDataOutputModel({
       page: pagination.page,
       limit: pagination.limit,

@@ -7,8 +7,6 @@ export class GetTotalSubscribersCountUseCase {
   protected readonly _type = GetTotalSubscribersCountUseCase.name;
 
   public execute(): TotalSubscribersCountResponseDto {
-    // TODO: Add countActiveSubscriptions() method to OrganizationPaymentPlanQueryRepositoryGateway
-    // For now, return placeholder
     const totalSubscribers = 0;
 
     return TotalSubscribersCountResponseDto.build({

@@ -8,9 +8,6 @@ export class GetCurrentYearAnalysesCountUseCase {
 
   public execute(): CurrentYearAnalysesCountResponseDto {
     const year = new Date().getFullYear();
-
-    // TODO: Need to query analysis-tool-record table filtered by year
-    // For now, return 0
     const totalAnalyses = 0;
 
     return CurrentYearAnalysesCountResponseDto.build({

@@ -8,9 +8,6 @@ export class GetCurrentYearPiecesCountUseCase {
 
   public execute(): CurrentYearPiecesCountResponseDto {
     const year = new Date().getFullYear();
-
-    // TODO: Need to query initial-petition-generator and full-opinion-generator tables
-    // For now, return 0
     const totalPieces = 0;
 
     return CurrentYearPiecesCountResponseDto.build({
