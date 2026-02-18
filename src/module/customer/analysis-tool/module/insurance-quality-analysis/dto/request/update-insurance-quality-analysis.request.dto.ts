@@ -1,5 +1,4 @@
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
-import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { InsuranceQualityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-document/enum/insurance-quality-analysis-document-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-boolean-property/request-dto-boolean-property.decorator';
@@ -50,11 +49,6 @@ export class UpdateInsuranceQualityAnalysisJsonRequestDto extends BaseBuildableD
 
   @RequestDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
-
-  @RequestDtoObjectProperty(() => UpdateAnalysisToolClientRequestDto, {
-    required: false,
-  })
-  public analysisToolClient?: UpdateAnalysisToolClientRequestDto;
 
   protected override readonly _type =
     UpdateInsuranceQualityAnalysisJsonRequestDto.name;
