@@ -1426,7 +1426,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
       ).map((where) => ({
         ...where,
-        code: Like(`%${listData.searchBy}%`),
+        code: Like(`${listData.searchBy}`),
       }));
     }
 
@@ -1520,7 +1520,7 @@ export class AnalysisToolRecordTypeormQueryRepository
     if (listData.searchBy !== null) {
       (
         searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
-      ).code = Like(`%${listData.searchBy}%`);
+      ).code = Like(`${listData.searchBy}`);
     }
 
     if (listData.type !== null) {
