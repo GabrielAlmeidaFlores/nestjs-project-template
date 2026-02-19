@@ -1,3 +1,4 @@
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
 import { InsuranceQualityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-document/enum/insurance-quality-analysis-document-type.enum';
@@ -23,6 +24,33 @@ export class GetInsuranceQualityAnalysisDocumentResponseDto extends BaseBuildabl
 
   protected override readonly _type =
     GetInsuranceQualityAnalysisDocumentResponseDto.name;
+}
+
+@ResponseDto()
+export class GetInsuranceQualityAnalysisResultResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public clientName?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public clientFederalDocument?: FederalDocument;
+
+  @ResponseDtoDateProperty({ required: false })
+  public clientBirthDate?: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public insuranceQualityConclusion?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public gracePeriodConclusion?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public finalRecommendation?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public analysisSummary?: string;
+
+  protected override readonly _type =
+    GetInsuranceQualityAnalysisResultResponseDto.name;
 }
 
 @ResponseDto()
@@ -71,17 +99,15 @@ export class GetInsuranceQualityAnalysisResponseDto extends BaseBuildableDtoObje
   @ResponseDtoStringProperty({ required: false })
   public analysisRuralActivityDetails?: string;
 
-  @ResponseDtoStringProperty({ required: false })
-  public insuranceQualityConclusion?: string;
-
-  @ResponseDtoStringProperty({ required: false })
-  public gracePeriodConclusion?: string;
-
-  @ResponseDtoStringProperty({ required: false })
-  public finalRecommendation?: string;
-
-  @ResponseDtoStringProperty({ required: false })
-  public analysisSummary?: string;
+  @ResponseDtoObjectProperty(
+    () => GetInsuranceQualityAnalysisResultResponseDto,
+    {
+      required: false,
+    },
+  )
+  public insuranceQualityAnalysisResult?:
+    | GetInsuranceQualityAnalysisResultResponseDto
+    | undefined;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;

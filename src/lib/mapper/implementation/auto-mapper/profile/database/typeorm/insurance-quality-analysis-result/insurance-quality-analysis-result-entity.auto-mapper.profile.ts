@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { InsuranceQualityAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-result.typeorm.entity';
 import { InsuranceQualityAnalysisResultEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-result/insurance-quality-analysis-result.entity';
 import { InsuranceQualityAnalysisResultId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-result/value-object/insurance-quality-analysis-result-id/insurance-quality-analysis-result-id.value-object';
@@ -25,8 +26,20 @@ export class InsuranceQualityAnalysisResultEntityAutoMapperProfile {
       source: InsuranceQualityAnalysisResultTypeormEntity,
     ): InsuranceQualityAnalysisResultEntity => {
       return new InsuranceQualityAnalysisResultEntity({
-        ...source,
         id: new InsuranceQualityAnalysisResultId(source.id),
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
+        clientBirthDate: source.clientBirthDate,
+        insuranceQualityConclusion: source.insuranceQualityConclusion,
+        gracePeriodConclusion: source.gracePeriodConclusion,
+        finalRecommendation: source.finalRecommendation,
+        analysisSummary: source.analysisSummary,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -45,8 +58,19 @@ export class InsuranceQualityAnalysisResultEntityAutoMapperProfile {
       source: InsuranceQualityAnalysisResultEntity,
     ): InsuranceQualityAnalysisResultTypeormEntity => {
       return InsuranceQualityAnalysisResultTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        clientName: source.clientName,
+        clientFederalDocument: source.clientFederalDocument
+          ? source.clientFederalDocument.toString()
+          : null,
+        clientBirthDate: source.clientBirthDate,
+        insuranceQualityConclusion: source.insuranceQualityConclusion,
+        gracePeriodConclusion: source.gracePeriodConclusion,
+        finalRecommendation: source.finalRecommendation,
+        analysisSummary: source.analysisSummary,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
