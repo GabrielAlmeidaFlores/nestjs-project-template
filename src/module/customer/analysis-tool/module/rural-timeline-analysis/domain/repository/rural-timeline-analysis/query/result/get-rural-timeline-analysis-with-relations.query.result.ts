@@ -11,6 +11,8 @@ import type { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@mod
 import type { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import type { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/enum/rural-timeline-analysis-document-type.enum';
 import type { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
+import type { RuralTimelineAnalysisInssBenefitId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/value-object/rural-timeline-analysis-inss-benefit-id/rural-timeline-analysis-inss-benefit-id.value-object';
+import type { RuralTimelineAnalysisLegalProceedingId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/value-object/rural-timeline-analysis-legal-proceeding-id/rural-timeline-analysis-legal-proceeding-id.value-object';
 import type { ProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/production-destination.enum';
 import type { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import type { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
@@ -41,18 +43,20 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResu
     GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult.name;
 }
 
-export class GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitQueryResult extends BaseBuildableObject {
+export class GetRuralTimelineAnalysisInssBenefitQueryResult extends BaseBuildableObject {
+  public readonly id: RuralTimelineAnalysisInssBenefitId;
   public readonly inssBenefitNumber: string;
 
   protected override readonly _type =
-    GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitQueryResult.name;
+    GetRuralTimelineAnalysisInssBenefitQueryResult.name;
 }
 
-export class GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingQueryResult extends BaseBuildableObject {
+export class GetRuralTimelineAnalysisLegalProceedingQueryResult extends BaseBuildableObject {
+  public readonly id: RuralTimelineAnalysisLegalProceedingId;
   public readonly legalProceedingNumber: string;
 
   protected override readonly _type =
-    GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingQueryResult.name;
+    GetRuralTimelineAnalysisLegalProceedingQueryResult.name;
 }
 
 export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends BaseBuildableObject {
@@ -68,8 +72,6 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
   public readonly externalSupplementationIntent: boolean;
   public readonly cnisDocument: string | null;
   public readonly ruralTimelineCnisContributionPeriodUnderMinimum: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult[];
-  public readonly inssBenefits: GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitQueryResult[];
-  public readonly legalProceedings: GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
@@ -165,6 +167,8 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResult extends BaseBuilda
   public readonly ruralTimelineAnalysisPeriod: GetRuralTimelineAnalysisPeriodQueryResult[];
   public readonly ruralTimelineDocument: GetRuralTimelineAnalysisDocumentQueryResult[];
   public readonly ruralTimelineCnisContributionPeriod: GetRuralTimelineAnalysisCnisContributionPeriodQueryResult[];
+  public readonly inssBenefits: GetRuralTimelineAnalysisInssBenefitQueryResult[];
+  public readonly legalProceedings: GetRuralTimelineAnalysisLegalProceedingQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

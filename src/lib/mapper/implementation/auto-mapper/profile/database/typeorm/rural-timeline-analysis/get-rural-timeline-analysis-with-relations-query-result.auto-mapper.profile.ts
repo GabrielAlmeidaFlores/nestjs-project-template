@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
+import { RuralTimelineAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-inss-benefit.typeorm.entity';
+import { RuralTimelineAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-legal-proceeding.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import {
@@ -11,6 +13,8 @@ import {
   GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
   GetRuralTimelineAnalysisDocumentQueryResult,
   GetRuralTimelineAnalysisPeriodQueryResult,
+  GetRuralTimelineAnalysisInssBenefitQueryResult,
+  GetRuralTimelineAnalysisLegalProceedingQueryResult,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
@@ -94,6 +98,30 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
               period,
               RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
               GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+            ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) => destination.inssBenefits,
+        mapFrom((source) =>
+          (source.inssBenefits ?? []).map((benefit) =>
+            mapper.map(
+              benefit,
+              RuralTimelineAnalysisInssBenefitTypeormEntity,
+              GetRuralTimelineAnalysisInssBenefitQueryResult,
+            ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) => destination.legalProceedings,
+        mapFrom((source) =>
+          (source.legalProceedings ?? []).map((proceeding) =>
+            mapper.map(
+              proceeding,
+              RuralTimelineAnalysisLegalProceedingTypeormEntity,
+              GetRuralTimelineAnalysisLegalProceedingQueryResult,
             ),
           ),
         ),

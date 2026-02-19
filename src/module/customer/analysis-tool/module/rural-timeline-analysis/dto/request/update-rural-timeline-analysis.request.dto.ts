@@ -34,6 +34,22 @@ export class UpdateRuralTimelineAnalysisRequestDto extends BaseBuildableDtoObjec
   })
   public workRegime?: RuralTimelineAnalysisWorkRegimeEnum;
 
+  @RequestDtoStringProperty({
+    description:
+      'Lista de números de processos judiciais relacionados à análise da linha do tempo rural.',
+    required: false,
+    isArray: true,
+  })
+  public legalProceedingNumber?: string[];
+
+  @RequestDtoStringProperty({
+    description:
+      'Lista de números de benefícios do INSS relacionados à análise da linha do tempo rural.',
+    required: false,
+    isArray: true,
+  })
+  public inssBenefitNumber?: string[];
+
   protected override readonly _type =
     UpdateRuralTimelineAnalysisRequestDto.name;
 }
