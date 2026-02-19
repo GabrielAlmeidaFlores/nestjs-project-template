@@ -1,3 +1,4 @@
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
@@ -26,6 +27,15 @@ export class GetSpeechGeneratorClientResponseDto extends BaseBuildableDtoObject 
 
 @ResponseDto()
 export class GetSpeechGeneratorResultResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty({ required: false })
+  public clientName?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public clientFederalDocument?: FederalDocument;
+
+  @ResponseDtoDateProperty({ required: false })
+  public clientBirthDate?: Date;
+
   @ResponseDtoStringProperty({ required: false })
   public speechGeneratorCompleteContent?: string;
 

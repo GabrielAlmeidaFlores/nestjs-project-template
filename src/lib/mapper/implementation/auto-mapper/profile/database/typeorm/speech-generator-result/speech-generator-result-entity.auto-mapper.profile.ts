@@ -2,6 +2,7 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { SpeechGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-result.typeorm.entity';
 import { SpeechGeneratorResultEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/speech-generator-result.entity';
 import { SpeechGeneratorResultId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator-result/value-object/speech-generator-result-id/speech-generator-result-id.value-object';
@@ -24,8 +25,19 @@ export class SpeechGeneratorResultEntityAutoMapperProfile {
       source: SpeechGeneratorResultTypeormEntity,
     ): SpeechGeneratorResultEntity => {
       return new SpeechGeneratorResultEntity({
-        ...source,
         id: new SpeechGeneratorResultId(source.id),
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
+        clientBirthDate: source.clientBirthDate,
+        speechGeneratorCompleteContent: source.speechGeneratorCompleteContent,
+        speechGeneratorSimplifiedContent:
+          source.speechGeneratorSimplifiedContent,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -44,8 +56,19 @@ export class SpeechGeneratorResultEntityAutoMapperProfile {
       source: SpeechGeneratorResultEntity,
     ): SpeechGeneratorResultTypeormEntity => {
       return SpeechGeneratorResultTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? source.clientFederalDocument.toString()
+            : null,
+        clientBirthDate: source.clientBirthDate,
+        speechGeneratorCompleteContent: source.speechGeneratorCompleteContent,
+        speechGeneratorSimplifiedContent:
+          source.speechGeneratorSimplifiedContent,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
