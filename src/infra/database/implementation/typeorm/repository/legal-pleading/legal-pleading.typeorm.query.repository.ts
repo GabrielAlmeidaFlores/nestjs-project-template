@@ -14,6 +14,7 @@ import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-t
 import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
 import { GetLegalPleadingWithFullRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-full-relations.query.result';
 import { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
+import { LegalPleadingMonthlyStatisticsMonthlyQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics-monthly.query.result';
 import {
   LegalPleadingMonthlyStatisticsQueryResult,
   LegalPleadingStatisticsQueryResult,
@@ -432,6 +433,55 @@ export class LegalPleadingTypeormQueryRepository
     });
 
     return count;
+  }
+
+  public async countAllMonthlyLegalPleadingForYear(
+    year: number,
+  ): Promise<Array<LegalPleadingMonthlyStatisticsMonthlyQueryResult>> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const analyses = await this.repository.find({
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const analysesByMonth = new Map<number, number>();
+
+    for (const analysis of analyses) {
+      const month = analysis.createdAt.getMonth();
+      const currentCount = analysesByMonth.get(month) ?? 0;
+      analysesByMonth.set(month, currentCount + 1);
+    }
+
+    return Array.from(analysesByMonth.entries())
+      .sort(([monthA], [monthB]) => monthA - monthB)
+      .map(([month, totalCount]) =>
+        LegalPleadingMonthlyStatisticsMonthlyQueryResult.build({
+          month,
+          totalCount,
+        }),
+      );
   }
 
   public async listAllLegalPleadingsForYear(

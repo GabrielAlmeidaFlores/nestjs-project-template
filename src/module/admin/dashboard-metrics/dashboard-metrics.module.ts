@@ -5,6 +5,7 @@ import { DashboardMetricsController } from '@module/admin/dashboard-metrics/dash
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
 import { GetCurrentYearAnalysisMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-monthly-count.use-case';
 import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
+import { GetCurrentYearLegalPleadingMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-monthly-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
 import { GetPaymentPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-payment-plan-sales-count.use-case';
@@ -24,6 +25,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     GetPaymentPlanSalesCountUseCase,
     GetCurrentYearLegalPleadingsCountUseCase,
     ListCurrentYearLegalPleadingsUseCase,
+    GetCurrentYearLegalPleadingMonthlyCountUseCase,
     GetCurrentYearAnalysesCountUseCase,
     ListCurrentYearAnalysesUseCase,
     GetCurrentYearAnalysisMonthlyCountUseCase,
