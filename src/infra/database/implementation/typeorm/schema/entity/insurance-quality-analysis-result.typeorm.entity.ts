@@ -2,9 +2,36 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
+import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 
 @Entity({ name: 'insurance_quality_analysis_result' })
 export class InsuranceQualityAnalysisResultTypeormEntity extends BaseTypeormEntity {
+  @Column({
+    name: 'client_name',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public clientName: string | null;
+
+  @Column({
+    name: 'client_federal_document',
+    type: 'varchar',
+    length: 50,
+    transformer: CryptographyTransformer,
+    nullable: true,
+  })
+  public clientFederalDocument: string | null;
+
+  @Column({
+    name: 'client_birth_date',
+    type: 'date',
+    transformer: DateOnlyTransformer,
+    nullable: true,
+  })
+  public clientBirthDate: Date | null;
+
   @Column({
     name: 'insurance_quality_conclusion',
     type: 'text',
