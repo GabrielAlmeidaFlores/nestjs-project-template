@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { DashboardMetricsController } from '@module/admin/dashboard-metrics/dashboard-metrics.controller';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
+import { GetCurrentYearAnalysisMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-monthly-count.use-case';
 import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
@@ -25,6 +26,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     ListCurrentYearLegalPleadingsUseCase,
     GetCurrentYearAnalysesCountUseCase,
     ListCurrentYearAnalysesUseCase,
+    GetCurrentYearAnalysisMonthlyCountUseCase,
     ListAllUsersUseCase,
   ],
 })
