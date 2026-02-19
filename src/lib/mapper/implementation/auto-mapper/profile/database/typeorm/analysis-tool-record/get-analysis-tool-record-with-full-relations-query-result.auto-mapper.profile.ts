@@ -2,7 +2,10 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
+import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-customer-and-organization-relations.query.result';
 import { GetAnalysisToolClientWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/result/get-analysis-tool-client-with-relations.query.result';
 import { GetAnalysisToolRecordWithFullRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-full-relations.query.result';
@@ -27,9 +30,11 @@ export class GetAnalysisToolRecordWithFullRelationsQueryResultAutoMapperProfile 
       source: AnalysisToolRecordTypeormEntity,
     ): GetAnalysisToolRecordWithFullRelationsQueryResult => {
       if (!source.createdBy || !source.updatedBy) {
-        throw new Error(
-          'Missing required relations: createdBy or updatedBy in AnalysisToolRecordTypeormEntity',
-        );
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetAnalysisToolRecordWithFullRelationsQueryResult.name,
+          sourceClass: AnalysisToolRecordTypeormEntity.name,
+        });
       }
 
       return GetAnalysisToolRecordWithFullRelationsQueryResult.build({
@@ -42,18 +47,18 @@ export class GetAnalysisToolRecordWithFullRelationsQueryResultAutoMapperProfile 
         deletedAt: source.deletedAt,
         createdBy: this.mapper.map(
           source.createdBy,
-          'OrganizationMemberTypeormEntity',
+          OrganizationMemberTypeormEntity,
           GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult,
         ),
         updatedBy: this.mapper.map(
           source.updatedBy,
-          'OrganizationMemberTypeormEntity',
+          OrganizationMemberTypeormEntity,
           GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult,
         ),
         analysisToolClient: source.analysisToolClient
           ? this.mapper.map(
               source.analysisToolClient,
-              'AnalysisToolClientTypeormEntity',
+              AnalysisToolClientTypeormEntity,
               GetAnalysisToolClientWithRelationsQueryResult,
             )
           : null,

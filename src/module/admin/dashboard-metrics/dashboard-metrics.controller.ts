@@ -1,16 +1,15 @@
 import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
-import { AnalysisItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/analysis-item.response.dto';
 import { CurrentYearAnalysesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-count.response.dto';
 import { CurrentYearLegalPleadingsCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-legal-pleadings-count.response.dto';
 import { CurrentYearRevenueResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-revenue.response.dto';
 import { CurrentYearUsersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-users-count.response.dto';
-import { LegalPleadingItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/legal-pleading-item.response.dto';
+import { ListCurrentYearAnalysesResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-current-year-analyses.response.dto';
+import { ListCurrentYearLegalPleadingsResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-current-year-legal-pleadings.response.dto';
+import { ListUsersResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-users.response.dto';
 import { PaymentPlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count.response.dto';
 import { TotalSubscribersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/total-subscribers-count.response.dto';
-import { UserItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/user-item.response.dto';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
 import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
@@ -150,13 +149,13 @@ export class DashboardMetricsController {
       statusCode: HttpStatus.OK,
       description:
         'Lista de peças processuais do ano atual obtida com sucesso.',
-      type: LegalPleadingItemResponseDto,
+      type: ListCurrentYearLegalPleadingsResponseDto,
     },
     guard: [AuthGuard],
   })
   public async listCurrentYearLegalPleadings(
     @Query() dto: ListDataRequestDto,
-  ): Promise<ListDataOutputModel<LegalPleadingItemResponseDto>> {
+  ): Promise<ListCurrentYearLegalPleadingsResponseDto> {
     return this.listCurrentYearLegalPleadingsUseCase.execute(
       new ListDataInputModel(dto),
     );
@@ -192,13 +191,13 @@ export class DashboardMetricsController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Lista de análises do ano atual obtida com sucesso.',
-      type: AnalysisItemResponseDto,
+      type: ListCurrentYearAnalysesResponseDto,
     },
     guard: [AuthGuard],
   })
   public async listCurrentYearAnalyses(
     @Query() dto: ListDataRequestDto,
-  ): Promise<ListDataOutputModel<AnalysisItemResponseDto>> {
+  ): Promise<ListCurrentYearAnalysesResponseDto> {
     return this.listCurrentYearAnalysesUseCase.execute(
       new ListDataInputModel(dto),
     );
@@ -215,13 +214,13 @@ export class DashboardMetricsController {
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Lista de usuários obtida com sucesso.',
-      type: UserItemResponseDto,
+      type: ListUsersResponseDto,
     },
     guard: [AuthGuard],
   })
   public async listAllUsers(
     @Query() dto: ListDataRequestDto,
-  ): Promise<ListDataOutputModel<UserItemResponseDto>> {
+  ): Promise<ListUsersResponseDto> {
     return this.listAllUsersUseCase.execute(new ListDataInputModel(dto));
   }
 }
