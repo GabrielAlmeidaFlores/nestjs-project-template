@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
+import { ListUsersResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-users.response.dto';
 import { UserItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/user-item.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 
@@ -18,7 +19,7 @@ export class ListAllUsersUseCase {
 
   public async execute(
     pagination: ListDataInputModel,
-  ): Promise<ListDataOutputModel<UserItemResponseDto>> {
+  ): Promise<ListUsersResponseDto> {
     const allCustomers =
       await this.customerQueryRepository.listAllCustomersWithAuthIdentity();
 
@@ -37,11 +38,20 @@ export class ListAllUsersUseCase {
         }),
     );
 
-    return new ListDataOutputModel({
+    const listDataOutput = new ListDataOutputModel({
       page: pagination.page,
       limit: pagination.limit,
       totalItems: allCustomers.length,
       resource: users,
+    });
+
+    return ListUsersResponseDto.build({
+      page: listDataOutput.page,
+      limit: listDataOutput.limit,
+      totalItems: listDataOutput.totalItems,
+      totalPages: listDataOutput.totalPages,
+      amountItemsCurrentPage: listDataOutput.amountItemsCurrentPage,
+      resource: listDataOutput.resource,
     });
   }
 }
