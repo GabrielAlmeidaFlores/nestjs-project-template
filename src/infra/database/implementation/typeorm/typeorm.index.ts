@@ -232,6 +232,8 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-inss-benefit.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-legal-proceeding.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
@@ -340,6 +342,8 @@ export class TypeormIndex {
     RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
+    RuralTimelineAnalysisCnisContributionPeriodInssBenefitTypeormEntity,
+    RuralTimelineAnalysisCnisContributionPeriodLegalProceedingTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
     InsuranceQualityAnalysisDocumentTypeormEntity,
     InsuranceQualityAnalysisResultTypeormEntity,

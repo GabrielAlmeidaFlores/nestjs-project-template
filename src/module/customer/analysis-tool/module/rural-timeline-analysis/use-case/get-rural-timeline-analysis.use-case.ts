@@ -20,6 +20,8 @@ import {
   GetRuralTimelineAnalysisDocumentResponseDto,
   RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
+  GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto,
+  GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -264,6 +266,24 @@ export class GetRuralTimelineAnalysisUseCase {
           ),
         );
 
+      const inssBenefits: GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto[] =
+        period.inssBenefits.map((benefit) =>
+          GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto.build(
+            {
+              inssBenefitNumber: benefit.inssBenefitNumber,
+            },
+          ),
+        );
+
+      const legalProceedings: GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto[] =
+        period.legalProceedings.map((proceeding) =>
+          GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto.build(
+            {
+              legalProceedingNumber: proceeding.legalProceedingNumber,
+            },
+          ),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -301,6 +321,8 @@ export class GetRuralTimelineAnalysisUseCase {
             cnisDocumentOriginalFileName,
           }),
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
+          ...(inssBenefits.length > 0 && { inssBenefits }),
+          ...(legalProceedings.length > 0 && { legalProceedings }),
         }),
       );
     }
