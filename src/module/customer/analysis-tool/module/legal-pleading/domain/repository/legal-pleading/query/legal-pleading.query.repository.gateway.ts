@@ -5,6 +5,7 @@ import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain
 import type { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
 import type { GetLegalPleadingWithFullRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-full-relations.query.result';
 import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
+import type { LegalPleadingMonthlyStatisticsMonthlyQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics-monthly.query.result';
 import type { LegalPleadingStatisticsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics.query.result';
 import type { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
 import type { LegalPleadingId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
@@ -51,6 +52,10 @@ export abstract class LegalPleadingQueryRepositoryGateway {
   ): Promise<LegalPleadingStatisticsQueryResult>;
 
   public abstract countAllLegalPleadingsForYear(year: number): Promise<number>;
+
+  public abstract countAllMonthlyLegalPleadingForYear(
+    year: number,
+  ): Promise<Array<LegalPleadingMonthlyStatisticsMonthlyQueryResult>>;
 
   public abstract listAllLegalPleadingsForYear(
     year: number,
