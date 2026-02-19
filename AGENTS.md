@@ -678,7 +678,11 @@ Query Gateways (Read)                Command Gateways (Write)
 - ✅ TypeORM Entity ↔ Domain Entity
 - ✅ Domain Entity ↔ DTO (when needed)
 - ✅ Use `constructUsing` for complex transformations
+- ✅ Explicitly map all properties (DO NOT use spread operator `...source`)
+- ✅ Use `IncompleteSourceDataForMappingError` for missing required relations
 - ❌ NO business logic in mappers
+- ❌ NO spread operator (`...source`) in mappers
+- ❌ NO generic `Error` or `throw new Error()` - use `IncompleteSourceDataForMappingError`
 
 **Example**:
 
@@ -688,8 +692,10 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { AnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis/analysis.entity';
 import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
+import { ClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/client/client.entity';
 
 @Injectable()
 export class AnalysisEntityAutoMapperProfile {
@@ -703,6 +709,21 @@ export class AnalysisEntityAutoMapperProfile {
     const convertOrmToDomain = (
       source: AnalysisTypeormEntity,
     ): AnalysisEntity => {
+      // ✅ CORRECT: Check for required relations and throw IncompleteSourceDataForMappingError
+      if (!source.client) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: AnalysisEntity.name,
+          sourceClass: AnalysisTypeormEntity.name,
+        });
+      }
+
+      const client = this.mapper.map(
+        source.client,
+        ClientTypeormEntity,
+        ClientEntity,
+      );
+
+      // ✅ CORRECT: Explicitly map each property
       return new AnalysisEntity({
         id: new AnalysisId(source.id),
         clientId: new ClientId(source.clientId),
@@ -711,6 +732,7 @@ export class AnalysisEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
+        client,
       });
     };
 
@@ -722,6 +744,44 @@ export class AnalysisEntityAutoMapperProfile {
     );
   }
 }
+```
+
+**Error Handling in AutoMapper**:
+
+```typescript
+// ❌ WRONG - Do NOT use generic Error
+if (!source.relation) {
+  throw new Error('Relation not loaded');
+}
+
+// ✅ CORRECT - Use IncompleteSourceDataForMappingError
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+
+if (!source.relation) {
+  throw new IncompleteSourceDataForMappingError({
+    destinationClass: DestinationEntity.name,
+    sourceClass: SourceTypeormEntity.name,
+  });
+}
+```
+
+**Why NO Spread Operator?**
+
+```typescript
+// ❌ WRONG - TypeORM entities have internal metadata that shouldn't be spread
+return AnalysisEntity.build({
+  ...source, // ❌ BAD: Spreads TypeORM metadata and methods
+  id: new AnalysisId(source.id),
+});
+
+// ✅ CORRECT - Explicitly map only what's needed
+return AnalysisEntity.build({
+  id: new AnalysisId(source.id),
+  name: source.name,
+  status: source.status,
+  createdAt: source.createdAt,
+  // ... all other properties explicitly
+});
 ```
 
 ---
@@ -993,10 +1053,10 @@ export class CorrectDocumentDto extends BaseBuildableDtoObject {
 @RequestDto()
 export class Base64FileRequestDto extends BaseBuildableDtoObject {
   @RequestDtoValueObjectProperty(Base64)
-  public readonly base64: Base64;  // Base64 value object
+  public readonly base64: Base64; // Base64 value object
 
   @RequestDtoStringProperty({ required: true })
-  public readonly originalFileName: string;  // Original file name
+  public readonly originalFileName: string; // Original file name
 
   protected override readonly _type = Base64FileRequestDto.name;
 }
@@ -1028,6 +1088,7 @@ export class Base64FileRequestDto extends BaseBuildableDtoObject {
 **Migration Notes:**
 
 If you find existing DTOs using `@RequestDtoFileProperty` with `FileModel[]`:
+
 1. Replace `FileModel[]` with `Base64FileRequestDto[]`
 2. Import `Base64FileRequestDto` from `@shared/api/util/dto/request/base64-file.request.dto`
 3. Remove `@RequestDtoFileProperty` decorator
