@@ -231,21 +231,21 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseD
 }
 
 @ResponseDto()
-export class GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto extends BaseBuildableDtoObject {
+export class GetRuralTimelineAnalysisInssBenefitResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public inssBenefitNumber: string;
 
   protected override readonly _type =
-    GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto.name;
+    GetRuralTimelineAnalysisInssBenefitResponseDto.name;
 }
 
 @ResponseDto()
-export class GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto extends BaseBuildableDtoObject {
+export class GetRuralTimelineAnalysisLegalProceedingResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty()
   public legalProceedingNumber: string;
 
   protected override readonly _type =
-    GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto.name;
+    GetRuralTimelineAnalysisLegalProceedingResponseDto.name;
 }
 
 @ResponseDto()
@@ -291,19 +291,6 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
     { isArray: true, required: false },
   )
   public underMinimumPeriods?: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto[];
-
-  @ResponseDtoObjectProperty(
-    () => GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto,
-    { isArray: true, required: false },
-  )
-  public inssBenefits?: GetRuralTimelineAnalysisCnisContributionPeriodInssBenefitResponseDto[];
-
-  @ResponseDtoObjectProperty(
-    () =>
-      GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto,
-    { isArray: true, required: false },
-  )
-  public legalProceedings?: GetRuralTimelineAnalysisCnisContributionPeriodLegalProceedingResponseDto[];
 
   protected override readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.name;
@@ -410,6 +397,12 @@ export class GetRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject 
     { isArray: true, required: false },
   )
   public cnisContributionPeriods?: RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
 
   @ResponseDtoObjectProperty(
     () => GetRuralTimelineAnalysisResponsibleResponseDto,

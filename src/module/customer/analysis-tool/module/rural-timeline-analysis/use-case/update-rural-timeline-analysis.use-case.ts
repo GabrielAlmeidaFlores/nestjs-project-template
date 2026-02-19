@@ -1,13 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
+import {
+  GetRuralTimelineAnalysisInssBenefitQueryResult,
+  GetRuralTimelineAnalysisLegalProceedingQueryResult,
+} from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
+import { RuralTimelineAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/command/rural-timeline-analysis-inss-benefit.command.repository.gateway';
+import { RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-legal-proceeding/command/rural-timeline-analysis-legal-proceeding.command.repository.gateway';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/rural-timeline-analysis-inss-benefit.entity';
+import { RuralTimelineAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/rural-timeline-analysis-legal-proceeding.entity';
 import { UpdateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis.request.dto';
 import { UpdateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -27,6 +36,10 @@ export class UpdateRuralTimelineAnalysisUseCase {
     private readonly ruralTimelineAnalysisQueryRepositoryGateway: RuralTimelineAnalysisQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisCommandRepositoryGateway: RuralTimelineAnalysisCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisInssBenefitCommandRepositoryGateway: RuralTimelineAnalysisInssBenefitCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway: RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -63,6 +76,15 @@ export class UpdateRuralTimelineAnalysisUseCase {
       throw new RuralTimelineAnalysisNotFoundError();
     }
 
+    const existingQueryResult =
+      await this.ruralTimelineAnalysisQueryRepositoryGateway.findOneByIdWithRelations(
+        ruralTimelineAnalysisId,
+      );
+
+    if (existingQueryResult === null) {
+      throw new RuralTimelineAnalysisNotFoundError();
+    }
+
     const updatedEntity = new RuralTimelineAnalysisEntity({
       id: ruralTimelineAnalysisId,
       analysisToolClientId: existingEntity.analysisToolClientId,
@@ -81,16 +103,92 @@ export class UpdateRuralTimelineAnalysisUseCase {
       deletedAt: existingEntity.deletedAt,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
+    const transactions: TransactionType[] = [];
+
+    if (dto.inssBenefitNumber !== undefined) {
+      const inssBenefitNumberTransactions =
+        this.updateInssBenefitNumberOnDatabase(
+          updatedEntity,
+          existingQueryResult.inssBenefits,
+          dto.inssBenefitNumber,
+        );
+
+      transactions.push(...inssBenefitNumberTransactions);
+    }
+
+    if (dto.legalProceedingNumber !== undefined) {
+      const legalProceedingNumberTransactions =
+        this.updateLegalProceedingNumberOnDatabase(
+          updatedEntity,
+          existingQueryResult.legalProceedings,
+          dto.legalProceedingNumber,
+        );
+
+      transactions.push(...legalProceedingNumberTransactions);
+    }
+
+    const ruralTimelineAnalysisTransaction =
       this.ruralTimelineAnalysisCommandRepositoryGateway.updateRuralTimeline(
         updatedEntity,
-      ),
-    );
+      );
+    transactions.push(ruralTimelineAnalysisTransaction);
 
-    await transaction.commit();
+    const executeTransactions =
+      await this.baseTransactionRepositoryGateway.execute(transactions);
+    await executeTransactions.commit();
 
     return UpdateRuralTimelineAnalysisResponseDto.build({
       ruralTimelineAnalysisId: updatedEntity.id,
     });
+  }
+
+  private updateInssBenefitNumberOnDatabase(
+    ruralTimelineAnalysis: RuralTimelineAnalysisEntity,
+    currentInssBenefits: GetRuralTimelineAnalysisInssBenefitQueryResult[],
+    newInssBenefitNumber: string[],
+  ): TransactionType[] {
+    const deleteCurrent = currentInssBenefits.map((value) => {
+      return this.ruralTimelineAnalysisInssBenefitCommandRepositoryGateway.deleteRuralTimelineAnalysisInssBenefit(
+        value.id,
+      );
+    });
+
+    const createNew = newInssBenefitNumber.map((value) => {
+      const entity = new RuralTimelineAnalysisInssBenefitEntity({
+        inssBenefitNumber: value,
+        ruralTimeline: ruralTimelineAnalysis,
+      });
+
+      return this.ruralTimelineAnalysisInssBenefitCommandRepositoryGateway.createRuralTimelineAnalysisInssBenefit(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
+  }
+
+  private updateLegalProceedingNumberOnDatabase(
+    ruralTimelineAnalysis: RuralTimelineAnalysisEntity,
+    currentLegalProceedings: GetRuralTimelineAnalysisLegalProceedingQueryResult[],
+    newLegalProceedingNumber: string[],
+  ): TransactionType[] {
+    const deleteCurrent = currentLegalProceedings.map((value) => {
+      return this.ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway.deleteRuralTimelineAnalysisLegalProceeding(
+        value.id,
+      );
+    });
+
+    const createNew = newLegalProceedingNumber.map((value) => {
+      const entity = new RuralTimelineAnalysisLegalProceedingEntity({
+        legalProceedingNumber: value,
+        ruralTimeline: ruralTimelineAnalysis,
+      });
+
+      return this.ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway.createRuralTimelineAnalysisLegalProceeding(
+        entity,
+      );
+    });
+
+    return [...deleteCurrent, ...createNew];
   }
 }
