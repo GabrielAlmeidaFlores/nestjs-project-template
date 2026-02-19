@@ -22,6 +22,7 @@
   <h2>3. Resumo da Análise</h2>
   <table>
     <tbody>
+      <tr><th>Tipo</th><td>Valor</td></tr>
       <tr><th>Tempo Potencial Válido</th><td>{{cnisAnalysis.potencialValido}}</td></tr>
       <tr><th>Tempo Restrito Válido</th><td>{{cnisAnalysis.restritoValido}}</td></tr>
       <tr><th>Carência Total (meses)</th><td>{{cnisAnalysis.carenciaTotal}}</td></tr>
@@ -210,6 +211,7 @@
   <h2>10. Tempo Total com Restrições</h2>
   <table>
     <tbody>
+      <tr><th>Tipo</th><td>Tempo Total com Restrições</td></tr>
       <tr><th>Carência Total (restrições)</th><td>{{cnisAnalysis.calculateTempoTotalComRestricoes.tempoComRestricoesResumo.carenciaTotal}}</td></tr>
       <tr><th>Tempo Total (restrições)</th><td>{{cnisAnalysis.calculateTempoTotalComRestricoes.tempoComRestricoesResumo.tempoTotalComRestricoesContribuicao.abreviado}}</td></tr>
     </tbody>
@@ -221,6 +223,7 @@
   <h2>11. Salário de Benefício e Ajuste</h2>
   <table>
     <tbody>
+      <tr><th>Tipo</th><td>Salário</td></tr>
       <tr><th>Salário SB Pós-Reforma</th><td>{{formatCurrency cnisAnalysis.salarioSBPosReforma.salarioBeneficio}}</td></tr>
       <tr><th>Salário SB Pré-Reforma</th><td>{{formatCurrency cnisAnalysis.salarioSBPreReforma.salarioBeneficio}}</td></tr>
       <tr><th>Ajuste Final (SB Pós)</th><td>{{formatCurrency cnisAnalysis.ajusteFinal.ajusteSbPos}}</td></tr>
@@ -232,6 +235,7 @@
   <h2>12. Pedágio (Regras de Transição)</h2>
   <table>
     <tbody>
+      <tr><th>Tipo</th><td>Pedágio</td></tr>
       <tr><th>Pedágio 100%</th><td>Contribuição à reforma: {{cnisAnalysis.tempoPedagio100.totalContributionAtReforma}} anos | Faltante: {{cnisAnalysis.tempoPedagio100.tempoFaltante}} | Pedágio: {{cnisAnalysis.tempoPedagio100.pedagio}} | Total necessário: {{cnisAnalysis.tempoPedagio100.tempoTotalNecessario}}</td></tr>
       <tr><th>Pedágio 50%</th><td>Contribuição à reforma: {{cnisAnalysis.tempoPedagio50.totalContributionAtReforma}} anos | Faltante: {{cnisAnalysis.tempoPedagio50.tempoFaltante}} | Pedágio: {{cnisAnalysis.tempoPedagio50.pedagio}} | Total necessário: {{cnisAnalysis.tempoPedagio50.tempoTotalNecessario}}</td></tr>
     </tbody>
@@ -249,6 +253,7 @@
     {{#if this.requirements}}
     <table class="requirements">
       <tbody>
+        <tr><th>Indicadores</th><td>Requisitos</td></tr>
         {{#each this.requirementsEntries}}
         <tr><th>{{this.key}}</th><td>{{formatValue this.value}}</td></tr>
         {{/each}}
