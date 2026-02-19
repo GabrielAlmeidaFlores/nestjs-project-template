@@ -1495,20 +1495,28 @@ export class AnalysisToolRecordTypeormQueryRepository
       },
       relations: {
         createdBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
         updatedBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
         analysisToolClient: {
           createdBy: {
-            customer: true,
+            customer: {
+              authIdentity: true,
+            },
             organization: true,
           },
           updatedBy: {
-            customer: true,
+            customer: {
+              authIdentity: true,
+            },
             organization: true,
           },
           analysisToolClientInssBenefit: true,
