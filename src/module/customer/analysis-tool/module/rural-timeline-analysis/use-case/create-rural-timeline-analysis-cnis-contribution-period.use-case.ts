@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period.request.dto';
+import { SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/sync-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { SyncRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/sync-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -22,16 +23,35 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     dto: CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto,
   ): Promise<CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto> {
+    const syncDto = this.mapToSyncDto(dto);
+
     const syncResult =
       await this.syncRuralTimelineAnalysisCnisContributionPeriodUseCase.execute(
         sessionData,
         organizationSessionDataModel,
         ruralTimelineAnalysisId,
-        dto as any,
+        syncDto,
       );
 
     return CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
       contributionPeriodId: syncResult.contributionPeriodId,
+    });
+  }
+
+  private mapToSyncDto(
+    dto: CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto,
+  ): SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto {
+    return SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto.build({
+      employmentRelationshipSource: dto.employmentRelationshipSource ?? null,
+      startDate: dto.startDate ?? null,
+      endDate: dto.endDate ?? null,
+      category: dto.category ?? null,
+      qualifyingPeriod: dto.qualifyingPeriod ?? null,
+      status: dto.status ?? null,
+      averageContributionAmount: dto.averageContributionAmount ?? null,
+      contributionAdjustmentIntent: dto.contributionAdjustmentIntent,
+      externalSupplementationIntent: dto.externalSupplementationIntent,
+      cnisDocument: dto.cnisDocument ?? null,
     });
   }
 }
