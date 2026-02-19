@@ -5,7 +5,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class CurrentYearLegalPleadingMonthCountItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoNumberProperty()
-  public totalAnalyses: number;
+  public totalLegalPleadings: number;
 
   @ResponseDtoNumberProperty()
   public month: number;
