@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { LegalPleadingItemResponseDto } from '@module/admin/dashboard-metrics/dto/response/legal-pleading-item.response.dto';
+import { ListCurrentYearLegalPleadingsResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-current-year-legal-pleadings.response.dto';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
 
@@ -17,7 +17,7 @@ export class ListCurrentYearLegalPleadingsUseCase {
 
   public async execute(
     pagination: ListDataInputModel,
-  ): Promise<ListDataOutputModel<LegalPleadingItemResponseDto>> {
+  ): Promise<ListCurrentYearLegalPleadingsResponseDto> {
     const year = new Date().getFullYear();
 
     const listParam = new ListLegalPleadingQueryParam({
@@ -44,10 +44,12 @@ export class ListCurrentYearLegalPleadingsUseCase {
       });
     });
 
-    return new ListDataOutputModel({
+    return ListCurrentYearLegalPleadingsResponseDto.build({
       page: legalPleadings.page,
       limit: legalPleadings.limit,
       totalItems: legalPleadings.totalItems,
+      totalPages: legalPleadings.totalPages,
+      amountItemsCurrentPage: legalPleadings.amountItemsCurrentPage,
       resource: items,
     });
   }

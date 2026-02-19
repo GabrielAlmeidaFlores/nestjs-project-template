@@ -115,11 +115,15 @@ export class LegalPleadingTypeormQueryRepository
         },
         legalPleadingResult: true,
         createdBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
         updatedBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
       },
@@ -495,20 +499,28 @@ export class LegalPleadingTypeormQueryRepository
           analysisToolClientInssBenefit: true,
           analysisToolClientLegalProceeding: true,
           createdBy: {
-            customer: true,
+            customer: {
+              authIdentity: true,
+            },
             organization: true,
           },
           updatedBy: {
-            customer: true,
+            customer: {
+              authIdentity: true,
+            },
             organization: true,
           },
         },
         createdBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
         updatedBy: {
-          customer: true,
+          customer: {
+            authIdentity: true,
+          },
           organization: true,
         },
         legalPleadingDocument: true,
