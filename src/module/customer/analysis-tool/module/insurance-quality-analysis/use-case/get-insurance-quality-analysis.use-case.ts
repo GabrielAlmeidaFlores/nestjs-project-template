@@ -9,6 +9,7 @@ import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/modul
 import {
   GetInsuranceQualityAnalysisDocumentResponseDto,
   GetInsuranceQualityAnalysisResponseDto,
+  GetInsuranceQualityAnalysisResultResponseDto,
 } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/get-insurance-quality-analysis.response.dto';
 import { InsuranceQualityAnalysisNotFoundError } from '@module/customer/analysis-tool/module/insurance-quality-analysis/error/insurance-quality-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -63,6 +64,19 @@ export class GetInsuranceQualityAnalysisUseCase {
     const analysisResult =
       insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisResult;
 
+    const insuranceQualityAnalysisResult = analysisResult
+      ? GetInsuranceQualityAnalysisResultResponseDto.build({
+          clientName: analysisResult.clientName ?? null,
+          clientFederalDocument: analysisResult.clientFederalDocument ?? null,
+          clientBirthDate: analysisResult.clientBirthDate ?? null,
+          insuranceQualityConclusion:
+            analysisResult.insuranceQualityConclusion ?? null,
+          gracePeriodConclusion: analysisResult.gracePeriodConclusion ?? null,
+          finalRecommendation: analysisResult.finalRecommendation ?? null,
+          analysisSummary: analysisResult.analysisSummary ?? null,
+        })
+      : null;
+
     const response = GetInsuranceQualityAnalysisResponseDto.build({
       insuranceQualityAnalysisId,
       analysisToolClientId: analysisToolRecordQueryResult.analysisToolClient.id,
@@ -89,11 +103,7 @@ export class GetInsuranceQualityAnalysisUseCase {
       analysisRuralActivityDetails:
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails ??
         null,
-      insuranceQualityConclusion:
-        analysisResult?.insuranceQualityConclusion ?? null,
-      gracePeriodConclusion: analysisResult?.gracePeriodConclusion ?? null,
-      finalRecommendation: analysisResult?.finalRecommendation ?? null,
-      analysisSummary: analysisResult?.analysisSummary ?? null,
+      insuranceQualityAnalysisResult,
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,
     });
