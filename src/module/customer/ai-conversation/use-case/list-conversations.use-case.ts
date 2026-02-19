@@ -37,7 +37,6 @@ export class ListConversationsUseCase {
         undefined,
         dto.search,
       );
-
     const filteredConversations =
       this.filterConversationsByAllowedTypes(allConversations);
 
