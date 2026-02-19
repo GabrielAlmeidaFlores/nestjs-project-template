@@ -107,7 +107,7 @@ export class UpdateRuralTimelineAnalysisPeriodDocumentUseCase {
         dto.probatoryPurpose ?? existingDocument.probatoryPurpose,
       type: dto.type ?? existingDocument.type,
       document: documentLocation,
-      analyzedAt: existingDocument.analyzedAt,
+      analyzedAt: null,
       createdAt: existingDocument.createdAt,
       updatedAt: existingDocument.updatedAt,
       deletedAt: existingDocument.deletedAt,

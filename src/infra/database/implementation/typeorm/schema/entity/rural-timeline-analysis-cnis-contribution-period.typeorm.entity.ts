@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-inss-benefit.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-legal-proceeding.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
@@ -99,6 +101,23 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   )
   public ruralTimelineCnisContributionPeriodUnderMinimum?:
     | RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineAnalysisCnisContributionPeriodInssBenefitTypeormEntity,
+    (entity) => entity.ruralTimelineCnisContributionPeriod,
+  )
+  public inssBenefits?:
+    | RuralTimelineAnalysisCnisContributionPeriodInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () =>
+      RuralTimelineAnalysisCnisContributionPeriodLegalProceedingTypeormEntity,
+    (entity) => entity.ruralTimelineCnisContributionPeriod,
+  )
+  public legalProceedings?:
+    | RuralTimelineAnalysisCnisContributionPeriodLegalProceedingTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

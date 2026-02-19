@@ -59,6 +59,8 @@ export class RuralTimelineAnalysisTypeormQueryRepository
         'ruralTimelinePeriod.ruralTimelinePeriodFamilyGroupMember',
         'ruralTimelineCnisContributionPeriod',
         'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodUnderMinimum',
+        'ruralTimelineCnisContributionPeriod.inssBenefits',
+        'ruralTimelineCnisContributionPeriod.legalProceedings',
       ],
     });
 
