@@ -184,7 +184,7 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public async getCurrentYearnLegalPleadingMonthlyCount(): Promise<CurrentYearLegalPleadingMonthCountResponseDto> {
+  public async getCurrentYearLegalPleadingMonthlyCount(): Promise<CurrentYearLegalPleadingMonthCountResponseDto> {
     return this.getCurrentYearLegalPleadingMonthlyCountUseCase.execute();
   }
 
@@ -245,7 +245,7 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public async getCurrentYearnAnalysesMonthlyCount(): Promise<CurrentYearAnalysesMonthCountResponseDto> {
+  public async getCurrentYearAnalysesMonthlyCount(): Promise<CurrentYearAnalysesMonthCountResponseDto> {
     return this.getCurrentYearAnalysisMonthlyCountUseCase.execute();
   }
 
