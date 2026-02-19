@@ -4,6 +4,8 @@ import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import * as Handlebars from 'handlebars';
 
+import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-analysis-result.model';
+
 const APOSENTADORIA_KEYS = [
   'aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido',
   'aposentadoriaPorIdadeUrbanaComDireitoAdquirido',
@@ -40,7 +42,7 @@ export class CnisFastAnalysisTemplateService {
     'cnis-fast-analysis-complete.hbs',
   );
 
-  public buildAposentadoriaItems(cnisAnalysis: Record<string, unknown>): {
+  public buildAposentadoriaItems(cnisAnalysis: CnisAnalysisResultModel): {
     type: string;
     eligibility: Record<string, unknown>;
     requirements: Record<string, unknown>;
@@ -66,8 +68,7 @@ export class CnisFastAnalysisTemplateService {
       }
 
       const type = analysis.type ?? key;
-      const eligibility =
-        (analysis.eligibility as Record<string, unknown>) ?? {};
+      const eligibility = analysis.eligibility as Record<string, unknown>;
       const requirements = analysis.requirements ?? {};
       const requirementsEntries = Object.entries(requirements).map(
         ([k, v]) => ({ key: humanKey(k), value: v }),
@@ -84,7 +85,7 @@ export class CnisFastAnalysisTemplateService {
     return items;
   }
 
-  public render(cnisAnalysis: Record<string, any>): string {
+  public render(cnisAnalysis: CnisAnalysisResultModel): string {
     const html = this.renderToHtml(cnisAnalysis);
     return html;
   }
@@ -92,7 +93,7 @@ export class CnisFastAnalysisTemplateService {
   /**
    * Renderiza o template HBS para HTML (para uso em preview/PDF sem conversão para markdown).
    */
-  public renderToHtml(cnisAnalysis: Record<string, any>): string {
+  public renderToHtml(cnisAnalysis: CnisAnalysisResultModel): string {
     const template = this.compileTemplate();
     const aposentadoriaItems = this.buildAposentadoriaItems(cnisAnalysis);
 
@@ -153,12 +154,15 @@ export class CnisFastAnalysisTemplateService {
       return Array.isArray(arr) && arr.length > 0;
     });
 
-    Handlebars.registerHelper('arrayJoin', (arr: unknown, sep: string) => {
-      if (!Array.isArray(arr)) {
-        return '';
-      }
-      return arr.join(sep ?? ', ');
-    });
+    Handlebars.registerHelper(
+      'arrayJoin',
+      (arr: unknown, sep: string | undefined) => {
+        if (!Array.isArray(arr)) {
+          return '';
+        }
+        return arr.join(sep ?? ', ');
+      },
+    );
 
     Handlebars.registerHelper('formatCurrency', (value: unknown) => {
       const n = typeof value === 'number' ? value : Number(value);
