@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -14,6 +15,7 @@ import { MedicalQuestionGeneratorCommandRepositoryGateway } from '@module/custom
 import { MedicalQuestionGeneratorResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator-result/command/medical-question-generator-result.command.repository.gateway';
 import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
+import { MedicalQuestionGeneratorDocumentTypeEnum } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-document/enum/medical-question-generator-document-type.enum';
 import { MedicalQuestionGeneratorResultEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-result/medical-question-generator-result.entity';
 import { CreateMedicalQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/medical-question-generator/dto/response/create-medical-question-generator-result.response.dto';
 import { MedicalQuestionGeneratorDocumentRequiredError } from '@module/customer/analysis-tool/module/medical-question-generator/error/medical-question-generator-document-required.error';
@@ -120,8 +122,16 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
         [...medicalQuestionGeneratorDocumentsBuffer, clientDataBuffer],
       );
 
+    const cnisData = await this.extractCnisData(
+      medicalQuestionGeneratorQueryResult.medicalQuestionGeneratorDocument,
+    );
+
     const medicalQuestionGeneratorResult =
       new MedicalQuestionGeneratorResultEntity({
+        clientName: cnisData.clientName,
+        clientFederalDocument: cnisData.clientFederalDocument,
+        clientBirthDate: cnisData.clientBirthDate,
+        clientLastAffiliationDate: cnisData.clientLastAffiliationDate,
         medicalQuestionGeneratorCompleteAnalysis:
           medicalQuestionGeneratorCompleteAnalysis,
         medicalQuestionGeneratorSimplifiedAnalysis: null,
@@ -192,5 +202,75 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
     return CreateMedicalQuestionGeneratorResultResponseDto.build({
       medicalQuestionGeneratorCompleteAnalysis,
     });
+  }
+
+  private async extractCnisData(
+    documents: Array<{
+      type: MedicalQuestionGeneratorDocumentTypeEnum;
+      document: string;
+    }>,
+  ): Promise<{
+    clientName: string | null;
+    clientFederalDocument: FederalDocument | null;
+    clientBirthDate: Date | null;
+    clientLastAffiliationDate: Date | null;
+  }> {
+    const cnisDocument = documents.find(
+      (doc) => doc.type === MedicalQuestionGeneratorDocumentTypeEnum.CNIS,
+    );
+
+    if (!cnisDocument) {
+      return {
+        clientName: null,
+        clientFederalDocument: null,
+        clientBirthDate: null,
+        clientLastAffiliationDate: null,
+      };
+    }
+
+    const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
+      cnisDocument.document,
+    );
+
+    const cnisDocumentData =
+      await this.analysisProcessorGateway.parseCnisDocument(cnisDocumentBuffer);
+
+    let clientLastAffiliationDate: Date | null = null;
+
+    cnisDocumentData.socialSecurityRelations?.forEach(
+      (socialSecurityRelation) => {
+        if (
+          socialSecurityRelation.socialSecurityAffiliationInfo.dataFim ===
+          undefined
+        ) {
+          return;
+        }
+
+        if (clientLastAffiliationDate === null) {
+          clientLastAffiliationDate =
+            socialSecurityRelation.socialSecurityAffiliationInfo.dataFim;
+          return;
+        }
+
+        if (
+          socialSecurityRelation.socialSecurityAffiliationInfo.dataFim >
+          clientLastAffiliationDate
+        ) {
+          clientLastAffiliationDate =
+            socialSecurityRelation.socialSecurityAffiliationInfo.dataFim;
+        }
+      },
+    );
+
+    return {
+      clientName: cnisDocumentData.affiliateIdentification?.nome ?? null,
+      clientFederalDocument:
+        cnisDocumentData.affiliateIdentification?.cpf !== undefined
+          ? new FederalDocument(cnisDocumentData.affiliateIdentification.cpf)
+          : null,
+      clientBirthDate:
+        cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null,
+      clientLastAffiliationDate,
+    };
   }
 }

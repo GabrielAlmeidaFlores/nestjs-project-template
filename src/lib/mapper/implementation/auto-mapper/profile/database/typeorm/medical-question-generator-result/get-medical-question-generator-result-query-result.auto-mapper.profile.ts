@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
 import { GetMedicalQuestionGeneratorResultQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator-result/query/result/get-medical-question-generator-result.query.result';
 import { MedicalQuestionGeneratorResultId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator-result/value-object/medical-question-generator-result-id/medical-question-generator-result-id.value-object';
@@ -26,6 +27,13 @@ export class GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile {
     ): GetMedicalQuestionGeneratorResultQueryResult => {
       return GetMedicalQuestionGeneratorResultQueryResult.build({
         id: new MedicalQuestionGeneratorResultId(source.id),
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
+        clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         medicalQuestionGeneratorCompleteAnalysis:
           source.medicalQuestionGeneratorCompleteAnalysis,
         medicalQuestionGeneratorSimplifiedAnalysis:
@@ -52,6 +60,13 @@ export class GetMedicalQuestionGeneratorResultQueryResultAutoMapperProfile {
     ): MedicalQuestionGeneratorResultTypeormEntity => {
       return MedicalQuestionGeneratorResultTypeormEntity.build({
         id: source.id.toString(),
+        clientName: source.clientName,
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? source.clientFederalDocument.toString()
+            : null,
+        clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         medicalQuestionGeneratorCompleteAnalysis:
           source.medicalQuestionGeneratorCompleteAnalysis,
         medicalQuestionGeneratorSimplifiedAnalysis:
