@@ -1667,6 +1667,57 @@ export class AnalysisId extends BaseValueObject<string> {
 - ✅ Immutable (readonly value)
 - ❌ NO business logic (only validation)
 
+#### ⚠️ CRITICAL: ID Value Objects Auto-Generate UUIDs
+
+**NEVER manually generate UUIDs using `crypto.randomUUID()` or similar functions.**
+
+ID value objects that extend `Guid` automatically generate a UUID when no value is provided to the constructor.
+
+**❌ WRONG - Manual UUID Generation:**
+
+```typescript
+import { randomUUID } from 'node:crypto';
+
+const entity = new AnalysisEntity({
+  id: new AnalysisId(randomUUID()), // ❌ WRONG: Manually generating UUID
+  name: 'Test',
+});
+```
+
+**✅ CORRECT - Auto-Generation:**
+
+```typescript
+const entity = new AnalysisEntity({
+  id: new AnalysisId(), // ✅ CORRECT: ID class auto-generates UUID
+  name: 'Test',
+});
+```
+
+**Why This Matters:**
+
+1. **DRY Principle**: The `Guid` class already has UUID generation logic (see `@core/domain/schema/value-object/guid/guid.value-object.ts`)
+2. **Consistency**: All UUIDs are generated using the same algorithm throughout the codebase
+3. **Simplicity**: Less code to write and maintain
+4. **Type Safety**: The ID value object handles validation automatically
+
+**How It Works:**
+
+The `Guid` class constructor accepts an optional `value` parameter:
+
+```typescript
+public constructor(value?: string) {
+  value = value ?? Guid.generate(); // Auto-generates if not provided
+  super(value);
+  // ... validation
+}
+```
+
+**When to Provide a Value:**
+
+- ✅ When mapping from database (existing ID): `new AnalysisId(source.id)`
+- ✅ When receiving from API/DTO: `new AnalysisId(dto.analysisId)`
+- ❌ When creating new entities: `new AnalysisId()` (NO parameter)
+
 ### 9. Module Registration Patterns
 
 #### Feature Module Pattern
