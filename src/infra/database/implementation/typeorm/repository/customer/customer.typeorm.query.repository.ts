@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
@@ -9,6 +9,7 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { UsersStatisticsMonthlyQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-statistics.query.result';
 import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
@@ -213,6 +214,9 @@ export class CustomerTypeormQueryRepository
     const data = await this.find({
       relations: {
         authIdentity: true,
+        organizationMember: {
+          organization: true,
+        },
       },
     });
 
@@ -223,5 +227,54 @@ export class CustomerTypeormQueryRepository
     );
 
     return mappedData;
+  }
+
+  public async countAllMonthlyUsersForYear(
+    year: number,
+  ): Promise<Array<UsersStatisticsMonthlyQueryResult>> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const users = await this.repository.find({
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const usersByMonth = new Map<number, number>();
+
+    for (const user of users) {
+      const month = user.createdAt.getMonth();
+      const currentCount = usersByMonth.get(month) ?? 0;
+      usersByMonth.set(month, currentCount + 1);
+    }
+
+    return Array.from(usersByMonth.entries())
+      .sort(([monthA], [monthB]) => monthA - monthB)
+      .map(([month, totalCount]) =>
+        UsersStatisticsMonthlyQueryResult.build({
+          month,
+          totalCount,
+        }),
+      );
   }
 }

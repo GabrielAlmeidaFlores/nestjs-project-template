@@ -8,15 +8,17 @@ import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboar
 import { GetCurrentYearLegalPleadingMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-monthly-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
+import { GetCurrentYearUsersMonthlyUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-monthly-count.use-case';
 import { GetPaymentPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-payment-plan-sales-count.use-case';
 import { GetTotalSubscribersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-total-subscribers-count.use-case';
 import { ListAllUsersUseCase } from '@module/admin/dashboard-metrics/use-case/list-all-users.use-case';
 import { ListCurrentYearAnalysesUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-analyses.use-case';
 import { ListCurrentYearLegalPleadingsUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-legal-pleadings.use-case';
+import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
 @Module({
-  imports: [AuthModule, DatabaseModule],
+  imports: [AuthModule, DatabaseModule, PaymentPlanModule],
   controllers: [DashboardMetricsController],
   providers: [
     GetTotalSubscribersCountUseCase,
@@ -30,6 +32,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     ListCurrentYearAnalysesUseCase,
     GetCurrentYearAnalysisMonthlyCountUseCase,
     ListAllUsersUseCase,
+    GetCurrentYearUsersMonthlyUseCase,
   ],
 })
 export class DashboardMetricsModule {
