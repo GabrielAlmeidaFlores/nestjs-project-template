@@ -33,9 +33,17 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile
       );
 
       return new RuralTimelineAnalysisPeriodFamilyGroupMemberEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodFamilyGroupMemberId(source.id),
+        name: source.name,
+        federalDocument: source.federalDocument,
+        kinship: source.kinship,
+        receivesRuralBenefit: source.receivesRuralBenefit,
+        benefitNumber: source.benefitNumber ?? null,
+        cnisDocument: source.cnisDocument ?? null,
         ruralTimelinePeriodId: ruralTimelinePeriod.id,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

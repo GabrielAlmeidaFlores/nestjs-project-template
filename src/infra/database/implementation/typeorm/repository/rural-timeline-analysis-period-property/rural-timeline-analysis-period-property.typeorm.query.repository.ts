@@ -30,7 +30,6 @@ export class RuralTimelineAnalysisPeriodPropertyTypeormQueryRepository
   ): Promise<RuralTimelineAnalysisPeriodPropertyEntity | null> {
     const result = await this.findOne({
       where: { id: id.toString() },
-      relations: { ruralTimelinePeriod: true },
     });
 
     if (result === null) {
