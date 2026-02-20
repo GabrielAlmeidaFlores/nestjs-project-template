@@ -69,6 +69,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
       relations: {
         ruralTimelineCnisContributionPeriodUnderMinimum: true,
         ruralTimelineCnisContributionPeriodPendingExitDate: true,
+        ruralTimelineCnisContributionPeriodOverdueContribution: true,
       },
     });
 

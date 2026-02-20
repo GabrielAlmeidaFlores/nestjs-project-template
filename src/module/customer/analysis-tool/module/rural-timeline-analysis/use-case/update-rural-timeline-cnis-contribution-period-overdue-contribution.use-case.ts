@@ -87,9 +87,6 @@ export class UpdateRuralTimelineCnisContributionPeriodOverdueContributionUseCase
           existingOverdueContribution.ruralTimelineCnisContributionPeriodId,
         overdueDate: dto.overdueDate ?? existingOverdueContribution.overdueDate,
         paymentDate: dto.paymentDate ?? existingOverdueContribution.paymentDate,
-        createdAt: existingOverdueContribution.createdAt,
-        updatedAt: new Date(),
-        deletedAt: existingOverdueContribution.deletedAt,
       });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
