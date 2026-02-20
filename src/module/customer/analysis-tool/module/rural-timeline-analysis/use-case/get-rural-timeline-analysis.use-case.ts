@@ -22,6 +22,7 @@ import {
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
   GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
   GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDto,
+  GetRuralTimelineCnisContributionPeriodDocumentResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -301,6 +302,27 @@ export class GetRuralTimelineAnalysisUseCase {
           );
       }
 
+      const documents: GetRuralTimelineCnisContributionPeriodDocumentResponseDto[] =
+        [];
+
+      for (const doc of period.ruralTimelineCnisContributionPeriodDocument ??
+        []) {
+        const url = await this.fileProcessorGateway.getFileSignedUrl(
+          doc.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+
+        documents.push(
+          GetRuralTimelineCnisContributionPeriodDocumentResponseDto.build({
+            id: doc.id.toString(),
+            type: doc.type,
+            documentUrl: url.toString(),
+            documentOriginalFileName: originalFileName,
+          }),
+        );
+      }
+
       cnisContributionPeriods.push(
         RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.build({
           ...(period.employmentRelationshipSource !== null && {
@@ -320,6 +342,9 @@ export class GetRuralTimelineAnalysisUseCase {
           }),
           contributionAdjustmentIntent: period.contributionAdjustmentIntent,
           externalSupplementationIntent: period.externalSupplementationIntent,
+          shouldConsiderPeriod: period.shouldConsiderPeriod,
+          shouldConsiderLastRemunerationAsExitDate:
+            period.shouldConsiderLastRemunerationAsExitDate,
           ...(cnisDocumentUrl !== undefined && { cnisDocumentUrl }),
           ...(cnisDocumentOriginalFileName !== undefined && {
             cnisDocumentOriginalFileName,
@@ -330,6 +355,7 @@ export class GetRuralTimelineAnalysisUseCase {
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
           ...(pendingExitDates.length > 0 && { pendingExitDates }),
           ...(overdueContributions.length > 0 && { overdueContributions }),
+          ...(documents.length > 0 && { documents }),
         }),
       );
     }

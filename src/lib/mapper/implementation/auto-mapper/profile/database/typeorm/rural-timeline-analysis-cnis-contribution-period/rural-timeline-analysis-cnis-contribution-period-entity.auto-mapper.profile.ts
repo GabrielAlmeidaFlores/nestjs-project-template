@@ -47,6 +47,9 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
             : null,
         contributionAdjustmentIntent: source.contributionAdjustmentIntent,
         externalSupplementationIntent: source.externalSupplementationIntent,
+        shouldConsiderPeriod: source.shouldConsiderPeriod,
+        shouldConsiderLastRemunerationAsExitDate:
+          source.shouldConsiderLastRemunerationAsExitDate,
         cnisDocument: source.cnisDocument ?? null,
         impactAnalysis: source.impactAnalysis ?? null,
         createdAt: source.createdAt,
@@ -83,6 +86,9 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
             : null,
           contributionAdjustmentIntent: source.contributionAdjustmentIntent,
           externalSupplementationIntent: source.externalSupplementationIntent,
+          shouldConsiderPeriod: source.shouldConsiderPeriod,
+          shouldConsiderLastRemunerationAsExitDate:
+            source.shouldConsiderLastRemunerationAsExitDate,
           cnisDocument: source.cnisDocument,
           impactAnalysis: source.impactAnalysis,
           createdAt: source.createdAt,

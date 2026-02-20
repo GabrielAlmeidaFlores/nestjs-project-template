@@ -255,6 +255,24 @@ export class GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDt
 }
 
 @ResponseDto()
+export class GetRuralTimelineCnisContributionPeriodDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public id: string;
+
+  @ResponseDtoStringProperty()
+  public type: string;
+
+  @ResponseDtoStringProperty()
+  public documentUrl: string;
+
+  @ResponseDtoStringProperty()
+  public documentOriginalFileName: string;
+
+  protected override readonly _type =
+    GetRuralTimelineCnisContributionPeriodDocumentResponseDto.name;
+}
+
+@ResponseDto()
 export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public employmentRelationshipSource?: string;
@@ -286,6 +304,12 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
   @ResponseDtoBooleanProperty()
   public externalSupplementationIntent: boolean;
 
+  @ResponseDtoBooleanProperty()
+  public shouldConsiderPeriod: boolean;
+
+  @ResponseDtoBooleanProperty()
+  public shouldConsiderLastRemunerationAsExitDate: boolean;
+
   @ResponseDtoStringProperty({ required: false })
   public cnisDocumentUrl?: string;
 
@@ -312,6 +336,12 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
     { isArray: true, required: false },
   )
   public overdueContributions?: GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () => GetRuralTimelineCnisContributionPeriodDocumentResponseDto,
+    { isArray: true, required: false },
+  )
+  public documents?: GetRuralTimelineCnisContributionPeriodDocumentResponseDto[];
 
   protected override readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.name;
