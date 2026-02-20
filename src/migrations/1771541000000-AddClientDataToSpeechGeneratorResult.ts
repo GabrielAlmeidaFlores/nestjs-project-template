@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddClientDataToSpeechGeneratorResult1771541000000 implements MigrationInterface {
   name = 'AddClientDataToSpeechGeneratorResult1771541000000';

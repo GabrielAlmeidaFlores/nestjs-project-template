@@ -362,6 +362,12 @@ export class GetRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject 
   @ResponseDtoObjectProperty(() => GetRuralTimelineAnalysisClientResponseDto)
   public analysisToolClient: GetRuralTimelineAnalysisClientResponseDto;
 
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumber?: string[];
+
+  @ResponseDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumber?: string[];
+
   @ResponseDtoObjectProperty(() => GetRuralTimelineAnalysisPeriodResponseDto, {
     isArray: true,
     required: false,
