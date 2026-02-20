@@ -1662,6 +1662,10 @@ export class AnalysisToolRecordTypeormQueryRepository
           analysisToolClientLegalProceeding: true,
         },
         speechGenerator: true,
+        ruralTimeline: {
+          ruralTimelineAnalysisInssBenefit: true,
+          ruralTimelineAnalysisLegalProceeding: true,
+        },
       };
 
     for (const key of this.getEntityRelationsKey()) {
@@ -1684,7 +1688,6 @@ export class AnalysisToolRecordTypeormQueryRepository
       'medicalQuestionGenerator',
       'disabilityAssessmentForBpcAnalysis',
       'perCapitaIncomeForBpcAnalysis',
-      'ruralTimeline',
       'insuranceQualityAnalysis',
       'audienceQuestionGenerator',
     ];
