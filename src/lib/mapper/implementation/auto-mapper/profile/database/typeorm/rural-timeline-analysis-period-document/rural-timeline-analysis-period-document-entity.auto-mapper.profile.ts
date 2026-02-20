@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { RuralTimelineAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-document.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
+import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 
@@ -26,11 +27,27 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
     const convert = (
       source: RuralTimelineAnalysisPeriodDocumentTypeormEntity,
     ): RuralTimelineAnalysisPeriodDocumentEntity => {
-      const ruralTimelinePeriod = this.mapper.map(
-        source.ruralTimelinePeriod,
-        RuralTimelineAnalysisPeriodTypeormEntity,
-        RuralTimelineAnalysisPeriodEntity,
-      );
+      let ruralTimelinePeriodId;
+
+      if (
+        source.ruralTimelinePeriod?.ruralTimeline?.analysisToolRecord
+          ?.analysisToolClient !== undefined
+      ) {
+        const ruralTimelinePeriod = this.mapper.map(
+          source.ruralTimelinePeriod,
+          RuralTimelineAnalysisPeriodTypeormEntity,
+          RuralTimelineAnalysisPeriodEntity,
+        );
+        ruralTimelinePeriodId = ruralTimelinePeriod.id;
+      } else if (source.ruralTimelinePeriod?.id) {
+        ruralTimelinePeriodId = new RuralTimelineAnalysisPeriodId(
+          source.ruralTimelinePeriod.id,
+        );
+      } else {
+        throw new Error(
+          'RuralTimelineAnalysisPeriodDocumentEntity requires ruralTimelinePeriodId',
+        );
+      }
 
       return new RuralTimelineAnalysisPeriodDocumentEntity({
         id: new RuralTimelineAnalysisPeriodDocumentId(source.id),
@@ -41,7 +58,7 @@ export class RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile {
         analyzedAt: source.analyzedAt ?? null,
         document: source.document,
         type: source.type,
-        ruralTimelinePeriodId: ruralTimelinePeriod.id,
+        ruralTimelinePeriodId,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
