@@ -51,6 +51,8 @@ export class RuralTimelineAnalysisTypeormQueryRepository
       where: { id: id.toString() },
       relations: [
         'ruralTimelineDocument',
+        'ruralTimelineAnalysisInssBenefit',
+        'ruralTimelineAnalysisLegalProceeding',
         'ruralTimelinePeriod',
         'ruralTimelinePeriod.ruralTimelinePeriodProperty',
         'ruralTimelinePeriod.ruralTimelinePeriodResidence',
