@@ -8,6 +8,7 @@ export class GetSpeechGeneratorResultQueryResult extends BaseBuildableObject {
   public readonly clientName: string | null;
   public readonly clientFederalDocument: FederalDocument | null;
   public readonly clientBirthDate: Date | null;
+  public readonly clientLastAffiliationDate: Date | null;
   public readonly speechGeneratorCompleteContent: string | null;
   public readonly speechGeneratorSimplifiedContent: string | null;
   public readonly createdAt: Date;

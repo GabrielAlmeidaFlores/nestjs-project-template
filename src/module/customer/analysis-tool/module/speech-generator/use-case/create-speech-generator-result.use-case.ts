@@ -123,6 +123,7 @@ export class CreateSpeechGeneratorResultUseCase {
     let clientName: string | null = null;
     let clientFederalDocument: FederalDocument | null = null;
     let clientBirthDate: Date | null = null;
+    let clientLastAffiliationDate: Date | null = null;
 
     const firstDocumentBuffer = documentsBuffer[0];
     if (firstDocumentBuffer !== undefined) {
@@ -139,10 +140,37 @@ export class CreateSpeechGeneratorResultUseCase {
           cnisDocumentData.affiliateIdentification?.cpf !== undefined
             ? new FederalDocument(cnisDocumentData.affiliateIdentification.cpf)
             : null;
+
+        cnisDocumentData.socialSecurityRelations?.forEach(
+          (socialSecurityRelation) => {
+            if (
+              socialSecurityRelation.socialSecurityAffiliationInfo.dataFim ===
+              undefined
+            ) {
+              return;
+            }
+
+            if (clientLastAffiliationDate === null) {
+              clientLastAffiliationDate =
+                socialSecurityRelation.socialSecurityAffiliationInfo.dataFim ??
+                null;
+              return;
+            }
+
+            if (
+              socialSecurityRelation.socialSecurityAffiliationInfo.dataFim >
+              clientLastAffiliationDate
+            ) {
+              clientLastAffiliationDate =
+                socialSecurityRelation.socialSecurityAffiliationInfo.dataFim;
+            }
+          },
+        );
       } catch {
         clientName = null;
         clientFederalDocument = null;
         clientBirthDate = null;
+        clientLastAffiliationDate = null;
       }
     }
 
@@ -160,6 +188,7 @@ export class CreateSpeechGeneratorResultUseCase {
       clientName,
       clientFederalDocument,
       clientBirthDate,
+      clientLastAffiliationDate,
       speechGeneratorCompleteContent: speechGeneratorCompleteContentMarkdown,
       speechGeneratorSimplifiedContent: null,
     });
@@ -233,6 +262,8 @@ export class CreateSpeechGeneratorResultUseCase {
       clientName: speechGeneratorResult.clientName,
       clientFederalDocument: speechGeneratorResult.clientFederalDocument,
       clientBirthDate: speechGeneratorResult.clientBirthDate,
+      clientLastAffiliationDate:
+        speechGeneratorResult.clientLastAffiliationDate,
       speechGeneratorCompleteContent: completeContentHtml,
       speechGeneratorSimplifiedContent: simplifiedContentHtml,
     });

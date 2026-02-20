@@ -94,6 +94,8 @@ export class GetSpeechGeneratorUseCase {
             .clientFederalDocument,
         clientBirthDate:
           speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate,
+        clientLastAffiliationDate:
+          speechGeneratorQueryResult.speechGeneratorResult.clientLastAffiliationDate,
         speechGeneratorCompleteContent: completeContent,
         speechGeneratorSimplifiedContent: simplifiedContent,
         createdAt: speechGeneratorQueryResult.speechGeneratorResult.createdAt,
