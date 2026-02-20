@@ -88,17 +88,34 @@ export class GetSpeechGeneratorUseCase {
           : null;
 
       speechGeneratorResultDto = GetSpeechGeneratorResultResponseDto.build({
-        clientName: speechGeneratorQueryResult.speechGeneratorResult.clientName,
-        clientFederalDocument:
-          speechGeneratorQueryResult.speechGeneratorResult
-            .clientFederalDocument,
-        clientBirthDate:
-          speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate,
-        clientLastAffiliationDate:
-          speechGeneratorQueryResult.speechGeneratorResult
-            .clientLastAffiliationDate,
-        speechGeneratorCompleteContent: completeContent,
-        speechGeneratorSimplifiedContent: simplifiedContent,
+        ...(speechGeneratorQueryResult.speechGeneratorResult.clientName !==
+          null && {
+          clientName:
+            speechGeneratorQueryResult.speechGeneratorResult.clientName,
+        }),
+        ...(speechGeneratorQueryResult.speechGeneratorResult
+          .clientFederalDocument !== null && {
+          clientFederalDocument:
+            speechGeneratorQueryResult.speechGeneratorResult
+              .clientFederalDocument,
+        }),
+        ...(speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate !==
+          null && {
+          clientBirthDate:
+            speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate,
+        }),
+        ...(speechGeneratorQueryResult.speechGeneratorResult
+          .clientLastAffiliationDate !== null && {
+          clientLastAffiliationDate:
+            speechGeneratorQueryResult.speechGeneratorResult
+              .clientLastAffiliationDate,
+        }),
+        ...(completeContent !== null && {
+          speechGeneratorCompleteContent: completeContent,
+        }),
+        ...(simplifiedContent !== null && {
+          speechGeneratorSimplifiedContent: simplifiedContent,
+        }),
         createdAt: speechGeneratorQueryResult.speechGeneratorResult.createdAt,
         updatedAt: speechGeneratorQueryResult.speechGeneratorResult.updatedAt,
       });
