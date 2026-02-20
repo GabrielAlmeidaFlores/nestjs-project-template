@@ -22,6 +22,11 @@ import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysi
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period.request.dto';
+import { CreateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-economic-aspects.request.dto';
+import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-family-group-member.request.dto';
+import { CreateRuralTimelineAnalysisPeriodPropertyRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-property.request.dto';
+import { CreateRuralTimelineAnalysisPeriodResidenceRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-residence.request.dto';
+import { CreateRuralTimelineAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
 import { GetRuralTimelineCnisAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/get-rural-timeline-cnis-analysis.request.dto';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-cnis-contribution-period-under-minimum.request.dto';
@@ -38,8 +43,20 @@ import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/custome
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/analyze-rural-timeline-analysis-period-document.response.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-cnis-contribution-period.response.dto';
+import { CreateRuralTimelineAnalysisPeriodEconomicAspectsResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period-economic-aspects.response.dto';
+import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period-family-group-member.response.dto';
+import { CreateRuralTimelineAnalysisPeriodPropertyResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period-property.response.dto';
+import { CreateRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period-residence.response.dto';
+import { CreateRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
+import { DeleteRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-economic-aspects.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-family-group-member.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodPropertyResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-property.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-residence.response.dto';
+import { DeleteRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period.response.dto';
+import { DeleteRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis.response.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis-period-document-analysis.response.dto';
 import { GenerateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis.response.dto';
 import { GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-consolidated-document-analysis.response.dto';
@@ -60,8 +77,20 @@ import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/an
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period.use-case';
+import { CreateRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-economic-aspects.use-case';
+import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-family-group-member.use-case';
+import { CreateRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-property.use-case';
+import { CreateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-residence.use-case';
+import { CreateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
+import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-economic-aspects.use-case';
+import { DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-family-group-member.use-case';
+import { DeleteRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-property.use-case';
+import { DeleteRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-residence.use-case';
+import { DeleteRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period.use-case';
+import { DeleteRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis.use-case';
 import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-complete-analysis.use-case';
 import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
@@ -98,6 +127,8 @@ export class RuralTimelineAnalysisController {
 
   public constructor(
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
+    private readonly deleteRuralTimelineAnalysisUseCase: DeleteRuralTimelineAnalysisUseCase,
+    private readonly createRuralTimelineAnalysisPeriodUseCase: CreateRuralTimelineAnalysisPeriodUseCase,
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
     private readonly getRuralTimelineCnisAnalysisUseCase: GetRuralTimelineCnisAnalysisUseCase,
     private readonly generateRuralTimelineAnalysisUseCase: GenerateRuralTimelineAnalysisUseCase,
@@ -112,6 +143,7 @@ export class RuralTimelineAnalysisController {
     private readonly listRuralTimelineAnalysisCnisContributionPeriodUseCase: ListRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly createRuralTimelineAnalysisCnisContributionPeriodUseCase: CreateRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly updateRuralTimelineAnalysisCnisContributionPeriodUseCase: UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
+    private readonly deleteRuralTimelineAnalysisCnisContributionPeriodUseCase: DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly updateRuralTimelineAnalysisUseCase: UpdateRuralTimelineAnalysisUseCase,
     private readonly updateRuralTimelineAnalysisPeriodUseCase: UpdateRuralTimelineAnalysisPeriodUseCase,
     private readonly updateRuralTimelineAnalysisDocumentUseCase: UpdateRuralTimelineAnalysisDocumentUseCase,
@@ -121,6 +153,15 @@ export class RuralTimelineAnalysisController {
     private readonly updateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase: UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
     private readonly updateRuralTimelineAnalysisPeriodResidenceUseCase: UpdateRuralTimelineAnalysisPeriodResidenceUseCase,
     private readonly updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase,
+    private readonly createRuralTimelineAnalysisPeriodPropertyUseCase: CreateRuralTimelineAnalysisPeriodPropertyUseCase,
+    private readonly createRuralTimelineAnalysisPeriodResidenceUseCase: CreateRuralTimelineAnalysisPeriodResidenceUseCase,
+    private readonly createRuralTimelineAnalysisPeriodEconomicAspectsUseCase: CreateRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
+    private readonly createRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase: CreateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodUseCase: DeleteRuralTimelineAnalysisPeriodUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodPropertyUseCase: DeleteRuralTimelineAnalysisPeriodPropertyUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodResidenceUseCase: DeleteRuralTimelineAnalysisPeriodResidenceUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase: DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
+    private readonly deleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase: DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -216,6 +257,73 @@ export class RuralTimelineAnalysisController {
       organizationSessionData,
       ruralTimelineAnalysisId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar análise de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineAnalysisRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de linha do tempo rural atualizada com sucesso.',
+      type: UpdateRuralTimelineAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Body() dto: UpdateRuralTimelineAnalysisRequestDto,
+  ): Promise<UpdateRuralTimelineAnalysisResponseDto> {
+    return await this.updateRuralTimelineAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar análise de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise de linha do tempo rural deletada com sucesso.',
+      type: DeleteRuralTimelineAnalysisResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysis(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+  ): Promise<DeleteRuralTimelineAnalysisResponseDto> {
+    return await this.deleteRuralTimelineAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
     );
   }
 
@@ -392,6 +500,47 @@ export class RuralTimelineAnalysisController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Atualizar documento da análise rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/document/:documentId',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineAnalysisDocumentRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documento da análise rural atualizado com sucesso.',
+      type: UpdateRuralTimelineAnalysisDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysisDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisDocumentId),
+    )
+    documentId: RuralTimelineAnalysisDocumentId,
+    @Body() dto: UpdateRuralTimelineAnalysisDocumentRequestDto,
+  ): Promise<UpdateRuralTimelineAnalysisDocumentResponseDto> {
+    return await this.updateRuralTimelineAnalysisDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      documentId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Listar períodos de contribuição CNIS',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -499,6 +648,203 @@ export class RuralTimelineAnalysisController {
       ruralTimelineAnalysisId,
       contributionPeriodId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar período de contribuição CNIS abaixo do mínimo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId/under-minimum/:periodUnderMinimumId',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Período de contribuição CNIS abaixo do mínimo atualizado com sucesso.',
+      type: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'contributionPeriodId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId),
+    )
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+    @Param(
+      'periodUnderMinimumId',
+      new ParseValueObjectPipe(
+        RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
+      ),
+    )
+    periodUnderMinimumId: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
+    @Body()
+    dto: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto,
+  ): Promise<UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto> {
+    return await this.updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      contributionPeriodId,
+      periodUnderMinimumId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período de contribuição CNIS deletado com sucesso.',
+      type: DeleteRuralTimelineAnalysisCnisContributionPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisCnisContributionPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'contributionPeriodId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId),
+    )
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+  ): Promise<DeleteRuralTimelineAnalysisCnisContributionPeriodResponseDto> {
+    return await this.deleteRuralTimelineAnalysisCnisContributionPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      contributionPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisPeriodRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Período de linha do tempo rural criado com sucesso.',
+      type: CreateRuralTimelineAnalysisPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineAnalysisPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Body() dto: CreateRuralTimelineAnalysisPeriodRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisPeriodResponseDto> {
+    return await this.createRuralTimelineAnalysisPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineAnalysisPeriodRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período rural atualizado com sucesso.',
+      type: UpdateRuralTimelineAnalysisPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysisPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: UpdateRuralTimelineAnalysisPeriodRequestDto,
+  ): Promise<UpdateRuralTimelineAnalysisPeriodResponseDto> {
+    return await this.updateRuralTimelineAnalysisPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Período de linha do tempo rural deletado com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
     );
   }
 
@@ -621,158 +967,6 @@ export class RuralTimelineAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Deletar documento de um período rural',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/document/:ruralTimelineAnalysisPeriodDocumentId',
-      method: RequestMethod.DELETE,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Documento deletado do período rural com sucesso.',
-      type: DeleteRuralTimelineAnalysisPeriodDocumentResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async deleteRuralTimelineAnalysisPeriodDocument(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Param(
-      'ruralTimelineAnalysisPeriodDocumentId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodDocumentId),
-    )
-    ruralTimelineAnalysisPeriodDocumentId: RuralTimelineAnalysisPeriodDocumentId,
-  ): Promise<DeleteRuralTimelineAnalysisPeriodDocumentResponseDto> {
-    return await this.deleteRuralTimelineAnalysisPeriodDocumentUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
-      ruralTimelineAnalysisPeriodDocumentId,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar análise de linha do tempo rural',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId',
-      method: RequestMethod.PATCH,
-      type: UpdateRuralTimelineAnalysisRequestDto,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise de linha do tempo rural atualizada com sucesso.',
-      type: UpdateRuralTimelineAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateRuralTimelineAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Body() dto: UpdateRuralTimelineAnalysisRequestDto,
-  ): Promise<UpdateRuralTimelineAnalysisResponseDto> {
-    return await this.updateRuralTimelineAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar período rural',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId/period/:periodId',
-      method: RequestMethod.PATCH,
-      type: UpdateRuralTimelineAnalysisPeriodRequestDto,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Período rural atualizado com sucesso.',
-      type: UpdateRuralTimelineAnalysisPeriodResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateRuralTimelineAnalysisPeriod(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
-    periodId: RuralTimelineAnalysisPeriodId,
-    @Body() dto: UpdateRuralTimelineAnalysisPeriodRequestDto,
-  ): Promise<UpdateRuralTimelineAnalysisPeriodResponseDto> {
-    return await this.updateRuralTimelineAnalysisPeriodUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
-      periodId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar documento da análise rural',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId/document/:documentId',
-      method: RequestMethod.PATCH,
-      type: UpdateRuralTimelineAnalysisDocumentRequestDto,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Documento da análise rural atualizado com sucesso.',
-      type: UpdateRuralTimelineAnalysisDocumentResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateRuralTimelineAnalysisDocument(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Param(
-      'documentId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisDocumentId),
-    )
-    documentId: RuralTimelineAnalysisDocumentId,
-    @Body() dto: UpdateRuralTimelineAnalysisDocumentRequestDto,
-  ): Promise<UpdateRuralTimelineAnalysisDocumentResponseDto> {
-    return await this.updateRuralTimelineAnalysisDocumentUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
-      documentId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
     summary: 'Atualizar documento de um período rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -817,10 +1011,86 @@ export class RuralTimelineAnalysisController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Deletar documento de um período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:ruralTimelineAnalysisPeriodId/document/:ruralTimelineAnalysisPeriodDocumentId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Documento deletado do período rural com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'ruralTimelineAnalysisPeriodDocumentId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodDocumentId),
+    )
+    ruralTimelineAnalysisPeriodDocumentId: RuralTimelineAnalysisPeriodDocumentId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodDocumentResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      ruralTimelineAnalysisPeriodDocumentId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar propriedade de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/property',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisPeriodPropertyRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Propriedade de período criada com sucesso.',
+      type: CreateRuralTimelineAnalysisPeriodPropertyResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineAnalysisPeriodProperty(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: CreateRuralTimelineAnalysisPeriodPropertyRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisPeriodPropertyResponseDto> {
+    return await this.createRuralTimelineAnalysisPeriodPropertyUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Atualizar propriedade de um período rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':ruralTimelineAnalysisId/period/:periodId/property/:propertyId',
+      path: ':ruralTimelineAnalysisId/period/:periodId/property',
       method: RequestMethod.PATCH,
       type: UpdateRuralTimelineAnalysisPeriodPropertyRequestDto,
     },
@@ -843,11 +1113,6 @@ export class RuralTimelineAnalysisController {
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
     periodId: RuralTimelineAnalysisPeriodId,
-    @Param(
-      'propertyId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodPropertyId),
-    )
-    propertyId: RuralTimelineAnalysisPeriodPropertyId,
     @Body() dto: UpdateRuralTimelineAnalysisPeriodPropertyRequestDto,
   ): Promise<UpdateRuralTimelineAnalysisPeriodPropertyResponseDto> {
     return await this.updateRuralTimelineAnalysisPeriodPropertyUseCase.execute(
@@ -855,7 +1120,202 @@ export class RuralTimelineAnalysisController {
       organizationSessionData,
       ruralTimelineAnalysisId,
       periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar propriedade de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/property/:propertyId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Propriedade de período deletada com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodPropertyResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriodProperty(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Param(
+      'propertyId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodPropertyId),
+    )
+    propertyId: RuralTimelineAnalysisPeriodPropertyId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodPropertyResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodPropertyUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
       propertyId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar residência de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/residence',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisPeriodResidenceRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Residência de período criada com sucesso.',
+      type: CreateRuralTimelineAnalysisPeriodResidenceResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineAnalysisPeriodResidence(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: CreateRuralTimelineAnalysisPeriodResidenceRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisPeriodResidenceResponseDto> {
+    return await this.createRuralTimelineAnalysisPeriodResidenceUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar residência de um período rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/residence',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineAnalysisPeriodResidenceRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Residência do período rural atualizada com sucesso.',
+      type: UpdateRuralTimelineAnalysisPeriodResidenceResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysisPeriodResidence(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: UpdateRuralTimelineAnalysisPeriodResidenceRequestDto,
+  ): Promise<UpdateRuralTimelineAnalysisPeriodResidenceResponseDto> {
+    return await this.updateRuralTimelineAnalysisPeriodResidenceUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar residência de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/residence/:residenceId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Residência de período deletada com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodResidenceResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriodResidence(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Param(
+      'residenceId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodResidenceId),
+    )
+    residenceId: RuralTimelineAnalysisPeriodResidenceId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodResidenceResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodResidenceUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      residenceId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar aspecto econômico de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Aspecto econômico de período criado com sucesso.',
+      type: CreateRuralTimelineAnalysisPeriodEconomicAspectsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineAnalysisPeriodEconomicAspects(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: CreateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
+    return await this.createRuralTimelineAnalysisPeriodEconomicAspectsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
       dto,
     );
   }
@@ -906,6 +1366,86 @@ export class RuralTimelineAnalysisController {
   }
 
   @BuildEndpointSpecification({
+    summary: 'Deletar aspecto econômico de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects/:economicAspectsId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Aspecto econômico de período deletado com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineAnalysisPeriodEconomicAspects(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Param(
+      'economicAspectsId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodEconomicAspectsId),
+    )
+    economicAspectsId: RuralTimelineAnalysisPeriodEconomicAspectsId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      economicAspectsId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Criar membro do grupo familiar de período de linha do tempo rural',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/period/:periodId/family-group-member',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisPeriodFamilyGroupMemberRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Membro do grupo familiar de período criado com sucesso.',
+      type: CreateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineAnalysisPeriodFamilyGroupMember(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
+    periodId: RuralTimelineAnalysisPeriodId,
+    @Body() dto: CreateRuralTimelineAnalysisPeriodFamilyGroupMemberRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto> {
+    return await this.createRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      periodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Atualizar membro do grupo familiar de um período rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
@@ -951,22 +1491,22 @@ export class RuralTimelineAnalysisController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar residência de um período rural',
+    summary:
+      'Deletar membro do grupo familiar de período de linha do tempo rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':ruralTimelineAnalysisId/period/:periodId/residence/:residenceId',
-      method: RequestMethod.PATCH,
-      type: UpdateRuralTimelineAnalysisPeriodResidenceRequestDto,
+      path: ':ruralTimelineAnalysisId/period/:periodId/family-group-member/:familyGroupMemberId',
+      method: RequestMethod.DELETE,
     },
     tag: ['analise-linha-tempo-rural'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Residência do período rural atualizada com sucesso.',
-      type: UpdateRuralTimelineAnalysisPeriodResidenceResponseDto,
+      description: 'Membro do grupo familiar de período deletado com sucesso.',
+      type: DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
-  public async updateRuralTimelineAnalysisPeriodResidence(
+  public async deleteRuralTimelineAnalysisPeriodFamilyGroupMember(
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
@@ -978,70 +1518,17 @@ export class RuralTimelineAnalysisController {
     @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
     periodId: RuralTimelineAnalysisPeriodId,
     @Param(
-      'residenceId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodResidenceId),
+      'familyGroupMemberId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodFamilyGroupMemberId),
     )
-    residenceId: RuralTimelineAnalysisPeriodResidenceId,
-    @Body() dto: UpdateRuralTimelineAnalysisPeriodResidenceRequestDto,
-  ): Promise<UpdateRuralTimelineAnalysisPeriodResidenceResponseDto> {
-    return await this.updateRuralTimelineAnalysisPeriodResidenceUseCase.execute(
+    familyGroupMemberId: RuralTimelineAnalysisPeriodFamilyGroupMemberId,
+  ): Promise<DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto> {
+    return await this.deleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
       periodId,
-      residenceId,
-      dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Atualizar período de contribuição CNIS abaixo do mínimo',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId/under-minimum/:periodUnderMinimumId',
-      method: RequestMethod.PATCH,
-      type: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description:
-        'Período de contribuição CNIS abaixo do mínimo atualizado com sucesso.',
-      type: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    @Param(
-      'contributionPeriodId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId),
-    )
-    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
-    @Param(
-      'periodUnderMinimumId',
-      new ParseValueObjectPipe(
-        RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
-      ),
-    )
-    periodUnderMinimumId: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId,
-    @Body()
-    dto: UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto,
-  ): Promise<UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto> {
-    return await this.updateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
-      contributionPeriodId,
-      periodUnderMinimumId,
-      dto,
+      familyGroupMemberId,
     );
   }
 }
