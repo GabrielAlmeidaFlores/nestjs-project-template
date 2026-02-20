@@ -1117,6 +1117,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const endDate = relation.socialSecurityAffiliationInfo.dataFim;
       const lastDateRemun = relation.socialSecurityAffiliationInfo.ultRemun;
       const seq = relation.socialSecurityAffiliationInfo.seq;
+      const totalContribuicao = this.calculateTotalContribuicao(
+        relation.socialSecurityAffiliationEarningsHistory,
+      );
 
       let calculatedContributionTime: TempoDeContribuicaoInterface = {
         seq: seq ?? 0,
@@ -1134,6 +1137,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao,
         },
       };
 
@@ -1147,6 +1151,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           startDate,
           endDate,
         );
+
         calculatedContributionTime = {
           seq: seq ?? 0,
           origemDoVinculo:
@@ -1163,6 +1168,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: days,
             meses: months,
             anos: years,
+            totalContribuicao,
           },
         };
       }
@@ -1192,6 +1198,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: days,
             meses: months,
             anos: years,
+            totalContribuicao,
           },
         };
       }
@@ -1316,6 +1323,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     return data.socialSecurityRelations.map((relation) => {
       const seq = relation.socialSecurityAffiliationInfo.seq ?? 1;
+      const totalContribuicao = this.calculateTotalContribuicao(
+        relation.socialSecurityAffiliationEarningsHistory,
+      );
       const indicadoresRemuneracao =
         relation.socialSecurityAffiliationEarningsHistory
           .map((item) => item.indicadores)
@@ -1376,6 +1386,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
 
       const carencia =
@@ -1392,6 +1403,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         concomitanciaDetalhe?.tipo === 'secundario'
           ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
               seq,
+              totalContribuicao,
               concomitanciaDetalhe.dataAjustada?.dataInicio ?? undefined,
               concomitanciaDetalhe.dataAjustada?.dataFim ?? undefined,
             ).dados ?? contributionTime)
@@ -1424,6 +1436,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculateConsolidatedTimeContributionAndCarenciaAjustado(
     seq: number,
+    totalContribuicao: string,
     startDate?: Date,
     endDate?: Date,
   ): TempoDeContribuicaoInterface {
@@ -1448,6 +1461,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: days,
           meses: months,
           anos: years,
+          totalContribuicao,
         },
       };
     }
@@ -1462,6 +1476,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: 0,
         meses: 0,
         anos: 0,
+        totalContribuicao: '0',
       },
     };
   }
@@ -1671,6 +1686,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: 0,
             meses: 0,
             anos: 0,
+            totalContribuicao: '0',
           };
           item.carencia = 0;
         }
@@ -2571,6 +2587,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -2588,6 +2605,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
     const totals = this.calculateTotals(data);
@@ -2765,6 +2783,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -2783,6 +2802,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
 
@@ -3599,6 +3619,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -3614,6 +3635,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
 
@@ -4198,5 +4220,67 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         projectedFulfillmentDate: finalProjectedFulfillmentDate,
       },
     };
+  }
+
+  private calculateTotalContribuicao(
+    earningsHistory: CnisSessionSocialSecurityAffiliationEarningsHistoryModel[],
+  ): string {
+    const earningsObj: { salario: number; competencia: string }[] =
+      earningsHistory.map((earning) => {
+        const dataRemuneracao = earning.competencia;
+        const rawSalario = earning.remuneracao ?? '';
+        const salario = Number(rawSalario.replace(/\./g, '').replace(',', '.'));
+
+        if (
+          dataRemuneracao instanceof Date &&
+          !isNaN(dataRemuneracao.getTime()) &&
+          salario > 0
+        ) {
+          const year = dataRemuneracao.getFullYear();
+
+          const tetoData = TetoInssData.find((t) => t.ano === year);
+
+          if (tetoData) {
+            return {
+              salario:
+                salario > tetoData.tetoInss ? tetoData.tetoInss : salario,
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
+            };
+          } else {
+            return {
+              salario,
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
+            };
+          }
+        }
+        return {
+          salario: 0,
+          competencia: '',
+        };
+      });
+
+    const earnings = earningsObj.reduce((acc, item) => {
+      const COMPETENCIA_YEAR_START = 0;
+      const COMPETENCIA_YEAR_END = 4;
+      const COMPETENCIA_MONTH_START = 5;
+      const COMPETENCIA_MONTH_END = 7;
+
+      const competenciaFormatted =
+        item.competencia.slice(COMPETENCIA_MONTH_START, COMPETENCIA_MONTH_END) +
+        '/' +
+        item.competencia.slice(COMPETENCIA_YEAR_START, COMPETENCIA_YEAR_END);
+      const fatorData = ipcaData.find(
+        (f) => f.competencia === competenciaFormatted,
+      );
+      const fatorCorrecao = fatorData ? fatorData.fatorSimplificado : 1;
+
+      const valorCorrigido = item.salario * fatorCorrecao;
+      return acc + valorCorrigido;
+    }, 0);
+
+    return earnings.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   }
 }
