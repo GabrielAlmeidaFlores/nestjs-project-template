@@ -171,6 +171,8 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormCommandRepository } fr
 import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.typeorm.query.repository';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.typeorm.query.repository';
+import { RuralTimelineAnalysisPeriodPendingExitDateTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.typeorm.command.repository';
+import { RuralTimelineAnalysisPeriodPendingExitDateTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.typeorm.query.repository';
 import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodPropertyTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.typeorm.query.repository';
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
@@ -328,6 +330,8 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } fr
 import { RuralTimelineAnalysisPeriodEconomicAspectsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/query/rural-timeline-analysis-period-economic-aspects.query.repository.gateway';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/command/rural-timeline-analysis-period-family-group-member.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/query/rural-timeline-analysis-period-family-group-member.query.repository.gateway';
+import { RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/command/rural-timeline-analysis-period-pending-exit-date.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodPendingExitDateQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/query/rural-timeline-analysis-period-pending-exit-date.query.repository.gateway';
 import { RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/command/rural-timeline-analysis-period-property.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodPropertyQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/query/rural-timeline-analysis-period-property.query.repository.gateway';
 import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
@@ -1105,6 +1109,15 @@ const classProvider: ClassProvider[] = [
       RuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryRepositoryGateway,
     useClass:
       RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormQueryRepository,
+  },
+  {
+    provide: RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway,
+    useClass:
+      RuralTimelineAnalysisPeriodPendingExitDateTypeormCommandRepository,
+  },
+  {
+    provide: RuralTimelineAnalysisPeriodPendingExitDateQueryRepositoryGateway,
+    useClass: RuralTimelineAnalysisPeriodPendingExitDateTypeormQueryRepository,
   },
   {
     provide: SpecialActivityAnalysisQueryRepositoryGateway,
