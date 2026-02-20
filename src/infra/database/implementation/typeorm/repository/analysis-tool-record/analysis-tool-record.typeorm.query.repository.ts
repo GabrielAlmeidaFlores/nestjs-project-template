@@ -1144,7 +1144,13 @@ export class AnalysisToolRecordTypeormQueryRepository
               organization: true,
             },
           },
-          ruralTimeline: true,
+          ruralTimeline: {
+            ruralTimelineAnalysisInssBenefit: true,
+            ruralTimelineAnalysisLegalProceeding: true,
+            ruralTimelinePeriod: true,
+            ruralTimelineDocument: true,
+            ruralTimelineCnisContributionPeriod: true,
+          },
           createdBy: {
             customer: true,
             organization: true,
