@@ -246,7 +246,7 @@ export class DownloadInsuranceQualityAnalysisCompleteAnalysisUseCase {
     return await this.exportDocumentGateway.downloadFileAsStreamable(
       analysisSummary,
       format,
-      `insurance-quality-analysis-${insuranceQualityAnalysisId.toString()}`,
+      'analise_completa_qualidade_segurado',
     );
   }
 
