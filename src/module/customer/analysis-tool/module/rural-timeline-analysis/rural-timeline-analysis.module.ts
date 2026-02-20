@@ -43,6 +43,7 @@ import { UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@modu
 import { UpdateRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period-property.use-case';
 import { UpdateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period-residence.use-case';
 import { UpdateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period.use-case';
+import { UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-tool-record-status-to-complete.use-case';
 import { UpdateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
@@ -101,6 +102,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteRuralTimelineAnalysisPeriodResidenceUseCase,
     DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
     DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
+    UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase,
   ],
   exports: [],
 })
