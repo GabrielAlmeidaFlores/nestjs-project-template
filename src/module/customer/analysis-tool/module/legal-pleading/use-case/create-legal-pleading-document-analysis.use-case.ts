@@ -193,7 +193,7 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
             );
 
           documentAnalysis =
-            this.cnisFastAnalysisTemplateService.render(cnisAnalyzed);
+            await this.cnisFastAnalysisTemplateService.render(cnisAnalyzed);
           documentAnalysisAsHtml = true;
         } else {
           documentAnalysis =
