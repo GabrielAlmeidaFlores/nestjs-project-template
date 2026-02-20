@@ -88,9 +88,16 @@ export class GetSpeechGeneratorUseCase {
           : null;
 
       speechGeneratorResultDto = GetSpeechGeneratorResultResponseDto.build({
-        ...speechGeneratorQueryResult.speechGeneratorResult,
+        clientName: speechGeneratorQueryResult.speechGeneratorResult.clientName,
+        clientFederalDocument:
+          speechGeneratorQueryResult.speechGeneratorResult
+            .clientFederalDocument,
+        clientBirthDate:
+          speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate,
         speechGeneratorCompleteContent: completeContent,
         speechGeneratorSimplifiedContent: simplifiedContent,
+        createdAt: speechGeneratorQueryResult.speechGeneratorResult.createdAt,
+        updatedAt: speechGeneratorQueryResult.speechGeneratorResult.updatedAt,
       });
     }
 
