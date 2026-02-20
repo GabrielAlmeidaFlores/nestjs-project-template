@@ -7,12 +7,10 @@ import { MedicalQuestionGeneratorInssBenefitTypeormEntity } from '@infra/databas
 import { MedicalQuestionGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-legal-proceeding.typeorm.entity';
 import { MedicalQuestionGeneratorResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator-result.typeorm.entity';
 import { MedicalQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-question-generator.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetMedicalQuestionGeneratorDocumentQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-document.query.result';
 import { GetMedicalQuestionGeneratorInssBenefitQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-inss-benefit.query.result';
 import { GetMedicalQuestionGeneratorLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-legal-proceeding.query.result';
 import { GetMedicalQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator-with-relations.query.result';
-import { GetMedicalQuestionGeneratorQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator/query/result/get-medical-question-generator.query.result';
 import { GetMedicalQuestionGeneratorResultQueryResult } from '@module/customer/analysis-tool/module/medical-question-generator/domain/repository/medical-question-generator-result/query/result/get-medical-question-generator-result.query.result';
 import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
 
@@ -34,17 +32,6 @@ export class GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfil
     const convertOrmEntityToQueryResult = (
       source: MedicalQuestionGeneratorTypeormEntity,
     ): GetMedicalQuestionGeneratorWithRelationsQueryResult => {
-      if (
-        !source.medicalQuestionGeneratorDocument ||
-        !source.medicalQuestionGeneratorLegalProceeding ||
-        !source.medicalQuestionGeneratorInssBenefit
-      ) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetMedicalQuestionGeneratorQueryResult.name,
-          sourceClass: MedicalQuestionGeneratorTypeormEntity.name,
-        });
-      }
-
       const medicalQuestionGeneratorResult =
         source.medicalQuestionGeneratorResult
           ? this.mapper.map(
@@ -55,19 +42,19 @@ export class GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfil
           : null;
 
       const medicalQuestionGeneratorInssBenefit = this.mapper.mapArray(
-        source.medicalQuestionGeneratorInssBenefit,
+        source.medicalQuestionGeneratorInssBenefit ?? [],
         MedicalQuestionGeneratorInssBenefitTypeormEntity,
         GetMedicalQuestionGeneratorInssBenefitQueryResult,
       );
 
       const medicalQuestionGeneratorLegalProceeding = this.mapper.mapArray(
-        source.medicalQuestionGeneratorLegalProceeding,
+        source.medicalQuestionGeneratorLegalProceeding ?? [],
         MedicalQuestionGeneratorLegalProceedingTypeormEntity,
         GetMedicalQuestionGeneratorLegalProceedingQueryResult,
       );
 
       const medicalQuestionGeneratorDocument = this.mapper.mapArray(
-        source.medicalQuestionGeneratorDocument,
+        source.medicalQuestionGeneratorDocument ?? [],
         MedicalQuestionGeneratorDocumentTypeormEntity,
         GetMedicalQuestionGeneratorDocumentQueryResult,
       );
@@ -108,32 +95,23 @@ export class GetMedicalQuestionGeneratorWithRelationsQueryResultAutoMapperProfil
             )
           : undefined;
 
-      const medicalQuestionGeneratorInssBenefit =
-        source.medicalQuestionGeneratorInssBenefit.length > 0
-          ? this.mapper.mapArray(
-              source.medicalQuestionGeneratorInssBenefit,
-              GetMedicalQuestionGeneratorInssBenefitQueryResult,
-              MedicalQuestionGeneratorInssBenefitTypeormEntity,
-            )
-          : undefined;
+      const medicalQuestionGeneratorInssBenefit = this.mapper.mapArray(
+        source.medicalQuestionGeneratorInssBenefit,
+        GetMedicalQuestionGeneratorInssBenefitQueryResult,
+        MedicalQuestionGeneratorInssBenefitTypeormEntity,
+      );
 
-      const medicalQuestionGeneratorLegalProceeding =
-        source.medicalQuestionGeneratorLegalProceeding.length > 0
-          ? this.mapper.mapArray(
-              source.medicalQuestionGeneratorLegalProceeding,
-              GetMedicalQuestionGeneratorLegalProceedingQueryResult,
-              MedicalQuestionGeneratorLegalProceedingTypeormEntity,
-            )
-          : undefined;
+      const medicalQuestionGeneratorLegalProceeding = this.mapper.mapArray(
+        source.medicalQuestionGeneratorLegalProceeding,
+        GetMedicalQuestionGeneratorLegalProceedingQueryResult,
+        MedicalQuestionGeneratorLegalProceedingTypeormEntity,
+      );
 
-      const medicalQuestionGeneratorDocument =
-        source.medicalQuestionGeneratorDocument.length > 0
-          ? this.mapper.mapArray(
-              source.medicalQuestionGeneratorDocument,
-              GetMedicalQuestionGeneratorDocumentQueryResult,
-              MedicalQuestionGeneratorDocumentTypeormEntity,
-            )
-          : undefined;
+      const medicalQuestionGeneratorDocument = this.mapper.mapArray(
+        source.medicalQuestionGeneratorDocument,
+        GetMedicalQuestionGeneratorDocumentQueryResult,
+        MedicalQuestionGeneratorDocumentTypeormEntity,
+      );
 
       return MedicalQuestionGeneratorTypeormEntity.build({
         id: source.id.toString(),
