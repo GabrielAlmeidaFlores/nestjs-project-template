@@ -64,6 +64,11 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
   )
   public readonly cnisDocument: string | null;
 
+  @Description(
+    'Análise de impacto gerada pela IA sobre o período de contribuição CNIS, considerando contribuições em atraso, datas de saída pendentes e outros fatores.',
+  )
+  public readonly impactAnalysis: string | null;
+
   protected readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodEntity.name;
 
@@ -84,5 +89,6 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
     this.contributionAdjustmentIntent = props.contributionAdjustmentIntent;
     this.externalSupplementationIntent = props.externalSupplementationIntent;
     this.cnisDocument = props.cnisDocument ?? null;
+    this.impactAnalysis = props.impactAnalysis ?? null;
   }
 }
