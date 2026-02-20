@@ -7,6 +7,10 @@ export abstract class RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositor
     props: RuralTimelineAnalysisPeriodEconomicAspectsEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisPeriodEconomicAspects(
+    props: RuralTimelineAnalysisPeriodEconomicAspectsEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisPeriodEconomicAspects(
     id: RuralTimelineAnalysisPeriodEconomicAspectsId,
   ): TransactionType;

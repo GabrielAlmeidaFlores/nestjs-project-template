@@ -206,4 +206,22 @@ export class CustomerTypeormQueryRepository
 
     return mappedData;
   }
+
+  public async listAllCustomersWithAuthIdentity(): Promise<
+    Array<GetCustomerWithAuthIdentityRelationQueryResult>
+  > {
+    const data = await this.find({
+      relations: {
+        authIdentity: true,
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      data,
+      CustomerTypeormEntity,
+      GetCustomerWithAuthIdentityRelationQueryResult,
+    );
+
+    return mappedData;
+  }
 }

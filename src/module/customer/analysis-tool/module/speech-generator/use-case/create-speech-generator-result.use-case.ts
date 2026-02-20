@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
@@ -119,6 +120,32 @@ export class CreateSpeechGeneratorResultUseCase {
     );
     const files = [...documentsBuffer, clientDataBuffer];
 
+    let clientName: string | null = null;
+    let clientFederalDocument: FederalDocument | null = null;
+    let clientBirthDate: Date | null = null;
+
+    const firstDocumentBuffer = documentsBuffer[0];
+    if (firstDocumentBuffer !== undefined) {
+      try {
+        const cnisDocumentData =
+          await this.analysisProcessorGateway.parseCnisDocument(
+            firstDocumentBuffer,
+          );
+
+        clientName = cnisDocumentData.affiliateIdentification?.nome ?? null;
+        clientBirthDate =
+          cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null;
+        clientFederalDocument =
+          cnisDocumentData.affiliateIdentification?.cpf !== undefined
+            ? new FederalDocument(cnisDocumentData.affiliateIdentification.cpf)
+            : null;
+      } catch {
+        clientName = null;
+        clientFederalDocument = null;
+        clientBirthDate = null;
+      }
+    }
+
     const speechGeneratorCompleteContentMarkdown =
       await this.analysisProcessorGateway.getSpeechGeneratorCompleteAnalysis(
         promptCompleteResponse.prompt,
@@ -130,6 +157,9 @@ export class CreateSpeechGeneratorResultUseCase {
     }
 
     const speechGeneratorResult = new SpeechGeneratorResultEntity({
+      clientName,
+      clientFederalDocument,
+      clientBirthDate,
       speechGeneratorCompleteContent: speechGeneratorCompleteContentMarkdown,
       speechGeneratorSimplifiedContent: null,
     });

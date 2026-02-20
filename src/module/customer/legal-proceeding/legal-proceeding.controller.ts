@@ -6,7 +6,6 @@ import { GetAnalysisToolClientLegalProceedingUseCaseGateway } from '@module/cust
 import { ListLegalProceedingDetailByDateRequestDto } from '@module/customer/legal-proceeding/dto/request/list-legal-proceeding-detail-by-date.request.dto';
 import { CountLegalProceedingDetailStatusResponseDto } from '@module/customer/legal-proceeding/dto/response/count-legal-proceeding-detail-status.reponse.dto';
 import { GetLegalProceedingDetailWithLawyerAndRecipientRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/get-legal-proceeding-detail-with-lawyer-and-recipient-relations.response.dto';
-import { ListLegalProceedingDetailWithRelationsResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail-with-relations.response.dto';
 import { ListLegalProceedingDetailResponseDto } from '@module/customer/legal-proceeding/dto/response/list-legal-proceeding-detail.response.dto';
 import { CountLegalProceedingDetailUseCase } from '@module/customer/legal-proceeding/use-case/count-legal-proceeding-detail.use-case';
 import { GetLegalProceedingDetailByLegalProceedingNumberUseCase } from '@module/customer/legal-proceeding/use-case/get-legal-proceeding-detail-by-legal-proceeding-number.use-case';
@@ -43,7 +42,7 @@ export class LegalProceedingController {
       statusCode: HttpStatus.OK,
       description:
         'Listar registros detalhados sobre os processos judiciais da organizacao',
-      type: ListLegalProceedingDetailWithRelationsResponseDto,
+      type: ListAnalysisToolClientLegalProceedingDetailResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })
@@ -72,7 +71,7 @@ export class LegalProceedingController {
       statusCode: HttpStatus.OK,
       description:
         'Listar registros detalhados sobre as movimentações processos judiciais da organização',
-      type: ListLegalProceedingDetailWithRelationsResponseDto,
+      type: ListLegalProceedingDetailResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
   })

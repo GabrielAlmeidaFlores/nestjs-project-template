@@ -8,6 +8,7 @@ import { ListAnalysisToolRecordRequestDto } from '@module/customer/analysis-tool
 import { ListLegalProceedingDetailWithCombinedFiltersRequestDto } from '@module/customer/analysis-tool/dto/request/list-legal-proceeding-detail-with-combined-filters.request.dto';
 import { UpdateAnalysisToolClientRequestDto } from '@module/customer/analysis-tool/dto/request/update-analysis-tool-client.request.dto';
 import { CreateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/create-analysis-tool-client.response';
+import { DeleteAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-client.response';
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { GetAnalysisToolRecordStatisticsResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-record-statistics.response.dto';
@@ -17,6 +18,7 @@ import { ListAnalysisToolRecordResponseDto } from '@module/customer/analysis-too
 import { ListCidTenResponseDto } from '@module/customer/analysis-tool/dto/response/list-cid-ten.response.dto';
 import { UpdateAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/update-analysis-tool-client.response.dto';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
+import { DeleteAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-client.use-case';
 import { DeleteAnalysisToolRecordUseCase } from '@module/customer/analysis-tool/use-case/delete-analysis-tool-record.use-case';
 import { GetAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-client.use-case';
 import { GetAnalysisToolRecordStatisticsUseCase } from '@module/customer/analysis-tool/use-case/get-analysis-tool-record-statistics.use-case';
@@ -47,6 +49,7 @@ export class AnalysisToolController {
     private readonly listAnalysisToolRecordUseCase: ListAnalysisToolRecordUseCase,
     private readonly updateAnalysisToolClientUseCase: UpdateAnalysisToolClientUseCase,
     private readonly getAnalysisToolClientUseCase: GetAnalysisToolClientUseCase,
+    private readonly deleteAnalysisToolClientUseCase: DeleteAnalysisToolClientUseCase,
     private readonly deleteAnalysisToolRecordUseCase: DeleteAnalysisToolRecordUseCase,
     private readonly listCidTenUseCase: ListCidTenUseCase,
     private readonly getAnalysisToolRecordStatisticsUseCase: GetAnalysisToolRecordStatisticsUseCase,
@@ -262,6 +265,38 @@ export class AnalysisToolController {
     return await this.getAnalysisToolClientUseCase.execute(
       organizationSessionData,
       sessionData,
+      analysisToolClientId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar cliente da análise',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analysis-tool-client/:analysisToolClientId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['cliente-da-analise'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Cliente da análise deletado com sucesso.',
+      type: DeleteAnalysisToolClientResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteAnalysisToolClient(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisToolClientId',
+      new ParseValueObjectPipe(AnalysisToolClientId),
+    )
+    analysisToolClientId: AnalysisToolClientId,
+  ): Promise<DeleteAnalysisToolClientResponseDto> {
+    return await this.deleteAnalysisToolClientUseCase.execute(
+      sessionData,
+      organizationSessionData,
       analysisToolClientId,
     );
   }

@@ -7,6 +7,7 @@ import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementati
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GetRuralTimelineAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 
@@ -23,6 +24,24 @@ export class RuralTimelineAnalysisTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async findOneById(
+    id: RuralTimelineAnalysisId,
+  ): Promise<RuralTimelineAnalysisEntity | null> {
+    const result = await this.findOne({
+      where: { id: id.toString() },
+    });
+
+    if (result === null) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      result,
+      RuralTimelineAnalysisTypeormEntity,
+      RuralTimelineAnalysisEntity,
+    );
   }
 
   public async findOneByIdWithRelations(

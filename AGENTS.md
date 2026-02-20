@@ -567,8 +567,12 @@ export class AnalysisController {
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use response decorators for OpenAPI docs
 - ✅ Separate Request and Response DTOs
+- ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
+- ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
+- ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
+- ❌ NO success booleans or generic messages in update response DTOs (return the ID instead)
 
 **Example**:
 
@@ -586,21 +590,61 @@ export class ProcessAnalysisRequestDto extends BaseBuildableDtoObject {
   protected override readonly _type = ProcessAnalysisRequestDto.name;
 }
 
-// Response DTO
+// Response DTO - CORRECT: Using value objects and enums with proper naming
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis/enum/analysis-status.enum';
+import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class ProcessAnalysisResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Value object preserved
+  public analysisId: AnalysisId; // ✅ CORRECT: Property name matches class name (camelCase)
+
+  @ResponseDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value object preserved
+  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Full name "paymentPlanId", NOT shortened "planId"
+
+  @ResponseDtoEnumProperty(AnalysisStatusEnum) // ✅ CORRECT: Enum preserved
+  public analysisStatus: AnalysisStatusEnum; // ✅ CORRECT: Property name matches enum name pattern
 
   @ResponseDtoNumberProperty()
-  public result: number;
+  public result: number; // ✅ CORRECT: Primitive for calculations
 
   protected override readonly _type = ProcessAnalysisResponseDto.name;
+}
+
+// ❌ WRONG - Converting value objects to primitives
+@ResponseDto()
+export class WrongAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisId value object
+  public id: string;
+
+  @ResponseDtoStringProperty() // ❌ WRONG: Should be AnalysisStatusEnum
+  public status: string;
+
+  protected override readonly _type = WrongAnalysisResponseDto.name;
+}
+
+// ❌ WRONG - Update response with success boolean
+@ResponseDto()
+export class WrongUpdateAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoBooleanProperty() // ❌ WRONG: Should return the ID, not success
+  public success: boolean;
+
+  protected override readonly _type = WrongUpdateAnalysisResponseDto.name;
+}
+
+// ✅ CORRECT - Update response with ID value object
+@ResponseDto()
+export class UpdateAnalysisResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(AnalysisId) // ✅ CORRECT: Returns the ID
+  public analysisId: AnalysisId;
+
+  protected override readonly _type = UpdateAnalysisResponseDto.name;
 }
 ```
 
@@ -634,7 +678,11 @@ Query Gateways (Read)                Command Gateways (Write)
 - ✅ TypeORM Entity ↔ Domain Entity
 - ✅ Domain Entity ↔ DTO (when needed)
 - ✅ Use `constructUsing` for complex transformations
+- ✅ Explicitly map all properties (DO NOT use spread operator `...source`)
+- ✅ Use `IncompleteSourceDataForMappingError` for missing required relations
 - ❌ NO business logic in mappers
+- ❌ NO spread operator (`...source`) in mappers
+- ❌ NO generic `Error` or `throw new Error()` - use `IncompleteSourceDataForMappingError`
 
 **Example**:
 
@@ -644,8 +692,10 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { AnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AnalysisEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis/analysis.entity';
 import { AnalysisId } from '@module/customer/analysis-tool/domain/schema/entity/analysis/value-object/analysis-id/analysis-id.value-object';
+import { ClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/client/client.entity';
 
 @Injectable()
 export class AnalysisEntityAutoMapperProfile {
@@ -659,6 +709,21 @@ export class AnalysisEntityAutoMapperProfile {
     const convertOrmToDomain = (
       source: AnalysisTypeormEntity,
     ): AnalysisEntity => {
+      // ✅ CORRECT: Check for required relations and throw IncompleteSourceDataForMappingError
+      if (!source.client) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: AnalysisEntity.name,
+          sourceClass: AnalysisTypeormEntity.name,
+        });
+      }
+
+      const client = this.mapper.map(
+        source.client,
+        ClientTypeormEntity,
+        ClientEntity,
+      );
+
+      // ✅ CORRECT: Explicitly map each property
       return new AnalysisEntity({
         id: new AnalysisId(source.id),
         clientId: new ClientId(source.clientId),
@@ -667,6 +732,7 @@ export class AnalysisEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
+        client,
       });
     };
 
@@ -678,6 +744,44 @@ export class AnalysisEntityAutoMapperProfile {
     );
   }
 }
+```
+
+**Error Handling in AutoMapper**:
+
+```typescript
+// ❌ WRONG - Do NOT use generic Error
+if (!source.relation) {
+  throw new Error('Relation not loaded');
+}
+
+// ✅ CORRECT - Use IncompleteSourceDataForMappingError
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+
+if (!source.relation) {
+  throw new IncompleteSourceDataForMappingError({
+    destinationClass: DestinationEntity.name,
+    sourceClass: SourceTypeormEntity.name,
+  });
+}
+```
+
+**Why NO Spread Operator?**
+
+```typescript
+// ❌ WRONG - TypeORM entities have internal metadata that shouldn't be spread
+return AnalysisEntity.build({
+  ...source, // ❌ BAD: Spreads TypeORM metadata and methods
+  id: new AnalysisId(source.id),
+});
+
+// ✅ CORRECT - Explicitly map only what's needed
+return AnalysisEntity.build({
+  id: new AnalysisId(source.id),
+  name: source.name,
+  status: source.status,
+  createdAt: source.createdAt,
+  // ... all other properties explicitly
+});
 ```
 
 ---
@@ -893,6 +997,103 @@ interface BaseDtoPropertyDecoratorPropsInterface {
 - ✅ Validation messages in Portuguese
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use `.build()` static method for instantiation
+
+#### Base64 File Upload Pattern ⚠️ CRITICAL
+
+**NEVER use `@RequestDtoFileProperty` with `FileModel` for file uploads in Request DTOs.**
+
+The codebase uses a **base64-first approach** for file uploads to ensure consistency and proper validation.
+
+**❌ WRONG - Using FileModel (Old Pattern):**
+
+```typescript
+import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
+import { FileModel } from '@shared/system/model/generic/file.model';
+
+@RequestDto()
+export class WrongDocumentDto extends BaseBuildableDtoObject {
+  @RequestDtoFileProperty({
+    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
+    required: false,
+    isArray: true,
+  })
+  public files?: FileModel[]; // ❌ WRONG: Should use Base64FileRequestDto
+
+  protected override readonly _type = WrongDocumentDto.name;
+}
+```
+
+**✅ CORRECT - Using Base64FileRequestDto (Standard Pattern):**
+
+```typescript
+import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@RequestDto()
+export class CorrectDocumentDto extends BaseBuildableDtoObject {
+  @RequestDtoEnumProperty(DocumentTypeEnum)
+  public type: DocumentTypeEnum;
+
+  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
+    required: false,
+    isArray: true,
+  })
+  public files?: Base64FileRequestDto[]; // ✅ CORRECT: Uses Base64FileRequestDto
+
+  protected override readonly _type = CorrectDocumentDto.name;
+}
+```
+
+**Base64FileRequestDto Structure:**
+
+```typescript
+// Located at: @shared/api/util/dto/request/base64-file.request.dto
+@RequestDto()
+export class Base64FileRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly base64: Base64; // Base64 value object
+
+  @RequestDtoStringProperty({ required: true })
+  public readonly originalFileName: string; // Original file name
+
+  protected override readonly _type = Base64FileRequestDto.name;
+}
+```
+
+**Usage Example:**
+
+```typescript
+// Frontend sends:
+{
+  "type": "CNIS_DOCUMENT",
+  "files": [
+    {
+      "base64": "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MK...",
+      "originalFileName": "cnis-document.pdf"
+    }
+  ]
+}
+```
+
+**Why Base64 Pattern?**
+
+1. **Consistency**: All file uploads follow the same pattern
+2. **Validation**: `Base64` value object validates base64 encoding
+3. **Security**: Controlled file types and sizes
+4. **Traceability**: Original filename preserved for debugging
+5. **API First**: Works seamlessly with REST APIs (no multipart/form-data complexity)
+
+**Migration Notes:**
+
+If you find existing DTOs using `@RequestDtoFileProperty` with `FileModel[]`:
+
+1. Replace `FileModel[]` with `Base64FileRequestDto[]`
+2. Import `Base64FileRequestDto` from `@shared/api/util/dto/request/base64-file.request.dto`
+3. Remove `@RequestDtoFileProperty` decorator
+4. Use `@RequestDtoObjectProperty(() => Base64FileRequestDto)` instead
+5. Remove unused imports: `FileModel`, `MimeTypeEnum`, `RequestDtoFileProperty`
 
 ### 4. Repository Method Naming Patterns
 
