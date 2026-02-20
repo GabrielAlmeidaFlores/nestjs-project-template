@@ -51,6 +51,9 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
       averageContributionAmount: dto.averageContributionAmount ?? null,
       contributionAdjustmentIntent: dto.contributionAdjustmentIntent,
       externalSupplementationIntent: dto.externalSupplementationIntent,
+      shouldConsiderPeriod: dto.shouldConsiderPeriod ?? null,
+      shouldConsiderLastRemunerationAsExitDate:
+        dto.shouldConsiderLastRemunerationAsExitDate ?? null,
       cnisDocument: dto.cnisDocument ?? null,
     });
   }

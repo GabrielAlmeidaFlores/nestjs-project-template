@@ -59,6 +59,9 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase {
         dto.contributionAdjustmentIntent ??
         ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
       externalSupplementationIntent: dto.externalSupplementationIntent ?? false,
+      shouldConsiderPeriod: dto.shouldConsiderPeriod ?? null,
+      shouldConsiderLastRemunerationAsExitDate:
+        dto.shouldConsiderLastRemunerationAsExitDate ?? null,
       cnisDocument: dto.cnisDocument ?? null,
     });
   }

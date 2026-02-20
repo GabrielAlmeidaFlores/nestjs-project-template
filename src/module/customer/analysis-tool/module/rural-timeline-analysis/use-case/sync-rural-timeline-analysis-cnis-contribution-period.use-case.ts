@@ -170,6 +170,9 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
       averageContributionAmount: dto.averageContributionAmount ?? null,
       contributionAdjustmentIntent: dto.contributionAdjustmentIntent,
       externalSupplementationIntent: dto.externalSupplementationIntent,
+      shouldConsiderPeriod: dto.shouldConsiderPeriod ?? true,
+      shouldConsiderLastRemunerationAsExitDate:
+        dto.shouldConsiderLastRemunerationAsExitDate ?? false,
       cnisDocument: cnisDocumentLocation,
     });
 
