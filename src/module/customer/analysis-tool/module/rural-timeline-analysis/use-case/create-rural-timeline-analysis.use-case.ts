@@ -117,7 +117,7 @@ export class CreateRuralTimelineAnalysisUseCase {
         ? dto.inssBenefitNumber.map((value) => {
             return new RuralTimelineAnalysisInssBenefitEntity({
               inssBenefitNumber: value,
-              ruralTimelineAnalysis,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
             });
           })
         : [];
@@ -127,7 +127,7 @@ export class CreateRuralTimelineAnalysisUseCase {
         ? dto.legalProceedingNumber.map((value) => {
             return new RuralTimelineAnalysisLegalProceedingEntity({
               legalProceedingNumber: value,
-              ruralTimelineAnalysis,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
             });
           })
         : [];
