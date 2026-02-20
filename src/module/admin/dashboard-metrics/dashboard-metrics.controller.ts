@@ -1,6 +1,7 @@
 import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { GetCurrentYearAnalysesCountRequestDto } from '@module/admin/dashboard-metrics/dto/request/get-current-year-analyses-count.request.dto';
 import { CurrentYearAnalysesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-count.response.dto';
 import { CurrentYearAnalysesMonthCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-monthly-count.response.dto';
 import { CurrentYearLegalPleadingMonthCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-legal-pleading-monthly-count.response.dto';
@@ -226,8 +227,10 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public async getCurrentYearAnalysesCount(): Promise<CurrentYearAnalysesCountResponseDto> {
-    return this.getCurrentYearAnalysesCountUseCase.execute();
+  public async getCurrentYearAnalysesCount(
+    @Query() dto: GetCurrentYearAnalysesCountRequestDto,
+  ): Promise<CurrentYearAnalysesCountResponseDto> {
+    return this.getCurrentYearAnalysesCountUseCase.execute(dto.type);
   }
 
   @BuildEndpointSpecification({
@@ -268,8 +271,10 @@ export class DashboardMetricsController {
     },
     guard: [AuthGuard],
   })
-  public async getCurrentYearAnalysesMonthlyCount(): Promise<CurrentYearAnalysesMonthCountResponseDto> {
-    return this.getCurrentYearAnalysisMonthlyCountUseCase.execute();
+  public async getCurrentYearAnalysesMonthlyCount(
+    @Query() dto: GetCurrentYearAnalysesCountRequestDto,
+  ): Promise<CurrentYearAnalysesMonthCountResponseDto> {
+    return this.getCurrentYearAnalysisMonthlyCountUseCase.execute(dto.type);
   }
 
   @BuildEndpointSpecification({

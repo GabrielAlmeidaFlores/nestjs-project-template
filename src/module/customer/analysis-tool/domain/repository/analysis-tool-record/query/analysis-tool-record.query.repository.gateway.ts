@@ -164,10 +164,14 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     err: ConstructorType<NotFoundError>,
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
-  public abstract countAllAnalysesForYear(year: number): Promise<number>;
+  public abstract countAllAnalysesForYear(
+    year: number,
+    type?: AnalysisToolRecordTypeEnum,
+  ): Promise<number>;
 
   public abstract countAllMonthlyAnalysesForYear(
     year: number,
+    type?: AnalysisToolRecordTypeEnum,
   ): Promise<Array<GetAnalysisToolRecordStatisticsMonthlyQueryResult>>;
 
   public abstract listAllAnalysesForYear(
