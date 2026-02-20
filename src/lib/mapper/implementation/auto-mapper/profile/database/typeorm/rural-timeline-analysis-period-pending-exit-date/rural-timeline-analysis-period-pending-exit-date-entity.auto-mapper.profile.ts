@@ -28,7 +28,7 @@ export class RuralTimelineAnalysisPeriodPendingExitDateEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
     ): RuralTimelineAnalysisPeriodPendingExitDateEntity => {
-      if (!source.ruralTimelineCnisContributionPeriod?.id) {
+      if (source.ruralTimelineCnisContributionPeriod?.id === undefined) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             RuralTimelineAnalysisPeriodPendingExitDateEntity.name,

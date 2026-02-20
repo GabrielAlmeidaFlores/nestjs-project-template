@@ -72,6 +72,7 @@ import { UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto } from '@
 import { UpdateRuralTimelineAnalysisPeriodPropertyResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-period-property.response.dto';
 import { UpdateRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-period-residence.response.dto';
 import { UpdateRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-period.response.dto';
+import { UpdateRuralTimelineAnalysisToolRecordToCompleteStatusResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-tool-record-to-complete-status.response.dto';
 import { UpdateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis.response.dto';
 import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
@@ -108,6 +109,7 @@ import { UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@modu
 import { UpdateRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period-property.use-case';
 import { UpdateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period-residence.use-case';
 import { UpdateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period.use-case';
+import { UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-tool-record-status-to-complete.use-case';
 import { UpdateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -162,6 +164,7 @@ export class RuralTimelineAnalysisController {
     private readonly deleteRuralTimelineAnalysisPeriodResidenceUseCase: DeleteRuralTimelineAnalysisPeriodResidenceUseCase,
     private readonly deleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase: DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
     private readonly deleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase: DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
+    private readonly updateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase: UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1529,6 +1532,39 @@ export class RuralTimelineAnalysisController {
       ruralTimelineAnalysisId,
       periodId,
       familyGroupMemberId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar o status da linha do tempo rural para completo',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/complete',
+      method: RequestMethod.PATCH,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Status de analysis-tool-record de linha do tempo rural atualizado com sucesso',
+      type: UpdateRuralTimelineAnalysisToolRecordToCompleteStatusResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineAnalysisToolRecordStatusToComplete(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+  ): Promise<UpdateRuralTimelineAnalysisToolRecordToCompleteStatusResponseDto> {
+    return await this.updateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
     );
   }
 }
