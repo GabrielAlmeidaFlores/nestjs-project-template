@@ -31,6 +31,11 @@ export class RuralTimelineAnalysisTypeormQueryRepository
   ): Promise<RuralTimelineAnalysisEntity | null> {
     const result = await this.findOne({
       where: { id: id.toString() },
+      relations: {
+        analysisToolRecord: {
+          analysisToolClient: true,
+        },
+      },
     });
 
     if (result === null) {

@@ -183,106 +183,108 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
     const systemInstruction = promptResponse.prompt;
 
-    const analyzedDocuments: AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto[] =
-      [];
-    const updatedDocuments: RuralTimelineAnalysisPeriodDocumentEntity[] = [];
-    const creditTransactions = [];
+    const results = await Promise.all(
+      documentsToAnalyze.map(async (documentQueryResult) => {
+        const creditTransaction =
+          await this.consumeOrganizationCreditUseCase.execute(
+            organizationSessionData.organizationId,
+            PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
+            organizationMember.id,
+          );
 
-    for (const documentQueryResult of documentsToAnalyze) {
-      const creditTransaction =
-        await this.consumeOrganizationCreditUseCase.execute(
-          organizationSessionData.organizationId,
-          PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
-          organizationMember.id,
+        const documentBuffer = await this.fileProcessorGateway.getFileBuffer(
+          documentQueryResult.document,
         );
 
-      creditTransactions.push(creditTransaction);
-
-      const documentBuffer = await this.fileProcessorGateway.getFileBuffer(
-        documentQueryResult.document,
-      );
-
-      const analysisResult =
-        await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
-          GenerateResponseInputModel.build({
-            systemInstruction,
-            prompt: periodContext,
-            promptFiles: [documentBuffer],
-            responseConfig: ResponseConfigInputModel.build({
-              responseMimeType:
-                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-              jsonSchema: {
-                type: 'object',
-                properties: {
-                  documentYear: {
-                    type: ['number', 'null'],
-                    description:
-                      'Ano de emissão ou referência do documento (número ou null)',
+        const analysisResult =
+          await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+            GenerateResponseInputModel.build({
+              systemInstruction,
+              prompt: periodContext,
+              promptFiles: [documentBuffer],
+              responseConfig: ResponseConfigInputModel.build({
+                responseMimeType:
+                  GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+                jsonSchema: {
+                  type: 'object',
+                  properties: {
+                    documentYear: {
+                      type: ['number', 'null'],
+                      description:
+                        'Ano de emissão ou referência do documento (número ou null)',
+                    },
+                    probatoryPurpose: {
+                      type: ['string', 'null'],
+                      description:
+                        'Finalidade probatória do documento (string ou null)',
+                    },
                   },
-                  probatoryPurpose: {
-                    type: ['string', 'null'],
-                    description:
-                      'Finalidade probatória do documento (string ou null)',
-                  },
+                  required: ['documentYear', 'probatoryPurpose'],
                 },
-                required: ['documentYear', 'probatoryPurpose'],
-              },
+              }),
             }),
-          }),
-        );
+          );
 
-      if (analysisResult === null) {
-        throw new DocumentAnalysisFailedError();
-      }
+        if (analysisResult === null) {
+          throw new DocumentAnalysisFailedError();
+        }
 
-      let parsedResult: {
-        documentYear: number | null;
-        probatoryPurpose: string | null;
-      };
-
-      try {
-        parsedResult = JSON.parse(analysisResult) as {
+        let parsedResult: {
           documentYear: number | null;
           probatoryPurpose: string | null;
         };
-      } catch {
-        throw new InvalidAnalysisResultError();
-      }
 
-      const updatedDocument = new RuralTimelineAnalysisPeriodDocumentEntity({
-        id: new RuralTimelineAnalysisPeriodDocumentId(
-          documentQueryResult.id.toString(),
-        ),
-        documentYear: parsedResult.documentYear,
-        documentHolderType: documentQueryResult.documentHolderType,
-        selfOwned: documentQueryResult.selfOwned,
-        probatoryPurpose: parsedResult.probatoryPurpose,
-        analyzedAt: new Date(),
-        document: documentQueryResult.document,
-        type: documentQueryResult.type,
-        ruralTimelinePeriodId: ruralTimelineAnalysisPeriodId,
-      });
+        try {
+          parsedResult = JSON.parse(analysisResult) as {
+            documentYear: number | null;
+            probatoryPurpose: string | null;
+          };
+        } catch {
+          throw new InvalidAnalysisResultError();
+        }
 
-      updatedDocuments.push(updatedDocument);
+        const updatedDocument = new RuralTimelineAnalysisPeriodDocumentEntity({
+          id: new RuralTimelineAnalysisPeriodDocumentId(
+            documentQueryResult.id.toString(),
+          ),
+          documentYear: parsedResult.documentYear,
+          documentHolderType: documentQueryResult.documentHolderType,
+          selfOwned: documentQueryResult.selfOwned,
+          probatoryPurpose: parsedResult.probatoryPurpose,
+          analyzedAt: new Date(),
+          document: documentQueryResult.document,
+          type: documentQueryResult.type,
+          ruralTimelinePeriodId: ruralTimelineAnalysisPeriodId,
+        });
 
-      analyzedDocuments.push(
-        AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto.build({
-          documentId: documentQueryResult.id.toString(),
-          ...(parsedResult.documentYear !== null && {
-            documentYear: parsedResult.documentYear,
-          }),
-          ...(documentQueryResult.documentHolderType !== null && {
-            documentHolderType: documentQueryResult.documentHolderType,
-          }),
-          ...(documentQueryResult.selfOwned !== null && {
-            selfOwned: documentQueryResult.selfOwned,
-          }),
-          ...(parsedResult.probatoryPurpose !== null && {
-            probatoryPurpose: parsedResult.probatoryPurpose,
-          }),
-        }),
-      );
-    }
+        const analyzedDocument =
+          AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto.build({
+            documentId: documentQueryResult.id.toString(),
+            ...(parsedResult.documentYear !== null && {
+              documentYear: parsedResult.documentYear,
+            }),
+            ...(documentQueryResult.documentHolderType !== null && {
+              documentHolderType: documentQueryResult.documentHolderType,
+            }),
+            ...(documentQueryResult.selfOwned !== null && {
+              selfOwned: documentQueryResult.selfOwned,
+            }),
+            ...(parsedResult.probatoryPurpose !== null && {
+              probatoryPurpose: parsedResult.probatoryPurpose,
+            }),
+          });
+
+        return {
+          creditTransaction,
+          updatedDocument,
+          analyzedDocument,
+        };
+      }),
+    );
+
+    const creditTransactions = results.map((r) => r.creditTransaction);
+    const updatedDocuments = results.map((r) => r.updatedDocument);
+    const analyzedDocuments = results.map((r) => r.analyzedDocument);
 
     const allTransactions = [
       ...creditTransactions,
