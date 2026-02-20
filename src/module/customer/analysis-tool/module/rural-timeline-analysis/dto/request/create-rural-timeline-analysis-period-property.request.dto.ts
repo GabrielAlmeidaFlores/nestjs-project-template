@@ -4,6 +4,7 @@ import { RuralTimelineAnalysisPeriodLandOwnershipTypeEnum } from '@module/custom
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
@@ -14,7 +15,7 @@ export class CreateRuralTimelineAnalysisPeriodPropertyRequestDto extends BaseBui
   @RequestDtoStringProperty({ required: false })
   public ownerName?: string;
 
-  @RequestDtoStringProperty({ required: false })
+  @RequestDtoValueObjectProperty(PostalCode, { required: false })
   public postalCode?: PostalCode;
 
   @RequestDtoEnumProperty(StateCodeEnum, { required: false })

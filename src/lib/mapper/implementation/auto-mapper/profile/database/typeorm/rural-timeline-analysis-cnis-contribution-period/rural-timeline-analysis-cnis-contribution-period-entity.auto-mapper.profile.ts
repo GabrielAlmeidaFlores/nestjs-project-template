@@ -28,17 +28,29 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
       source: RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     ): RuralTimelineAnalysisCnisContributionPeriodEntity => {
       return new RuralTimelineAnalysisCnisContributionPeriodEntity({
-        ...source,
         id: new RuralTimelineAnalysisCnisContributionPeriodId(source.id),
         ruralTimelineId:
           source.ruralTimeline?.id !== undefined
             ? new RuralTimelineAnalysisId(source.ruralTimeline.id)
             : null,
+        employmentRelationshipSource:
+          source.employmentRelationshipSource ?? null,
+        startDate: source.startDate ?? null,
+        endDate: source.endDate ?? null,
+        category: source.category ?? null,
+        qualifyingPeriod: source.qualifyingPeriod ?? null,
+        status: source.status ?? null,
         averageContributionAmount:
           source.averageContributionAmount !== null &&
           source.averageContributionAmount !== undefined
             ? new DecimalValue(source.averageContributionAmount)
             : null,
+        contributionAdjustmentIntent: source.contributionAdjustmentIntent,
+        externalSupplementationIntent: source.externalSupplementationIntent,
+        cnisDocument: source.cnisDocument ?? null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

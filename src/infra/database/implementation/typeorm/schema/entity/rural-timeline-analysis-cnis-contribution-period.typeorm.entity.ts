@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
+import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
@@ -99,6 +100,14 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   )
   public ruralTimelineCnisContributionPeriodUnderMinimum?:
     | RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
+    (entity) => entity.ruralTimelineCnisContributionPeriod,
+  )
+  public ruralTimelineCnisContributionPeriodPendingExitDate?:
+    | RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

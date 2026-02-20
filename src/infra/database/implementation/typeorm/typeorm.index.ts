@@ -240,6 +240,7 @@ import { RuralTimelineAnalysisLegalProceedingTypeormEntity } from '@infra/databa
 import { RuralTimelineAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-document.typeorm.entity';
 import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-economic-aspects.typeorm.entity';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-family-group-member.typeorm.entity';
+import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
 import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
@@ -342,6 +343,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
+    RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
     RuralTimelineAnalysisInssBenefitTypeormEntity,
     RuralTimelineAnalysisLegalProceedingTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
