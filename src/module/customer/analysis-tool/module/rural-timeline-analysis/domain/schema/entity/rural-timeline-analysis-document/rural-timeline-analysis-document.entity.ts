@@ -12,6 +12,11 @@ export class RuralTimelineAnalysisDocumentEntity extends BaseEntity<RuralTimelin
   )
   public readonly type: RuralTimelineAnalysisDocumentTypeEnum;
 
+  @Description(
+    'Tipo customizado do documento para permitir upload de documentos genéricos não listados no enum.',
+  )
+  public readonly customType: string | null;
+
   @Description('Nome do arquivo do documento CNIS enviado para análise.')
   public readonly document: string;
 
@@ -24,6 +29,7 @@ export class RuralTimelineAnalysisDocumentEntity extends BaseEntity<RuralTimelin
     super(RuralTimelineAnalysisDocumentId, props);
 
     this.type = props.type;
+    this.customType = props.customType ?? null;
     this.document = props.document;
     this.ruralTimelineId = props.ruralTimelineId;
   }

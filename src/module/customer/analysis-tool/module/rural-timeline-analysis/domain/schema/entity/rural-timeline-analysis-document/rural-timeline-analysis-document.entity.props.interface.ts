@@ -5,6 +5,7 @@ import type { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-
 
 export interface RuralTimelineAnalysisDocumentEntityPropsInterface extends BaseEntityPropsInterface<RuralTimelineAnalysisDocumentId> {
   type: RuralTimelineAnalysisDocumentTypeEnum;
+  customType?: string | null;
   document: string;
   ruralTimelineId: RuralTimelineAnalysisId;
 }

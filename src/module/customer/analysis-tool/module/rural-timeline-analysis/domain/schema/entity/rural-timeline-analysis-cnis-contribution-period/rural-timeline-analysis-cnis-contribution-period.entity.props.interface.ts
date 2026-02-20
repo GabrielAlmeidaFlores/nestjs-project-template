@@ -16,5 +16,7 @@ export interface RuralTimelineAnalysisCnisContributionPeriodEntityPropsInterface
   averageContributionAmount?: DecimalValue | null;
   contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   externalSupplementationIntent: boolean;
+  shouldConsiderPeriod: boolean;
+  shouldConsiderLastRemunerationAsEndDate: boolean;
   cnisDocument?: string | null;
 }
