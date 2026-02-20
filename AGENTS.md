@@ -600,24 +600,40 @@ export class AnalysisController {
 - ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
 - ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
 - ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
+- ✅ **CRITICAL: Value Objects in Request DTOs MUST use `@RequestDtoValueObjectProperty(ValueObjectClass)` decorator, NEVER `@RequestDtoStringProperty` or `@RequestDtoNumberProperty`**
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
 - ❌ NO success booleans or generic messages in update response DTOs (return the ID instead)
+- ❌ NO `@RequestDtoStringProperty` or `@RequestDtoNumberProperty` for Value Object properties (use `@RequestDtoValueObjectProperty` instead)
 
 **Example**:
 
 ```typescript
-// Request DTO
+// Request DTO - CORRECT: Using Value Objects
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
 export class ProcessAnalysisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public analysisId: string;
+  @RequestDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value Object uses dedicated decorator
+  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Type is Value Object, not primitive
+
+  @RequestDtoStringProperty() // ✅ CORRECT: Primitive string uses string decorator
+  public description: string;
 
   protected override readonly _type = ProcessAnalysisRequestDto.name;
+}
+
+// ❌ WRONG - Request DTO with incorrect decorator for Value Object
+@RequestDto()
+export class WrongProcessAnalysisRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoStringProperty() // ❌ WRONG: Should use @RequestDtoValueObjectProperty
+  public paymentPlanId: string; // ❌ WRONG: Should be PaymentPlanId value object
+
+  protected override readonly _type = WrongProcessAnalysisRequestDto.name;
 }
 
 // Response DTO - CORRECT: Using value objects and enums with proper naming
