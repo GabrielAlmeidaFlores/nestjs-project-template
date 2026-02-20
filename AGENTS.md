@@ -600,24 +600,40 @@ export class AnalysisController {
 - ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
 - ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
 - ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
+- ✅ **CRITICAL: Value Objects in Request DTOs MUST use `@RequestDtoValueObjectProperty(ValueObjectClass)` decorator, NEVER `@RequestDtoStringProperty` or `@RequestDtoNumberProperty`**
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
 - ❌ NO success booleans or generic messages in update response DTOs (return the ID instead)
+- ❌ NO `@RequestDtoStringProperty` or `@RequestDtoNumberProperty` for Value Object properties (use `@RequestDtoValueObjectProperty` instead)
 
 **Example**:
 
 ```typescript
-// Request DTO
+// Request DTO - CORRECT: Using Value Objects
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
+import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
+import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @RequestDto()
 export class ProcessAnalysisRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty()
-  public analysisId: string;
+  @RequestDtoValueObjectProperty(PaymentPlanId) // ✅ CORRECT: Value Object uses dedicated decorator
+  public paymentPlanId: PaymentPlanId; // ✅ CORRECT: Type is Value Object, not primitive
+
+  @RequestDtoStringProperty() // ✅ CORRECT: Primitive string uses string decorator
+  public description: string;
 
   protected override readonly _type = ProcessAnalysisRequestDto.name;
+}
+
+// ❌ WRONG - Request DTO with incorrect decorator for Value Object
+@RequestDto()
+export class WrongProcessAnalysisRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoStringProperty() // ❌ WRONG: Should use @RequestDtoValueObjectProperty
+  public paymentPlanId: string; // ❌ WRONG: Should be PaymentPlanId value object
+
+  protected override readonly _type = WrongProcessAnalysisRequestDto.name;
 }
 
 // Response DTO - CORRECT: Using value objects and enums with proper naming
@@ -1650,6 +1666,57 @@ export class AnalysisId extends BaseValueObject<string> {
 - ✅ Throw specific error on invalid input
 - ✅ Immutable (readonly value)
 - ❌ NO business logic (only validation)
+
+#### ⚠️ CRITICAL: ID Value Objects Auto-Generate UUIDs
+
+**NEVER manually generate UUIDs using `crypto.randomUUID()` or similar functions.**
+
+ID value objects that extend `Guid` automatically generate a UUID when no value is provided to the constructor.
+
+**❌ WRONG - Manual UUID Generation:**
+
+```typescript
+import { randomUUID } from 'node:crypto';
+
+const entity = new AnalysisEntity({
+  id: new AnalysisId(randomUUID()), // ❌ WRONG: Manually generating UUID
+  name: 'Test',
+});
+```
+
+**✅ CORRECT - Auto-Generation:**
+
+```typescript
+const entity = new AnalysisEntity({
+  id: new AnalysisId(), // ✅ CORRECT: ID class auto-generates UUID
+  name: 'Test',
+});
+```
+
+**Why This Matters:**
+
+1. **DRY Principle**: The `Guid` class already has UUID generation logic (see `@core/domain/schema/value-object/guid/guid.value-object.ts`)
+2. **Consistency**: All UUIDs are generated using the same algorithm throughout the codebase
+3. **Simplicity**: Less code to write and maintain
+4. **Type Safety**: The ID value object handles validation automatically
+
+**How It Works:**
+
+The `Guid` class constructor accepts an optional `value` parameter:
+
+```typescript
+public constructor(value?: string) {
+  value = value ?? Guid.generate(); // Auto-generates if not provided
+  super(value);
+  // ... validation
+}
+```
+
+**When to Provide a Value:**
+
+- ✅ When mapping from database (existing ID): `new AnalysisId(source.id)`
+- ✅ When receiving from API/DTO: `new AnalysisId(dto.analysisId)`
+- ❌ When creating new entities: `new AnalysisId()` (NO parameter)
 
 ### 9. Module Registration Patterns
 

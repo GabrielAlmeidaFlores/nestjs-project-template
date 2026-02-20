@@ -5,9 +5,11 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
+import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import {
   GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult,
+  GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
@@ -89,6 +91,20 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
                 underMin,
                 RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
                 GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult,
+              ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) =>
+          destination.ruralTimelineCnisContributionPeriodPendingExitDate,
+        mapFrom((source) =>
+          (source.ruralTimelineCnisContributionPeriodPendingExitDate ?? []).map(
+            (pendingExit) =>
+              mapper.map(
+                pendingExit,
+                RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
+                GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult,
               ),
           ),
         ),
