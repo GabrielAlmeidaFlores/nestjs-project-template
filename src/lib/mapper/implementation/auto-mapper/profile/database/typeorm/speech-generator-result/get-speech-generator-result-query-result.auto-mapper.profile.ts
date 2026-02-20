@@ -33,6 +33,7 @@ export class GetSpeechGeneratorResultQueryResultAutoMapperProfile {
             ? new FederalDocument(source.clientFederalDocument)
             : null,
         clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         speechGeneratorCompleteContent: source.speechGeneratorCompleteContent,
         speechGeneratorSimplifiedContent:
           source.speechGeneratorSimplifiedContent,
@@ -64,6 +65,7 @@ export class GetSpeechGeneratorResultQueryResultAutoMapperProfile {
             ? source.clientFederalDocument.toString()
             : null,
         clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         speechGeneratorCompleteContent: source.speechGeneratorCompleteContent,
         speechGeneratorSimplifiedContent:
           source.speechGeneratorSimplifiedContent,
