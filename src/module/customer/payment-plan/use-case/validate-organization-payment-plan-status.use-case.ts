@@ -115,27 +115,33 @@ export class ValidateOrganizationPaymentPlanStatusUseCase implements ValidateOrg
     const cycleValue = organizationPaymentPlan.cycle as string;
 
     if (cycleValue === (PaymentPlanCycleEnum.MONTHLY_RECURRING as string)) {
-      return this.validateMonthlyRecurring(
+      const response = this.validateMonthlyRecurring(
         organizationPaymentPlan,
         bankPayments,
         enabledPaidResources,
       );
+      response.paymentPlanCycle = organizationPaymentPlan.cycle;
+      return response;
     }
 
     if (cycleValue === (PaymentPlanCycleEnum.MONTHLY as string)) {
-      return this.validateMonthly(
+      const response = this.validateMonthly(
         organizationPaymentPlan,
         bankPayments,
         enabledPaidResources,
       );
+      response.paymentPlanCycle = organizationPaymentPlan.cycle;
+      return response;
     }
 
     if (cycleValue === (PaymentPlanCycleEnum.YEARLY as string)) {
-      return this.validateYearly(
+      const response = this.validateYearly(
         organizationPaymentPlan,
         bankPayments,
         enabledPaidResources,
       );
+      response.paymentPlanCycle = organizationPaymentPlan.cycle;
+      return response;
     }
 
     throw new OrganizationPaymentPlanNotFoundError();

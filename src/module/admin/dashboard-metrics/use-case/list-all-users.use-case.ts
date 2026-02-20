@@ -28,6 +28,9 @@ interface CachedOrganizationDataInterface {
   paymentPlanPrice:
     | ValidateOrganizationPaymentPlanStatusResponseDto['planPrice']
     | null;
+  paymentPlanCycle:
+    | ValidateOrganizationPaymentPlanStatusResponseDto['paymentPlanCycle']
+    | null;
   subscriptionStatus: DashboardSubscriptionStatusEnum;
 }
 
@@ -84,6 +87,7 @@ export class ListAllUsersUseCase {
           organizationName: organizationData.organizationName,
           paymentPlanName: organizationData.paymentPlanName,
           paymentPlanPrice: organizationData.paymentPlanPrice,
+          paymentPlanCycle: organizationData.paymentPlanCycle,
           subscriptionStatus: organizationData.subscriptionStatus,
         }),
       );
@@ -155,6 +159,7 @@ export class ListAllUsersUseCase {
         organizationName: null,
         paymentPlanName: null,
         paymentPlanPrice: null,
+        paymentPlanCycle: null,
         subscriptionStatus: DashboardSubscriptionStatusEnum.INACTIVE,
       };
     }
@@ -189,6 +194,7 @@ export class ListAllUsersUseCase {
       organizationName: organization?.name ?? null,
       paymentPlanName: statusData?.planName ?? null,
       paymentPlanPrice: statusData?.planPrice ?? null,
+      paymentPlanCycle: statusData?.paymentPlanCycle ?? null,
       subscriptionStatus:
         statusData?.isActive === true
           ? DashboardSubscriptionStatusEnum.ACTIVE
