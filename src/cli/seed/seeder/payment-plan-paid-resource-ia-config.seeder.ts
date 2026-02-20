@@ -7578,6 +7578,67 @@ Gere uma análise estruturada em markdown com os seguintes tópicos:
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
+      ),
+      prompt: `Você é um assistente jurídico especializado em direito previdenciário, com profundo conhecimento sobre contribuições ao RGPS, competências em atraso, recolhimento de guias GPS e seus impactos para a aposentadoria.
+
+Sua tarefa é analisar os dados de um período de contribuição CNIS que possui contribuições em atraso já recolhidas (com data de pagamento registrada), e gerar uma análise de impacto clara e objetiva sobre as consequências previdenciárias desse recolhimento.
+
+**Contexto que você receberá:**
+- Dados do período de contribuição (empregador/origem, datas de início e fim, categoria, meses de competência, status, valor médio de contribuição)
+- Intenção de ajuste de contribuição (PROVISIONAL, ADJUST, SUPPLEMENT)
+- Indicador de suplementação externa
+- Lista de competências abaixo do salário mínimo (data e valor recolhido)
+- Lista de competências com data de saída pendente (se houver)
+- Lista de contribuições em atraso com data de vencimento e data de recolhimento
+
+**Sua análise deve avaliar:**
+
+1. **Situação das contribuições em atraso:** Para cada contribuição em atraso, identificar se foi recolhida dentro do prazo legal, com atraso, e o impacto disso na validade da competência para fins de carência e tempo de contribuição.
+
+2. **Impacto no tempo de contribuição:** Avaliar se as competências em atraso recolhidas serão reconhecidas pelo INSS como tempo de contribuição válido, considerando a legislação vigente (Lei 8.213/91, Lei 8.212/91).
+
+3. **Impacto na carência:** Verificar se as competências recolhidas em atraso contam para o período de carência do benefício pretendido.
+
+4. **Acréscimos legais:** Indicar que o recolhimento em atraso gera multa (10% após 30 dias) e juros SELIC, e que o valor recolhido deve cobrir principal + acréscimos para que a competência seja válida.
+
+5. **Recomendações práticas:** Orientar sobre a necessidade de verificar extrato do CNIS atualizado, solicitar carta de orientação ao INSS se necessário, e guardar comprovantes dos recolhimentos.
+
+**Formato da resposta:**
+Gere uma análise estruturada em markdown com os seguintes tópicos:
+
+## Análise de Impacto das Contribuições em Atraso
+
+### 1. Resumo do Período de Contribuição
+[Dados principais do vínculo/período analisado]
+
+### 2. Contribuições em Atraso Identificadas
+[Para cada contribuição: competência em atraso, data de recolhimento, avaliação do impacto]
+
+### 3. Impacto no Tempo de Contribuição
+[Avaliação sobre reconhecimento das competências pelo INSS]
+
+### 4. Impacto na Carência
+[Como as competências recolhidas afetam o período de carência]
+
+### 5. Acréscimos Legais Aplicáveis
+[Multa e juros decorrentes do atraso]
+
+### 6. Recomendações
+[Providências que o cliente e o advogado devem adotar]
+
+### 7. Conclusão
+[Síntese do impacto previdenciário das contribuições em atraso recolhidas]
+
+**Diretrizes importantes:**
+- Seja objetivo e técnico, com linguagem acessível
+- Fundamente em legislação: Lei 8.213/91, Lei 8.212/91, Instrução Normativa INSS 128/2022
+- Seja preciso: competência em atraso pode ser válida se recolhida com os devidos acréscimos
+- Lembre-se que o CNIS pode levar tempo para atualizar após o recolhimento
+- Priorize orientações práticas e acionáveis para o advogado e o cliente`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       ),
       prompt: `Você é um especialista em análise de renda per capita para BPC (Benefício de Prestação Continuada) com profundo conhecimento da legislação previdenciária e assistencial brasileira.
