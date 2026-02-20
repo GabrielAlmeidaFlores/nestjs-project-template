@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import { Injectable } from '@nestjs/common';
@@ -8,28 +8,6 @@ import { CnisAnalysisResultModel } from '@lib/cnis-analyzer/model/generic/cnis-a
 
 import type { ConsolidadoRelacaoInterface } from '@lib/cnis-analyzer/interface/consolidado-relation.interface';
 import type { DataInterface } from '@lib/cnis-analyzer/interface/data-interface';
-
-const APOSENTADORIA_KEYS = [
-  'aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido',
-  'aposentadoriaPorIdadeUrbanaComDireitoAdquirido',
-  'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15',
-  'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16',
-  'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17',
-  'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20',
-  'aposentadoriaPorIdadeHibridaComDireitoAdquirido',
-  'aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18',
-  'aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18',
-  'aposentadoriaProgramadaComumPrevistaNoArt19',
-] as const;
-
-function humanKey(key: string): string {
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, (s) => s.toUpperCase())
-    .trim();
-}
-
-const PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
 
 @Injectable()
 export class CnisFastAnalysisTemplateService {
@@ -42,6 +20,24 @@ export class CnisFastAnalysisTemplateService {
     'cnis-fast-analysis',
     'cnis-fast-analysis-complete.hbs',
   );
+
+  private compiledTemplate: Handlebars.TemplateDelegate | null = null;
+  private helpersRegistered = false;
+
+  private readonly APOSENTADORIA_KEYS = [
+    'aposentadoriaPorTempoDeContribuicaoComDireitoAdquirido',
+    'aposentadoriaPorIdadeUrbanaComDireitoAdquirido',
+    'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoArt15',
+    'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt16',
+    'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt17',
+    'aposentadoriaPorTempoDeContribuicaoComBaseNaRegraDeTransicaoDoArt20',
+    'aposentadoriaPorIdadeHibridaComDireitoAdquirido',
+    'aposentadoriaPorIdadeUrbanaPrevistaNaRegraDeTransicaoDoArt18',
+    'aposentadoriaPorIdadeHibridaPrevistaNaRegraDeTransicaoDoArt18',
+    'aposentadoriaProgramadaComumPrevistaNoArt19',
+  ] as const;
+
+  private readonly PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
 
   public buildAposentadoriaItems(cnisAnalysis: CnisAnalysisResultModel): {
     type: string;
@@ -56,7 +52,7 @@ export class CnisFastAnalysisTemplateService {
       requirementsEntries: { key: string; value: unknown }[];
     }[] = [];
 
-    for (const key of APOSENTADORIA_KEYS) {
+    for (const key of this.APOSENTADORIA_KEYS) {
       const analysis = cnisAnalysis[key] as
         | {
             type?: string;
@@ -72,7 +68,7 @@ export class CnisFastAnalysisTemplateService {
       const eligibility = analysis.eligibility as Record<string, unknown>;
       const requirements = analysis.requirements ?? {};
       const requirementsEntries = Object.entries(requirements).map(
-        ([k, v]) => ({ key: humanKey(k), value: v }),
+        ([k, v]) => ({ key: this.humanKey(k), value: v }),
       );
 
       items.push({
@@ -86,16 +82,15 @@ export class CnisFastAnalysisTemplateService {
     return items;
   }
 
-  public render(cnisAnalysis: CnisAnalysisResultModel): string {
-    const html = this.renderToHtml(cnisAnalysis);
+  public async render(cnisAnalysis: CnisAnalysisResultModel): Promise<string> {
+    const html = await this.renderToHtml(cnisAnalysis);
     return html;
   }
 
-  /**
-   * Renderiza o template HBS para HTML (para uso em preview/PDF sem conversão para markdown).
-   */
-  public renderToHtml(cnisAnalysis: CnisAnalysisResultModel): string {
-    const template = this.compileTemplate();
+  public async renderToHtml(
+    cnisAnalysis: CnisAnalysisResultModel,
+  ): Promise<string> {
+    const template = await this.getOrCompileTemplate();
     const aposentadoriaItems = this.buildAposentadoriaItems(cnisAnalysis);
     const consolidacaoTempoCarencia =
       this.buildConsolidacaoTempoCarencia(cnisAnalysis);
@@ -139,6 +134,13 @@ export class CnisFastAnalysisTemplateService {
     return template(context);
   }
 
+  private humanKey(key: string): string {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (s) => s.toUpperCase())
+      .trim();
+  }
+
   private buildConsolidacaoTempoCarencia(
     cnisAnalysis: CnisAnalysisResultModel,
   ): {
@@ -151,14 +153,14 @@ export class CnisFastAnalysisTemplateService {
       c.tipo !== 'secundario';
     const semPendencia = (c: ConsolidadoRelacaoInterface): boolean =>
       !c.isPendencia;
-    const carenciaSemPendencias = (cnisAnalysis.consolidadoResumido ?? [])
+    const carenciaSemPendencias = cnisAnalysis.consolidadoResumido
       .filter((c) => principal(c) && semPendencia(c))
       .reduce((acc, c) => acc + (c.carencia ?? 0), 0);
     return {
       tempoSemPendencias: cnisAnalysis.potencialValido,
       tempoComPendencias: cnisAnalysis.restritoValido,
       carenciaSemPendencias,
-      carenciaComPendencias: cnisAnalysis.carenciaTotal ?? 0,
+      carenciaComPendencias: cnisAnalysis.carenciaTotal,
     };
   }
 
@@ -173,7 +175,7 @@ export class CnisFastAnalysisTemplateService {
     analise: string;
     tempoValidoSoma: string;
   }[] {
-    const list = (cnisAnalysis.consolidadoResumido ?? []).filter(
+    const list = cnisAnalysis.consolidadoResumido.filter(
       (c) => c.isConcomitante,
     );
     const formatRange = (d: DataInterface | null | undefined): string => {
@@ -243,7 +245,9 @@ export class CnisFastAnalysisTemplateService {
     const sorted = [...correcaoMonetaria].sort(
       (a, b) => a.valorCorrigido - b.valorCorrigido,
     );
-    const take = Math.ceil(sorted.length * PERCENTUAL_MENORES_CONTRIBUICOES);
+    const take = Math.ceil(
+      sorted.length * this.PERCENTUAL_MENORES_CONTRIBUICOES,
+    );
     return sorted.slice(0, take).map((item, i) => ({
       ordem: i + 1,
       competencia: item.competencia ?? '—',
@@ -307,14 +311,26 @@ export class CnisFastAnalysisTemplateService {
       .map((c) => ({ seq: c.seq, origem: c.origem ?? null }));
   }
 
-  private compileTemplate(): Handlebars.TemplateDelegate {
+  private async getOrCompileTemplate(): Promise<Handlebars.TemplateDelegate> {
+    if (this.compiledTemplate) {
+      return this.compiledTemplate;
+    }
+
     this.registerHelpers();
-    const source = fs.readFileSync(this.templatePath, 'utf-8');
-    return Handlebars.compile(source);
+
+    try {
+      const source = await fs.readFile(this.templatePath, 'utf-8');
+      this.compiledTemplate = Handlebars.compile(source);
+      return this.compiledTemplate;
+    } catch (error) {
+      throw new Error(
+        `Falha ao ler ou compilar template em ${this.templatePath}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 
   private registerHelpers(): void {
-    if (Handlebars.helpers['formatDate']) {
+    if (this.helpersRegistered) {
       return;
     }
 
@@ -388,5 +404,7 @@ export class CnisFastAnalysisTemplateService {
         return String(haystack).includes(String(needle));
       },
     );
+
+    this.helpersRegistered = true;
   }
 }

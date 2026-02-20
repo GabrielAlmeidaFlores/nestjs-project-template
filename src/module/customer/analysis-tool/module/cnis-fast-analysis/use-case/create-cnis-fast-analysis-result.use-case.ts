@@ -126,7 +126,7 @@ export class CreateCnisFastAnalysisResultUseCase {
       );
 
     const cnisCompleteAnalysis =
-      this.cnisFastAnalysisTemplateService.render(cnisAnalyzerResponse);
+      await this.cnisFastAnalysisTemplateService.render(cnisAnalyzerResponse);
 
     let clientLastAffiliationDate: Date | null = null;
 
