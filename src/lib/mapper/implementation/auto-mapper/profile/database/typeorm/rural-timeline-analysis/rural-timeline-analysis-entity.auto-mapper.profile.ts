@@ -33,11 +33,20 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
       }
 
       return new RuralTimelineAnalysisEntity({
-        ...source,
         id: new RuralTimelineAnalysisId(source.id),
         analysisToolClientId: new AnalysisToolClientId(
           source.analysisToolRecord.analysisToolClient.id,
         ),
+        workRegime: source.workRegime,
+        ruralTimelineCompleteAnalysis:
+          source.ruralTimelineCompleteAnalysis ?? null,
+        ruralTimelineSimplifiedAnalysis:
+          source.ruralTimelineSimplifiedAnalysis ?? null,
+        ruralTimelinePeriodDocumentAnalysis:
+          source.ruralTimelinePeriodDocumentAnalysis ?? null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -56,8 +65,21 @@ export class RuralTimelineAnalysisEntityAutoMapperProfile {
       source: RuralTimelineAnalysisEntity,
     ): RuralTimelineAnalysisTypeormEntity => {
       return RuralTimelineAnalysisTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        workRegime: source.workRegime,
+        ruralTimelineCompleteAnalysis: source.ruralTimelineCompleteAnalysis,
+        ruralTimelineSimplifiedAnalysis: source.ruralTimelineSimplifiedAnalysis,
+        ruralTimelinePeriodDocumentAnalysis:
+          source.ruralTimelinePeriodDocumentAnalysis,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+        analysisToolRecord: undefined,
+        ruralTimelineDocument: undefined,
+        ruralTimelinePeriod: undefined,
+        ruralTimelineCnisContributionPeriod: undefined,
+        ruralTimelineAnalysisInssBenefit: undefined,
+        ruralTimelineAnalysisLegalProceeding: undefined,
       });
     };
 
