@@ -61,6 +61,8 @@ export class RuralTimelineAnalysisTypeormQueryRepository
         'ruralTimelinePeriod.ruralTimelinePeriodFamilyGroupMember',
         'ruralTimelineCnisContributionPeriod',
         'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodUnderMinimum',
+        'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodPendingExitDate',
+        'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodOverdueContribution',
       ],
     });
 
