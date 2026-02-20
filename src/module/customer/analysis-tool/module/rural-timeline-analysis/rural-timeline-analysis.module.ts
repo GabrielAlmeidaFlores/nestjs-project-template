@@ -11,8 +11,20 @@ import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/an
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period.use-case';
+import { CreateRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-economic-aspects.use-case';
+import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-family-group-member.use-case';
+import { CreateRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-property.use-case';
+import { CreateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-residence.use-case';
+import { CreateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
+import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-economic-aspects.use-case';
+import { DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-family-group-member.use-case';
+import { DeleteRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-property.use-case';
+import { DeleteRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-residence.use-case';
+import { DeleteRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period.use-case';
+import { DeleteRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis.use-case';
 import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-complete-analysis.use-case';
 import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
@@ -53,6 +65,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   controllers: [RuralTimelineAnalysisController],
   providers: [
     CreateRuralTimelineAnalysisUseCase,
+    DeleteRuralTimelineAnalysisUseCase,
+    CreateRuralTimelineAnalysisPeriodUseCase,
     GetRuralTimelineAnalysisUseCase,
     GetRuralTimelineCnisAnalysisUseCase,
     GenerateRuralTimelineAnalysisUseCase,
@@ -68,6 +82,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralTimelineAnalysisCnisContributionPeriodUseCase,
     SyncRuralTimelineAnalysisCnisContributionPeriodUseCase,
     UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
+    DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase,
     UpdateRuralTimelineAnalysisUseCase,
     UpdateRuralTimelineAnalysisPeriodUseCase,
     UpdateRuralTimelineAnalysisDocumentUseCase,
@@ -77,6 +92,15 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
     UpdateRuralTimelineAnalysisPeriodResidenceUseCase,
     UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase,
+    CreateRuralTimelineAnalysisPeriodPropertyUseCase,
+    CreateRuralTimelineAnalysisPeriodResidenceUseCase,
+    CreateRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
+    CreateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
+    DeleteRuralTimelineAnalysisPeriodUseCase,
+    DeleteRuralTimelineAnalysisPeriodPropertyUseCase,
+    DeleteRuralTimelineAnalysisPeriodResidenceUseCase,
+    DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
+    DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
   ],
   exports: [],
 })
