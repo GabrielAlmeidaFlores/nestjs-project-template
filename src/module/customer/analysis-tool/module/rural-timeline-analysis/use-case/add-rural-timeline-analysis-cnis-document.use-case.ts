@@ -23,6 +23,7 @@ import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity } from '@
 import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/enum/rural-timeline-analysis-document-type.enum';
 import { RuralTimelineAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/rural-timeline-analysis-document.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.entity';
+import { RuralTimelineAnalysisPeriodPendingExitDateId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/value-object/rural-timeline-analysis-period-pending-exit-date-id/rural-timeline-analysis-period-pending-exit-date-id.value-object';
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -229,6 +230,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
               ) {
                 const pendingExitDateEntity =
                   new RuralTimelineAnalysisPeriodPendingExitDateEntity({
+                    id: new RuralTimelineAnalysisPeriodPendingExitDateId(),
                     pendingDate: earnings.competencia,
                     pendingAmount: new DecimalValue(
                       parseFloat(earnings.remuneracao),
@@ -247,6 +249,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
           } else {
             const pendingExitDateEntity =
               new RuralTimelineAnalysisPeriodPendingExitDateEntity({
+                id: new RuralTimelineAnalysisPeriodPendingExitDateId(),
                 pendingDate:
                   matchingSocialSecurityRelation.socialSecurityAffiliationInfo
                     .dataInicio ?? new Date(),
