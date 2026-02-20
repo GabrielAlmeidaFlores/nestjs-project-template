@@ -6,6 +6,7 @@ export interface SpeechGeneratorResultEntityPropsInterface extends BaseEntityPro
   clientName?: string | null;
   clientFederalDocument?: FederalDocument | null;
   clientBirthDate?: Date | null;
+  clientLastAffiliationDate?: Date | null;
   speechGeneratorCompleteContent?: string | null;
   speechGeneratorSimplifiedContent?: string | null;
 }
