@@ -20,6 +20,7 @@ import {
   GetRuralTimelineAnalysisDocumentResponseDto,
   RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
+  GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -264,6 +265,15 @@ export class GetRuralTimelineAnalysisUseCase {
           ),
         );
 
+      const pendingExitDates: GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto[] =
+        period.ruralTimelineCnisContributionPeriodPendingExitDate.map(
+          (pendingExit) =>
+            GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto.build({
+              pendingDate: pendingExit.pendingDate,
+              pendingAmount: pendingExit.pendingAmount,
+            }),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -301,6 +311,7 @@ export class GetRuralTimelineAnalysisUseCase {
             cnisDocumentOriginalFileName,
           }),
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
+          ...(pendingExitDates.length > 0 && { pendingExitDates }),
         }),
       );
     }

@@ -231,6 +231,18 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseD
 }
 
 @ResponseDto()
+export class GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty()
+  public pendingDate: Date;
+
+  @ResponseDtoValueObjectProperty(DecimalValue)
+  public pendingAmount: DecimalValue;
+
+  protected override readonly _type =
+    GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto.name;
+}
+
+@ResponseDto()
 export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoStringProperty({ required: false })
   public employmentRelationshipSource?: string;
@@ -273,6 +285,12 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
     { isArray: true, required: false },
   )
   public underMinimumPeriods?: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () => GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
+    { isArray: true, required: false },
+  )
+  public pendingExitDates?: GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto[];
 
   protected override readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto.name;

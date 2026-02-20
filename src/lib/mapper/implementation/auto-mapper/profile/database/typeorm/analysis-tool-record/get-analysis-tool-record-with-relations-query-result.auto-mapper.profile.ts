@@ -144,11 +144,16 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult,
       );
 
-      const ruralTimelineAnalysis = this.mapper.map(
-        source.ruralTimeline,
-        RuralTimelineAnalysisTypeormEntity,
-        GetRuralTimelineAnalysisWithRelationsQueryResult,
-      );
+      const ruralTimelineAnalysis =
+        source.ruralTimeline !== null &&
+        source.ruralTimeline?.ruralTimelineAnalysisInssBenefit !== undefined &&
+        source.ruralTimeline.ruralTimelineAnalysisLegalProceeding !== undefined
+          ? this.mapper.map(
+              source.ruralTimeline,
+              RuralTimelineAnalysisTypeormEntity,
+              GetRuralTimelineAnalysisWithRelationsQueryResult,
+            )
+          : null;
 
       const insuranceQualityAnalysis = this.mapper.map(
         source.insuranceQualityAnalysis,
