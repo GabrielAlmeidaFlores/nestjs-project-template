@@ -1,20 +1,23 @@
-import { createMap, forMember, mapFrom } from '@automapper/core';
+import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
+import { RuralTimelineAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-inss-benefit.typeorm.entity';
+import { RuralTimelineAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-legal-proceeding.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import {
   GetRuralTimelineAnalysisWithRelationsQueryResult,
   GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
   GetRuralTimelineAnalysisDocumentQueryResult,
   GetRuralTimelineAnalysisPeriodQueryResult,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { GetRuralTimelineAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/query/result/get-rural-timeline-analysis-inss-benefit.query.result';
+import { GetRuralTimelineAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-legal-proceeding/query/result/get-rural-timeline-analysis-legal-proceeding.query.result';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
-
-import type { Mapper } from '@automapper/core';
 
 @Injectable()
 export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
@@ -22,82 +25,150 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile {
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
-    this.createMap(this.mapper);
+    this.createMappings();
   }
 
-  private createMap(mapper: Mapper): void {
+  private createMappings(): void {
+    this.mapOrmEntityToDomainEntity();
+    this.mapDomainEntityToOrmEntity();
+  }
+
+  private mapOrmEntityToDomainEntity(): void {
+    const convertOrmEntityToDomainEntity = (
+      source: RuralTimelineAnalysisTypeormEntity,
+    ): GetRuralTimelineAnalysisWithRelationsQueryResult => {
+      if (
+        !source.ruralTimelineAnalysisInssBenefit ||
+        !source.ruralTimelineAnalysisLegalProceeding
+      ) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetRuralTimelineAnalysisWithRelationsQueryResult.name,
+          sourceClass: RuralTimelineAnalysisTypeormEntity.name,
+        });
+      }
+
+      const ruralTimelineAnalysisInssBenefit = this.mapper.mapArray(
+        source.ruralTimelineAnalysisInssBenefit,
+        RuralTimelineAnalysisInssBenefitTypeormEntity,
+        GetRuralTimelineAnalysisInssBenefitQueryResult,
+      );
+
+      const ruralTimelineAnalysisLegalProceeding = this.mapper.mapArray(
+        source.ruralTimelineAnalysisLegalProceeding,
+        RuralTimelineAnalysisLegalProceedingTypeormEntity,
+        GetRuralTimelineAnalysisLegalProceedingQueryResult,
+      );
+
+      const ruralTimelineAnalysisPeriod = this.mapper.mapArray(
+        source.ruralTimelinePeriod ?? [],
+        RuralTimelineAnalysisPeriodTypeormEntity,
+        GetRuralTimelineAnalysisPeriodQueryResult,
+      );
+
+      const ruralTimelineDocument = this.mapper.mapArray(
+        source.ruralTimelineDocument ?? [],
+        RuralTimelineAnalysisDocumentTypeormEntity,
+        GetRuralTimelineAnalysisDocumentQueryResult,
+      );
+
+      const ruralTimelineCnisContributionPeriod = this.mapper.mapArray(
+        source.ruralTimelineCnisContributionPeriod ?? [],
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+        GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+      );
+
+      return GetRuralTimelineAnalysisWithRelationsQueryResult.build({
+        id: new RuralTimelineAnalysisId(source.id),
+        ruralTimelineCompleteAnalysis:
+          source.ruralTimelineCompleteAnalysis ?? null,
+        ruralTimelineSimplifiedAnalysis:
+          source.ruralTimelineSimplifiedAnalysis ?? null,
+        ruralTimelinePeriodDocumentAnalysis:
+          source.ruralTimelinePeriodDocumentAnalysis ?? null,
+        workRegime: source.workRegime,
+        ruralTimelineAnalysisInssBenefit,
+        ruralTimelineAnalysisLegalProceeding,
+        ruralTimelineAnalysisPeriod,
+        ruralTimelineDocument,
+        ruralTimelineCnisContributionPeriod,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt ?? null,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertOrmEntityToDomainEntity);
+
     createMap(
-      mapper,
+      this.mapper,
       RuralTimelineAnalysisTypeormEntity,
       GetRuralTimelineAnalysisWithRelationsQueryResult,
-      forMember(
-        (destination) => destination.id,
-        mapFrom((source) => new RuralTimelineAnalysisId(source.id)),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelineCompleteAnalysis,
-        mapFrom((source) => source.ruralTimelineCompleteAnalysis ?? null),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelineSimplifiedAnalysis,
-        mapFrom((source) => source.ruralTimelineSimplifiedAnalysis ?? null),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelinePeriodDocumentAnalysis,
-        mapFrom((source) => source.ruralTimelinePeriodDocumentAnalysis ?? null),
-      ),
-      forMember(
-        (destination) => destination.workRegime,
-        mapFrom((source) => source.workRegime),
-      ),
-      forMember(
-        (destination) => destination.createdAt,
-        mapFrom((source) => source.createdAt),
-      ),
-      forMember(
-        (destination) => destination.updatedAt,
-        mapFrom((source) => source.updatedAt),
-      ),
-      forMember(
-        (destination) => destination.deletedAt,
-        mapFrom((source) => source.deletedAt ?? null),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelineAnalysisPeriod,
-        mapFrom((source) =>
-          (source.ruralTimelinePeriod ?? []).map((period) =>
-            mapper.map(
-              period,
-              RuralTimelineAnalysisPeriodTypeormEntity,
-              GetRuralTimelineAnalysisPeriodQueryResult,
-            ),
-          ),
-        ),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelineDocument,
-        mapFrom((source) =>
-          (source.ruralTimelineDocument ?? []).map((doc) =>
-            mapper.map(
-              doc,
-              RuralTimelineAnalysisDocumentTypeormEntity,
-              GetRuralTimelineAnalysisDocumentQueryResult,
-            ),
-          ),
-        ),
-      ),
-      forMember(
-        (destination) => destination.ruralTimelineCnisContributionPeriod,
-        mapFrom((source) =>
-          (source.ruralTimelineCnisContributionPeriod ?? []).map((period) =>
-            mapper.map(
-              period,
-              RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
-              GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
-            ),
-          ),
-        ),
-      ),
+      mappingFunction,
+    );
+  }
+
+  private mapDomainEntityToOrmEntity(): void {
+    const convertDomainEntityToOrmEntity = (
+      source: GetRuralTimelineAnalysisWithRelationsQueryResult,
+    ): RuralTimelineAnalysisTypeormEntity => {
+      const ruralTimelineAnalysisInssBenefit = this.mapper.mapArray(
+        source.ruralTimelineAnalysisInssBenefit,
+        GetRuralTimelineAnalysisInssBenefitQueryResult,
+        RuralTimelineAnalysisInssBenefitTypeormEntity,
+      );
+
+      const ruralTimelineAnalysisLegalProceeding = this.mapper.mapArray(
+        source.ruralTimelineAnalysisLegalProceeding,
+        GetRuralTimelineAnalysisLegalProceedingQueryResult,
+        RuralTimelineAnalysisLegalProceedingTypeormEntity,
+      );
+
+      const ruralTimelinePeriod = this.mapper.mapArray(
+        source.ruralTimelineAnalysisPeriod,
+        GetRuralTimelineAnalysisPeriodQueryResult,
+        RuralTimelineAnalysisPeriodTypeormEntity,
+      );
+
+      const ruralTimelineDocument = this.mapper.mapArray(
+        source.ruralTimelineDocument,
+        GetRuralTimelineAnalysisDocumentQueryResult,
+        RuralTimelineAnalysisDocumentTypeormEntity,
+      );
+
+      const ruralTimelineCnisContributionPeriod = this.mapper.mapArray(
+        source.ruralTimelineCnisContributionPeriod,
+        GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+      );
+
+      return RuralTimelineAnalysisTypeormEntity.build({
+        id: source.id.toString(),
+        ruralTimelineCompleteAnalysis:
+          source.ruralTimelineCompleteAnalysis ?? null,
+        ruralTimelineSimplifiedAnalysis:
+          source.ruralTimelineSimplifiedAnalysis ?? null,
+        ruralTimelinePeriodDocumentAnalysis:
+          source.ruralTimelinePeriodDocumentAnalysis ?? null,
+        workRegime: source.workRegime,
+        ruralTimelineAnalysisInssBenefit,
+        ruralTimelineAnalysisLegalProceeding,
+        ruralTimelinePeriod,
+        ruralTimelineDocument,
+        ruralTimelineCnisContributionPeriod,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt ?? null,
+      });
+    };
+
+    const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);
+
+    createMap(
+      this.mapper,
+      GetRuralTimelineAnalysisWithRelationsQueryResult,
+      RuralTimelineAnalysisTypeormEntity,
+      mappingFunction,
     );
   }
 }

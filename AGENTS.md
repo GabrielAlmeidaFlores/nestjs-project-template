@@ -130,9 +130,39 @@ src/
 - ✅ Use value objects for type safety
 - ✅ Extend `BaseEntity` from `@core`
 - ✅ Immutable properties (`readonly`)
+- ✅ Keep entities lightweight - store only primitive data and value objects
+- ✅ Use arrays of primitives (strings, numbers) instead of bidirectional entity references
 - ❌ NO database concerns (no TypeORM decorators)
 - ❌ NO infrastructure dependencies
 - ❌ NO DTOs or external service calls
+- ❌ NO bidirectional entity relationships (e.g., `childEntity: ChildEntity[]`)
+
+**Entity Relationship Pattern**:
+
+When you need to represent related data in an entity, prefer **lightweight primitives** over heavy entity references:
+
+```typescript
+// ❌ WRONG - Heavy bidirectional relationship
+export class ParentEntity extends BaseEntity<ParentId> {
+  public readonly childEntities: ChildEntity[]; // Loads entire child entities
+}
+
+// ✅ CORRECT - Lightweight primitive arrays
+export class ParentEntity extends BaseEntity<ParentId> {
+  public readonly childIds: string[]; // Just IDs
+  public readonly childNames: string[]; // Denormalized data if needed
+}
+```
+
+**Why avoid bidirectional relationships?**
+
+1. **Performance**: Loading full entity graphs is expensive and slow
+2. **Memory**: Entities with nested entities consume excessive memory
+3. **Serialization**: Circular references cause serialization issues
+4. **Complexity**: Deep object graphs are harder to reason about and test
+5. **Domain purity**: Domain entities should represent business concepts, not database structures
+
+**When you need related data**: Use the repository layer to fetch related entities separately, then combine them in use cases or query results.
 
 **Example**:
 

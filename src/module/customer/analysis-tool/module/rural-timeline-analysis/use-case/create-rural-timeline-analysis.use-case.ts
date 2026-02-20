@@ -14,6 +14,8 @@ import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
+import { RuralTimelineAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/command/rural-timeline-analysis-inss-benefit.command.repository.gateway';
+import { RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-legal-proceeding/command/rural-timeline-analysis-legal-proceeding.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period/command/rural-timeline-analysis-period.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/command/rural-timeline-analysis-period-economic-aspects.command.repository.gateway';
@@ -21,6 +23,8 @@ import { RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway } 
 import { RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/command/rural-timeline-analysis-period-property.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { RuralTimelineAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/rural-timeline-analysis-inss-benefit.entity';
+import { RuralTimelineAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/rural-timeline-analysis-legal-proceeding.entity';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.entity';
@@ -42,6 +46,10 @@ export class CreateRuralTimelineAnalysisUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisCommandRepositoryGateway: RuralTimelineAnalysisCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisInssBenefitCommandRepositoryGateway: RuralTimelineAnalysisInssBenefitCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway: RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(AnalysisToolClientQueryRepositoryGateway)
     private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisPeriodCommandRepositoryGateway)
@@ -103,6 +111,26 @@ export class CreateRuralTimelineAnalysisUseCase {
       ruralTimelinePeriodDocumentAnalysis: null,
       analysisToolClientId: dto.analysisToolClientId,
     });
+
+    const ruralTimelineAnalysisInssBenefit =
+      dto.inssBenefitNumber !== undefined
+        ? dto.inssBenefitNumber.map((value) => {
+            return new RuralTimelineAnalysisInssBenefitEntity({
+              inssBenefitNumber: value,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
+            });
+          })
+        : [];
+
+    const ruralTimelineAnalysisLegalProceeding =
+      dto.legalProceedingNumber !== undefined
+        ? dto.legalProceedingNumber.map((value) => {
+            return new RuralTimelineAnalysisLegalProceedingEntity({
+              legalProceedingNumber: value,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
+            });
+          })
+        : [];
 
     const residences: RuralTimelineAnalysisPeriodResidenceEntity[] = [];
     const properties: RuralTimelineAnalysisPeriodPropertyEntity[] = [];
@@ -280,6 +308,8 @@ export class CreateRuralTimelineAnalysisUseCase {
 
     await this.createOnDatabase(
       ruralTimelineAnalysis,
+      ruralTimelineAnalysisInssBenefit,
+      ruralTimelineAnalysisLegalProceeding,
       periods,
       documents,
       residences,
@@ -296,6 +326,8 @@ export class CreateRuralTimelineAnalysisUseCase {
 
   private async createOnDatabase(
     ruralTimelineAnalysis: RuralTimelineAnalysisEntity,
+    ruralTimelineAnalysisInssBenefit: RuralTimelineAnalysisInssBenefitEntity[],
+    ruralTimelineAnalysisLegalProceeding: RuralTimelineAnalysisLegalProceedingEntity[],
     periods: RuralTimelineAnalysisPeriodEntity[],
     documents: RuralTimelineAnalysisPeriodDocumentEntity[],
     residences: RuralTimelineAnalysisPeriodResidenceEntity[],
@@ -308,6 +340,20 @@ export class CreateRuralTimelineAnalysisUseCase {
       this.ruralTimelineAnalysisCommandRepositoryGateway.createRuralTimeline(
         ruralTimelineAnalysis,
       );
+
+    const ruralTimelineAnalysisInssBenefitTransactions =
+      ruralTimelineAnalysisInssBenefit.map((value) => {
+        return this.ruralTimelineAnalysisInssBenefitCommandRepositoryGateway.createRuralTimelineAnalysisInssBenefit(
+          value,
+        );
+      });
+
+    const ruralTimelineAnalysisLegalProceedingTransactions =
+      ruralTimelineAnalysisLegalProceeding.map((value) => {
+        return this.ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway.createRuralTimelineAnalysisLegalProceeding(
+          value,
+        );
+      });
 
     const periodTransactions = periods.map((period) => {
       return this.ruralTimelineAnalysisPeriodCommandRepositoryGateway.createRuralTimelineAnalysisPeriod(
@@ -354,6 +400,8 @@ export class CreateRuralTimelineAnalysisUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       ruralTimelineAnalysisTransaction,
+      ...ruralTimelineAnalysisInssBenefitTransactions,
+      ...ruralTimelineAnalysisLegalProceedingTransactions,
       ...periodTransactions,
       ...documentTransactions,
       ...residenceTransactions,

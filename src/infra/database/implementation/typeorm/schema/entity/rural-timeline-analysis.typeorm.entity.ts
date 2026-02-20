@@ -4,6 +4,8 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
+import { RuralTimelineAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-inss-benefit.typeorm.entity';
+import { RuralTimelineAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-legal-proceeding.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisWorkRegimeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/enum/rural-timeline-work-regime.enum';
 
@@ -65,6 +67,22 @@ export class RuralTimelineAnalysisTypeormEntity extends BaseTypeormEntity {
   )
   public ruralTimelineCnisContributionPeriod?:
     | RuralTimelineAnalysisCnisContributionPeriodTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineAnalysisInssBenefitTypeormEntity,
+    (entity) => entity.ruralTimelineAnalysis,
+  )
+  public ruralTimelineAnalysisInssBenefit?:
+    | RuralTimelineAnalysisInssBenefitTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineAnalysisLegalProceedingTypeormEntity,
+    (entity) => entity.ruralTimelineAnalysis,
+  )
+  public ruralTimelineAnalysisLegalProceeding?:
+    | RuralTimelineAnalysisLegalProceedingTypeormEntity[]
     | undefined;
 
   protected override readonly _type = RuralTimelineAnalysisTypeormEntity.name;
