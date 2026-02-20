@@ -71,6 +71,9 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
           contributionAdjustmentIntent: source.contributionAdjustmentIntent,
           externalSupplementationIntent: source.externalSupplementationIntent,
           cnisDocument: source.cnisDocument,
+          shouldConsiderPeriod: source.shouldConsiderPeriod,
+          shouldConsiderLastRemunerationAsEndDate:
+            source.shouldConsiderLastRemunerationAsEndDate,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
           deletedAt: source.deletedAt,

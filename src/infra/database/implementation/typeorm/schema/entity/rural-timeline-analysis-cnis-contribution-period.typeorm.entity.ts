@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodLateContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-late-contribution.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodMissingEndDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-missing-end-date.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
@@ -79,6 +81,20 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   public externalSupplementationIntent: boolean;
 
   @Column({
+    name: 'should_consider_period',
+    type: 'boolean',
+    default: true,
+  })
+  public shouldConsiderPeriod: boolean;
+
+  @Column({
+    name: 'should_consider_last_remuneration_as_end_date',
+    type: 'boolean',
+    default: false,
+  })
+  public shouldConsiderLastRemunerationAsEndDate: boolean;
+
+  @Column({
     name: 'cnis_document',
     type: 'varchar',
     length: 255,
@@ -99,6 +115,24 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   )
   public ruralTimelineCnisContributionPeriodUnderMinimum?:
     | RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () =>
+      RuralTimelineAnalysisCnisContributionPeriodMissingEndDateTypeormEntity,
+    (entity) => entity.ruralTimelineAnalysisCnisContributionPeriod,
+  )
+  public ruralTimelineAnalysisCnisContributionPeriodMissingEndDate?:
+    | RuralTimelineAnalysisCnisContributionPeriodMissingEndDateTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () =>
+      RuralTimelineAnalysisCnisContributionPeriodLateContributionTypeormEntity,
+    (entity) => entity.ruralTimelineAnalysisCnisContributionPeriod,
+  )
+  public ruralTimelineAnalysisCnisContributionPeriodLateContribution?:
+    | RuralTimelineAnalysisCnisContributionPeriodLateContributionTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

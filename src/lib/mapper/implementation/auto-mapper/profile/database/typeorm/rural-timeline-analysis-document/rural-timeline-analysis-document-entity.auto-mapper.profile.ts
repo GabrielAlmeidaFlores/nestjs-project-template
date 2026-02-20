@@ -56,6 +56,7 @@ export class RuralTimelineAnalysisDocumentEntityAutoMapperProfile {
       const ormEntity = RuralTimelineAnalysisDocumentTypeormEntity.build({
         id: source.id.toString(),
         type: source.type,
+        customType: source.customType,
         document: source.document,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

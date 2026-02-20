@@ -19,6 +19,14 @@ export class RuralTimelineAnalysisDocumentTypeormEntity extends BaseTypeormEntit
   })
   public document: string;
 
+  @Column({
+    name: 'custom_type',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public customType: string | null;
+
   @ManyToOne(
     () => RuralTimelineAnalysisTypeormEntity,
     (entity) => entity.ruralTimelineDocument,

@@ -171,6 +171,8 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
       contributionAdjustmentIntent: dto.contributionAdjustmentIntent,
       externalSupplementationIntent: dto.externalSupplementationIntent,
       cnisDocument: cnisDocumentLocation,
+      shouldConsiderPeriod: true,
+      shouldConsiderLastRemunerationAsEndDate: false,
     });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute(
