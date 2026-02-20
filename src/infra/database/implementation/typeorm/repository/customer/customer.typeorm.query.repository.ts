@@ -214,6 +214,9 @@ export class CustomerTypeormQueryRepository
     const data = await this.find({
       relations: {
         authIdentity: true,
+        organizationMember: {
+          organization: true,
+        },
       },
     });
 
