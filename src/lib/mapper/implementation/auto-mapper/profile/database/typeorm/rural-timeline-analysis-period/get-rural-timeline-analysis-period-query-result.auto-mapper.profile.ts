@@ -8,14 +8,12 @@ import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infr
 import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
 import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
-import {
-  GetRuralTimelineAnalysisPeriodQueryResult,
-  GetRuralTimelineAnalysisPeriodDocumentQueryResult,
-  GetRuralTimelineAnalysisPeriodResidenceQueryResult,
-  GetRuralTimelineAnalysisPeriodPropertyQueryResult,
-  GetRuralTimelineAnalysisPeriodEconomicAspectsQueryResult,
-  GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult,
-} from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { GetRuralTimelineAnalysisPeriodQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.query.result';
+import { GetRuralTimelineAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/query/result/get-rural-timeline-analysis-period-document.query.result';
+import { GetRuralTimelineAnalysisPeriodEconomicAspectsQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/query/result/get-rural-timeline-analysis-period-economic-aspects.query.result';
+import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/query/result/get-rural-timeline-analysis-period-family-group-member.query.result';
+import { GetRuralTimelineAnalysisPeriodPropertyQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/query/result/get-rural-timeline-analysis-period-property.query.result';
+import { GetRuralTimelineAnalysisPeriodResidenceQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/query/result/get-rural-timeline-analysis-period-residence.query.result';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 
 import type { Mapper } from '@automapper/core';

@@ -177,6 +177,8 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@in
 import { RuralTimelineAnalysisPeriodPropertyTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.typeorm.query.repository';
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodResidenceTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.query.repository';
+import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.command.repository';
+import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -336,6 +338,8 @@ import { RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway } from '@mo
 import { RuralTimelineAnalysisPeriodPropertyQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/query/rural-timeline-analysis-period-property.query.repository.gateway';
 import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodResidenceQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/query/rural-timeline-analysis-period-residence.query.repository.gateway';
+import { RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/command/rural-timeline-cnis-contribution-period-overdue-contribution.command.repository.gateway';
+import { RuralTimelineCnisContributionPeriodOverdueContributionQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/query/rural-timeline-cnis-contribution-period-overdue-contribution.query.repository.gateway';
 import { SpecialActivityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/command/special-activity-analysis.command.repository.gateway';
 import { SpecialActivityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/special-activity-analysis.query.repository.gateway';
 import { SpecialActivityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-document/command/special-activity-analysis-document.command.repository.gateway';
@@ -1118,6 +1122,18 @@ const classProvider: ClassProvider[] = [
   {
     provide: RuralTimelineAnalysisPeriodPendingExitDateQueryRepositoryGateway,
     useClass: RuralTimelineAnalysisPeriodPendingExitDateTypeormQueryRepository,
+  },
+  {
+    provide:
+      RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
+    useClass:
+      RuralTimelineCnisContributionPeriodOverdueContributionTypeormCommandRepository,
+  },
+  {
+    provide:
+      RuralTimelineCnisContributionPeriodOverdueContributionQueryRepositoryGateway,
+    useClass:
+      RuralTimelineCnisContributionPeriodOverdueContributionTypeormQueryRepository,
   },
   {
     provide: SpecialActivityAnalysisQueryRepositoryGateway,

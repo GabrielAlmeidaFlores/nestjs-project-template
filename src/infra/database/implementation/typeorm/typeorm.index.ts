@@ -245,6 +245,7 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/databas
 import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.entity';
 import { SpecialActivityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-documents.typeorm.entity';
 import { SpecialActivityInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-benefit.typeorm.entity';
 import { SpecialActivityLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-legal-proceeding.typeorm.entity';
@@ -344,6 +345,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
     RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
+    RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity,
     RuralTimelineAnalysisInssBenefitTypeormEntity,
     RuralTimelineAnalysisLegalProceedingTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,

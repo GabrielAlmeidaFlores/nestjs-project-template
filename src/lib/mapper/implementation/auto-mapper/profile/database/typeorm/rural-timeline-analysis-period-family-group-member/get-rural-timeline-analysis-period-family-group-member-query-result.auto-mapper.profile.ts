@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-family-group-member.typeorm.entity';
-import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/query/result/get-rural-timeline-analysis-period-family-group-member.query.result';
 
 import type { Mapper } from '@automapper/core';
 

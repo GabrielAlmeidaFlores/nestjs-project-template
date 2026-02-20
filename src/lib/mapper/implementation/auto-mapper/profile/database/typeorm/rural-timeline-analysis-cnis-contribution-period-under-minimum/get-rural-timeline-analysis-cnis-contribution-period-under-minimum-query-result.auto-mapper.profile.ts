@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
-import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/query/result/get-rural-timeline-analysis-cnis-contribution-period-under-minimum.query.result';
 
 import type { Mapper } from '@automapper/core';
 

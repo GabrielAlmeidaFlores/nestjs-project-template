@@ -4,6 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
@@ -87,6 +88,13 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   })
   public cnisDocument?: string | null;
 
+  @Column({
+    name: 'impact_analysis',
+    type: 'text',
+    nullable: true,
+  })
+  public impactAnalysis?: string | null;
+
   @ManyToOne(
     () => RuralTimelineAnalysisTypeormEntity,
     (entity) => entity.ruralTimelineCnisContributionPeriod,
@@ -108,6 +116,14 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   )
   public ruralTimelineCnisContributionPeriodPendingExitDate?:
     | RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity,
+    (entity) => entity.ruralTimelineCnisContributionPeriod,
+  )
+  public ruralTimelineCnisContributionPeriodOverdueContribution?:
+    | RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity[]
     | undefined;
 
   protected override readonly _type =

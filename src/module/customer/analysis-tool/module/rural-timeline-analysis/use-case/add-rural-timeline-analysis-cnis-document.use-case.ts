@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
@@ -27,6 +29,9 @@ import { RuralTimelineAnalysisPeriodPendingExitDateId } from '@module/customer/a
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -59,6 +64,12 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     private readonly cnisProcessorGateway: CnisProcessorGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
+    @Inject(GenerativeIaGateway)
+    private readonly generativeIaGateway: GenerativeIaGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCaseGateway: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCaseGateway: ConsumeOrganizationCreditUseCaseGateway,
   ) {}
 
   public async execute(
@@ -271,8 +282,147 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       await batchTransaction.commit();
     }
 
+    await this.generateImpactAnalysisForAllPeriods(
+      organizationSessionData,
+      sessionData,
+      organizationMember.id,
+      ruralTimelineAnalysisId,
+    );
+
     return AddRuralTimelineAnalysisCnisDocumentResponseDto.build({
       cnisDocumentId: cnisDocumentEntity.id.toString(),
     });
+  }
+
+  private async generateImpactAnalysisForAllPeriods(
+    organizationSessionData: OrganizationSessionDataModel,
+    sessionData: SessionDataModel,
+    organizationMemberId: unknown,
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+  ): Promise<void> {
+    const periodsResult =
+      await this.ruralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway.listByRuralTimelineAnalysisId(
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        new ListRuralTimelineAnalysisCnisContributionPeriodQueryParam({
+          ruralTimelineAnalysis: ruralTimelineAnalysisId,
+        }),
+      );
+
+    for (const cnisContributionPeriod of periodsResult.resource) {
+      const hasOverdueContributionWithBothDates =
+        cnisContributionPeriod.ruralTimelineCnisContributionPeriodOverdueContribution.some(
+          (overdue) => overdue.paymentDate !== null,
+        );
+
+      if (!hasOverdueContributionWithBothDates) {
+        continue;
+      }
+
+      const promptResponse =
+        await this.getPaymentPlanPaidResourcePromptUseCaseGateway.execute(
+          PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
+        );
+
+      const creditTransaction =
+        await this.consumeOrganizationCreditUseCaseGateway.execute(
+          organizationSessionData.organizationId,
+          PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
+          organizationMemberId as never,
+        );
+
+      const periodContext = JSON.stringify(
+        {
+          periodInfo: {
+            employmentRelationshipSource:
+              cnisContributionPeriod.employmentRelationshipSource,
+            startDate: cnisContributionPeriod.startDate,
+            endDate: cnisContributionPeriod.endDate,
+            category: cnisContributionPeriod.category,
+            qualifyingPeriod: cnisContributionPeriod.qualifyingPeriod,
+            status: cnisContributionPeriod.status,
+            averageContributionAmount:
+              cnisContributionPeriod.averageContributionAmount?.toString(),
+            contributionAdjustmentIntent:
+              cnisContributionPeriod.contributionAdjustmentIntent,
+            externalSupplementationIntent:
+              cnisContributionPeriod.externalSupplementationIntent,
+            underMinimum:
+              cnisContributionPeriod.ruralTimelineCnisContributionPeriodUnderMinimum.map(
+                (underMin: {
+                  contributionDate: Date;
+                  contributionAmount: DecimalValue;
+                }) => ({
+                  contributionDate: underMin.contributionDate,
+                  contributionAmount: underMin.contributionAmount.toString(),
+                }),
+              ),
+            pendingExitDates:
+              cnisContributionPeriod.ruralTimelineCnisContributionPeriodPendingExitDate.map(
+                (pendingExit: {
+                  pendingDate: Date;
+                  pendingAmount: DecimalValue;
+                }) => ({
+                  pendingDate: pendingExit.pendingDate,
+                  pendingAmount: pendingExit.pendingAmount.toString(),
+                }),
+              ),
+            overdueContributions:
+              cnisContributionPeriod.ruralTimelineCnisContributionPeriodOverdueContribution.map(
+                (overdue: { overdueDate: Date; paymentDate: Date | null }) => ({
+                  overdueDate: overdue.overdueDate,
+                  paymentDate: overdue.paymentDate,
+                }),
+              ),
+          },
+        },
+        null,
+        2,
+      );
+
+      const systemInstruction = promptResponse.prompt;
+
+      const analysisResult =
+        await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+          GenerateResponseInputModel.build({
+            systemInstruction,
+            prompt: periodContext,
+            promptFiles: [],
+          }),
+        );
+
+      const updatedPeriod =
+        new RuralTimelineAnalysisCnisContributionPeriodEntity({
+          id: cnisContributionPeriod.id,
+          employmentRelationshipSource:
+            cnisContributionPeriod.employmentRelationshipSource,
+          startDate: cnisContributionPeriod.startDate,
+          endDate: cnisContributionPeriod.endDate,
+          category: cnisContributionPeriod.category,
+          qualifyingPeriod: cnisContributionPeriod.qualifyingPeriod,
+          status: cnisContributionPeriod.status,
+          averageContributionAmount:
+            cnisContributionPeriod.averageContributionAmount,
+          contributionAdjustmentIntent:
+            cnisContributionPeriod.contributionAdjustmentIntent,
+          externalSupplementationIntent:
+            cnisContributionPeriod.externalSupplementationIntent,
+          cnisDocument: cnisContributionPeriod.cnisDocument,
+          impactAnalysis: analysisResult,
+          ruralTimelineId: ruralTimelineAnalysisId,
+          createdAt: cnisContributionPeriod.createdAt,
+          updatedAt: cnisContributionPeriod.updatedAt,
+          deletedAt: cnisContributionPeriod.deletedAt,
+        });
+
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        creditTransaction,
+        this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.updateRuralTimelineAnalysisCnisContributionPeriod(
+          updatedPeriod,
+        ),
+      ]);
+
+      await transaction.commit();
+    }
   }
 }

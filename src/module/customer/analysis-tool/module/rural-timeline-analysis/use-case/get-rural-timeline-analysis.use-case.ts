@@ -21,6 +21,7 @@ import {
   RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
   GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
+  GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -274,6 +275,19 @@ export class GetRuralTimelineAnalysisUseCase {
             }),
         );
 
+      const overdueContributions: GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDto[] =
+        period.ruralTimelineCnisContributionPeriodOverdueContribution.map(
+          (overdue) =>
+            GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDto.build(
+              {
+                overdueDate: overdue.overdueDate,
+                ...(overdue.paymentDate !== null && {
+                  paymentDate: overdue.paymentDate,
+                }),
+              },
+            ),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -310,8 +324,12 @@ export class GetRuralTimelineAnalysisUseCase {
           ...(cnisDocumentOriginalFileName !== undefined && {
             cnisDocumentOriginalFileName,
           }),
+          ...(period.impactAnalysis !== null && {
+            impactAnalysis: period.impactAnalysis,
+          }),
           ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
           ...(pendingExitDates.length > 0 && { pendingExitDates }),
+          ...(overdueContributions.length > 0 && { overdueContributions }),
         }),
       );
     }
