@@ -20,6 +20,7 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
+import { GetAnalysisToolRecordStatisticsMonthlyQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics-monthly.query.result';
 import {
   AnalysisToolRecordStatisticsQueryResult,
   MonthlyStatisticsQueryResult,
@@ -1356,6 +1357,55 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
 
     return count;
+  }
+
+  public async countAllMonthlyAnalysesForYear(
+    year: number,
+  ): Promise<Array<GetAnalysisToolRecordStatisticsMonthlyQueryResult>> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const analyses = await this.repository.find({
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const analysesByMonth = new Map<number, number>();
+
+    for (const analysis of analyses) {
+      const month = analysis.createdAt.getMonth();
+      const currentCount = analysesByMonth.get(month) ?? 0;
+      analysesByMonth.set(month, currentCount + 1);
+    }
+
+    return Array.from(analysesByMonth.entries())
+      .sort(([monthA], [monthB]) => monthA - monthB)
+      .map(([month, totalCount]) =>
+        GetAnalysisToolRecordStatisticsMonthlyQueryResult.build({
+          month,
+          totalCount,
+        }),
+      );
   }
 
   public async listAllAnalysesForYear(

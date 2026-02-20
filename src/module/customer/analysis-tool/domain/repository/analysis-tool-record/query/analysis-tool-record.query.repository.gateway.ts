@@ -2,6 +2,7 @@ import type { ListDataOutputModel } from '@core/domain/repository/base/query/mod
 import type { NotFoundError } from '@core/error/not-found.error';
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
+import type { GetAnalysisToolRecordStatisticsMonthlyQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics-monthly.query.result';
 import type { AnalysisToolRecordStatisticsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics.query.result';
 import type { GetAnalysisToolRecordWithFullRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-full-relations.query.result';
 import type { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
@@ -164,6 +165,10 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
   ): Promise<GetAnalysisToolRecordWithRelationsQueryResult>;
 
   public abstract countAllAnalysesForYear(year: number): Promise<number>;
+
+  public abstract countAllMonthlyAnalysesForYear(
+    year: number,
+  ): Promise<Array<GetAnalysisToolRecordStatisticsMonthlyQueryResult>>;
 
   public abstract listAllAnalysesForYear(
     year: number,
