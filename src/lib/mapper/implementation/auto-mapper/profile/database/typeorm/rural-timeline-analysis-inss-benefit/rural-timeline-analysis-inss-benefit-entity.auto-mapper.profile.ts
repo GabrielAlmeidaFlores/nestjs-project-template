@@ -3,10 +3,10 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-inss-benefit.typeorm.entity';
-import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
-import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { RuralTimelineAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/rural-timeline-analysis-inss-benefit.entity';
 import { RuralTimelineAnalysisInssBenefitId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/value-object/rural-timeline-analysis-inss-benefit-id/rural-timeline-analysis-inss-benefit-id.value-object';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 @Injectable()
 export class RuralTimelineAnalysisInssBenefitEntityAutoMapperProfile {
@@ -26,16 +26,19 @@ export class RuralTimelineAnalysisInssBenefitEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisInssBenefitTypeormEntity,
     ): RuralTimelineAnalysisInssBenefitEntity => {
-      const ruralTimelineAnalysis = this.mapper.map(
-        source.ruralTimelineAnalysis,
-        RuralTimelineAnalysisTypeormEntity,
-        RuralTimelineAnalysisEntity,
-      );
+      if (!source.ruralTimelineAnalysis) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: RuralTimelineAnalysisInssBenefitEntity.name,
+          sourceClass: RuralTimelineAnalysisInssBenefitTypeormEntity.name,
+        });
+      }
 
       return new RuralTimelineAnalysisInssBenefitEntity({
         id: new RuralTimelineAnalysisInssBenefitId(source.id),
         inssBenefitNumber: source.inssBenefitNumber,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysisId: new RuralTimelineAnalysisId(
+          source.ruralTimelineAnalysis.id,
+        ),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -56,16 +59,10 @@ export class RuralTimelineAnalysisInssBenefitEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: RuralTimelineAnalysisInssBenefitEntity,
     ): RuralTimelineAnalysisInssBenefitTypeormEntity => {
-      const ruralTimelineAnalysis = this.mapper.map(
-        source.ruralTimelineAnalysis,
-        RuralTimelineAnalysisEntity,
-        RuralTimelineAnalysisTypeormEntity,
-      );
-
       return RuralTimelineAnalysisInssBenefitTypeormEntity.build({
         id: source.id.toString(),
         inssBenefitNumber: source.inssBenefitNumber,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysis: undefined,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

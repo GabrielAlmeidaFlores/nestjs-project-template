@@ -155,7 +155,7 @@ export class UpdateRuralTimelineAnalysisUseCase {
     const createNew = newInssBenefitNumber.map((value) => {
       const entity = new RuralTimelineAnalysisInssBenefitEntity({
         inssBenefitNumber: value,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
       });
 
       return this.ruralTimelineAnalysisInssBenefitCommandRepositoryGateway.createRuralTimelineAnalysisInssBenefit(
@@ -180,7 +180,7 @@ export class UpdateRuralTimelineAnalysisUseCase {
     const createNew = newLegalProceedingNumber.map((value) => {
       const entity = new RuralTimelineAnalysisLegalProceedingEntity({
         legalProceedingNumber: value,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
       });
 
       return this.ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway.createRuralTimelineAnalysisLegalProceeding(

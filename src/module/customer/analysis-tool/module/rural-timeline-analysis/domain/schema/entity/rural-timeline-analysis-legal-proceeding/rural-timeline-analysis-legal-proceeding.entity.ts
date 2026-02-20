@@ -1,7 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { RuralTimelineAnalysisLegalProceedingEntityPropsInterface } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/rural-timeline-analysis-legal-proceeding.entity.props.interface';
 import { RuralTimelineAnalysisLegalProceedingId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/value-object/rural-timeline-analysis-legal-proceeding-id/rural-timeline-analysis-legal-proceeding-id.value-object';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RuralTimelineAnalysisLegalProceedingEntity extends BaseEntity<RuralTimelineAnalysisLegalProceedingId> {
@@ -11,9 +11,9 @@ export class RuralTimelineAnalysisLegalProceedingEntity extends BaseEntity<Rural
   public readonly legalProceedingNumber: string;
 
   @Description(
-    'Análise de linha do tempo rural associada ao processo judicial.',
+    'ID da análise de linha do tempo rural associada ao processo judicial.',
   )
-  public readonly ruralTimelineAnalysis: RuralTimelineAnalysisEntity;
+  public readonly ruralTimelineAnalysisId: RuralTimelineAnalysisId;
 
   protected readonly _type = RuralTimelineAnalysisLegalProceedingEntity.name;
 
@@ -23,6 +23,6 @@ export class RuralTimelineAnalysisLegalProceedingEntity extends BaseEntity<Rural
     super(RuralTimelineAnalysisLegalProceedingId, props);
 
     this.legalProceedingNumber = props.legalProceedingNumber;
-    this.ruralTimelineAnalysis = props.ruralTimelineAnalysis;
+    this.ruralTimelineAnalysisId = props.ruralTimelineAnalysisId;
   }
 }

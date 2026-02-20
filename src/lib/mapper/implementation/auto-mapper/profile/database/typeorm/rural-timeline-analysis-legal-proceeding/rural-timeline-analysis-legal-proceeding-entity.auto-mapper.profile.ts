@@ -3,10 +3,10 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-legal-proceeding.typeorm.entity';
-import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
-import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { RuralTimelineAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/rural-timeline-analysis-legal-proceeding.entity';
 import { RuralTimelineAnalysisLegalProceedingId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/value-object/rural-timeline-analysis-legal-proceeding-id/rural-timeline-analysis-legal-proceeding-id.value-object';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 
 @Injectable()
 export class RuralTimelineAnalysisLegalProceedingEntityAutoMapperProfile {
@@ -26,16 +26,19 @@ export class RuralTimelineAnalysisLegalProceedingEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisLegalProceedingTypeormEntity,
     ): RuralTimelineAnalysisLegalProceedingEntity => {
-      const ruralTimelineAnalysis = this.mapper.map(
-        source.ruralTimelineAnalysis,
-        RuralTimelineAnalysisTypeormEntity,
-        RuralTimelineAnalysisEntity,
-      );
+      if (!source.ruralTimelineAnalysis) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: RuralTimelineAnalysisLegalProceedingEntity.name,
+          sourceClass: RuralTimelineAnalysisLegalProceedingTypeormEntity.name,
+        });
+      }
 
       return new RuralTimelineAnalysisLegalProceedingEntity({
         id: new RuralTimelineAnalysisLegalProceedingId(source.id),
         legalProceedingNumber: source.legalProceedingNumber,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysisId: new RuralTimelineAnalysisId(
+          source.ruralTimelineAnalysis.id,
+        ),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -56,16 +59,10 @@ export class RuralTimelineAnalysisLegalProceedingEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: RuralTimelineAnalysisLegalProceedingEntity,
     ): RuralTimelineAnalysisLegalProceedingTypeormEntity => {
-      const ruralTimelineAnalysis = this.mapper.map(
-        source.ruralTimelineAnalysis,
-        RuralTimelineAnalysisEntity,
-        RuralTimelineAnalysisTypeormEntity,
-      );
-
       return RuralTimelineAnalysisLegalProceedingTypeormEntity.build({
         id: source.id.toString(),
         legalProceedingNumber: source.legalProceedingNumber,
-        ruralTimelineAnalysis,
+        ruralTimelineAnalysis: undefined,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
