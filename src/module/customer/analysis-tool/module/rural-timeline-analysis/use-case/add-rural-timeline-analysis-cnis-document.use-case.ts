@@ -219,10 +219,9 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             .dataFim === undefined
         ) {
           const earningsHistory =
-            matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory ??
-            [];
+            matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory;
 
-          if (earningsHistory.length > 0) {
+          if (earningsHistory.length) {
             for (const earnings of earningsHistory) {
               if (
                 earnings.competencia !== undefined &&
