@@ -43,6 +43,14 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResu
     GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult.name;
 }
 
+export class GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult extends BaseBuildableObject {
+  public readonly pendingDate: Date;
+  public readonly pendingAmount: DecimalValue;
+
+  protected override readonly _type =
+    GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult.name;
+}
+
 export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisCnisContributionPeriodId;
   public readonly employmentRelationshipSource: string | null;
@@ -56,6 +64,7 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends B
   public readonly externalSupplementationIntent: boolean;
   public readonly cnisDocument: string | null;
   public readonly ruralTimelineCnisContributionPeriodUnderMinimum: GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult[];
+  public readonly ruralTimelineCnisContributionPeriodPendingExitDate: GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult[];
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

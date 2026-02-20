@@ -9,6 +9,7 @@ import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/r
 import {
   GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
+  GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { ListRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/list-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -69,6 +70,15 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
           ),
         );
 
+      const pendingExitDates =
+        item.ruralTimelineCnisContributionPeriodPendingExitDate.map(
+          (pendingExit) =>
+            GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto.build({
+              pendingDate: pendingExit.pendingDate,
+              pendingAmount: pendingExit.pendingAmount,
+            }),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -100,6 +110,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
+        ...(pendingExitDates.length > 0 && { pendingExitDates }),
       });
     });
 
