@@ -1907,6 +1907,84 @@ export class AnalysisEntityAutoMapperProfile {
 
 ## Code Organization Guidelines
 
+### Query Result Files ⚠️ MANDATORY
+
+**CRITICAL**: Each query result class MUST live in its own file inside the corresponding repository's `query/result/` folder. **NEVER put multiple query result classes in the same file.**
+
+**Pattern**: `domain/repository/{entity-name}/query/result/get-{entity-name}.query.result.ts`
+
+**❌ WRONG - Multiple classes in one file:**
+
+```typescript
+// rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result.ts
+export class GetRuralTimelineAnalysisDocumentQueryResult { ... }
+export class GetRuralTimelineAnalysisPeriodQueryResult { ... }
+export class GetRuralTimelineAnalysisWithRelationsQueryResult { ... }
+```
+
+**✅ CORRECT - Each class in its own file:**
+
+```
+rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result.ts
+rural-timeline-analysis-document/query/result/get-rural-timeline-analysis-document.query.result.ts
+rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.query.result.ts
+```
+
+**Rules**:
+- ✅ ONE query result class per file
+- ✅ File lives under its entity's repository folder (`{entity}/query/result/`)
+- ✅ Import cross-referencing query results from their individual files directly
+- ❌ NO barrel/index files that re-export multiple query results
+- ❌ NO "with-relations" result file that bundles unrelated sub-results
+
+---
+
+### Entity Props Interface ⚠️ MANDATORY
+
+**CRITICAL**: Entity props interfaces MUST extend `BaseEntityPropsInterface<IdType>`. **NEVER redeclare `id`, `createdAt`, `updatedAt`, or `deletedAt`** — these are already provided by the base interface.
+
+**❌ WRONG - Redeclaring base fields:**
+
+```typescript
+export interface AnalysisEntityPropsInterface {
+  id?: AnalysisId;           // ❌ Already in BaseEntityPropsInterface
+  createdAt?: Date;          // ❌ Already in BaseEntityPropsInterface
+  updatedAt?: Date;          // ❌ Already in BaseEntityPropsInterface
+  deletedAt?: Date | null;   // ❌ Already in BaseEntityPropsInterface
+  name: string;
+}
+```
+
+**✅ CORRECT - Extending BaseEntityPropsInterface:**
+
+```typescript
+import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/base.entity.props.interface';
+import type { AnalysisId } from './value-object/analysis-id/analysis-id.value-object';
+
+export interface AnalysisEntityPropsInterface extends BaseEntityPropsInterface<AnalysisId> {
+  name: string;              // ✅ Only domain-specific fields
+}
+```
+
+**`BaseEntityPropsInterface` already provides:**
+
+```typescript
+interface BaseEntityPropsInterface<Id extends Guid> {
+  id?: Id | null;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+  deletedAt?: Date | null;
+}
+```
+
+**Rules**:
+- ✅ Always extend `BaseEntityPropsInterface<YourEntityId>`
+- ✅ Only declare domain-specific fields in the interface body
+- ✅ Import `BaseEntityPropsInterface` from `@core/domain/schema/entity/base/base.entity.props.interface`
+- ❌ NEVER declare `id`, `createdAt`, `updatedAt`, or `deletedAt` in entity props interfaces
+
+---
+
 ### Module Structure
 
 Each feature module follows this structure:

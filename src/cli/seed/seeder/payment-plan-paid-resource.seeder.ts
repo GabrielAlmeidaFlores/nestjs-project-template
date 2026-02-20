@@ -486,6 +486,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Versão simplificada do parecer jurídico para apresentação ao cliente, com linguagem acessível e clara.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('ddb8a0da-7049-493b-b256-668cdcc88f8b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
+      creditCost: 2,
+      title: 'Análise de Impacto de Contribuição em Atraso CNIS',
+      description:
+        'Análise de impacto gerada por IA sobre as contribuições em atraso do período de contribuição CNIS, avaliando consequências previdenciárias do recolhimento.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

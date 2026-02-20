@@ -1152,6 +1152,7 @@ export class AnalysisToolRecordTypeormQueryRepository
             ruralTimelineCnisContributionPeriod: {
               ruralTimelineCnisContributionPeriodPendingExitDate: true,
               ruralTimelineCnisContributionPeriodUnderMinimum: true,
+              ruralTimelineCnisContributionPeriodOverdueContribution: true,
             },
           },
           createdBy: {
