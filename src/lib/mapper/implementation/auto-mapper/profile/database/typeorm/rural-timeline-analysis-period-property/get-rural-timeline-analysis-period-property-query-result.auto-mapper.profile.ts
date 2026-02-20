@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
 import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
-import { GetRuralTimelineAnalysisPeriodPropertyQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { GetRuralTimelineAnalysisPeriodPropertyQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/query/result/get-rural-timeline-analysis-period-property.query.result';
 import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
 
 import type { Mapper } from '@automapper/core';

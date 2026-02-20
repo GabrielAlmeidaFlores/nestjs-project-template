@@ -6,11 +6,11 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
-import {
-  GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
-  GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult,
-  GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult,
-} from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/result/get-rural-timeline-analysis-with-relations.query.result';
+import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.entity';
+import { GetRuralTimelineAnalysisCnisContributionPeriodQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/result/get-rural-timeline-analysis-cnis-contribution-period.query.result';
+import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/query/result/get-rural-timeline-analysis-cnis-contribution-period-under-minimum.query.result';
+import { GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/query/result/get-rural-timeline-analysis-period-pending-exit-date.query.result';
+import { GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/query/result/get-rural-timeline-cnis-contribution-period-overdue-contribution.query.result';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 
 import type { Mapper } from '@automapper/core';
@@ -82,6 +82,10 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
         mapFrom((source) => source.cnisDocument ?? null),
       ),
       forMember(
+        (destination) => destination.impactAnalysis,
+        mapFrom((source) => source.impactAnalysis ?? null),
+      ),
+      forMember(
         (destination) =>
           destination.ruralTimelineCnisContributionPeriodUnderMinimum,
         mapFrom((source) =>
@@ -106,6 +110,21 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
                 RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
                 GetRuralTimelineAnalysisPeriodPendingExitDateQueryResult,
               ),
+          ),
+        ),
+      ),
+      forMember(
+        (destination) =>
+          destination.ruralTimelineCnisContributionPeriodOverdueContribution,
+        mapFrom((source) =>
+          (
+            source.ruralTimelineCnisContributionPeriodOverdueContribution ?? []
+          ).map((overdue) =>
+            mapper.map(
+              overdue,
+              RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity,
+              GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResult,
+            ),
           ),
         ),
       ),

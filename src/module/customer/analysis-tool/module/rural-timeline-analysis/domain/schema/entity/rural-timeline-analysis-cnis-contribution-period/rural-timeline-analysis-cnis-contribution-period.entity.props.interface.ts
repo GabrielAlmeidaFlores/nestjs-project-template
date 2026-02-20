@@ -17,4 +17,5 @@ export interface RuralTimelineAnalysisCnisContributionPeriodEntityPropsInterface
   contributionAdjustmentIntent: ContributionAdjustmentIntentTypeEnum;
   externalSupplementationIntent: boolean;
   cnisDocument?: string | null;
+  impactAnalysis?: string | null;
 }
