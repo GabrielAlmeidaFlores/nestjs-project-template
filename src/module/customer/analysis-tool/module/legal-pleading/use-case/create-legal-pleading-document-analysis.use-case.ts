@@ -11,6 +11,7 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { CnisFastAnalysisTemplateService } from '@module/customer/analysis-tool/module/cnis-fast-analysis/service/cnis-fast-analysis-template.service';
 import { LegalPleadingQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/legal-pleading.query.repository.gateway';
 import { LegalPleadingDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-document/command/legal-pleading-document.repository.gateway';
 import { LegalPleadingDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-document/query/legal-pleading-document.query.repository.gateway';
@@ -67,6 +68,8 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
     private readonly cnisProcessorGateway: CnisProcessorGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
+    @Inject(CnisFastAnalysisTemplateService)
+    private readonly cnisFastAnalysisTemplateService: CnisFastAnalysisTemplateService,
   ) {}
 
   public async execute(
@@ -167,17 +170,13 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
       );
 
-    const cnisFastAnalysisCompleteAnalysisPrompt =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-      );
-
     await Promise.all(
       Object.keys(documentGroup).map(async (key) => {
         const documentType = key as LegalPleadingDocumentTypeEnum;
         const documents = documentGroup[documentType] as Buffer[];
 
         let documentAnalysis: string | null = null;
+        let documentAnalysisAsHtml = false;
 
         if (
           documentType === LegalPleadingDocumentTypeEnum.CNIS &&
@@ -194,11 +193,8 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
             );
 
           documentAnalysis =
-            await this.analysisProcessorGateway.getCnisCompleteAnalysis(
-              cnisFastAnalysisCompleteAnalysisPrompt.prompt,
-              JSON.stringify(cnisAnalyzed),
-              documents,
-            );
+            await this.cnisFastAnalysisTemplateService.render(cnisAnalyzed);
+          documentAnalysisAsHtml = true;
         } else {
           documentAnalysis =
             await this.analysisProcessorGateway.getLegalPleadingQuickDocumentAnalysis(
@@ -213,11 +209,11 @@ export class CreateLegalPleadingDocumentAnalysisUseCase {
           });
 
         const analysis =
-          documentAnalysis !== null
+          documentAnalysis !== null && !documentAnalysisAsHtml
             ? await this.exportDocumentGateway.convertMarkdownToHtml(
                 documentAnalysis,
               )
-            : null;
+            : (documentAnalysis ?? null);
 
         const documentAnalysisResponseData =
           CreateLegalPleadingDocumentTypeAnalysisResponseDto.build({

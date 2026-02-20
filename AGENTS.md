@@ -932,7 +932,98 @@ export class AnalysisNotFoundError extends NotFoundError {
 - `ForbiddenError` - 403 Forbidden
 - `UnexpectedError` - 500 Internal Server Error
 
-### 3. DTO Property Decorators
+### 3. Code Organization Pattern ⚠️ MANDATORY
+
+**CRITICAL**: Constants and helper functions MUST be encapsulated inside classes, NOT at module level.
+
+**Why This Matters**:
+
+- **Maintainability**: Keeps related logic together
+- **Testability**: Easier to mock and test class behavior
+- **Encapsulation**: Prevents global namespace pollution
+- **Architecture**: Follows Clean Architecture and OOP principles
+- **Performance**: Enables proper lifecycle management (singleton services cache data in instance properties)
+
+**❌ WRONG - Module-Level Constants and Functions:**
+
+```typescript
+// ❌ BAD: Constants and functions at module level
+const APOSENTADORIA_KEYS = [
+  'aposentadoriaPorIdadeUrbana',
+  'aposentadoriaPorIdadeRural',
+] as const;
+
+const PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
+
+function humanKey(key: string): string {
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (s) => s.toUpperCase())
+    .trim();
+}
+
+@Injectable()
+export class SomeService {
+  public someMethod(): void {
+    // Using module-level constants and functions
+    for (const key of APOSENTADORIA_KEYS) {
+      const formatted = humanKey(key);
+      // ...
+    }
+  }
+}
+```
+
+**✅ CORRECT - Class-Level Constants and Methods:**
+
+```typescript
+@Injectable()
+export class SomeService {
+  protected readonly _type = SomeService.name;
+
+  // ✅ GOOD: Constants as private readonly properties
+  private readonly APOSENTADORIA_KEYS = [
+    'aposentadoriaPorIdadeUrbana',
+    'aposentadoriaPorIdadeRural',
+  ] as const;
+
+  private readonly PERCENTUAL_MENORES_CONTRIBUICOES = 0.2;
+
+  // ✅ GOOD: Helper function as private method
+  private humanKey(key: string): string {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (s) => s.toUpperCase())
+      .trim();
+  }
+
+  public someMethod(): void {
+    // Using instance properties and methods
+    for (const key of this.APOSENTADORIA_KEYS) {
+      const formatted = this.humanKey(key);
+      // ...
+    }
+  }
+}
+```
+
+**Rules**:
+
+- ✅ Constants: Use `private readonly` or `protected readonly` properties
+- ✅ Helper functions: Use `private` methods (or `protected` if needed by subclasses)
+- ✅ Access via `this`: `this.CONSTANT_NAME`, `this.helperMethod()`
+- ✅ Keep related logic inside the class that uses it
+- ❌ NO module-level constants (except true global enums or types)
+- ❌ NO module-level helper functions
+- ❌ NO global utility functions (use class methods instead)
+
+**Exception**: Only use module-level constants for:
+
+- Type definitions and interfaces
+- Enums that are used across multiple unrelated modules
+- True application-wide configuration (should be in dedicated config files)
+
+### 4. DTO Property Decorators
 
 #### Request DTO Pattern
 
@@ -1125,7 +1216,7 @@ If you find existing DTOs using `@RequestDtoFileProperty` with `FileModel[]`:
 4. Use `@RequestDtoObjectProperty(() => Base64FileRequestDto)` instead
 5. Remove unused imports: `FileModel`, `MimeTypeEnum`, `RequestDtoFileProperty`
 
-### 4. Repository Method Naming Patterns
+### 5. Repository Method Naming Patterns
 
 #### Query Repository (Read Operations)
 
@@ -1200,7 +1291,7 @@ export type TransactionType = (executor: unknown) => Promise<void>;
 | Update          | `update{Entity}` or `update{Entity}{Field}` | `TransactionType`                      |
 | Delete          | `delete{Entity}`                            | `TransactionType`                      |
 
-### 5. TypeORM Entity Patterns
+### 6. TypeORM Entity Patterns
 
 #### Column Naming and Transformers
 
@@ -1386,7 +1477,7 @@ Root Cause: Repository doesn't load relation → AutoMapper can't extract ID →
 Solution: Add `relations: { relationName: true }` to repository query
 ```
 
-### 6. Controller and Endpoint Patterns
+### 7. Controller and Endpoint Patterns
 
 #### Controller Route Decorators
 
@@ -1516,7 +1607,7 @@ export class AnalysisController {
 - ✅ Use `@Query()` for query parameters
 - ✅ Controller methods should ONLY call use cases (no business logic)
 
-### 7. Value Object Patterns
+### 8. Value Object Patterns
 
 ```typescript
 import { BaseValueObject } from '@core/domain/schema/value-object/base/base.value-object';
@@ -1560,7 +1651,7 @@ export class AnalysisId extends BaseValueObject<string> {
 - ✅ Immutable (readonly value)
 - ❌ NO business logic (only validation)
 
-### 8. Module Registration Patterns
+### 9. Module Registration Patterns
 
 #### Feature Module Pattern
 
@@ -1627,7 +1718,7 @@ const providers: ClassProvider[] = [
 - ✅ Repository gateways registered ONLY in `DatabaseModule`
 - ❌ DO NOT register repositories in feature modules
 
-### 9. Build Pattern for Objects
+### 10. Build Pattern for Objects
 
 #### Usage in DTOs and TypeORM Entities
 
@@ -1653,7 +1744,7 @@ const entity = AnalysisTypeormEntity.build({
 - ✅ TypeORM entities extend `BaseTypeormEntity` (which extends `BaseBuildableObject`)
 - ✅ Build pattern handles automatic property assignment
 
-### 10. Enum Patterns
+### 11. Enum Patterns
 
 ```typescript
 export enum AnalysisStatusEnum {
@@ -1674,7 +1765,7 @@ export enum AnalysisStatusEnum {
 - ❌ NO numeric enums
 - ❌ NO accents, special symbols, or spaces in enum values (use only alphanumeric and underscores)
 
-### 11. AutoMapper Profile Patterns
+### 12. AutoMapper Profile Patterns
 
 ```typescript
 import { Mapper, constructUsing, createMap } from '@automapper/core';

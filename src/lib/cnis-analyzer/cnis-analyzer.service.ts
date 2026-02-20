@@ -1117,6 +1117,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const endDate = relation.socialSecurityAffiliationInfo.dataFim;
       const lastDateRemun = relation.socialSecurityAffiliationInfo.ultRemun;
       const seq = relation.socialSecurityAffiliationInfo.seq;
+      const totalContribuicao = this.calculateTotalContribuicao(
+        relation.socialSecurityAffiliationEarningsHistory,
+      );
 
       let calculatedContributionTime: TempoDeContribuicaoInterface = {
         seq: seq ?? 0,
@@ -1134,6 +1137,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao,
         },
       };
 
@@ -1147,6 +1151,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           startDate,
           endDate,
         );
+
         calculatedContributionTime = {
           seq: seq ?? 0,
           origemDoVinculo:
@@ -1163,6 +1168,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: days,
             meses: months,
             anos: years,
+            totalContribuicao,
           },
         };
       }
@@ -1192,6 +1198,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: days,
             meses: months,
             anos: years,
+            totalContribuicao,
           },
         };
       }
@@ -1316,6 +1323,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     return data.socialSecurityRelations.map((relation) => {
       const seq = relation.socialSecurityAffiliationInfo.seq ?? 1;
+      const totalContribuicao = this.calculateTotalContribuicao(
+        relation.socialSecurityAffiliationEarningsHistory,
+      );
       const indicadoresRemuneracao =
         relation.socialSecurityAffiliationEarningsHistory
           .map((item) => item.indicadores)
@@ -1376,6 +1386,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
 
       const carencia =
@@ -1392,6 +1403,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         concomitanciaDetalhe?.tipo === 'secundario'
           ? (this.calculateConsolidatedTimeContributionAndCarenciaAjustado(
               seq,
+              totalContribuicao,
               concomitanciaDetalhe.dataAjustada?.dataInicio ?? undefined,
               concomitanciaDetalhe.dataAjustada?.dataFim ?? undefined,
             ).dados ?? contributionTime)
@@ -1424,6 +1436,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculateConsolidatedTimeContributionAndCarenciaAjustado(
     seq: number,
+    totalContribuicao: string,
     startDate?: Date,
     endDate?: Date,
   ): TempoDeContribuicaoInterface {
@@ -1448,6 +1461,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: days,
           meses: months,
           anos: years,
+          totalContribuicao,
         },
       };
     }
@@ -1462,6 +1476,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: 0,
         meses: 0,
         anos: 0,
+        totalContribuicao: '0',
       },
     };
   }
@@ -1671,6 +1686,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
             dias: 0,
             meses: 0,
             anos: 0,
+            totalContribuicao: '0',
           };
           item.carencia = 0;
         }
@@ -1815,7 +1831,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   }
 
   private calculateRequirementDateByAge(
-    requiredAge: number,
+    idadeRequerida: number,
     currentAge: number,
     birthDate: Date | null,
   ): Date | null {
@@ -1826,11 +1842,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       return null;
     }
 
-    if (currentAge < requiredAge) {
+    if (currentAge < idadeRequerida) {
       return null;
     }
 
-    const fullRequiredAge = Math.floor(requiredAge);
+    const fullRequiredAge = Math.floor(idadeRequerida);
 
     return new Date(
       birthDate.getFullYear() + fullRequiredAge,
@@ -2331,7 +2347,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
   private calculatePointsRequirementDate(
     data: ConsolidadoRelacaoInterface[],
-    requiredPoints: number,
+    pontosRequeridos: number,
     currentAge: number,
     birthDate?: Date,
   ): Date | null {
@@ -2342,7 +2358,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const totalPoints = this.calculateTotals(data);
     const totalPointsAcquired = currentAge + totalPoints.totalInYears;
 
-    if (totalPointsAcquired < requiredPoints) {
+    if (totalPointsAcquired < pontosRequeridos) {
       return null;
     }
 
@@ -2395,8 +2411,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const pointsGainedInPeriod = durationInYears * 2;
       const pointsAtEndOfPeriod = pointsBeforePeriod + pointsGainedInPeriod;
 
-      if (pointsAtEndOfPeriod >= requiredPoints) {
-        const pointsNeeded = requiredPoints - pointsBeforePeriod;
+      if (pointsAtEndOfPeriod >= pontosRequeridos) {
+        const pointsNeeded = pontosRequeridos - pointsBeforePeriod;
 
         const yearsNeededForPoints = pointsNeeded / 2;
 
@@ -2440,7 +2456,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     gender: string,
     percentualPedagio: number,
   ): PedagioPosReformaInterface {
-    const requiredContributionYears = this.getRequiredContributionAge(gender);
+    const anosDeContribuicaoRequeridos =
+      this.getRequiredContributionAge(gender);
 
     let totalContributionYearsAtReforma = 0;
     let totalContributionMonthsAtReforma = 0;
@@ -2483,11 +2500,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     );
 
     const tempoFaltante =
-      requiredContributionYears - totalContributionAtReforma;
+      anosDeContribuicaoRequeridos - totalContributionAtReforma;
 
     const pedagio = tempoFaltante * percentualPedagio;
 
-    const tempoTotalNecessario = requiredContributionYears + pedagio;
+    const tempoTotalNecessario = anosDeContribuicaoRequeridos + pedagio;
 
     return {
       totalContributionAtReforma,
@@ -2543,7 +2560,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const POINTS_MEN = 96;
     const POINTS_WOMEN = 86;
 
-    const requiredContributionYears = this.getRequiredContributionAge(gender);
+    const anosDeContribuicaoRequeridos =
+      this.getRequiredContributionAge(gender);
 
     data.forEach((item) => {
       const dataInicio = this.toDate(
@@ -2569,6 +2587,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -2586,20 +2605,21 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
     const totals = this.calculateTotals(data);
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
-    const requiredPoints = gender === 'F' ? POINTS_WOMEN : POINTS_MEN;
+    const pontosRequeridos = gender === 'F' ? POINTS_WOMEN : POINTS_MEN;
 
     const meetsContributionRequirement =
-      totals.totalInYears >= requiredContributionYears;
+      totals.totalInYears >= anosDeContribuicaoRequeridos;
 
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
-    const meetsPointsRequirement = points >= requiredPoints;
+    const meetsPointsRequirement = points >= pontosRequeridos;
 
     const isEligible =
       meetsContributionRequirement &&
@@ -2609,7 +2629,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const contributionRequirementDate = meetsContributionRequirement
       ? this.calculateContributionRequirementDate(
           data,
-          requiredContributionYears,
+          anosDeContribuicaoRequeridos,
         )
       : null;
 
@@ -2620,7 +2640,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const pointsRequirementDate = this.calculatePointsRequirementDate(
       data,
-      requiredPoints,
+      pontosRequeridos,
       age,
       birthDate,
     );
@@ -2644,7 +2664,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const monthsToContribution = meetsContributionRequirement
       ? 0
       : Math.ceil(
-          (requiredContributionYears - totals.totalInYears) *
+          (anosDeContribuicaoRequeridos - totals.totalInYears) *
             this.MONTHS_IN_YEAR,
         );
 
@@ -2654,7 +2674,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToPoints = meetsPointsRequirement
       ? 0
-      : Math.ceil((requiredPoints - points) * this.MONTHS_IN_YEAR);
+      : Math.ceil((pontosRequeridos - points) * this.MONTHS_IN_YEAR);
 
     const monthsToFulfill = Math.max(
       monthsToContribution,
@@ -2707,15 +2727,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         atingiuRequisitoDePontos: meetsPointsRequirement,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        requiredContributionYears,
-        requiredPoints,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
+        anosDeContribuicaoRequeridos,
+        pontosRequeridos,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         dataQueIraAtingirRequisitoDePontos,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedPointsRequirementDate: pointsRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDePontos: pointsRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -2735,7 +2755,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const REQUIRED_AGE_MEN = 65;
     const REQUIRED_AGE_WOMEN = 60;
 
-    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+    const idadeRequerida =
+      gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
     const CUTOFF_DATE = new Date('2019-11-13');
 
     data.forEach((item) => {
@@ -2762,6 +2783,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -2780,17 +2802,22 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const carenciaRequirementDate = this.calculateCarenciaRequirementDate(
@@ -2816,7 +2843,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToAge = meetsAgeRequirement
       ? 0
-      : (requiredAge - age) * this.MONTHS_IN_YEAR;
+      : (idadeRequerida - age) * this.MONTHS_IN_YEAR;
 
     const monthsToCarencia = meetsCarenciaRequirement
       ? 0
@@ -2859,12 +2886,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       requirements: {
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        requiredAge,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeIdade,
         dataQueIraAtingirRequisitoDeCarencia,
-        reachedAgeRequirementDate: ageRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -2886,7 +2913,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const MAX_POINTS_MEN = 105;
     const MAX_POINTS_WOMEN = 100;
 
-    const requiredContributionYears = this.getRequiredContributionAge(gender);
+    const anosDeContribuicaoRequeridos =
+      this.getRequiredContributionAge(gender);
 
     const basePoints = gender === 'F' ? BASE_POINTS_WOMEN : BASE_POINTS_MEN;
     const maxPoints = gender === 'F' ? MAX_POINTS_WOMEN : MAX_POINTS_MEN;
@@ -2895,7 +2923,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
     const currentYear = new Date().getFullYear();
-    const requiredPoints = Math.min(
+    const pontosRequeridos = Math.min(
       basePoints + Math.max(0, currentYear - this.YEAR_2020),
       maxPoints,
     );
@@ -2903,17 +2931,17 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const pontos = this.calculatePontos(age, data);
 
     const meetsContributionRequirement =
-      totals.totalInYears >= requiredContributionYears;
+      totals.totalInYears >= anosDeContribuicaoRequeridos;
 
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
-    const meetsPointsRequirement = pontos >= requiredPoints;
+    const meetsPointsRequirement = pontos >= pontosRequeridos;
 
     const contributionRequirementDate = meetsContributionRequirement
       ? this.calculateContributionRequirementDate(
           data,
-          requiredContributionYears,
+          anosDeContribuicaoRequeridos,
         )
       : null;
 
@@ -2924,7 +2952,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const pointsRequirementDate = this.calculatePointsRequirementDate(
       data,
-      requiredPoints,
+      pontosRequeridos,
       age,
       birthDate,
     );
@@ -2937,7 +2965,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           totals.years,
           totals.months,
           totals.days,
-          requiredContributionYears,
+          anosDeContribuicaoRequeridos,
         );
 
     const monthsToCarencia = meetsCarenciaRequirement
@@ -2946,7 +2974,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToPoints = meetsPointsRequirement
       ? 0
-      : Math.ceil((requiredPoints - pontos) * this.MONTHS_IN_YEAR);
+      : Math.ceil((pontosRequeridos - pontos) * this.MONTHS_IN_YEAR);
 
     const adjustedMonthsToPoints = Math.max(
       0,
@@ -3022,18 +3050,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       age,
 
       requirements: {
-        requiredContributionYears,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        requiredPoints,
+        anosDeContribuicaoRequeridos,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
+        pontosRequeridos,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         dataQueIraAtingirRequisitoDePontos,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         atingiuRequisitoDePontos: meetsPointsRequirement,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
-        reachedPointsRequirementDate: pointsRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDePontos: pointsRequirementDate,
       },
 
       eligibility: {
@@ -3093,7 +3121,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const REQUIRED_CARENCIA_MONTHS = 180;
     const PEDAGIO_PERCENTAGE = 1;
 
-    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+    const idadeRequerida =
+      gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
     const requiredContribution = this.getRequiredContributionAge(gender);
 
     const totalContribution = this.totalContributionType(data);
@@ -3106,7 +3135,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
     const meetsContributionRequirement =
       totalContribution >= pedagioData.tempoTotalNecessario;
     const meetsCarenciaRequirement =
@@ -3115,7 +3144,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const actualDate = new Date();
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const contributionRequirementDate = meetsContributionRequirement
@@ -3132,7 +3165,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToAge = meetsAgeRequirement
       ? 0
-      : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
+      : Math.ceil((idadeRequerida - age) * this.MONTHS_IN_YEAR);
 
     const monthsToContribution = meetsContributionRequirement
       ? 0
@@ -3214,18 +3247,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalContributionYearsAtReforma: pedagioData.totalContributionAtReforma,
       totalCarenciaMonths,
       requirements: {
-        requiredAge,
-        requiredContributionYears: requiredContribution,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
+        anosDeContribuicaoRequeridos: requiredContribution,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeIdade,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedAgeRequirementDate: ageRequirementDate,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -3249,7 +3282,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const PEDAGIO_PERCENTAGE = 0.5;
     const YEARS_INCREASE_START = 2020;
     const currentDate = new Date();
-    const requiredContributionYears =
+    const anosDeContribuicaoRequeridos =
       gender === 'F'
         ? this.REQUIRED_CONTRIBUTION_WOMEN
         : this.REQUIRED_CONTRIBUTION_MEN;
@@ -3262,27 +3295,31 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const currentYear = new Date().getFullYear();
     const yearsSince2020 = Math.max(0, currentYear - YEARS_INCREASE_START);
 
-    let requiredAge = baseAge + yearsSince2020 * PEDAGIO_PERCENTAGE;
-    if (requiredAge > maxAge) {
-      requiredAge = maxAge;
+    let idadeRequerida = baseAge + yearsSince2020 * PEDAGIO_PERCENTAGE;
+    if (idadeRequerida > maxAge) {
+      idadeRequerida = maxAge;
     }
 
     const meetsContributionRequirement =
-      totals.totalInYears >= requiredContributionYears;
+      totals.totalInYears >= anosDeContribuicaoRequeridos;
 
     const meetsCarenciaRequirement =
       totals.carencia >= REQUIRED_CARENCIA_MONTHS;
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const contributionRequirementDate = meetsContributionRequirement
       ? this.calculateContributionRequirementDate(
           data,
-          requiredContributionYears,
+          anosDeContribuicaoRequeridos,
         )
       : null;
 
@@ -3314,7 +3351,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           totals.years,
           totals.months,
           totals.days,
-          requiredContributionYears,
+          anosDeContribuicaoRequeridos,
         );
 
     const monthsToCarencia = meetsCarenciaRequirement
@@ -3323,7 +3360,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToAge = meetsAgeRequirement
       ? 0
-      : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
+      : Math.ceil((idadeRequerida - age) * this.MONTHS_IN_YEAR);
 
     const monthsToFulfill = Math.max(
       monthsToContribution,
@@ -3370,18 +3407,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalCarenciaMonths: totals.carencia,
       age,
       requirements: {
-        requiredContributionYears,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
-        requiredAge,
+        anosDeContribuicaoRequeridos,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         dataQueIraAtingirRequisitoDeIdade,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
-        reachedAgeRequirementDate: ageRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
       },
       eligibility: {
         isEligible: eligibilityDate !== null,
@@ -3497,14 +3534,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalContributionYearsAtReforma: pedagioData.totalContributionAtReforma,
       totalCarenciaMonths,
       requirements: {
-        requiredContributionYears: requiredContribution,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        anosDeContribuicaoRequeridos: requiredContribution,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         atingiuRequisitoDeContribuicao: meetsContributionTimeRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -3529,7 +3566,8 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const REQUIRED_AGE_WOMEN = 60;
 
     const cutoff = this.CUTOFF_DATE;
-    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+    const idadeRequerida =
+      gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
 
     const hasSeguradoEspecial = data.some(
       (item) =>
@@ -3544,12 +3582,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         age,
         totalCarenciaMonths: 0,
         requirements: {
-          requiredAge,
-          requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+          idadeRequerida,
+          mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
           atingiuRequisitoDeIdade: false,
           atingiuRequisitoDeCarencia: false,
-          reachedAgeRequirementDate: null,
-          reachedCarenciaRequirementDate: null,
+          dataQueAtingiuRequisitoDeIdade: null,
+          dataQueAtingiuRequisitoDeCarencia: null,
         },
         eligibility: {
           isEligible: false,
@@ -3581,6 +3619,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
           dias: 0,
           meses: 0,
           anos: 0,
+          totalContribuicao: '0',
         };
         return;
       }
@@ -3596,19 +3635,20 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         dias: days,
         meses: months,
         anos: years,
+        totalContribuicao: undefined,
       };
     });
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data, cutoff);
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
     const isEligible = meetsAgeRequirement && meetsCarenciaRequirement;
 
     const ageCompletionDate = new Date(
-      birthDate.getFullYear() + requiredAge,
+      birthDate.getFullYear() + idadeRequerida,
       birthDate.getMonth(),
       birthDate.getDate(),
     );
@@ -3629,12 +3669,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       age,
       totalCarenciaMonths,
       requirements: {
-        requiredAge,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedAgeRequirementDate: ageCompletionDate,
-        reachedCarenciaRequirementDate: carenciaCompletionDate,
+        dataQueAtingiuRequisitoDeIdade: ageCompletionDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaCompletionDate,
       },
       eligibility: {
         isEligible,
@@ -3661,24 +3701,24 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const currentYear = new Date().getFullYear();
     const yearsSince2020 = Math.max(0, currentYear - YEARS_INCREASE_START);
 
-    let requiredAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
+    let idadeRequerida = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
 
     if (gender === 'F') {
-      requiredAge = BASE_AGE_WOMEN + yearsSince2020 * HALF_YEAR_AS_DECIMAL;
-      if (requiredAge > MAX_AGE_WOMEN) {
-        requiredAge = MAX_AGE_WOMEN;
+      idadeRequerida = BASE_AGE_WOMEN + yearsSince2020 * HALF_YEAR_AS_DECIMAL;
+      if (idadeRequerida > MAX_AGE_WOMEN) {
+        idadeRequerida = MAX_AGE_WOMEN;
       }
     }
 
     if (gender === 'M') {
-      requiredAge = BASE_AGE_MEN;
+      idadeRequerida = BASE_AGE_MEN;
     }
 
     const totals = this.calculateTotals(data);
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
     const meetsContributionRequirement =
       totals.totalInYears >= REQUIRED_CONTRIBUTION_YEARS;
     const meetsCarenciaRequirement =
@@ -3690,7 +3730,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       meetsCarenciaRequirement;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const contributionRequirementDate =
@@ -3719,7 +3763,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const monthsToAge = meetsAgeRequirement
       ? 0
-      : Math.ceil((requiredAge - age) * this.MONTHS_IN_YEAR);
+      : Math.ceil((idadeRequerida - age) * this.MONTHS_IN_YEAR);
 
     const monthsToContribution = meetsContributionRequirement
       ? 0
@@ -3781,18 +3825,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalCarenciaMonths,
       age,
       requirements: {
-        requiredAge,
-        requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
+        anosDeContribuicaoRequeridos: REQUIRED_CONTRIBUTION_YEARS,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeIdade,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedAgeRequirementDate: ageRequirementDate,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible: allRequirementsMet,
@@ -3814,7 +3858,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const MAX_AGE_WOMEN = 62;
     const REQUIRED_CONTRIBUTION_YEARS = 15;
 
-    const requiredAge = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
+    const idadeRequerida = gender === 'F' ? BASE_AGE_WOMEN : BASE_AGE_MEN;
     const calculatedTotals = this.calculateTotals(data);
 
     const currentYear = new Date().getFullYear();
@@ -3822,18 +3866,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const SIX_MONTHS_IN_YEARS_PERCENTUAL = 0.5;
 
-    let requiredAgeAdjusted = requiredAge;
+    let requiredAgeAdjusted = idadeRequerida;
     if (gender === 'F') {
       const yearsSince2020 = Math.max(0, currentYear - year2020);
       requiredAgeAdjusted = Math.min(
-        requiredAge + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
+        idadeRequerida + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
         MAX_AGE_WOMEN,
       );
     }
     if (gender === 'M') {
       const yearsSince2020 = Math.max(0, currentYear - year2020);
       requiredAgeAdjusted = Math.min(
-        requiredAge + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
+        idadeRequerida + yearsSince2020 * SIX_MONTHS_IN_YEARS_PERCENTUAL,
         BASE_AGE_MEN,
       );
     }
@@ -3852,15 +3896,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         totalCarenciaMonths: 0,
         age,
         requirements: {
-          requiredAge: requiredAgeAdjusted,
-          requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
-          requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+          idadeRequerida: requiredAgeAdjusted,
+          anosDeContribuicaoRequeridos: REQUIRED_CONTRIBUTION_YEARS,
+          mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
           atingiuRequisitoDeIdade: false,
           atingiuRequisitoDeContribuicao: false,
           atingiuRequisitoDeCarencia: false,
-          reachedAgeRequirementDate: null,
-          reachedContributionRequirementDate: null,
-          reachedCarenciaRequirementDate: null,
+          dataQueAtingiuRequisitoDeIdade: null,
+          dataQueAtingiuRequisitoDeContribuicao: null,
+          dataQueAtingiuRequisitoDeCarencia: null,
         },
         eligibility: {
           isEligible: false,
@@ -3884,7 +3928,11 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       meetsCarenciaRequirement;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const contributionRequirementDate =
@@ -4004,18 +4052,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalCarenciaMonths,
       age,
       requirements: {
-        requiredAge: requiredAgeAdjusted,
-        requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida: requiredAgeAdjusted,
+        anosDeContribuicaoRequeridos: REQUIRED_CONTRIBUTION_YEARS,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeIdade,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedAgeRequirementDate: ageRequirementDate,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible,
@@ -4039,20 +4087,25 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     const REQUIRED_CONTRIBUTION_YEARS =
       gender === 'F' ? REQUIRED_CONTRIBUTION_WOMEN : REQUIRED_CONTRIBUTION_MEN;
 
-    const requiredAge = gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
+    const idadeRequerida =
+      gender === 'F' ? REQUIRED_AGE_WOMEN : REQUIRED_AGE_MEN;
 
     const totals = this.calculateTotals(data);
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
 
-    const meetsAgeRequirement = age >= requiredAge;
+    const meetsAgeRequirement = age >= idadeRequerida;
     const meetsContributionRequirement =
       totals.totalInYears >= REQUIRED_CONTRIBUTION_YEARS;
     const meetsCarenciaRequirement =
       totalCarenciaMonths >= REQUIRED_CARENCIA_MONTHS;
 
     const ageRequirementDate = meetsAgeRequirement
-      ? this.calculateRequirementDateByAge(requiredAge, age, birthDate ?? null)
+      ? this.calculateRequirementDateByAge(
+          idadeRequerida,
+          age,
+          birthDate ?? null,
+        )
       : null;
 
     const contributionRequirementDate =
@@ -4084,7 +4137,7 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
     const now = new Date();
 
-    const missingAgeYears = meetsAgeRequirement ? 0 : requiredAge - age;
+    const missingAgeYears = meetsAgeRequirement ? 0 : idadeRequerida - age;
 
     const missingContributionYears = meetsContributionRequirement
       ? 0
@@ -4148,18 +4201,18 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       totalCarenciaMonths,
       age,
       requirements: {
-        requiredAge,
-        requiredContributionYears: REQUIRED_CONTRIBUTION_YEARS,
-        requiredCarenciaMonths: REQUIRED_CARENCIA_MONTHS,
+        idadeRequerida,
+        anosDeContribuicaoRequeridos: REQUIRED_CONTRIBUTION_YEARS,
+        mesesDeCarenciaRequeridos: REQUIRED_CARENCIA_MONTHS,
         dataQueIraAtingirRequisitoDeIdade,
         dataQueIraAtingirRequisitoDeContribuicao,
         dataQueIraAtingirRequisitoDeCarencia,
         atingiuRequisitoDeIdade: meetsAgeRequirement,
         atingiuRequisitoDeContribuicao: meetsContributionRequirement,
         atingiuRequisitoDeCarencia: meetsCarenciaRequirement,
-        reachedAgeRequirementDate: ageRequirementDate,
-        reachedContributionRequirementDate: contributionRequirementDate,
-        reachedCarenciaRequirementDate: carenciaRequirementDate,
+        dataQueAtingiuRequisitoDeIdade: ageRequirementDate,
+        dataQueAtingiuRequisitoDeContribuicao: contributionRequirementDate,
+        dataQueAtingiuRequisitoDeCarencia: carenciaRequirementDate,
       },
       eligibility: {
         isEligible: allRequirementsMet,
@@ -4167,5 +4220,67 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         projectedFulfillmentDate: finalProjectedFulfillmentDate,
       },
     };
+  }
+
+  private calculateTotalContribuicao(
+    earningsHistory: CnisSessionSocialSecurityAffiliationEarningsHistoryModel[],
+  ): string {
+    const earningsObj: { salario: number; competencia: string }[] =
+      earningsHistory.map((earning) => {
+        const dataRemuneracao = earning.competencia;
+        const rawSalario = earning.remuneracao ?? '';
+        const salario = Number(rawSalario.replace(/\./g, '').replace(',', '.'));
+
+        if (
+          dataRemuneracao instanceof Date &&
+          !isNaN(dataRemuneracao.getTime()) &&
+          salario > 0
+        ) {
+          const year = dataRemuneracao.getFullYear();
+
+          const tetoData = TetoInssData.find((t) => t.ano === year);
+
+          if (tetoData) {
+            return {
+              salario:
+                salario > tetoData.tetoInss ? tetoData.tetoInss : salario,
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
+            };
+          } else {
+            return {
+              salario,
+              competencia: dataRemuneracao.toISOString().split('T')[0] ?? '',
+            };
+          }
+        }
+        return {
+          salario: 0,
+          competencia: '',
+        };
+      });
+
+    const earnings = earningsObj.reduce((acc, item) => {
+      const COMPETENCIA_YEAR_START = 0;
+      const COMPETENCIA_YEAR_END = 4;
+      const COMPETENCIA_MONTH_START = 5;
+      const COMPETENCIA_MONTH_END = 7;
+
+      const competenciaFormatted =
+        item.competencia.slice(COMPETENCIA_MONTH_START, COMPETENCIA_MONTH_END) +
+        '/' +
+        item.competencia.slice(COMPETENCIA_YEAR_START, COMPETENCIA_YEAR_END);
+      const fatorData = ipcaData.find(
+        (f) => f.competencia === competenciaFormatted,
+      );
+      const fatorCorrecao = fatorData ? fatorData.fatorSimplificado : 1;
+
+      const valorCorrigido = item.salario * fatorCorrecao;
+      return acc + valorCorrigido;
+    }, 0);
+
+    return earnings.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   }
 }
