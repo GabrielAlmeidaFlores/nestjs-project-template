@@ -3,6 +3,7 @@ import type { NotFoundError } from '@core/error/not-found.error';
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import type { ListLegalPleadingQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/param/list-legal-pleading.query.param';
+import type { GetLegalPleadingWithFullRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-full-relations.query.result';
 import type { GetLegalPleadingWithRelationsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/get-legal-pleading-with-relations.query.result';
 import type { LegalPleadingStatisticsQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics.query.result';
 import type { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
@@ -48,4 +49,11 @@ export abstract class LegalPleadingQueryRepositoryGateway {
     endDate: Date,
     petitionType?: LegalPleadingPetitionTypeEnum,
   ): Promise<LegalPleadingStatisticsQueryResult>;
+
+  public abstract countAllLegalPleadingsForYear(year: number): Promise<number>;
+
+  public abstract listAllLegalPleadingsForYear(
+    year: number,
+    listData: ListLegalPleadingQueryParam,
+  ): Promise<ListDataOutputModel<GetLegalPleadingWithFullRelationsQueryResult>>;
 }

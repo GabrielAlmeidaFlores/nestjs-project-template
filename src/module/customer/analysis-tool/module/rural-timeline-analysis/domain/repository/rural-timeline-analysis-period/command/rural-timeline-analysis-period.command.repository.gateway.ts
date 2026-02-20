@@ -7,6 +7,10 @@ export abstract class RuralTimelineAnalysisPeriodCommandRepositoryGateway {
     props: RuralTimelineAnalysisPeriodEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisPeriod(
+    props: RuralTimelineAnalysisPeriodEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisPeriod(
     id: RuralTimelineAnalysisPeriodId,
   ): TransactionType;

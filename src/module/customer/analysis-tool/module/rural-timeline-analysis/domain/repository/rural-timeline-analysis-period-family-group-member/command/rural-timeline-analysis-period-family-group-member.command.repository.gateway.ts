@@ -7,6 +7,10 @@ export abstract class RuralTimelineAnalysisPeriodFamilyGroupMemberCommandReposit
     props: RuralTimelineAnalysisPeriodFamilyGroupMemberEntity,
   ): TransactionType;
 
+  public abstract updateRuralTimelineAnalysisPeriodFamilyGroupMember(
+    props: RuralTimelineAnalysisPeriodFamilyGroupMemberEntity,
+  ): TransactionType;
+
   public abstract deleteRuralTimelineAnalysisPeriodFamilyGroupMember(
     id: RuralTimelineAnalysisPeriodFamilyGroupMemberId,
   ): TransactionType;
