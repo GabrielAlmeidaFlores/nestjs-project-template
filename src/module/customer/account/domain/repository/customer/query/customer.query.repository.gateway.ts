@@ -1,6 +1,7 @@
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { NotFoundError } from '@core/error/not-found.error';
+import type { UsersStatisticsMonthlyQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-statistics.query.result';
 import type { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import type { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import type { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
@@ -41,4 +42,8 @@ export abstract class CustomerQueryRepositoryGateway {
   public abstract listAllCustomersWithAuthIdentity(): Promise<
     Array<GetCustomerWithAuthIdentityRelationQueryResult>
   >;
+
+  public abstract countAllMonthlyUsersForYear(
+    year: number,
+  ): Promise<Array<UsersStatisticsMonthlyQueryResult>>;
 }

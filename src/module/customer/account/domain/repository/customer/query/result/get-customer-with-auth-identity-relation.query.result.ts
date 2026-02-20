@@ -1,6 +1,7 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
 
 import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import type { GetOrganizationMemberWithOrganizationRelationQueryResult } from '@module/customer/account/domain/repository/organization-member/query/result/get-organization-member-with-organization-relation.query.result';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import type { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 
@@ -14,6 +15,9 @@ export class GetCustomerWithAuthIdentityRelationQueryResult extends BaseBuildabl
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
   public readonly authIdentity: GetAuthIdentityQueryResult;
+  public readonly organizationMember?:
+    | GetOrganizationMemberWithOrganizationRelationQueryResult[]
+    | undefined;
 
   protected override readonly _type =
     GetCustomerWithAuthIdentityRelationQueryResult.name;

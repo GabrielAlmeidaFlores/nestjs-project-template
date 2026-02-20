@@ -1340,7 +1340,10 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
   }
 
-  public async countAllAnalysesForYear(year: number): Promise<number> {
+  public async countAllAnalysesForYear(
+    year: number,
+    type?: AnalysisToolRecordTypeEnum,
+  ): Promise<number> {
     const JANUARY = 0;
     const DECEMBER = 11;
     const LAST_DAY_OF_MONTH = 31;
@@ -1360,10 +1363,16 @@ export class AnalysisToolRecordTypeormQueryRepository
       LAST_MILLISECOND,
     );
 
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    if (type !== undefined) {
+      whereClause.type = type;
+    }
+
     const count = await this.repository.count({
-      where: {
-        createdAt: Between(startDate, endDate),
-      },
+      where: whereClause,
     });
 
     return count;
@@ -1371,6 +1380,7 @@ export class AnalysisToolRecordTypeormQueryRepository
 
   public async countAllMonthlyAnalysesForYear(
     year: number,
+    type?: AnalysisToolRecordTypeEnum,
   ): Promise<Array<GetAnalysisToolRecordStatisticsMonthlyQueryResult>> {
     const JANUARY = 0;
     const DECEMBER = 11;
@@ -1391,10 +1401,16 @@ export class AnalysisToolRecordTypeormQueryRepository
       LAST_MILLISECOND,
     );
 
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    if (type !== undefined) {
+      whereClause.type = type;
+    }
+
     const analyses = await this.repository.find({
-      where: {
-        createdAt: Between(startDate, endDate),
-      },
+      where: whereClause,
       select: {
         createdAt: true,
       },
