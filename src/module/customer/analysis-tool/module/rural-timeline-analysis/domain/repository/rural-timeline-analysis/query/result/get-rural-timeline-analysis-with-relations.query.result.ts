@@ -4,6 +4,8 @@ import type { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { PostalCode } from '@core/domain/schema/value-object/postal-code/postal-code.value-object';
+import type { GetRuralTimelineAnalysisInssBenefitQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/query/result/get-rural-timeline-analysis-inss-benefit.query.result';
+import type { GetRuralTimelineAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-legal-proceeding/query/result/get-rural-timeline-analysis-legal-proceeding.query.result';
 import type { RuralTimelineAnalysisWorkRegimeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/enum/rural-timeline-work-regime.enum';
 import type { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import type { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
@@ -146,6 +148,8 @@ export class GetRuralTimelineAnalysisWithRelationsQueryResult extends BaseBuilda
   public readonly ruralTimelineSimplifiedAnalysis: string | null;
   public readonly ruralTimelinePeriodDocumentAnalysis: string | null;
   public readonly workRegime: RuralTimelineAnalysisWorkRegimeEnum;
+  public readonly ruralTimelineAnalysisInssBenefit: GetRuralTimelineAnalysisInssBenefitQueryResult[];
+  public readonly ruralTimelineAnalysisLegalProceeding: GetRuralTimelineAnalysisLegalProceedingQueryResult[];
   public readonly ruralTimelineAnalysisPeriod: GetRuralTimelineAnalysisPeriodQueryResult[];
   public readonly ruralTimelineDocument: GetRuralTimelineAnalysisDocumentQueryResult[];
   public readonly ruralTimelineCnisContributionPeriod: GetRuralTimelineAnalysisCnisContributionPeriodQueryResult[];

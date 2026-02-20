@@ -9,4 +9,6 @@ export interface RuralTimelineAnalysisEntityPropsInterface extends BaseEntityPro
   ruralTimelinePeriodDocumentAnalysis?: string | null;
   analysisToolClientId: AnalysisToolClientId;
   workRegime: RuralTimelineAnalysisWorkRegimeEnum;
+  legalProceedingNumber?: string[] | null;
+  inssBenefitNumber?: string[] | null;
 }
