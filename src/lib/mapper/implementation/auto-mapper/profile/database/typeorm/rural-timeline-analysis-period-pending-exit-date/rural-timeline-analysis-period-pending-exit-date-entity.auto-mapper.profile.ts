@@ -6,7 +6,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import { RuralTimelineAnalysisPeriodPendingExitDateEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/value-object/rural-timeline-analysis-period-pending-exit-date-id/rural-timeline-analysis-period-pending-exit-date-id.value-object';
 
@@ -28,7 +28,7 @@ export class RuralTimelineAnalysisPeriodPendingExitDateEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
     ): RuralTimelineAnalysisPeriodPendingExitDateEntity => {
-      if (!source.ruralTimelineCnisContributionPeriod) {
+      if (!source.ruralTimelineCnisContributionPeriod?.id) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             RuralTimelineAnalysisPeriodPendingExitDateEntity.name,
@@ -37,18 +37,14 @@ export class RuralTimelineAnalysisPeriodPendingExitDateEntityAutoMapperProfile {
         });
       }
 
-      const ruralTimelineCnisContributionPeriod = this.mapper.map(
-        source.ruralTimelineCnisContributionPeriod,
-        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
-        RuralTimelineAnalysisCnisContributionPeriodEntity,
-      );
-
       return new RuralTimelineAnalysisPeriodPendingExitDateEntity({
         id: new RuralTimelineAnalysisPeriodPendingExitDateId(source.id),
         pendingDate: source.pendingDate,
         pendingAmount: new DecimalValue(source.pendingAmount),
         ruralTimelineCnisContributionPeriodId:
-          ruralTimelineCnisContributionPeriod.id,
+          new RuralTimelineAnalysisCnisContributionPeriodId(
+            source.ruralTimelineCnisContributionPeriod.id,
+          ),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

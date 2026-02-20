@@ -239,6 +239,7 @@ import { GetRuralTimelineAnalysisPeriodEconomicAspectsQueryResultAutoMapperProfi
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/get-rural-timeline-analysis-period-family-group-member-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member-entity.auto-mapper.profile';
+import { GetRuralTimelineAnalysisPeriodPendingExitDateQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-pending-exit-date/get-rural-timeline-analysis-period-pending-exit-date-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodPendingExitDateEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisPeriodPropertyQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/get-rural-timeline-analysis-period-property-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
@@ -520,6 +521,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     RuralTimelineAnalysisDocumentEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodPendingExitDateEntityAutoMapperProfile,
+    GetRuralTimelineAnalysisPeriodPendingExitDateQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,
