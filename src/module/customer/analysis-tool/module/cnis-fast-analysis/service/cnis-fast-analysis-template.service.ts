@@ -37,13 +37,9 @@ export class CnisFastAnalysisTemplateService {
 
   private readonly templatePath = path.join(
     process.cwd(),
-    'src',
-    'module',
-    'customer',
-    'analysis-tool',
-    'module',
+    'assets',
+    'pdf-template',
     'cnis-fast-analysis',
-    'templates',
     'cnis-fast-analysis-complete.hbs',
   );
 
