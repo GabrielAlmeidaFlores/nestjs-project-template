@@ -1,10 +1,11 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { DashboardSubscriptionStatusEnum } from '@module/admin/dashboard-metrics/dto/response/enum/dashboard-subscription-status.enum';
 import { DashboardUserTypeEnum } from '@module/admin/dashboard-metrics/dto/response/enum/dashboard-user-type.enum';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -40,13 +41,16 @@ export class UserItemResponseDto extends BaseBuildableDtoObject {
   public userType: DashboardUserTypeEnum;
 
   @ResponseDtoStringProperty({ required: false })
-  public organizationName: string | null;
+  public organizationName?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public paymentPlanName: string | null;
+  public paymentPlanName?: string;
 
   @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
-  public paymentPlanPrice: DecimalValue | null;
+  public paymentPlanPrice?: DecimalValue;
+
+  @ResponseDtoEnumProperty(PaymentPlanCycleEnum, { required: false })
+  public paymentPlanCycle?: PaymentPlanCycleEnum;
 
   @ResponseDtoEnumProperty(DashboardSubscriptionStatusEnum)
   public subscriptionStatus: DashboardSubscriptionStatusEnum;
