@@ -35,8 +35,13 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
       );
 
       return new RuralTimelineAnalysisPeriodEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodId(source.id),
+        startDate: source.startDate ?? null,
+        endDate: source.endDate ?? null,
+        workerType: source.workerType ?? null,
+        workRegimeType: source.workRegimeType ?? null,
+        productionDestination: source.productionDestination ?? null,
+        documentAnalysis: source.documentAnalysis ?? null,
         ruralTimelineId: ruralTimeline.id,
         ruralTimelinePeriodPropertyId: source.ruralTimelinePeriodProperty
           ? new RuralTimelineAnalysisPeriodPropertyId(
@@ -48,6 +53,9 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
               source.ruralTimelinePeriodResidence.id,
             )
           : null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

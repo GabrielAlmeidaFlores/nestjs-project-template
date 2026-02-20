@@ -26,9 +26,13 @@ export class RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile {
       source: RuralTimelineAnalysisPeriodResidenceTypeormEntity,
     ): RuralTimelineAnalysisPeriodResidenceEntity => {
       return new RuralTimelineAnalysisPeriodResidenceEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodResidenceId(source.id),
+        city: source.city,
+        stateCode: source.stateCode,
         distanceToPropertyKm: new DecimalValue(source.distanceToPropertyKm),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -47,9 +51,13 @@ export class RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile {
       source: RuralTimelineAnalysisPeriodResidenceEntity,
     ): RuralTimelineAnalysisPeriodResidenceTypeormEntity => {
       return RuralTimelineAnalysisPeriodResidenceTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        city: source.city,
+        stateCode: source.stateCode,
         distanceToPropertyKm: source.distanceToPropertyKm.toString(),
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

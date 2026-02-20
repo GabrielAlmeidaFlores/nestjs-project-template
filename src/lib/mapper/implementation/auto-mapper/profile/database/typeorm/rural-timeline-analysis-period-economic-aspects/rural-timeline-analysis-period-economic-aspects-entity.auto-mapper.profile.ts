@@ -33,9 +33,13 @@ export class RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile {
       );
 
       return new RuralTimelineAnalysisPeriodEconomicAspectsEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodEconomicAspectsId(source.id),
+        type: source.type,
+        content: source.content ?? null,
         ruralTimelinePeriodId: ruralTimelinePeriod.id,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
