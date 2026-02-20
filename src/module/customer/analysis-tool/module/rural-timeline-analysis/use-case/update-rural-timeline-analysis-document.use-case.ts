@@ -241,6 +241,8 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
             externalSupplementationIntent: false,
+            shouldConsiderPeriod: true,
+            shouldConsiderLastRemunerationAsExitDate: false,
           });
 
         batchOperations.push(

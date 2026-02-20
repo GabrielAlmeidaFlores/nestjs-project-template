@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { RuralTimelineCnisContributionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-document.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { GetRuralTimelineCnisContributionPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-document/query/result/get-rural-timeline-cnis-contribution-period-document.query.result';
+import { GetRuralTimelineCnisContributionPeriodDocumentQueryResultType } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-document/query/result/get-rural-timeline-cnis-contribution-period-document.query.result';
 import { RuralTimelineCnisContributionPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-document/query/rural-timeline-cnis-contribution-period-document.query.repository.gateway';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import { RuralTimelineCnisContributionPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.entity';
@@ -29,7 +29,7 @@ export class RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository
 
   public async findOneRuralTimelineCnisContributionPeriodDocumentById(
     id: RuralTimelineCnisContributionPeriodDocumentId,
-  ): Promise<GetRuralTimelineCnisContributionPeriodDocumentQueryResult | null> {
+  ): Promise<GetRuralTimelineCnisContributionPeriodDocumentQueryResultType | null> {
     const result = await this.findOne({
       where: { id: id.toString() },
       relations: { ruralTimelineCnisContributionPeriod: true },
@@ -48,7 +48,7 @@ export class RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository
 
   public async listRuralTimelineCnisContributionPeriodDocumentsByPeriodId(
     periodId: RuralTimelineAnalysisCnisContributionPeriodId,
-  ): Promise<GetRuralTimelineCnisContributionPeriodDocumentQueryResult[]> {
+  ): Promise<GetRuralTimelineCnisContributionPeriodDocumentQueryResultType[]> {
     const results = await this.find({
       where: {
         ruralTimelineCnisContributionPeriod: { id: periodId.toString() },

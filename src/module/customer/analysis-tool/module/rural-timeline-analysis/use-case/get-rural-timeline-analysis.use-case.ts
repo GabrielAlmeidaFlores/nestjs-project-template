@@ -305,8 +305,7 @@ export class GetRuralTimelineAnalysisUseCase {
       const documents: GetRuralTimelineCnisContributionPeriodDocumentResponseDto[] =
         [];
 
-      for (const doc of period.ruralTimelineCnisContributionPeriodDocument ??
-        []) {
+      for (const doc of period.ruralTimelineCnisContributionPeriodDocument) {
         const url = await this.fileProcessorGateway.getFileSignedUrl(
           doc.document,
         );
