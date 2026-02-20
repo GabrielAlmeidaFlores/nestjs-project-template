@@ -251,7 +251,7 @@ export class CustomerTypeormQueryRepository
       LAST_MILLISECOND,
     );
 
-    const analyses = await this.repository.find({
+    const users = await this.repository.find({
       where: {
         createdAt: Between(startDate, endDate),
       },
@@ -260,15 +260,15 @@ export class CustomerTypeormQueryRepository
       },
     });
 
-    const analysesByMonth = new Map<number, number>();
+    const usersByMonth = new Map<number, number>();
 
-    for (const analysis of analyses) {
-      const month = analysis.createdAt.getMonth();
-      const currentCount = analysesByMonth.get(month) ?? 0;
-      analysesByMonth.set(month, currentCount + 1);
+    for (const user of users) {
+      const month = user.createdAt.getMonth();
+      const currentCount = usersByMonth.get(month) ?? 0;
+      usersByMonth.set(month, currentCount + 1);
     }
 
-    return Array.from(analysesByMonth.entries())
+    return Array.from(usersByMonth.entries())
       .sort(([monthA], [monthB]) => monthA - monthB)
       .map(([month, totalCount]) =>
         UsersStatisticsMonthlyQueryResult.build({
