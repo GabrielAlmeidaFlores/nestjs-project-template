@@ -7,7 +7,7 @@ export class NodeApplicationVariable {
     NodeApplicationVariable.source.getValueOrDefault<boolean>(
       'PRODUCTION_ENVIRONMENT',
       Boolean,
-      false,
+      true,
     );
 
   protected readonly _type = NodeApplicationVariable.name;
