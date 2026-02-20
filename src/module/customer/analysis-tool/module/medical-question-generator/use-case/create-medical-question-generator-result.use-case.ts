@@ -200,10 +200,16 @@ export class CreateMedicalQuestionGeneratorResultUseCase {
     await transaction.commit();
 
     return CreateMedicalQuestionGeneratorResultResponseDto.build({
-      clientName: cnisData.clientName,
-      clientFederalDocument: cnisData.clientFederalDocument,
-      clientBirthDate: cnisData.clientBirthDate,
-      clientLastAffiliationDate: cnisData.clientLastAffiliationDate,
+      ...(cnisData.clientName !== null && { clientName: cnisData.clientName }),
+      ...(cnisData.clientFederalDocument !== null && {
+        clientFederalDocument: cnisData.clientFederalDocument,
+      }),
+      ...(cnisData.clientBirthDate !== null && {
+        clientBirthDate: cnisData.clientBirthDate,
+      }),
+      ...(cnisData.clientLastAffiliationDate !== null && {
+        clientLastAffiliationDate: cnisData.clientLastAffiliationDate,
+      }),
       medicalQuestionGeneratorCompleteAnalysis,
     });
   }

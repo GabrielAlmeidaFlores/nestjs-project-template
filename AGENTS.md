@@ -597,12 +597,16 @@ export class AnalysisController {
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use response decorators for OpenAPI docs
 - ✅ Separate Request and Response DTOs
+- ✅ **CRITICAL: DTOs MUST use optional properties (`field?: Type`) for nullable fields, NEVER `field: Type | null`**
+- ✅ **CRITICAL: When building DTOs from domain data with `null` values, omit the property entirely (do NOT pass `null` or `undefined`)**
 - ✅ **CRITICAL: If a field is a value object or enum in the domain, it MUST remain a value object or enum in the DTO** (do NOT convert to primitives like string)
 - ✅ **CRITICAL: DTO property names MUST match the value object/enum class name (camelCase)** to maintain maximum similarity (e.g., `PaymentPlanId` → `paymentPlanId`, NOT `planId`)
 - ✅ **CRITICAL: Update/PATCH response DTOs MUST return the entity ID (as a value object), NOT a success boolean or message**
 - ✅ **CRITICAL: Value Objects in Request DTOs MUST use `@RequestDtoValueObjectProperty(ValueObjectClass)` decorator, NEVER `@RequestDtoStringProperty` or `@RequestDtoNumberProperty`**
 - ❌ NO business logic
 - ❌ NO domain entities (only primitive types or value objects)
+- ❌ NO `| null` union types in DTO properties (use optional `?:` instead)
+- ❌ NO passing `null` or `undefined` values to DTO builders (omit the property instead)
 - ❌ NO success booleans or generic messages in update response DTOs (return the ID instead)
 - ❌ NO `@RequestDtoStringProperty` or `@RequestDtoNumberProperty` for Value Object properties (use `@RequestDtoValueObjectProperty` instead)
 
@@ -692,6 +696,47 @@ export class UpdateAnalysisResponseDto extends BaseBuildableDtoObject {
 
   protected override readonly _type = UpdateAnalysisResponseDto.name;
 }
+
+// ✅ CORRECT - Handling null values when building DTOs
+// When domain data has null values, omit the property instead of passing null
+const responseDto = CreateAnalysisResponseDto.build({
+  analysisId: new AnalysisId('123'),
+  // ✅ CORRECT: Use conditional spreading to omit null properties
+  ...(clientName !== null && { clientName }),
+  ...(clientEmail !== null && { clientEmail }),
+  ...(completedAt !== null && { completedAt }),
+});
+
+// ❌ WRONG - Passing null or undefined to DTO builder
+const wrongDto = CreateAnalysisResponseDto.build({
+  analysisId: new AnalysisId('123'),
+  clientName: null, // ❌ WRONG: Don't pass null
+  clientEmail: undefined, // ❌ WRONG: Don't pass undefined
+});
+```
+
+**Why DTOs Use Optional Properties Instead of `| null`:**
+
+1. **TypeScript `exactOptionalPropertyTypes`**: The project has strict TypeScript settings enabled. Optional properties (`field?: Type`) mean "can be omitted" while `field: Type | null` means "must be present but can be null"
+2. **JSON Serialization**: When a property is omitted, it doesn't appear in the JSON response. When it's `null`, it appears as `"field": null`
+3. **API Consistency**: Frontend consumers don't need to check for both `undefined` and `null` - they only check if the property exists
+4. **Clean Architecture**: DTOs are presentation layer - they represent API contracts, not domain models
+
+**Pattern for Converting Domain `null` to DTO Optional**:
+
+```typescript
+// Domain entity (can have null)
+const entity = new AnalysisEntity({
+  clientName: string | null,
+  clientEmail: Email | null,
+});
+
+// DTO builder (omit null values)
+return ResponseDto.build({
+  requiredField: entity.id,
+  ...(entity.clientName !== null && { clientName: entity.clientName }),
+  ...(entity.clientEmail !== null && { clientEmail: entity.clientEmail }),
+});
 ```
 
 ### 5. CQRS Pattern
@@ -1931,6 +1976,7 @@ rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.q
 ```
 
 **Rules**:
+
 - ✅ ONE query result class per file
 - ✅ File lives under its entity's repository folder (`{entity}/query/result/`)
 - ✅ Import cross-referencing query results from their individual files directly
@@ -1947,10 +1993,10 @@ rural-timeline-analysis-period/query/result/get-rural-timeline-analysis-period.q
 
 ```typescript
 export interface AnalysisEntityPropsInterface {
-  id?: AnalysisId;           // ❌ Already in BaseEntityPropsInterface
-  createdAt?: Date;          // ❌ Already in BaseEntityPropsInterface
-  updatedAt?: Date;          // ❌ Already in BaseEntityPropsInterface
-  deletedAt?: Date | null;   // ❌ Already in BaseEntityPropsInterface
+  id?: AnalysisId; // ❌ Already in BaseEntityPropsInterface
+  createdAt?: Date; // ❌ Already in BaseEntityPropsInterface
+  updatedAt?: Date; // ❌ Already in BaseEntityPropsInterface
+  deletedAt?: Date | null; // ❌ Already in BaseEntityPropsInterface
   name: string;
 }
 ```
@@ -1962,7 +2008,7 @@ import type { BaseEntityPropsInterface } from '@core/domain/schema/entity/base/b
 import type { AnalysisId } from './value-object/analysis-id/analysis-id.value-object';
 
 export interface AnalysisEntityPropsInterface extends BaseEntityPropsInterface<AnalysisId> {
-  name: string;              // ✅ Only domain-specific fields
+  name: string; // ✅ Only domain-specific fields
 }
 ```
 
@@ -1978,6 +2024,7 @@ interface BaseEntityPropsInterface<Id extends Guid> {
 ```
 
 **Rules**:
+
 - ✅ Always extend `BaseEntityPropsInterface<YourEntityId>`
 - ✅ Only declare domain-specific fields in the interface body
 - ✅ Import `BaseEntityPropsInterface` from `@core/domain/schema/entity/base/base.entity.props.interface`
