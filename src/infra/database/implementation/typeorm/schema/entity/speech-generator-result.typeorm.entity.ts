@@ -33,6 +33,14 @@ export class SpeechGeneratorResultTypeormEntity extends BaseTypeormEntity {
   public clientBirthDate: Date | null;
 
   @Column({
+    name: 'client_last_affiliation_date',
+    type: 'date',
+    transformer: DateOnlyTransformer,
+    nullable: true,
+  })
+  public clientLastAffiliationDate: Date | null;
+
+  @Column({
     name: 'speech_generator_complete_content',
     type: 'longtext',
     nullable: true,
