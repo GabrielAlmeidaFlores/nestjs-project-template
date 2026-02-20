@@ -25,7 +25,7 @@ export class GetCurrentYearLegalPleadingMonthlyCountUseCase {
     const legalPleadingMonthly = monthlyLegalPleading.map((item) =>
       CurrentYearLegalPleadingMonthCountItemResponseDto.build({
         month: item.month,
-        totalAnalyses: item.totalCount,
+        totalLegalPleadings: item.totalCount,
       }),
     );
 
