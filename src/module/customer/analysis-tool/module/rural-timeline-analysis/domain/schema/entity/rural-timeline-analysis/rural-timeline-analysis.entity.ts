@@ -31,6 +31,14 @@ export class RuralTimelineAnalysisEntity extends BaseEntity<RuralTimelineAnalysi
   )
   public readonly workRegime: RuralTimelineAnalysisWorkRegimeEnum;
 
+  @Description(
+    'Números de processos judiciais relacionados à análise de linha do tempo rural.',
+  )
+  public readonly legalProceedingNumber: string[] | null;
+
+  @Description('Números de benefícios INSS relacionados à análise.')
+  public readonly inssBenefitNumber: string[] | null;
+
   protected readonly _type = RuralTimelineAnalysisEntity.name;
 
   public constructor(props: RuralTimelineAnalysisEntityPropsInterface) {
@@ -44,5 +52,7 @@ export class RuralTimelineAnalysisEntity extends BaseEntity<RuralTimelineAnalysi
       props.ruralTimelinePeriodDocumentAnalysis ?? null;
     this.analysisToolClientId = props.analysisToolClientId;
     this.workRegime = props.workRegime;
+    this.legalProceedingNumber = props.legalProceedingNumber ?? null;
+    this.inssBenefitNumber = props.inssBenefitNumber ?? null;
   }
 }

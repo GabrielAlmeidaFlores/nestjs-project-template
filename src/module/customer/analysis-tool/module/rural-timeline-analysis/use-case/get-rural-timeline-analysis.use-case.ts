@@ -327,6 +327,20 @@ export class GetRuralTimelineAnalysisUseCase {
       analysisToolClient: GetRuralTimelineAnalysisClientResponseDto.build({
         ...analysisToolRecordQueryResult.analysisToolClient,
       }),
+      ...(ruralTimelineAnalysisQueryResult.ruralTimelineAnalysisInssBenefit
+        .length > 0 && {
+        inssBenefitNumber:
+          ruralTimelineAnalysisQueryResult.ruralTimelineAnalysisInssBenefit.map(
+            (item) => item.inssBenefitNumber,
+          ),
+      }),
+      ...(ruralTimelineAnalysisQueryResult.ruralTimelineAnalysisLegalProceeding
+        .length > 0 && {
+        legalProceedingNumber:
+          ruralTimelineAnalysisQueryResult.ruralTimelineAnalysisLegalProceeding.map(
+            (item) => item.legalProceedingNumber,
+          ),
+      }),
       ...(periods.length > 0 && { periods }),
       ...(cnisDocuments.length > 0 && { cnisDocuments }),
       ...(cnisContributionPeriods.length > 0 && { cnisContributionPeriods }),
