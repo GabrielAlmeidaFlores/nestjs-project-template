@@ -83,7 +83,54 @@ export class GetMedicalQuestionGeneratorUseCase {
         medicalQuestionGeneratorQueryResult.medicalQuestionGeneratorResult !==
         null
           ? GetMedicalQuestionGeneratorResultResponseDto.build({
-              ...medicalQuestionGeneratorQueryResult.medicalQuestionGeneratorResult,
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult.clientName !== null && {
+                clientName:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult.clientName,
+              }),
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult.clientFederalDocument !==
+                null && {
+                clientFederalDocument:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult.clientFederalDocument,
+              }),
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult.clientBirthDate !== null && {
+                clientBirthDate:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult.clientBirthDate,
+              }),
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult.clientLastAffiliationDate !==
+                null && {
+                clientLastAffiliationDate:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult.clientLastAffiliationDate,
+              }),
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult
+                .medicalQuestionGeneratorCompleteAnalysis !== null && {
+                medicalQuestionGeneratorCompleteAnalysis:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult
+                    .medicalQuestionGeneratorCompleteAnalysis,
+              }),
+              ...(medicalQuestionGeneratorQueryResult
+                .medicalQuestionGeneratorResult
+                .medicalQuestionGeneratorSimplifiedAnalysis !== null && {
+                medicalQuestionGeneratorSimplifiedAnalysis:
+                  medicalQuestionGeneratorQueryResult
+                    .medicalQuestionGeneratorResult
+                    .medicalQuestionGeneratorSimplifiedAnalysis,
+              }),
+              createdAt:
+                medicalQuestionGeneratorQueryResult
+                  .medicalQuestionGeneratorResult.createdAt,
+              updatedAt:
+                medicalQuestionGeneratorQueryResult
+                  .medicalQuestionGeneratorResult.updatedAt,
             })
           : null,
       createdBy: GetMedicalQuestionGeneratorResponsibleResponseDto.build({

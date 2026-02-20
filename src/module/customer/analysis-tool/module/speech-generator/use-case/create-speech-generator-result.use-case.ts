@@ -259,13 +259,25 @@ export class CreateSpeechGeneratorResultUseCase {
         : null;
 
     return CreateSpeechGeneratorResultResponseDto.build({
-      clientName: speechGeneratorResult.clientName,
-      clientFederalDocument: speechGeneratorResult.clientFederalDocument,
-      clientBirthDate: speechGeneratorResult.clientBirthDate,
-      clientLastAffiliationDate:
-        speechGeneratorResult.clientLastAffiliationDate,
-      speechGeneratorCompleteContent: completeContentHtml,
-      speechGeneratorSimplifiedContent: simplifiedContentHtml,
+      ...(speechGeneratorResult.clientName !== null && {
+        clientName: speechGeneratorResult.clientName,
+      }),
+      ...(speechGeneratorResult.clientFederalDocument !== null && {
+        clientFederalDocument: speechGeneratorResult.clientFederalDocument,
+      }),
+      ...(speechGeneratorResult.clientBirthDate !== null && {
+        clientBirthDate: speechGeneratorResult.clientBirthDate,
+      }),
+      ...(speechGeneratorResult.clientLastAffiliationDate !== null && {
+        clientLastAffiliationDate:
+          speechGeneratorResult.clientLastAffiliationDate,
+      }),
+      ...(completeContentHtml !== null && {
+        speechGeneratorCompleteContent: completeContentHtml,
+      }),
+      ...(simplifiedContentHtml !== null && {
+        speechGeneratorSimplifiedContent: simplifiedContentHtml,
+      }),
     });
   }
 }
