@@ -2,6 +2,8 @@ import { HttpStatus, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { CurrentYearAnalysesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-count.response.dto';
+import { CurrentYearAnalysesMonthCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-analyses-monthly-count.response.dto';
+import { CurrentYearLegalPleadingMonthCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-legal-pleading-monthly-count.response.dto';
 import { CurrentYearLegalPleadingsCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-legal-pleadings-count.response.dto';
 import { CurrentYearRevenueResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-revenue.response.dto';
 import { CurrentYearUsersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-users-count.response.dto';
@@ -11,7 +13,9 @@ import { ListUsersResponseDto } from '@module/admin/dashboard-metrics/dto/respon
 import { PaymentPlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count.response.dto';
 import { TotalSubscribersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/total-subscribers-count.response.dto';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
+import { GetCurrentYearAnalysisMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-monthly-count.use-case';
 import { GetCurrentYearLegalPleadingsCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-count.use-case';
+import { GetCurrentYearLegalPleadingMonthlyCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-legal-pleadings-monthly-count.use-case';
 import { GetCurrentYearRevenueUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-revenue.use-case';
 import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-count.use-case';
 import { GetPaymentPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-payment-plan-sales-count.use-case';
@@ -39,6 +43,8 @@ export class DashboardMetricsController {
     private readonly getCurrentYearAnalysesCountUseCase: GetCurrentYearAnalysesCountUseCase,
     private readonly listCurrentYearAnalysesUseCase: ListCurrentYearAnalysesUseCase,
     private readonly listAllUsersUseCase: ListAllUsersUseCase,
+    private readonly getCurrentYearAnalysisMonthlyCountUseCase: GetCurrentYearAnalysisMonthlyCountUseCase,
+    private readonly getCurrentYearLegalPleadingMonthlyCountUseCase: GetCurrentYearLegalPleadingMonthlyCountUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -162,6 +168,27 @@ export class DashboardMetricsController {
   }
 
   @BuildEndpointSpecification({
+    summary:
+      'Obter quantidade de peças processuais geradas no mês durante o ano.',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'legal-pleadings/count/monthly',
+      method: RequestMethod.GET,
+    },
+    tag: ['dashboard-admin'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Quantidade de peças processuais geradas no mês durante o ano.',
+      type: CurrentYearLegalPleadingMonthCountResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getCurrentYearLegalPleadingMonthlyCount(): Promise<CurrentYearLegalPleadingMonthCountResponseDto> {
+    return this.getCurrentYearLegalPleadingMonthlyCountUseCase.execute();
+  }
+
+  @BuildEndpointSpecification({
     summary: 'Obter número total de análises geradas no ano atual',
     userLevel: [UserLevelEnum.ADMIN],
     http: {
@@ -201,6 +228,25 @@ export class DashboardMetricsController {
     return this.listCurrentYearAnalysesUseCase.execute(
       new ListDataInputModel(dto),
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter quantidade de analises geradas no mês durante o ano.',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'analyses/count/monthly',
+      method: RequestMethod.GET,
+    },
+    tag: ['dashboard-admin'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Quantidade de analises geradas no mês durante o ano.',
+      type: CurrentYearAnalysesMonthCountResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getCurrentYearAnalysesMonthlyCount(): Promise<CurrentYearAnalysesMonthCountResponseDto> {
+    return this.getCurrentYearAnalysisMonthlyCountUseCase.execute();
   }
 
   @BuildEndpointSpecification({
