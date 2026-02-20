@@ -262,7 +262,7 @@ export class DownloadInsuranceQualityAnalysisSimplifiedAnalysisUseCase {
     return await this.exportDocumentGateway.downloadFileAsStreamable(
       simplifiedAnalysis,
       format,
-      `analise-simplificada-de-qualidade-do-segurado-${insuranceQualityAnalysisId.toString()}`,
+      'analise_simplificada_qualidade_segurado',
     );
   }
 
