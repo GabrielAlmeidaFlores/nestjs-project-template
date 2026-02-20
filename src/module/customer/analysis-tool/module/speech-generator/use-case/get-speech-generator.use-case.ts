@@ -95,7 +95,8 @@ export class GetSpeechGeneratorUseCase {
         clientBirthDate:
           speechGeneratorQueryResult.speechGeneratorResult.clientBirthDate,
         clientLastAffiliationDate:
-          speechGeneratorQueryResult.speechGeneratorResult.clientLastAffiliationDate,
+          speechGeneratorQueryResult.speechGeneratorResult
+            .clientLastAffiliationDate,
         speechGeneratorCompleteContent: completeContent,
         speechGeneratorSimplifiedContent: simplifiedContent,
         createdAt: speechGeneratorQueryResult.speechGeneratorResult.createdAt,
