@@ -16,6 +16,9 @@ export class CreateSpeechGeneratorResultResponseDto extends BaseBuildableDtoObje
   @ResponseDtoDateProperty({ required: false })
   public clientBirthDate?: Date;
 
+  @ResponseDtoDateProperty({ required: false })
+  public clientLastAffiliationDate?: Date;
+
   @ResponseDtoStringProperty({ required: false })
   public speechGeneratorCompleteContent?: string;
 

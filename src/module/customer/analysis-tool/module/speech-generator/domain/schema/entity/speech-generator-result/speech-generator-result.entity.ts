@@ -14,6 +14,9 @@ export class SpeechGeneratorResultEntity extends BaseEntity<SpeechGeneratorResul
   @Description('Data de nascimento do cliente extraída do CNIS.')
   public readonly clientBirthDate: Date | null;
 
+  @Description('Data da última filiação do cliente extraída do CNIS.')
+  public readonly clientLastAffiliationDate: Date | null;
+
   @Description(
     'Conteúdo completo do discurso em markup/hypertext para edição no frontend.',
   )
@@ -32,6 +35,7 @@ export class SpeechGeneratorResultEntity extends BaseEntity<SpeechGeneratorResul
     this.clientName = props.clientName ?? null;
     this.clientFederalDocument = props.clientFederalDocument ?? null;
     this.clientBirthDate = props.clientBirthDate ?? null;
+    this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
     this.speechGeneratorCompleteContent =
       props.speechGeneratorCompleteContent ?? null;
     this.speechGeneratorSimplifiedContent =
