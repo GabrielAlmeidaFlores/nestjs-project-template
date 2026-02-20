@@ -230,6 +230,9 @@ export class CreateSpeechGeneratorResultUseCase {
         : null;
 
     return CreateSpeechGeneratorResultResponseDto.build({
+      clientName: speechGeneratorResult.clientName,
+      clientFederalDocument: speechGeneratorResult.clientFederalDocument,
+      clientBirthDate: speechGeneratorResult.clientBirthDate,
       speechGeneratorCompleteContent: completeContentHtml,
       speechGeneratorSimplifiedContent: simplifiedContentHtml,
     });
