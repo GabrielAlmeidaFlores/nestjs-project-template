@@ -69,43 +69,43 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
-      title: 'Monitoramento de Processos',
+      title: 'MONITORAMENTO DE PROCESSOS JURÍDICOS',
       description:
-        'Acompanhamento automático e contínuo de processos jurídicos nos tribunais. Sistema monitora movimentações processuais, notifica sobre atualizações importantes e mantém histórico completo de andamentos.',
+        'Acompanhamento automático e contínuo de processos jurídicos nos tribunais. Sistema monitora movimentações processuais em tempo real, emite notificações sobre atualizações importantes, mantém histórico completo de andamentos e alertas de prazos críticos.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('bd9b379c-0e54-4ede-a3da-476185e69f8e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS,
       creditCost: 0.3,
-      title: 'Chat Eloy - Questões Previdenciárias',
+      title: 'CHAT ELOY - QUESTÕES PREVIDENCIÁRIAS',
       description:
-        'Assistente de IA especializado em responder dúvidas sobre direito previdenciário. Esclarece questões sobre benefícios do INSS, requisitos, documentação, prazos e procedimentos administrativos com fundamentação legal.',
+        'Assistente de IA especializado em responder dúvidas sobre direito previdenciário. Esclarece questões sobre benefícios do INSS, requisitos para aposentadoria, pensão e auxílios, documentação necessária, prazos processuais e procedimentos administrativos, fornecendo fundamentação legal completa.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('056fa86a-6a7e-49fc-941a-477ec9a28f56'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_LEGISLATION_QUESTIONS,
       creditCost: 0.3,
-      title: 'Chat Eloy - Legislação',
+      title: 'CHAT ELOY - CONSULTA DE LEGISLAÇÃO PREVIDENCIÁRIA',
       description:
-        'Assistente de IA especializado em legislação previdenciária. Consulta leis, decretos, instruções normativas do INSS, portarias e medidas provisórias, fornecendo citações precisas e interpretação contextualizada das normas.',
+        'Assistente de IA especializado em legislação previdenciária. Consulta e interpreta leis, decretos, instruções normativas do INSS, portarias, medidas provisórias e regulamentos do RGPS e RPPS, fornecendo citações precisas com número da norma, artigo e interpretação contextualizada aplicada ao caso concreto.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('98ce2c1e-52f3-4dbd-a2f9-9a7972db4c17'),
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH,
       creditCost: 0.3,
-      title: 'Chat Eloy - Teses Jurídicas',
+      title: 'CHAT ELOY - PESQUISA DE TESES JURÍDICAS VITORIOSAS',
       description:
-        'Assistente de IA para pesquisa de teses jurídicas vitoriosas em direito previdenciário. Identifica precedentes favoráveis em tribunais superiores (STF, STJ, TNU), súmulas, recursos repetitivos e jurisprudência consolidada.',
+        'Assistente de IA para pesquisa de teses jurídicas vitoriosas em direito previdenciário. Identifica precedentes favoráveis em tribunais superiores (STF, STJ, TNU), súmulas vinculantes e não vinculantes, recursos repetitivos com repercussão geral, jurisprudência consolidada e decisões recentes, fornecendo estratégias argumentativas baseadas em casos vencedores.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('d146fdb8-8511-472e-9f0c-dc9d5fb0d2ad'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_ANALYSIS,
       creditCost: 0.3,
-      title: 'Chat Eloy - Análise',
+      title: 'CHAT ELOY - ANÁLISE INTELIGENTE DE DOCUMENTOS E CASOS',
       description:
-        'Assistente de IA para análise inteligente de documentos e casos previdenciários. Examina CNIS, CTPS, laudos médicos, processos administrativos e judiciais, identificando informações relevantes e fornecendo insights estratégicos.',
+        'Assistente de IA para análise inteligente de documentos e casos previdenciários. Examina CNIS, CTPS, PPP, laudos médicos, processos administrativos do INSS, ações judiciais e recursos, identificando informações relevantes, inconsistências documentais, pontos fortes e fracos do caso, fornecendo insights estratégicos e sugestões de argumentação jurídica.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('a3f5c2e1-8d4b-4c9a-9f61-1e8c7b6a5d42'),
