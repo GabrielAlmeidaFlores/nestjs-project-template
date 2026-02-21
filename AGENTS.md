@@ -771,6 +771,8 @@ Query Gateways (Read)                Command Gateways (Write)
 - ✅ Use `constructUsing` for complex transformations
 - ✅ Explicitly map all properties (DO NOT use spread operator `...source`)
 - ✅ Use `IncompleteSourceDataForMappingError` for missing required relations
+- ✅ AutoMapper profiles should avoid branching (`if/else`) and rely on repositories to always load required relations
+- ✅ NEVER use non-null assertions (`!`) in mappers; when a required relation is missing, throw `IncompleteSourceDataForMappingError`
 - ❌ NO business logic in mappers
 - ❌ NO spread operator (`...source`) in mappers
 - ❌ NO generic `Error` or `throw new Error()` - use `IncompleteSourceDataForMappingError`
@@ -1179,6 +1181,7 @@ interface BaseDtoPropertyDecoratorPropsInterface {
 - ✅ Validation messages in Portuguese
 - ✅ Extend `BaseBuildableDtoObject`
 - ✅ Use `.build()` static method for instantiation
+- ✅ **DTO classes MUST NOT declare custom static methods** (e.g., `buildFromEntity`). Keep DTOs as pure data carriers and use `.build()` directly from use cases.
 
 #### Base64 File Upload Pattern ⚠️ CRITICAL
 
