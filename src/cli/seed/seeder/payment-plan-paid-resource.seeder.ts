@@ -495,6 +495,15 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise de impacto gerada por IA sobre as contribuições em atraso do período de contribuição CNIS, avaliando consequências previdenciárias do recolhimento.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e8f9a0b1-c2d3-4e5f-6a7b-8c9d0e1f2a3b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'Análise Simplificada Linha do Tempo Rural',
+      description:
+        'Análise simplificada da linha do tempo rural com parecer resumido.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
