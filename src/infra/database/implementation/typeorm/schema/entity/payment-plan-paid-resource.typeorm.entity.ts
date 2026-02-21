@@ -30,7 +30,7 @@ export class PaymentPlanPaidResourceTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'title', type: 'varchar', length: 100 })
   public title: string;
 
-  @Column({ name: 'description', type: 'varchar', length: 150 })
+  @Column({ name: 'description', type: 'varchar', length: 255 })
   public description: string;
 
   @ManyToOne(() => AdminTypeormEntity)
