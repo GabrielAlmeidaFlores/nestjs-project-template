@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
+import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { RuralTimelineAnalysisController } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.controller';
@@ -58,6 +59,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
 
 @Module({
   imports: [
+    AnalysisProcessorModule,
     AuthModule,
     CnisAnalyzerModule,
     CnisProcessorModule,
