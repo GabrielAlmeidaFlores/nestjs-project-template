@@ -1,12 +1,15 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerTypeEnum } from '@module/admin/customer-management/dto/enum/customer-type.enum';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
@@ -33,6 +36,11 @@ export class CustomerItemResponseDto extends BaseBuildableDtoObject {
   })
   public customerDocument: FederalDocument;
 
+  @ResponseDtoValueObjectProperty(PhoneNumber, {
+    description: 'Número de telefone do usuário',
+  })
+  public customerPhoneNumber: PhoneNumber;
+
   @ResponseDtoStringProperty({
     required: false,
     description: 'Nome do plano de pagamento contratado pelo usuário',
@@ -45,10 +53,22 @@ export class CustomerItemResponseDto extends BaseBuildableDtoObject {
   })
   public currentPaymentPlanValue?: DecimalValue;
 
+  @ResponseDtoEnumProperty(PaymentPlanCycleEnum, {
+    required: false,
+    description:
+      'Ciclo de cobrança do plano: MONTHLY (mensal), YEARLY (anual), MONTHLY_RECURRING (mensal recorrente)',
+  })
+  public currentPaymentPlanCycle?: PaymentPlanCycleEnum;
+
   @ResponseDtoDateProperty({
     description: 'Data e hora de cadastro do usuário no sistema',
   })
   public customerCreatedAt: Date;
+
+  @ResponseDtoNumberProperty({
+    description: 'Número de dias desde o cadastro do usuário',
+  })
+  public customerRegisteredTimeInDays: number;
 
   @ResponseDtoEnumProperty(CustomerTypeEnum, {
     description:

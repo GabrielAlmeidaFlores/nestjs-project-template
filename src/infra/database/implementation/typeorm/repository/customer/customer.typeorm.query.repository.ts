@@ -5,6 +5,7 @@ import { Between, Brackets, Repository } from 'typeorm';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -277,6 +278,7 @@ export class CustomerTypeormQueryRepository
       .select([
         'customer.id',
         'customer.name',
+        'customer.phoneNumber',
         'customer.createdAt',
         'authIdentity.email',
         'authIdentity.federalDocument',
@@ -371,6 +373,7 @@ export class CustomerTypeormQueryRepository
         new GetCustomerWithOrganizationForListQueryResult({
           customerId: new CustomerId(customer.id),
           customerName: customer.name,
+          customerPhoneNumber: new PhoneNumber(customer.phoneNumber),
           customerEmail: new Email(customer.authIdentity.email),
           customerDocument: new FederalDocument(
             customer.authIdentity.federalDocument,

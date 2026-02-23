@@ -11,6 +11,7 @@ import { OrganizationPaymentPlanNotFoundError } from '@module/customer/payment-p
 import { ValidateOrganizationPaymentPlanStatusUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/validate-organization-payment-plan-status.use-case-gateway';
 
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import type { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import type { ValidateOrganizationPaymentPlanStatusResponseDto } from '@module/customer/payment-plan/dto/response/validate-organization-payment-plan-status.response.dto';
 
 interface CachedOrganizationDataInterface {
@@ -18,6 +19,7 @@ interface CachedOrganizationDataInterface {
   paymentPlanPrice:
     | ValidateOrganizationPaymentPlanStatusResponseDto['planPrice']
     | null;
+  paymentPlanCycle: PaymentPlanCycleEnum | null;
   subscriptionStatus: DashboardSubscriptionStatusEnum;
   maxMemberCount: number | null;
 }
@@ -66,13 +68,19 @@ export class ListCustomersUseCase {
         organizationData.maxMemberCount,
       );
 
+      const registeredTimeInDays = this.calculateDaysSinceDate(
+        item.customerCreatedAt,
+      );
+
       customers.push(
         CustomerItemResponseDto.build({
           customerId: item.customerId,
           customerName: item.customerName,
+          customerPhoneNumber: item.customerPhoneNumber,
           customerEmail: item.customerEmail,
           customerDocument: item.customerDocument,
           customerCreatedAt: item.customerCreatedAt,
+          customerRegisteredTimeInDays: registeredTimeInDays,
           customerType,
           ...(item.organizationName !== null && {
             organizationName: item.organizationName,
@@ -82,6 +90,9 @@ export class ListCustomersUseCase {
           }),
           ...(organizationData.paymentPlanPrice !== null && {
             currentPaymentPlanValue: organizationData.paymentPlanPrice,
+          }),
+          ...(organizationData.paymentPlanCycle !== null && {
+            currentPaymentPlanCycle: organizationData.paymentPlanCycle,
           }),
           hasActiveSubscription:
             organizationData.subscriptionStatus ===
@@ -128,6 +139,7 @@ export class ListCustomersUseCase {
       return {
         paymentPlanName: null,
         paymentPlanPrice: null,
+        paymentPlanCycle: null,
         subscriptionStatus: DashboardSubscriptionStatusEnum.INACTIVE,
         maxMemberCount: null,
       };
@@ -157,6 +169,7 @@ export class ListCustomersUseCase {
     const organizationData: CachedOrganizationDataInterface = {
       paymentPlanName: statusData?.planName ?? null,
       paymentPlanPrice: statusData?.planPrice ?? null,
+      paymentPlanCycle: statusData?.paymentPlanCycle ?? null,
       subscriptionStatus:
         statusData?.isActive === true
           ? DashboardSubscriptionStatusEnum.ACTIVE
@@ -167,5 +180,16 @@ export class ListCustomersUseCase {
     cache.set(organizationIdValue, organizationData);
 
     return organizationData;
+  }
+
+  private calculateDaysSinceDate(date: Date): number {
+    const millisecondsPerSecond = 1000;
+    const secondsPerMinute = 60;
+    const minutesPerHour = 60;
+    const hoursPerDay = 24;
+    const millisecondsPerDay =
+      millisecondsPerSecond * secondsPerMinute * minutesPerHour * hoursPerDay;
+
+    return Math.floor((Date.now() - date.getTime()) / millisecondsPerDay);
   }
 }

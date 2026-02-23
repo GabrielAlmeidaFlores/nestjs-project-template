@@ -2,6 +2,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 
 import type { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import type { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import type { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import type { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 
@@ -10,6 +11,7 @@ export interface GetCustomerWithOrganizationForListQueryResultPropsInterface {
   customerName: string;
   customerEmail: Email;
   customerDocument: FederalDocument;
+  customerPhoneNumber: PhoneNumber;
   customerCreatedAt: Date;
   organizationId: OrganizationId | null;
   organizationName: string | null;
@@ -21,6 +23,7 @@ export class GetCustomerWithOrganizationForListQueryResult extends BaseBuildable
   public readonly customerName: string;
   public readonly customerEmail: Email;
   public readonly customerDocument: FederalDocument;
+  public readonly customerPhoneNumber: PhoneNumber;
   public readonly customerCreatedAt: Date;
   public readonly organizationId: OrganizationId | null;
   public readonly organizationName: string | null;
@@ -37,6 +40,7 @@ export class GetCustomerWithOrganizationForListQueryResult extends BaseBuildable
     this.customerName = props.customerName;
     this.customerEmail = props.customerEmail;
     this.customerDocument = props.customerDocument;
+    this.customerPhoneNumber = props.customerPhoneNumber;
     this.customerCreatedAt = props.customerCreatedAt;
     this.organizationId = props.organizationId;
     this.organizationName = props.organizationName;
