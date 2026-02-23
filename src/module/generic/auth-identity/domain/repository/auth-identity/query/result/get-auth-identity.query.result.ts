@@ -11,6 +11,7 @@ export class GetAuthIdentityQueryResult extends BaseBuildableObject {
   public readonly federalDocument: FederalDocument;
   public readonly password: HashedPassword;
   public readonly authenticatorAppSecret: string | null;
+  public readonly isActive: boolean;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

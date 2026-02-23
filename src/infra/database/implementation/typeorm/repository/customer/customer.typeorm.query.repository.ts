@@ -5,7 +5,6 @@ import { Between, Brackets, Repository } from 'typeorm';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -20,7 +19,6 @@ import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/custo
 import { GetCustomerWithOrganizationForListQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-organization-for-list.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
-import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
@@ -271,6 +269,7 @@ export class CustomerTypeormQueryRepository
   > {
     const queryBuilder = this.repository
       .createQueryBuilder('customer')
+      .withDeleted()
       .leftJoinAndSelect('customer.authIdentity', 'authIdentity')
       .leftJoin('customer.organizationMember', 'organizationMember')
       .leftJoin('organizationMember.organization', 'organization')
@@ -282,6 +281,8 @@ export class CustomerTypeormQueryRepository
         'customer.createdAt',
         'authIdentity.email',
         'authIdentity.federalDocument',
+        'authIdentity.deletedAt',
+        'authIdentity.isActive',
         'organizationMember.id',
         'organizationMember.owner',
         'organization.id',
@@ -359,35 +360,15 @@ export class CustomerTypeormQueryRepository
 
     const customers = await queryBuilder.getMany();
 
-    const results: GetCustomerWithOrganizationForListQueryResult[] = [];
-
-    for (const customer of customers) {
-      if (!customer.authIdentity) {
-        continue;
-      }
-
-      const organizationMember = customer.organizationMember?.[0];
-      const organization = organizationMember?.organization;
-
-      results.push(
-        new GetCustomerWithOrganizationForListQueryResult({
-          customerId: new CustomerId(customer.id),
-          customerName: customer.name,
-          customerPhoneNumber: new PhoneNumber(customer.phoneNumber),
-          customerEmail: new Email(customer.authIdentity.email),
-          customerDocument: new FederalDocument(
-            customer.authIdentity.federalDocument,
-          ),
-          customerCreatedAt: customer.createdAt,
-          organizationId:
-            organization?.id !== undefined
-              ? new OrganizationId(organization.id)
-              : null,
-          organizationName: organization?.name ?? null,
-          isOrganizationOwner: organizationMember?.owner ?? false,
-        }),
+    const results = customers
+      .filter((customer) => customer.authIdentity !== undefined)
+      .map((customer) =>
+        this.mapperGateway.map(
+          customer,
+          CustomerTypeormEntity,
+          GetCustomerWithOrganizationForListQueryResult,
+        ),
       );
-    }
 
     return new ListDataOutputModel({
       page: input.page,

@@ -65,6 +65,19 @@ export class CustomerItemResponseDto extends BaseBuildableDtoObject {
   })
   public customerCreatedAt: Date;
 
+  @ResponseDtoDateProperty({
+    required: false,
+    description:
+      'Data e hora de exclusão do usuário no sistema (soft delete). Quando presente, indica que o usuário está inativo/deletado.',
+  })
+  public customerDeletedAt?: Date;
+
+  @ResponseDtoBooleanProperty({
+    description:
+      'Indica se o usuário está ativo no sistema. Quando false, o usuário não pode fazer login.',
+  })
+  public customerIsActive: boolean;
+
   @ResponseDtoNumberProperty({
     description: 'Número de dias desde o cadastro do usuário',
   })

@@ -60,6 +60,7 @@ import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-auth-identity-relation-query-result.auto-mapper.profile';
 import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-customer-address-relation-query-result.auto-mapper.profile';
+import { GetCustomerWithOrganizationForListQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-organization-for-list-query-result.auto-mapper.profile';
 import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
 import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/get-customer-query-result.auto-mapper.profile';
 import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
@@ -287,6 +288,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetOrganizationQueryResultAutoMapperProfile,
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
+    GetCustomerWithOrganizationForListQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile,
     GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
