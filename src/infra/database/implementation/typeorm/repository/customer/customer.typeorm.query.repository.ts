@@ -214,27 +214,6 @@ export class CustomerTypeormQueryRepository
     return mappedData;
   }
 
-  public async listAllCustomersWithAuthIdentity(): Promise<
-    Array<GetCustomerWithAuthIdentityRelationQueryResult>
-  > {
-    const data = await this.find({
-      relations: {
-        authIdentity: true,
-        organizationMember: {
-          organization: true,
-        },
-      },
-    });
-
-    const mappedData = this.mapperGateway.mapArray(
-      data,
-      CustomerTypeormEntity,
-      GetCustomerWithAuthIdentityRelationQueryResult,
-    );
-
-    return mappedData;
-  }
-
   public async countAllMonthlyUsersForYear(
     year: number,
   ): Promise<Array<UsersStatisticsMonthlyQueryResult>> {

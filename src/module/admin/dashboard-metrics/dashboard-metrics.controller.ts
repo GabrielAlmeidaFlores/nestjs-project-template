@@ -11,7 +11,6 @@ import { CurrentYearUsersCountResponseDto } from '@module/admin/dashboard-metric
 import { CurrentYearUsersMonthCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/current-year-users-monthly-count.response.dto';
 import { ListCurrentYearAnalysesResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-current-year-analyses.response.dto';
 import { ListCurrentYearLegalPleadingsResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-current-year-legal-pleadings.response.dto';
-import { ListUsersResponseDto } from '@module/admin/dashboard-metrics/dto/response/list-users.response.dto';
 import { PaymentPlanSalesCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/payment-plan-sales-count.response.dto';
 import { TotalSubscribersCountResponseDto } from '@module/admin/dashboard-metrics/dto/response/total-subscribers-count.response.dto';
 import { GetCurrentYearAnalysesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-analyses-count.use-case';
@@ -23,7 +22,6 @@ import { GetCurrentYearUsersCountUseCase } from '@module/admin/dashboard-metrics
 import { GetCurrentYearUsersMonthlyUseCase } from '@module/admin/dashboard-metrics/use-case/get-current-year-users-monthly-count.use-case';
 import { GetPaymentPlanSalesCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-payment-plan-sales-count.use-case';
 import { GetTotalSubscribersCountUseCase } from '@module/admin/dashboard-metrics/use-case/get-total-subscribers-count.use-case';
-import { ListAllUsersUseCase } from '@module/admin/dashboard-metrics/use-case/list-all-users.use-case';
 import { ListCurrentYearAnalysesUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-analyses.use-case';
 import { ListCurrentYearLegalPleadingsUseCase } from '@module/admin/dashboard-metrics/use-case/list-current-year-legal-pleadings.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -45,7 +43,6 @@ export class DashboardMetricsController {
     private readonly listCurrentYearLegalPleadingsUseCase: ListCurrentYearLegalPleadingsUseCase,
     private readonly getCurrentYearAnalysesCountUseCase: GetCurrentYearAnalysesCountUseCase,
     private readonly listCurrentYearAnalysesUseCase: ListCurrentYearAnalysesUseCase,
-    private readonly listAllUsersUseCase: ListAllUsersUseCase,
     private readonly getCurrentYearAnalysisMonthlyCountUseCase: GetCurrentYearAnalysisMonthlyCountUseCase,
     private readonly getCurrentYearLegalPleadingMonthlyCountUseCase: GetCurrentYearLegalPleadingMonthlyCountUseCase,
     private readonly getCurrentYearUsersMonthlyUseCase: GetCurrentYearUsersMonthlyUseCase,
@@ -275,26 +272,5 @@ export class DashboardMetricsController {
     @Query() dto: GetCurrentYearAnalysesCountRequestDto,
   ): Promise<CurrentYearAnalysesMonthCountResponseDto> {
     return this.getCurrentYearAnalysisMonthlyCountUseCase.execute(dto.type);
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Listar todos os usuários cadastrados',
-    userLevel: [UserLevelEnum.ADMIN],
-    http: {
-      path: 'users',
-      method: RequestMethod.GET,
-    },
-    tag: ['dashboard-admin'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Lista de usuários obtida com sucesso.',
-      type: ListUsersResponseDto,
-    },
-    guard: [AuthGuard],
-  })
-  public async listAllUsers(
-    @Query() dto: ListDataRequestDto,
-  ): Promise<ListUsersResponseDto> {
-    return this.listAllUsersUseCase.execute(new ListDataInputModel(dto));
   }
 }
