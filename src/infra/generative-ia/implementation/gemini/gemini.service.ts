@@ -1,7 +1,6 @@
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
 import { Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
-import jsPDF from 'jspdf';
 
 import { GenerativeIaApiKeyInvalidError } from '@infra/generative-ia/error/generative-ia-api-key-invalid.error';
 import { GenerativeIaConnectionError } from '@infra/generative-ia/error/generative-ia-connection.error';
@@ -17,8 +16,14 @@ export class GeminiService implements GenerativeIaGateway {
   protected readonly _type = GeminiService.name;
 
   private readonly googleGenerativeAI: GoogleGenAI;
+  private readonly urlRegex: RegExp;
+  private readonly fileTypeCache: Map<string, string>;
+  private readonly hashSubstringLength: number;
 
   public constructor() {
+    this.hashSubstringLength = 32;
+    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/gi;
+    this.fileTypeCache = new Map<string, string>();
     this.googleGenerativeAI = new GoogleGenAI({
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
@@ -27,7 +32,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 5_000;
+    const maxOutputTokens = 2_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -39,7 +44,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 8_192;
+    const maxOutputTokens = 4_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -51,7 +56,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 10_000;
+    const maxOutputTokens = 8_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -131,10 +136,10 @@ export class GeminiService implements GenerativeIaGateway {
       }
     }
 
-    const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;
-
-    const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
-    const hasUrl = URL_REGEX.test(unifiedInstruction);
+    const hasUrl =
+      (props.systemInstruction !== undefined &&
+        this.urlRegex.test(props.systemInstruction)) ||
+      (props.prompt !== undefined && this.urlRegex.test(props.prompt));
 
     if (contentConfig.config) {
       const toolsList: Array<unknown> = [];
@@ -339,22 +344,28 @@ export class GeminiService implements GenerativeIaGateway {
           return { text: content } as Part;
         }
 
-        let fileData = await fileType.fileTypeFromBuffer(content);
+        // Cria hash simples do buffer para cache
+        const contentHash = Buffer.from(content)
+          .toString('base64')
+          .substring(0, this.hashSubstringLength);
 
-        if (fileData === undefined) {
-          const textContext = content.toString('utf-8');
-          const pdfBuffer = this.generatePdfFromText(textContext);
-          fileData = await fileType.fileTypeFromBuffer(pdfBuffer);
-          content = pdfBuffer;
-        }
+        let mimeType = this.fileTypeCache.get(contentHash);
 
-        if (fileData === undefined) {
-          return null;
+        if (mimeType === undefined) {
+          const fileData = await fileType.fileTypeFromBuffer(content);
+
+          if (fileData !== undefined) {
+            mimeType = fileData.mime;
+          } else {
+            mimeType = 'text/plain';
+          }
+
+          this.fileTypeCache.set(contentHash, mimeType);
         }
 
         return {
           inlineData: {
-            mimeType: fileData.mime,
+            mimeType,
             data: content.toString('base64'),
           },
         } as Part;
@@ -362,31 +373,5 @@ export class GeminiService implements GenerativeIaGateway {
     );
 
     return results.filter((part): part is Part => part !== null);
-  }
-
-  private generatePdfFromText(text: string): Buffer {
-    const doc = new jsPDF();
-    const margin = 10;
-    const lineHeight = 7;
-    let y = margin;
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const maxWidth = pageWidth - margin * 2;
-    const textLines = doc.splitTextToSize(text, maxWidth) as string[];
-
-    for (const line of textLines) {
-      if (y + lineHeight > pageHeight - margin) {
-        doc.addPage();
-        y = margin;
-      }
-      doc.text(line, margin, y);
-      y += lineHeight;
-    }
-
-    const pdfArrayBuffer = doc.output('arraybuffer');
-    const pdfBuffer = Buffer.from(pdfArrayBuffer);
-
-    return pdfBuffer;
   }
 }
