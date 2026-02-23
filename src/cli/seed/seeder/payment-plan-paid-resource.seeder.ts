@@ -291,7 +291,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('e9bfa47e-d159-4b54-8ef4-05dfc6c655d2'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
-      creditCost: 0,
+      creditCost: 2,
       title: 'GERADOR DE PERGUNTAS MÉDICAS - ANÁLISE COMPLETA',
       description:
         'Geração completa de perguntas médicas estratégicas com IA para laudos e perícias. Analisa patologias alegadas, CID relacionados, documentos médicos apresentados, gerando questionário técnico para médico assistente ou perito, visando comprovar incapacidade laborativa ou condições de saúde.',
@@ -300,7 +300,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('d5c8e1f2-a3b4-4c5d-8e6f-7a8b9c0d1e2f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
-      creditCost: 0,
+      creditCost: 1,
       title: 'GERADOR DE PERGUNTAS MÉDICAS - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de perguntas médicas essenciais com IA. Cria questionário objetivo baseado na patologia principal alegada, focando em perguntas diretas sobre sintomas, limitações funcionais e capacidade laborativa. Versão resumida para casos menos complexos.',
