@@ -1,5 +1,0 @@
-export enum DashboardUserTypeEnum {
-  ORGANIZATION = 'ORGANIZATION',
-  COLLABORATOR = 'COLLABORATOR',
-  INDIVIDUAL = 'INDIVIDUAL',
-}

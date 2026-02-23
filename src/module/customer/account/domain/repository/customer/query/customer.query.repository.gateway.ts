@@ -42,10 +42,6 @@ export abstract class CustomerQueryRepositoryGateway {
 
   public abstract listAll(): Promise<Array<GetCustomerQueryResult>>;
 
-  public abstract listAllCustomersWithAuthIdentity(): Promise<
-    Array<GetCustomerWithAuthIdentityRelationQueryResult>
-  >;
-
   public abstract listCustomersWithFilters(
     input: ListCustomersWithFiltersInputModel,
   ): Promise<
