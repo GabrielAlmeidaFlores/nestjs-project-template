@@ -12,8 +12,8 @@ import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
-export class DeactivateCustomerAuthIdentityUseCase {
-  protected readonly _type = DeactivateCustomerAuthIdentityUseCase.name;
+export class ToggleCustomerActiveStatusUseCase {
+  protected readonly _type = ToggleCustomerActiveStatusUseCase.name;
 
   public constructor(
     @Inject(CustomerQueryRepositoryGateway)
@@ -28,13 +28,17 @@ export class DeactivateCustomerAuthIdentityUseCase {
 
   public async execute(
     customerId: CustomerId,
+    isActive: boolean,
   ): Promise<DeactivateCustomerAuthIdentityResponseDto> {
     await this.validateCustomerExists(customerId);
 
     const authIdentity =
       await this.fetchAuthIdentityByCustomerIdOrThrow(customerId);
 
-    const updatedAuthIdentity = this.buildDeactivatedAuthIdentity(authIdentity);
+    const updatedAuthIdentity = this.buildUpdatedAuthIdentity(
+      authIdentity,
+      isActive,
+    );
 
     await this.persistUpdatedAuthIdentity(authIdentity.id, updatedAuthIdentity);
 
@@ -67,8 +71,9 @@ export class DeactivateCustomerAuthIdentityUseCase {
     return authIdentity;
   }
 
-  private buildDeactivatedAuthIdentity(
+  private buildUpdatedAuthIdentity(
     authIdentity: GetAuthIdentityWithRelationsQueryResult,
+    isActive: boolean,
   ): AuthIdentityEntity {
     return new AuthIdentityEntity({
       id: authIdentity.id,
@@ -78,7 +83,7 @@ export class DeactivateCustomerAuthIdentityUseCase {
       authenticatorAppSecret: authIdentity.authenticatorAppSecret,
       customer: authIdentity.customer?.id ?? null,
       admin: authIdentity.admin?.id ?? null,
-      isActive: false,
+      isActive,
       createdAt: authIdentity.createdAt,
       updatedAt: new Date(),
     });
