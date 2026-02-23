@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { AdminId } from '@module/admin/account/domain/schema/entity/admin/value-object/admin-id/admin-id.value-object';
 import { DeactivateCustomerAuthIdentityRequestDto } from '@module/admin/customer-management/dto/request/deactivate-customer-auth-identity.request.dto';
 import { DeactivateCustomerAuthIdentityResponseDto } from '@module/admin/customer-management/dto/response/deactivate-customer-auth-identity.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
@@ -79,10 +78,8 @@ export class DeactivateCustomerAuthIdentityUseCase {
       federalDocument: authIdentity.federalDocument,
       password: authIdentity.password,
       authenticatorAppSecret: authIdentity.authenticatorAppSecret,
-      customer: authIdentity.customer
-        ? new CustomerId(authIdentity.customer.id)
-        : null,
-      admin: authIdentity.admin ? new AdminId(authIdentity.admin.id) : null,
+      customer: authIdentity.customer?.id ?? null,
+      admin: authIdentity.admin?.id ?? null,
       isActive: false,
       createdAt: authIdentity.createdAt,
       updatedAt: new Date(),
