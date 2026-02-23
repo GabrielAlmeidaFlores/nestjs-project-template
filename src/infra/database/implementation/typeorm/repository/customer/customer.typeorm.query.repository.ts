@@ -8,6 +8,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
+import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerTypeEnum } from '@module/admin/customer-management/dto/enum/customer-type.enum';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
@@ -308,7 +309,9 @@ export class CustomerTypeormQueryRepository
 
     if (input.searchBy !== undefined && input.searchBy.trim() !== '') {
       const searchTerm = `%${input.searchBy.trim().toLowerCase()}%`;
-      const searchTermExact = input.searchBy.trim();
+      const encryptedSearchTerm = CryptographyTransformer.to(
+        input.searchBy.trim(),
+      );
 
       queryBuilder.andWhere(
         new Brackets((qb) => {
@@ -318,10 +321,13 @@ export class CustomerTypeormQueryRepository
             })
             .orWhere('LOWER(organization.name) LIKE :searchTerm', {
               searchTerm,
-            })
-            .orWhere('authIdentity.federal_document = :searchTermExact', {
-              searchTermExact,
             });
+
+          if (encryptedSearchTerm !== undefined) {
+            qb.orWhere('authIdentity.federal_document = :encryptedSearchTerm', {
+              encryptedSearchTerm,
+            });
+          }
         }),
       );
     }
