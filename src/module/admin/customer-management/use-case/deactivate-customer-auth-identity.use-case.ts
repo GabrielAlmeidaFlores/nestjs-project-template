@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { DeactivateCustomerAuthIdentityRequestDto } from '@module/admin/customer-management/dto/request/deactivate-customer-auth-identity.request.dto';
 import { DeactivateCustomerAuthIdentityResponseDto } from '@module/admin/customer-management/dto/response/deactivate-customer-auth-identity.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
@@ -28,20 +27,19 @@ export class DeactivateCustomerAuthIdentityUseCase {
   ) {}
 
   public async execute(
-    dto: DeactivateCustomerAuthIdentityRequestDto,
+    customerId: CustomerId,
   ): Promise<DeactivateCustomerAuthIdentityResponseDto> {
-    await this.validateCustomerExists(dto.customerId);
+    await this.validateCustomerExists(customerId);
 
-    const authIdentity = await this.fetchAuthIdentityByCustomerIdOrThrow(
-      dto.customerId,
-    );
+    const authIdentity =
+      await this.fetchAuthIdentityByCustomerIdOrThrow(customerId);
 
     const updatedAuthIdentity = this.buildDeactivatedAuthIdentity(authIdentity);
 
     await this.persistUpdatedAuthIdentity(authIdentity.id, updatedAuthIdentity);
 
     return DeactivateCustomerAuthIdentityResponseDto.build({
-      customerId: dto.customerId,
+      customerId,
     });
   }
 

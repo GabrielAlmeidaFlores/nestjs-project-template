@@ -1,6 +1,5 @@
 import { HttpStatus, Query, RequestMethod, Param } from '@nestjs/common';
 
-import { DeactivateCustomerAuthIdentityRequestDto } from '@module/admin/customer-management/dto/request/deactivate-customer-auth-identity.request.dto';
 import { ListCustomersRequestDto } from '@module/admin/customer-management/dto/request/list-customers.request.dto';
 import { DeactivateCustomerAuthIdentityResponseDto } from '@module/admin/customer-management/dto/response/deactivate-customer-auth-identity.response.dto';
 import { ListCustomersResponseDto } from '@module/admin/customer-management/dto/response/list-customers.response.dto';
@@ -63,9 +62,6 @@ export class CustomerManagementController {
     @Param('customerId', new ParseValueObjectPipe(CustomerId))
     customerId: CustomerId,
   ): Promise<DeactivateCustomerAuthIdentityResponseDto> {
-    const dto = DeactivateCustomerAuthIdentityRequestDto.build({
-      customerId,
-    });
-    return this.deactivateCustomerAuthIdentityUseCase.execute(dto);
+    return this.deactivateCustomerAuthIdentityUseCase.execute(customerId);
   }
 }

@@ -1673,39 +1673,82 @@ export class AnalysisController {
 
 #### ⚠️ CRITICAL: Path Parameter and Use Case Input Pattern
 
-**RULE**: When a path parameter is extracted from the route, it should be converted to a Value Object using `ParseValueObjectPipe` and passed directly to the use case. **NEVER create a DTO in the controller to wrap the parameter.**
+**RULE**: When a path parameter is extracted from the route:
+
+1. Convert it to a Value Object using `ParseValueObjectPipe`
+2. Pass it **directly to the use case** - **NEVER create a Request DTO just to wrap the parameter**
+3. If the controller method has no Request DTO, the use case should **NOT** have a Request DTO either
+4. Use cases should accept only the necessary Value Objects or domain objects directly
 
 The same input from the controller parameter should flow directly to the use case - this is the established pattern.
 
-**❌ WRONG - Creating DTO wrapper in controller:**
+**❌ WRONG - Creating unnecessary DTO wrapper:**
 
 ```typescript
-public async deactivateCustomer(
-  @Param('customerId') customerId: string,
-): Promise<DeactivateCustomerResponseDto> {
-  // ❌ WRONG: Manually creating DTO and constructing Value Object
-  const dto = DeactivateCustomerRequestDto.build({
-    customerId: new CustomerId(customerId),
-  });
-  return this.deactivateCustomerUseCase.execute(dto);
-}
-```
-
-**✅ CORRECT - Using ParseValueObjectPipe:**
-
-```typescript
+// Controller
 public async deactivateCustomer(
   @Param('customerId', new ParseValueObjectPipe(CustomerId))
   customerId: CustomerId,
 ): Promise<DeactivateCustomerResponseDto> {
-  // ✅ CORRECT: ParseValueObjectPipe converts to Value Object
-  // Pass directly to use case with .build()
+  // ❌ WRONG: Wrapping in DTO just adds unnecessary layer
   const dto = DeactivateCustomerRequestDto.build({
-    customerId, // ✅ Already a CustomerId Value Object
+    customerId,
   });
   return this.deactivateCustomerUseCase.execute(dto);
 }
+
+// Use Case - ❌ WRONG: Unnecessary request DTO
+public async execute(
+  dto: DeactivateCustomerRequestDto,
+): Promise<DeactivateCustomerResponseDto> {
+  await this.validateCustomerExists(dto.customerId);
+  // ...
+}
 ```
+
+**✅ CORRECT - Direct parameter passing:**
+
+```typescript
+// Controller
+public async deactivateCustomer(
+  @Param('customerId', new ParseValueObjectPipe(CustomerId))
+  customerId: CustomerId,
+): Promise<DeactivateCustomerResponseDto> {
+  // ✅ CORRECT: Pass Value Object directly to use case
+  return this.deactivateCustomerUseCase.execute(customerId);
+}
+
+// Use Case - ✅ CORRECT: Accept Value Object directly
+public async execute(
+  customerId: CustomerId,
+): Promise<DeactivateCustomerResponseDto> {
+  await this.validateCustomerExists(customerId);
+  // ...
+  return DeactivateCustomerResponseDto.build({
+    customerId,
+  });
+}
+```
+
+**When to Use Request DTOs vs Direct Parameters:**
+
+| Scenario                     | Use Request DTO                     | Pass Directly                       |
+| ---------------------------- | ----------------------------------- | ----------------------------------- |
+| Single path parameter        | ❌ No                               | ✅ Yes - pass Value Object directly |
+| Multiple path parameters     | ✅ Create DTO if needed for clarity | Optional                            |
+| Request body with validation | ✅ Yes - always use DTO             | N/A                                 |
+| Query parameters             | ✅ Yes - use DTO for validation     | N/A                                 |
+| Session/Auth data            | ✅ Yes - pass SessionDataModel      | N/A                                 |
+
+**Rules:**
+
+- ✅ Use `ParseValueObjectPipe` for automatic path parameter conversion
+- ✅ Pass converted Value Objects directly to use cases (no wrapping)
+- ✅ If controller has no Request DTO, use case should NOT have one either
+- ✅ Use cases accept only what they need (no unnecessary wrapper objects)
+- ✅ Request DTOs are used for **request body** validation and **complex query parameters**
+- ❌ NO unnecessary Request DTOs just to wrap a single path parameter
+- ❌ NO intermediate wrapper objects in use case signatures
 
 **How ParseValueObjectPipe Works:**
 
@@ -1720,7 +1763,7 @@ public async deactivateCustomer(
 - ✅ Automatic validation at the pipe layer
 - ✅ Single responsibility: parsing happens once
 - ✅ Type safety: parameter is already a Value Object
-- ✅ Cleaner controller logic
+- ✅ Cleaner code: no unnecessary wrapper objects
 - ✅ Consistent with established patterns in the codebase
 - ✅ Errors caught early (before reaching use case)
 
