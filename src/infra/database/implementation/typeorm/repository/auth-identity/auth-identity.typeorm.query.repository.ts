@@ -11,6 +11,7 @@ import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identit
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 
 @Injectable()
 export class AuthIdentityTypeormQueryRepository
@@ -107,6 +108,36 @@ export class AuthIdentityTypeormQueryRepository
       data,
       AuthIdentityTypeormEntity,
       GetAuthIdentityQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneAuthIdentityByCustomerId(
+    customerId: CustomerId,
+  ): Promise<GetAuthIdentityWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        customer: {
+          id: customerId.toString(),
+        },
+      },
+      relations: {
+        admin: true,
+        customer: true,
+      },
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AuthIdentityTypeormEntity,
+      GetAuthIdentityWithRelationsQueryResult,
     );
 
     return mappedData;
