@@ -1,4 +1,4 @@
-import { HttpStatus, Query, RequestMethod, Param, Body } from '@nestjs/common';
+import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListCustomersRequestDto } from '@module/admin/customer-management/dto/request/list-customers.request.dto';
@@ -15,6 +15,7 @@ import { PaginatedBankPaymentsResponseDto } from '@module/customer/payment-plan/
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
@@ -117,8 +118,11 @@ export class CustomerManagementController {
   public async getCustomerBankPayments(
     @Param('customerId', new ParseValueObjectPipe(CustomerId))
     customerId: CustomerId,
-    @Query() listData: ListDataInputModel,
+    @Query() dto: ListDataRequestDto,
   ): Promise<PaginatedBankPaymentsResponseDto> {
-    return this.getCustomerBankPaymentsUseCase.execute(customerId, listData);
+    return this.getCustomerBankPaymentsUseCase.execute(
+      customerId,
+      new ListDataInputModel(dto),
+    );
   }
 }

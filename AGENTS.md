@@ -1767,6 +1767,93 @@ public async execute(
 - ✅ Consistent with established patterns in the codebase
 - ✅ Errors caught early (before reaching use case)
 
+#### ⚠️ CRITICAL: Query Parameter DTO Pattern
+
+**RULE**: When handling query parameters for pagination or filtering:
+
+1. Use a **Request DTO** to capture and validate query parameters (e.g., `ListDataRequestDto`)
+2. The DTO is marked with `@RequestDto()` and uses property decorators for validation
+3. In the controller, convert the DTO to the domain model (e.g., `ListDataInputModel`)
+4. Pass the domain model to the use case
+
+**Why This Pattern?**:
+
+- Query parameters need validation and type transformation
+- Request DTOs provide OpenAPI/Swagger documentation
+- Separation between HTTP layer (DTO) and domain layer (InputModel)
+- Consistent with how all query parameters are handled in the codebase
+
+**✅ CORRECT - Query Parameter Pattern:**
+
+```typescript
+// Define the Request DTO for query parameters
+@RequestDto()
+export class ListDataRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoNumberProperty({ example: 1 })
+  public page: number;
+
+  @RequestDtoNumberProperty({ example: 10 })
+  public limit: number;
+
+  @RequestDtoStringProperty({ required: false, example: '-createdAt' })
+  public sortField?: string;
+
+  protected override readonly _type = ListDataRequestDto.name;
+}
+
+// Controller: Accept DTO, convert to domain model
+public async listPaymentPlans(
+  @Query() dto: ListDataRequestDto,
+): Promise<ListPaymentPlansResponseDto> {
+  return await this.listPaymentPlansUseCase.execute(
+    new ListDataInputModel(dto),  // Convert DTO to domain model
+  );
+}
+
+// Use Case: Accept domain model
+public async execute(
+  pagination: ListDataInputModel,
+): Promise<ListPaymentPlansResponseDto> {
+  // Use pagination.page, pagination.limit, etc.
+  const results = await this.repository.list(pagination);
+  return results;
+}
+```
+
+**❌ WRONG - Direct Query Parameter Binding:**
+
+```typescript
+// ❌ WRONG: Using domain model directly for query parameters
+public async listPaymentPlans(
+  @Query() listData: ListDataInputModel,  // No validation, no OpenAPI docs
+): Promise<ListPaymentPlansResponseDto> {
+  return await this.listPaymentPlansUseCase.execute(listData);
+}
+```
+
+**Pattern Flow**:
+
+```
+HTTP Request
+    ↓
+@Query() dto: ListDataRequestDto  (validation + OpenAPI docs)
+    ↓
+new ListDataInputModel(dto)  (convert to domain model)
+    ↓
+Use Case executes with domain model
+```
+
+**Rules**:
+
+- ✅ Use `@Query() dto: ListDataRequestDto` (or similar Request DTO)
+- ✅ Create `ListDataInputModel` from the DTO in the controller method
+- ✅ Pass the domain model to the use case
+- ✅ Request DTOs have `@RequestDto()` decorator and property decorators
+- ✅ Use `ListDataRequestDto` from `@shared/api/util/dto/request/list-data.request.dto`
+- ✅ For custom query parameters, create a custom Request DTO extending `BaseBuildableDtoObject`
+- ❌ NO direct binding of domain models to `@Query()` decorator (will not validate or document)
+- ❌ NO skipping the DTO layer for query parameters
+
 ### 8. Value Object Patterns
 
 ```typescript
