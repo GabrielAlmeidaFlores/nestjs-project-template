@@ -10,6 +10,7 @@ import { CustomerId } from '@module/customer/account/domain/schema/entity/custom
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @AdminControllerRoute('customer-management')
@@ -59,10 +60,11 @@ export class CustomerManagementController {
     guard: [AuthGuard],
   })
   public async deactivateCustomerAuthIdentity(
-    @Param('customerId') customerId: string,
+    @Param('customerId', new ParseValueObjectPipe(CustomerId))
+    customerId: CustomerId,
   ): Promise<DeactivateCustomerAuthIdentityResponseDto> {
     const dto = DeactivateCustomerAuthIdentityRequestDto.build({
-      customerId: new CustomerId(customerId),
+      customerId,
     });
     return this.deactivateCustomerAuthIdentityUseCase.execute(dto);
   }
