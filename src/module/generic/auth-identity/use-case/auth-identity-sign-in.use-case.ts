@@ -6,6 +6,7 @@ import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identit
 import { AuthIdentitySignInRequestDto } from '@module/generic/auth-identity/dto/request/auth-identity-sign-in.request.dto';
 import { AuthIdentitySignInResponseDto } from '@module/generic/auth-identity/dto/response/auth-identity-sign-in.response.dto';
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
+import { AccountDeactivatedError } from '@module/generic/auth-identity/error/account-deactivated.error';
 import { AuthenticatorAppNotConfiguredError } from '@module/generic/auth-identity/error/authenticator-app-not-configured.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthenticatorGateway } from '@module/generic/auth-identity/lib/authenticator/authenticator.gateway';
@@ -45,6 +46,10 @@ export class AuthIdentitySignInUseCase {
 
     if (!authIdentity) {
       throw new WrongSignInCredentialsError();
+    }
+
+    if (!authIdentity.isActive) {
+      throw new AccountDeactivatedError();
     }
 
     const isPasswordRight = bcrypt.compareSync(

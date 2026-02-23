@@ -1,12 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period.request.dto';
-import { SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/sync-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-cnis-contribution-period.response.dto';
-import { SyncRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/sync-rural-timeline-analysis-cnis-contribution-period.use-case';
+import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
@@ -14,7 +22,16 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     CreateRuralTimelineAnalysisCnisContributionPeriodUseCase.name;
 
   public constructor(
-    private readonly syncRuralTimelineAnalysisCnisContributionPeriodUseCase: SyncRuralTimelineAnalysisCnisContributionPeriodUseCase,
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway,
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -23,25 +40,31 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     dto: CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto,
   ): Promise<CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto> {
-    const syncDto = this.mapToSyncDto(dto);
-
-    const syncResult =
-      await this.syncRuralTimelineAnalysisCnisContributionPeriodUseCase.execute(
-        sessionData,
-        organizationSessionDataModel,
-        ruralTimelineAnalysisId,
-        syncDto,
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionDataModel.organizationId,
       );
 
-    return CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
-      contributionPeriodId: syncResult.contributionPeriodId,
-    });
-  }
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
 
-  private mapToSyncDto(
-    dto: CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto,
-  ): SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto {
-    return SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto.build({
+    await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+      ruralTimelineAnalysisId,
+      organizationSessionDataModel.organizationId,
+      sessionData.authIdentityId,
+      RuralTimelineAnalysisNotFoundError,
+    );
+
+    const cnisDocumentLocation = await this.uploadCnisDocumentIfProvided(dto);
+
+    const contributionPeriodId =
+      new RuralTimelineAnalysisCnisContributionPeriodId();
+
+    const newEntity = new RuralTimelineAnalysisCnisContributionPeriodEntity({
+      id: contributionPeriodId,
+      ruralTimelineId: ruralTimelineAnalysisId,
       employmentRelationshipSource: dto.employmentRelationshipSource ?? null,
       startDate: dto.startDate ?? null,
       endDate: dto.endDate ?? null,
@@ -51,7 +74,40 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
       averageContributionAmount: dto.averageContributionAmount ?? null,
       contributionAdjustmentIntent: dto.contributionAdjustmentIntent,
       externalSupplementationIntent: dto.externalSupplementationIntent,
-      cnisDocument: dto.cnisDocument ?? null,
+      shouldConsiderPeriod: dto.shouldConsiderPeriod ?? true,
+      shouldConsiderLastRemunerationAsExitDate:
+        dto.shouldConsiderLastRemunerationAsExitDate ?? false,
+      cnisDocument: cnisDocumentLocation,
     });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriod(
+        newEntity,
+      ),
+    );
+
+    await transaction.commit();
+
+    return CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
+      contributionPeriodId,
+    });
+  }
+
+  private async uploadCnisDocumentIfProvided(
+    dto: CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto,
+  ): Promise<string | null> {
+    if (dto.cnisDocument === undefined) {
+      return null;
+    }
+
+    const fileBuffer = dto.cnisDocument.base64.decodeToBuffer();
+    const fileModel = FileModel.build({
+      buffer: fileBuffer,
+      originalName: dto.cnisDocument.originalFileName,
+      size: fileBuffer.length,
+      encoding: 'base64',
+    });
+
+    return await this.fileProcessorGateway.uploadFile(fileModel);
   }
 }

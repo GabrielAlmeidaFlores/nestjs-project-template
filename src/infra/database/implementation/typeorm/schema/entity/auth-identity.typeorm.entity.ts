@@ -37,6 +37,9 @@ export class AuthIdentityTypeormEntity extends BaseTypeormEntity {
   })
   public authenticatorAppSecret: string | null;
 
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  public isActive: boolean;
+
   @OneToOne(() => CustomerTypeormEntity, (entity) => entity.authIdentity, {
     nullable: true,
   })

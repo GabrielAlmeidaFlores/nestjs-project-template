@@ -86,6 +86,7 @@ export class GetAuthIdentityWithRelationsQueryResultAutoMapperProfile {
         federalDocument: source.federalDocument.toString(),
         password: source.password.toString(),
         authenticatorAppSecret: source.authenticatorAppSecret,
+        isActive: source.isActive,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

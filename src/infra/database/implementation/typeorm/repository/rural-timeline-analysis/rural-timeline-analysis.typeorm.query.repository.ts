@@ -31,6 +31,11 @@ export class RuralTimelineAnalysisTypeormQueryRepository
   ): Promise<RuralTimelineAnalysisEntity | null> {
     const result = await this.findOne({
       where: { id: id.toString() },
+      relations: {
+        analysisToolRecord: {
+          analysisToolClient: true,
+        },
+      },
     });
 
     if (result === null) {
@@ -63,6 +68,7 @@ export class RuralTimelineAnalysisTypeormQueryRepository
         'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodUnderMinimum',
         'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodPendingExitDate',
         'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodOverdueContribution',
+        'ruralTimelineCnisContributionPeriod.ruralTimelineCnisContributionPeriodDocument',
       ],
     });
 
