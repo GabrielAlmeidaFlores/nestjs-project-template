@@ -13,4 +13,5 @@ export interface AuthIdentityEntityPropsInterface extends BaseEntityPropsInterfa
   authenticatorAppSecret?: string | null;
   customer?: CustomerId | null;
   admin?: AdminId | null;
+  isActive?: boolean | null;
 }

@@ -29,6 +29,9 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
   @Description('Administrador associado à identidade de autenticação.')
   public readonly admin: AdminId | null;
 
+  @Description('Indica se a identidade de autenticação está ativa.')
+  public readonly isActive: boolean;
+
   protected readonly _type = AuthIdentityEntity.name;
 
   public constructor(props: AuthIdentityEntityPropsInterface) {
@@ -42,6 +45,7 @@ export class AuthIdentityEntity extends BaseEntity<AuthIdentityId> {
     this.authenticatorAppSecret = props.authenticatorAppSecret ?? null;
     this.customer = props.customer ?? null;
     this.admin = props.admin ?? null;
+    this.isActive = props.isActive ?? true;
   }
 
   public static validatePassword(password: string | HashedPassword): void {
