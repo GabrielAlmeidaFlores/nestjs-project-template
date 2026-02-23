@@ -50,6 +50,10 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
   public async listPaymentPlanPaidResource(
     listData: ListPaymentPlanPaidResourceQueryParam,
   ): Promise<ListDataOutputModel<GetPaymentPlanPaidResourceQueryResult>> {
+    if (listData.searchBy !== null && !listData.searchBy.endsWith('%')) {
+      listData.searchBy = `${listData.searchBy}%`;
+    }
+
     const searchOptions: FindManyOptions<PaymentPlanPaidResourceTypeormEntity> =
       {
         where: [
