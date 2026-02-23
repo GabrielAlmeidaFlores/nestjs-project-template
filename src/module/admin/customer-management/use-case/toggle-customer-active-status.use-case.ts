@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { DeactivateCustomerAuthIdentityRequestDto } from '@module/admin/customer-management/dto/request/deactivate-customer-auth-identity.request.dto';
 import { DeactivateCustomerAuthIdentityResponseDto } from '@module/admin/customer-management/dto/response/deactivate-customer-auth-identity.response.dto';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
@@ -13,8 +12,8 @@ import { AuthIdentityEntity } from '@module/generic/auth-identity/domain/schema/
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
 @Injectable()
-export class DeactivateCustomerAuthIdentityUseCase {
-  protected readonly _type = DeactivateCustomerAuthIdentityUseCase.name;
+export class ToggleCustomerActiveStatusUseCase {
+  protected readonly _type = ToggleCustomerActiveStatusUseCase.name;
 
   public constructor(
     @Inject(CustomerQueryRepositoryGateway)
@@ -28,20 +27,23 @@ export class DeactivateCustomerAuthIdentityUseCase {
   ) {}
 
   public async execute(
-    dto: DeactivateCustomerAuthIdentityRequestDto,
+    customerId: CustomerId,
+    isActive: boolean,
   ): Promise<DeactivateCustomerAuthIdentityResponseDto> {
-    await this.validateCustomerExists(dto.customerId);
+    await this.validateCustomerExists(customerId);
 
-    const authIdentity = await this.fetchAuthIdentityByCustomerIdOrThrow(
-      dto.customerId,
+    const authIdentity =
+      await this.fetchAuthIdentityByCustomerIdOrThrow(customerId);
+
+    const updatedAuthIdentity = this.buildUpdatedAuthIdentity(
+      authIdentity,
+      isActive,
     );
-
-    const updatedAuthIdentity = this.buildDeactivatedAuthIdentity(authIdentity);
 
     await this.persistUpdatedAuthIdentity(authIdentity.id, updatedAuthIdentity);
 
     return DeactivateCustomerAuthIdentityResponseDto.build({
-      customerId: dto.customerId,
+      customerId,
     });
   }
 
@@ -69,8 +71,9 @@ export class DeactivateCustomerAuthIdentityUseCase {
     return authIdentity;
   }
 
-  private buildDeactivatedAuthIdentity(
+  private buildUpdatedAuthIdentity(
     authIdentity: GetAuthIdentityWithRelationsQueryResult,
+    isActive: boolean,
   ): AuthIdentityEntity {
     return new AuthIdentityEntity({
       id: authIdentity.id,
@@ -80,7 +83,7 @@ export class DeactivateCustomerAuthIdentityUseCase {
       authenticatorAppSecret: authIdentity.authenticatorAppSecret,
       customer: authIdentity.customer?.id ?? null,
       admin: authIdentity.admin?.id ?? null,
-      isActive: false,
+      isActive,
       createdAt: authIdentity.createdAt,
       updatedAt: new Date(),
     });

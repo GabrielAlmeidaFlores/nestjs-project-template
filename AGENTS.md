@@ -1673,39 +1673,82 @@ export class AnalysisController {
 
 #### ⚠️ CRITICAL: Path Parameter and Use Case Input Pattern
 
-**RULE**: When a path parameter is extracted from the route, it should be converted to a Value Object using `ParseValueObjectPipe` and passed directly to the use case. **NEVER create a DTO in the controller to wrap the parameter.**
+**RULE**: When a path parameter is extracted from the route:
+
+1. Convert it to a Value Object using `ParseValueObjectPipe`
+2. Pass it **directly to the use case** - **NEVER create a Request DTO just to wrap the parameter**
+3. If the controller method has no Request DTO, the use case should **NOT** have a Request DTO either
+4. Use cases should accept only the necessary Value Objects or domain objects directly
 
 The same input from the controller parameter should flow directly to the use case - this is the established pattern.
 
-**❌ WRONG - Creating DTO wrapper in controller:**
+**❌ WRONG - Creating unnecessary DTO wrapper:**
 
 ```typescript
-public async deactivateCustomer(
-  @Param('customerId') customerId: string,
-): Promise<DeactivateCustomerResponseDto> {
-  // ❌ WRONG: Manually creating DTO and constructing Value Object
-  const dto = DeactivateCustomerRequestDto.build({
-    customerId: new CustomerId(customerId),
-  });
-  return this.deactivateCustomerUseCase.execute(dto);
-}
-```
-
-**✅ CORRECT - Using ParseValueObjectPipe:**
-
-```typescript
+// Controller
 public async deactivateCustomer(
   @Param('customerId', new ParseValueObjectPipe(CustomerId))
   customerId: CustomerId,
 ): Promise<DeactivateCustomerResponseDto> {
-  // ✅ CORRECT: ParseValueObjectPipe converts to Value Object
-  // Pass directly to use case with .build()
+  // ❌ WRONG: Wrapping in DTO just adds unnecessary layer
   const dto = DeactivateCustomerRequestDto.build({
-    customerId, // ✅ Already a CustomerId Value Object
+    customerId,
   });
   return this.deactivateCustomerUseCase.execute(dto);
 }
+
+// Use Case - ❌ WRONG: Unnecessary request DTO
+public async execute(
+  dto: DeactivateCustomerRequestDto,
+): Promise<DeactivateCustomerResponseDto> {
+  await this.validateCustomerExists(dto.customerId);
+  // ...
+}
 ```
+
+**✅ CORRECT - Direct parameter passing:**
+
+```typescript
+// Controller
+public async deactivateCustomer(
+  @Param('customerId', new ParseValueObjectPipe(CustomerId))
+  customerId: CustomerId,
+): Promise<DeactivateCustomerResponseDto> {
+  // ✅ CORRECT: Pass Value Object directly to use case
+  return this.deactivateCustomerUseCase.execute(customerId);
+}
+
+// Use Case - ✅ CORRECT: Accept Value Object directly
+public async execute(
+  customerId: CustomerId,
+): Promise<DeactivateCustomerResponseDto> {
+  await this.validateCustomerExists(customerId);
+  // ...
+  return DeactivateCustomerResponseDto.build({
+    customerId,
+  });
+}
+```
+
+**When to Use Request DTOs vs Direct Parameters:**
+
+| Scenario                     | Use Request DTO                     | Pass Directly                       |
+| ---------------------------- | ----------------------------------- | ----------------------------------- |
+| Single path parameter        | ❌ No                               | ✅ Yes - pass Value Object directly |
+| Multiple path parameters     | ✅ Create DTO if needed for clarity | Optional                            |
+| Request body with validation | ✅ Yes - always use DTO             | N/A                                 |
+| Query parameters             | ✅ Yes - use DTO for validation     | N/A                                 |
+| Session/Auth data            | ✅ Yes - pass SessionDataModel      | N/A                                 |
+
+**Rules:**
+
+- ✅ Use `ParseValueObjectPipe` for automatic path parameter conversion
+- ✅ Pass converted Value Objects directly to use cases (no wrapping)
+- ✅ If controller has no Request DTO, use case should NOT have one either
+- ✅ Use cases accept only what they need (no unnecessary wrapper objects)
+- ✅ Request DTOs are used for **request body** validation and **complex query parameters**
+- ❌ NO unnecessary Request DTOs just to wrap a single path parameter
+- ❌ NO intermediate wrapper objects in use case signatures
 
 **How ParseValueObjectPipe Works:**
 
@@ -1720,9 +1763,96 @@ public async deactivateCustomer(
 - ✅ Automatic validation at the pipe layer
 - ✅ Single responsibility: parsing happens once
 - ✅ Type safety: parameter is already a Value Object
-- ✅ Cleaner controller logic
+- ✅ Cleaner code: no unnecessary wrapper objects
 - ✅ Consistent with established patterns in the codebase
 - ✅ Errors caught early (before reaching use case)
+
+#### ⚠️ CRITICAL: Query Parameter DTO Pattern
+
+**RULE**: When handling query parameters for pagination or filtering:
+
+1. Use a **Request DTO** to capture and validate query parameters (e.g., `ListDataRequestDto`)
+2. The DTO is marked with `@RequestDto()` and uses property decorators for validation
+3. In the controller, convert the DTO to the domain model (e.g., `ListDataInputModel`)
+4. Pass the domain model to the use case
+
+**Why This Pattern?**:
+
+- Query parameters need validation and type transformation
+- Request DTOs provide OpenAPI/Swagger documentation
+- Separation between HTTP layer (DTO) and domain layer (InputModel)
+- Consistent with how all query parameters are handled in the codebase
+
+**✅ CORRECT - Query Parameter Pattern:**
+
+```typescript
+// Define the Request DTO for query parameters
+@RequestDto()
+export class ListDataRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoNumberProperty({ example: 1 })
+  public page: number;
+
+  @RequestDtoNumberProperty({ example: 10 })
+  public limit: number;
+
+  @RequestDtoStringProperty({ required: false, example: '-createdAt' })
+  public sortField?: string;
+
+  protected override readonly _type = ListDataRequestDto.name;
+}
+
+// Controller: Accept DTO, convert to domain model
+public async listPaymentPlans(
+  @Query() dto: ListDataRequestDto,
+): Promise<ListPaymentPlansResponseDto> {
+  return await this.listPaymentPlansUseCase.execute(
+    new ListDataInputModel(dto),  // Convert DTO to domain model
+  );
+}
+
+// Use Case: Accept domain model
+public async execute(
+  pagination: ListDataInputModel,
+): Promise<ListPaymentPlansResponseDto> {
+  // Use pagination.page, pagination.limit, etc.
+  const results = await this.repository.list(pagination);
+  return results;
+}
+```
+
+**❌ WRONG - Direct Query Parameter Binding:**
+
+```typescript
+// ❌ WRONG: Using domain model directly for query parameters
+public async listPaymentPlans(
+  @Query() listData: ListDataInputModel,  // No validation, no OpenAPI docs
+): Promise<ListPaymentPlansResponseDto> {
+  return await this.listPaymentPlansUseCase.execute(listData);
+}
+```
+
+**Pattern Flow**:
+
+```
+HTTP Request
+    ↓
+@Query() dto: ListDataRequestDto  (validation + OpenAPI docs)
+    ↓
+new ListDataInputModel(dto)  (convert to domain model)
+    ↓
+Use Case executes with domain model
+```
+
+**Rules**:
+
+- ✅ Use `@Query() dto: ListDataRequestDto` (or similar Request DTO)
+- ✅ Create `ListDataInputModel` from the DTO in the controller method
+- ✅ Pass the domain model to the use case
+- ✅ Request DTOs have `@RequestDto()` decorator and property decorators
+- ✅ Use `ListDataRequestDto` from `@shared/api/util/dto/request/list-data.request.dto`
+- ✅ For custom query parameters, create a custom Request DTO extending `BaseBuildableDtoObject`
+- ❌ NO direct binding of domain models to `@Query()` decorator (will not validate or document)
+- ❌ NO skipping the DTO layer for query parameters
 
 ### 8. Value Object Patterns
 
