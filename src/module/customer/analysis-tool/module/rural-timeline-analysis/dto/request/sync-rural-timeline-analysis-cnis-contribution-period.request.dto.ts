@@ -76,6 +76,20 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto extends B
   })
   public externalSupplementationIntent: boolean;
 
+  @RequestDtoBooleanProperty({
+    description:
+      'Indica se este período deve ser considerado nos cálculos de aposentadoria. Quando false, o período é ignorado.',
+    required: false,
+  })
+  public shouldConsiderPeriod?: boolean;
+
+  @RequestDtoBooleanProperty({
+    description:
+      'Indica se a última remuneração do período deve ser automaticamente utilizada como data de saída.',
+    required: false,
+  })
+  public shouldConsiderLastRemunerationAsExitDate?: boolean;
+
   @RequestDtoObjectProperty(() => Base64FileRequestDto, { required: false })
   public cnisDocument?: Base64FileRequestDto;
 

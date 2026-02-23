@@ -60,6 +60,7 @@ import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-auth-identity-relation-query-result.auto-mapper.profile';
 import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-customer-address-relation-query-result.auto-mapper.profile';
+import { GetCustomerWithOrganizationForListQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-organization-for-list-query-result.auto-mapper.profile';
 import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
 import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/get-customer-query-result.auto-mapper.profile';
 import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
@@ -245,6 +246,7 @@ import { GetRuralTimelineAnalysisPeriodPropertyQueryResultAutoMapperProfile } fr
 import { RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisPeriodResidenceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/get-rural-timeline-analysis-period-residence-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence-entity.auto-mapper.profile';
+import { RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document-entity.auto-mapper.profile';
 import { GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/get-rural-timeline-cnis-contribution-period-overdue-contribution-query-result.auto-mapper.profile';
 import { RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/get-special-activity-analysis-with-relations-query-result.auto-mapper.profile';
@@ -286,6 +288,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetOrganizationQueryResultAutoMapperProfile,
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
+    GetCustomerWithOrganizationForListQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile,
     GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
@@ -526,6 +529,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetRuralTimelineAnalysisPeriodPendingExitDateQueryResultAutoMapperProfile,
     RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile,
     GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile,
+    RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,

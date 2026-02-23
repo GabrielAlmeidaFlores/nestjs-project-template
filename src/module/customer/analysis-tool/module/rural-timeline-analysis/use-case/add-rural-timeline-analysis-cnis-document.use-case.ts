@@ -177,6 +177,8 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
             externalSupplementationIntent: false,
+            shouldConsiderPeriod: true,
+            shouldConsiderLastRemunerationAsExitDate: false,
           });
 
         batchOperations.push(
@@ -407,6 +409,9 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             cnisContributionPeriod.contributionAdjustmentIntent,
           externalSupplementationIntent:
             cnisContributionPeriod.externalSupplementationIntent,
+          shouldConsiderPeriod: cnisContributionPeriod.shouldConsiderPeriod,
+          shouldConsiderLastRemunerationAsExitDate:
+            cnisContributionPeriod.shouldConsiderLastRemunerationAsExitDate,
           cnisDocument: cnisContributionPeriod.cnisDocument,
           impactAnalysis: analysisResult,
           ruralTimelineId: ruralTimelineAnalysisId,

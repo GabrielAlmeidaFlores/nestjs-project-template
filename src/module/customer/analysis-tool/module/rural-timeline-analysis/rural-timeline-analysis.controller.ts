@@ -19,6 +19,7 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsId } from '@module/customer/a
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
 import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
 import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
+import { RuralTimelineCnisContributionPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-document/value-object/rural-timeline-cnis-contribution-period-document-id/rural-timeline-cnis-contribution-period-document-id.value-object';
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-period-document.request.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period.request.dto';
@@ -28,6 +29,7 @@ import { CreateRuralTimelineAnalysisPeriodPropertyRequestDto } from '@module/cus
 import { CreateRuralTimelineAnalysisPeriodResidenceRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period-residence.request.dto';
 import { CreateRuralTimelineAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-period.request.dto';
 import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
+import { CreateRuralTimelineCnisContributionPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-cnis-contribution-period-document.request.dto';
 import { GetRuralTimelineCnisAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/get-rural-timeline-cnis-analysis.request.dto';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-cnis-contribution-period-under-minimum.request.dto';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-cnis-contribution-period.request.dto';
@@ -39,6 +41,7 @@ import { UpdateRuralTimelineAnalysisPeriodPropertyRequestDto } from '@module/cus
 import { UpdateRuralTimelineAnalysisPeriodResidenceRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-period-residence.request.dto';
 import { UpdateRuralTimelineAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis-period.request.dto';
 import { UpdateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-analysis.request.dto';
+import { UpdateRuralTimelineCnisContributionPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/update-rural-timeline-cnis-contribution-period-document.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { AddRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-period-document.response.dto';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/analyze-rural-timeline-analysis-period-document.response.dto';
@@ -49,6 +52,7 @@ import { CreateRuralTimelineAnalysisPeriodPropertyResponseDto } from '@module/cu
 import { CreateRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period-residence.response.dto';
 import { CreateRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-period.response.dto';
 import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
+import { CreateRuralTimelineCnisContributionPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-cnis-contribution-period-document.response.dto';
 import { DeleteRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-document.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-economic-aspects.response.dto';
@@ -56,7 +60,7 @@ import { DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto } from '@
 import { DeleteRuralTimelineAnalysisPeriodPropertyResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-property.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-residence.response.dto';
 import { DeleteRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period.response.dto';
-import { DeleteRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis.response.dto';
+import { DeleteRuralTimelineCnisContributionPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-cnis-contribution-period-document.response.dto';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis-period-document-analysis.response.dto';
 import { GenerateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-analysis.response.dto';
 import { GenerateRuralTimelineConsolidatedDocumentAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/generate-rural-timeline-consolidated-document-analysis.response.dto';
@@ -74,6 +78,7 @@ import { UpdateRuralTimelineAnalysisPeriodResidenceResponseDto } from '@module/c
 import { UpdateRuralTimelineAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-period.response.dto';
 import { UpdateRuralTimelineAnalysisToolRecordToCompleteStatusResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis-tool-record-to-complete-status.response.dto';
 import { UpdateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-analysis.response.dto';
+import { UpdateRuralTimelineCnisContributionPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/update-rural-timeline-cnis-contribution-period-document.response.dto';
 import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
@@ -84,6 +89,7 @@ import { CreateRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/custom
 import { CreateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-residence.use-case';
 import { CreateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period.use-case';
 import { CreateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis.use-case';
+import { CreateRuralTimelineCnisContributionPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-cnis-contribution-period-document.use-case';
 import { DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { DeleteRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-document.use-case';
 import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-economic-aspects.use-case';
@@ -91,7 +97,7 @@ import { DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@modu
 import { DeleteRuralTimelineAnalysisPeriodPropertyUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-property.use-case';
 import { DeleteRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period-residence.use-case';
 import { DeleteRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis-period.use-case';
-import { DeleteRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-analysis.use-case';
+import { DeleteRuralTimelineCnisContributionPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/delete-rural-timeline-cnis-contribution-period-document.use-case';
 import { DownloadRuralTimelineCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-complete-analysis.use-case';
 import { DownloadRuralTimelineSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/download-rural-timeline-simplified-analysis.use-case';
 import { GenerateRuralTimelineAnalysisPeriodDocumentAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/generate-rural-timeline-analysis-period-document-analysis.use-case';
@@ -111,6 +117,7 @@ import { UpdateRuralTimelineAnalysisPeriodResidenceUseCase } from '@module/custo
 import { UpdateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-period.use-case';
 import { UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-tool-record-status-to-complete.use-case';
 import { UpdateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis.use-case';
+import { UpdateRuralTimelineCnisContributionPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-cnis-contribution-period-document.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -129,7 +136,6 @@ export class RuralTimelineAnalysisController {
 
   public constructor(
     private readonly createRuralTimelineAnalysisUseCase: CreateRuralTimelineAnalysisUseCase,
-    private readonly deleteRuralTimelineAnalysisUseCase: DeleteRuralTimelineAnalysisUseCase,
     private readonly createRuralTimelineAnalysisPeriodUseCase: CreateRuralTimelineAnalysisPeriodUseCase,
     private readonly getRuralTimelineAnalysisUseCase: GetRuralTimelineAnalysisUseCase,
     private readonly getRuralTimelineCnisAnalysisUseCase: GetRuralTimelineCnisAnalysisUseCase,
@@ -146,6 +152,9 @@ export class RuralTimelineAnalysisController {
     private readonly createRuralTimelineAnalysisCnisContributionPeriodUseCase: CreateRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly updateRuralTimelineAnalysisCnisContributionPeriodUseCase: UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase,
     private readonly deleteRuralTimelineAnalysisCnisContributionPeriodUseCase: DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase,
+    private readonly createRuralTimelineCnisContributionPeriodDocumentUseCase: CreateRuralTimelineCnisContributionPeriodDocumentUseCase,
+    private readonly updateRuralTimelineCnisContributionPeriodDocumentUseCase: UpdateRuralTimelineCnisContributionPeriodDocumentUseCase,
+    private readonly deleteRuralTimelineCnisContributionPeriodDocumentUseCase: DeleteRuralTimelineCnisContributionPeriodDocumentUseCase,
     private readonly updateRuralTimelineAnalysisUseCase: UpdateRuralTimelineAnalysisUseCase,
     private readonly updateRuralTimelineAnalysisPeriodUseCase: UpdateRuralTimelineAnalysisPeriodUseCase,
     private readonly updateRuralTimelineAnalysisDocumentUseCase: UpdateRuralTimelineAnalysisDocumentUseCase,
@@ -295,38 +304,6 @@ export class RuralTimelineAnalysisController {
       organizationSessionData,
       ruralTimelineAnalysisId,
       dto,
-    );
-  }
-
-  @BuildEndpointSpecification({
-    summary: 'Deletar análise de linha do tempo rural',
-    userLevel: [UserLevelEnum.CUSTOMER],
-    http: {
-      path: ':ruralTimelineAnalysisId',
-      method: RequestMethod.DELETE,
-    },
-    tag: ['analise-linha-tempo-rural'],
-    successResponse: {
-      statusCode: HttpStatus.OK,
-      description: 'Análise de linha do tempo rural deletada com sucesso.',
-      type: DeleteRuralTimelineAnalysisResponseDto,
-    },
-    guard: [AuthGuard, OrganizationSessionGuard],
-  })
-  public async deleteRuralTimelineAnalysis(
-    @GetSessionData() sessionData: SessionDataModel,
-    @GetOrganizationSessionData()
-    organizationSessionData: OrganizationSessionDataModel,
-    @Param(
-      'ruralTimelineAnalysisId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisId),
-    )
-    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-  ): Promise<DeleteRuralTimelineAnalysisResponseDto> {
-    return await this.deleteRuralTimelineAnalysisUseCase.execute(
-      sessionData,
-      organizationSessionData,
-      ruralTimelineAnalysisId,
     );
   }
 
@@ -740,6 +717,129 @@ export class RuralTimelineAnalysisController {
       organizationSessionData,
       ruralTimelineAnalysisId,
       contributionPeriodId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar documento do período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId/document',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineCnisContributionPeriodDocumentRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description:
+        'Documento do período de contribuição CNIS criado com sucesso.',
+      type: CreateRuralTimelineCnisContributionPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRuralTimelineCnisContributionPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'contributionPeriodId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId),
+    )
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+    @Body() dto: CreateRuralTimelineCnisContributionPeriodDocumentRequestDto,
+  ): Promise<CreateRuralTimelineCnisContributionPeriodDocumentResponseDto> {
+    return await this.createRuralTimelineCnisContributionPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      contributionPeriodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar documento do período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period-document/:documentId',
+      method: RequestMethod.PATCH,
+      type: UpdateRuralTimelineCnisContributionPeriodDocumentRequestDto,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Documento do período de contribuição CNIS atualizado com sucesso.',
+      type: UpdateRuralTimelineCnisContributionPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateRuralTimelineCnisContributionPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(RuralTimelineCnisContributionPeriodDocumentId),
+    )
+    documentId: RuralTimelineCnisContributionPeriodDocumentId,
+    @Body() dto: UpdateRuralTimelineCnisContributionPeriodDocumentRequestDto,
+  ): Promise<UpdateRuralTimelineCnisContributionPeriodDocumentResponseDto> {
+    return await this.updateRuralTimelineCnisContributionPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      documentId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Deletar documento do período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period-document/:documentId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['analise-linha-tempo-rural'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description:
+        'Documento do período de contribuição CNIS deletado com sucesso.',
+      type: DeleteRuralTimelineCnisContributionPeriodDocumentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async deleteRuralTimelineCnisContributionPeriodDocument(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'ruralTimelineAnalysisId',
+      new ParseValueObjectPipe(RuralTimelineAnalysisId),
+    )
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param(
+      'documentId',
+      new ParseValueObjectPipe(RuralTimelineCnisContributionPeriodDocumentId),
+    )
+    documentId: RuralTimelineCnisContributionPeriodDocumentId,
+  ): Promise<DeleteRuralTimelineCnisContributionPeriodDocumentResponseDto> {
+    return await this.deleteRuralTimelineCnisContributionPeriodDocumentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      documentId,
     );
   }
 

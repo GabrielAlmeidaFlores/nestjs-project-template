@@ -4,7 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
@@ -23,21 +25,38 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
     this.mapOrmEntityToDomainEntity();
     this.mapDomainEntityToOrmEntity();
   }
-
   private mapOrmEntityToDomainEntity(): void {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisPeriodTypeormEntity,
     ): RuralTimelineAnalysisPeriodEntity => {
-      const ruralTimeline = this.mapper.map(
-        source.ruralTimeline,
-        RuralTimelineAnalysisTypeormEntity,
-        RuralTimelineAnalysisEntity,
-      );
+      let ruralTimelineId: RuralTimelineAnalysisId;
+      const ruralTimeline = source.ruralTimeline;
+
+      if (ruralTimeline?.analysisToolRecord?.analysisToolClient !== undefined) {
+        const mappedRuralTimeline = this.mapper.map(
+          ruralTimeline,
+          RuralTimelineAnalysisTypeormEntity,
+          RuralTimelineAnalysisEntity,
+        );
+        ruralTimelineId = mappedRuralTimeline.id;
+      } else if (ruralTimeline !== undefined) {
+        ruralTimelineId = new RuralTimelineAnalysisId(ruralTimeline.id);
+      } else {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass: RuralTimelineAnalysisPeriodEntity.name,
+          sourceClass: RuralTimelineAnalysisPeriodTypeormEntity.name,
+        });
+      }
 
       return new RuralTimelineAnalysisPeriodEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodId(source.id),
-        ruralTimelineId: ruralTimeline.id,
+        startDate: source.startDate ?? null,
+        endDate: source.endDate ?? null,
+        workerType: source.workerType ?? null,
+        workRegimeType: source.workRegimeType ?? null,
+        productionDestination: source.productionDestination ?? null,
+        documentAnalysis: source.documentAnalysis ?? null,
+        ruralTimelineId,
         ruralTimelinePeriodPropertyId: source.ruralTimelinePeriodProperty
           ? new RuralTimelineAnalysisPeriodPropertyId(
               source.ruralTimelinePeriodProperty.id,
@@ -48,6 +67,9 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
               source.ruralTimelinePeriodResidence.id,
             )
           : null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

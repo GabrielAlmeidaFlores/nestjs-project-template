@@ -26,12 +26,22 @@ export class RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile {
       source: RuralTimelineAnalysisPeriodPropertyTypeormEntity,
     ): RuralTimelineAnalysisPeriodPropertyEntity => {
       return new RuralTimelineAnalysisPeriodPropertyEntity({
-        ...source,
         id: new RuralTimelineAnalysisPeriodPropertyId(source.id),
+        propertyName: source.propertyName ?? null,
+        ownerName: source.ownerName ?? null,
         postalCode:
           source.postalCode !== null && source.postalCode !== undefined
             ? new PostalCode(source.postalCode)
             : null,
+        stateCode: source.stateCode ?? null,
+        city: source.city ?? null,
+        neighborhood: source.neighborhood ?? null,
+        street: source.street ?? null,
+        streetNumber: source.streetNumber ?? null,
+        landOwnershipType: source.landOwnershipType ?? null,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -50,9 +60,19 @@ export class RuralTimelineAnalysisPeriodPropertyEntityAutoMapperProfile {
       source: RuralTimelineAnalysisPeriodPropertyEntity,
     ): RuralTimelineAnalysisPeriodPropertyTypeormEntity => {
       return RuralTimelineAnalysisPeriodPropertyTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        propertyName: source.propertyName,
+        ownerName: source.ownerName,
         postalCode: source.postalCode?.toString() ?? null,
+        stateCode: source.stateCode,
+        city: source.city,
+        neighborhood: source.neighborhood,
+        street: source.street,
+        streetNumber: source.streetNumber,
+        landOwnershipType: source.landOwnershipType,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

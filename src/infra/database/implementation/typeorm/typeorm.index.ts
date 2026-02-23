@@ -121,6 +121,8 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormCommandRepository } fr
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodPropertyTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodResidenceTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.typeorm.command.repository';
+import { RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.command.repository';
+import { RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document.typeorm.query.repository';
 import { SpecialActivityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.command.repository';
 import { SpecialActivityTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-activity/special-activity.typeorm.query.repository';
 import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-document/special-activity-document.typeorm.command.repository';
@@ -245,6 +247,7 @@ import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/databas
 import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { RuralTimelineCnisContributionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-document.typeorm.entity';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.entity';
 import { SpecialActivityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-documents.typeorm.entity';
 import { SpecialActivityInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-benefit.typeorm.entity';
@@ -346,6 +349,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity,
     RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
     RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity,
+    RuralTimelineCnisContributionPeriodDocumentTypeormEntity,
     RuralTimelineAnalysisInssBenefitTypeormEntity,
     RuralTimelineAnalysisLegalProceedingTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
@@ -499,6 +503,8 @@ export class TypeormIndex {
     RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormCommandRepository,
     RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository,
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository,
+    RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository,
+    RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository,
     InsuranceQualityAnalysisTypeormCommandRepository,
     InsuranceQualityAnalysisDocumentTypeormCommandRepository,
     InsuranceQualityAnalysisInssBenefitTypeormCommandRepository,

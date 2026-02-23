@@ -39,7 +39,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 30_000;
+    const maxOutputTokens = 8_192;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -51,7 +51,7 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 40_000;
+    const maxOutputTokens = 10_000;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -106,8 +106,10 @@ export class GeminiService implements GenerativeIaGateway {
       model,
       contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
       config: {
-        temperature: 0.3,
+        temperature: 0.1,
         maxOutputTokens,
+        topP: 0.95,
+        topK: 40,
       },
     } as GenerateContentParameters;
 
@@ -331,35 +333,35 @@ export class GeminiService implements GenerativeIaGateway {
   private async buildPartWithFileContent(
     contentList: GenerativeIaPartType[],
   ): Promise<Part[]> {
-    const partList: Part[] = [];
+    const results = await Promise.all(
+      contentList.map(async (content) => {
+        if (typeof content === 'string') {
+          return { text: content } as Part;
+        }
 
-    for (let content of contentList) {
-      if (typeof content === 'string') {
-        partList.push({ text: content });
-        continue;
-      }
+        let fileData = await fileType.fileTypeFromBuffer(content);
 
-      let fileData = await fileType.fileTypeFromBuffer(content);
+        if (fileData === undefined) {
+          const textContext = content.toString('utf-8');
+          const pdfBuffer = this.generatePdfFromText(textContext);
+          fileData = await fileType.fileTypeFromBuffer(pdfBuffer);
+          content = pdfBuffer;
+        }
 
-      if (fileData === undefined) {
-        const textContext = content.toString('utf-8');
-        content = this.generatePdfFromText(textContext);
-        fileData = await fileType.fileTypeFromBuffer(content);
-      }
+        if (fileData === undefined) {
+          return null;
+        }
 
-      if (fileData === undefined) {
-        continue;
-      }
+        return {
+          inlineData: {
+            mimeType: fileData.mime,
+            data: content.toString('base64'),
+          },
+        } as Part;
+      }),
+    );
 
-      partList.push({
-        inlineData: {
-          mimeType: fileData.mime,
-          data: content.toString('base64'),
-        },
-      });
-    }
-
-    return partList;
+    return results.filter((part): part is Part => part !== null);
   }
 
   private generatePdfFromText(text: string): Buffer {

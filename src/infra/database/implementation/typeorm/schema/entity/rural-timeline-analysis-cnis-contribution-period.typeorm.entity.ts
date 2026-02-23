@@ -4,6 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-pending-exit-date.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
+import { RuralTimelineCnisContributionPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-document.typeorm.entity';
 import { RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
@@ -81,6 +82,18 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   public externalSupplementationIntent: boolean;
 
   @Column({
+    name: 'should_consider_period',
+    type: 'boolean',
+  })
+  public shouldConsiderPeriod: boolean;
+
+  @Column({
+    name: 'should_consider_last_remuneration_as_exit_date',
+    type: 'boolean',
+  })
+  public shouldConsiderLastRemunerationAsExitDate: boolean;
+
+  @Column({
     name: 'cnis_document',
     type: 'varchar',
     length: 255,
@@ -124,6 +137,14 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends Ba
   )
   public ruralTimelineCnisContributionPeriodOverdueContribution?:
     | RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity[]
+    | undefined;
+
+  @OneToMany(
+    () => RuralTimelineCnisContributionPeriodDocumentTypeormEntity,
+    (entity) => entity.ruralTimelineCnisContributionPeriod,
+  )
+  public ruralTimelineCnisContributionPeriodDocument?:
+    | RuralTimelineCnisContributionPeriodDocumentTypeormEntity[]
     | undefined;
 
   protected override readonly _type =
