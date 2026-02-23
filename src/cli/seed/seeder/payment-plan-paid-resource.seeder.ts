@@ -130,7 +130,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_SPECIAL_PERIOD_PPP_ANALYSIS,
       creditCost: 6,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE PERÍODOS ESPECIAIS PPP',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE PERÍODOS ESPECIAIS PPP',
       description:
         'Análise de períodos de trabalho especial com base no PPP (Perfil Profissiográfico Previdenciário) usando IA. Identifica exposição a agentes nocivos, valida enquadramento legal por período histórico, calcula conversão de tempo especial em comum e impacto na aposentadoria.',
     }),
@@ -139,7 +140,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_NO_END_DATE_DOCUMENTS_ANALYSIS,
       creditCost: 5,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE DOCUMENTOS SEM DATA FIM',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE DOCUMENTOS SEM DATA FIM',
       description:
         'Análise de vínculos empregatícios e atividades sem data de término usando IA. Examina contratos de trabalho vigentes, atividades autônomas em andamento, vínculos não baixados no CNIS, calculando projeções de tempo futuro e elegibilidade progressiva para aposentadoria.',
     }),
@@ -175,7 +177,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_CTPS_OUTSIDE_CNIS_ANALYSIS,
       creditCost: 4,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE CTPS FORA DO CNIS',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE CTPS FORA DO CNIS',
       description:
         'Análise de vínculos anotados na CTPS mas ausentes no CNIS usando IA. Identifica períodos omissos, valida autenticidade das anotações, avalia viabilidade de reconhecimento administrativo ou necessidade de ação judicial, calculando ganho de tempo e impacto na aposentadoria.',
     }),
@@ -184,7 +187,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_STUDENT_APPRENTICE_ANALYSIS,
       creditCost: 3,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE ESTUDANTE APRENDIZ',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE ESTUDANTE APRENDIZ',
       description:
         'Análise de tempo como estudante aprendiz (Menor Aprendiz Lei 10.097/2000) com IA para reconhecimento previdenciário. Valida contratos de aprendizagem, verifica recolhimentos ao INSS, calcula período computável conforme legislação vigente à época e impacto no tempo de contribuição.',
     }),
@@ -193,7 +197,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_WORK_ABROAD_ANALYSIS,
       creditCost: 5,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE TRABALHO NO EXTERIOR',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE TRABALHO NO EXTERIOR',
       description:
         'Análise de períodos de trabalho no exterior com IA para reconhecimento no RGPS. Examina acordos internacionais de previdência social, valida documentação estrangeira, orienta sobre apostilamento e tradução juramentada, calcula tempo computável e procedimentos de averbação.',
     }),
@@ -202,7 +207,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_INFORMAL_WORK_ANALYSIS,
       creditCost: 4,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE TRABALHO INFORMAL',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE TRABALHO INFORMAL',
       description:
         'Análise de períodos de trabalho informal (autônomo, contribuinte individual) com IA. Examina recibos de pagamento autônomo (RPA), notas fiscais de serviço, carnês de contribuição, valida recolhimentos em atraso, calcula viabilidade de indenização e impacto no tempo de contribuição e valor do benefício.',
     }),
@@ -211,7 +217,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RETIREMENT_PLANNING_RGPS_LABOR_COURT_DECISION_ANALYSIS,
       creditCost: 6,
-      title: 'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE DECISÕES DA JUSTIÇA DO TRABALHO',
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA RGPS - ANÁLISE DE DECISÕES DA JUSTIÇA DO TRABALHO',
       description:
         'Análise de sentenças e acordos trabalhistas com IA para reconhecimento de vínculo previdenciário. Examina decisões judiciais transitadas em julgado, valida reconhecimento de vínculo empregatício, calcula período e salários de contribuição homologados, orienta procedimento de averbação no INSS.',
     }),
@@ -387,7 +394,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
       creditCost: 1,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE DE DOCUMENTO INDIVIDUAL DE PERÍODO',
+      title:
+        'LINHA DO TEMPO RURAL - ANÁLISE DE DOCUMENTO INDIVIDUAL DE PERÍODO',
       description:
         'Análise individual de um único documento comprobatório de atividade rural com IA. Valida autenticidade formal, identifica período coberto, examina conteúdo probatório (declaração sindical, nota fiscal, contrato, ITR), avalia força probatória isolada e necessidade de documentos complementares para aquele período.',
     }),
@@ -396,7 +404,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS,
       creditCost: 3,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA DE DOCUMENTOS DO PERÍODO',
+      title:
+        'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA DE DOCUMENTOS DO PERÍODO',
       description:
         'Análise consolidada de todos os documentos comprobatórios de um único período de atividade rural específico com IA. Examina conjunto probatório daquele período, valida consistência temporal entre documentos, avalia suficiência do início de prova material e robustez probatória para reconhecimento judicial.',
     }),
@@ -423,7 +432,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS,
       creditCost: 5,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA GERAL DE TODOS OS DOCUMENTOS',
+      title:
+        'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA GERAL DE TODOS OS DOCUMENTOS',
       description:
         'Análise consolidada geral de todos os documentos comprobatórios de todos os períodos da linha do tempo rural com IA. Examina conjunto probatório completo considerando múltiplos períodos rurais, identifica sobreposições, lacunas temporais, consistência entre períodos distintos, gerando parecer técnico unificado sobre viabilidade global de reconhecimento.',
     }),
@@ -504,7 +514,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
       creditCost: 2,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE DE IMPACTO DE CONTRIBUIÇÃO EM ATRASO',
+      title:
+        'LINHA DO TEMPO RURAL - ANÁLISE DE IMPACTO DE CONTRIBUIÇÃO EM ATRASO',
       description:
         'Análise de impacto de contribuições em atraso sobre períodos de atividade rural com IA. Examina CNIS do período de contribuição, identifica recolhimentos em atraso, avalia se o atraso prejudica reconhecimento do tempo rural anterior, calcula consequências previdenciárias (perda de carência, qualidade de segurado), orienta sobre regularização contributiva.',
     }),
