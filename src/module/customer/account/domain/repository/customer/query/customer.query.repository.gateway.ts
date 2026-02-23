@@ -3,6 +3,7 @@ import type { Email } from '@core/domain/schema/value-object/email/email.value-o
 import type { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import type { NotFoundError } from '@core/error/not-found.error';
 import type { ListCustomersWithFiltersInputModel } from '@module/customer/account/domain/repository/customer/query/model/input/list-customers-with-filters.input.model';
+import type { GetCustomerProfileQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-profile.query.result';
 import type { UsersStatisticsMonthlyQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-statistics.query.result';
 import type { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-auth-identity-relation.query.result';
 import type { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
@@ -51,4 +52,8 @@ export abstract class CustomerQueryRepositoryGateway {
   public abstract countAllMonthlyUsersForYear(
     year: number,
   ): Promise<Array<UsersStatisticsMonthlyQueryResult>>;
+
+  public abstract findOneByCustomerIdWithProfileData(
+    customerId: CustomerId,
+  ): Promise<GetCustomerProfileQueryResult | null>;
 }
