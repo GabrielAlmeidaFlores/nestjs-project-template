@@ -1667,9 +1667,62 @@ export class AnalysisController {
 - ✅ All summaries and descriptions in Portuguese
 - ✅ Use `@GetSessionData()` for authenticated user data
 - ✅ Use `@Body()` for request body
-- ✅ Use `@Param()` for path parameters
+- ✅ Use `@Param()` for path parameters with `ParseValueObjectPipe` for Value Objects
 - ✅ Use `@Query()` for query parameters
 - ✅ Controller methods should ONLY call use cases (no business logic)
+
+#### ⚠️ CRITICAL: Path Parameter and Use Case Input Pattern
+
+**RULE**: When a path parameter is extracted from the route, it should be converted to a Value Object using `ParseValueObjectPipe` and passed directly to the use case. **NEVER create a DTO in the controller to wrap the parameter.**
+
+The same input from the controller parameter should flow directly to the use case - this is the established pattern.
+
+**❌ WRONG - Creating DTO wrapper in controller:**
+
+```typescript
+public async deactivateCustomer(
+  @Param('customerId') customerId: string,
+): Promise<DeactivateCustomerResponseDto> {
+  // ❌ WRONG: Manually creating DTO and constructing Value Object
+  const dto = DeactivateCustomerRequestDto.build({
+    customerId: new CustomerId(customerId),
+  });
+  return this.deactivateCustomerUseCase.execute(dto);
+}
+```
+
+**✅ CORRECT - Using ParseValueObjectPipe:**
+
+```typescript
+public async deactivateCustomer(
+  @Param('customerId', new ParseValueObjectPipe(CustomerId))
+  customerId: CustomerId,
+): Promise<DeactivateCustomerResponseDto> {
+  // ✅ CORRECT: ParseValueObjectPipe converts to Value Object
+  // Pass directly to use case with .build()
+  const dto = DeactivateCustomerRequestDto.build({
+    customerId, // ✅ Already a CustomerId Value Object
+  });
+  return this.deactivateCustomerUseCase.execute(dto);
+}
+```
+
+**How ParseValueObjectPipe Works:**
+
+1. Extracts the string value from the route parameter
+2. Automatically converts it to the specified Value Object (e.g., `CustomerId`)
+3. Validates the Value Object during construction
+4. Returns the typed Value Object to the controller method
+5. Controller passes it directly to the use case
+
+**Benefits:**
+
+- ✅ Automatic validation at the pipe layer
+- ✅ Single responsibility: parsing happens once
+- ✅ Type safety: parameter is already a Value Object
+- ✅ Cleaner controller logic
+- ✅ Consistent with established patterns in the codebase
+- ✅ Errors caught early (before reaching use case)
 
 ### 8. Value Object Patterns
 
