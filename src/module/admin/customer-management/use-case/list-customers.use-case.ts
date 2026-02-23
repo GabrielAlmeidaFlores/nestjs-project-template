@@ -80,6 +80,10 @@ export class ListCustomersUseCase {
           customerEmail: item.customerEmail,
           customerDocument: item.customerDocument,
           customerCreatedAt: item.customerCreatedAt,
+          ...(item.customerDeletedAt !== null && {
+            customerDeletedAt: item.customerDeletedAt,
+          }),
+          customerIsActive: item.customerIsActive,
           customerRegisteredTimeInDays: registeredTimeInDays,
           customerType,
           ...(item.organizationName !== null && {
