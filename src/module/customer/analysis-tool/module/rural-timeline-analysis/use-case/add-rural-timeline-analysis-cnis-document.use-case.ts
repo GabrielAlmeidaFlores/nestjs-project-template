@@ -5,6 +5,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -169,6 +170,22 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       const batchOperations = [];
 
       for (const contributionPeriod of batch) {
+        const matchingSocialSecurityRelation =
+          cnisData.socialSecurityRelations?.find(
+            (relation) =>
+              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
+                contributionPeriod.origemDoVinculo &&
+              contributionPeriod.dados !== undefined &&
+              relation.socialSecurityAffiliationInfo.dataInicio ===
+                contributionPeriod.dados.data?.dataInicio,
+          );
+
+        const willHavePendingExitDates =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationInfo !==
+            undefined &&
+          matchingSocialSecurityRelation.socialSecurityAffiliationInfo
+            .dataFim === undefined;
+
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
@@ -178,7 +195,9 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             endDate: contributionPeriod.dados?.data?.dataFim ?? null,
             category: contributionPeriod.tipoDoVinculo ?? null,
             qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
-            status: RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
+            status: willHavePendingExitDates
+              ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
+              : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
             averageContributionAmount: null,
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
@@ -193,16 +212,6 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
           ),
         );
 
-        const matchingSocialSecurityRelation =
-          cnisData.socialSecurityRelations?.find(
-            (relation) =>
-              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
-                contributionPeriod.origemDoVinculo &&
-              contributionPeriod.dados !== undefined &&
-              relation.socialSecurityAffiliationInfo.dataInicio ===
-                contributionPeriod.dados.data?.dataInicio,
-          );
-
         if (
           matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
         ) {
@@ -211,23 +220,25 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
               earnings.competencia !== undefined &&
               earnings.remuneracao !== undefined
             ) {
-              const underMinimumEntity =
-                new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
-                  {
-                    contributionDate: earnings.competencia,
-                    contributionAmount: new DecimalValue(
-                      parseFloat(earnings.remuneracao),
-                    ),
-                    ruralTimelineCnisContributionPeriodId:
-                      contributionPeriodEntity.id,
-                  },
-                );
+              const year = earnings.competencia.getFullYear();
+              const tetoData = TetoInssData.find((t) => t.ano === year);
+              const salarioMinimo = tetoData?.salarioMinimo ?? 0;
+              const amount = parseFloat(earnings.remuneracao);
 
-              batchOperations.push(
-                this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
-                  underMinimumEntity,
-                ),
-              );
+              if (salarioMinimo > 0 && amount < salarioMinimo) {
+                batchOperations.push(
+                  this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+                    new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
+                      {
+                        contributionDate: earnings.competencia,
+                        contributionAmount: new DecimalValue(amount),
+                        ruralTimelineCnisContributionPeriodId:
+                          contributionPeriodEntity.id,
+                      },
+                    ),
+                  ),
+                );
+              }
             }
           }
         }
