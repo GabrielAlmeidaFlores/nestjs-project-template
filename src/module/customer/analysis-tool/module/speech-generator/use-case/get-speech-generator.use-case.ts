@@ -127,8 +127,7 @@ export class GetSpeechGeneratorUseCase {
       updatedAt: analysisToolRecordQueryResult.updatedAt,
       createdAt: analysisToolRecordQueryResult.createdAt,
       analysisToolClient: GetSpeechGeneratorClientResponseDto.build({
-        id: analysisToolRecordQueryResult.analysisToolClient.id,
-        name: analysisToolRecordQueryResult.analysisToolClient.name,
+        ...analysisToolRecordQueryResult.analysisToolClient,
       }),
       speechGeneratorResult: speechGeneratorResultDto,
       inssBenefitNumber: speechGeneratorQueryResult.speechGeneratorBenefit.map(
