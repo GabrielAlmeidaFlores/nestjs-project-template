@@ -24,6 +24,7 @@ import { GetCustomerWithOrganizationForListQueryResult } from '@module/customer/
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
 import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
@@ -409,15 +410,24 @@ export class CustomerTypeormQueryRepository
     let paymentPlanName = 'N/A';
     let paymentPlanPrice = new DecimalValue('0');
     let paymentPlanCycle = PaymentPlanCycleEnum.MONTHLY;
+    let maxMemberCount: number | null = null;
+    let organizationId: OrganizationId | null = null;
+    let isOrganizationOwner = false;
 
     // Get payment plan from the first organization member's organization
     const firstOrgMember = customerTypeormEntity.organizationMember?.[0];
+    if (firstOrgMember?.organization?.id !== undefined) {
+      organizationId = new OrganizationId(firstOrgMember.organization.id);
+      isOrganizationOwner = firstOrgMember.owner;
+    }
+
     if (firstOrgMember?.organization?.organizationPaymentPlan?.[0]) {
       const orgPaymentPlan =
         firstOrgMember.organization.organizationPaymentPlan[0];
       paymentPlanName = orgPaymentPlan.name;
       paymentPlanPrice = new DecimalValue(orgPaymentPlan.price);
       paymentPlanCycle = orgPaymentPlan.cycle;
+      maxMemberCount = orgPaymentPlan.maxMemberCount;
     }
 
     return GetCustomerProfileQueryResult.build({
@@ -428,6 +438,10 @@ export class CustomerTypeormQueryRepository
         customerTypeormEntity.authIdentity.federalDocument.toString(),
       ),
       phoneNumber: new PhoneNumber(customerTypeormEntity.phoneNumber),
+      customerIsActive: customerTypeormEntity.authIdentity.isActive,
+      organizationId,
+      isOrganizationOwner,
+      maxMemberCount,
       createdAt: customerTypeormEntity.createdAt,
       paymentPlanName,
       paymentPlanPrice,

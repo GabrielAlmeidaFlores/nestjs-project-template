@@ -2,9 +2,11 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
+import { CustomerTypeEnum } from '@module/admin/customer-management/dto/enum/customer-type.enum';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
@@ -54,6 +56,9 @@ export class GetCustomerProfileResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(PhoneNumber)
   public phoneNumber: PhoneNumber;
 
+  @ResponseDtoEnumProperty(CustomerTypeEnum)
+  public customerType: CustomerTypeEnum;
+
   @ResponseDtoDateProperty()
   public registrationDate: Date;
 
@@ -65,6 +70,9 @@ export class GetCustomerProfileResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoEnumProperty(PaymentPlanCycleEnum)
   public paymentPlanCycle: PaymentPlanCycleEnum;
+
+  @ResponseDtoBooleanProperty()
+  public customerIsActive: boolean;
 
   @ResponseDtoObjectProperty(() => CustomerAddressResponseDto, {
     required: false,
