@@ -71,6 +71,7 @@ export class CreateTeacherRetirementPlanningResultUseCase {
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
       );
 
+      console.log(organizationSessionData.organizationId, organizationMember.id, PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS);
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
@@ -93,7 +94,7 @@ export class CreateTeacherRetirementPlanningResultUseCase {
     };
 
     const completeAnalysis =
-      await this.analysisProcessorGateway.getRetirementPlanningRppsCompleteAnalysis(
+      await this.analysisProcessorGateway.getTeacherRetirementPlanningCompleteAnalysis(
         promptResponse.prompt,
         [Buffer.from(JSON.stringify(input, null, 2), 'utf-8')],
       );
