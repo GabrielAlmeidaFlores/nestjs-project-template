@@ -8,6 +8,17 @@ import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/d
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
+export class PendingExitDateResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoDateProperty()
+  public date: Date;
+
+  @ResponseDtoStringProperty()
+  public amount: string;
+
+  protected override readonly _type = PendingExitDateResponseDto.name;
+}
+
+@ResponseDto()
 export class CnisTimelinePeriodResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(CnisTimelinePeriodTypeEnum)
   public type: CnisTimelinePeriodTypeEnum;
@@ -20,6 +31,12 @@ export class CnisTimelinePeriodResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoStringProperty({ required: false })
   public description?: string;
+
+  @ResponseDtoObjectProperty(() => PendingExitDateResponseDto, {
+    required: false,
+    isArray: true,
+  })
+  public pendingExitDates?: PendingExitDateResponseDto[];
 
   protected override readonly _type = CnisTimelinePeriodResponseDto.name;
 }
