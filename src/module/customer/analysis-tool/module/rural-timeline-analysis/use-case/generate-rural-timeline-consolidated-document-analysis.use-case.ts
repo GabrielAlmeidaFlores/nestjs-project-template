@@ -156,7 +156,7 @@ export class GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase {
     const systemInstruction = promptResponse.prompt;
 
     const analysisResult =
-      await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           systemInstruction,
           prompt: consolidatedContext,
