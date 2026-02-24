@@ -107,7 +107,8 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       }
 
       if (
-        period.ruralTimelineCnisContributionPeriodPendingExitDate.length > 0
+        period.ruralTimelineCnisContributionPeriodPendingExitDate.length > 0 &&
+        !period.endDate
       ) {
         const pendingExitDates =
           period.ruralTimelineCnisContributionPeriodPendingExitDate.map(
@@ -138,18 +139,33 @@ export class GetRuralTimelineCnisAnalysisUseCase {
             firstPendingDate,
             lastPendingDate,
           );
-          totalPendingMonths += months;
 
-          periods.push(
-            CnisTimelinePeriodResponseDto.build({
-              type: CnisTimelinePeriodTypeEnum.PENDING,
-              startDate: firstPendingDate,
-              endDate: lastPendingDate,
-              description:
-                'Período sem data de saída - aguardando informações de encerramento',
-              pendingExitDates,
-            }),
-          );
+          const isResolved =
+            period.status ===
+            RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID;
+
+          if (isResolved) {
+            totalRuralMonths += months;
+            periods.push(
+              CnisTimelinePeriodResponseDto.build({
+                type: CnisTimelinePeriodTypeEnum.RURAL,
+                startDate: firstPendingDate,
+                endDate: lastPendingDate,
+              }),
+            );
+          } else {
+            totalPendingMonths += months;
+            periods.push(
+              CnisTimelinePeriodResponseDto.build({
+                type: CnisTimelinePeriodTypeEnum.PENDING,
+                startDate: firstPendingDate,
+                endDate: lastPendingDate,
+                description:
+                  'Período sem data de saída - aguardando informações de encerramento',
+                pendingExitDates,
+              }),
+            );
+          }
         }
       }
     }
