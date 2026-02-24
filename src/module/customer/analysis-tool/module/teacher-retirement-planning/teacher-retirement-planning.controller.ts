@@ -6,6 +6,7 @@ import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/custome
 import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
 import { CreateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning.request.dto';
 import { ListTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/list-teacher-retirement-planning-remuneration.request.dto';
+import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-period.request.dto';
 import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
 import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
 import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period.response.dto';
@@ -15,6 +16,7 @@ import { CreateTeacherRetirementPlanningResponseDto } from '@module/customer/ana
 import { DeleteTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/delete-teacher-retirement-planning.response.dto';
 import { GetTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
 import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/list-teacher-retirement-planning-remuneration.response.dto';
+import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
@@ -26,6 +28,7 @@ import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@modul
 import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
 import { GetTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning.use-case';
 import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/list-teacher-retirement-planning-remuneration.use-case';
+import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
 import { UpdateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-remuneration.use-case';
 import { UpdateTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -53,6 +56,7 @@ export class TeacherRetirementPlanningController {
     private readonly downloadTeacherRetirementPlanningSimplifiedAnalysisUseCase: DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase,
     private readonly createTeacherRetirementPlanningPeriodUseCase: CreateTeacherRetirementPlanningPeriodUseCase,
     private readonly createTeacherRetirementPlanningRemunerationUseCase: CreateTeacherRetirementPlanningRemunerationUseCase,
+    private readonly updateTeacherRetirementPlanningPeriodUseCase: UpdateTeacherRetirementPlanningPeriodUseCase,
     private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationUseCase,
     private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
   ) {}
@@ -246,6 +250,41 @@ export class TeacherRetirementPlanningController {
     return this.createTeacherRetirementPlanningPeriodUseCase.execute(
       sessionData,
       organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar períodos do planejamento previdenciário de professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':teacherRetirementPlanningId/period',
+      method: RequestMethod.PATCH,
+      type: UpdateTeacherRetirementPlanningPeriodRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Períodos atualizados com sucesso.',
+      type: UpdateTeacherRetirementPlanningPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updatePeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'teacherRetirementPlanningId',
+      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+    )
+    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+    @Body() dto: UpdateTeacherRetirementPlanningPeriodRequestDto,
+  ): Promise<UpdateTeacherRetirementPlanningPeriodResponseDto> {
+    return this.updateTeacherRetirementPlanningPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      teacherRetirementPlanningId,
       dto,
     );
   }

@@ -14,6 +14,7 @@ import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@modul
 import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
 import { GetTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning.use-case';
 import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/list-teacher-retirement-planning-remuneration.use-case';
+import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
 import { UpdateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-remuneration.use-case';
 import { UpdateTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
@@ -43,6 +44,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase,
     CreateTeacherRetirementPlanningPeriodUseCase,
     CreateTeacherRetirementPlanningRemunerationUseCase,
+    UpdateTeacherRetirementPlanningPeriodUseCase,
     UpdateTeacherRetirementPlanningRemunerationUseCase,
     ListTeacherRetirementPlanningRemunerationUseCase,
   ],
