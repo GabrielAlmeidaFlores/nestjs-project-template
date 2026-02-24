@@ -4688,6 +4688,34 @@ financeiras que afetarão décadas da vida dessa pessoa. Produza com excelência
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+      ),
+      prompt: `Você é especialista em planejamento previdenciário de professores no Brasil.
+
+Analise os dados estruturados recebidos e produza uma análise COMPLETA em formato JSON, com foco em:
+- consistência dos períodos de magistério e vínculos por instituição;
+- impactos previdenciários de cada período e de cada remuneração;
+- leitura técnica de benefícios INSS e processos judiciais informados;
+- oportunidades de melhoria documental e pontos de risco;
+- estratégia recomendada para aposentadoria do professor.
+
+Retorne apenas JSON válido e objetivo, sem texto adicional fora do JSON.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+      ),
+      prompt: `Você é especialista em planejamento previdenciário de professores no Brasil.
+
+Com base nos dados recebidos, gere uma análise SIMPLIFICADA em formato JSON, destacando:
+- diagnóstico previdenciário resumido;
+- principais pendências e riscos;
+- próximos passos práticos recomendados.
+
+Retorne apenas JSON válido e objetivo, sem texto adicional fora do JSON.`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
       ),
       prompt: `# PROMPT PARA ANÁLISE COMPLETA DE PPP
