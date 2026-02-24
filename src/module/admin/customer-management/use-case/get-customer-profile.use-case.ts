@@ -43,7 +43,7 @@ export class GetCustomerProfileUseCase {
         })
       : undefined;
     const customerType = this.determineCustomerType(
-      customerProfile.isOrganizationOwner,
+      customerProfile.isOrganizationOwner ?? false,
       customerProfile.organizationId,
       customerProfile.maxMemberCount,
     );
@@ -56,10 +56,16 @@ export class GetCustomerProfileUseCase {
       phoneNumber: customerProfile.phoneNumber,
       customerType,
       registrationDate: customerProfile.createdAt,
-      paymentPlanName: customerProfile.paymentPlanName,
-      paymentPlanPrice: customerProfile.paymentPlanPrice,
-      paymentPlanCycle: customerProfile.paymentPlanCycle,
       customerIsActive: customerProfile.customerIsActive,
+      ...(customerProfile.paymentPlanName !== undefined && {
+        paymentPlanName: customerProfile.paymentPlanName,
+      }),
+      ...(customerProfile.paymentPlanPrice !== undefined && {
+        paymentPlanPrice: customerProfile.paymentPlanPrice,
+      }),
+      ...(customerProfile.paymentPlanCycle !== undefined && {
+        paymentPlanCycle: customerProfile.paymentPlanCycle,
+      }),
       ...(addressData && { address: addressData }),
     });
   }

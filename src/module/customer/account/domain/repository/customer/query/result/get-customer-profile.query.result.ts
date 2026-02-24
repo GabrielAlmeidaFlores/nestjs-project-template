@@ -17,12 +17,12 @@ export class GetCustomerProfileQueryResult extends BaseBuildableObject {
   public readonly phoneNumber: PhoneNumber;
   public readonly customerIsActive: boolean;
   public readonly organizationId: OrganizationId | null;
-  public readonly isOrganizationOwner: boolean;
+  public readonly isOrganizationOwner?: boolean;
   public readonly maxMemberCount: number | null;
   public readonly createdAt: Date;
-  public readonly paymentPlanName: string;
-  public readonly paymentPlanPrice: DecimalValue;
-  public readonly paymentPlanCycle: PaymentPlanCycleEnum;
+  public readonly paymentPlanName?: string;
+  public readonly paymentPlanPrice?: DecimalValue;
+  public readonly paymentPlanCycle?: PaymentPlanCycleEnum;
   public readonly customerAddress?: GetCustomerAddressQueryResult;
 
   protected override readonly _type = GetCustomerProfileQueryResult.name;

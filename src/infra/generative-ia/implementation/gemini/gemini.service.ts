@@ -372,6 +372,6 @@ export class GeminiService implements GenerativeIaGateway {
       }),
     );
 
-    return results.filter((part): part is Part => part !== null);
+    return results;
   }
 }
