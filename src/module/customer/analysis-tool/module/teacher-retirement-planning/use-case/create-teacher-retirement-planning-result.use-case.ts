@@ -114,6 +114,7 @@ export class CreateTeacherRetirementPlanningResultUseCase {
       ...(planning.result !== null && { id: planning.result.id }),
       teacherRetirementPlanningCompleteAnalysis: completeAnalysis,
       teacherRetirementPlanningSimplifiedAnalysis: null,
+      teacherRetirementPlanningCompleteAnalysisDownload: null,
     });
 
     const planningEntity = new TeacherRetirementPlanningEntity({

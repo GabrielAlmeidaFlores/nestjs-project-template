@@ -218,121 +218,124 @@ Análise processada do CNIS:
   public async getTeacherRetirementPlanningCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    asJson = true,
   ): Promise<string | null> {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
-        responseConfig: ResponseConfigInputModel.build({
-          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-          jsonSchema: {
-            type: 'object',
-            properties: {
-              timeline: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    startDate: {
-                      type: 'string',
-                      description: 'Data de inicio no formato YYYY-MM-DD',
-                    },
-                    endDate: {
-                      type: 'string',
-                      description: 'Data de fim no formato YYYY-MM-DD',
-                    },
-                    activityType: {
-                      type: 'string',
-                      enum: [
-                        'Atividade como professor',
-                        'Atividade comum',
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: {
+                type: 'object',
+                properties: {
+                  timeline: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        startDate: {
+                          type: 'string',
+                          description: 'Data de inicio no formato YYYY-MM-DD',
+                        },
+                        endDate: {
+                          type: 'string',
+                          description: 'Data de fim no formato YYYY-MM-DD',
+                        },
+                        activityType: {
+                          type: 'string',
+                          enum: [
+                            'Atividade como professor',
+                            'Atividade comum',
+                          ],
+                          description: 'Tipo de atividade exercida',
+                        },
+                        type: {
+                          type: 'string',
+                          description: 'Classificacao do periodo',
+                        },
+                        location: {
+                          type: 'string',
+                          description: 'Local do periodo',
+                        },
+                      },
+                      required: [
+                        'startDate',
+                        'endDate',
+                        'activityType',
+                        'type',
+                        'location',
                       ],
-                      description: 'Tipo de atividade exercida',
-                    },
-                    type: {
-                      type: 'string',
-                      description: 'Classificacao do periodo',
-                    },
-                    location: {
-                      type: 'string',
-                      description: 'Local do periodo',
                     },
                   },
-                  required: [
-                    'startDate',
-                    'endDate',
-                    'activityType',
-                    'type',
-                    'location',
-                  ],
-                },
-              },
-              retirementRules: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    ruleName: {
-                      type: 'string',
-                      description: 'Nome da regra de aposentadoria',
-                    },
-                    result: {
-                      type: 'boolean',
-                      description: 'Resultado da regra',
-                    },
-                    rightDate: {
-                      type: 'string',
-                      description: 'Data do direito no formato YYYY-MM-DD',
-                    },
-                    estimatedRMI: {
-                      type: 'number',
-                      description: 'Renda mensal inicial estimada',
-                    },
-                    bestRMI: {
-                      type: 'boolean',
-                      description: 'Indica se possui a melhor RMI',
-                    },
-                    highestLawsuitValue: {
-                      type: 'boolean',
-                      description: 'Indica se possui o maior valor de acao',
-                    },
-                    detailedRuleAnalysis: {
-                      type: 'string',
-                      description: 'Analise detalhada da regra',
+                  retirementRules: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        ruleName: {
+                          type: 'string',
+                          description: 'Nome da regra de aposentadoria',
+                        },
+                        result: {
+                          type: 'boolean',
+                          description: 'Resultado da regra',
+                        },
+                        rightDate: {
+                          type: 'string',
+                          description: 'Data do direito no formato YYYY-MM-DD',
+                        },
+                        estimatedRMI: {
+                          type: 'number',
+                          description: 'Renda mensal inicial estimada',
+                        },
+                        bestRMI: {
+                          type: 'boolean',
+                          description: 'Indica se possui a melhor RMI',
+                        },
+                        highestLawsuitValue: {
+                          type: 'boolean',
+                          description: 'Indica se possui o maior valor de acao',
+                        },
+                        detailedRuleAnalysis: {
+                          type: 'string',
+                          description: 'Analise detalhada da regra',
+                        },
+                      },
+                      required: [
+                        'ruleName',
+                        'result',
+                        'bestRMI',
+                        'highestLawsuitValue',
+                        'detailedRuleAnalysis',
+                      ],
                     },
                   },
-                  required: [
-                    'ruleName',
-                    'result',
-                    'bestRMI',
-                    'highestLawsuitValue',
-                    'detailedRuleAnalysis',
-                  ],
+                  finalAnalysis: {
+                    type: 'string',
+                    description: 'Analise final consolidada',
+                  },
+                  teacherTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total como professor. Exemplo: 29 anos e 3 meses',
+                  },
+                  commonTime: {
+                    type: 'string',
+                    description: 'Tempo total comum. Exemplo: 29 anos e 3 meses',
+                  },
                 },
+                required: [
+                  'timeline',
+                  'retirementRules',
+                  'finalAnalysis',
+                  'teacherTime',
+                  'commonTime',
+                ],
               },
-              finalAnalysis: {
-                type: 'string',
-                description: 'Analise final consolidada',
-              },
-              teacherTime: {
-                type: 'string',
-                description:
-                  'Tempo total como professor. Exemplo: 29 anos e 3 meses',
-              },
-              commonTime: {
-                type: 'string',
-                description: 'Tempo total comum. Exemplo: 29 anos e 3 meses',
-              },
-            },
-            required: [
-              'timeline',
-              'retirementRules',
-              'finalAnalysis',
-              'teacherTime',
-              'commonTime',
-            ],
-          },
-        }),
+            })
+          : null,
       }),
     );
   }

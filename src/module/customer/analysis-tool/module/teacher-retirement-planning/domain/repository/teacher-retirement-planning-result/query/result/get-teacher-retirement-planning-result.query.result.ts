@@ -6,6 +6,7 @@ export class GetTeacherRetirementPlanningResultQueryResult extends BaseBuildable
   public readonly id: TeacherRetirementPlanningResultId;
   public readonly teacherRetirementPlanningCompleteAnalysis: string | null;
   public readonly teacherRetirementPlanningSimplifiedAnalysis: string | null;
+  public readonly teacherRetirementPlanningCompleteAnalysisDownload: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

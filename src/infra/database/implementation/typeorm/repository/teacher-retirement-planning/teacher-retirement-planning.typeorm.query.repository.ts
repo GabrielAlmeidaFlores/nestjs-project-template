@@ -181,6 +181,8 @@ export class TeacherRetirementPlanningTypeormQueryRepository
               entity.result.teacherRetirementPlanningCompleteAnalysis,
             teacherRetirementPlanningSimplifiedAnalysis:
               entity.result.teacherRetirementPlanningSimplifiedAnalysis,
+            teacherRetirementPlanningCompleteAnalysisDownload:
+              entity.result.teacherRetirementPlanningCompleteAnalysisDownload,
             createdAt: entity.result.createdAt,
             updatedAt: entity.result.updatedAt,
             deletedAt: entity.result.deletedAt,

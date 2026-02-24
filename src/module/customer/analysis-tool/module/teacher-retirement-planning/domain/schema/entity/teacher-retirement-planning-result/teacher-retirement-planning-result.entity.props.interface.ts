@@ -5,4 +5,5 @@ export interface TeacherRetirementPlanningResultEntityPropsInterface
   extends BaseEntityPropsInterface<TeacherRetirementPlanningResultId> {
   teacherRetirementPlanningCompleteAnalysis?: string | null;
   teacherRetirementPlanningSimplifiedAnalysis?: string | null;
+  teacherRetirementPlanningCompleteAnalysisDownload?: string | null;
 }

@@ -30,6 +30,7 @@ export abstract class AnalysisProcessorGateway {
   public abstract getTeacherRetirementPlanningCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    asJson?: boolean,
   ): Promise<string | null>;
 
   public abstract getSpecialActivityCompleteAnalysis(

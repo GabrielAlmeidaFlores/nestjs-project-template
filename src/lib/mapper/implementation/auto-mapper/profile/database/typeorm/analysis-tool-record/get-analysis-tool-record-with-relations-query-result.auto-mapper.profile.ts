@@ -168,9 +168,13 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       return GetAnalysisToolRecordWithRelationsQueryResult.build({
-        ...source,
         id: new AnalysisToolRecordId(source.id),
         code: new AnalysisToolRecordCode(source.code),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
@@ -185,6 +189,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
+        teacherRetirementPlanning: null,
         analysisToolClient,
         createdBy,
         updatedBy,
@@ -311,9 +316,13 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       return AnalysisToolRecordTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
         code: source.code.toString(),
+        type: source.type,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         cnisFastAnalysis,
         retirementPlanningRpps,
         retirementPlanningRgps,
