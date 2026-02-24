@@ -32,7 +32,12 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 2_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 2_000;
+
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -44,7 +49,12 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 4_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 4_000;
+
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
