@@ -66,6 +66,26 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Planejamento completo de aposentadoria no Regime Próprio de Previdência Social (RPPS) com IA. Calcula tempo de contribuição, simula regras de transição, estima valores de benefício e identifica melhor momento para aposentação de servidor público.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a77f0e13-2a67-497a-bc4b-7f2215b31f6f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title:
+        'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE COMPLETA',
+      description:
+        'Planejamento completo de aposentadoria para professor com IA. Analisa períodos de magistério, vínculos por instituição, remunerações, benefícios e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('7b2d3112-f0f1-46f4-9d35-e7ebf4cc2705'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title:
+        'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
