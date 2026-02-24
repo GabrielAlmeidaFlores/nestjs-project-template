@@ -11,6 +11,7 @@ import {
   CnisTimelineContributionSummaryResponseDto,
   CnisTimelinePeriodResponseDto,
   GetRuralTimelineCnisAnalysisResponseDto,
+  PendingExitDateResponseDto,
 } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/get-rural-timeline-cnis-analysis.response.dto';
 import { CnisTimelinePeriodTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/enum/cnis-timeline-period-type.enum';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -65,48 +66,92 @@ export class GetRuralTimelineCnisAnalysisUseCase {
     let latestDate: Date | null = null;
 
     let totalRuralMonths = 0;
-    const totalUrbanMonths = 0;
     let totalPendingMonths = 0;
 
     for (const period of ruralTimelineAnalysis.ruralTimelineCnisContributionPeriod) {
-      if (!period.startDate || !period.endDate) {
-        continue;
+      if (period.startDate && period.endDate) {
+        const startDate = period.startDate;
+        const endDate = period.endDate;
+
+        if (earliestDate === null || startDate < earliestDate) {
+          earliestDate = startDate;
+        }
+        if (latestDate === null || endDate > latestDate) {
+          latestDate = endDate;
+        }
+
+        const months = this.calculateMonthsBetweenDates(startDate, endDate);
+
+        let type: CnisTimelinePeriodTypeEnum = CnisTimelinePeriodTypeEnum.RURAL;
+        let description: string | null = null;
+
+        if (
+          period.status ===
+          RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
+        ) {
+          type = CnisTimelinePeriodTypeEnum.PENDING;
+          totalPendingMonths += months;
+          description = 'Período pendente de validação';
+        } else {
+          totalRuralMonths += months;
+        }
+
+        periods.push(
+          CnisTimelinePeriodResponseDto.build({
+            type,
+            startDate,
+            endDate,
+            description,
+          }),
+        );
       }
-
-      const startDate = period.startDate;
-      const endDate = period.endDate;
-
-      if (earliestDate === null || startDate < earliestDate) {
-        earliestDate = startDate;
-      }
-      if (latestDate === null || endDate > latestDate) {
-        latestDate = endDate;
-      }
-
-      const months = this.calculateMonthsBetweenDates(startDate, endDate);
-
-      let type: CnisTimelinePeriodTypeEnum = CnisTimelinePeriodTypeEnum.RURAL;
-      let description: string | null = null;
 
       if (
-        period.status ===
-        RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
+        period.ruralTimelineCnisContributionPeriodPendingExitDate.length > 0
       ) {
-        type = CnisTimelinePeriodTypeEnum.PENDING;
-        totalPendingMonths += months;
-        description = 'Período pendente de validação';
-      } else {
-        totalRuralMonths += months;
-      }
+        const pendingExitDates =
+          period.ruralTimelineCnisContributionPeriodPendingExitDate.map(
+            (pending) =>
+              PendingExitDateResponseDto.build({
+                date: pending.pendingDate,
+                amount: pending.pendingAmount.toString(),
+              }),
+          );
 
-      periods.push(
-        CnisTimelinePeriodResponseDto.build({
-          type,
-          startDate,
-          endDate,
-          description,
-        }),
-      );
+        const firstPendingDate =
+          period.ruralTimelineCnisContributionPeriodPendingExitDate[0]
+            ?.pendingDate;
+        const lastPendingDate =
+          period.ruralTimelineCnisContributionPeriodPendingExitDate[
+            period.ruralTimelineCnisContributionPeriodPendingExitDate.length - 1
+          ]?.pendingDate;
+
+        if (firstPendingDate && lastPendingDate) {
+          if (earliestDate === null || firstPendingDate < earliestDate) {
+            earliestDate = firstPendingDate;
+          }
+          if (latestDate === null || lastPendingDate > latestDate) {
+            latestDate = lastPendingDate;
+          }
+
+          const months = this.calculateMonthsBetweenDates(
+            firstPendingDate,
+            lastPendingDate,
+          );
+          totalPendingMonths += months;
+
+          periods.push(
+            CnisTimelinePeriodResponseDto.build({
+              type: CnisTimelinePeriodTypeEnum.PENDING,
+              startDate: firstPendingDate,
+              endDate: lastPendingDate,
+              description:
+                'Período sem data de saída - aguardando informações de encerramento',
+              pendingExitDates,
+            }),
+          );
+        }
+      }
     }
 
     for (const period of ruralTimelineAnalysis.ruralTimelineAnalysisPeriod) {
@@ -164,11 +209,8 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       ),
       ruralMonths:
         totalRuralMonths % GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
-      urbanYears: Math.floor(
-        totalUrbanMonths / GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
-      ),
-      urbanMonths:
-        totalUrbanMonths % GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
+      urbanYears: 0,
+      urbanMonths: 0,
       overlapMonths: totalOverlapMonths,
       pendingYears: Math.floor(
         totalPendingMonths / GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,

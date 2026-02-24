@@ -13,6 +13,11 @@ import { GenerativeIaApplicationVariable } from '@shared/system/constant/applica
 
 @Injectable()
 export class GeminiService implements GenerativeIaGateway {
+  private static readonly TEMPERATURE_FOR_JSON_MODE = 0;
+  private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
+  private static readonly TOP_P_VALUE = 0.95;
+  private static readonly TOP_K_VALUE = 40;
+
   protected readonly _type = GeminiService.name;
 
   private readonly googleGenerativeAI: GoogleGenAI;
@@ -118,14 +123,21 @@ export class GeminiService implements GenerativeIaGateway {
     }
 
     const isStructuredJsonMode = props.responseConfig !== undefined;
-    const temperature = isStructuredJsonMode ? 0 : 0.1;
+    const temperature = isStructuredJsonMode
+      ? GeminiService.TEMPERATURE_FOR_JSON_MODE
+      : GeminiService.TEMPERATURE_FOR_MARKDOWN_MODE;
 
     const contentConfig = {
       model,
       contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
       config: isStructuredJsonMode
         ? { temperature, maxOutputTokens }
-        : { temperature, maxOutputTokens, topP: 0.95, topK: 40 },
+        : {
+            temperature,
+            maxOutputTokens,
+            topP: GeminiService.TOP_P_VALUE,
+            topK: GeminiService.TOP_K_VALUE,
+          },
     } as GenerateContentParameters;
 
     if (props.responseConfig !== undefined) {
