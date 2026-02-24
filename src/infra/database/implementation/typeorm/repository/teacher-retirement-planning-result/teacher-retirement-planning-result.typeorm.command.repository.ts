@@ -32,6 +32,8 @@ export class TeacherRetirementPlanningResultTypeormCommandRepository
         props.teacherRetirementPlanningCompleteAnalysis,
       teacherRetirementPlanningSimplifiedAnalysis:
         props.teacherRetirementPlanningSimplifiedAnalysis,
+      teacherRetirementPlanningCompleteAnalysisDownload:
+        props.teacherRetirementPlanningCompleteAnalysisDownload,
     });
   }
 
@@ -43,6 +45,8 @@ export class TeacherRetirementPlanningResultTypeormCommandRepository
         props.teacherRetirementPlanningCompleteAnalysis,
       teacherRetirementPlanningSimplifiedAnalysis:
         props.teacherRetirementPlanningSimplifiedAnalysis,
+      teacherRetirementPlanningCompleteAnalysisDownload:
+        props.teacherRetirementPlanningCompleteAnalysisDownload,
     });
   }
 }

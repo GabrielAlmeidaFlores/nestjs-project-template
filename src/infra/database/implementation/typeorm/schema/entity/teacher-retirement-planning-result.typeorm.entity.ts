@@ -19,6 +19,13 @@ export class TeacherRetirementPlanningResultTypeormEntity extends BaseTypeormEnt
   })
   public teacherRetirementPlanningSimplifiedAnalysis: string | null;
 
+  @Column({
+    name: 'teacher_retirement_planning_complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public teacherRetirementPlanningCompleteAnalysisDownload: string | null;
+
   @OneToOne(
     () => TeacherRetirementPlanningTypeormEntity,
     (entity) => entity.result,
