@@ -197,7 +197,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         );
 
         const analysisResult =
-          await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+          await this.generativeIaGateway.generateFlashLiteResponseFromPromptAndFiles(
             GenerateResponseInputModel.build({
               systemInstruction,
               prompt: periodContext,
