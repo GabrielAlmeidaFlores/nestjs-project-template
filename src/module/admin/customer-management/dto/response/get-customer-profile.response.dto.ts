@@ -62,14 +62,14 @@ export class GetCustomerProfileResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public registrationDate: Date;
 
-  @ResponseDtoStringProperty()
-  public paymentPlanName: string;
+  @ResponseDtoStringProperty({ required: false })
+  public paymentPlanName?: string;
 
-  @ResponseDtoValueObjectProperty(DecimalValue)
-  public paymentPlanPrice: DecimalValue;
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public paymentPlanPrice?: DecimalValue;
 
-  @ResponseDtoEnumProperty(PaymentPlanCycleEnum)
-  public paymentPlanCycle: PaymentPlanCycleEnum;
+  @ResponseDtoEnumProperty(PaymentPlanCycleEnum, { required: false })
+  public paymentPlanCycle?: PaymentPlanCycleEnum;
 
   @ResponseDtoBooleanProperty()
   public customerIsActive: boolean;
