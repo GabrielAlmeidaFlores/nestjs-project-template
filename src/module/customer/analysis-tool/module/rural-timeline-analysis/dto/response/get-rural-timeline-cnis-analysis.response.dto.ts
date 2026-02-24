@@ -1,3 +1,4 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { CnisTimelinePeriodTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/enum/cnis-timeline-period-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -5,15 +6,16 @@ import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
 import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class PendingExitDateResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
-  public date: Date;
+  public pendingDate: Date;
 
-  @ResponseDtoStringProperty()
-  public amount: string;
+  @ResponseDtoValueObjectProperty(DecimalValue)
+  public pendingAmount: DecimalValue;
 
   protected override readonly _type = PendingExitDateResponseDto.name;
 }

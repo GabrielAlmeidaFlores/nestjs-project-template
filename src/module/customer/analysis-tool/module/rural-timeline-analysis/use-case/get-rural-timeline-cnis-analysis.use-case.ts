@@ -113,8 +113,8 @@ export class GetRuralTimelineCnisAnalysisUseCase {
           period.ruralTimelineCnisContributionPeriodPendingExitDate.map(
             (pending) =>
               PendingExitDateResponseDto.build({
-                date: pending.pendingDate,
-                amount: pending.pendingAmount.toString(),
+                pendingDate: pending.pendingDate,
+                pendingAmount: pending.pendingAmount,
               }),
           );
 
@@ -177,7 +177,6 @@ export class GetRuralTimelineCnisAnalysisUseCase {
           type: CnisTimelinePeriodTypeEnum.RURAL,
           startDate,
           endDate,
-          description: null,
         }),
       );
     }
