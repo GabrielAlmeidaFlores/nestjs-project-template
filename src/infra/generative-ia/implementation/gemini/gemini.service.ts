@@ -22,7 +22,7 @@ export class GeminiService implements GenerativeIaGateway {
 
   public constructor() {
     this.hashSubstringLength = 32;
-    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/gi;
+    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/i;
     this.fileTypeCache = new Map<string, string>();
     this.googleGenerativeAI = new GoogleGenAI({
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
@@ -117,15 +117,15 @@ export class GeminiService implements GenerativeIaGateway {
       });
     }
 
+    const isStructuredJsonMode = props.responseConfig !== undefined;
+    const temperature = isStructuredJsonMode ? 0 : 0.1;
+
     const contentConfig = {
       model,
       contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
-      config: {
-        temperature: 0.1,
-        maxOutputTokens,
-        topP: 0.95,
-        topK: 40,
-      },
+      config: isStructuredJsonMode
+        ? { temperature, maxOutputTokens }
+        : { temperature, maxOutputTokens, topP: 0.95, topK: 40 },
     } as GenerateContentParameters;
 
     if (props.responseConfig !== undefined) {
