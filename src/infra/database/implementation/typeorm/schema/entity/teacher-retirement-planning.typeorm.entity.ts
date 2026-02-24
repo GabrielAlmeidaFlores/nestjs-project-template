@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
@@ -73,7 +73,9 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
   @OneToOne(
     () => TeacherRetirementPlanningResultTypeormEntity,
     (entity) => entity.teacherRetirementPlanning,
+    { nullable: true },
   )
+  @JoinColumn({ name: 'teacher_retirement_planning_result_id' })
   public result?: TeacherRetirementPlanningResultTypeormEntity | undefined;
 
   @OneToOne(

@@ -3,6 +3,7 @@ import { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer
 import { TeacherRetirementPlanningPeriodItemEducationLevelEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-education-level.enum';
 import { TeacherRetirementPlanningPeriodItemInstitutionTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-institution-type.enum';
 import { TeacherRetirementPlanningPeriodItemRolePerformedEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-role-performed.enum';
+import { TeacherRetirementPlanningPeriodItemWorkloadTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-workload-type.enum';
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
 import { RequestDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-date-property/request-dto-date-property.decorator';
 import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-enum-property/request-dto-enum-property.decorator';
@@ -23,11 +24,16 @@ export class CreateTeacherRetirementPlanningPeriodItemDocumentRequestDto extends
 
 @RequestDto()
 export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty({ required: true })
-  public readonly startDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly startDate?: Date;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly endDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly endDate?: Date;
+
+  @RequestDtoEnumProperty(TeacherRetirementPlanningPeriodItemWorkloadTypeEnum, {
+    required: true,
+  })
+  public readonly workloadType: TeacherRetirementPlanningPeriodItemWorkloadTypeEnum;
 
   @RequestDtoStringProperty({ required: true })
   public readonly institutionName: string;
@@ -61,9 +67,7 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
 }
 
 @RequestDto()
-export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoValueObjectProperty(TeacherRetirementPlanningId)
-  public readonly teacherRetirementPlanningId: TeacherRetirementPlanningId;
+export class CreateTeacherRetirementPlanningPeriodDataRequestDto extends BaseBuildableDtoObject {
 
   @RequestDtoDateProperty({ required: true })
   public readonly startDate: Date;
@@ -86,10 +90,28 @@ export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildab
   public readonly department: string;
 
   @RequestDtoObjectProperty(() => CreateTeacherRetirementPlanningPeriodItemRequestDto, {
-    required: true,
+    required: false,
     isArray: true,
   })
-  public readonly items: CreateTeacherRetirementPlanningPeriodItemRequestDto[];
+  public readonly items?: CreateTeacherRetirementPlanningPeriodItemRequestDto[];
+
+  protected override readonly _type =
+    CreateTeacherRetirementPlanningPeriodDataRequestDto.name;
+}
+
+@RequestDto()
+export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(TeacherRetirementPlanningId)
+  public readonly teacherRetirementPlanningId: TeacherRetirementPlanningId;
+
+  @RequestDtoObjectProperty(
+    () => CreateTeacherRetirementPlanningPeriodDataRequestDto,
+    {
+      required: true,
+      isArray: true,
+    },
+  )
+  public readonly periods: CreateTeacherRetirementPlanningPeriodDataRequestDto[];
 
   protected override readonly _type =
     CreateTeacherRetirementPlanningPeriodRequestDto.name;

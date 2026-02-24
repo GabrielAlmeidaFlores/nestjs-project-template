@@ -7,6 +7,7 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import {
+  GetTeacherRetirementPlanningDocumentResponseDto,
   GetTeacherRetirementPlanningPeriodItemDocumentResponseDto,
   GetTeacherRetirementPlanningPeriodItemResponseDto,
   GetTeacherRetirementPlanningPeriodResponseDto,
@@ -78,9 +79,14 @@ export class GetTeacherRetirementPlanningUseCase {
                     const fileBuffer = await this.fileProcessorGateway.getFileBuffer(
                       document.document,
                     );
+                    const originalFileName =
+                      await this.fileProcessorGateway.getOriginalFileName(
+                        document.document,
+                      );
                     return GetTeacherRetirementPlanningPeriodItemDocumentResponseDto.build(
                       {
                         document: Base64.encodeBuffer(fileBuffer).toString(),
+                        originalFileName,
                       },
                     );
                   }),
@@ -97,7 +103,14 @@ export class GetTeacherRetirementPlanningUseCase {
         const fileBuffer = await this.fileProcessorGateway.getFileBuffer(
           document.document,
         );
-        return Base64.encodeBuffer(fileBuffer).toString();
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(
+            document.document,
+          );
+        return GetTeacherRetirementPlanningDocumentResponseDto.build({
+          document: Base64.encodeBuffer(fileBuffer).toString(),
+          originalFileName,
+        });
       }),
     );
 

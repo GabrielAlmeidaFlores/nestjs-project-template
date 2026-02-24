@@ -4,10 +4,10 @@ import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/prope
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
-export class CreateTeacherRetirementPlanningPeriodResponseDto extends BaseBuildableDtoObject {
+export class UpdateTeacherRetirementPlanningPeriodResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(TeacherRetirementPlanningId)
   public teacherRetirementPlanningId: TeacherRetirementPlanningId;
 
   protected override readonly _type =
-    CreateTeacherRetirementPlanningPeriodResponseDto.name;
+    UpdateTeacherRetirementPlanningPeriodResponseDto.name;
 }

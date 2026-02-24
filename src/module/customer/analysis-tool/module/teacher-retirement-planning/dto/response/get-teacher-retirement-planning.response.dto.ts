@@ -20,6 +20,9 @@ export class GetTeacherRetirementPlanningPeriodItemDocumentResponseDto extends B
   @ResponseDtoStringProperty()
   public document: string;
 
+  @ResponseDtoStringProperty()
+  public originalFileName: string;
+
   protected override readonly _type =
     GetTeacherRetirementPlanningPeriodItemDocumentResponseDto.name;
 }
@@ -100,6 +103,18 @@ export class GetTeacherRetirementPlanningResultResponseDto extends BaseBuildable
 }
 
 @ResponseDto()
+export class GetTeacherRetirementPlanningDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public document: string;
+
+  @ResponseDtoStringProperty()
+  public originalFileName: string;
+
+  protected override readonly _type =
+    GetTeacherRetirementPlanningDocumentResponseDto.name;
+}
+
+@ResponseDto()
 export class GetTeacherRetirementPlanningRemunerationResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoDateProperty()
   public contributionDate: Date;
@@ -143,8 +158,11 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
 
-  @ResponseDtoStringProperty({ required: false, isArray: true })
-  public documents?: string[];
+  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningDocumentResponseDto, {
+    required: false,
+    isArray: true,
+  })
+  public documents?: GetTeacherRetirementPlanningDocumentResponseDto[];
 
   @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningPeriodResponseDto, {
     required: false,
