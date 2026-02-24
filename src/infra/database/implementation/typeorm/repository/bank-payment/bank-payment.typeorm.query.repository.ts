@@ -123,6 +123,11 @@ export class BankPaymentTypeormQueryRepository
           },
         },
       },
+      relations: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: true,
+        },
+      },
     });
 
     const resource = this.mapperGateway.mapArray(
@@ -153,6 +158,11 @@ export class BankPaymentTypeormQueryRepository
               },
             },
           },
+        },
+      },
+      relations: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: true,
         },
       },
     });
