@@ -34,6 +34,7 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class AddRuralTimelineAnalysisCnisDocumentUseCase {
@@ -96,9 +97,15 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
         RuralTimelineAnalysisNotFoundError,
       );
 
-    const bucketKey = await this.fileProcessorGateway.uploadFile(
-      dto.cnisDocument,
-    );
+    const fileBuffer = dto.cnisDocument.base64.decodeToBuffer();
+    const fileModel = FileModel.build({
+      buffer: fileBuffer,
+      originalName: dto.cnisDocument.originalFileName,
+      size: fileBuffer.length,
+      encoding: 'base64',
+    });
+
+    const bucketKey = await this.fileProcessorGateway.uploadFile(fileModel);
 
     const cnisDocumentEntity = new RuralTimelineAnalysisDocumentEntity({
       type: RuralTimelineAnalysisDocumentTypeEnum.CNIS,
@@ -106,9 +113,8 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       ruralTimelineId: ruralTimelineAnalysisId,
     });
 
-    const cnisData = await this.cnisProcessorGateway.parseCnisDocument(
-      dto.cnisDocument.buffer,
-    );
+    const cnisData =
+      await this.cnisProcessorGateway.parseCnisDocument(fileBuffer);
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
@@ -292,7 +298,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     );
 
     return AddRuralTimelineAnalysisCnisDocumentResponseDto.build({
-      cnisDocumentId: cnisDocumentEntity.id.toString(),
+      ruralTimelineAnalysisDocumentId: cnisDocumentEntity.id,
     });
   }
 
