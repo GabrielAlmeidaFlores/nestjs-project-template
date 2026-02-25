@@ -171,6 +171,8 @@ export class GetRuralTimelineAnalysisUseCase {
           residence:
             period.ruralTimelineAnalysisPeriodResidence !== null
               ? GetRuralTimelineAnalysisPeriodResidenceResponseDto.build({
+                  ruralTimelineAnalysisPeriodResidenceId:
+                    period.ruralTimelineAnalysisPeriodResidence.id,
                   city: period.ruralTimelineAnalysisPeriodResidence.city,
                   stateCode:
                     period.ruralTimelineAnalysisPeriodResidence.stateCode,
@@ -182,6 +184,8 @@ export class GetRuralTimelineAnalysisUseCase {
           property:
             period.ruralTimelineAnalysisPeriodProperty !== null
               ? GetRuralTimelineAnalysisPeriodPropertyResponseDto.build({
+                  ruralTimelineAnalysisPeriodPropertyId:
+                    period.ruralTimelineAnalysisPeriodProperty.id,
                   ...(period.ruralTimelineAnalysisPeriodProperty
                     .propertyName !== null && {
                     propertyName:

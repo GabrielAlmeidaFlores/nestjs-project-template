@@ -26,6 +26,8 @@ import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/custo
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/enum/rural-timeline-analysis-period-family-group-member-kinship-type.enum';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
 import { RuralTimelineAnalysisPeriodLandOwnershipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/enum/rural-timeline-analysis-period-land-ownership-type.enum';
+import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
+import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
 import { RuralTimelineCnisContributionPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-document/value-object/rural-timeline-cnis-contribution-period-document-id/rural-timeline-cnis-contribution-period-document-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
@@ -116,6 +118,9 @@ export class GetRuralTimelineAnalysisPeriodDocumentResponseDto extends BaseBuild
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodResidenceResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodResidenceId)
+  public ruralTimelineAnalysisPeriodResidenceId: RuralTimelineAnalysisPeriodResidenceId;
+
   @ResponseDtoStringProperty()
   public city: string;
 
@@ -131,6 +136,9 @@ export class GetRuralTimelineAnalysisPeriodResidenceResponseDto extends BaseBuil
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodPropertyResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodPropertyId)
+  public ruralTimelineAnalysisPeriodPropertyId: RuralTimelineAnalysisPeriodPropertyId;
+
   @ResponseDtoStringProperty({ required: false })
   public propertyName?: string;
 
