@@ -95,7 +95,7 @@ export class CreateTeacherRetirementPlanningUseCase {
     const teacherRetirementPlanning = new TeacherRetirementPlanningEntity({
       id: teacherRetirementPlanningId,
       federativeEntity: dto.federativeEntity,
-      state: (dto.state as StateCodeEnum) ?? null,
+      state: dto.state as StateCodeEnum,
       municipality: dto.municipality ?? null,
       analysisName: dto.analysisName ?? null,
       currentPosition: dto.currentPosition ?? null,

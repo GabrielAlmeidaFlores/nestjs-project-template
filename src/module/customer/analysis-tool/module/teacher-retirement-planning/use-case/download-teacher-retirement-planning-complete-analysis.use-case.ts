@@ -50,7 +50,7 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
         organizationSessionData.organizationId,
       );
 
-    if (!organizationMember) {
+    if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
 
@@ -64,18 +64,25 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
         teacherRetirementPlanningId,
       );
 
-    if (!planning) {
+    if (planning === null) {
       throw new TeacherRetirementPlanningNotFoundError();
     }
 
-    if (!planning.result?.teacherRetirementPlanningCompleteAnalysis) {
+    if (planning.result === null) {
+      throw new TeacherRetirementPlanningResultNotFoundError();
+    }
+
+    if (
+      planning.result.teacherRetirementPlanningCompleteAnalysis === null ||
+      planning.result.teacherRetirementPlanningCompleteAnalysis === ''
+    ) {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 
     let responseAi =
       planning.result.teacherRetirementPlanningCompleteAnalysisDownload;
 
-    if (!responseAi) {
+    if (responseAi === null || responseAi === '') {
       const completeAnalysisDownload =
         await this.analysisProcessorGateway.getTeacherRetirementPlanningCompleteAnalysis(
           promptResponse.prompt,
@@ -108,7 +115,7 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
       responseAi = completeAnalysisDownload;
     }
 
-    if (!responseAi) {
+    if (responseAi === null || responseAi === '') {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 

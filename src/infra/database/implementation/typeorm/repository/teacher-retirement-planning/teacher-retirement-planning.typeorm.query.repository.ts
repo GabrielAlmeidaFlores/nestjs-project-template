@@ -179,18 +179,23 @@ export class TeacherRetirementPlanningTypeormQueryRepository
           deletedAt: item.deletedAt,
         }),
       ),
-      result: entity.result
+      result: entity.teacherRetirementPlanningResult
         ? GetTeacherRetirementPlanningResultQueryResult.build({
-            id: new TeacherRetirementPlanningResultId(entity.result.id),
+            id: new TeacherRetirementPlanningResultId(
+              entity.teacherRetirementPlanningResult.id,
+            ),
             teacherRetirementPlanningCompleteAnalysis:
-              entity.result.teacherRetirementPlanningCompleteAnalysis,
+              entity.teacherRetirementPlanningResult
+                .teacherRetirementPlanningCompleteAnalysis,
             teacherRetirementPlanningSimplifiedAnalysis:
-              entity.result.teacherRetirementPlanningSimplifiedAnalysis,
+              entity.teacherRetirementPlanningResult
+                .teacherRetirementPlanningSimplifiedAnalysis,
             teacherRetirementPlanningCompleteAnalysisDownload:
-              entity.result.teacherRetirementPlanningCompleteAnalysisDownload,
-            createdAt: entity.result.createdAt,
-            updatedAt: entity.result.updatedAt,
-            deletedAt: entity.result.deletedAt,
+              entity.teacherRetirementPlanningResult
+                .teacherRetirementPlanningCompleteAnalysisDownload,
+            createdAt: entity.teacherRetirementPlanningResult.createdAt,
+            updatedAt: entity.teacherRetirementPlanningResult.updatedAt,
+            deletedAt: entity.teacherRetirementPlanningResult.deletedAt,
           })
         : null,
       createdAt: entity.createdAt,

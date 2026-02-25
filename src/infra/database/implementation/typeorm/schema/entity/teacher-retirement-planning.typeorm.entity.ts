@@ -84,7 +84,9 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
     { nullable: true },
   )
   @JoinColumn({ name: 'teacher_retirement_planning_result_id' })
-  public result?: TeacherRetirementPlanningResultTypeormEntity | undefined;
+  public teacherRetirementPlanningResult?:
+    | TeacherRetirementPlanningResultTypeormEntity
+    | undefined;
 
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,

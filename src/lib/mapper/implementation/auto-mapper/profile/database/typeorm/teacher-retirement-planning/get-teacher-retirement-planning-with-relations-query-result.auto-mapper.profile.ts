@@ -77,9 +77,9 @@ export class GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfi
           )
         : [];
 
-      const result = source.result
+      const result = source.teacherRetirementPlanningResult
         ? this.mapper.map(
-            source.result,
+            source.teacherRetirementPlanningResult,
             TeacherRetirementPlanningResultTypeormEntity,
             GetTeacherRetirementPlanningResultQueryResult,
           )
@@ -174,7 +174,7 @@ export class GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfi
         documents,
         periods,
         remunerations,
-        result,
+        teacherRetirementPlanningResult: result,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
