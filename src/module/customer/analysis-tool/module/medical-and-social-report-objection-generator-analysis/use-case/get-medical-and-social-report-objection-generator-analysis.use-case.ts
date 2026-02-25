@@ -65,7 +65,6 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
         MedicalAndSocialReportObjectionGeneratorAnalysisNotFoundError,
       );
 
-      console.log('teste')
     const response =
       GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build({
         ...medicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
