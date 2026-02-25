@@ -13,6 +13,11 @@ import { GenerativeIaApplicationVariable } from '@shared/system/constant/applica
 
 @Injectable()
 export class GeminiService implements GenerativeIaGateway {
+  private static readonly TEMPERATURE_FOR_JSON_MODE = 0;
+  private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
+  private static readonly TOP_P_VALUE = 0.95;
+  private static readonly TOP_K_VALUE = 40;
+
   protected readonly _type = GeminiService.name;
 
   private readonly googleGenerativeAI: GoogleGenAI;
@@ -22,7 +27,7 @@ export class GeminiService implements GenerativeIaGateway {
 
   public constructor() {
     this.hashSubstringLength = 32;
-    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/gi;
+    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/i;
     this.fileTypeCache = new Map<string, string>();
     this.googleGenerativeAI = new GoogleGenAI({
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
@@ -32,7 +37,12 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 2_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 2_000;
+
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -44,7 +54,12 @@ export class GeminiService implements GenerativeIaGateway {
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 4_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 4_000;
+
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
@@ -107,15 +122,22 @@ export class GeminiService implements GenerativeIaGateway {
       });
     }
 
+    const isStructuredJsonMode = props.responseConfig !== undefined;
+    const temperature = isStructuredJsonMode
+      ? GeminiService.TEMPERATURE_FOR_JSON_MODE
+      : GeminiService.TEMPERATURE_FOR_MARKDOWN_MODE;
+
     const contentConfig = {
       model,
       contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
-      config: {
-        temperature: 0.1,
-        maxOutputTokens,
-        topP: 0.95,
-        topK: 40,
-      },
+      config: isStructuredJsonMode
+        ? { temperature, maxOutputTokens }
+        : {
+            temperature,
+            maxOutputTokens,
+            topP: GeminiService.TOP_P_VALUE,
+            topK: GeminiService.TOP_K_VALUE,
+          },
     } as GenerateContentParameters;
 
     if (props.responseConfig !== undefined) {
@@ -372,6 +394,6 @@ export class GeminiService implements GenerativeIaGateway {
       }),
     );
 
-    return results.filter((part): part is Part => part !== null);
+    return results;
   }
 }

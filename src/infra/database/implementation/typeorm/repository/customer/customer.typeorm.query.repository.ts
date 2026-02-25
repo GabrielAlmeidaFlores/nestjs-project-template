@@ -3,13 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Brackets, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
-import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
-import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
-import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
@@ -22,10 +19,8 @@ import { GetCustomerWithAuthIdentityRelationQueryResult } from '@module/customer
 import { GetCustomerWithCustomerAddressRelationQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-customer-address-relation.query.result';
 import { GetCustomerWithOrganizationForListQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer-with-organization-for-list.query.result';
 import { GetCustomerQueryResult } from '@module/customer/account/domain/repository/customer/query/result/get-customer.query.result';
-import { GetCustomerAddressQueryResult } from '@module/customer/account/domain/repository/customer-address/query/result/get-customer-address.query.result';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
-import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -406,39 +401,10 @@ export class CustomerTypeormQueryRepository
       return null;
     }
 
-    let paymentPlanName = 'N/A';
-    let paymentPlanPrice = new DecimalValue('0');
-    let paymentPlanCycle = PaymentPlanCycleEnum.MONTHLY;
-
-    // Get payment plan from the first organization member's organization
-    const firstOrgMember = customerTypeormEntity.organizationMember?.[0];
-    if (firstOrgMember?.organization?.organizationPaymentPlan?.[0]) {
-      const orgPaymentPlan =
-        firstOrgMember.organization.organizationPaymentPlan[0];
-      paymentPlanName = orgPaymentPlan.name;
-      paymentPlanPrice = new DecimalValue(orgPaymentPlan.price);
-      paymentPlanCycle = orgPaymentPlan.cycle;
-    }
-
-    return GetCustomerProfileQueryResult.build({
-      customerId: new CustomerId(customerTypeormEntity.id),
-      name: customerTypeormEntity.name,
-      email: new Email(customerTypeormEntity.authIdentity.email.toString()),
-      federalDocument: new FederalDocument(
-        customerTypeormEntity.authIdentity.federalDocument.toString(),
-      ),
-      phoneNumber: new PhoneNumber(customerTypeormEntity.phoneNumber),
-      createdAt: customerTypeormEntity.createdAt,
-      paymentPlanName,
-      paymentPlanPrice,
-      paymentPlanCycle,
-      ...(customerTypeormEntity.customerAddress && {
-        customerAddress: this.mapperGateway.map(
-          customerTypeormEntity.customerAddress,
-          CustomerAddressTypeormEntity,
-          GetCustomerAddressQueryResult,
-        ),
-      }),
-    });
+    return this.mapperGateway.map(
+      customerTypeormEntity,
+      CustomerTypeormEntity,
+      GetCustomerProfileQueryResult,
+    );
   }
 }

@@ -86,7 +86,10 @@ export class DeleteRuralTimelineCnisContributionPeriodOverdueContributionUseCase
     await transaction.commit();
 
     return DeleteRuralTimelineCnisContributionPeriodOverdueContributionResponseDto.build(
-      {},
+      {
+        ruralTimelineCnisContributionPeriodOverdueContributionId:
+          overdueContributionId,
+      },
     );
   }
 }

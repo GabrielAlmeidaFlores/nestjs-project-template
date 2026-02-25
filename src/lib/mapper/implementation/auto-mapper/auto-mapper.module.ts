@@ -57,6 +57,7 @@ import { GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile } from '
 import { CnisFastAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/cnis-fast-analysis-result-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/get-cnis-fast-analysis-result-query-result.auto-mapper.profile';
 import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
+import { GetCustomerProfileQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-profile-query-result.auto-mapper.profile';
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-auth-identity-relation-query-result.auto-mapper.profile';
 import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-customer-address-relation-query-result.auto-mapper.profile';
@@ -290,6 +291,7 @@ import { GetTeacherRetirementPlanningWithRelationsQueryResultAutoMapperProfile }
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
     GetCustomerWithOrganizationForListQueryResultAutoMapperProfile,
+    GetCustomerProfileQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile,
     GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
