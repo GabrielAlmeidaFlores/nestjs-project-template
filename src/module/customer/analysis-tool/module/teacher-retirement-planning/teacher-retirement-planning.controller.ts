@@ -15,6 +15,7 @@ import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/custom
 import { CreateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning.response.dto';
 import { DeleteTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/delete-teacher-retirement-planning.response.dto';
 import { GetTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
+import { GetTeacherRetirementPlanningRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning-remuneration-calculation.response.dto';
 import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/list-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
@@ -26,6 +27,7 @@ import { CreateTeacherRetirementPlanningUseCase } from '@module/customer/analysi
 import { DeleteTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/delete-teacher-retirement-planning.use-case';
 import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-complete-analysis.use-case';
 import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
+import { GetTeacherRetirementPlanningRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning-remuneration-calculation.use-case';
 import { GetTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning.use-case';
 import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/list-teacher-retirement-planning-remuneration.use-case';
 import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
@@ -59,6 +61,7 @@ export class TeacherRetirementPlanningController {
     private readonly updateTeacherRetirementPlanningPeriodUseCase: UpdateTeacherRetirementPlanningPeriodUseCase,
     private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationUseCase,
     private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
+    private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -392,6 +395,39 @@ export class TeacherRetirementPlanningController {
       organizationSessionData,
       teacherRetirementPlanningId,
       dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Obter cálculo de remunerações do planejamento previdenciário de professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':teacherRetirementPlanningId/remuneration-calculation',
+      method: RequestMethod.GET,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Cálculo de remunerações retornado com sucesso.',
+      type: GetTeacherRetirementPlanningRemunerationCalculationResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async getRemunerationCalculation(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'teacherRetirementPlanningId',
+      new ParseValueObjectPipe(TeacherRetirementPlanningId),
+    )
+    teacherRetirementPlanningId: TeacherRetirementPlanningId,
+  ): Promise<GetTeacherRetirementPlanningRemunerationCalculationResponseDto> {
+    return this.getTeacherRetirementPlanningRemunerationCalculationUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      teacherRetirementPlanningId,
     );
   }
 
