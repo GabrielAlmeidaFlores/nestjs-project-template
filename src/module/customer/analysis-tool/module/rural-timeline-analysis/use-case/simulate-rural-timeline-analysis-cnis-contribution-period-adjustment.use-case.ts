@@ -28,7 +28,10 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
 
   private readonly PREVIDENCIARIO_DAYS_PER_MONTH = 30;
   private readonly PREVIDENCIARIO_DAYS_PER_YEAR = 360;
-  private readonly MS_PER_DAY = 1000 * 60 * 60 * 24;
+  private readonly MS_PER_SECOND = 1000;
+  private readonly SECONDS_PER_MINUTE = 60;
+  private readonly MINUTES_PER_HOUR = 60;
+  private readonly HOURS_PER_DAY = 24;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -42,7 +45,10 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
   ) {
     this.PREVIDENCIARIO_DAYS_PER_MONTH = this.PREVIDENCIARIO_DAYS_PER_MONTH;
     this.PREVIDENCIARIO_DAYS_PER_YEAR = this.PREVIDENCIARIO_DAYS_PER_YEAR;
-    this.MS_PER_DAY = this.MS_PER_DAY;
+    this.MS_PER_SECOND = this.MS_PER_SECOND;
+    this.SECONDS_PER_MINUTE = this.SECONDS_PER_MINUTE;
+    this.MINUTES_PER_HOUR = this.MINUTES_PER_HOUR;
+    this.HOURS_PER_DAY = this.HOURS_PER_DAY;
   }
 
   public async execute(
@@ -105,7 +111,7 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     originalEndDate: Date,
     conventionalStartDate: Date,
     conventionalEndDate: Date,
-  ): ContributionTimeDifference {
+  ): ContributionTimeDifferenceInterface {
     const originalDays = this.calculatePeriodDaysPrevidenciario(
       originalStartDate,
       originalEndDate,
@@ -134,13 +140,17 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     startDate: Date,
     endDate: Date,
   ): number {
-    const msPerDay = 1000 * 60 * 60 * 24;
+    const msPerDay =
+      this.MS_PER_SECOND *
+      this.SECONDS_PER_MINUTE *
+      this.MINUTES_PER_HOUR *
+      this.HOURS_PER_DAY;
     return Math.round((endDate.getTime() - startDate.getTime()) / msPerDay) + 1;
   }
 
   private async generateTechnicalObservation(
     dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
-    timeDifference: ContributionTimeDifference,
+    timeDifference: ContributionTimeDifferenceInterface,
   ): Promise<string> {
     const originalStart =
       dto.originalPeriodStartDate.toLocaleDateString('pt-BR');
@@ -180,7 +190,7 @@ A observação deve:
 
   private buildFallbackTechnicalObservation(
     dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
-    timeDifference: ContributionTimeDifference,
+    timeDifference: ContributionTimeDifferenceInterface,
   ): string {
     const originalStart =
       dto.originalPeriodStartDate.toLocaleDateString('pt-BR');
