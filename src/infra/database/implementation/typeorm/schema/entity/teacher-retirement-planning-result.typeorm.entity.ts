@@ -28,7 +28,7 @@ export class TeacherRetirementPlanningResultTypeormEntity extends BaseTypeormEnt
 
   @OneToOne(
     () => TeacherRetirementPlanningTypeormEntity,
-    (entity) => entity.result,
+    (entity) => entity.teacherRetirementPlanningResult,
   )
   public teacherRetirementPlanning?: TeacherRetirementPlanningTypeormEntity;
 
