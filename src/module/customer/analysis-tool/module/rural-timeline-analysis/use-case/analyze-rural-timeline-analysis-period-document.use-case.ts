@@ -259,7 +259,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
         const analyzedDocument =
           AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto.build({
-            documentId: documentQueryResult.id.toString(),
+            ruralTimelineAnalysisPeriodDocumentId: documentQueryResult.id,
             ...(parsedResult.documentYear !== null && {
               documentYear: parsedResult.documentYear,
             }),
