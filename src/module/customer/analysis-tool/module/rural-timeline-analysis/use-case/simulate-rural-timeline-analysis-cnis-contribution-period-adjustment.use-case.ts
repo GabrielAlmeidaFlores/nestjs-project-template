@@ -15,7 +15,7 @@ import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-to
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-interface ContributionTimeDifference {
+interface ContributionTimeDifferenceInterface {
   years: number;
   months: number;
   days: number;
@@ -28,6 +28,7 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
 
   private readonly PREVIDENCIARIO_DAYS_PER_MONTH = 30;
   private readonly PREVIDENCIARIO_DAYS_PER_YEAR = 360;
+  private readonly MS_PER_DAY = 1000 * 60 * 60 * 24;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -38,7 +39,11 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     private readonly cnisContributionPeriodQueryRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway,
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
-  ) {}
+  ) {
+    this.PREVIDENCIARIO_DAYS_PER_MONTH = this.PREVIDENCIARIO_DAYS_PER_MONTH;
+    this.PREVIDENCIARIO_DAYS_PER_YEAR = this.PREVIDENCIARIO_DAYS_PER_YEAR;
+    this.MS_PER_DAY = this.MS_PER_DAY;
+  }
 
   public async execute(
     sessionData: SessionDataModel,
