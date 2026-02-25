@@ -5,8 +5,7 @@ import type { TeacherRetirementPlanningFederativeEntityEnum } from '@module/cust
 import type { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import type { TeacherRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 
-export interface TeacherRetirementPlanningEntityPropsInterface
-  extends BaseEntityPropsInterface<TeacherRetirementPlanningId> {
+export interface TeacherRetirementPlanningEntityPropsInterface extends BaseEntityPropsInterface<TeacherRetirementPlanningId> {
   federativeEntity: TeacherRetirementPlanningFederativeEntityEnum;
   state?: StateCodeEnum | null;
   municipality?: string | null;

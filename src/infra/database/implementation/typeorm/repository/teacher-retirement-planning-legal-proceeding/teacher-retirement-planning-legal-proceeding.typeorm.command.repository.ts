@@ -30,7 +30,9 @@ export class TeacherRetirementPlanningLegalProceedingTypeormCommandRepository
     return this.create({
       id: props.id.toString(),
       legalProceedingNumber: props.legalProceedingNumber,
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 

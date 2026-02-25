@@ -100,9 +100,8 @@ export class UpdateTeacherRetirementPlanningRemunerationUseCase {
       );
     }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      transactions,
-    );
+    const transaction =
+      await this.baseTransactionRepositoryGateway.execute(transactions);
 
     await transaction.commit();
 

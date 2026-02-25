@@ -5,6 +5,8 @@ export class FailedToGenerateTeacherRetirementPlanningAnalysisError extends Unex
     FailedToGenerateTeacherRetirementPlanningAnalysisError.name;
 
   public constructor() {
-    super('Falha ao gerar a análise do planejamento previdenciário de professor.');
+    super(
+      'Falha ao gerar a análise do planejamento previdenciário de professor.',
+    );
   }
 }

@@ -70,8 +70,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
       creditCost: 8,
-      title:
-        'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE COMPLETA',
+      title: 'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE COMPLETA',
       description:
         'Planejamento completo de aposentadoria para professor com IA. Analisa períodos de magistério, vínculos por instituição, remunerações, benefícios e processos para estimar cenários e estratégia previdenciária mais vantajosa.',
     }),
@@ -80,8 +79,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
-      title:
-        'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE SIMPLIFICADA',
+      title: 'PLANEJAMENTO PREVIDENCIÁRIO DE PROFESSOR - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada do planejamento previdenciário de professor com IA, apresentando diagnóstico objetivo de elegibilidade, pontos de atenção e próximos passos recomendados.',
     }),

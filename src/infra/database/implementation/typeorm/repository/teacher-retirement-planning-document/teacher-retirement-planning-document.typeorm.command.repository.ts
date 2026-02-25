@@ -30,7 +30,9 @@ export class TeacherRetirementPlanningDocumentTypeormCommandRepository
     return this.create({
       id: props.id.toString(),
       document: props.document,
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 

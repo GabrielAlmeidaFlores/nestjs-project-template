@@ -43,14 +43,20 @@ export class CreateTeacherRetirementPlanningPeriodItemRequestDto extends BaseBui
   )
   public readonly institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
 
-  @RequestDtoEnumProperty(TeacherRetirementPlanningPeriodItemEducationLevelEnum, {
-    required: true,
-  })
+  @RequestDtoEnumProperty(
+    TeacherRetirementPlanningPeriodItemEducationLevelEnum,
+    {
+      required: true,
+    },
+  )
   public readonly educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
 
-  @RequestDtoEnumProperty(TeacherRetirementPlanningPeriodItemRolePerformedEnum, {
-    required: true,
-  })
+  @RequestDtoEnumProperty(
+    TeacherRetirementPlanningPeriodItemRolePerformedEnum,
+    {
+      required: true,
+    },
+  )
   public readonly rolePerformed: TeacherRetirementPlanningPeriodItemRolePerformedEnum;
 
   @RequestDtoObjectProperty(
@@ -85,10 +91,13 @@ export class CreateTeacherRetirementPlanningPeriodRequestDto extends BaseBuildab
   @RequestDtoStringProperty({ required: true })
   public readonly department: string;
 
-  @RequestDtoObjectProperty(() => CreateTeacherRetirementPlanningPeriodItemRequestDto, {
-    required: true,
-    isArray: true,
-  })
+  @RequestDtoObjectProperty(
+    () => CreateTeacherRetirementPlanningPeriodItemRequestDto,
+    {
+      required: true,
+      isArray: true,
+    },
+  )
   public readonly items: CreateTeacherRetirementPlanningPeriodItemRequestDto[];
 
   protected override readonly _type =

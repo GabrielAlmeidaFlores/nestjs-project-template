@@ -6,11 +6,15 @@ import type { TeacherRetirementPlanningResultEntityPropsInterface } from '@modul
 export class TeacherRetirementPlanningResultEntity extends BaseEntity<TeacherRetirementPlanningResultId> {
   public readonly teacherRetirementPlanningCompleteAnalysis: string | null;
   public readonly teacherRetirementPlanningSimplifiedAnalysis: string | null;
-  public readonly teacherRetirementPlanningCompleteAnalysisDownload: string | null;
+  public readonly teacherRetirementPlanningCompleteAnalysisDownload:
+    | string
+    | null;
 
   protected readonly _type = TeacherRetirementPlanningResultEntity.name;
 
-  public constructor(props: TeacherRetirementPlanningResultEntityPropsInterface) {
+  public constructor(
+    props: TeacherRetirementPlanningResultEntityPropsInterface,
+  ) {
     super(TeacherRetirementPlanningResultId, props);
     this.teacherRetirementPlanningCompleteAnalysis =
       props.teacherRetirementPlanningCompleteAnalysis ?? null;

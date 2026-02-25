@@ -5,8 +5,6 @@ export class TeacherRetirementPlanningPeriodItemDatesRequiredForPartTimeError ex
     TeacherRetirementPlanningPeriodItemDatesRequiredForPartTimeError.name;
 
   public constructor() {
-    super(
-      'Para itens part-time, as datas de início e fim são obrigatórias.',
-    );
+    super('Para itens part-time, as datas de início e fim são obrigatórias.');
   }
 }

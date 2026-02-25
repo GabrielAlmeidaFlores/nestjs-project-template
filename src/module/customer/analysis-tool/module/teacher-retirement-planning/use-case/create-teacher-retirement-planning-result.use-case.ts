@@ -71,7 +71,11 @@ export class CreateTeacherRetirementPlanningResultUseCase {
         PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
       );
 
-      console.log(organizationSessionData.organizationId, organizationMember.id, PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS);
+    console.log(
+      organizationSessionData.organizationId,
+      organizationMember.id,
+      PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+    );
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
@@ -145,9 +149,10 @@ export class CreateTeacherRetirementPlanningResultUseCase {
       ),
     ];
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
-      [consumeCreditTransaction, ...transactions],
-    );
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      consumeCreditTransaction,
+      ...transactions,
+    ]);
 
     await transaction.commit();
 

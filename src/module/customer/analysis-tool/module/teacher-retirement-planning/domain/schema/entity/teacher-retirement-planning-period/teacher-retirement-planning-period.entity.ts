@@ -1,9 +1,9 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/enum/teacher-retirement-planning-period-service-type.enum';
 import { TeacherRetirementPlanningPeriodId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/value-object/teacher-retirement-planning-period-id.value-object';
 
-import type { TeacherRetirementPlanningPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/teacher-retirement-planning-period.entity.props.interface';
 import type { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
+import type { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/enum/teacher-retirement-planning-period-service-type.enum';
+import type { TeacherRetirementPlanningPeriodEntityPropsInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period/teacher-retirement-planning-period.entity.props.interface';
 
 export class TeacherRetirementPlanningPeriodEntity extends BaseEntity<TeacherRetirementPlanningPeriodId> {
   public readonly startDate: Date;
@@ -16,7 +16,9 @@ export class TeacherRetirementPlanningPeriodEntity extends BaseEntity<TeacherRet
 
   protected readonly _type = TeacherRetirementPlanningPeriodEntity.name;
 
-  public constructor(props: TeacherRetirementPlanningPeriodEntityPropsInterface) {
+  public constructor(
+    props: TeacherRetirementPlanningPeriodEntityPropsInterface,
+  ) {
     super(TeacherRetirementPlanningPeriodId, props);
     this.startDate = props.startDate;
     this.endDate = props.endDate;

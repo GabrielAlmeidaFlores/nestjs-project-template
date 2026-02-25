@@ -35,7 +35,9 @@ export class TeacherRetirementPlanningPeriodTypeormCommandRepository
       careerName: props.careerName,
       serviceType: props.serviceType,
       department: props.department,
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 

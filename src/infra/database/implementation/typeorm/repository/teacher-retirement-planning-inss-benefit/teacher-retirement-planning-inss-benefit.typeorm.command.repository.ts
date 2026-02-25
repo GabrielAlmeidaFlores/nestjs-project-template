@@ -30,7 +30,9 @@ export class TeacherRetirementPlanningInssBenefitTypeormCommandRepository
     return this.create({
       id: props.id.toString(),
       inssBenefitNumber: props.inssBenefitNumber,
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 

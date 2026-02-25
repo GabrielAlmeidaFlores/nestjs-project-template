@@ -226,7 +226,8 @@ Análise processada do CNIS:
         promptFiles: files,
         responseConfig: asJson
           ? ResponseConfigInputModel.build({
-              responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
               jsonSchema: {
                 type: 'object',
                 properties: {
@@ -245,10 +246,7 @@ Análise processada do CNIS:
                         },
                         activityType: {
                           type: 'string',
-                          enum: [
-                            'Atividade como professor',
-                            'Atividade comum',
-                          ],
+                          enum: ['Atividade como professor', 'Atividade comum'],
                           description: 'Tipo de atividade exercida',
                         },
                         type: {
@@ -323,7 +321,8 @@ Análise processada do CNIS:
                   },
                   commonTime: {
                     type: 'string',
-                    description: 'Tempo total comum. Exemplo: 29 anos e 3 meses',
+                    description:
+                      'Tempo total comum. Exemplo: 29 anos e 3 meses',
                   },
                 },
                 required: [

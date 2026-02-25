@@ -1,4 +1,12 @@
-import { Body, HttpStatus, Param, Query, RequestMethod, StreamableFile, ParseEnumPipe } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  RequestMethod,
+  StreamableFile,
+  ParseEnumPipe,
+} from '@nestjs/common';
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
@@ -14,8 +22,8 @@ import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/
 import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
 import { CreateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning.response.dto';
 import { DeleteTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/delete-teacher-retirement-planning.response.dto';
-import { GetTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
 import { GetTeacherRetirementPlanningRemunerationCalculationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning-remuneration-calculation.response.dto';
+import { GetTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
 import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/list-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
@@ -75,7 +83,8 @@ export class TeacherRetirementPlanningController {
     tag: ['planejamento-previdenciario-professor'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Planejamento previdenciário de professor criado com sucesso.',
+      description:
+        'Planejamento previdenciário de professor criado com sucesso.',
       type: CreateTeacherRetirementPlanningResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -293,8 +302,7 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Criar remunerações do planejamento previdenciário de professor',
+    summary: 'Criar remunerações do planejamento previdenciário de professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':teacherRetirementPlanningId/remuneration',
@@ -432,7 +440,8 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Download da análise completa do planejamento previdenciário de professor',
+    summary:
+      'Download da análise completa do planejamento previdenciário de professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':teacherRetirementPlanningId/download/complete-version',
@@ -467,7 +476,8 @@ export class TeacherRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Download da análise simplificada do planejamento previdenciário de professor',
+    summary:
+      'Download da análise simplificada do planejamento previdenciário de professor',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':teacherRetirementPlanningId/download/simplified-version',

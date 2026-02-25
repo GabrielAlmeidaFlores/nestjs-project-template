@@ -31,7 +31,9 @@ export class TeacherRetirementPlanningRemunerationTypeormCommandRepository
       id: props.id.toString(),
       contributionDate: props.contributionDate,
       amount: props.amount.toString(),
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 
@@ -42,7 +44,9 @@ export class TeacherRetirementPlanningRemunerationTypeormCommandRepository
     return this.update(id.toString(), {
       contributionDate: props.contributionDate,
       amount: props.amount.toString(),
-      teacherRetirementPlanning: { id: props.teacherRetirementPlanning.id.toString() },
+      teacherRetirementPlanning: {
+        id: props.teacherRetirementPlanning.id.toString(),
+      },
     });
   }
 
