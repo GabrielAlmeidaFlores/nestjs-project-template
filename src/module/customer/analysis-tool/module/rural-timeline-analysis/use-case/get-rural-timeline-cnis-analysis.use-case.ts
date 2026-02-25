@@ -108,7 +108,7 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
       if (
         period.ruralTimelineCnisContributionPeriodPendingExitDate.length > 0 &&
-        !period.endDate
+        period.endDate
       ) {
         const pendingExitDates =
           period.ruralTimelineCnisContributionPeriodPendingExitDate.map(
