@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-economic-aspects.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodEconomicAspectsEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.entity';
 import { RuralTimelineAnalysisPeriodEconomicAspectsId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/value-object/rural-timeline-analysis-period-economic-aspects-id/rural-timeline-analysis-period-economic-aspects-id.value-object';
@@ -26,6 +27,15 @@ export class RuralTimelineAnalysisPeriodEconomicAspectsEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity,
     ): RuralTimelineAnalysisPeriodEconomicAspectsEntity => {
+      if (!source.ruralTimelinePeriod) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            RuralTimelineAnalysisPeriodEconomicAspectsEntity.name,
+          sourceClass:
+            RuralTimelineAnalysisPeriodEconomicAspectsTypeormEntity.name,
+        });
+      }
+
       const ruralTimelinePeriod = this.mapper.map(
         source.ruralTimelinePeriod,
         RuralTimelineAnalysisPeriodTypeormEntity,
