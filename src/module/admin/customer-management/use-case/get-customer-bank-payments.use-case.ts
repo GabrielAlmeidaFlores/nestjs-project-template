@@ -59,7 +59,11 @@ export class GetCustomerBankPaymentsUseCase {
   ): GetBankPaymentResponseDto {
     return GetBankPaymentResponseDto.build({
       id: payment.id,
+      ...(payment.planName !== undefined && {
+        planName: payment.planName,
+      }),
       status: payment.status,
+      paymentMethod: payment.paymentMethod,
       amount: payment.amount,
       dueDate: payment.dueDate,
       ...(payment.paymentDate !== null && {

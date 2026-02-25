@@ -34,13 +34,16 @@ export class RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMa
       );
 
       return new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity({
-        ...source,
         id: new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId(
           source.id,
         ),
+        contributionDate: source.contributionDate,
         contributionAmount: new DecimalValue(source.contributionAmount),
         ruralTimelineCnisContributionPeriodId:
           ruralTimelineCnisContributionPeriod.id,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 

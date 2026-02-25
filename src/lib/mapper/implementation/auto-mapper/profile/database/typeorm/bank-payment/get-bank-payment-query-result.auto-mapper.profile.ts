@@ -25,8 +25,13 @@ export class GetBankPaymentQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: BankPaymentTypeormEntity,
     ): GetBankPaymentQueryResult => {
+      const planName =
+        source.organizationPaymentPlanBankPayment?.[0]?.organizationPaymentPlan
+          ?.name;
+
       return GetBankPaymentQueryResult.build({
         id: new BankPaymentId(source.id),
+        ...(planName !== undefined && { planName }),
         bankExternalId: source.bankExternalId,
         paymentMethod: source.paymentMethod,
         amount: new DecimalValue(source.amount),
