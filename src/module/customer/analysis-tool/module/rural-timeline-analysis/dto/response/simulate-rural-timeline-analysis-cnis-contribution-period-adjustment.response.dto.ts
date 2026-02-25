@@ -5,16 +5,24 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoNumberProperty({ description: 'Anos de tempo de contribuição ganhos.' })
+  @ResponseDtoNumberProperty({
+    description: 'Anos de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedYears: number;
 
-  @ResponseDtoNumberProperty({ description: 'Meses de tempo de contribuição ganhos.' })
+  @ResponseDtoNumberProperty({
+    description: 'Meses de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedMonths: number;
 
-  @ResponseDtoNumberProperty({ description: 'Dias de tempo de contribuição ganhos.' })
+  @ResponseDtoNumberProperty({
+    description: 'Dias de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedDays: number;
 
-  @ResponseDtoStringProperty({ description: 'Observação técnica gerada pela IA.' })
+  @ResponseDtoStringProperty({
+    description: 'Observação técnica gerada pela IA.',
+  })
   public technicalObservation: string;
 
   protected override readonly _type =

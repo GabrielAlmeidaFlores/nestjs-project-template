@@ -32,9 +32,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormEntity 
   })
   public conventionalPeriodEndDate: Date;
 
-  @ManyToOne(
-    () => RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
-  )
+  @ManyToOne(() => RuralTimelineAnalysisCnisContributionPeriodTypeormEntity)
   @JoinColumn({ name: 'rural_timeline_cnis_contribution_period_id' })
   public ruralTimelineCnisContributionPeriod?:
     | RuralTimelineAnalysisCnisContributionPeriodTypeormEntity

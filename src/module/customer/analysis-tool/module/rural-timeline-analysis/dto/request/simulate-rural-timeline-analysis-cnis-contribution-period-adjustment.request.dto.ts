@@ -4,16 +4,24 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty({ description: 'Data de início do período original (CNIS).' })
+  @RequestDtoDateProperty({
+    description: 'Data de início do período original (CNIS).',
+  })
   public originalPeriodStartDate: Date;
 
-  @RequestDtoDateProperty({ description: 'Data de término do período original (CNIS).' })
+  @RequestDtoDateProperty({
+    description: 'Data de término do período original (CNIS).',
+  })
   public originalPeriodEndDate: Date;
 
-  @RequestDtoDateProperty({ description: 'Data de início do período convencional proposto.' })
+  @RequestDtoDateProperty({
+    description: 'Data de início do período convencional proposto.',
+  })
   public conventionalPeriodStartDate: Date;
 
-  @RequestDtoDateProperty({ description: 'Data de término do período convencional proposto.' })
+  @RequestDtoDateProperty({
+    description: 'Data de término do período convencional proposto.',
+  })
   public conventionalPeriodEndDate: Date;
 
   protected override readonly _type =
