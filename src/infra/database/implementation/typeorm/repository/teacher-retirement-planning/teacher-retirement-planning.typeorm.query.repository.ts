@@ -83,7 +83,7 @@ export class TeacherRetirementPlanningTypeormQueryRepository
           },
         },
         remunerations: true,
-        result: true,
+        teacherRetirementPlanningResult: true,
       },
     });
 
