@@ -14,14 +14,21 @@ import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/r
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
 import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/enum/rural-timeline-analysis-document-type.enum';
+import { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
 import { ProductionDestinationEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/production-destination.enum';
 import { RuralTimelineAnalysisPeriodWorkRegimeTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-work-regime-type.enum';
 import { RuralTimelineAnalysisPeriodWorkerTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/enum/rural-timeline-analysis-period-worker-type.enum';
+import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodDocumentHolderTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-holder-type.enum';
 import { RuralTimelineAnalysisPeriodDocumentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/enum/rural-timeline-analysis-period-document-type.enum';
+import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
 import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberKinshipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/enum/rural-timeline-analysis-period-family-group-member-kinship-type.enum';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
 import { RuralTimelineAnalysisPeriodLandOwnershipTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/enum/rural-timeline-analysis-period-land-ownership-type.enum';
+import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
+import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
+import { RuralTimelineCnisContributionPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-document/value-object/rural-timeline-cnis-contribution-period-document-id/rural-timeline-cnis-contribution-period-document-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
@@ -79,8 +86,8 @@ export class GetRuralTimelineAnalysisResponsibleResponseDto extends BaseBuildabl
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodDocumentId)
+  public ruralTimelineAnalysisPeriodDocumentId: RuralTimelineAnalysisPeriodDocumentId;
 
   @ResponseDtoNumberProperty({ required: false })
   public documentYear?: number;
@@ -111,6 +118,9 @@ export class GetRuralTimelineAnalysisPeriodDocumentResponseDto extends BaseBuild
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodResidenceResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodResidenceId)
+  public ruralTimelineAnalysisPeriodResidenceId: RuralTimelineAnalysisPeriodResidenceId;
+
   @ResponseDtoStringProperty()
   public city: string;
 
@@ -126,6 +136,9 @@ export class GetRuralTimelineAnalysisPeriodResidenceResponseDto extends BaseBuil
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodPropertyResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodPropertyId)
+  public ruralTimelineAnalysisPeriodPropertyId: RuralTimelineAnalysisPeriodPropertyId;
+
   @ResponseDtoStringProperty({ required: false })
   public propertyName?: string;
 
@@ -173,6 +186,11 @@ export class GetRuralTimelineAnalysisPeriodEconomicAspectsResponseDto extends Ba
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoValueObjectProperty(
+    RuralTimelineAnalysisPeriodFamilyGroupMemberId,
+  )
+  public ruralTimelineAnalysisPeriodFamilyGroupMemberId: RuralTimelineAnalysisPeriodFamilyGroupMemberId;
+
   @ResponseDtoStringProperty()
   public name: string;
 
@@ -202,8 +220,8 @@ export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto extends 
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisDocumentId)
+  public ruralTimelineAnalysisDocumentId: RuralTimelineAnalysisDocumentId;
 
   @ResponseDtoEnumProperty(RuralTimelineAnalysisDocumentTypeEnum)
   public type: RuralTimelineAnalysisDocumentTypeEnum;
@@ -256,8 +274,8 @@ export class GetRuralTimelineCnisContributionPeriodOverdueContributionResponseDt
 
 @ResponseDto()
 export class GetRuralTimelineCnisContributionPeriodDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(RuralTimelineCnisContributionPeriodDocumentId)
+  public ruralTimelineCnisContributionPeriodDocumentId: RuralTimelineCnisContributionPeriodDocumentId;
 
   @ResponseDtoStringProperty()
   public type: string;
@@ -349,8 +367,8 @@ export class RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto exten
 
 @ResponseDto()
 export class GetRuralTimelineAnalysisPeriodResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoStringProperty()
-  public id: string;
+  @ResponseDtoValueObjectProperty(RuralTimelineAnalysisPeriodId)
+  public ruralTimelineAnalysisPeriodId: RuralTimelineAnalysisPeriodId;
 
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
