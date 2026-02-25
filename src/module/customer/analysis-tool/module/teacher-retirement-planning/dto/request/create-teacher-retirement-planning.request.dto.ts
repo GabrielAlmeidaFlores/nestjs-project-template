@@ -133,6 +133,9 @@ export class CreateTeacherRetirementPlanningRequestDto extends BaseBuildableDtoO
   @RequestDtoStringProperty({ required: false })
   public readonly analysisName?: string;
 
+  @RequestDtoStringProperty({ required: false })
+  public readonly currentPosition?: string;
+
   @RequestDtoEnumProperty(TeacherRetirementPlanningActivityTypeEnum)
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
 

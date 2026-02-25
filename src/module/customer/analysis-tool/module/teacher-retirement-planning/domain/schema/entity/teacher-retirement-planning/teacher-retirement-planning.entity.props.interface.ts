@@ -11,6 +11,7 @@ export interface TeacherRetirementPlanningEntityPropsInterface
   state?: StateCodeEnum | null;
   municipality?: string | null;
   analysisName?: string | null;
+  currentPosition?: string | null;
   activityType: TeacherRetirementPlanningActivityTypeEnum;
   publicServiceStartDate: Date;
   careerStartDate: Date;

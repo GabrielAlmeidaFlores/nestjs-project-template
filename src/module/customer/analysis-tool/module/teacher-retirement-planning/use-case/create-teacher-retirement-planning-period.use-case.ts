@@ -77,6 +77,7 @@ export class CreateTeacherRetirementPlanningPeriodUseCase {
       state: planning.state,
       municipality: planning.municipality,
       analysisName: planning.analysisName,
+      currentPosition: planning.currentPosition,
       activityType: planning.activityType,
       publicServiceStartDate: planning.publicServiceStartDate,
       careerStartDate: planning.careerStartDate,

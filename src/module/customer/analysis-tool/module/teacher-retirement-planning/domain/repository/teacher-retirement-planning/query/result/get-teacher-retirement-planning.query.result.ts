@@ -11,6 +11,7 @@ export class GetTeacherRetirementPlanningQueryResult extends BaseBuildableObject
   public readonly state: StateCodeEnum | null;
   public readonly municipality: string | null;
   public readonly analysisName: string | null;
+  public readonly currentPosition: string | null;
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
   public readonly publicServiceStartDate: Date;
   public readonly careerStartDate: Date;

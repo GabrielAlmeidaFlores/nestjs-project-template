@@ -144,6 +144,9 @@ export class GetTeacherRetirementPlanningUseCase {
       ...(planning.state !== null && { state: planning.state.toString() }),
       ...(planning.municipality !== null && { municipality: planning.municipality }),
       ...(planning.analysisName !== null && { analysisName: planning.analysisName }),
+      ...(planning.currentPosition !== null && {
+        currentPosition: planning.currentPosition,
+      }),
       activityType: planning.activityType,
       publicServiceStartDate: planning.publicServiceStartDate,
       careerStartDate: planning.careerStartDate,
