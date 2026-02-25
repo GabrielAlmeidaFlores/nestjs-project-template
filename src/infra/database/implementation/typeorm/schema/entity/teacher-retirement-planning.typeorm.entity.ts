@@ -122,5 +122,6 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
   )
   public remunerations?: TeacherRetirementPlanningRemunerationTypeormEntity[];
 
-  protected override readonly _type = TeacherRetirementPlanningTypeormEntity.name;
+  protected override readonly _type =
+    TeacherRetirementPlanningTypeormEntity.name;
 }

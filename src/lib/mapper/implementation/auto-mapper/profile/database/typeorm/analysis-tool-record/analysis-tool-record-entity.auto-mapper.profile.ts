@@ -356,7 +356,9 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       const teacherRetirementPlanning = source.teacherRetirementPlanning
-        ? ({ id: source.teacherRetirementPlanning.id.toString() } as TeacherRetirementPlanningTypeormEntity)
+        ? ({
+            id: source.teacherRetirementPlanning.id.toString(),
+          } as TeacherRetirementPlanningTypeormEntity)
         : null;
 
       const createdBy = {

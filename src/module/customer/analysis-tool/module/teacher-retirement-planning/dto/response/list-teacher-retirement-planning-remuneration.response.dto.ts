@@ -5,9 +5,12 @@ import { ListDataResponseDto } from '@shared/api/util/dto/response/list-data.res
 
 @ResponseDto()
 export class ListTeacherRetirementPlanningRemunerationResponseDto extends ListDataResponseDto<GetTeacherRetirementPlanningRemunerationResponseDto> {
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningRemunerationResponseDto, {
-    isArray: true,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningRemunerationResponseDto,
+    {
+      isArray: true,
+    },
+  )
   public override resource: GetTeacherRetirementPlanningRemunerationResponseDto[];
 
   protected override readonly _type =

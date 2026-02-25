@@ -1,11 +1,11 @@
 import { Inject, StreamableFile } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
-import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
-import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
@@ -68,10 +68,7 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
       throw new TeacherRetirementPlanningNotFoundError();
     }
 
-    if (
-      !planning.result ||
-      !planning.result.teacherRetirementPlanningCompleteAnalysis
-    ) {
+    if (!planning.result?.teacherRetirementPlanningCompleteAnalysis) {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 
@@ -102,9 +99,9 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
           updatedResult,
         );
 
-      const transaction = await this.baseTransactionRepositoryGateway.execute(
-        [resultTransaction],
-      );
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        resultTransaction,
+      ]);
 
       await transaction.commit();
 
@@ -115,9 +112,8 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 
-    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
-      responseAi,
-    );
+    const htmlContent =
+      await this.exportDocumentGateway.convertMarkdownToHtml(responseAi);
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,

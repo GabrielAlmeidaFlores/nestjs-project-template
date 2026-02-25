@@ -76,9 +76,10 @@ export class GetTeacherRetirementPlanningUseCase {
                 rolePerformed: item.rolePerformed,
                 documents: await Promise.all(
                   item.documents.map(async (document) => {
-                    const fileBuffer = await this.fileProcessorGateway.getFileBuffer(
-                      document.document,
-                    );
+                    const fileBuffer =
+                      await this.fileProcessorGateway.getFileBuffer(
+                        document.document,
+                      );
                     const originalFileName =
                       await this.fileProcessorGateway.getOriginalFileName(
                         document.document,
@@ -142,8 +143,12 @@ export class GetTeacherRetirementPlanningUseCase {
       teacherRetirementPlanningId: planning.id,
       federativeEntity: planning.federativeEntity,
       ...(planning.state !== null && { state: planning.state.toString() }),
-      ...(planning.municipality !== null && { municipality: planning.municipality }),
-      ...(planning.analysisName !== null && { analysisName: planning.analysisName }),
+      ...(planning.municipality !== null && {
+        municipality: planning.municipality,
+      }),
+      ...(planning.analysisName !== null && {
+        analysisName: planning.analysisName,
+      }),
       ...(planning.currentPosition !== null && {
         currentPosition: planning.currentPosition,
       }),
@@ -163,7 +168,9 @@ export class GetTeacherRetirementPlanningUseCase {
       ...(documents.length > 0 && { documents }),
       ...(periods.length > 0 && { periods }),
       ...(remunerations.length > 0 && { remunerations }),
-      ...(teacherRetirementPlanningResult && { teacherRetirementPlanningResult }),
+      ...(teacherRetirementPlanningResult && {
+        teacherRetirementPlanningResult,
+      }),
     });
   }
 }

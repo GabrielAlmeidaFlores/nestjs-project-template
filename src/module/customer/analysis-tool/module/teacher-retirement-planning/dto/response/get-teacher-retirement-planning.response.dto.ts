@@ -1,12 +1,4 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
-import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
-import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
-import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
-import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
-import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
-import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-
 import { TeacherRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-activity-type.enum';
 import { TeacherRetirementPlanningFederativeEntityEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/enum/teacher-retirement-planning-federative-entity.enum';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
@@ -14,6 +6,13 @@ import { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer
 import { TeacherRetirementPlanningPeriodItemEducationLevelEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-education-level.enum';
 import { TeacherRetirementPlanningPeriodItemInstitutionTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-institution-type.enum';
 import { TeacherRetirementPlanningPeriodItemRolePerformedEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-role-performed.enum';
+import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
+import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
+import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
+import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
+import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
 @ResponseDto()
 export class GetTeacherRetirementPlanningPeriodItemDocumentResponseDto extends BaseBuildableDtoObject {
@@ -38,10 +37,14 @@ export class GetTeacherRetirementPlanningPeriodItemResponseDto extends BaseBuild
   @ResponseDtoStringProperty()
   public institutionName: string;
 
-  @ResponseDtoEnumProperty(TeacherRetirementPlanningPeriodItemInstitutionTypeEnum)
+  @ResponseDtoEnumProperty(
+    TeacherRetirementPlanningPeriodItemInstitutionTypeEnum,
+  )
   public institutionType: TeacherRetirementPlanningPeriodItemInstitutionTypeEnum;
 
-  @ResponseDtoEnumProperty(TeacherRetirementPlanningPeriodItemEducationLevelEnum)
+  @ResponseDtoEnumProperty(
+    TeacherRetirementPlanningPeriodItemEducationLevelEnum,
+  )
   public educationLevel: TeacherRetirementPlanningPeriodItemEducationLevelEnum;
 
   @ResponseDtoEnumProperty(TeacherRetirementPlanningPeriodItemRolePerformedEnum)
@@ -80,10 +83,13 @@ export class GetTeacherRetirementPlanningPeriodResponseDto extends BaseBuildable
   @ResponseDtoStringProperty()
   public department: string;
 
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningPeriodItemResponseDto, {
-    required: false,
-    isArray: true,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningPeriodItemResponseDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
   public items?: GetTeacherRetirementPlanningPeriodItemResponseDto[];
 
   protected override readonly _type =
@@ -161,28 +167,41 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public legalProceedingNumber?: string[];
 
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningDocumentResponseDto, {
-    required: false,
-    isArray: true,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningDocumentResponseDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
   public documents?: GetTeacherRetirementPlanningDocumentResponseDto[];
 
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningPeriodResponseDto, {
-    required: false,
-    isArray: true,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningPeriodResponseDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
   public periods?: GetTeacherRetirementPlanningPeriodResponseDto[];
 
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningRemunerationResponseDto, {
-    required: false,
-    isArray: true,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningRemunerationResponseDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
   public remunerations?: GetTeacherRetirementPlanningRemunerationResponseDto[];
 
-  @ResponseDtoObjectProperty(() => GetTeacherRetirementPlanningResultResponseDto, {
-    required: false,
-  })
+  @ResponseDtoObjectProperty(
+    () => GetTeacherRetirementPlanningResultResponseDto,
+    {
+      required: false,
+    },
+  )
   public teacherRetirementPlanningResult?: GetTeacherRetirementPlanningResultResponseDto;
 
-  protected override readonly _type = GetTeacherRetirementPlanningResponseDto.name;
+  protected override readonly _type =
+    GetTeacherRetirementPlanningResponseDto.name;
 }
