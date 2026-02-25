@@ -59,8 +59,8 @@ export class DeleteRuralTimelineCnisContributionPeriodDocumentUseCase {
 
     await transaction.commit();
 
-    return DeleteRuralTimelineCnisContributionPeriodDocumentResponseDto.build(
-      {},
-    );
+    return DeleteRuralTimelineCnisContributionPeriodDocumentResponseDto.build({
+      ruralTimelineCnisContributionPeriodDocumentId: documentId,
+    });
   }
 }

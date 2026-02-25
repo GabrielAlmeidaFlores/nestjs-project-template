@@ -8,6 +8,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
@@ -551,7 +552,7 @@ export class RuralTimelineAnalysisController {
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
-      dto,
+      new ListDataInputModel(dto),
     );
   }
 
