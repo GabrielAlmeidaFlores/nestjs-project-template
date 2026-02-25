@@ -47,6 +47,14 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
   public analysisName: string | null;
 
   @Column({
+    name: 'current_position',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public currentPosition: string | null;
+
+  @Column({
     name: 'activity_type',
     type: 'simple-enum',
     enum: TeacherRetirementPlanningActivityTypeEnum,

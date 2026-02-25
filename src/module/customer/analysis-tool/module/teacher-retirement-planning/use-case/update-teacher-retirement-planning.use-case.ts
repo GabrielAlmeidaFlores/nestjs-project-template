@@ -91,6 +91,7 @@ export class UpdateTeacherRetirementPlanningUseCase {
       state: (dto.state as StateCodeEnum) ?? null,
       municipality: dto.municipality ?? null,
       analysisName: dto.analysisName ?? null,
+      currentPosition: dto.currentPosition ?? null,
       activityType: dto.activityType,
       publicServiceStartDate: dto.publicServiceStartDate,
       careerStartDate: dto.careerStartDate,

@@ -143,6 +143,9 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoStringProperty({ required: false })
   public analysisName?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public currentPosition?: string;
+
   @ResponseDtoEnumProperty(TeacherRetirementPlanningActivityTypeEnum)
   public activityType: TeacherRetirementPlanningActivityTypeEnum;
 
