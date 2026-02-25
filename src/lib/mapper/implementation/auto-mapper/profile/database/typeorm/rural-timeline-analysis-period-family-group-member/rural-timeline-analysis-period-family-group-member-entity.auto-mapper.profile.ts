@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-family-group-member.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.entity';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
@@ -26,6 +27,15 @@ export class RuralTimelineAnalysisPeriodFamilyGroupMemberEntityAutoMapperProfile
     const convertOrmEntityToDomainEntity = (
       source: RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
     ): RuralTimelineAnalysisPeriodFamilyGroupMemberEntity => {
+      if (!source.ruralTimelinePeriod) {
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            RuralTimelineAnalysisPeriodFamilyGroupMemberEntity.name,
+          sourceClass:
+            RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity.name,
+        });
+      }
+
       const ruralTimelinePeriod = this.mapper.map(
         source.ruralTimelinePeriod,
         RuralTimelineAnalysisPeriodTypeormEntity,

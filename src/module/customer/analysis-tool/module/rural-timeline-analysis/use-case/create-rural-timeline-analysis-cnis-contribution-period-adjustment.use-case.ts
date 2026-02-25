@@ -11,8 +11,8 @@ import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/
 import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment.entity';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period-adjustment.request.dto';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-cnis-contribution-period-adjustment.response.dto';
-import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { RuralTimelineAnalysisCnisContributionPeriodNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-cnis-contribution-period-not-found.error';
+import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -28,7 +28,9 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase 
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway)
     private readonly cnisContributionPeriodQueryRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway,
-    @Inject(RuralTimelineAnalysisCnisContributionPeriodAdjustmentCommandRepositoryGateway)
+    @Inject(
+      RuralTimelineAnalysisCnisContributionPeriodAdjustmentCommandRepositoryGateway,
+    )
     private readonly adjustmentCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodAdjustmentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -86,8 +88,11 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase 
 
     await transaction.commit();
 
-    return CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto.build({
-      ruralTimelineAnalysisCnisContributionPeriodAdjustmentId: adjustmentEntity.id,
-    });
+    return CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto.build(
+      {
+        ruralTimelineAnalysisCnisContributionPeriodAdjustmentId:
+          adjustmentEntity.id,
+      },
+    );
   }
 }

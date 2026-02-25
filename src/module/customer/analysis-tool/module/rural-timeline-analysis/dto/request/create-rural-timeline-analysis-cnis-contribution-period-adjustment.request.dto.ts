@@ -6,22 +6,34 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @RequestDto()
 export class CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoStringProperty({ description: 'Observação técnica gerada pela IA (confirmada pelo usuário).' })
+  @RequestDtoStringProperty({
+    description: 'Observação técnica gerada pela IA (confirmada pelo usuário).',
+  })
   public technicalObservation: string;
 
-  @RequestDtoNumberProperty({ description: 'Anos de tempo de contribuição ganhos.' })
+  @RequestDtoNumberProperty({
+    description: 'Anos de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedYears: number;
 
-  @RequestDtoNumberProperty({ description: 'Meses de tempo de contribuição ganhos.' })
+  @RequestDtoNumberProperty({
+    description: 'Meses de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedMonths: number;
 
-  @RequestDtoNumberProperty({ description: 'Dias de tempo de contribuição ganhos.' })
+  @RequestDtoNumberProperty({
+    description: 'Dias de tempo de contribuição ganhos.',
+  })
   public contributionTimeGainedDays: number;
 
-  @RequestDtoDateProperty({ description: 'Data de início do período convencional.' })
+  @RequestDtoDateProperty({
+    description: 'Data de início do período convencional.',
+  })
   public conventionalPeriodStartDate: Date;
 
-  @RequestDtoDateProperty({ description: 'Data de término do período convencional.' })
+  @RequestDtoDateProperty({
+    description: 'Data de término do período convencional.',
+  })
   public conventionalPeriodEndDate: Date;
 
   protected override readonly _type =

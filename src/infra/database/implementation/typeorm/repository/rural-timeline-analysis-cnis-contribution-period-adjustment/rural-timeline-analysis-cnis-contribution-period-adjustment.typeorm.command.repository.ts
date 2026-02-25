@@ -13,7 +13,8 @@ import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentId } from '@module
 @Injectable()
 export class RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormCommandRepository
   extends BaseTypeormCommandRepository<RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormEntity>
-  implements RuralTimelineAnalysisCnisContributionPeriodAdjustmentCommandRepositoryGateway
+  implements
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentCommandRepositoryGateway
 {
   protected readonly _type =
     RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormCommandRepository.name;
