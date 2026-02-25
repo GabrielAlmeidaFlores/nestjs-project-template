@@ -250,6 +250,7 @@ import { RuralTimelineAnalysisPeriodResidenceEntityAutoMapperProfile } from '@li
 import { RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-document/rural-timeline-cnis-contribution-period-document-entity.auto-mapper.profile';
 import { GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/get-rural-timeline-cnis-contribution-period-overdue-contribution-query-result.auto-mapper.profile';
 import { RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/get-special-activity-analysis-with-relations-query-result.auto-mapper.profile';
 import { SpecialActivityEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity/special-activity-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-document/get-special-activity-analysis-document-query-result.auto-mapper.profile';
@@ -532,6 +533,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile,
     GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile,
     RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,

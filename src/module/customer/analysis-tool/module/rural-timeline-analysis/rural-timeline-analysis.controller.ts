@@ -119,6 +119,12 @@ import { UpdateRuralTimelineAnalysisPeriodUseCase } from '@module/customer/analy
 import { UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-tool-record-status-to-complete.use-case';
 import { UpdateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis.use-case';
 import { UpdateRuralTimelineCnisContributionPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-cnis-contribution-period-document.use-case';
+import { SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/simulate-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
+import { SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/simulate-rural-timeline-analysis-cnis-contribution-period-adjustment.request.dto';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis-cnis-contribution-period-adjustment.request.dto';
+import { SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/simulate-rural-timeline-analysis-cnis-contribution-period-adjustment.response.dto';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis-cnis-contribution-period-adjustment.response.dto';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -175,6 +181,8 @@ export class RuralTimelineAnalysisController {
     private readonly deleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase: DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase,
     private readonly deleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase: DeleteRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase,
     private readonly updateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase: UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase,
+    private readonly simulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
+    private readonly createRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase: CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -1666,6 +1674,74 @@ export class RuralTimelineAnalysisController {
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Simular ajuste de período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId/adjustment/simulate',
+      method: RequestMethod.POST,
+      type: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
+    },
+    tag: ['rural-timeline-analysis'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Simulação de ajuste calculada com sucesso.',
+      type: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async simulateRuralTimelineAnalysisCnisContributionPeriodAdjustment(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @Param('ruralTimelineAnalysisId', new ParseValueObjectPipe(RuralTimelineAnalysisId))
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('contributionPeriodId', new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId))
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+    @Body() dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
+  ): Promise<SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto> {
+    return this.simulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      contributionPeriodId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar ajuste de período de contribuição CNIS',
+    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    http: {
+      path: ':ruralTimelineAnalysisId/cnis-contribution-period/:contributionPeriodId/adjustment',
+      method: RequestMethod.POST,
+      type: CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
+    },
+    tag: ['rural-timeline-analysis'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Ajuste criado com sucesso.',
+      type: CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async createRuralTimelineAnalysisCnisContributionPeriodAdjustment(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData() organizationSessionData: OrganizationSessionDataModel,
+    @Param('ruralTimelineAnalysisId', new ParseValueObjectPipe(RuralTimelineAnalysisId))
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    @Param('contributionPeriodId', new ParseValueObjectPipe(RuralTimelineAnalysisCnisContributionPeriodId))
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+    @Body() dto: CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto> {
+    return this.createRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      ruralTimelineAnalysisId,
+      contributionPeriodId,
+      dto,
     );
   }
 }

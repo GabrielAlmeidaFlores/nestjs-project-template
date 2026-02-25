@@ -52,6 +52,8 @@ import { UpdateRuralTimelineAnalysisToolRecordStatusToCompleteUseCase } from '@m
 import { UpdateRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis.use-case';
 import { UpdateRuralTimelineCnisContributionPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-cnis-contribution-period-document.use-case';
 import { UpdateRuralTimelineCnisContributionPeriodOverdueContributionUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-cnis-contribution-period-overdue-contribution.use-case';
+import { SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/simulate-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
 import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
 import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
@@ -117,6 +119,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
     UpdateRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
     DeleteRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
+    SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
+    CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
   ],
   exports: [],
 })
