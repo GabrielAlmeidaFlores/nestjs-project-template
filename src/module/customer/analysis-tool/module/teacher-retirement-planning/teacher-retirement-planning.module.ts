@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { RemunerationCalculatorModule } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.module';
 import { TeacherRetirementPlanningController } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.controller';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
@@ -12,6 +13,7 @@ import { CreateTeacherRetirementPlanningUseCase } from '@module/customer/analysi
 import { DeleteTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/delete-teacher-retirement-planning.use-case';
 import { DownloadTeacherRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-complete-analysis.use-case';
 import { DownloadTeacherRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/download-teacher-retirement-planning-simplified-analysis.use-case';
+import { GetTeacherRetirementPlanningRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning-remuneration-calculation.use-case';
 import { GetTeacherRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/get-teacher-retirement-planning.use-case';
 import { ListTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/list-teacher-retirement-planning-remuneration.use-case';
 import { UpdateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/update-teacher-retirement-planning-period.use-case';
@@ -30,6 +32,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     AnalysisProcessorModule,
     FileProcessorModule,
     ExportDocumentModule,
+    RemunerationCalculatorModule,
     OrganizationCreditModule,
     PaymentPlanModule,
   ],
@@ -47,6 +50,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateTeacherRetirementPlanningPeriodUseCase,
     UpdateTeacherRetirementPlanningRemunerationUseCase,
     ListTeacherRetirementPlanningRemunerationUseCase,
+    GetTeacherRetirementPlanningRemunerationCalculationUseCase,
   ],
   exports: [DeleteTeacherRetirementPlanningUseCase],
 })
