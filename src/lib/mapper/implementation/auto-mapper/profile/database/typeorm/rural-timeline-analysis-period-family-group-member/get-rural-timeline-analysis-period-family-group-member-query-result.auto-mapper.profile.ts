@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-family-group-member.typeorm.entity';
 import { GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/query/result/get-rural-timeline-analysis-period-family-group-member.query.result';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
 
 import type { Mapper } from '@automapper/core';
 
@@ -22,6 +23,13 @@ export class GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResultAutoMappe
       mapper,
       RuralTimelineAnalysisPeriodFamilyGroupMemberTypeormEntity,
       GetRuralTimelineAnalysisPeriodFamilyGroupMemberQueryResult,
+      forMember(
+        (destination) => destination.id,
+        mapFrom(
+          (source) =>
+            new RuralTimelineAnalysisPeriodFamilyGroupMemberId(source.id),
+        ),
+      ),
       forMember(
         (destination) => destination.name,
         mapFrom((source) => source.name),

@@ -91,7 +91,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
         documents.push(
           GetRuralTimelineAnalysisPeriodDocumentResponseDto.build({
-            id: document.id.toString(),
+            ruralTimelineAnalysisPeriodDocumentId: document.id,
             ...(document.documentYear !== null && {
               documentYear: document.documentYear,
             }),
@@ -139,6 +139,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
         familyGroupMembers.push(
           GetRuralTimelineAnalysisPeriodFamilyGroupMemberResponseDto.build({
+            ruralTimelineAnalysisPeriodFamilyGroupMemberId: member.id,
             name: member.name,
             federalDocument: member.federalDocument.toString(),
             kinship: member.kinship,
@@ -156,7 +157,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
       periods.push(
         GetRuralTimelineAnalysisPeriodResponseDto.build({
-          id: period.id.toString(),
+          ruralTimelineAnalysisPeriodId: period.id,
           startDate: period.startDate,
           endDate: period.endDate,
           workerType: period.workerType,
@@ -245,7 +246,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
       cnisDocuments.push(
         GetRuralTimelineAnalysisDocumentResponseDto.build({
-          id: doc.id.toString(),
+          ruralTimelineAnalysisDocumentId: doc.id,
           type: doc.type as RuralTimelineAnalysisDocumentTypeEnum,
           url: url.toString(),
           originalFileName,
@@ -314,7 +315,7 @@ export class GetRuralTimelineAnalysisUseCase {
 
         documents.push(
           GetRuralTimelineCnisContributionPeriodDocumentResponseDto.build({
-            id: doc.id.toString(),
+            ruralTimelineCnisContributionPeriodDocumentId: doc.id,
             type: doc.type,
             documentUrl: url.toString(),
             documentOriginalFileName: originalFileName,
