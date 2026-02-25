@@ -65,6 +65,7 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
         MedicalAndSocialReportObjectionGeneratorAnalysisNotFoundError,
       );
 
+      console.log('teste')
     const response =
       GetMedicalAndSocialReportObjectionGeneratorAnalysisResponseDto.build({
         ...medicalAndSocialReportObjectionGeneratorAnalysisQueryResult,
@@ -74,7 +75,46 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
         analysisToolClient:
           GetMedicalAndSocialReportObjectionGeneratorAnalysisClientResponseDto.build(
             {
-              ...analysisToolRecordQueryResult.analysisToolClient,
+              id: analysisToolRecordQueryResult.analysisToolClient.id,
+              ...(analysisToolRecordQueryResult.analysisToolClient.name !==
+                null && {
+                name: analysisToolRecordQueryResult.analysisToolClient.name,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient
+                .federalDocument !== null && {
+                federalDocument:
+                  analysisToolRecordQueryResult.analysisToolClient
+                    .federalDocument,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient.email !==
+                null && {
+                email: analysisToolRecordQueryResult.analysisToolClient.email,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient
+                .corporateEmail !== null && {
+                corporateEmail:
+                  analysisToolRecordQueryResult.analysisToolClient
+                    .corporateEmail,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient
+                .phoneNumber !== null && {
+                phoneNumber:
+                  analysisToolRecordQueryResult.analysisToolClient.phoneNumber,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient.birthDate !==
+                null && {
+                birthDate:
+                  analysisToolRecordQueryResult.analysisToolClient.birthDate,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient.gender !==
+                null && {
+                gender: analysisToolRecordQueryResult.analysisToolClient.gender,
+              }),
+              ...(analysisToolRecordQueryResult.analysisToolClient.clientType !==
+                null && {
+                clientType:
+                  analysisToolRecordQueryResult.analysisToolClient.clientType,
+              }),
             },
           ),
         medicalAndSocialReportObjectionGeneratorAnalysisResult:
