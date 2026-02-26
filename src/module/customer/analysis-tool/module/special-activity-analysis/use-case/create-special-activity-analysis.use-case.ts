@@ -18,13 +18,11 @@ import { SpecialActivityAnalysisDocumentCommandRepositoryGateway } from '@module
 import { SpecialActivityAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-inss-benefit/command/special-activity-analysis-inss-benefit.command.repository.gateway';
 import { SpecialActivityAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/command/special-activity-analysis-legal-proceeding.command.repository.gateway';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
-import { SpecialActivityDocumentTypeEnum } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/enum/special-activity-document-type.enum';
 import { SpecialActivityDocumentEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-document/special-activity-document.entity';
 import { SpecialActivityInssBenefitEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-inss-benefit/special-activity-inss-benefit.entity';
 import { SpecialActivityLegalProceedingEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity-legal-proceeding/special-activity-legal-proceeding.entity';
 import { CreateSpecialActivityAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-activity-analysis/dto/request/create-special-activity-analysis.request.dto';
 import { CreateSpecialActivityAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-activity-analysis/dto/response/create-special-activity-analysis.response.dto';
-import { SpecialActivityAnalysisAtLeastOnePppRequiredError } from '@module/customer/analysis-tool/module/special-activity-analysis/error/special-activity-analysis-at-least-one-ppp-required.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
@@ -71,14 +69,6 @@ export class CreateSpecialActivityAnalysisUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const hasPpp = dto.documents.some(
-      (doc) => doc.type === SpecialActivityDocumentTypeEnum.PPP,
-    );
-
-    if (!hasPpp) {
-      throw new SpecialActivityAnalysisAtLeastOnePppRequiredError();
-    }
-
     const analysisToolClientQueryResult =
       await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
         dto.analysisToolClientId,
@@ -94,27 +84,30 @@ export class CreateSpecialActivityAnalysisUseCase {
 
     const specialActivity = new SpecialActivityEntity({});
 
-    const specialActivityDocuments = await Promise.all(
-      dto.documents.map(async (docDto) => {
-        const buffer = docDto.document.base64.decodeToBuffer();
+    const specialActivityDocuments =
+      dto.documents && dto.documents.length > 0
+        ? await Promise.all(
+            dto.documents.map(async (docDto) => {
+              const buffer = docDto.document.base64.decodeToBuffer();
 
-        const fileModel = FileModel.build({
-          buffer,
-          originalName: docDto.document.originalFileName,
-          size: buffer.length,
-          encoding: '7bit',
-        });
+              const fileModel = FileModel.build({
+                buffer,
+                originalName: docDto.document.originalFileName,
+                size: buffer.length,
+                encoding: '7bit',
+              });
 
-        const documentPath =
-          await this.fileProcessorGateway.uploadFile(fileModel);
+              const documentPath =
+                await this.fileProcessorGateway.uploadFile(fileModel);
 
-        return new SpecialActivityDocumentEntity({
-          document: documentPath,
-          type: docDto.type,
-          specialActivity,
-        });
-      }),
-    );
+              return new SpecialActivityDocumentEntity({
+                document: documentPath,
+                type: docDto.type,
+                specialActivity,
+              });
+            }),
+          )
+        : [];
 
     const specialActivityInssBenefit =
       dto.inssBenefitNumber !== undefined
