@@ -72,7 +72,7 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
     const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
-    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 5_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
     const maxOutputTokens = props.responseConfig
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
