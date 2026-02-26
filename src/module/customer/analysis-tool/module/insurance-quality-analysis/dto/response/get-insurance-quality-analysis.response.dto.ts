@@ -99,6 +99,33 @@ export class GetInsuranceQualityAnalysisResponseDto extends BaseBuildableDtoObje
   @ResponseDtoStringProperty({ required: false })
   public analysisRuralActivityDetails?: string;
 
+  @ResponseDtoBooleanProperty({ required: false })
+  public analysisIsWorkAccidentOrSeriousIllness?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public analysisIsSeriousIllnessArt151?: boolean;
+
+  @ResponseDtoStringProperty({ required: false })
+  public analysisSeriousIllnesses?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public analysisOtherSeriousIllness?: string;
+
+  @ResponseDtoDateProperty({ required: false })
+  public analysisDiseaseStartDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public analysisRuralStartDate?: Date;
+
+  @ResponseDtoDateProperty({ required: false })
+  public analysisRuralEndDate?: Date;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public analysisHadInvoluntaryUnemployment?: boolean;
+
+  @ResponseDtoBooleanProperty({ required: false })
+  public analysisIntendsToProveByTestimony?: boolean;
+
   @ResponseDtoObjectProperty(
     () => GetInsuranceQualityAnalysisResultResponseDto,
     {

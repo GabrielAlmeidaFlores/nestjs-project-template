@@ -55,6 +55,18 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
         analysisContributionSituation: source.analysisContributionSituation,
         analysisHasRuralActivity: source.analysisHasRuralActivity,
         analysisRuralActivityDetails: source.analysisRuralActivityDetails,
+        analysisIsWorkAccidentOrSeriousIllness:
+          source.analysisIsWorkAccidentOrSeriousIllness,
+        analysisIsSeriousIllnessArt151: source.analysisIsSeriousIllnessArt151,
+        analysisSeriousIllnesses: source.analysisSeriousIllnesses,
+        analysisOtherSeriousIllness: source.analysisOtherSeriousIllness,
+        analysisDiseaseStartDate: source.analysisDiseaseStartDate,
+        analysisRuralStartDate: source.analysisRuralStartDate,
+        analysisRuralEndDate: source.analysisRuralEndDate,
+        analysisHadInvoluntaryUnemployment:
+          source.analysisHadInvoluntaryUnemployment,
+        analysisIntendsToProveByTestimony:
+          source.analysisIntendsToProveByTestimony,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -85,6 +97,18 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
       return InsuranceQualityAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        analysisIsWorkAccidentOrSeriousIllness:
+          source.analysisIsWorkAccidentOrSeriousIllness,
+        analysisIsSeriousIllnessArt151: source.analysisIsSeriousIllnessArt151,
+        analysisSeriousIllnesses: source.analysisSeriousIllnesses,
+        analysisOtherSeriousIllness: source.analysisOtherSeriousIllness,
+        analysisDiseaseStartDate: source.analysisDiseaseStartDate,
+        analysisRuralStartDate: source.analysisRuralStartDate,
+        analysisRuralEndDate: source.analysisRuralEndDate,
+        analysisHadInvoluntaryUnemployment:
+          source.analysisHadInvoluntaryUnemployment,
+        analysisIntendsToProveByTestimony:
+          source.analysisIntendsToProveByTestimony,
         insuranceQualityAnalysisResult,
         insuranceQualityAnalysisInssBenefit: undefined,
         insuranceQualityAnalysisLegalProceeding: undefined,
