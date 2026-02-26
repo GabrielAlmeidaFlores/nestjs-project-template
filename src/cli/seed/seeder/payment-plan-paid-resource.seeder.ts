@@ -533,7 +533,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
       creditCost: 1,
-      title: 'LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
+      title:
+        'LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
       description:
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
