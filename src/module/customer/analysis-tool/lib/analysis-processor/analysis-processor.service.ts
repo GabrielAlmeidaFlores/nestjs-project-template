@@ -428,7 +428,6 @@ Análise processada do CNIS:
             })
           : null,
       }),
-      asJson,
     );
   }
 
