@@ -34,6 +34,7 @@ import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
+import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
@@ -102,6 +103,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { medicalQuestionGenerator: Not(IsNull()) },
+        { generalUrbanRetirementGrant: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -570,6 +572,73 @@ export class AnalysisToolRecordTypeormQueryRepository
             },
           },
           retirementPlanningRgps: true,
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByGeneralUrbanRetirementGrantIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    generalUrbanRetirementGrantId: GeneralUrbanRetirementGrantId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          generalUrbanRetirementGrant: {
+            id: generalUrbanRetirementGrantId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+            updatedBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+          updatedBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+          generalUrbanRetirementGrant: true,
         },
       },
       err,
@@ -1683,7 +1752,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'specialActivity',
       'administrativeProcedureInssAnalysis',
       'judicialCaseAnalysis',
-      'administrativeProcedureInssAnalysis',
+      'generalUrbanRetirementGrant',
       'medicalAndSocialReportObjectionGeneratorAnalysis',
       'medicalQuestionGenerator',
       'disabilityAssessmentForBpcAnalysis',
