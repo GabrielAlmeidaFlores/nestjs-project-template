@@ -42,6 +42,33 @@ export class UpdateInsuranceQualityAnalysisJsonRequestDto extends BaseBuildableD
   @RequestDtoStringProperty({ required: false })
   public analysisRuralActivityDetails?: string;
 
+  @RequestDtoBooleanProperty({ required: false })
+  public analysisIsWorkAccidentOrSeriousIllness?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public analysisIsSeriousIllnessArt151?: boolean;
+
+  @RequestDtoStringProperty({ required: false })
+  public analysisSeriousIllnesses?: string;
+
+  @RequestDtoStringProperty({ required: false })
+  public analysisOtherSeriousIllness?: string;
+
+  @RequestDtoDateProperty({ required: false })
+  public analysisDiseaseStartDate?: Date;
+
+  @RequestDtoDateProperty({ required: false })
+  public analysisRuralStartDate?: Date;
+
+  @RequestDtoDateProperty({ required: false })
+  public analysisRuralEndDate?: Date;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public analysisHadInvoluntaryUnemployment?: boolean;
+
+  @RequestDtoBooleanProperty({ required: false })
+  public analysisIntendsToProveByTestimony?: boolean;
+
   @RequestDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];
 
