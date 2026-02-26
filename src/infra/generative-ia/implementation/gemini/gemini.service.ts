@@ -215,7 +215,9 @@ export class GeminiService implements GenerativeIaGateway {
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-      return result.text ?? null;
+      return typeof result.text === 'string'
+        ? this.stripCodeFence(result.text)
+        : null;
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
@@ -400,5 +402,17 @@ export class GeminiService implements GenerativeIaGateway {
     );
 
     return results;
+  }
+
+  private stripCodeFence(text: string | null): string | null {
+    if (text === null) {
+      return text;
+    }
+
+    return text
+      .replace(/^```(?:\w+)?\n/gm, '')
+      .replace(/\n```$/gm, '')
+      .replace(/```/g, '')
+      .trim();
   }
 }
