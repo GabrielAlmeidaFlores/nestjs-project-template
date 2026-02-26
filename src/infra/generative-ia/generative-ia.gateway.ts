@@ -3,6 +3,7 @@ import type { GenerateResponseInputModel } from '@infra/generative-ia/model/inpu
 export abstract class GenerativeIaGateway {
   public abstract generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
+    asJson?: boolean,
   ): Promise<string | null>;
 
   public abstract generateFlashLiteResponseFromPromptAndFiles(

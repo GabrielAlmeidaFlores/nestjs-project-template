@@ -118,6 +118,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
         promptResponse.prompt,
         allBuffers,
+        true,
       );
 
     const specialActivityResult = new SpecialActivityResultEntity({
