@@ -317,8 +317,7 @@ Análise processada do CNIS:
                         },
                         harmfulAgentsInformationSource: {
                           type: 'array',
-                          description:
-                            'Fontes de informação sobre os agentes',
+                          description: 'Fontes de informação sobre os agentes',
                           items: {
                             type: 'string',
                           },

@@ -109,8 +109,8 @@ export class GetMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
                 null && {
                 gender: analysisToolRecordQueryResult.analysisToolClient.gender,
               }),
-              ...(analysisToolRecordQueryResult.analysisToolClient.clientType !==
-                null && {
+              ...(analysisToolRecordQueryResult.analysisToolClient
+                .clientType !== null && {
                 clientType:
                   analysisToolRecordQueryResult.analysisToolClient.clientType,
               }),
