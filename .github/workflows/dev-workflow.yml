@@ -39,6 +39,7 @@ jobs:
         run: |
           docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
   deploy:
+    needs: build
     runs-on: agiliza-previ
     steps:
       - name: 📦 Checkout Repository
