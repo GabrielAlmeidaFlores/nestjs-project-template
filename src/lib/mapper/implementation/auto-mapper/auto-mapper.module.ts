@@ -225,6 +225,7 @@ import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } fro
 import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/get-rural-timeline-analysis-cnis-contribution-period-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/get-rural-timeline-analysis-cnis-contribution-period-under-minimum-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/get-rural-timeline-analysis-document-query-result.auto-mapper.profile';
@@ -532,6 +533,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile,
     GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile,
     RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,
