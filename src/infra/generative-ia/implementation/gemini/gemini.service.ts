@@ -70,10 +70,13 @@ export class GeminiService implements GenerativeIaGateway {
 
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
-    asJson: boolean = false,
   ): Promise<string | null> {
-    const maxOutputTokens = asJson ? 16_000 : 8_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 5_000;
 
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
     return await this.generateResponseFromPromptAndFiles(
       props,
