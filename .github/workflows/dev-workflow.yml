@@ -40,7 +40,6 @@ jobs:
           docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
   deploy:
     runs-on: agiliza-previ
-    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
