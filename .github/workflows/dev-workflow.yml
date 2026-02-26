@@ -32,8 +32,6 @@ jobs:
           docker buildx build \
             --load \
             --no-cache \
-            --cpuset-cpus="1" \
-            --memory="2g" \
             -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} \
             .
 
