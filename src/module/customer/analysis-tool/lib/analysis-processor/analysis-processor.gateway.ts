@@ -136,4 +136,24 @@ export abstract class AnalysisProcessorGateway {
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementAdministrativeRequestDeniedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
+
+  public abstract getGeneralUrbanRetirementBenefitAwardLetterAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null>;
 }

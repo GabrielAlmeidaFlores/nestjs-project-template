@@ -15,6 +15,7 @@ import type { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@mo
 import type { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
 import type { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import type { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import type { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import type { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import type { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
@@ -37,6 +38,7 @@ export interface AnalysisToolRecordEntityPropsInterface extends BaseEntityPropsI
   perCapitaIncomeForBpcAnalysis?: PerCapitaIncomeForBpcAnalysisEntity | null;
   ruralTimelineAnalysis?: RuralTimelineAnalysisEntity | null;
   insuranceQualityAnalysis?: InsuranceQualityAnalysisEntity | null;
+  generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisEntity | null;
   status: AnalysisStatusEnum;
   analysisToolClient: AnalysisToolClientEntity;
   createdBy: OrganizationMemberId;

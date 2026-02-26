@@ -1,0 +1,140 @@
+import { Inject, Injectable, StreamableFile } from '@nestjs/common';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
+import { CnisFastAnalysisDoesNotContainCompleteAnalysisError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-does-not-contain-complete-analysis.error';
+import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
+import { GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-result/command/general-urban-retirement-analysis-result.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
+import { GeneralUrbanRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.entity';
+import { GeneralUrbanRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement/error/general-urban-retirement-analysis-not-found.error';
+import { GeneralUrbanRetirementSimplifiedAnalysisNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement/error/general-urban-retirement-simplified-analysis-not-found.error';
+import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
+import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
+import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+@Injectable()
+export class DownloadGeneralUrbanRetirementSimplifiedAnalysisUseCase {
+  protected readonly _type =
+    DownloadGeneralUrbanRetirementSimplifiedAnalysisUseCase.name;
+
+  public constructor(
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(GeneralUrbanRetirementAnalysisQueryRepositoryGateway)
+    private readonly generalUrbanRetirementAnalysisQueryRepositoryGateway: GeneralUrbanRetirementAnalysisQueryRepositoryGateway,
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(AnalysisProcessorGateway)
+    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
+    @Inject(ConsumeOrganizationCreditUseCaseGateway)
+    private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
+    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
+    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway)
+    private readonly generalUrbanRetirementAnalysisResultCommandRepositoryGateway: GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway,
+  ) {}
+
+  public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+    generalUrbanRetirementAnalysisId: GeneralUrbanRetirementAnalysisId,
+    format: ExportDocumentFormatEnum,
+  ): Promise<StreamableFile> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_SIMPLIFIED_ANALYSIS,
+      );
+
+    const consumeCreditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_SIMPLIFIED_ANALYSIS,
+        organizationMember.id,
+      );
+
+    const analysisQueryResult =
+      await this.generalUrbanRetirementAnalysisQueryRepositoryGateway.findOneByGeneralUrbanRetirementAnalysisIdAndOrganizationIdWithRelationsOrFail(
+        generalUrbanRetirementAnalysisId,
+        organizationSessionData.organizationId,
+        GeneralUrbanRetirementAnalysisNotFoundError,
+      );
+
+    if (!analysisQueryResult.generalUrbanRetirementAnalysisResult) {
+      throw new CnisFastAnalysisDoesNotContainCompleteAnalysisError();
+    }
+
+    if (
+      analysisQueryResult.generalUrbanRetirementAnalysisResult
+        .generalUrbanRetirementCompleteAnalysis === null
+    ) {
+      throw new CnisFastAnalysisDoesNotContainCompleteAnalysisError();
+    }
+
+    let responseAi =
+      analysisQueryResult.generalUrbanRetirementAnalysisResult
+        .generalUrbanRetirementSimplifiedAnalysis;
+
+    if (responseAi === null) {
+      const generalUrbanRetirementSimplifiedAnalysis =
+        await this.analysisProcessorGateway.getGeneralUrbanRetirementSimplifiedAnalysis(
+          promptResponse.prompt,
+          [
+            Buffer.from(
+              analysisQueryResult.generalUrbanRetirementAnalysisResult
+                .generalUrbanRetirementCompleteAnalysis,
+              'utf-8',
+            ),
+          ],
+        );
+
+      const generalUrbanRetirementAnalysisResult =
+        new GeneralUrbanRetirementAnalysisResultEntity({
+          ...analysisQueryResult.generalUrbanRetirementAnalysisResult,
+          generalUrbanRetirementSimplifiedAnalysis,
+        });
+
+      const generalUrbanRetirementAnalysisResultTransaction =
+        this.generalUrbanRetirementAnalysisResultCommandRepositoryGateway.updateGeneralUrbanRetirementAnalysisResult(
+          analysisQueryResult.generalUrbanRetirementAnalysisResult.id,
+          generalUrbanRetirementAnalysisResult,
+        );
+
+      const transaction = await this.baseTransactionRepositoryGateway.execute([
+        consumeCreditTransaction,
+        generalUrbanRetirementAnalysisResultTransaction,
+      ]);
+      await transaction.commit();
+
+      responseAi = generalUrbanRetirementSimplifiedAnalysis;
+    }
+
+    if (responseAi === null) {
+      throw new GeneralUrbanRetirementSimplifiedAnalysisNotFoundError();
+    }
+
+    return this.exportDocumentGateway.downloadFileAsStreamable(
+      responseAi,
+      format,
+      'analise_simplificada_aposentadoria_urbana_geral',
+    );
+  }
+}
