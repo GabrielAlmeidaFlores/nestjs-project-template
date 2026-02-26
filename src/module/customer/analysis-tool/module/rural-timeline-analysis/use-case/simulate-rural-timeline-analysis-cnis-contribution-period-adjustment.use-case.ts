@@ -215,7 +215,7 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
 **Suplementação externa prevista:** ${period.externalSupplementationIntent ? 'Sim' : 'Não'}
 **Período considerado nos cálculos:** ${period.shouldConsiderPeriod ? 'Sim' : 'Não'}
 **Utilizar última remuneração como data de saída:** ${period.shouldConsiderLastRemunerationAsExitDate ? 'Sim' : 'Não'}
-${period.impactAnalysis ? `\n**Análise de impacto existente:**\n${period.impactAnalysis}` : ''}
+${period.impactAnalysis !== null ? `\n**Análise de impacto existente:**\n${period.impactAnalysis}` : ''}
 
 ## Ajuste Proposto
 
