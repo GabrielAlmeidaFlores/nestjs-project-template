@@ -53,7 +53,7 @@ export class GetLegalPleadingUseCase {
         })
       : null;
 
-    const legalPleadingResult = legalPleadingQueryResult.legalPleadingAddress
+    const legalPleadingResult = legalPleadingQueryResult.legalPleadingResult
       ? GetLegalPleadingResultResponseDto.build({
           ...legalPleadingQueryResult.legalPleadingResult,
         })
