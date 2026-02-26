@@ -149,6 +149,9 @@ export class UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase {
       encoding: 'base64',
     });
 
-    return await this.fileProcessorGateway.uploadFile(fileModel);
+    return await this.fileProcessorGateway.uploadFile(
+      fileModel,
+      existingCnisDocument ?? undefined,
+    );
   }
 }

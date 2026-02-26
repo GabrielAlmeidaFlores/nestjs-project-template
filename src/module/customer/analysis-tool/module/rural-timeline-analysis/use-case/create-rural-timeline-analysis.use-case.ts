@@ -132,8 +132,14 @@ export class CreateRuralTimelineAnalysisUseCase {
           })
         : [];
 
-    const residenceMap = new Map<number, RuralTimelineAnalysisPeriodResidenceEntity>();
-    const propertyMap = new Map<number, RuralTimelineAnalysisPeriodPropertyEntity>();
+    const residenceMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodResidenceEntity
+    >();
+    const propertyMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodPropertyEntity
+    >();
 
     for (const [index, periodDto] of dto.periods.entries()) {
       if (periodDto.residence !== undefined) {
