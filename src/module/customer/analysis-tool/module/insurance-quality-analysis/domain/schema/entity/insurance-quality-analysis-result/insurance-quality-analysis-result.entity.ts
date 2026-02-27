@@ -14,6 +14,9 @@ export class InsuranceQualityAnalysisResultEntity extends BaseEntity<InsuranceQu
   @Description('Data de nascimento do cliente extraída do CNIS.')
   public readonly clientBirthDate: Date | null;
 
+  @Description('Data da última filiação do cliente extraída do CNIS.')
+  public readonly clientLastAffiliationDate: Date | null;
+
   @Description('Conclusão sobre qualidade de segurado.')
   public readonly insuranceQualityConclusion: string | null;
 
@@ -35,6 +38,7 @@ export class InsuranceQualityAnalysisResultEntity extends BaseEntity<InsuranceQu
     this.clientName = props.clientName ?? null;
     this.clientFederalDocument = props.clientFederalDocument ?? null;
     this.clientBirthDate = props.clientBirthDate ?? null;
+    this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
     this.insuranceQualityConclusion = props.insuranceQualityConclusion ?? null;
     this.gracePeriodConclusion = props.gracePeriodConclusion ?? null;
     this.finalRecommendation = props.finalRecommendation ?? null;

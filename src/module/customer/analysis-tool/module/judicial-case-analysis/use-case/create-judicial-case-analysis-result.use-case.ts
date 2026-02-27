@@ -128,6 +128,13 @@ export class CreateJudicialCaseAnalysisResultUseCase {
       );
 
     const judicialCaseAnalysisResult = new JudicialCaseAnalysisResultEntity({
+      clientName: analysisToolRecordQueryResult.analysisToolClient.name ?? null,
+      clientFederalDocument:
+        analysisToolRecordQueryResult.analysisToolClient.federalDocument ??
+        null,
+      clientBirthDate:
+        analysisToolRecordQueryResult.analysisToolClient.birthDate ?? null,
+      clientLastAffiliationDate: null,
       judicialCaseCompleteAnalysis: judicialCaseCompleteAnalysis,
     });
 
