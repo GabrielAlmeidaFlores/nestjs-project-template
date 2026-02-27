@@ -1,6 +1,5 @@
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 
 export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentId extends Guid {
-  protected override readonly _type =
-    DisabilityRetirementPlanningPeriodSpecialTimeDocumentId.name;
+  protected override readonly _type = DisabilityRetirementPlanningPeriodSpecialTimeDocumentId.name;
 }

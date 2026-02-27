@@ -1,4 +1,4 @@
-﻿# read_Me_analysis
+# read_Me_analysis
 
 ## Objetivo deste documento
 
@@ -1556,75 +1556,3 @@ Mantenha o padrão de segurança, transação e listagem exatamente igual para r
   @JoinColumn({ name: 'disability_retirement_planning_period_id' })
   public period?: DisabilityRetirementPlanningPeriodTypeormEntity;
   ```
-
----
-
-## Padrão obrigatório: entidades de domínio com referência completa (nunca `*Id: string` interno)
-
-### O que estava errado
-
-As entidades filhas do fluxo de disability foram criadas armazenando a chave estrangeira como string primitiva:
-
-`	ypescript
-// ERRADO  FK como string primitiva
-export class DisabilityRetirementPlanningDocumentEntity extends BaseEntity<...> {
-  public readonly disabilityRetirementPlanningId: string;
-}
-`
-
-E no mapper, a conversão de domínio para ORM usava um cast ilegal:
-
-`	ypescript
-// ERRADO  type cast inválido no mapper
-return DisabilityRetirementPlanningDocumentTypeormEntity.build({
-  disabilityRetirementPlanning: { id: source.disabilityRetirementPlanningId } as DisabilityRetirementPlanningTypeormEntity,
-});
-`
-
-### O que deve ser feito
-
-A entidade de domínio deve armazenar a entidade relacionada completa, e o mapper deve usar this.mapper.map() para converter entre camadas:
-
-`	ypescript
-// CORRETO  entidade completa na domain entity
-export class DisabilityRetirementPlanningDocumentEntity extends BaseEntity<...> {
-  public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity;
-}
-
-// CORRETO  mapper ORM para Domain
-const disabilityRetirementPlanning = this.mapper.map(
-  source.disabilityRetirementPlanning,
-  DisabilityRetirementPlanningTypeormEntity,
-  DisabilityRetirementPlanningEntity,
-);
-return new DisabilityRetirementPlanningDocumentEntity({
-  disabilityRetirementPlanning,
-});
-
-// CORRETO  mapper Domain para ORM
-const disabilityRetirementPlanning = this.mapper.map(
-  source.disabilityRetirementPlanning,
-  DisabilityRetirementPlanningEntity,
-  DisabilityRetirementPlanningTypeormEntity,
-);
-return DisabilityRetirementPlanningDocumentTypeormEntity.build({
-  disabilityRetirementPlanning,
-});
-`
-
-No use case, ao construir entidades filhas, passe a entidade pai já instanciada:
-
-`	ypescript
-// CORRETO  use case
-const document = new DisabilityRetirementPlanningDocumentEntity({
-  disabilityRetirementPlanning: disabilityRetirementPlanning,
-  document: documentUrl,
-});
-`
-
-### Exceção: referências cross-module/cross-aggregate
-
-Referências a entidades de outros módulos ou agregados continuam como primitivos (string | null):
-
-- analysisToolRecordId: string  referência cross-aggregate na entidade principal
-- cidTenId: string | null  referência cross-module (CID-10) em DisabilityRetirementPlanningPeriodDisabilityEntity
