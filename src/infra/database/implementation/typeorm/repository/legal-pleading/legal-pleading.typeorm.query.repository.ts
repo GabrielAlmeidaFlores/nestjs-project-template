@@ -303,7 +303,9 @@ export class LegalPleadingTypeormQueryRepository
       })
       .getRawOne<{ maxCode: string | null }>();
 
-    return result?.maxCode !== null && result?.maxCode !== undefined ? parseInt(result.maxCode, 10) : 0;
+    return result?.maxCode !== null && result?.maxCode !== undefined
+      ? parseInt(result.maxCode, 10)
+      : 0;
   }
 
   public async countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
