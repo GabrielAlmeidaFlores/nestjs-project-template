@@ -95,8 +95,16 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
       );
 
       return InsuranceQualityAnalysisTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        analysisBenefitNumber: source.analysisBenefitNumber,
+        analysisBenefitType: source.analysisBenefitType,
+        analysisBenefitConcessionDate: source.analysisBenefitConcessionDate,
+        analysisBenefitCessationDate: source.analysisBenefitCessationDate,
+        analysisHasPreviousBenefit: source.analysisHasPreviousBenefit,
+        analysisPreviousBenefitDetails: source.analysisPreviousBenefitDetails,
+        analysisContributionSituation: source.analysisContributionSituation,
+        analysisHasRuralActivity: source.analysisHasRuralActivity,
+        analysisRuralActivityDetails: source.analysisRuralActivityDetails,
         analysisIsWorkAccidentOrSeriousIllness:
           source.analysisIsWorkAccidentOrSeriousIllness,
         analysisIsSeriousIllnessArt151: source.analysisIsSeriousIllnessArt151,
@@ -109,6 +117,9 @@ export class InsuranceQualityAnalysisEntityAutoMapperProfile {
           source.analysisHadInvoluntaryUnemployment,
         analysisIntendsToProveByTestimony:
           source.analysisIntendsToProveByTestimony,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         insuranceQualityAnalysisResult,
         insuranceQualityAnalysisInssBenefit: undefined,
         insuranceQualityAnalysisLegalProceeding: undefined,
