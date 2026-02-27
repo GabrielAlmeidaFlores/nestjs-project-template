@@ -30,6 +30,7 @@ import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
@@ -213,6 +214,28 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
 
     return total;
+  }
+
+  public async findMaxCodeByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<number> {
+    const record = await this.repository.findOne({
+      select: { code: true },
+      where: {
+        createdBy: {
+          organization: { id: organizationId.toString() },
+          customer: { authIdentity: { id: authIdentityId.toString() } },
+        },
+      },
+      order: { createdAt: 'DESC' },
+    });
+
+    if (record === null) {
+      return 0;
+    }
+
+    return new AnalysisToolRecordCode(record.code).toNumber();
   }
 
   public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
@@ -1521,7 +1544,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       skip,
       take: listData.limit,
       order: {
-        createdAt: 'DESC',
+        code: 'DESC',
       },
     });
 

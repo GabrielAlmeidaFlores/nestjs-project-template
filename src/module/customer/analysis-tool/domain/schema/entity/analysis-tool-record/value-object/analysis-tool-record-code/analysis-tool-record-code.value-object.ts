@@ -2,6 +2,8 @@ import { BaseValueObject } from '@core/domain/schema/value-object/base/base.valu
 import { InvalidAnalysisToolRecordCodeError } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/error/invalid-analysis-tool-record-code.error';
 
 export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCode> {
+  public static readonly prefix = 'AN';
+
   protected readonly _type = AnalysisToolRecordCode.name;
 
   public constructor(value: number | string) {
@@ -25,7 +27,7 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
   private static generate(value: number): string {
     const padStart = 3;
     const numericPart = String(value).padStart(padStart, '0');
-    return `AN${numericPart}`;
+    return `${AnalysisToolRecordCode.prefix}${numericPart}`;
   }
 
   private static isValidString(code: string): boolean {
@@ -46,5 +48,9 @@ export class AnalysisToolRecordCode extends BaseValueObject<AnalysisToolRecordCo
 
   public toString(): string {
     return this.value;
+  }
+
+  public toNumber(): number {
+    return parseInt(this.value.replace(AnalysisToolRecordCode.prefix, ''));
   }
 }

@@ -13,6 +13,9 @@ const plugins = {
 
 module.exports = [
   {
+    ignores: ['src/migrations/**'],
+  },
+  {
     files: ['{src,apps,libs,test}/**/*.ts'],
     languageOptions: {
       ecmaVersion: 'latest',
