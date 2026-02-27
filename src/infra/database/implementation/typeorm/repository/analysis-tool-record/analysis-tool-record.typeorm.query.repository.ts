@@ -228,6 +228,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         },
       },
       order: { createdAt: 'DESC' },
+      withDeleted: true,
     });
 
     if (record === null) {

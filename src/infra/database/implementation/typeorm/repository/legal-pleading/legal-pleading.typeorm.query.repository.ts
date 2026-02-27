@@ -296,6 +296,7 @@ export class LegalPleadingTypeormQueryRepository
           customer: { authIdentity: { id: authIdentityId.toString() } },
         },
       },
+      withDeleted: true,
       order: { createdAt: 'DESC' },
     });
 
