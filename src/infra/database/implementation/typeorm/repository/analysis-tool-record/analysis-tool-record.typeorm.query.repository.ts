@@ -215,6 +215,28 @@ export class AnalysisToolRecordTypeormQueryRepository
     return total;
   }
 
+  public async findMaxCodeByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<number> {
+    const result = await this.repository
+      .createQueryBuilder('record')
+      .select('MAX(CAST(SUBSTRING(record.code, 3) AS INTEGER))', 'maxCode')
+      .leftJoin('record.createdBy', 'createdBy')
+      .leftJoin('createdBy.organization', 'organization')
+      .leftJoin('createdBy.customer', 'customer')
+      .leftJoin('customer.authIdentity', 'authIdentity')
+      .where('organization.id = :organizationId', {
+        organizationId: organizationId.toString(),
+      })
+      .andWhere('authIdentity.id = :authIdentityId', {
+        authIdentityId: authIdentityId.toString(),
+      })
+      .getRawOne<{ maxCode: string | null }>();
+
+    return result?.maxCode ? parseInt(result.maxCode, 10) : 0;
+  }
+
   public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
     analysisToolClientId: AnalysisToolClientId,
     organizationId: OrganizationId,
@@ -1521,7 +1543,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       skip,
       take: listData.limit,
       order: {
-        createdAt: 'DESC',
+        code: 'DESC',
       },
     });
 
