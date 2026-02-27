@@ -289,22 +289,29 @@ export class LegalPleadingTypeormQueryRepository
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
-    const record = await this.repository.findOne({
-      where: {
-        createdBy: {
-          organization: { id: organizationId.toString() },
-          customer: { authIdentity: { id: authIdentityId.toString() } },
-        },
+    const whereClause = {
+      createdBy: {
+        organization: { id: organizationId.toString() },
+        customer: { authIdentity: { id: authIdentityId.toString() } },
       },
-      withDeleted: true,
-      order: { createdAt: 'DESC' },
-    });
+    };
 
-    if (record === null) {
-      return 0;
-    }
+    const [record, count] = await Promise.all([
+      this.repository.findOne({
+        where: whereClause,
+        withDeleted: true,
+        order: { createdAt: 'DESC' },
+      }),
+      this.repository.count({
+        where: whereClause,
+        withDeleted: true,
+      }),
+    ]);
 
-    return new LegalPleadingCode(record.code).toNumber();
+    const codeFromRecord =
+      record !== null ? new LegalPleadingCode(record.code).toNumber() : 0;
+
+    return Math.max(codeFromRecord, count);
   }
 
   public async countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
