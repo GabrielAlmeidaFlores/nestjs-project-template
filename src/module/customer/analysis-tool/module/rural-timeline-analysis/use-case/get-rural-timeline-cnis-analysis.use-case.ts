@@ -22,7 +22,11 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 export class GetRuralTimelineCnisAnalysisUseCase {
   private static readonly MONTHS_IN_YEAR = 12;
 
-  private static readonly RURAL_CATEGORIES = ['segurado especial', 'trabalhador rural', 'empregado rural'];
+  private static readonly RURAL_CATEGORIES = [
+    'segurado especial',
+    'trabalhador rural',
+    'empregado rural',
+  ];
 
   protected readonly _type = GetRuralTimelineCnisAnalysisUseCase.name;
 
@@ -85,7 +89,9 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
         const months = this.calculateMonthsBetweenDates(startDate, endDate);
 
-        let type: CnisTimelinePeriodTypeEnum = this.isRuralCategory(period.category)
+        let type: CnisTimelinePeriodTypeEnum = this.isRuralCategory(
+          period.category,
+        )
           ? CnisTimelinePeriodTypeEnum.RURAL
           : CnisTimelinePeriodTypeEnum.URBAN;
         let description: string | null = null;
@@ -423,10 +429,12 @@ export class GetRuralTimelineCnisAnalysisUseCase {
   }
 
   private isRuralCategory(category?: string | null): boolean {
-    if (!category) return true;
+    if (category == null || category === '') {
+      return true;
+    }
     const lower = category.toLowerCase().trim();
-    return GetRuralTimelineCnisAnalysisUseCase.RURAL_CATEGORIES.some((pattern) =>
-      lower.includes(pattern),
+    return GetRuralTimelineCnisAnalysisUseCase.RURAL_CATEGORIES.some(
+      (pattern) => lower.includes(pattern),
     );
   }
 
