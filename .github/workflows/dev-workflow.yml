@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: agiliza-previ
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
           docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
   deploy:
     needs: build
-    runs-on: agiliza-previ
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -60,8 +60,8 @@ jobs:
       - name: 🚀 Deploy Docker
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
 
+          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
       - name: 🧾 Docker Status & Logs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
