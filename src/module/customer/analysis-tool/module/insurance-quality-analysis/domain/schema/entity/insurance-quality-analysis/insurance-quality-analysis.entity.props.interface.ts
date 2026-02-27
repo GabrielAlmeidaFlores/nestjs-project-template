@@ -14,5 +14,14 @@ export interface InsuranceQualityAnalysisEntityPropsInterface extends BaseEntity
   analysisContributionSituation?: string | null;
   analysisHasRuralActivity?: boolean | null;
   analysisRuralActivityDetails?: string | null;
+  analysisIsWorkAccidentOrSeriousIllness?: boolean | null;
+  analysisIsSeriousIllnessArt151?: boolean | null;
+  analysisSeriousIllnesses?: string | null;
+  analysisOtherSeriousIllness?: string | null;
+  analysisDiseaseStartDate?: Date | null;
+  analysisRuralStartDate?: Date | null;
+  analysisRuralEndDate?: Date | null;
+  analysisHadInvoluntaryUnemployment?: boolean | null;
+  analysisIntendsToProveByTestimony?: boolean | null;
   insuranceQualityAnalysisResult?: InsuranceQualityAnalysisResultEntity | null;
 }

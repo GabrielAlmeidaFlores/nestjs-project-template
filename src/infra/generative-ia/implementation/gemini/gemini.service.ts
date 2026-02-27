@@ -72,7 +72,7 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
     const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
-    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 5_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
     const maxOutputTokens = props.responseConfig
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
@@ -215,7 +215,9 @@ export class GeminiService implements GenerativeIaGateway {
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-      return result.text ?? null;
+      return typeof result.text === 'string'
+        ? this.stripCodeFence(result.text)
+        : null;
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
@@ -400,5 +402,17 @@ export class GeminiService implements GenerativeIaGateway {
     );
 
     return results;
+  }
+
+  private stripCodeFence(text: string | null): string | null {
+    if (text === null) {
+      return text;
+    }
+
+    return text
+      .replace(/^```(?:\w+)?\n/gm, '')
+      .replace(/\n```$/gm, '')
+      .replace(/```/g, '')
+      .trim();
   }
 }

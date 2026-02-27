@@ -103,6 +103,28 @@ export class GetInsuranceQualityAnalysisUseCase {
       analysisRuralActivityDetails:
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails ??
         null,
+      analysisIsWorkAccidentOrSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisIsWorkAccidentOrSeriousIllness ??
+        null,
+      analysisIsSeriousIllnessArt151:
+        insuranceQualityAnalysisQueryResult.analysisIsSeriousIllnessArt151 ??
+        null,
+      analysisSeriousIllnesses:
+        insuranceQualityAnalysisQueryResult.analysisSeriousIllnesses ?? null,
+      analysisOtherSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisOtherSeriousIllness ?? null,
+      analysisDiseaseStartDate:
+        insuranceQualityAnalysisQueryResult.analysisDiseaseStartDate ?? null,
+      analysisRuralStartDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralStartDate ?? null,
+      analysisRuralEndDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralEndDate ?? null,
+      analysisHadInvoluntaryUnemployment:
+        insuranceQualityAnalysisQueryResult.analysisHadInvoluntaryUnemployment ??
+        null,
+      analysisIntendsToProveByTestimony:
+        insuranceQualityAnalysisQueryResult.analysisIntendsToProveByTestimony ??
+        null,
       insuranceQualityAnalysisResult,
       createdAt: analysisToolRecordQueryResult.createdAt,
       updatedAt: analysisToolRecordQueryResult.updatedAt,

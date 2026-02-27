@@ -77,6 +77,74 @@ export class InsuranceQualityAnalysisTypeormEntity extends BaseTypeormEntity {
   })
   public analysisRuralActivityDetails: string | null;
 
+  @Column({
+    name: 'analysis_is_work_accident_or_serious_illness',
+    type: 'boolean',
+    nullable: true,
+  })
+  public analysisIsWorkAccidentOrSeriousIllness: boolean | null;
+
+  @Column({
+    name: 'analysis_is_serious_illness_art151',
+    type: 'boolean',
+    nullable: true,
+  })
+  public analysisIsSeriousIllnessArt151: boolean | null;
+
+  @Column({
+    name: 'analysis_serious_illnesses',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public analysisSeriousIllnesses: string | null;
+
+  @Column({
+    name: 'analysis_other_serious_illness',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  public analysisOtherSeriousIllness: string | null;
+
+  @Column({
+    name: 'analysis_disease_start_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public analysisDiseaseStartDate: Date | null;
+
+  @Column({
+    name: 'analysis_rural_start_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public analysisRuralStartDate: Date | null;
+
+  @Column({
+    name: 'analysis_rural_end_date',
+    type: 'date',
+    nullable: true,
+    transformer: DateOnlyTransformer,
+  })
+  public analysisRuralEndDate: Date | null;
+
+  @Column({
+    name: 'analysis_had_involuntary_unemployment',
+    type: 'boolean',
+    nullable: true,
+  })
+  public analysisHadInvoluntaryUnemployment: boolean | null;
+
+  @Column({
+    name: 'analysis_intends_to_prove_by_testimony',
+    type: 'boolean',
+    nullable: true,
+  })
+  public analysisIntendsToProveByTestimony: boolean | null;
+
   @OneToOne(
     () => InsuranceQualityAnalysisResultTypeormEntity,
     (entity) => entity.insuranceQualityAnalysis,
