@@ -290,7 +290,6 @@ export class LegalPleadingTypeormQueryRepository
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
     const record = await this.repository.findOne({
-      select: { code: true },
       where: {
         createdBy: {
           organization: { id: organizationId.toString() },
