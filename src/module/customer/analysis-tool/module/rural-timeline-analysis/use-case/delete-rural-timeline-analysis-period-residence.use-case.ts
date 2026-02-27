@@ -97,6 +97,8 @@ export class DeleteRuralTimelineAnalysisPeriodResidenceUseCase {
 
     await transaction.commit();
 
-    return DeleteRuralTimelineAnalysisPeriodResidenceResponseDto.build({});
+    return DeleteRuralTimelineAnalysisPeriodResidenceResponseDto.build({
+      ruralTimelineAnalysisPeriodResidenceId,
+    });
   }
 }
