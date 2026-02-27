@@ -102,8 +102,13 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
       throw new InsuranceQualityAnalysisResultAlreadyExistsError();
     }
 
-    const clientDataBuffer = Buffer.from(
-      JSON.stringify(analysisToolRecordQueryResult.analysisToolClient, null, 2),
+    const analysisData = {
+      data_analise: new Date().toISOString(),
+      client: analysisToolRecordQueryResult.analysisToolClient,
+    };
+
+    const analysisDataBuffer = Buffer.from(
+      JSON.stringify(analysisData, null, 2),
       'utf-8',
     );
 
@@ -114,7 +119,7 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
     const analysisSummary =
       await this.analysisProcessorGateway.getInsuranceQualityAnalysisCompleteAnalysis(
         promptResponse.prompt,
-        [clientDataBuffer, ...documentBuffers],
+        [analysisDataBuffer, ...documentBuffers],
       );
 
     const insuranceQualityAnalysisResult =
