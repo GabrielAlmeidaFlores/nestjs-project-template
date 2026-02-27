@@ -15,7 +15,6 @@ import { AudienceQuestionGeneratorResultCommandRepositoryGateway } from '@module
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { AudienceQuestionGeneratorResultEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator-result/audience-question-generator-result.entity';
-import { buildCompleteAnalysisSystemInstruction } from '@module/customer/analysis-tool/module/audience-question-generator/domain/service/build-complete-analysis-system-instruction.service';
 import { CreateAudienceQuestionGeneratorResultResponseDto } from '@module/customer/analysis-tool/module/audience-question-generator/dto/response/create-audience-question-generator-result.response.dto';
 import { AudienceQuestionDocumentRequiredError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-document-required.error';
 import { AudienceQuestionGeneratorNotFoundError } from '@module/customer/analysis-tool/module/audience-question-generator/error/audience-question-generator-not-found.error';
@@ -115,7 +114,7 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       ),
     );
 
-    const systemInstruction = buildCompleteAnalysisSystemInstruction(
+    const systemInstruction = this.buildCompleteAnalysisSystemInstruction(
       promptResponse.prompt,
       new Date(),
     );
@@ -193,5 +192,12 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       audienceQuestionGeneratorCompleteAnalysis:
         audienceQuestionGeneratorResult.audienceQuestionGeneratorCompleteAnalysis,
     });
+  }
+
+  private buildCompleteAnalysisSystemInstruction(
+    basePrompt: string,
+    currentDate: Date,
+  ): string {
+    return `${basePrompt}\nuse the current date: ${currentDate.toISOString()}`;
   }
 }
