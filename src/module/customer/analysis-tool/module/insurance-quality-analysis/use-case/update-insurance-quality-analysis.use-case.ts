@@ -145,6 +145,33 @@ export class UpdateInsuranceQualityAnalysisUseCase {
       analysisRuralActivityDetails:
         dto.json?.analysisRuralActivityDetails ??
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails,
+      analysisIsWorkAccidentOrSeriousIllness:
+        dto.json?.analysisIsWorkAccidentOrSeriousIllness ??
+        insuranceQualityAnalysisQueryResult.analysisIsWorkAccidentOrSeriousIllness,
+      analysisIsSeriousIllnessArt151:
+        dto.json?.analysisIsSeriousIllnessArt151 ??
+        insuranceQualityAnalysisQueryResult.analysisIsSeriousIllnessArt151,
+      analysisSeriousIllnesses:
+        dto.json?.analysisSeriousIllnesses ??
+        insuranceQualityAnalysisQueryResult.analysisSeriousIllnesses,
+      analysisOtherSeriousIllness:
+        dto.json?.analysisOtherSeriousIllness ??
+        insuranceQualityAnalysisQueryResult.analysisOtherSeriousIllness,
+      analysisDiseaseStartDate:
+        dto.json?.analysisDiseaseStartDate ??
+        insuranceQualityAnalysisQueryResult.analysisDiseaseStartDate,
+      analysisRuralStartDate:
+        dto.json?.analysisRuralStartDate ??
+        insuranceQualityAnalysisQueryResult.analysisRuralStartDate,
+      analysisRuralEndDate:
+        dto.json?.analysisRuralEndDate ??
+        insuranceQualityAnalysisQueryResult.analysisRuralEndDate,
+      analysisHadInvoluntaryUnemployment:
+        dto.json?.analysisHadInvoluntaryUnemployment ??
+        insuranceQualityAnalysisQueryResult.analysisHadInvoluntaryUnemployment,
+      analysisIntendsToProveByTestimony:
+        dto.json?.analysisIntendsToProveByTestimony ??
+        insuranceQualityAnalysisQueryResult.analysisIntendsToProveByTestimony,
       insuranceQualityAnalysisResult: null,
     });
 

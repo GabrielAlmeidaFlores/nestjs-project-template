@@ -148,6 +148,24 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
         insuranceQualityAnalysisQueryResult.analysisHasRuralActivity,
       analysisRuralActivityDetails:
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails,
+      analysisIsWorkAccidentOrSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisIsWorkAccidentOrSeriousIllness,
+      analysisIsSeriousIllnessArt151:
+        insuranceQualityAnalysisQueryResult.analysisIsSeriousIllnessArt151,
+      analysisSeriousIllnesses:
+        insuranceQualityAnalysisQueryResult.analysisSeriousIllnesses,
+      analysisOtherSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisOtherSeriousIllness,
+      analysisDiseaseStartDate:
+        insuranceQualityAnalysisQueryResult.analysisDiseaseStartDate,
+      analysisRuralStartDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralStartDate,
+      analysisRuralEndDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralEndDate,
+      analysisHadInvoluntaryUnemployment:
+        insuranceQualityAnalysisQueryResult.analysisHadInvoluntaryUnemployment,
+      analysisIntendsToProveByTestimony:
+        insuranceQualityAnalysisQueryResult.analysisIntendsToProveByTestimony,
       insuranceQualityAnalysisResult,
     });
 
