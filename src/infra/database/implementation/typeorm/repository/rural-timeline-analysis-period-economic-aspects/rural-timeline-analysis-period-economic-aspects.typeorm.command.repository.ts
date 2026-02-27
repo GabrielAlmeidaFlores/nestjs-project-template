@@ -53,6 +53,6 @@ export class RuralTimelineAnalysisPeriodEconomicAspectsTypeormCommandRepository
   public deleteRuralTimelineAnalysisPeriodEconomicAspects(
     id: RuralTimelineAnalysisPeriodEconomicAspectsId,
   ): TransactionType {
-    return this.update(id.toString(), { deletedAt: new Date() });
+    return this.delete(id.toString());
   }
 }
