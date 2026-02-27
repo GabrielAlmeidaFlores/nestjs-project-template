@@ -429,7 +429,7 @@ export class GetRuralTimelineCnisAnalysisUseCase {
   }
 
   private isRuralCategory(category?: string | null): boolean {
-    if (category == null || category === '') {
+    if (category === null || category === undefined || category === '') {
       return true;
     }
     const lower = category.toLowerCase().trim();
