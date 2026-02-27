@@ -209,24 +209,38 @@ export class UpdateLegalPleadingUseCase {
     transactions.push(...legalPleadingDocumentTransaction);
 
     if (dto.json.inssBenefitNumbers !== undefined) {
-      const deleteOld = existingLegalPleading.analysisToolClient.analysisToolClientInssBenefit.map(
-        (b) => this.analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(b.id),
-      );
-      const createNew = dto.json.inssBenefitNumbers.map(
-        (number) => this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
-          new AnalysisToolClientInssBenefitEntity({ inssBenefitNumber: number, analysisToolClient }),
+      const deleteOld =
+        existingLegalPleading.analysisToolClient.analysisToolClientInssBenefit.map(
+          (b) =>
+            this.analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
+              b.id,
+            ),
+        );
+      const createNew = dto.json.inssBenefitNumbers.map((number) =>
+        this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+          new AnalysisToolClientInssBenefitEntity({
+            inssBenefitNumber: number,
+            analysisToolClient,
+          }),
         ),
       );
       transactions.push(...deleteOld, ...createNew);
     }
 
     if (dto.json.legalProceedingNumbers !== undefined) {
-      const deleteOld = existingLegalPleading.analysisToolClient.analysisToolClientLegalProceeding.map(
-        (p) => this.analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(p.id),
-      );
-      const createNew = dto.json.legalProceedingNumbers.map(
-        (number) => this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
-          new AnalysisToolClientLegalProceedingEntity({ legalProceedingNumber: number, analysisToolClient }),
+      const deleteOld =
+        existingLegalPleading.analysisToolClient.analysisToolClientLegalProceeding.map(
+          (p) =>
+            this.analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(
+              p.id,
+            ),
+        );
+      const createNew = dto.json.legalProceedingNumbers.map((number) =>
+        this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+          new AnalysisToolClientLegalProceedingEntity({
+            legalProceedingNumber: number,
+            analysisToolClient,
+          }),
         ),
       );
       transactions.push(...deleteOld, ...createNew);
