@@ -159,14 +159,14 @@ export class CreateMedicalAndSocialReportObjectionGeneratorAnalysisUseCase {
       );
     });
 
-    const countRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      code: new AnalysisToolRecordCode(countRecords + 1),
+      code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS,
       medicalAndSocialReportObjectionGeneratorAnalysis,
       analysisToolClient,
