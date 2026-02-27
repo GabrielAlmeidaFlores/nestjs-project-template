@@ -12,6 +12,7 @@ export class GetInsuranceQualityAnalysisResultQueryResult extends BaseBuildableO
   public readonly clientName: string | null;
   public readonly clientFederalDocument: FederalDocument | null;
   public readonly clientBirthDate: Date | null;
+  public readonly clientLastAffiliationDate: Date | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 
