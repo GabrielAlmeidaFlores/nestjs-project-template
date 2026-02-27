@@ -27,7 +27,7 @@ export abstract class BaseTypeormCommandRepository<
 
       const entityMetadata = repo.metadata;
 
-      const immutableFields = new Set(['createdAt', 'deletedAt', 'id']);
+      const immutableFields = new Set(['createdAt', 'id']);
 
       const validPropertyNames = entityMetadata.columns
         .map((column) => column.propertyName)
