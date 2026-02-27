@@ -98,6 +98,7 @@ export class ListAnalysisToolRecordUseCase {
           analysisToolRecord.medicalQuestionGenerator ??
           analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
           analysisToolRecord.insuranceQualityAnalysis ??
+          analysisToolRecord.disabilityRetirementPlanning ??
           analysisToolRecord.audienceQuestionGenerator;
 
         if (analysis !== null) {

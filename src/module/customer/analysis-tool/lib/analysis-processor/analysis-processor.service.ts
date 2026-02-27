@@ -657,4 +657,16 @@ Análise processada do CNIS:
       }),
     );
   }
+
+  public async getDisabilityRetirementPlanningCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
 }
