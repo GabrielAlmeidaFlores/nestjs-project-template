@@ -71,7 +71,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
         ruralTimelineCnisContributionPeriodPendingExitDate: true,
         ruralTimelineCnisContributionPeriodOverdueContribution: true,
       },
-      order: { startDate: 'ASC' },
+      order: { startDate: { direction: 'ASC', nulls: 'LAST' } },
     });
 
     const mappedResource = result.resource.map((item) =>
