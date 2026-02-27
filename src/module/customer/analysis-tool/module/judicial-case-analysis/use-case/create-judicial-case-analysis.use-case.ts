@@ -139,14 +139,14 @@ export class CreateJudicialCaseAnalysisUseCase {
       });
     });
 
-    const countRecords: number =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode: number =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      code: new AnalysisToolRecordCode(countRecords + 1),
+      code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.JUDICIAL_CASE_ANALYSIS,
       judicialCaseAnalysis,
       analysisToolClient,

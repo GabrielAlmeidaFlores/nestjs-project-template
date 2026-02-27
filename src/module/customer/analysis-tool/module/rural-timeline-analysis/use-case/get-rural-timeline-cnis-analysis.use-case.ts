@@ -22,6 +22,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 export class GetRuralTimelineCnisAnalysisUseCase {
   private static readonly MONTHS_IN_YEAR = 12;
 
+  private static readonly RURAL_CATEGORIES = ['segurado especial', 'trabalhador rural', 'empregado rural'];
+
   protected readonly _type = GetRuralTimelineCnisAnalysisUseCase.name;
 
   public constructor(
@@ -66,6 +68,7 @@ export class GetRuralTimelineCnisAnalysisUseCase {
     let latestDate: Date | null = null;
 
     let totalRuralMonths = 0;
+    let totalUrbanMonths = 0;
     let totalPendingMonths = 0;
 
     for (const period of ruralTimelineAnalysis.ruralTimelineCnisContributionPeriod) {
@@ -82,7 +85,9 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
         const months = this.calculateMonthsBetweenDates(startDate, endDate);
 
-        let type: CnisTimelinePeriodTypeEnum = CnisTimelinePeriodTypeEnum.RURAL;
+        let type: CnisTimelinePeriodTypeEnum = this.isRuralCategory(period.category)
+          ? CnisTimelinePeriodTypeEnum.RURAL
+          : CnisTimelinePeriodTypeEnum.URBAN;
         let description: string | null = null;
 
         if (
@@ -92,6 +97,8 @@ export class GetRuralTimelineCnisAnalysisUseCase {
           type = CnisTimelinePeriodTypeEnum.PENDING;
           totalPendingMonths += months;
           description = 'Período pendente de validação';
+        } else if (type === CnisTimelinePeriodTypeEnum.URBAN) {
+          totalUrbanMonths += months;
         } else {
           totalRuralMonths += months;
         }
@@ -224,8 +231,11 @@ export class GetRuralTimelineCnisAnalysisUseCase {
       ),
       ruralMonths:
         totalRuralMonths % GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
-      urbanYears: 0,
-      urbanMonths: 0,
+      urbanYears: Math.floor(
+        totalUrbanMonths / GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
+      ),
+      urbanMonths:
+        totalUrbanMonths % GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
       overlapMonths: totalOverlapMonths,
       pendingYears: Math.floor(
         totalPendingMonths / GetRuralTimelineCnisAnalysisUseCase.MONTHS_IN_YEAR,
@@ -410,6 +420,14 @@ export class GetRuralTimelineCnisAnalysisUseCase {
 
   private minDate(date1: Date, date2: Date): Date {
     return date1 < date2 ? date1 : date2;
+  }
+
+  private isRuralCategory(category?: string | null): boolean {
+    if (!category) return true;
+    const lower = category.toLowerCase().trim();
+    return GetRuralTimelineCnisAnalysisUseCase.RURAL_CATEGORIES.some((pattern) =>
+      lower.includes(pattern),
+    );
   }
 
   private addDays(date: Date, days: number): Date {
