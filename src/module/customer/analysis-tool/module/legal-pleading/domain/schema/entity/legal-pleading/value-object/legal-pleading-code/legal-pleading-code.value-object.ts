@@ -2,6 +2,8 @@ import { BaseValueObject } from '@core/domain/schema/value-object/base/base.valu
 import { InvalidLegalPleadingCodeError } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/error/invalid-legal-pleading-code.error';
 
 export class LegalPleadingCode extends BaseValueObject<LegalPleadingCode> {
+  public static readonly prefix = 'AJ';
+
   protected readonly _type = LegalPleadingCode.name;
 
   public constructor(value: number | string) {
@@ -25,7 +27,7 @@ export class LegalPleadingCode extends BaseValueObject<LegalPleadingCode> {
   private static generate(value: number): string {
     const padStart = 3;
     const numericPart = String(value).padStart(padStart, '0');
-    return `AJ${numericPart}`;
+    return `${LegalPleadingCode.prefix}${numericPart}`;
   }
 
   private static isValidString(code: string): boolean {
@@ -46,5 +48,9 @@ export class LegalPleadingCode extends BaseValueObject<LegalPleadingCode> {
 
   public toString(): string {
     return this.value;
+  }
+
+  public toNumber(): number {
+    return parseInt(this.value.replace(LegalPleadingCode.prefix, ''), 10);
   }
 }

@@ -20,6 +20,7 @@ import {
   LegalPleadingStatisticsQueryResult,
 } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics.query.result';
 import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
@@ -288,24 +289,22 @@ export class LegalPleadingTypeormQueryRepository
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
   ): Promise<number> {
-    const result = await this.repository
-      .createQueryBuilder('record')
-      .select('MAX(CAST(SUBSTRING(record.code, 3) AS INTEGER))', 'maxCode')
-      .leftJoin('record.createdBy', 'createdBy')
-      .leftJoin('createdBy.organization', 'organization')
-      .leftJoin('createdBy.customer', 'customer')
-      .leftJoin('customer.authIdentity', 'authIdentity')
-      .where('organization.id = :organizationId', {
-        organizationId: organizationId.toString(),
-      })
-      .andWhere('authIdentity.id = :authIdentityId', {
-        authIdentityId: authIdentityId.toString(),
-      })
-      .getRawOne<{ maxCode: string | null }>();
+    const record = await this.repository.findOne({
+      select: { code: true },
+      where: {
+        createdBy: {
+          organization: { id: organizationId.toString() },
+          customer: { authIdentity: { id: authIdentityId.toString() } },
+        },
+      },
+      order: { createdAt: 'DESC' },
+    });
 
-    return result?.maxCode !== null && result?.maxCode !== undefined
-      ? parseInt(result.maxCode, 10)
-      : 0;
+    if (record === null) {
+      return 0;
+    }
+
+    return new LegalPleadingCode(record.code).toNumber();
   }
 
   public async countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(
