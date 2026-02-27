@@ -33,6 +33,7 @@ export class InsuranceQualityAnalysisResultEntityAutoMapperProfile {
             ? new FederalDocument(source.clientFederalDocument)
             : null,
         clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         insuranceQualityConclusion: source.insuranceQualityConclusion,
         gracePeriodConclusion: source.gracePeriodConclusion,
         finalRecommendation: source.finalRecommendation,
@@ -64,6 +65,7 @@ export class InsuranceQualityAnalysisResultEntityAutoMapperProfile {
           ? source.clientFederalDocument.toString()
           : null,
         clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         insuranceQualityConclusion: source.insuranceQualityConclusion,
         gracePeriodConclusion: source.gracePeriodConclusion,
         finalRecommendation: source.finalRecommendation,

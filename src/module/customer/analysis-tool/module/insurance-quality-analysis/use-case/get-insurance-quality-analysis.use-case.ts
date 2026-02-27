@@ -69,6 +69,8 @@ export class GetInsuranceQualityAnalysisUseCase {
           clientName: analysisResult.clientName ?? null,
           clientFederalDocument: analysisResult.clientFederalDocument ?? null,
           clientBirthDate: analysisResult.clientBirthDate ?? null,
+          clientLastAffiliationDate:
+            analysisResult.clientLastAffiliationDate ?? null,
           insuranceQualityConclusion:
             analysisResult.insuranceQualityConclusion ?? null,
           gracePeriodConclusion: analysisResult.gracePeriodConclusion ?? null,
