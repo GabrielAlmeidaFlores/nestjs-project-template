@@ -539,7 +539,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      id: new PaymentPlanPaidResourceId('e8f9a0b1-c2d3-4e5f-ba5b-8c9d0e1f2a3b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
       creditCost: 8,
@@ -548,7 +548,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa de planejamento de aposentadoria por invalidez com geração de parecer técnico previdenciário por IA. Avalia os períodos de contribuição, benefícios INSS, remunerações, afastamentos por incapacidade, atividades especiais e documentos probatórios, calculando o direito à aposentadoria por invalidez e gerando fundamentação técnica detalhada com estratégia de concessão.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-8901-bcde-f12345678901'),
+      id: new PaymentPlanPaidResourceId('e8f9a0b1-c2d3-4e5f-ba6b-8c9d0e1f2a3b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
       creditCost: 4,
