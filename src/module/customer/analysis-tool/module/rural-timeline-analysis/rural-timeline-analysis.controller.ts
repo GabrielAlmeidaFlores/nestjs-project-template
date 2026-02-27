@@ -16,7 +16,7 @@ import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId } from '@modu
 import { RuralTimelineAnalysisDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/value-object/rural-timeline-analysis-document-id/rural-timeline-analysis-document-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/value-object/rural-timeline-analysis-period-document-id/rural-timeline-analysis-period-document-id.value-object';
-import { RuralTimelineAnalysisPeriodEconomicAspectsId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/value-object/rural-timeline-analysis-period-economic-aspects-id/rural-timeline-analysis-period-economic-aspects-id.value-object';
+import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import { RuralTimelineAnalysisPeriodFamilyGroupMemberId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/value-object/rural-timeline-analysis-period-family-group-member-id/rural-timeline-analysis-period-family-group-member-id.value-object';
 import { RuralTimelineAnalysisPeriodPropertyId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/value-object/rural-timeline-analysis-period-property-id/rural-timeline-analysis-period-property-id.value-object';
 import { RuralTimelineAnalysisPeriodResidenceId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/value-object/rural-timeline-analysis-period-residence-id/rural-timeline-analysis-period-residence-id.value-object';
@@ -1436,7 +1436,7 @@ export class RuralTimelineAnalysisController {
     summary: 'Atualizar aspectos econômicos de um período rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects/:economicAspectsId',
+      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects/:type',
       method: RequestMethod.PATCH,
       type: UpdateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,
     },
@@ -1461,10 +1461,10 @@ export class RuralTimelineAnalysisController {
     @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
     periodId: RuralTimelineAnalysisPeriodId,
     @Param(
-      'economicAspectsId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodEconomicAspectsId),
+      'type',
+      new ParseEnumPipe(RuralTimelineAnalysisPeriodEconomicAspectTypeEnum),
     )
-    economicAspectsId: RuralTimelineAnalysisPeriodEconomicAspectsId,
+    type: RuralTimelineAnalysisPeriodEconomicAspectTypeEnum,
     @Body() dto: UpdateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,
   ): Promise<UpdateRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
     return await this.updateRuralTimelineAnalysisPeriodEconomicAspectsUseCase.execute(
@@ -1472,7 +1472,7 @@ export class RuralTimelineAnalysisController {
       organizationSessionData,
       ruralTimelineAnalysisId,
       periodId,
-      economicAspectsId,
+      type,
       dto,
     );
   }
@@ -1481,7 +1481,7 @@ export class RuralTimelineAnalysisController {
     summary: 'Deletar aspecto econômico de período de linha do tempo rural',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects/:economicAspectsId',
+      path: ':ruralTimelineAnalysisId/period/:periodId/economic-aspects/:type',
       method: RequestMethod.DELETE,
     },
     tag: ['analise-linha-tempo-rural'],
@@ -1504,17 +1504,17 @@ export class RuralTimelineAnalysisController {
     @Param('periodId', new ParseValueObjectPipe(RuralTimelineAnalysisPeriodId))
     periodId: RuralTimelineAnalysisPeriodId,
     @Param(
-      'economicAspectsId',
-      new ParseValueObjectPipe(RuralTimelineAnalysisPeriodEconomicAspectsId),
+      'type',
+      new ParseEnumPipe(RuralTimelineAnalysisPeriodEconomicAspectTypeEnum),
     )
-    economicAspectsId: RuralTimelineAnalysisPeriodEconomicAspectsId,
+    type: RuralTimelineAnalysisPeriodEconomicAspectTypeEnum,
   ): Promise<DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
     return await this.deleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase.execute(
       sessionData,
       organizationSessionData,
       ruralTimelineAnalysisId,
       periodId,
-      economicAspectsId,
+      type,
     );
   }
 
