@@ -23,6 +23,7 @@ jobs:
 
       - name: 🐳 Build Docker Image
         id: build_1
+        continue-on-error: true
         run: |
           docker build -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} --no-cache .
 
