@@ -9,9 +9,9 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsQueryRepositoryGateway } from
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
 import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
-import { RuralTimelineAnalysisPeriodEconomicAspectsId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/value-object/rural-timeline-analysis-period-economic-aspects-id/rural-timeline-analysis-period-economic-aspects-id.value-object';
 import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-economic-aspects.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
+import { RuralTimelineAnalysisPeriodEconomicAspectsNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-period-economic-aspects-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -64,18 +64,7 @@ export class DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase {
       );
 
     if (existingEconomicAspects === null) {
-      return DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto.build({
-        ruralTimelineAnalysisPeriodEconomicAspectsId: new RuralTimelineAnalysisPeriodEconomicAspectsId(),
-      });
-    }
-
-    if (
-      existingEconomicAspects.ruralTimelinePeriodId.toString() !==
-      periodId.toString()
-    ) {
-      return DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto.build({
-        ruralTimelineAnalysisPeriodEconomicAspectsId: existingEconomicAspects.id,
-      });
+      throw new RuralTimelineAnalysisPeriodEconomicAspectsNotFoundError();
     }
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([

@@ -81,7 +81,11 @@ export class UpdateRuralTimelineAnalysisPeriodEconomicAspectsUseCase {
       );
 
     return existingEconomicAspects === null
-      ? await this.createRuralTimelineAnalysisPeriodEconomicAspects(period, dto)
+      ? await this.createRuralTimelineAnalysisPeriodEconomicAspects(
+          period,
+          type,
+          dto,
+        )
       : await this.updateRuralTimelineAnalysisPeriodEconomicAspects(
           periodId,
           existingEconomicAspects,
@@ -91,11 +95,12 @@ export class UpdateRuralTimelineAnalysisPeriodEconomicAspectsUseCase {
 
   private async createRuralTimelineAnalysisPeriodEconomicAspects(
     period: RuralTimelineAnalysisPeriodEntity,
+    type: RuralTimelineAnalysisPeriodEconomicAspectTypeEnum,
     dto: UpdateRuralTimelineAnalysisPeriodEconomicAspectsRequestDto,
   ): Promise<UpdateRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
     const economicAspectsEntity =
       new RuralTimelineAnalysisPeriodEconomicAspectsEntity({
-        type: dto.type as RuralTimelineAnalysisPeriodEconomicAspectTypeEnum,
+        type: type,
         content: dto.content ?? null,
         ruralTimelinePeriodId: period.id,
       });
