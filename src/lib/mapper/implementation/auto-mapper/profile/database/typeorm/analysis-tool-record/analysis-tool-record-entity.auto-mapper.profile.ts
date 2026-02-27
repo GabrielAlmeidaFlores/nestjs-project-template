@@ -8,6 +8,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
 import { JudicialCaseAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis.typeorm.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/medical-and-social-report-objection-generator-analysis.entity';
@@ -29,6 +30,7 @@ import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/anal
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
@@ -188,6 +190,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanning =
+        source.disabilityRetirementPlanning !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanning,
+              DisabilityRetirementPlanningTypeormEntity,
+              DisabilityRetirementPlanningEntity,
+            )
+          : null;
+
       return new AnalysisToolRecordEntity({
         ...source,
         id: new AnalysisToolRecordId(source.id),
@@ -209,6 +220,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
       });
     };
 
@@ -350,6 +362,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanning =
+        source.disabilityRetirementPlanning !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanning,
+              DisabilityRetirementPlanningEntity,
+              DisabilityRetirementPlanningTypeormEntity,
+            )
+          : null;
+
       const createdBy = {
         id: source.createdBy.toString(),
       } as OrganizationMemberTypeormEntity;
@@ -376,6 +397,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
         analysisToolClient,
         createdBy,
         updatedBy,

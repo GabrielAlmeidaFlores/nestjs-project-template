@@ -21,6 +21,7 @@ import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/spe
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
+import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
@@ -104,6 +105,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly insuranceQualityAnalysis: InsuranceQualityAnalysisEntity | null;
 
   @Description(
+    'Planejamento de aposentadoria por invalidez associado ao registro da ferramenta de análise',
+  )
+  public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -143,6 +149,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.perCapitaIncomeForBpcAnalysis ?? null;
     this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
+    this.disabilityRetirementPlanning =
+      props.disabilityRetirementPlanning ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

@@ -1,0 +1,6 @@
+export enum FederativeEntityEnum {
+  STATE = 'STATE',
+  MUNICIPALITY = 'MUNICIPALITY',
+  UNION = 'UNION',
+  FEDERAL_DISTRICT = 'FEDERAL_DISTRICT',
+}

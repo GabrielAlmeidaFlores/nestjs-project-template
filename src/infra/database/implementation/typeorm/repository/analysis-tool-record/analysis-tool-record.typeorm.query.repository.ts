@@ -34,6 +34,7 @@ import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis
 import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
+import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
 import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
@@ -102,6 +103,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
         { medicalQuestionGenerator: Not(IsNull()) },
+        { disabilityRetirementPlanning: Not(IsNull()) },
       ];
 
     const withUpdatedBy = {
@@ -1486,6 +1488,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
+        { disabilityRetirementPlanning: Not(IsNull()) },
       ];
 
     for (const relationalClause of atLeastOneRelationNotNull) {
@@ -1638,6 +1641,65 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
   }
 
+  public async findWithRelationsByDisabilityRetirementPlanningIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    disabilityRetirementPlanningId: DisabilityRetirementPlanningId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          disabilityRetirementPlanning: {
+            id: disabilityRetirementPlanningId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          disabilityRetirementPlanning: true,
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
@@ -1690,6 +1752,7 @@ export class AnalysisToolRecordTypeormQueryRepository
       'perCapitaIncomeForBpcAnalysis',
       'insuranceQualityAnalysis',
       'audienceQuestionGenerator',
+      'disabilityRetirementPlanning',
     ];
   }
 }

@@ -538,6 +538,25 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
+      creditCost: 8,
+      title: 'PLANEJAMENTO DE APOSENTADORIA POR INVALIDEZ - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de planejamento de aposentadoria por invalidez com geração de parecer técnico previdenciário por IA. Avalia os períodos de contribuição, benefícios INSS, remunerações, afastamentos por incapacidade, atividades especiais e documentos probatórios, calculando o direito à aposentadoria por invalidez e gerando fundamentação técnica detalhada com estratégia de concessão.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-8901-bcde-f12345678901'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_SIMPLIFIED_ANALYSIS,
+      creditCost: 4,
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA POR INVALIDEZ - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de planejamento de aposentadoria por invalidez com geração de parecer técnico previdenciário por IA. Avalia os principais elementos do processo como períodos de contribuição, benefícios INSS e afastamentos por incapacidade, gerando uma análise objetiva do direito à aposentadoria por invalidez com os próximos passos recomendados.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

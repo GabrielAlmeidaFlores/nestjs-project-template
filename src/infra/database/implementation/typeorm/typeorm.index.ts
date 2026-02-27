@@ -43,6 +43,19 @@ import { DisabilityAssessmentForBpcAnalysisBenefitTypeormCommandRepository } fro
 import { DisabilityAssessmentForBpcAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-document/disability-assessment-for-bpc-analysis-document.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-legal-proceeding/disability-assessment-for-bpc-analysis-legal-proceeding.typeorm.command.repository';
 import { DisabilityAssessmentForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result.typeorm.command.repository';
+import { DisabilityRetirementPlanningTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning/disability-retirement-planning.typeorm.command.repository';
+import { DisabilityRetirementPlanningTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning/disability-retirement-planning.typeorm.query.repository';
+import { DisabilityRetirementPlanningDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-document/disability-retirement-planning-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-inss-benefit/disability-retirement-planning-inss-benefit.typeorm.command.repository';
+import { DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-legal-proceeding/disability-retirement-planning-legal-proceeding.typeorm.command.repository';
+import { DisabilityRetirementPlanningPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period/disability-retirement-planning-period.typeorm.command.repository';
+import { DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-disability/disability-retirement-planning-period-disability.typeorm.command.repository';
+import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-disability-document/disability-retirement-planning-period-disability-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.typeorm.command.repository';
+import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-period-special-time-document/disability-retirement-planning-period-special-time-document.typeorm.command.repository';
+import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.command.repository';
+import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
+import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
 import { InsuranceQualityAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.query.repository';
 import { InsuranceQualityAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis-document/insurance-quality-analysis-document.typeorm.command.repository';
@@ -169,6 +182,17 @@ import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
 import { DisabilityAssessmentForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-result.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-document.typeorm.entity';
+import { DisabilityRetirementPlanningInssBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-inss-benefit.typeorm.entity';
+import { DisabilityRetirementPlanningLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-legal-proceeding.typeorm.entity';
+import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability-document.typeorm.entity';
+import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability.typeorm.entity';
+import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
+import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
+import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
+import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
+import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
+import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { FullOpinionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/full-opinion-generator.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
 import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
@@ -396,6 +420,17 @@ export class TypeormIndex {
     PerCapitaIncomeForBpcAnalysisLegalProceedingTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberTypeormEntity,
     PerCapitaIncomeForBpcAnalysisFamilyMemberDocumentTypeormEntity,
+    DisabilityRetirementPlanningTypeormEntity,
+    DisabilityRetirementPlanningRemunerationTypeormEntity,
+    DisabilityRetirementPlanningResultTypeormEntity,
+    DisabilityRetirementPlanningPeriodTypeormEntity,
+    DisabilityRetirementPlanningPeriodDisabilityTypeormEntity,
+    DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity,
+    DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity,
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity,
+    DisabilityRetirementPlanningInssBenefitTypeormEntity,
+    DisabilityRetirementPlanningLegalProceedingTypeormEntity,
+    DisabilityRetirementPlanningDocumentTypeormEntity,
   ];
 
   public static readonly repositories: Provider[] = [
@@ -537,6 +572,19 @@ export class TypeormIndex {
     MedicalQuestionGeneratorInssBenefitTypeormCommandRepository,
     MedicalQuestionGeneratorLegalProceedingTypeormCommandRepository,
     MedicalQuestionGeneratorResultTypeormCommandRepository,
+    DisabilityRetirementPlanningTypeormQueryRepository,
+    DisabilityRetirementPlanningTypeormCommandRepository,
+    DisabilityRetirementPlanningRemunerationTypeormQueryRepository,
+    DisabilityRetirementPlanningRemunerationTypeormCommandRepository,
+    DisabilityRetirementPlanningResultTypeormCommandRepository,
+    DisabilityRetirementPlanningPeriodTypeormCommandRepository,
+    DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepository,
+    DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningPeriodSpecialTimeTypeormCommandRepository,
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepository,
+    DisabilityRetirementPlanningInssBenefitTypeormCommandRepository,
+    DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository,
+    DisabilityRetirementPlanningDocumentTypeormCommandRepository,
   ];
 
   public static readonly dynamicModule = TypeOrmModule.forFeature(
