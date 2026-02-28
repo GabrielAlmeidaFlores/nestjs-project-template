@@ -113,13 +113,7 @@ export class ListAnalysisToolRecordUseCase {
           });
         }),
       )
-    )
-      .filter((item): item is GetAnalysisToolRecordResponseDto => item !== null)
-      .sort((a, b) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      });
+    ).filter((item): item is GetAnalysisToolRecordResponseDto => item !== null);
 
     return ListAnalysisToolRecordResponseDto.build({
       ...analysisToolRecordList,
