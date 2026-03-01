@@ -18,6 +18,11 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
 
+  private readonly FALLBACK_MODELS: Record<string, string> = {
+    'gemini-3-pro-preview': 'gemini-3-flash-preview',
+    'gemini-3-flash-preview': 'gemini-2.0-flash',
+  };
+
   protected readonly _type = GeminiService.name;
 
   private readonly googleGenerativeAI: GoogleGenAI;
@@ -89,6 +94,7 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
     model: string,
     maxOutputTokens: number,
+    isRetry = false,
   ): Promise<string | null> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
@@ -200,18 +206,18 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
-    if (
-      props.tools !== undefined &&
-      props.toolHandlers !== undefined &&
-      props.tools.length > 0
-    ) {
-      return await this.generateWithFunctionCalling(
-        contentConfig,
-        props.toolHandlers,
-      );
-    }
-
     try {
+      if (
+        props.tools !== undefined &&
+        props.toolHandlers !== undefined &&
+        props.tools.length > 0
+      ) {
+        return await this.generateWithFunctionCalling(
+          contentConfig,
+          props.toolHandlers,
+        );
+      }
+
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
@@ -238,6 +244,22 @@ export class GeminiService implements GenerativeIaGateway {
           error.message.includes('limit')
         ) {
           throw new GenerativeIaQuotaExceededError();
+        }
+
+        if (
+          error.message.includes('UNAVAILABLE') ||
+          error.message.includes('503')
+        ) {
+          const fallbackModel = this.FALLBACK_MODELS[model];
+
+          if (fallbackModel !== undefined && !isRetry) {
+            return await this.generateResponseFromPromptAndFiles(
+              props,
+              fallbackModel,
+              maxOutputTokens,
+              true,
+            );
+          }
         }
       }
 
