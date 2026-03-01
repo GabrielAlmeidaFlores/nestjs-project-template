@@ -24,6 +24,8 @@ export class ListPaymentPlanPaidResourcesUseCase {
       ...listData,
       resource: listData.resources ?? null,
       searchBy: listData.search ?? null,
+      search: null,
+      field: null,
     });
 
     const paidResources =
