@@ -89,7 +89,6 @@ export abstract class BaseTypeormQueryRepository<T extends BaseTypeormEntity> {
       relations: resolvedRelations,
       select: resolvedSelect,
       where: resolvedWhere,
-      relationLoadStrategy: 'query',
     };
 
     const [data, count] =
