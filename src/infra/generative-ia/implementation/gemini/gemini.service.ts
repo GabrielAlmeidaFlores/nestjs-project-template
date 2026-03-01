@@ -23,17 +23,19 @@ export class GeminiService implements GenerativeIaGateway {
     'gemini-3-flash-preview': 'gemini-2.0-flash',
   };
 
-  private readonly MARKDOWN_REPORT_RULE = `
+  private readonly GENERATIVE_IA_RULES = [
+    `
 Role: Act as a Technical Documentation Specialist.
 Task: Generate all responses exclusively in Standard Semantic Markdown optimized for direct HTML parsing.
 Formatting Rules:
 1. Strict Hierarchy: Use Markdown headers (#, ##, ###) to define the report structure. Never skip levels.
 2. Data Presentation: Use Markdown Tables (| column |) for all structured data. Do not use spaces, dashes, or tabs to visually simulate tables.
 3. Lists: Use standard bullet points (-) or numbered lists (1.) for sequential items.
-4. No ASCII Art/Visual Drawings: Do not use characters (pipes, slashes, dashes) to draw diagrams, borders, or flowcharts.
+4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
 5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
 6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
-`;
+`,
+  ];
 
   protected readonly _type = GeminiService.name;
 
@@ -119,7 +121,9 @@ Formatting Rules:
       systemInstructionParts.push({ text: props.systemInstruction });
     }
 
-    systemInstructionParts.push({ text: this.MARKDOWN_REPORT_RULE });
+    this.GENERATIVE_IA_RULES.forEach((rule) => {
+      systemInstructionParts.push({ text: rule });
+    });
 
     if (props.promptFiles !== undefined) {
       const fileParts = await this.buildPartWithFileContent(props.promptFiles);
