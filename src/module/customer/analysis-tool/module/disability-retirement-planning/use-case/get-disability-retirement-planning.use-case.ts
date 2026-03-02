@@ -115,6 +115,7 @@ export class GetDisabilityRetirementPlanningUseCase {
               {
                 disabilityType: disability.disabilityType,
                 disabilityDegree: disability.disabilityDegree,
+                disabilityCategory: disability.disabilityCategory,
                 startDate: disability.startDate,
                 ...(disability.endDate !== null && {
                   endDate: disability.endDate,

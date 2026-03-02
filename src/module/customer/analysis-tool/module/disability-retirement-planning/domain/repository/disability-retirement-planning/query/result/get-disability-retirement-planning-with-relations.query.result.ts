@@ -5,6 +5,7 @@ import { FederativeEntityEnum } from '@module/customer/analysis-tool/module/disa
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-document/enum/disability-retirement-planning-document-type.enum';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
+import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
@@ -29,6 +30,7 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityQueryResult extends 
   public readonly startDate: Date;
   public readonly endDate: Date | null;
   public readonly disabilityDegree: RetirementPlanningDisabilityDegreeEnum;
+  public readonly disabilityCategory: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum;
   public readonly cidTenId: string | null;
   public readonly disabilityType: RetirementPlanningDisabilityTimeTypeEnum;
   public readonly disabilityDescription: string;

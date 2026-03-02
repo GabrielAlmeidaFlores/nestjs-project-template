@@ -5,6 +5,6 @@ export class DisabilityRetirementPlanningNotFoundError extends NotFoundError {
     DisabilityRetirementPlanningNotFoundError.name;
 
   public constructor() {
-    super('Planejamento de aposentadoria por invalidez não encontrado');
+    super('Planejamento de aposentadoria da pessoa com deficiência não encontrado');
   }
 }

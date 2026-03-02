@@ -9,7 +9,6 @@ import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
 import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
-import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import {
   GetDisabilityRetirementPlanningDocumentQueryResult,
   GetDisabilityRetirementPlanningInssBenefitQueryResult,
@@ -39,20 +38,6 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
     const convertOrmEntityToDomainEntity = (
       source: DisabilityRetirementPlanningTypeormEntity,
     ): GetDisabilityRetirementPlanningWithRelationsQueryResult => {
-      if (
-        !source.disabilityRetirementPlanningPeriod ||
-        !source.disabilityRetirementPlanningDocument ||
-        !source.disabilityRetirementPlanningInssBenefit ||
-        !source.disabilityRetirementPlanningLegalProceeding ||
-        !source.disabilityRetirementPlanningRemuneration
-      ) {
-        throw new IncompleteSourceDataForMappingError({
-          destinationClass:
-            GetDisabilityRetirementPlanningWithRelationsQueryResult.name,
-          sourceClass: DisabilityRetirementPlanningTypeormEntity.name,
-        });
-      }
-
       const result = source.disabilityRetirementPlanningResult
         ? this.mapper.map(
             source.disabilityRetirementPlanningResult,
@@ -61,35 +46,45 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
           )
         : null;
 
-      const periods = this.mapper.mapArray(
-        source.disabilityRetirementPlanningPeriod,
-        DisabilityRetirementPlanningPeriodTypeormEntity,
-        GetDisabilityRetirementPlanningPeriodQueryResult,
-      );
+      const periods = source.disabilityRetirementPlanningPeriod
+        ? this.mapper.mapArray(
+            source.disabilityRetirementPlanningPeriod,
+            DisabilityRetirementPlanningPeriodTypeormEntity,
+            GetDisabilityRetirementPlanningPeriodQueryResult,
+          )
+        : [];
 
-      const documents = this.mapper.mapArray(
-        source.disabilityRetirementPlanningDocument,
-        DisabilityRetirementPlanningDocumentTypeormEntity,
-        GetDisabilityRetirementPlanningDocumentQueryResult,
-      );
+      const documents = source.disabilityRetirementPlanningDocument
+        ? this.mapper.mapArray(
+            source.disabilityRetirementPlanningDocument,
+            DisabilityRetirementPlanningDocumentTypeormEntity,
+            GetDisabilityRetirementPlanningDocumentQueryResult,
+          )
+        : [];
 
-      const inssBenefits = this.mapper.mapArray(
-        source.disabilityRetirementPlanningInssBenefit,
-        DisabilityRetirementPlanningInssBenefitTypeormEntity,
-        GetDisabilityRetirementPlanningInssBenefitQueryResult,
-      );
+      const inssBenefits = source.disabilityRetirementPlanningInssBenefit
+        ? this.mapper.mapArray(
+            source.disabilityRetirementPlanningInssBenefit,
+            DisabilityRetirementPlanningInssBenefitTypeormEntity,
+            GetDisabilityRetirementPlanningInssBenefitQueryResult,
+          )
+        : [];
 
-      const legalProceedings = this.mapper.mapArray(
-        source.disabilityRetirementPlanningLegalProceeding,
-        DisabilityRetirementPlanningLegalProceedingTypeormEntity,
-        GetDisabilityRetirementPlanningLegalProceedingQueryResult,
-      );
+      const legalProceedings = source.disabilityRetirementPlanningLegalProceeding
+        ? this.mapper.mapArray(
+            source.disabilityRetirementPlanningLegalProceeding,
+            DisabilityRetirementPlanningLegalProceedingTypeormEntity,
+            GetDisabilityRetirementPlanningLegalProceedingQueryResult,
+          )
+        : [];
 
-      const remunerations = this.mapper.mapArray(
-        source.disabilityRetirementPlanningRemuneration,
-        DisabilityRetirementPlanningRemunerationTypeormEntity,
-        GetDisabilityRetirementPlanningRemunerationQueryResult,
-      );
+      const remunerations = source.disabilityRetirementPlanningRemuneration
+        ? this.mapper.mapArray(
+            source.disabilityRetirementPlanningRemuneration,
+            DisabilityRetirementPlanningRemunerationTypeormEntity,
+            GetDisabilityRetirementPlanningRemunerationQueryResult,
+          )
+        : [];
 
       return GetDisabilityRetirementPlanningWithRelationsQueryResult.build({
         id: new DisabilityRetirementPlanningId(source.id),

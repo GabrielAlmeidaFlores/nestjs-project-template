@@ -2,11 +2,13 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { CreateDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning-remuneration.request.dto';
+import { CreateDisabilityRetirementPlanningPeriodsRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning-periods.request.dto';
 import { CreateDisabilityRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning.request.dto';
 import { ListDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/list-disability-retirement-planning-remuneration.request.dto';
 import { UpdateDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/update-disability-retirement-planning-remuneration.request.dto';
 import { UpdateDisabilityRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/update-disability-retirement-planning.request.dto';
 import { CreateDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-remuneration.response.dto';
+import { CreateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-periods.response.dto';
 import { CreateDisabilityRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-result.response.dto';
 import { CreateDisabilityRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning.response.dto';
 import { DeleteDisabilityRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/delete-disability-retirement-planning.response.dto';
@@ -16,12 +18,15 @@ import { ListDisabilityRetirementPlanningRemunerationResponseDto } from '@module
 import { UpdateDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-remuneration.response.dto';
 import { UpdateDisabilityRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning.response.dto';
 import { CreateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-remuneration.use-case';
+import { CreateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-period.use-case';
 import { CreateDisabilityRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-result.use-case';
 import { CreateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning.use-case';
 import { DeleteDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/delete-disability-retirement-planning.use-case';
 import { GetDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/get-disability-retirement-planning.use-case';
 import { ListDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/list-disability-retirement-planning-remuneration.use-case';
 import { UpdateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-remuneration.use-case';
+import { UpdateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-period.use-case';
+import { UpdateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-periods.response.dto';
 import { UpdateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -40,6 +45,8 @@ export class DisabilityRetirementPlanningController {
 
   public constructor(
     private readonly createDisabilityRetirementPlanningUseCase: CreateDisabilityRetirementPlanningUseCase,
+    private readonly createDisabilityRetirementPlanningPeriodUseCase: CreateDisabilityRetirementPlanningPeriodUseCase,
+    private readonly updateDisabilityRetirementPlanningPeriodUseCase: UpdateDisabilityRetirementPlanningPeriodUseCase,
     private readonly createDisabilityRetirementPlanningRemunerationUseCase: CreateDisabilityRetirementPlanningRemunerationUseCase,
     private readonly updateDisabilityRetirementPlanningRemunerationUseCase: UpdateDisabilityRetirementPlanningRemunerationUseCase,
     private readonly getDisabilityRetirementPlanningUseCase: GetDisabilityRetirementPlanningUseCase,
@@ -50,17 +57,17 @@ export class DisabilityRetirementPlanningController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Criar planejamento de aposentadoria por invalidez',
+    summary: 'Criar planejamento de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: '',
       method: RequestMethod.POST,
       type: CreateDisabilityRetirementPlanningRequestDto,
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description: 'Planejamento de aposentadoria por invalidez criado com sucesso.',
+      description: 'Planejamento de aposentadoria da pessoa com deficiência criado com sucesso.',
       type: CreateDisabilityRetirementPlanningResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -79,14 +86,84 @@ export class DisabilityRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Criar remunerações do planejamento de aposentadoria por invalidez',
+    summary: 'Criar períodos do planejamento de aposentadoria da pessoa com deficiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':disabilityRetirementPlanningId/period',
+      method: RequestMethod.POST,
+      type: CreateDisabilityRetirementPlanningPeriodsRequestDto,
+    },
+    tag: ['planejamento-aposentadoria-pcd'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Períodos criados com sucesso.',
+      type: CreateDisabilityRetirementPlanningPeriodsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createDisabilityRetirementPlanningPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'disabilityRetirementPlanningId',
+      new ParseValueObjectPipe(DisabilityRetirementPlanningId),
+    )
+    disabilityRetirementPlanningId: DisabilityRetirementPlanningId,
+    @Body() dto: CreateDisabilityRetirementPlanningPeriodsRequestDto,
+  ): Promise<CreateDisabilityRetirementPlanningPeriodsResponseDto> {
+    return await this.createDisabilityRetirementPlanningPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      disabilityRetirementPlanningId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar períodos do planejamento de aposentadoria da pessoa com deficiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':disabilityRetirementPlanningId/period',
+      method: RequestMethod.PATCH,
+      type: CreateDisabilityRetirementPlanningPeriodsRequestDto,
+    },
+    tag: ['planejamento-aposentadoria-pcd'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Períodos atualizados com sucesso.',
+      type: UpdateDisabilityRetirementPlanningPeriodsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async updateDisabilityRetirementPlanningPeriod(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'disabilityRetirementPlanningId',
+      new ParseValueObjectPipe(DisabilityRetirementPlanningId),
+    )
+    disabilityRetirementPlanningId: DisabilityRetirementPlanningId,
+    @Body() dto: CreateDisabilityRetirementPlanningPeriodsRequestDto,
+  ): Promise<UpdateDisabilityRetirementPlanningPeriodsResponseDto> {
+    return await this.updateDisabilityRetirementPlanningPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      disabilityRetirementPlanningId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar remunerações do planejamento de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':disabilityRetirementPlanningId/remuneration',
       method: RequestMethod.POST,
       type: CreateDisabilityRetirementPlanningRemunerationRequestDto,
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
       description: 'Remunerações criadas com sucesso.',
@@ -114,14 +191,14 @@ export class DisabilityRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar remunerações do planejamento de aposentadoria por invalidez',
+    summary: 'Atualizar remunerações do planejamento de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':disabilityRetirementPlanningId/remuneration',
       method: RequestMethod.PATCH,
       type: UpdateDisabilityRetirementPlanningRemunerationRequestDto,
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     successResponse: {
       statusCode: HttpStatus.OK,
       description: 'Remunerações atualizadas com sucesso.',
@@ -149,16 +226,16 @@ export class DisabilityRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Obter planejamento de aposentadoria por invalidez por ID',
+    summary: 'Obter planejamento de aposentadoria da pessoa com deficiência por ID',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':disabilityRetirementPlanningId',
       method: RequestMethod.GET,
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Dados do planejamento de aposentadoria por invalidez retornados com sucesso.',
+      description: 'Dados do planejamento de aposentadoria da pessoa com deficiência retornados com sucesso.',
       type: GetDisabilityRetirementPlanningResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -181,16 +258,16 @@ export class DisabilityRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar remunerações do planejamento de aposentadoria por invalidez',
+    summary: 'Listar remunerações do planejamento de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       method: RequestMethod.GET,
       path: ':disabilityRetirementPlanningId/remuneration',
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Remunerações do planejamento de aposentadoria por invalidez listadas com sucesso.',
+      description: 'Remunerações do planejamento de aposentadoria da pessoa com deficiência listadas com sucesso.',
       type: ListDisabilityRetirementPlanningRemunerationResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -215,7 +292,7 @@ export class DisabilityRetirementPlanningController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar planejamento de aposentadoria por invalidez',
+    summary: 'Atualizar planejamento de aposentadoria da pessoa com deficiência',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       method: RequestMethod.PATCH,
@@ -224,10 +301,10 @@ export class DisabilityRetirementPlanningController {
     },
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Planejamento de aposentadoria por invalidez atualizado com sucesso.',
+      description: 'Planejamento de aposentadoria da pessoa com deficiência atualizado com sucesso.',
       type: UpdateDisabilityRetirementPlanningResponseDto,
     },
-    tag: ['planejamento-aposentadoria-por-invalidez'],
+    tag: ['planejamento-aposentadoria-pcd'],
     guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async updateDisabilityRetirementPlanning(
