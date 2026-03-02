@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { AdministrativeProcedureInssAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/administrative-procedure-inss-analysis-result.entity';
 import { GetAdministrativeProcedureInssAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/repository/administrative-procedure-inss-analysis-result/query/result/get-administrative-procedure-inss-analysis-result.query.result';
 import { AdministrativeProcedureInssAnalysisResultId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis-result/value-object/administrative-procedure-inss-analysis-result-id/administrative-procedure-inss-analysis-result-id.value-object';
@@ -27,6 +28,10 @@ export class GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperPr
       return GetAdministrativeProcedureInssAnalysisResultQueryResult.build({
         ...source,
         id: new AdministrativeProcedureInssAnalysisResultId(source.id),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
       });
     };
 
@@ -47,6 +52,10 @@ export class GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperPr
       return AdministrativeProcedureInssAnalysisResultTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? source.clientFederalDocument.toString()
+            : null,
       });
     };
 

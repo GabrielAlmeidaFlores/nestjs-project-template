@@ -16,6 +16,7 @@ import { GetInsuranceQualityAnalysisDocumentQueryResult } from '@module/customer
 import { InsuranceQualityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-result/command/insurance-quality-analysis-result.command.repository.gateway';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
+import { InsuranceQualityAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-document/enum/insurance-quality-analysis-document-type.enum';
 import { InsuranceQualityAnalysisResultEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis-result/insurance-quality-analysis-result.entity';
 import { CreateInsuranceQualityAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/response/create-insurance-quality-analysis-result.response.dto';
 import { InsuranceQualityAnalysisNotFoundError } from '@module/customer/analysis-tool/module/insurance-quality-analysis/error/insurance-quality-analysis-not-found.error';
@@ -102,8 +103,13 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
       throw new InsuranceQualityAnalysisResultAlreadyExistsError();
     }
 
-    const clientDataBuffer = Buffer.from(
-      JSON.stringify(analysisToolRecordQueryResult.analysisToolClient, null, 2),
+    const analysisData = {
+      data_analise: new Date().toISOString(),
+      client: analysisToolRecordQueryResult.analysisToolClient,
+    };
+
+    const analysisDataBuffer = Buffer.from(
+      JSON.stringify(analysisData, null, 2),
       'utf-8',
     );
 
@@ -111,14 +117,27 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
       insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument,
     );
 
+    const clientLastAffiliationDate =
+      await this.extractClientLastAffiliationDate(
+        insuranceQualityAnalysisQueryResult.insuranceQualityAnalysisDocument,
+      );
+
     const analysisSummary =
       await this.analysisProcessorGateway.getInsuranceQualityAnalysisCompleteAnalysis(
         promptResponse.prompt,
-        [clientDataBuffer, ...documentBuffers],
+        [analysisDataBuffer, ...documentBuffers],
       );
 
     const insuranceQualityAnalysisResult =
       new InsuranceQualityAnalysisResultEntity({
+        clientName:
+          analysisToolRecordQueryResult.analysisToolClient.name ?? null,
+        clientFederalDocument:
+          analysisToolRecordQueryResult.analysisToolClient.federalDocument ??
+          null,
+        clientBirthDate:
+          analysisToolRecordQueryResult.analysisToolClient.birthDate ?? null,
+        clientLastAffiliationDate,
         insuranceQualityConclusion: analysisSummary,
         gracePeriodConclusion: null,
         finalRecommendation: null,
@@ -148,6 +167,24 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
         insuranceQualityAnalysisQueryResult.analysisHasRuralActivity,
       analysisRuralActivityDetails:
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails,
+      analysisIsWorkAccidentOrSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisIsWorkAccidentOrSeriousIllness,
+      analysisIsSeriousIllnessArt151:
+        insuranceQualityAnalysisQueryResult.analysisIsSeriousIllnessArt151,
+      analysisSeriousIllnesses:
+        insuranceQualityAnalysisQueryResult.analysisSeriousIllnesses,
+      analysisOtherSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisOtherSeriousIllness,
+      analysisDiseaseStartDate:
+        insuranceQualityAnalysisQueryResult.analysisDiseaseStartDate,
+      analysisRuralStartDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralStartDate,
+      analysisRuralEndDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralEndDate,
+      analysisHadInvoluntaryUnemployment:
+        insuranceQualityAnalysisQueryResult.analysisHadInvoluntaryUnemployment,
+      analysisIntendsToProveByTestimony:
+        insuranceQualityAnalysisQueryResult.analysisIntendsToProveByTestimony,
       insuranceQualityAnalysisResult,
     });
 
@@ -197,6 +234,47 @@ export class CreateInsuranceQualityAnalysisResultUseCase {
     return CreateInsuranceQualityAnalysisResultResponseDto.build({
       insuranceQualityAnalysisResultId: insuranceQualityAnalysisResult.id,
     });
+  }
+
+  private async extractClientLastAffiliationDate(
+    documents: GetInsuranceQualityAnalysisDocumentQueryResult[],
+  ): Promise<Date | null> {
+    const cnisDocument = documents.find(
+      (doc) => doc.type === InsuranceQualityAnalysisDocumentTypeEnum.CNIS,
+    );
+
+    if (!cnisDocument) {
+      return null;
+    }
+
+    try {
+      const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
+        cnisDocument.document,
+      );
+      const cnisDocumentData =
+        await this.analysisProcessorGateway.parseCnisDocument(cnisBuffer);
+
+      return (
+        cnisDocumentData.socialSecurityRelations
+          ?.filter(
+            (relation) =>
+              relation.socialSecurityAffiliationInfo.dataFim !== undefined,
+          )
+          .reduce<Date | null>((latest, relation) => {
+            const dataFim =
+              relation.socialSecurityAffiliationInfo.dataFim ?? null;
+            if (dataFim === null) {
+              return latest;
+            }
+            if (latest === null) {
+              return dataFim;
+            }
+            return dataFim > latest ? dataFim : latest;
+          }, null) ?? null
+      );
+    } catch {
+      return null;
+    }
   }
 
   private async getAnalysisDocumentBuffers(

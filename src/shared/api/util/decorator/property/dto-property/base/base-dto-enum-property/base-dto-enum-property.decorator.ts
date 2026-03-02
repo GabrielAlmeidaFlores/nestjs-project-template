@@ -1,4 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
+import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsOptional } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
@@ -30,7 +31,10 @@ export function BaseDtoEnumProperty(
   }
 
   if (isArray) {
-    decorators.push(IsArray());
+    decorators.push(
+      Transform(({ value }) => (Array.isArray(value) ? value : value != null ? [value] : value)),
+      IsArray(),
+    );
   }
 
   return applyDecorators(...decorators);
