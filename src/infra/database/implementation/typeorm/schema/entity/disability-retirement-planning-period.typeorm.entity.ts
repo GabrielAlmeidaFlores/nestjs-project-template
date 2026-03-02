@@ -33,7 +33,11 @@ export class DisabilityRetirementPlanningPeriodTypeormEntity extends BaseTypeorm
   @Column({ name: 'career_name', type: 'varchar', length: 255 })
   public careerName: string;
 
-  @Column({ name: 'service_type', type: 'simple-enum', enum: RetirementPlanningPeriodServiceTypeEnum })
+  @Column({
+    name: 'service_type',
+    type: 'simple-enum',
+    enum: RetirementPlanningPeriodServiceTypeEnum,
+  })
   public serviceType: RetirementPlanningPeriodServiceTypeEnum;
 
   @Column({ name: 'department', type: 'varchar', length: 255 })

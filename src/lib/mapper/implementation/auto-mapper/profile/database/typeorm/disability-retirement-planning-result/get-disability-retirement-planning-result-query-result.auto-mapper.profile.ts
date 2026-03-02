@@ -8,7 +8,8 @@ import { GetDisabilityRetirementPlanningResultQueryResult } from '@module/custom
 
 @Injectable()
 export class GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile {
-  protected readonly _type = GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile.name;
+  protected readonly _type =
+    GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -25,9 +26,12 @@ export class GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile {
     ): GetDisabilityRetirementPlanningResultQueryResult => {
       return GetDisabilityRetirementPlanningResultQueryResult.build({
         id: source.id,
-        disabilityRetirementPlanningCompleteAnalysis: source.disabilityRetirementPlanningCompleteAnalysis,
-        disabilityRetirementPlanningSimplifiedAnalysis: source.disabilityRetirementPlanningSimplifiedAnalysis,
-        disabilityRetirementPlanningCompleteAnalysisDownload: source.disabilityRetirementPlanningCompleteAnalysisDownload,
+        disabilityRetirementPlanningCompleteAnalysis:
+          source.disabilityRetirementPlanningCompleteAnalysis,
+        disabilityRetirementPlanningSimplifiedAnalysis:
+          source.disabilityRetirementPlanningSimplifiedAnalysis,
+        disabilityRetirementPlanningCompleteAnalysisDownload:
+          source.disabilityRetirementPlanningCompleteAnalysisDownload,
       });
     };
 
@@ -45,10 +49,15 @@ export class GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile {
     ): DisabilityRetirementPlanningResultTypeormEntity => {
       return DisabilityRetirementPlanningResultTypeormEntity.build({
         id: source.id,
-        disabilityRetirementPlanning: { id: '' } as DisabilityRetirementPlanningTypeormEntity,
-        disabilityRetirementPlanningCompleteAnalysis: source.disabilityRetirementPlanningCompleteAnalysis,
-        disabilityRetirementPlanningSimplifiedAnalysis: source.disabilityRetirementPlanningSimplifiedAnalysis,
-        disabilityRetirementPlanningCompleteAnalysisDownload: source.disabilityRetirementPlanningCompleteAnalysisDownload,
+        disabilityRetirementPlanning: {
+          id: '',
+        } as DisabilityRetirementPlanningTypeormEntity,
+        disabilityRetirementPlanningCompleteAnalysis:
+          source.disabilityRetirementPlanningCompleteAnalysis,
+        disabilityRetirementPlanningSimplifiedAnalysis:
+          source.disabilityRetirementPlanningSimplifiedAnalysis,
+        disabilityRetirementPlanningCompleteAnalysisDownload:
+          source.disabilityRetirementPlanningCompleteAnalysisDownload,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,

@@ -15,7 +15,8 @@ export class DisabilityRetirementPlanningDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<DisabilityRetirementPlanningDocumentTypeormEntity>
   implements DisabilityRetirementPlanningDocumentCommandRepositoryGateway
 {
-  protected readonly _type = DisabilityRetirementPlanningDocumentTypeormCommandRepository.name;
+  protected readonly _type =
+    DisabilityRetirementPlanningDocumentTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(DisabilityRetirementPlanningDocumentTypeormEntity)

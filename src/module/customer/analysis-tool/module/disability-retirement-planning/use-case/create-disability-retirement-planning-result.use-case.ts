@@ -12,12 +12,14 @@ import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/ana
 import { DisabilityRetirementPlanningCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/command/disability-retirement-planning.command.repository.gateway';
 import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
 import { DisabilityRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/command/disability-retirement-planning-result.command.repository.gateway';
+import { DisabilityRetirementPlanningResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/query/disability-retirement-planning-result.query.repository.gateway';
 import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/disability-retirement-planning-result.entity';
 import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
 import { CreateDisabilityRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-result.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
+import { DisabilityRetirementPlanningCompleteAnalysisModel, DisabilityRetirementPlanningRetirementOptionModel, DisabilityRetirementPlanningTimelinePeriodModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -40,6 +42,8 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
     private readonly disabilityRetirementPlanningCommandRepositoryGateway: DisabilityRetirementPlanningCommandRepositoryGateway,
     @Inject(DisabilityRetirementPlanningResultCommandRepositoryGateway)
     private readonly disabilityRetirementPlanningResultCommandRepositoryGateway: DisabilityRetirementPlanningResultCommandRepositoryGateway,
+    @Inject(DisabilityRetirementPlanningResultQueryRepositoryGateway)
+    private readonly disabilityRetirementPlanningResultQueryRepositoryGateway: DisabilityRetirementPlanningResultQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
@@ -118,7 +122,35 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
       await this.analysisProcessorGateway.getDisabilityRetirementPlanningCompleteAnalysis(
         promptResponse.prompt,
         [analysisDataBuffer],
+        true,
       );
+
+    if (analysisResult === null) {
+      throw new DisabilityRetirementPlanningNotFoundError();
+    }
+
+    let parsedAnalysis: DisabilityRetirementPlanningCompleteAnalysisModel;
+    try {
+      let cleanedJson: string = analysisResult;
+
+      if (cleanedJson.startsWith('"') && cleanedJson.endsWith('"')) {
+        cleanedJson = JSON.parse(cleanedJson) as string;
+      }
+
+      const raw = JSON.parse(cleanedJson) as DisabilityRetirementPlanningCompleteAnalysisModel;
+
+      parsedAnalysis = DisabilityRetirementPlanningCompleteAnalysisModel.build({
+        ...raw,
+        timeline: raw.timeline.map((p) =>
+          DisabilityRetirementPlanningTimelinePeriodModel.build(p),
+        ),
+        retirementOptionsSummary: raw.retirementOptionsSummary.map((o) =>
+          DisabilityRetirementPlanningRetirementOptionModel.build(o),
+        ),
+      });
+    } catch {
+      throw new DisabilityRetirementPlanningNotFoundError();
+    }
 
     const disabilityRetirementPlanningEntity =
       new DisabilityRetirementPlanningEntity({
@@ -133,16 +165,32 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
         analysisName: queryResult.analysisName,
       });
 
+    const existingResultId =
+      await this.disabilityRetirementPlanningResultQueryRepositoryGateway.findOneIdByDisabilityRetirementPlanningId(
+        disabilityRetirementPlanningId,
+      );
+
+    const resultId = existingResultId ?? new DisabilityRetirementPlanningResultId();
+
     const disabilityRetirementPlanningResultEntity =
       new DisabilityRetirementPlanningResultEntity({
-        id: new DisabilityRetirementPlanningResultId(),
+        id: resultId,
         disabilityRetirementPlanning: disabilityRetirementPlanningEntity,
         disabilityRetirementPlanningCompleteAnalysis: JSON.stringify(
-          analysisResult,
+          parsedAnalysis,
         ),
         disabilityRetirementPlanningSimplifiedAnalysis: null,
         disabilityRetirementPlanningCompleteAnalysisDownload: null,
       });
+
+    const resultTransaction = existingResultId
+      ? this.disabilityRetirementPlanningResultCommandRepositoryGateway.updateDisabilityRetirementPlanningResult(
+          existingResultId,
+          disabilityRetirementPlanningResultEntity,
+        )
+      : this.disabilityRetirementPlanningResultCommandRepositoryGateway.createDisabilityRetirementPlanningResult(
+          disabilityRetirementPlanningResultEntity,
+        );
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
@@ -163,9 +211,7 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       consumeCreditTransaction,
-      this.disabilityRetirementPlanningResultCommandRepositoryGateway.createDisabilityRetirementPlanningResult(
-        disabilityRetirementPlanningResultEntity,
-      ),
+      resultTransaction,
       this.disabilityRetirementPlanningCommandRepositoryGateway.updateDisabilityRetirementPlanning(
         disabilityRetirementPlanningId,
         disabilityRetirementPlanningEntity,
@@ -179,9 +225,7 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
     await transaction.commit();
 
     return CreateDisabilityRetirementPlanningResultResponseDto.build({
-      disabilityRetirementPlanningCompleteAnalysis: JSON.parse(
-        JSON.stringify(analysisResult),
-      ) as object,
+      disabilityRetirementPlanningCompleteAnalysis: parsedAnalysis,
     });
   }
 }

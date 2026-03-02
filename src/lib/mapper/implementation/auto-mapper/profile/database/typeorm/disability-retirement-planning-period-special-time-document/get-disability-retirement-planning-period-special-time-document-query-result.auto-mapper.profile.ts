@@ -8,7 +8,8 @@ import { GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult } f
 
 @Injectable()
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResultAutoMapperProfile {
-  protected readonly _type = GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResultAutoMapperProfile.name;
+  protected readonly _type =
+    GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -23,10 +24,12 @@ export class GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult
     const convertOrmEntityToDomainEntity = (
       source: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity,
     ): GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult => {
-      return GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult.build({
-        id: source.id,
-        document: source.document,
-      });
+      return GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult.build(
+        {
+          id: source.id,
+          document: source.document,
+        },
+      );
     };
 
     createMap(
@@ -41,14 +44,17 @@ export class GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult
     const convertDomainEntityToOrmEntity = (
       source: GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult,
     ): DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity => {
-      return DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.build({
-        id: source.id,
-        document: source.document,
-        disabilityRetirementPlanningPeriodSpecialTime: undefined as unknown as DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      });
+      return DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.build(
+        {
+          id: source.id,
+          document: source.document,
+          disabilityRetirementPlanningPeriodSpecialTime:
+            undefined as unknown as DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        },
+      );
     };
 
     createMap(

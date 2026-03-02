@@ -1,7 +1,6 @@
-import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
-
-import { DisabilityRetirementPlanningEntity } from '../../../schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
-import { DisabilityRetirementPlanningId } from '../../../schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import type { DisabilityRetirementPlanningEntity } from '../../../schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import type { DisabilityRetirementPlanningId } from '../../../schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 export abstract class DisabilityRetirementPlanningCommandRepositoryGateway {
   public abstract createDisabilityRetirementPlanning(

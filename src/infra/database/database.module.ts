@@ -63,6 +63,7 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepo
 import { DisabilityRetirementPlanningRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.command.repository';
 import { DisabilityRetirementPlanningRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.typeorm.query.repository';
 import { DisabilityRetirementPlanningResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.command.repository';
+import { DisabilityRetirementPlanningResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/disability-retirement-planning-result/disability-retirement-planning-result.typeorm.query.repository';
 import { FullOpinionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.query.repository';
 import { InitialPetitionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.command.repository';
@@ -269,6 +270,7 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryG
 import { DisabilityRetirementPlanningRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-remuneration/command/disability-retirement-planning-remuneration.command.repository.gateway';
 import { DisabilityRetirementPlanningRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-remuneration/query/disability-retirement-planning-remuneration.query.repository.gateway';
 import { DisabilityRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/command/disability-retirement-planning-result.command.repository.gateway';
+import { DisabilityRetirementPlanningResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/query/disability-retirement-planning-result.query.repository.gateway';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
 import { InsuranceQualityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-document/command/insurance-quality-analysis-document.command.repository.gateway';
@@ -575,28 +577,38 @@ const classProvider: ClassProvider[] = [
     useClass: DisabilityRetirementPlanningInssBenefitTypeormCommandRepository,
   },
   {
-    provide: DisabilityRetirementPlanningLegalProceedingCommandRepositoryGateway,
-    useClass: DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository,
+    provide:
+      DisabilityRetirementPlanningLegalProceedingCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningLegalProceedingTypeormCommandRepository,
   },
   {
     provide: DisabilityRetirementPlanningPeriodCommandRepositoryGateway,
     useClass: DisabilityRetirementPlanningPeriodTypeormCommandRepository,
   },
   {
-    provide: DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
-    useClass: DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepository,
+    provide:
+      DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningPeriodDisabilityTypeormCommandRepository,
   },
   {
-    provide: DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
-    useClass: DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormCommandRepository,
+    provide:
+      DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormCommandRepository,
   },
   {
-    provide: DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
-    useClass: DisabilityRetirementPlanningPeriodSpecialTimeTypeormCommandRepository,
+    provide:
+      DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningPeriodSpecialTimeTypeormCommandRepository,
   },
   {
-    provide: DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
-    useClass: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepository,
+    provide:
+      DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
+    useClass:
+      DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormCommandRepository,
   },
   {
     provide: DisabilityRetirementPlanningRemunerationCommandRepositoryGateway,
@@ -609,6 +621,10 @@ const classProvider: ClassProvider[] = [
   {
     provide: DisabilityRetirementPlanningResultCommandRepositoryGateway,
     useClass: DisabilityRetirementPlanningResultTypeormCommandRepository,
+  },
+  {
+    provide: DisabilityRetirementPlanningResultQueryRepositoryGateway,
+    useClass: DisabilityRetirementPlanningResultTypeormQueryRepository,
   },
   {
     provide:

@@ -20,10 +20,19 @@ export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity
   @Column({ name: 'current_position', type: 'varchar', length: 255 })
   public currentPosition: string;
 
-  @Column({ name: 'federative_entity', type: 'simple-enum', enum: FederativeEntityEnum })
+  @Column({
+    name: 'federative_entity',
+    type: 'simple-enum',
+    enum: FederativeEntityEnum,
+  })
   public federativeEntity: FederativeEntityEnum;
 
-  @Column({ name: 'state', type: 'simple-enum', enum: StateCodeEnum, nullable: true })
+  @Column({
+    name: 'state',
+    type: 'simple-enum',
+    enum: StateCodeEnum,
+    nullable: true,
+  })
   public state: StateCodeEnum | null;
 
   @Column({

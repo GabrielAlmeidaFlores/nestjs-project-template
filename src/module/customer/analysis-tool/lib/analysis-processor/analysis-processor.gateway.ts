@@ -140,6 +140,7 @@ export abstract class AnalysisProcessorGateway {
   public abstract getDisabilityRetirementPlanningCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    asJson?: boolean,
   ): Promise<string | null>;
 
   public abstract getDisabilityRetirementPlanningSimplifiedAnalysis(

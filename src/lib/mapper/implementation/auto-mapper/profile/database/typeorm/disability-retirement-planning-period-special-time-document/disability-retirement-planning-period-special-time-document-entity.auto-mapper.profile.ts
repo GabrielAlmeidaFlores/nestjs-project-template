@@ -5,13 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { DisabilityRetirementPlanningPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/disability-retirement-planning-period-special-time-document.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/value-object/disability-retirement-planning-period-special-time-document-id.value-object';
-import { DisabilityRetirementPlanningPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.entity';
 
 @Injectable()
 export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapperProfile {
-  protected readonly _type = DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapperProfile.name;
+  protected readonly _type =
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -28,8 +29,10 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapp
     ): DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity => {
       if (!source.disabilityRetirementPlanningPeriodSpecialTime) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity.name,
-          sourceClass: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.name,
+          destinationClass:
+            DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity.name,
+          sourceClass:
+            DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.name,
         });
       }
 
@@ -40,7 +43,9 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapp
       );
 
       return new DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity({
-        id: new DisabilityRetirementPlanningPeriodSpecialTimeDocumentId(source.id),
+        id: new DisabilityRetirementPlanningPeriodSpecialTimeDocumentId(
+          source.id,
+        ),
         document: source.document,
         disabilityRetirementPlanningPeriodSpecialTime,
         createdAt: source.createdAt,
@@ -67,14 +72,16 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapp
         DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity,
       );
 
-      return DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.build({
-        id: source.id.toString(),
-        document: source.document,
-        disabilityRetirementPlanningPeriodSpecialTime,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      return DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.build(
+        {
+          id: source.id.toString(),
+          document: source.document,
+          disabilityRetirementPlanningPeriodSpecialTime,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        },
+      );
     };
 
     createMap(

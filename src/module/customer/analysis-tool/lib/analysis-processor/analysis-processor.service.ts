@@ -661,11 +661,166 @@ Análise processada do CNIS:
   public async getDisabilityRetirementPlanningCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
+    asJson = true,
   ): Promise<string | null> {
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
       GenerateResponseInputModel.build({
         systemInstruction,
         promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: {
+                type: 'object',
+                properties: {
+                  timeline: {
+                    type: 'array',
+                    description: 'Lista de períodos da linha do tempo do segurado',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        startDate: {
+                          type: 'string',
+                          format: 'date',
+                          description: 'Data de início do período no formato YYYY-MM-DD',
+                        },
+                        endDate: {
+                          type: 'string',
+                          format: 'date',
+                          description: 'Data de fim do período no formato YYYY-MM-DD',
+                        },
+                        activityType: {
+                          type: 'string',
+                          enum: [
+                            'pcd_leve',
+                            'pcd_moderada',
+                            'pcd_grave',
+                            'atividade_comum',
+                            'periodo_sem_atividade',
+                          ],
+                          description:
+                            'Tipo de atividade do período: PCD_LEVE, PCD_MODERADA, PCD_GRAVE, ATIVIDADE_COMUM ou PERIODO_SEM_ATIVIDADE',
+                        },
+                        location: {
+                          type: 'string',
+                          description:
+                            'Local do período. Exemplo: Assentamento Nova Vida, município de Araraquara/SP',
+                        },
+                      },
+                      required: ['startDate', 'endDate', 'activityType', 'location'],
+                    },
+                  },
+                  retirementOptionsSummary: {
+                    type: 'array',
+                    description: 'Resumo das regras de aposentadoria analisadas',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        retirementRuleName: {
+                          type: 'string',
+                          description: 'Nome da regra de aposentadoria',
+                        },
+                        isEligible: {
+                          type: 'boolean',
+                          description:
+                            'Indica se o segurado já atingiu o direito (true) ou ainda está aguardando (false)',
+                        },
+                        eligibilityAvailableAt: {
+                          type: 'string',
+                          description:
+                            'Data do direito, se já atingido. Formato YYYY-MM-DD',
+                        },
+                        expectedMonthlyBenefit: {
+                          type: 'number',
+                          description: 'RMI prevista para esta regra',
+                        },
+                        isBestMonthlyBenefit: {
+                          type: 'boolean',
+                          description: 'Indica se esta regra oferece a melhor RMI',
+                        },
+                        hasHighestAdvantageValue: {
+                          type: 'boolean',
+                          description:
+                            'Indica se esta regra oferece o maior valor de causa',
+                        },
+                        retirementAnalysis: {
+                          type: 'string',
+                          description:
+                            'Análise detalhada desta regra em formato markdown',
+                        },
+                      },
+                      required: [
+                        'retirementRuleName',
+                        'isEligible',
+                        'expectedMonthlyBenefit',
+                        'isBestMonthlyBenefit',
+                        'hasHighestAdvantageValue',
+                        'retirementAnalysis',
+                      ],
+                    },
+                  },
+                  analysisResult: {
+                    type: 'string',
+                    description: 'Resultado geral da análise em formato markdown',
+                  },
+                  disabilityTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total como PCD. Exemplo: 23 anos, 7 meses e 4 dias',
+                  },
+                  commonTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total em atividade comum. Exemplo: 12 anos, 3 meses e 10 dias',
+                  },
+                  totalContributionTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total de contribuição. Exemplo: 35 anos, 10 meses e 14 dias',
+                  },
+                  positionTenureTime: {
+                    type: 'string',
+                    description:
+                      'Tempo no cargo atual. Exemplo: 10 anos, 6 meses e 15 dias',
+                  },
+                  publicServiceTime: {
+                    type: 'string',
+                    description:
+                      'Tempo no serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
+                  },
+                  totalCareerTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total de carreira. Exemplo: 42 anos, 1 mês e 20 dias',
+                  },
+                  insuredAge: {
+                    type: 'string',
+                    description:
+                      'Idade atual do segurado. Exemplo: 44 anos, 3 meses e 12 dias',
+                  },
+                  publicServiceStartDate: {
+                    type: 'string',
+                    format: 'date',
+                    description: 'Data de ingresso no serviço público no formato YYYY-MM-DD',
+                  },
+                },
+                required: [
+                  'timeline',
+                  'retirementOptionsSummary',
+                  'analysisResult',
+                  'disabilityTime',
+                  'commonTime',
+                  'totalContributionTime',
+                  'positionTenureTime',
+                  'publicServiceTime',
+                  'totalCareerTime',
+                  'insuredAge',
+                  'publicServiceStartDate',
+                ],
+              },
+            })
+          : null,
       }),
     );
   }
