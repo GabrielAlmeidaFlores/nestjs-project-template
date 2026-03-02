@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
+import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
@@ -22,23 +25,17 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-interface ContributionTimeDifferenceInterface {
-  years: number;
-  months: number;
-  days: number;
+interface AiAnalysisResultInterface {
+  contributionTimeGainedYears: number;
+  contributionTimeGainedMonths: number;
+  contributionTimeGainedDays: number;
+  technicalObservation: string;
 }
 
 @Injectable()
 export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase {
   protected readonly _type =
     SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase.name;
-
-  private readonly PREVIDENCIARIO_DAYS_PER_MONTH = 30;
-  private readonly PREVIDENCIARIO_DAYS_PER_YEAR = 360;
-  private readonly MS_PER_SECOND = 1000;
-  private readonly SECONDS_PER_MINUTE = 60;
-  private readonly MINUTES_PER_HOUR = 60;
-  private readonly HOURS_PER_DAY = 24;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -55,14 +52,9 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
-  ) {
-    this.PREVIDENCIARIO_DAYS_PER_MONTH = this.PREVIDENCIARIO_DAYS_PER_MONTH;
-    this.PREVIDENCIARIO_DAYS_PER_YEAR = this.PREVIDENCIARIO_DAYS_PER_YEAR;
-    this.MS_PER_SECOND = this.MS_PER_SECOND;
-    this.SECONDS_PER_MINUTE = this.SECONDS_PER_MINUTE;
-    this.MINUTES_PER_HOUR = this.MINUTES_PER_HOUR;
-    this.HOURS_PER_DAY = this.HOURS_PER_DAY;
-  }
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
+  ) {}
 
   public async execute(
     sessionData: SessionDataModel,
@@ -97,13 +89,6 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
       throw new RuralTimelineAnalysisCnisContributionPeriodNotFoundError();
     }
 
-    const timeDifference = this.calculateContributionTimeDifference(
-      dto.originalPeriodStartDate,
-      dto.originalPeriodEndDate,
-      dto.conventionalPeriodStartDate,
-      dto.conventionalPeriodEndDate,
-    );
-
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
@@ -116,9 +101,8 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
         organizationMember.id,
       );
 
-    const technicalObservation = await this.generateTechnicalObservation(
+    const aiAnalysis = await this.generateAiAnalysis(
       dto,
-      timeDifference,
       promptResponse.prompt,
       cnisContributionPeriod,
     );
@@ -127,64 +111,28 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
       await this.baseTransactionRepositoryGateway.execute(creditTransaction);
     await transaction.commit();
 
+    const technicalObservationHtml =
+      await this.markdownConverterGateway.convertToHtml(
+        aiAnalysis.technicalObservation,
+      );
+
     return SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto.build(
       {
-        contributionTimeGainedYears: timeDifference.years,
-        contributionTimeGainedMonths: timeDifference.months,
-        contributionTimeGainedDays: timeDifference.days,
-        technicalObservation,
+        contributionTimeGainedYears: aiAnalysis.contributionTimeGainedYears,
+        contributionTimeGainedMonths: aiAnalysis.contributionTimeGainedMonths,
+        contributionTimeGainedDays: aiAnalysis.contributionTimeGainedDays,
+        technicalObservation: technicalObservationHtml,
+        conventionalPeriodStartDate: dto.conventionalPeriodStartDate,
+        conventionalPeriodEndDate: dto.conventionalPeriodEndDate,
       },
     );
   }
 
-  private calculateContributionTimeDifference(
-    originalStartDate: Date,
-    originalEndDate: Date,
-    conventionalStartDate: Date,
-    conventionalEndDate: Date,
-  ): ContributionTimeDifferenceInterface {
-    const originalDays = this.calculatePeriodDaysPrevidenciario(
-      originalStartDate,
-      originalEndDate,
-    );
-    const conventionalDays = this.calculatePeriodDaysPrevidenciario(
-      conventionalStartDate,
-      conventionalEndDate,
-    );
-
-    const differenceDays = conventionalDays - originalDays;
-
-    const years = Math.floor(
-      differenceDays / this.PREVIDENCIARIO_DAYS_PER_YEAR,
-    );
-    const remainingAfterYears =
-      differenceDays % this.PREVIDENCIARIO_DAYS_PER_YEAR;
-    const months = Math.floor(
-      remainingAfterYears / this.PREVIDENCIARIO_DAYS_PER_MONTH,
-    );
-    const days = remainingAfterYears % this.PREVIDENCIARIO_DAYS_PER_MONTH;
-
-    return { years, months, days };
-  }
-
-  private calculatePeriodDaysPrevidenciario(
-    startDate: Date,
-    endDate: Date,
-  ): number {
-    const msPerDay =
-      this.MS_PER_SECOND *
-      this.SECONDS_PER_MINUTE *
-      this.MINUTES_PER_HOUR *
-      this.HOURS_PER_DAY;
-    return Math.round((endDate.getTime() - startDate.getTime()) / msPerDay) + 1;
-  }
-
-  private async generateTechnicalObservation(
+  private async generateAiAnalysis(
     dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
-    timeDifference: ContributionTimeDifferenceInterface,
     systemInstruction: string,
     period: RuralTimelineAnalysisCnisContributionPeriodEntity,
-  ): Promise<string> {
+  ): Promise<AiAnalysisResultInterface> {
     const originalStart =
       dto.originalPeriodStartDate.toLocaleDateString('pt-BR');
     const originalEnd = dto.originalPeriodEndDate.toLocaleDateString('pt-BR');
@@ -203,6 +151,21 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     );
     const statusLabel = this.resolveStatusLabel(period.status);
 
+    const daysPerMonth = 30;
+    const daysPerYear = 360;
+    const originalDays = this.calcPrevidenciarioDays(
+      dto.originalPeriodStartDate,
+      dto.originalPeriodEndDate,
+    );
+    const conventionalDays = this.calcPrevidenciarioDays(
+      dto.conventionalPeriodStartDate,
+      dto.conventionalPeriodEndDate,
+    );
+    const diffDays = Math.max(0, conventionalDays - originalDays);
+    const gainYears = Math.floor(diffDays / daysPerYear);
+    const gainMonths = Math.floor((diffDays % daysPerYear) / daysPerMonth);
+    const gainDays = diffDays % daysPerMonth;
+
     const prompt = `## Dados do Período de Contribuição CNIS
 
 **Empregador / Origem do vínculo:** ${period.employmentRelationshipSource ?? 'não informado'}
@@ -219,9 +182,24 @@ ${period.impactAnalysis !== null ? `\n**Análise de impacto existente:**\n${peri
 
 ## Ajuste Proposto
 
-**Período original (CNIS):** ${originalStart} a ${originalEnd}
-**Período convencional proposto:** ${conventionalStart} a ${conventionalEnd}
-**Tempo de contribuição ganho com o ajuste:** ${timeDifference.years} anos, ${timeDifference.months} meses e ${timeDifference.days} dias`;
+**Período original (CNIS):** ${originalStart} a ${originalEnd} (${originalDays} dias previdenciários)
+**Período convencional proposto:** ${conventionalStart} a ${conventionalEnd} (${conventionalDays} dias previdenciários)
+
+## Resultado do Cálculo Previdenciário (já calculado — use exatamente estes valores no JSON)
+
+**Dias de acréscimo:** ${diffDays} dias previdenciários (1 mês = 30 dias, 1 ano = 360 dias)
+**Tempo de contribuição ganho:** ${gainYears} anos, ${gainMonths} meses e ${gainDays} dias
+
+> Atenção: o período convencional ${conventionalDays <= originalDays ? 'não supera o original — o ajuste é uma regularização sem acréscimo de tempo' : 'supera o original — há ganho de tempo de contribuição'}.
+
+## Instrução para o campo "technicalObservation"
+
+Com base nos dados acima, gere uma observação técnica previdenciária detalhada.
+
+**IMPORTANTE — regras obrigatórias para o campo "technicalObservation":**
+- Use EXCLUSIVAMENTE Markdown puro: cabeçalhos com #/##/###, listas com -, tabelas com |, negrito com **
+- NÃO use tags HTML (<h1>, <strong>, <br>, etc.) em nenhuma hipótese
+- Estruture com as seções: 1. Identificação do vínculo e contextualização; 2. Fundamentação técnica e legal (Lei 8.213/91, Decreto 3.048/99, IN INSS 128/2022); 3. Impacto no tempo de contribuição (use os valores calculados acima); 4. Conclusão`;
 
     const result =
       await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
@@ -229,11 +207,71 @@ ${period.impactAnalysis !== null ? `\n**Análise de impacto existente:**\n${peri
           systemInstruction,
           prompt,
           promptFiles: [],
+          responseConfig: ResponseConfigInputModel.build({
+            responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+            jsonSchema: {
+              type: 'object',
+              properties: {
+                contributionTimeGainedYears: {
+                  type: 'integer',
+                  description:
+                    'Anos de contribuição ganhos — use exatamente o valor calculado no prompt (mínimo 0)',
+                },
+                contributionTimeGainedMonths: {
+                  type: 'integer',
+                  description:
+                    'Meses além dos anos — use exatamente o valor calculado no prompt (0-11)',
+                },
+                contributionTimeGainedDays: {
+                  type: 'integer',
+                  description:
+                    'Dias além dos meses — use exatamente o valor calculado no prompt (0-29)',
+                },
+                technicalObservation: {
+                  type: 'string',
+                  description:
+                    'Observação técnica previdenciária detalhada em formato Markdown',
+                },
+              },
+              required: [
+                'contributionTimeGainedYears',
+                'contributionTimeGainedMonths',
+                'contributionTimeGainedDays',
+                'technicalObservation',
+              ],
+            },
+          }),
         }),
       );
 
-    return (
-      result ?? this.buildFallbackTechnicalObservation(dto, timeDifference)
+    if (result === null) {
+      return this.buildFallbackAnalysis(dto, gainYears, gainMonths, gainDays);
+    }
+
+    try {
+      const parsed = JSON.parse(result) as Partial<AiAnalysisResultInterface>;
+      // Use TypeScript-computed values (reliable arithmetic); AI values are discarded.
+      return {
+        contributionTimeGainedYears: gainYears,
+        contributionTimeGainedMonths: gainMonths,
+        contributionTimeGainedDays: gainDays,
+        technicalObservation: parsed.technicalObservation ?? '',
+      };
+    } catch {
+      return this.buildFallbackAnalysis(dto, gainYears, gainMonths, gainDays);
+    }
+  }
+
+  private calcPrevidenciarioDays(start: Date, end: Date): number {
+    const msPerSecond = 1000;
+    const secondsPerMinute = 60;
+    const minutesPerHour = 60;
+    const hoursPerDay = 24;
+    const msPerDay =
+      msPerSecond * secondsPerMinute * minutesPerHour * hoursPerDay;
+    return Math.max(
+      0,
+      Math.round((end.getTime() - start.getTime()) / msPerDay) + 1,
     );
   }
 
@@ -265,10 +303,12 @@ ${period.impactAnalysis !== null ? `\n**Análise de impacto existente:**\n${peri
     return labels[status];
   }
 
-  private buildFallbackTechnicalObservation(
+  private buildFallbackAnalysis(
     dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
-    timeDifference: ContributionTimeDifferenceInterface,
-  ): string {
+    gainYears: number,
+    gainMonths: number,
+    gainDays: number,
+  ): AiAnalysisResultInterface {
     const originalStart =
       dto.originalPeriodStartDate.toLocaleDateString('pt-BR');
     const originalEnd = dto.originalPeriodEndDate.toLocaleDateString('pt-BR');
@@ -277,6 +317,11 @@ ${period.impactAnalysis !== null ? `\n**Análise de impacto existente:**\n${peri
     const conventionalEnd =
       dto.conventionalPeriodEndDate.toLocaleDateString('pt-BR');
 
-    return `Ajuste de período de contribuição CNIS: período original de ${originalStart} a ${originalEnd} substituído pelo período convencional de ${conventionalStart} a ${conventionalEnd}. Ganho de ${timeDifference.years} anos, ${timeDifference.months} meses e ${timeDifference.days} dias no cômputo do tempo de contribuição rural.`;
+    return {
+      contributionTimeGainedYears: gainYears,
+      contributionTimeGainedMonths: gainMonths,
+      contributionTimeGainedDays: gainDays,
+      technicalObservation: `Ajuste de período de contribuição CNIS: período original de ${originalStart} a ${originalEnd} substituído pelo período convencional de ${conventionalStart} a ${conventionalEnd}.`,
+    };
   }
 }
