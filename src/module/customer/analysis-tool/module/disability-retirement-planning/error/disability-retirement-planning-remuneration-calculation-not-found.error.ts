@@ -6,7 +6,7 @@ export class DisabilityRetirementPlanningRemunerationCalculationNotFoundError ex
 
   public constructor() {
     super(
-      'Remuneração do planejamento de aposentadoria por invalidez não encontrada',
+      'Remuneração do planejamento de aposentadoria da pessoa com deficiência não encontrada',
     );
   }
 }

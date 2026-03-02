@@ -5,6 +5,7 @@ import { CidTenTypeormEntity } from '@infra/database/implementation/typeorm/sche
 import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
+import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
@@ -30,6 +31,9 @@ export class DisabilityRetirementPlanningPeriodDisabilityTypeormEntity extends B
 
   @Column({ name: 'disability_degree', type: 'simple-enum', enum: RetirementPlanningDisabilityDegreeEnum })
   public disabilityDegree: RetirementPlanningDisabilityDegreeEnum;
+
+  @Column({ name: 'disability_category', type: 'simple-enum', enum: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum })
+  public disabilityCategory: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum;
 
   @Column({ name: 'disability_type', type: 'simple-enum', enum: RetirementPlanningDisabilityTimeTypeEnum })
   public disabilityType: RetirementPlanningDisabilityTimeTypeEnum;

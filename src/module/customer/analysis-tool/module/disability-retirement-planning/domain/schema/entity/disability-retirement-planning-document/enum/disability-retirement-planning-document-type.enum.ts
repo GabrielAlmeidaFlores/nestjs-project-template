@@ -1,4 +1,4 @@
 export enum DisabilityRetirementPlanningDocumentTypeEnum {
-  CTC_DOCUMENT = 'CTC_DOCUMENT',
-  ADMINISTRATIVE_PROCESS = 'ADMINISTRATIVE_PROCESS',
+  CTC_DOCUMENT = 'ctc_document',
+  ADMINISTRATIVE_PROCESS = 'administrative_process',
 }

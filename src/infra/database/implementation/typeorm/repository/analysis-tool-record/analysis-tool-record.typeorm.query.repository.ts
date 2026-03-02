@@ -103,6 +103,7 @@ export class AnalysisToolRecordTypeormQueryRepository
         { insuranceQualityAnalysis: Not(IsNull()) },
         { ruralTimeline: Not(IsNull()) },
         { audienceQuestionGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
         { disabilityRetirementPlanning: Not(IsNull()) },
       ];
 
