@@ -32,7 +32,13 @@ export function BaseDtoEnumProperty(
 
   if (isArray) {
     decorators.push(
-      Transform(({ value }) => (Array.isArray(value) ? value : value != null ? [value] : value)),
+      Transform(({ value }: { value: unknown }) =>
+        Array.isArray(value)
+          ? value
+          : value !== null && value !== undefined
+            ? [value]
+            : value,
+      ),
       IsArray(),
     );
   }
