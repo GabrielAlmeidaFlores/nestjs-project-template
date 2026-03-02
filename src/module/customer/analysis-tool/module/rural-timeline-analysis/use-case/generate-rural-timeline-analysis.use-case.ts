@@ -94,7 +94,7 @@ export class GenerateRuralTimelineAnalysisUseCase {
     const documentBuffers: Buffer[] = [];
 
     const cnisAnalysisResults = [];
-    let lastAffiliationDate: Date | null = null;
+    const affiliationDates: Date[] = [];
     for (const doc of ruralTimelineAnalysis.ruralTimelineDocument) {
       const buffer = await this.fileProcessorGateway.getFileBuffer(
         doc.document,
@@ -104,27 +104,11 @@ export class GenerateRuralTimelineAnalysisUseCase {
       const cnisData =
         await this.cnisProcessorGateway.parseCnisDocument(buffer);
 
-      cnisData.socialSecurityRelations?.forEach((socialSecurityRelation) => {
-        if (
-          socialSecurityRelation.socialSecurityAffiliationInfo.dataFim ===
-          undefined
-        ) {
-          return;
+      for (const relation of cnisData.socialSecurityRelations ?? []) {
+        if (relation.socialSecurityAffiliationInfo.dataFim !== undefined) {
+          affiliationDates.push(relation.socialSecurityAffiliationInfo.dataFim);
         }
-        if (lastAffiliationDate === null) {
-          lastAffiliationDate =
-            socialSecurityRelation.socialSecurityAffiliationInfo.dataFim ??
-            null;
-          return;
-        }
-        if (
-          socialSecurityRelation.socialSecurityAffiliationInfo.dataFim >
-          lastAffiliationDate
-        ) {
-          lastAffiliationDate =
-            socialSecurityRelation.socialSecurityAffiliationInfo.dataFim;
-        }
-      });
+      }
 
       const analysisToolClient = new AnalysisToolClientEntity({
         ...analysisToolRecordQueryResult.analysisToolClient,
@@ -200,9 +184,14 @@ export class GenerateRuralTimelineAnalysisUseCase {
 
     await transaction.commit();
 
+    const lastAffiliationDate =
+      affiliationDates.length > 0
+        ? affiliationDates.reduce((max, d) => (d > max ? d : max))
+        : undefined;
+
     return GenerateRuralTimelineAnalysisResponseDto.build({
       ruralTimelineCompleteAnalysis: analysisResult,
-      ...(lastAffiliationDate !== null && { lastAffiliationDate }),
+      ...(lastAffiliationDate !== undefined && { lastAffiliationDate }),
     });
   }
 }
