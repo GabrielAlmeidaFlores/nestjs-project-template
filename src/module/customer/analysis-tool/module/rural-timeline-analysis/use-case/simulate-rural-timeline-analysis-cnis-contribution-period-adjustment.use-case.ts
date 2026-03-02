@@ -9,7 +9,9 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
+import { RuralTimelineCnisContributionPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-document/query/rural-timeline-cnis-contribution-period-document.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
@@ -44,6 +46,10 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway)
     private readonly cnisContributionPeriodQueryRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway,
+    @Inject(RuralTimelineCnisContributionPeriodDocumentQueryRepositoryGateway)
+    private readonly cnisContributionPeriodDocumentQueryRepositoryGateway: RuralTimelineCnisContributionPeriodDocumentQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(GenerativeIaGateway)
     private readonly generativeIaGateway: GenerativeIaGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -89,6 +95,11 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
       throw new RuralTimelineAnalysisCnisContributionPeriodNotFoundError();
     }
 
+    const periodDocuments =
+      await this.cnisContributionPeriodDocumentQueryRepositoryGateway.listRuralTimelineCnisContributionPeriodDocumentsByPeriodId(
+        cnisContributionPeriodId,
+      );
+
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
@@ -101,10 +112,17 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
         organizationMember.id,
       );
 
+    const documentBuffers = await Promise.all(
+      periodDocuments.map((doc) =>
+        this.fileProcessorGateway.getFileBuffer(doc.document),
+      ),
+    );
+
     const aiAnalysis = await this.generateAiAnalysis(
       dto,
       promptResponse.prompt,
       cnisContributionPeriod,
+      documentBuffers,
     );
 
     const transaction =
@@ -132,6 +150,7 @@ export class SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCas
     dto: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentRequestDto,
     systemInstruction: string,
     period: RuralTimelineAnalysisCnisContributionPeriodEntity,
+    documentBuffers: Buffer[],
   ): Promise<AiAnalysisResultInterface> {
     const originalStart =
       dto.originalPeriodStartDate.toLocaleDateString('pt-BR');
@@ -206,7 +225,7 @@ Com base nos dados acima, gere uma observação técnica previdenciária detalha
         GenerateResponseInputModel.build({
           systemInstruction,
           prompt,
-          promptFiles: [],
+          promptFiles: documentBuffers,
           responseConfig: ResponseConfigInputModel.build({
             responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
             jsonSchema: {
