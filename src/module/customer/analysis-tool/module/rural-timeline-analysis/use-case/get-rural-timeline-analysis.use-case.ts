@@ -364,6 +364,16 @@ export class GetRuralTimelineAnalysisUseCase {
       );
     }
 
+    const lastAffiliationDate = cnisContributionPeriods.reduce<
+      Date | undefined
+    >(
+      (max, p) =>
+        p.endDate !== undefined && (max === undefined || p.endDate > max)
+          ? p.endDate
+          : max,
+      undefined,
+    );
+
     return GetRuralTimelineAnalysisResponseDto.build({
       id: ruralTimelineAnalysisQueryResult.id,
       workRegime: ruralTimelineAnalysisQueryResult.workRegime,
@@ -403,6 +413,7 @@ export class GetRuralTimelineAnalysisUseCase {
       ...(periods.length > 0 && { periods }),
       ...(cnisDocuments.length > 0 && { cnisDocuments }),
       ...(cnisContributionPeriods.length > 0 && { cnisContributionPeriods }),
+      ...(lastAffiliationDate !== undefined && { lastAffiliationDate }),
       createdBy: GetRuralTimelineAnalysisResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.createdBy.customer,
       }),
