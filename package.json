@@ -82,6 +82,7 @@
     "puppeteer": "^24.23.0",
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.1",
+    "rehype-raw": "^7.0.0",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
@@ -139,6 +140,8 @@
     "reflect-metadata": "^0.2.1",
     "@modelcontextprotocol/sdk": "^1.11.4",
     "@fastify/send/http-errors": "2.0.0",
-    "chromium-bidi/zod": "3.25.76"
+    "chromium-bidi/zod": "3.25.76",
+    "qs": "6.15.0",
+    "ip-address": "10.1.0"
   }
 }

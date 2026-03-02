@@ -67,16 +67,6 @@ export class PaymentPlanPaidResourceTypeormQueryRepository
                 ? { resource: listData.resource }
                 : {}),
           },
-          {
-            ...(listData.searchBy !== null
-              ? { description: Like(listData.searchBy) }
-              : {}),
-            ...(listData.resource instanceof Array
-              ? { resource: In(listData.resource) }
-              : listData.resource !== null
-                ? { resource: listData.resource }
-                : {}),
-          },
         ],
       };
 
