@@ -69,7 +69,10 @@ export class GetSpecialActivityAnalysisByIdUseCase {
       }),
     );
 
-    const parsedSpecialActivityCompleteAnalysis: Record<string, unknown> | null =
+    const parsedSpecialActivityCompleteAnalysis: Record<
+      string,
+      unknown
+    > | null =
       specialActivityQueryResult.specialActivityResult
         ?.specialActivityCompleteAnalysis !== null &&
       specialActivityQueryResult.specialActivityResult
@@ -82,7 +85,8 @@ export class GetSpecialActivityAnalysisByIdUseCase {
 
     if (
       parsedSpecialActivityCompleteAnalysis !== null &&
-      typeof parsedSpecialActivityCompleteAnalysis['analysisResult'] === 'string'
+      typeof parsedSpecialActivityCompleteAnalysis['analysisResult'] ===
+        'string'
     ) {
       parsedSpecialActivityCompleteAnalysis['analysisResult'] =
         await this.exportDocumentGateway.convertMarkdownToHtml(
