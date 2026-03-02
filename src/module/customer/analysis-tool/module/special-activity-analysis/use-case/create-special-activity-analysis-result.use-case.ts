@@ -9,6 +9,7 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpecialActivityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/command/special-activity-analysis.command.repository.gateway';
 import { SpecialActivityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/command/special-activity-analysis-result.command.repository.gateway';
@@ -50,6 +51,8 @@ export class CreateSpecialActivityAnalysisResultUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -193,7 +196,7 @@ export class CreateSpecialActivityAnalysisResultUseCase {
 
     await transaction.commit();
 
-    let parsedAnalysis: object = {};
+    let parsedAnalysis: Record<string, unknown> = {};
     if (
       specialActivityResult.specialActivityCompleteAnalysis !== null &&
       specialActivityResult.specialActivityCompleteAnalysis.length > 0
@@ -201,10 +204,17 @@ export class CreateSpecialActivityAnalysisResultUseCase {
       try {
         parsedAnalysis = JSON.parse(
           specialActivityResult.specialActivityCompleteAnalysis,
-        ) as object;
+        ) as Record<string, unknown>;
       } catch {
         throw new InvalidCompleteAnalysisJsonError();
       }
+    }
+
+    if (typeof parsedAnalysis['analysisResult'] === 'string') {
+      parsedAnalysis['analysisResult'] =
+        await this.exportDocumentGateway.convertMarkdownToHtml(
+          parsedAnalysis['analysisResult'],
+        );
     }
 
     return CreateSpecialActivityAnalysisResultResponseDto.build({

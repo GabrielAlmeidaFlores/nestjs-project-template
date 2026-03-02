@@ -69,6 +69,8 @@ export class GetInsuranceQualityAnalysisUseCase {
           clientName: analysisResult.clientName ?? null,
           clientFederalDocument: analysisResult.clientFederalDocument ?? null,
           clientBirthDate: analysisResult.clientBirthDate ?? null,
+          clientLastAffiliationDate:
+            analysisResult.clientLastAffiliationDate ?? null,
           insuranceQualityConclusion:
             analysisResult.insuranceQualityConclusion ?? null,
           gracePeriodConclusion: analysisResult.gracePeriodConclusion ?? null,
@@ -102,6 +104,28 @@ export class GetInsuranceQualityAnalysisUseCase {
         insuranceQualityAnalysisQueryResult.analysisHasRuralActivity ?? null,
       analysisRuralActivityDetails:
         insuranceQualityAnalysisQueryResult.analysisRuralActivityDetails ??
+        null,
+      analysisIsWorkAccidentOrSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisIsWorkAccidentOrSeriousIllness ??
+        null,
+      analysisIsSeriousIllnessArt151:
+        insuranceQualityAnalysisQueryResult.analysisIsSeriousIllnessArt151 ??
+        null,
+      analysisSeriousIllnesses:
+        insuranceQualityAnalysisQueryResult.analysisSeriousIllnesses ?? null,
+      analysisOtherSeriousIllness:
+        insuranceQualityAnalysisQueryResult.analysisOtherSeriousIllness ?? null,
+      analysisDiseaseStartDate:
+        insuranceQualityAnalysisQueryResult.analysisDiseaseStartDate ?? null,
+      analysisRuralStartDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralStartDate ?? null,
+      analysisRuralEndDate:
+        insuranceQualityAnalysisQueryResult.analysisRuralEndDate ?? null,
+      analysisHadInvoluntaryUnemployment:
+        insuranceQualityAnalysisQueryResult.analysisHadInvoluntaryUnemployment ??
+        null,
+      analysisIntendsToProveByTestimony:
+        insuranceQualityAnalysisQueryResult.analysisIntendsToProveByTestimony ??
         null,
       insuranceQualityAnalysisResult,
       createdAt: analysisToolRecordQueryResult.createdAt,

@@ -18,6 +18,25 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
 
+  private readonly FALLBACK_MODELS: Record<string, string> = {
+    'gemini-3-pro-preview': 'gemini-3-flash-preview',
+    'gemini-3-flash-preview': 'gemini-2.0-flash',
+  };
+
+  private readonly GENERATIVE_IA_RULES = [
+    `
+Role: Act as a Technical Documentation Specialist.
+Task: Generate all responses exclusively in Standard Semantic Markdown optimized for direct HTML parsing.
+Formatting Rules:
+1. Strict Hierarchy: Use Markdown headers (#, ##, ###) to define the report structure. Never skip levels.
+2. Data Presentation: Use Markdown Tables (| column |) for all structured data. Do not use spaces, dashes, or tabs to visually simulate tables.
+3. Lists: Use standard bullet points (-) or numbered lists (1.) for sequential items.
+4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
+5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
+6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
+`,
+  ];
+
   protected readonly _type = GeminiService.name;
 
   private readonly googleGenerativeAI: GoogleGenAI;
@@ -72,7 +91,7 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
     const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
-    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 5_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
     const maxOutputTokens = props.responseConfig
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
@@ -89,6 +108,7 @@ export class GeminiService implements GenerativeIaGateway {
     props: GenerateResponseInputModel,
     model: string,
     maxOutputTokens: number,
+    isRetry = false,
   ): Promise<string | null> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
@@ -100,6 +120,10 @@ export class GeminiService implements GenerativeIaGateway {
     if (props.systemInstruction !== undefined) {
       systemInstructionParts.push({ text: props.systemInstruction });
     }
+
+    this.GENERATIVE_IA_RULES.forEach((rule) => {
+      systemInstructionParts.push({ text: rule });
+    });
 
     if (props.promptFiles !== undefined) {
       const fileParts = await this.buildPartWithFileContent(props.promptFiles);
@@ -200,22 +224,24 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
-    if (
-      props.tools !== undefined &&
-      props.toolHandlers !== undefined &&
-      props.tools.length > 0
-    ) {
-      return await this.generateWithFunctionCalling(
-        contentConfig,
-        props.toolHandlers,
-      );
-    }
-
     try {
+      if (
+        props.tools !== undefined &&
+        props.toolHandlers !== undefined &&
+        props.tools.length > 0
+      ) {
+        return await this.generateWithFunctionCalling(
+          contentConfig,
+          props.toolHandlers,
+        );
+      }
+
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-      return result.text ?? null;
+      return typeof result.text === 'string'
+        ? this.stripCodeFence(result.text)
+        : null;
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
@@ -236,6 +262,22 @@ export class GeminiService implements GenerativeIaGateway {
           error.message.includes('limit')
         ) {
           throw new GenerativeIaQuotaExceededError();
+        }
+
+        if (
+          error.message.includes('UNAVAILABLE') ||
+          error.message.includes('503')
+        ) {
+          const fallbackModel = this.FALLBACK_MODELS[model];
+
+          if (fallbackModel !== undefined && !isRetry) {
+            return await this.generateResponseFromPromptAndFiles(
+              props,
+              fallbackModel,
+              maxOutputTokens,
+              true,
+            );
+          }
         }
       }
 
@@ -400,5 +442,17 @@ export class GeminiService implements GenerativeIaGateway {
     );
 
     return results;
+  }
+
+  private stripCodeFence(text: string | null): string | null {
+    if (text === null) {
+      return text;
+    }
+
+    return text
+      .replace(/^```(?:\w+)?\n/gm, '')
+      .replace(/\n```$/gm, '')
+      .replace(/```/g, '')
+      .trim();
   }
 }

@@ -12,35 +12,33 @@ env:
 
 jobs:
   build:
-    runs-on: agiliza-previ
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
-
-      # - name: ⚙️ Configure Docker for Insecure Registry
-      #   run: |
-      #     REGISTRY_HOST=$(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1)
-      #     echo "{ \"insecure-registries\": [\"$REGISTRY_HOST\"] }" | sudo tee /etc/docker/daemon.json
-      #     sudo systemctl restart docker
 
       - name: 🔐 Docker Login to Registry
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
 
       - name: 🐳 Build Docker Image
+        id: build_1
+        continue-on-error: true
         run: |
-          docker buildx build \
-            --load \
-            --no-cache \
-            -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} \
-            .
+          docker build -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} --no-cache .
+
+      - name: 🐳 Build Docker Image (Tentativa 2 - Retry)
+        if: steps.build_1.outcome == 'failure'
+        run: |
+          sleep 10
+          docker build -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} --no-cache .
 
       - name: 📤 Push Docker Image
         run: |
           docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
   deploy:
     needs: build
-    runs-on: agiliza-previ
+    runs-on: qa
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -62,8 +60,8 @@ jobs:
       - name: 🚀 Deploy Docker
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
-          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
 
+          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
       - name: 🧾 Docker Status & Logs
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
