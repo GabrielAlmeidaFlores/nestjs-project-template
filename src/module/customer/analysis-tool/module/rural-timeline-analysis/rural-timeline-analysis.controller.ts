@@ -1691,7 +1691,7 @@ export class RuralTimelineAnalysisController {
       description: 'Simulação de ajuste calculada com sucesso.',
       type: SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async simulateRuralTimelineAnalysisCnisContributionPeriodAdjustment(
     @GetSessionData() sessionData: SessionDataModel,
@@ -1733,7 +1733,7 @@ export class RuralTimelineAnalysisController {
       description: 'Ajuste criado com sucesso.',
       type: CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createRuralTimelineAnalysisCnisContributionPeriodAdjustment(
     @GetSessionData() sessionData: SessionDataModel,
