@@ -12,7 +12,11 @@ export class DisabilityRetirementPlanningDocumentTypeormEntity extends BaseTypeo
   @Column({ name: 'document', type: 'varchar', length: 500 })
   public document: string;
 
-  @Column({ name: 'type', type: 'simple-enum', enum: DisabilityRetirementPlanningDocumentTypeEnum })
+  @Column({
+    name: 'type',
+    type: 'simple-enum',
+    enum: DisabilityRetirementPlanningDocumentTypeEnum,
+  })
   public type: DisabilityRetirementPlanningDocumentTypeEnum;
 
   @ManyToOne(

@@ -6,11 +6,16 @@ import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infr
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetDisabilityRetirementPlanningPeriodDisabilityQueryResult, GetDisabilityRetirementPlanningPeriodQueryResult, GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import {
+  GetDisabilityRetirementPlanningPeriodDisabilityQueryResult,
+  GetDisabilityRetirementPlanningPeriodQueryResult,
+  GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult,
+} from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningPeriodQueryResultAutoMapperProfile {
-  protected readonly _type = GetDisabilityRetirementPlanningPeriodQueryResultAutoMapperProfile.name;
+  protected readonly _type =
+    GetDisabilityRetirementPlanningPeriodQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -25,9 +30,13 @@ export class GetDisabilityRetirementPlanningPeriodQueryResultAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: DisabilityRetirementPlanningPeriodTypeormEntity,
     ): GetDisabilityRetirementPlanningPeriodQueryResult => {
-      if (!source.disabilityRetirementPlanningPeriodDisability || !source.disabilityRetirementPlanningPeriodSpecialTime) {
+      if (
+        !source.disabilityRetirementPlanningPeriodDisability ||
+        !source.disabilityRetirementPlanningPeriodSpecialTime
+      ) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetDisabilityRetirementPlanningPeriodQueryResult.name,
+          destinationClass:
+            GetDisabilityRetirementPlanningPeriodQueryResult.name,
           sourceClass: DisabilityRetirementPlanningPeriodTypeormEntity.name,
         });
       }

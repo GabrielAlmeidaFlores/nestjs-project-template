@@ -9,6 +9,8 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { DisabilityRetirementPlanningCompleteAnalysisModel, DisabilityRetirementPlanningRetirementOptionModel, DisabilityRetirementPlanningTimelinePeriodModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
+import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
 import {
   GetDisabilityRetirementPlanningCidResponseDto,
   GetDisabilityRetirementPlanningDocumentResponseDto,
@@ -186,9 +188,50 @@ export class GetDisabilityRetirementPlanningUseCase {
         ? GetDisabilityRetirementPlanningResultResponseDto.build({
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysis !== null && {
-              disabilityRetirementPlanningCompleteAnalysis: JSON.parse(
-                queryResult.result.disabilityRetirementPlanningCompleteAnalysis,
-              ) as object,
+              disabilityRetirementPlanningCompleteAnalysis: (() => {
+                const raw = JSON.parse(
+                  queryResult.result.disabilityRetirementPlanningCompleteAnalysis,
+                ) as {
+                  timeline: Array<{ startDate: string; endDate: string; activityType: DisabilityRetirementPlanningActivityTypeEnum; location: string }>;
+                  retirementOptionsSummary: Array<{
+                    retirementRuleName: string;
+                    isEligible: boolean;
+                    eligibilityAvailableAt?: string;
+                    expectedMonthlyBenefit: number;
+                    isBestMonthlyBenefit: boolean;
+                    hasHighestAdvantageValue: boolean;
+                    retirementAnalysis: string;
+                  }>;
+                  analysisResult: string;
+                  disabilityTime: string;
+                  commonTime: string;
+                  totalContributionTime: string;
+                  positionTenureTime: string;
+                  publicServiceTime: string;
+                  totalCareerTime: string;
+                  insuredAge: string;
+                  publicServiceStartDate: string;
+                };
+
+                return DisabilityRetirementPlanningCompleteAnalysisModel.build({
+                  timeline: raw.timeline.map((p) =>
+                    DisabilityRetirementPlanningTimelinePeriodModel.build(p),
+                  ),
+                  retirementOptionsSummary: raw.retirementOptionsSummary.map(
+                    (o) =>
+                      DisabilityRetirementPlanningRetirementOptionModel.build(o),
+                  ),
+                  analysisResult: raw.analysisResult,
+                  disabilityTime: raw.disabilityTime,
+                  commonTime: raw.commonTime,
+                  totalContributionTime: raw.totalContributionTime,
+                  positionTenureTime: raw.positionTenureTime,
+                  publicServiceTime: raw.publicServiceTime,
+                  totalCareerTime: raw.totalCareerTime,
+                  insuredAge: raw.insuredAge,
+                  publicServiceStartDate: raw.publicServiceStartDate,
+                });
+              })(),
             }),
             ...(queryResult.result
               .disabilityRetirementPlanningSimplifiedAnalysis !== null && {

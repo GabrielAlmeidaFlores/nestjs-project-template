@@ -5,13 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { DisabilityRetirementPlanningRemunerationEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-remuneration/disability-retirement-planning-remuneration.entity';
 import { DisabilityRetirementPlanningRemunerationId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-remuneration/value-object/disability-retirement-planning-remuneration-id.value-object';
-import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 
 @Injectable()
 export class DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile {
-  protected readonly _type = DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile.name;
+  protected readonly _type =
+    DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -29,7 +30,8 @@ export class DisabilityRetirementPlanningRemunerationEntityAutoMapperProfile {
       if (!source.disabilityRetirementPlanning) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: DisabilityRetirementPlanningRemunerationEntity.name,
-          sourceClass: DisabilityRetirementPlanningRemunerationTypeormEntity.name,
+          sourceClass:
+            DisabilityRetirementPlanningRemunerationTypeormEntity.name,
         });
       }
 

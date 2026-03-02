@@ -29,13 +29,25 @@ export class DisabilityRetirementPlanningPeriodDisabilityTypeormEntity extends B
   })
   public endDate: Date | null;
 
-  @Column({ name: 'disability_degree', type: 'simple-enum', enum: RetirementPlanningDisabilityDegreeEnum })
+  @Column({
+    name: 'disability_degree',
+    type: 'simple-enum',
+    enum: RetirementPlanningDisabilityDegreeEnum,
+  })
   public disabilityDegree: RetirementPlanningDisabilityDegreeEnum;
 
-  @Column({ name: 'disability_category', type: 'simple-enum', enum: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum })
+  @Column({
+    name: 'disability_category',
+    type: 'simple-enum',
+    enum: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum,
+  })
   public disabilityCategory: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum;
 
-  @Column({ name: 'disability_type', type: 'simple-enum', enum: RetirementPlanningDisabilityTimeTypeEnum })
+  @Column({
+    name: 'disability_type',
+    type: 'simple-enum',
+    enum: RetirementPlanningDisabilityTimeTypeEnum,
+  })
   public disabilityType: RetirementPlanningDisabilityTimeTypeEnum;
 
   @Column({ name: 'disability_description', type: 'text' })

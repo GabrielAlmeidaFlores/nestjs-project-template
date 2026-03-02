@@ -25,9 +25,12 @@ export class CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto extend
   })
   public readonly disabilityDegree: RetirementPlanningDisabilityDegreeEnum;
 
-  @RequestDtoEnumProperty(DisabilityRetirementPlanningPeriodDisabilityCategoryEnum, {
-    required: true,
-  })
+  @RequestDtoEnumProperty(
+    DisabilityRetirementPlanningPeriodDisabilityCategoryEnum,
+    {
+      required: true,
+    },
+  )
   public readonly disabilityCategory: DisabilityRetirementPlanningPeriodDisabilityCategoryEnum;
 
   @RequestDtoValueObjectProperty(CidTenId, { required: false })
@@ -44,7 +47,10 @@ export class CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto extend
   @RequestDtoStringProperty({ required: true })
   public readonly activityImpact: string;
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, { required: false, isArray: true })
+  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
+    required: false,
+    isArray: true,
+  })
   public readonly documents?: Base64FileRequestDto[];
 
   protected override readonly _type =
@@ -59,7 +65,10 @@ export class CreateDisabilityRetirementPlanningPeriodSpecialTimeRequestDto exten
   @RequestDtoDateProperty({ required: false })
   public readonly endDate?: Date;
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, { required: false, isArray: true })
+  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
+    required: false,
+    isArray: true,
+  })
   public readonly documents?: Base64FileRequestDto[];
 
   protected override readonly _type =

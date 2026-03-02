@@ -5,13 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
+import { DisabilityRetirementPlanningPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period/disability-retirement-planning-period.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/disability-retirement-planning-period-disability.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/value-object/disability-retirement-planning-period-disability-id.value-object';
-import { DisabilityRetirementPlanningPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period/disability-retirement-planning-period.entity';
 
 @Injectable()
 export class DisabilityRetirementPlanningPeriodDisabilityEntityAutoMapperProfile {
-  protected readonly _type = DisabilityRetirementPlanningPeriodDisabilityEntityAutoMapperProfile.name;
+  protected readonly _type =
+    DisabilityRetirementPlanningPeriodDisabilityEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -28,8 +29,10 @@ export class DisabilityRetirementPlanningPeriodDisabilityEntityAutoMapperProfile
     ): DisabilityRetirementPlanningPeriodDisabilityEntity => {
       if (!source.disabilityRetirementPlanningPeriod) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: DisabilityRetirementPlanningPeriodDisabilityEntity.name,
-          sourceClass: DisabilityRetirementPlanningPeriodDisabilityTypeormEntity.name,
+          destinationClass:
+            DisabilityRetirementPlanningPeriodDisabilityEntity.name,
+          sourceClass:
+            DisabilityRetirementPlanningPeriodDisabilityTypeormEntity.name,
         });
       }
 

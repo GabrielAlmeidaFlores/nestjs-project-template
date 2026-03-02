@@ -52,13 +52,21 @@ export class UpdateDisabilityRetirementPlanningPeriodUseCase {
     private readonly cidTenQueryRepositoryGateway: CidTenQueryRepositoryGateway,
     @Inject(DisabilityRetirementPlanningPeriodCommandRepositoryGateway)
     private readonly periodCommandRepositoryGateway: DisabilityRetirementPlanningPeriodCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
+    )
     private readonly periodDisabilityCommandRepositoryGateway: DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
+    )
     private readonly periodDisabilityDocumentCommandRepositoryGateway: DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
+    )
     private readonly periodSpecialTimeCommandRepositoryGateway: DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
+    )
     private readonly periodSpecialTimeDocumentCommandRepositoryGateway: DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -310,13 +318,14 @@ export class UpdateDisabilityRetirementPlanningPeriodUseCase {
 
     const specialTimeId = new DisabilityRetirementPlanningPeriodSpecialTimeId();
 
-    const specialTime =
-      new DisabilityRetirementPlanningPeriodSpecialTimeEntity({
+    const specialTime = new DisabilityRetirementPlanningPeriodSpecialTimeEntity(
+      {
         id: specialTimeId,
         disabilityRetirementPlanningPeriod: period,
         startDate: specialTimeDto.startDate,
         endDate: specialTimeDto.endDate ?? null,
-      });
+      },
+    );
 
     operations.push(
       this.periodSpecialTimeCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodSpecialTime(

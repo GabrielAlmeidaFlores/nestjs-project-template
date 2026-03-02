@@ -15,6 +15,7 @@ import { DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGa
 import { DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-special-time/command/disability-retirement-planning-period-special-time.command.repository.gateway';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-special-time-document/command/disability-retirement-planning-period-special-time-document.command.repository.gateway';
 import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period/disability-retirement-planning-period.entity';
 import { DisabilityRetirementPlanningPeriodId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period/value-object/disability-retirement-planning-period-id.value-object';
 import { DisabilityRetirementPlanningPeriodDisabilityEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/disability-retirement-planning-period-disability.entity';
@@ -25,7 +26,6 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeEntity } from '@module/cus
 import { DisabilityRetirementPlanningPeriodSpecialTimeId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time/value-object/disability-retirement-planning-period-special-time-id.value-object';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/disability-retirement-planning-period-special-time-document.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/value-object/disability-retirement-planning-period-special-time-document-id.value-object';
-import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import {
   CreateDisabilityRetirementPlanningPeriodsRequestDto,
   CreateDisabilityRetirementPlanningPeriodRequestDto,
@@ -52,13 +52,21 @@ export class CreateDisabilityRetirementPlanningPeriodUseCase {
     private readonly cidTenQueryRepositoryGateway: CidTenQueryRepositoryGateway,
     @Inject(DisabilityRetirementPlanningPeriodCommandRepositoryGateway)
     private readonly periodCommandRepositoryGateway: DisabilityRetirementPlanningPeriodCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
+    )
     private readonly periodDisabilityCommandRepositoryGateway: DisabilityRetirementPlanningPeriodDisabilityCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
+    )
     private readonly periodDisabilityDocumentCommandRepositoryGateway: DisabilityRetirementPlanningPeriodDisabilityDocumentCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
+    )
     private readonly periodSpecialTimeCommandRepositoryGateway: DisabilityRetirementPlanningPeriodSpecialTimeCommandRepositoryGateway,
-    @Inject(DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway)
+    @Inject(
+      DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
+    )
     private readonly periodSpecialTimeDocumentCommandRepositoryGateway: DisabilityRetirementPlanningPeriodSpecialTimeDocumentCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -260,13 +268,14 @@ export class CreateDisabilityRetirementPlanningPeriodUseCase {
 
     const specialTimeId = new DisabilityRetirementPlanningPeriodSpecialTimeId();
 
-    const specialTime =
-      new DisabilityRetirementPlanningPeriodSpecialTimeEntity({
+    const specialTime = new DisabilityRetirementPlanningPeriodSpecialTimeEntity(
+      {
         id: specialTimeId,
         disabilityRetirementPlanningPeriod: period,
         startDate: specialTimeDto.startDate,
         endDate: specialTimeDto.endDate ?? null,
-      });
+      },
+    );
 
     operations.push(
       this.periodSpecialTimeCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodSpecialTime(

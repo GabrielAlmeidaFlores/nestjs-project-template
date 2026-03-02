@@ -48,4 +48,10 @@ export class DisabilityRetirementPlanningResultTypeormCommandRepository
     );
     return this.update(id.toString(), mappedData);
   }
+
+  public deleteDisabilityRetirementPlanningResult(
+    id: DisabilityRetirementPlanningResultId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
 }

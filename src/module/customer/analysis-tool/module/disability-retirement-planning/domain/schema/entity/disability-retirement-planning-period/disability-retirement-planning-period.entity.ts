@@ -1,9 +1,10 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 
-import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
-import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
-import { DisabilityRetirementPlanningPeriodEntityPropsInterface } from './disability-retirement-planning-period.entity.props.interface';
 import { DisabilityRetirementPlanningPeriodId } from './value-object/disability-retirement-planning-period-id.value-object';
+
+import type { DisabilityRetirementPlanningPeriodEntityPropsInterface } from './disability-retirement-planning-period.entity.props.interface';
+import type { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
+import type { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
 
 export class DisabilityRetirementPlanningPeriodEntity extends BaseEntity<DisabilityRetirementPlanningPeriodId> {
   protected readonly _type = DisabilityRetirementPlanningPeriodEntity.name;
@@ -16,7 +17,9 @@ export class DisabilityRetirementPlanningPeriodEntity extends BaseEntity<Disabil
   public readonly serviceType: RetirementPlanningPeriodServiceTypeEnum;
   public readonly department: string;
 
-  public constructor(props: DisabilityRetirementPlanningPeriodEntityPropsInterface) {
+  public constructor(
+    props: DisabilityRetirementPlanningPeriodEntityPropsInterface,
+  ) {
     super(DisabilityRetirementPlanningPeriodId, props);
     this.disabilityRetirementPlanning = props.disabilityRetirementPlanning;
     this.startDate = props.startDate;

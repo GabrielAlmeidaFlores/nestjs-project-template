@@ -79,14 +79,13 @@ export class CreateDisabilityRetirementPlanningRemunerationUseCase {
         1,
       );
 
-      const remunerationEntity = new DisabilityRetirementPlanningRemunerationEntity(
-        {
+      const remunerationEntity =
+        new DisabilityRetirementPlanningRemunerationEntity({
           id: new DisabilityRetirementPlanningRemunerationId(),
           disabilityRetirementPlanning: disabilityRetirementPlanningEntity,
           remunerationDate: normalizedDateToDayOne,
           remunerationAmount: remunerationDto.remunerationAmount,
-        },
-      );
+        });
 
       transactionOperations.push(
         this.disabilityRetirementPlanningRemunerationCommandRepositoryGateway.createDisabilityRetirementPlanningRemuneration(

@@ -70,13 +70,14 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
           )
         : [];
 
-      const legalProceedings = source.disabilityRetirementPlanningLegalProceeding
-        ? this.mapper.mapArray(
-            source.disabilityRetirementPlanningLegalProceeding,
-            DisabilityRetirementPlanningLegalProceedingTypeormEntity,
-            GetDisabilityRetirementPlanningLegalProceedingQueryResult,
-          )
-        : [];
+      const legalProceedings =
+        source.disabilityRetirementPlanningLegalProceeding
+          ? this.mapper.mapArray(
+              source.disabilityRetirementPlanningLegalProceeding,
+              DisabilityRetirementPlanningLegalProceedingTypeormEntity,
+              GetDisabilityRetirementPlanningLegalProceedingQueryResult,
+            )
+          : [];
 
       const remunerations = source.disabilityRetirementPlanningRemuneration
         ? this.mapper.mapArray(
@@ -170,7 +171,9 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,
-        ...(result !== undefined && { disabilityRetirementPlanningResult: result }),
+        ...(result !== undefined && {
+          disabilityRetirementPlanningResult: result,
+        }),
         disabilityRetirementPlanningPeriod: periods,
         disabilityRetirementPlanningDocument: documents,
         disabilityRetirementPlanningInssBenefit: inssBenefits,

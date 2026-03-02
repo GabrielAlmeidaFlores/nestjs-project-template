@@ -5,11 +5,15 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult, GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import {
+  GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult,
+  GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult,
+} from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile {
-  protected readonly _type = GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile.name;
+  protected readonly _type =
+    GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -26,8 +30,10 @@ export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapp
     ): GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult => {
       if (!source.disabilityRetirementPlanningPeriodSpecialTimeDocument) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult.name,
-          sourceClass: DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity.name,
+          destinationClass:
+            GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult.name,
+          sourceClass:
+            DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity.name,
         });
       }
 
