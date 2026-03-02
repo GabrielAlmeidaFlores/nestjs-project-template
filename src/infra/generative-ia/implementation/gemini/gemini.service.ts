@@ -18,26 +18,11 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
 
-  private readonly FALLBACK_MODELS: Record<string, string> = {
-    'gemini-3-pro-preview': 'gemini-3-flash-preview',
-    'gemini-3-flash-preview': 'gemini-2.0-flash',
-  };
-
-  private readonly GENERATIVE_IA_RULES = [
-    `
-Role: Act as a Technical Documentation Specialist.
-Task: Generate all responses exclusively in Standard Semantic Markdown optimized for direct HTML parsing.
-Formatting Rules:
-1. Strict Hierarchy: Use Markdown headers (#, ##, ###) to define the report structure. Never skip levels.
-2. Data Presentation: Use Markdown Tables (| column |) for all structured data. Do not use spaces, dashes, or tabs to visually simulate tables.
-3. Lists: Use standard bullet points (-) or numbered lists (1.) for sequential items.
-4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
-5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
-6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
-`,
-  ];
-
   protected readonly _type = GeminiService.name;
+
+  private readonly FALLBACK_MODELS: Record<string, string>;
+
+  private readonly GENERATIVE_IA_RULES: string[];
 
   private readonly googleGenerativeAI: GoogleGenAI;
   private readonly urlRegex: RegExp;
@@ -51,6 +36,23 @@ Formatting Rules:
     this.googleGenerativeAI = new GoogleGenAI({
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
+    this.FALLBACK_MODELS = {
+      'gemini-3-pro-preview': 'gemini-3-flash-preview',
+      'gemini-3-flash-preview': 'gemini-2.0-flash',
+    };
+    this.GENERATIVE_IA_RULES = [
+      `
+Role: Act as a Technical Documentation Specialist.
+Task: Generate all responses exclusively in Standard Semantic Markdown optimized for direct HTML parsing.
+Formatting Rules:
+1. Strict Hierarchy: Use Markdown headers (#, ##, ###) to define the report structure. Never skip levels.
+2. Data Presentation: Use Markdown Tables (| column |) for all structured data. Do not use spaces, dashes, or tabs to visually simulate tables.
+3. Lists: Use standard bullet points (-) or numbered lists (1.) for sequential items.
+4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
+5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
+6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
+`,
+    ];
   }
 
   public async generateFlashLiteResponseFromPromptAndFiles(
