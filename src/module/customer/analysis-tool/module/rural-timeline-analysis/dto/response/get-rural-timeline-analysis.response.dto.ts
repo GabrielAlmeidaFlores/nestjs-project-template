@@ -473,6 +473,9 @@ export class GetRuralTimelineAnalysisResponseDto extends BaseBuildableDtoObject 
   )
   public cnisContributionPeriods?: RuralTimelineAnalysisCnisContributionPeriodSummaryResponseDto[];
 
+  @ResponseDtoDateProperty({ required: false })
+  public lastAffiliationDate?: Date;
+
   @ResponseDtoObjectProperty(
     () => GetRuralTimelineAnalysisResponsibleResponseDto,
   )
