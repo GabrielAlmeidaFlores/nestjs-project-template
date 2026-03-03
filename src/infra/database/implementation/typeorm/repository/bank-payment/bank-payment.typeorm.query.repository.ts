@@ -1,7 +1,7 @@
 import { Constructor } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
@@ -9,9 +9,11 @@ import { NotFoundError } from '@core/error/not-found.error';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { BankPaymentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-payment.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { BankPaymentQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-payment/query/bank-payment.query.repository.gateway';
 import { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
+import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 
 @Injectable()
@@ -122,6 +124,11 @@ export class BankPaymentTypeormQueryRepository
           },
         },
       },
+      relations: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: true,
+        },
+      },
     });
 
     const resource = this.mapperGateway.mapArray(
@@ -134,5 +141,68 @@ export class BankPaymentTypeormQueryRepository
       ...data,
       resource,
     });
+  }
+
+  public async listBankPaymentByCustomerId(
+    customerId: CustomerId,
+    listData: ListDataInputModel,
+  ): Promise<ListDataOutputModel<GetBankPaymentQueryResult>> {
+    const data = await this.list(listData, {
+      where: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: {
+            organization: {
+              organizationMember: {
+                customer: {
+                  id: customerId.toString(),
+                },
+              },
+            },
+          },
+        },
+      },
+      relations: {
+        organizationPaymentPlanBankPayment: {
+          organizationPaymentPlan: true,
+        },
+      },
+    });
+
+    const resource = this.mapperGateway.mapArray(
+      data.resource,
+      BankPaymentTypeormEntity,
+      GetBankPaymentQueryResult,
+    );
+    return new ListDataOutputModel<GetBankPaymentQueryResult>({
+      ...data,
+      resource,
+    });
+  }
+
+  public async sumBankPaymentAmountByYear(year: number): Promise<number> {
+    const MONTH_DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MS = 999;
+
+    const startOfYear = new Date(year, 0, 1, 0, 0, 0, 0);
+    const endOfYear = new Date(
+      year,
+      MONTH_DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MS,
+    );
+
+    const total = await this.repository.sum('amount' as never, {
+      status: PaymentStatusEnum.CONFIRMED,
+      paymentDate: Between(startOfYear, endOfYear),
+    });
+
+    return total ?? 0;
   }
 }

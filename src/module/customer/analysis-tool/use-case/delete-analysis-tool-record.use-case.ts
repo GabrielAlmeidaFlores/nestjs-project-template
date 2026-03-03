@@ -8,8 +8,6 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { DeleteCnisFastAnalysisUseCase } from '@module/customer/analysis-tool/module/cnis-fast-analysis/use-case/delete-cnis-fast-analysis.use-case';
-import { DeleteRetirementPlanningRppsUseCase } from '@module/customer/analysis-tool/use-case/delete-retirement-planning-rpps.use-case';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -18,8 +16,6 @@ export class DeleteAnalysisToolRecordUseCase {
   protected readonly _type = DeleteAnalysisToolRecordUseCase.name;
 
   public constructor(
-    private readonly deleteCnisFastAnalysisUseCase: DeleteCnisFastAnalysisUseCase,
-    private readonly deleteRetirementPlanningRppsUseCase: DeleteRetirementPlanningRppsUseCase,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
@@ -52,22 +48,6 @@ export class DeleteAnalysisToolRecordUseCase {
         sessionData.authIdentityId,
         AnalysisToolRecordNotFoundError,
       );
-
-    if (analysisToolRecordResult.cnisFastAnalysis !== null) {
-      await this.deleteCnisFastAnalysisUseCase.execute(
-        sessionData,
-        organizationSessionData,
-        analysisToolRecordResult.cnisFastAnalysis.id,
-      );
-    }
-
-    if (analysisToolRecordResult.retirementPlanningRpps !== null) {
-      await this.deleteRetirementPlanningRppsUseCase.execute(
-        sessionData,
-        organizationSessionData,
-        analysisToolRecordResult.retirementPlanningRpps.id,
-      );
-    }
 
     const deleteTransaction =
       this.analysisToolRecordCommandRepositoryGateway.deleteAnalysisToolRecord(

@@ -4,7 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { RetirementPlanningRppsPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-disability.typeorm.entity';
 import { RetirementPlanningRppsPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-period-special-time.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
-import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
+import { RetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-document/enum/retirement-planning-document-type.enum';
 
 @Entity({ name: 'retirement_planning_rpps_period_document' })
 export class RetirementPlanningRppsPeriodDocumentTypeormEntity extends BaseTypeormEntity {

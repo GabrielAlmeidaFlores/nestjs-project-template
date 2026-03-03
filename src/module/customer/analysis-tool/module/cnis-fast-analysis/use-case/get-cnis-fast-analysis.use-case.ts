@@ -1,16 +1,17 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { CnisFastAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/cnis-fast-analysis.query.repository.gateway';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
 import {
-  GetCnisFastAnalysisResponseDto,
   GetCnisFastAnalysisClientResponseDto,
-  GetCnisFastAnalysisResultResponseDto,
+  GetCnisFastAnalysisResponseDto,
   GetCnisFastAnalysisResponsibleResponseDto,
+  GetCnisFastAnalysisResultResponseDto,
 } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/get-cnis-fast-analysis.response.dto';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -29,6 +30,8 @@ export class GetCnisFastAnalysisUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(CnisFastAnalysisQueryRepositoryGateway)
     private readonly cnisFastAnalysisQueryRepositoryGateway: CnisFastAnalysisQueryRepositoryGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -61,6 +64,25 @@ export class GetCnisFastAnalysisUseCase {
         CnisFastAnalysisNotFoundError,
       );
 
+    const cnisCompleteAnalysis =
+      cnisFastAnalysisQueryResult.cnisFastAnalysisResult &&
+      cnisFastAnalysisQueryResult.cnisFastAnalysisResult
+        .cnisCompleteAnalysis !== null
+        ? await this.exportDocumentGateway.convertMarkdownToHtml(
+            cnisFastAnalysisQueryResult.cnisFastAnalysisResult
+              .cnisCompleteAnalysis,
+          )
+        : null;
+
+    const cnisFastAnalysisResult =
+      cnisFastAnalysisQueryResult.cnisFastAnalysisResult &&
+      cnisCompleteAnalysis !== null
+        ? GetCnisFastAnalysisResultResponseDto.build({
+            ...cnisFastAnalysisQueryResult.cnisFastAnalysisResult,
+            cnisCompleteAnalysis,
+          })
+        : null;
+
     const response = GetCnisFastAnalysisResponseDto.build({
       ...cnisFastAnalysisQueryResult,
       status: analysisToolRecordQueryResult.status,
@@ -77,12 +99,7 @@ export class GetCnisFastAnalysisUseCase {
         cnisFastAnalysisQueryResult.cnisFastAnalysisInssBenefit.map(
           (t) => t.inssBenefitNumber,
         ),
-      cnisFastAnalysisResult:
-        cnisFastAnalysisQueryResult.cnisFastAnalysisResult !== null
-          ? GetCnisFastAnalysisResultResponseDto.build({
-              ...cnisFastAnalysisQueryResult.cnisFastAnalysisResult,
-            })
-          : null,
+      cnisFastAnalysisResult,
       createdBy: GetCnisFastAnalysisResponsibleResponseDto.build({
         ...analysisToolRecordQueryResult.createdBy.customer,
       }),

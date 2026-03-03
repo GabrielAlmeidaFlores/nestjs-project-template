@@ -6,8 +6,8 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { LegalPleadingAddressCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/command/legal-pleading-address.repository.gateway';
-import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
+import { LegalPleadingAddressCommandRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-address/command/legal-pleading-address.repository.gateway';
+import { LegalPleadingAddressEntity } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-address/legal-pleading-address.entity';
 
 @Injectable()
 export class LegalPleadingAddressTypeormCommandRepository

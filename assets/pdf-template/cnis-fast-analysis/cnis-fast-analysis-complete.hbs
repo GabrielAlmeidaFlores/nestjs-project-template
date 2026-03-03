@@ -1,0 +1,512 @@
+<div class="cnis-fast-analysis-report">
+  <h1>Análise Completa Rápida CNIS</h1>
+  <p class="report-date">Data da análise: {{reportDate}}</p>
+
+  {{! Dados do Cliente }}
+  <h2>1. Identificação do Cliente</h2>
+  <table>
+    <tbody>
+      <tr><th>Nome</th><td>{{cnisAnalysis.clientData.clientName}}</td></tr>
+      <tr><th>Nome da Mãe</th><td>{{cnisAnalysis.clientData.clientMotherName}}</td></tr>
+      <tr><th>CPF</th><td>{{cnisAnalysis.clientData.clientFederalDocument}}</td></tr>
+      <tr><th>NIT</th><td>{{cnisAnalysis.clientData.clientNIT}}</td></tr>
+      <tr><th>Data de Nascimento</th><td>{{formatDate cnisAnalysis.clientData.clientBirthDate}}</td></tr>
+    </tbody>
+  </table>
+
+  {{! Idade }}
+  <h2>2. Idade</h2>
+  <p><strong>{{cnisAnalysis.idade.abreviado}}</strong> ({{cnisAnalysis.idade.anos}} anos, {{cnisAnalysis.idade.meses}} meses e {{cnisAnalysis.idade.dias}} dias)</p>
+
+  {{! Resumo }}
+  <h2>3. Resumo da Análise</h2>
+  <table>
+    <tbody>
+      <tr><th>Tipo</th><td>Valor</td></tr>
+      <tr><th>Tempo Potencial Válido</th><td>{{cnisAnalysis.potencialValido}}</td></tr>
+      <tr><th>Tempo Restrito Válido</th><td>{{cnisAnalysis.restritoValido}}</td></tr>
+      <tr><th>Carência Total (meses)</th><td>{{cnisAnalysis.carenciaTotal}}</td></tr>
+      <tr><th>Duração Total (dias)</th><td>{{cnisAnalysis.duracaoTotalEmDias}}</td></tr>
+      <tr><th>Pontuação (idade + contribuição)</th><td>{{cnisAnalysis.points}}</td></tr>
+    </tbody>
+  </table>
+
+  {{! Consolidação do Tempo de Contribuição e Carência (prompt Seção 2) }}
+  <h2>3.1. Consolidação do Tempo de Contribuição e Carência</h2>
+  {{#if consolidacaoTempoCarencia}}
+  <table>
+    <thead>
+      <tr>
+        <th>Tempo de Contribuição Total (s/ pendências)</th>
+        <th>Tempo de Contribuição (c/ pendências)</th>
+        <th>Carência (s/ pendências)</th>
+        <th>Carência (c/ pendências)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{consolidacaoTempoCarencia.tempoSemPendencias}}</td>
+        <td>{{consolidacaoTempoCarencia.tempoComPendencias}}</td>
+        <td>{{consolidacaoTempoCarencia.carenciaComPendencias}}</td>
+        <td>{{consolidacaoTempoCarencia.carenciaSemPendencias}}</td>
+      </tr>
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Benefícios }}
+  <h2>4. Benefícios</h2>
+  {{#if cnisAnalysis.beneficios}}
+  {{#if (hasItems cnisAnalysis.beneficios)}}
+  <table>
+    <thead>
+      <tr>
+        <th>NIT</th>
+        <th>Origem</th>
+        <th>NB</th>
+        <th>Espécie</th>
+        <th>Situação</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.beneficios}}
+      {{#with this.socialSecurityAffiliationInfo}}
+      <tr>
+        <td>{{nit}}</td>
+        <td>{{origemDoVinculo}}</td>
+        <td>{{nb}}</td>
+        <td>{{especie}}</td>
+        <td>{{situacao}}</td>
+      </tr>
+      {{/with}}
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Análise de Benefícios por Incapacidade (prompt 4.4) }}
+  <h2>4.1. Análise de Benefícios por Incapacidade</h2>
+  {{#if beneficiosIncapacidadeTable}}
+  {{#if (hasItems beneficiosIncapacidadeTable)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Seq.</th>
+        <th>Origem / Vínculo</th>
+        <th>Status</th>
+        <th>Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each beneficiosIncapacidadeTable}}
+      <tr>
+        <td>{{seq}}</td>
+        <td>{{origem}}</td>
+        <td>{{status}}</td>
+        <td>{{observacao}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Análise de Inconsistências - Vínculos Sobrepostos a Benefícios (prompt 4.3.1) }}
+  <h2>4.2. Análise de Inconsistências (Vínculos Sobrepostos a Benefícios)</h2>
+  {{#if inconsistenciasSobreposicao}}
+  {{#if (hasItems inconsistenciasSobreposicao)}}
+  <p>Vínculos com período parcialmente invalidado devido à sobreposição com benefício por incapacidade.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Seq.</th>
+        <th>Origem do Vínculo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each inconsistenciasSobreposicao}}
+      <tr>
+        <td>{{seq}}</td>
+        <td>{{origem}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Tempo de Contribuição }}
+  <h2>5. Tempo de Contribuição por Vínculo (Resumo das Relações Previdenciárias)</h2>
+  {{#if (hasItems cnisAnalysis.tempoDeContribuicao)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Seq</th>
+        <th>Origem do Vínculo</th>
+        <th>Tipo Filiado no Vínculo</th>
+        <th>Indicadores</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Período</th>
+        <th>Remuneração</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.tempoDeContribuicao}}
+      <tr>
+        <td>{{seq}}</td>
+        <td>{{origemDoVinculo}}</td>
+        <td>{{tipoDoVinculo}}</td>
+        <td>{{indicadores}}</td>
+        <td>{{formatDate dados.data.dataInicio}}</td>
+        <td>{{formatDate dados.data.dataFim}}</td>
+        <td>{{dados.abreviado}}</td>
+        <td>{{dados.totalContribuicao}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Consolidado Resumido }}
+  <h2>6. Consolidado Resumido</h2>
+  {{#if (hasItems cnisAnalysis.consolidadoResumido)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Seq</th>
+        <th>Indicadores</th>
+        <th>Pendência</th>
+        <th>Origem</th>
+        <th>Tipo</th>
+        <th>Tempo Contrib.</th>
+        <th>Tempo Válido</th>
+        <th>Carência</th>
+        <th>Concomitante</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.consolidadoResumido}}
+      <tr class="{{#if isPendencia}}has-pendency{{/if}}">
+        <td>{{#if isConcomitante}}(C) {{/if}}{{#if isPendencia}}⚠️ {{/if}}{{#if (contains indicadores "PSE")}}🚨 {{/if}}{{#if ajustado}}🔸 {{/if}}{{seq}}</td>
+        <td>{{indicadores}}</td>
+        <td>{{#if isPendencia}}Sim{{else}}Não{{/if}}</td>
+        <td>{{origem}}</td>
+        <td>{{tipo}}</td>
+        <td>{{contributionTime.abreviado}}</td>
+        <td>{{validContributionTime.abreviado}}</td>
+        <td>{{carencia}}</td>
+        <td>{{#if isConcomitante}}Sim{{else}}Não{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <p class="legenda"><strong>Legenda:</strong> (C) Concomitante | ⚠️ Pendência | 💎 Tempo Especial | 🚨 Segurado Especial (período rural validado) | 🔸 Período parcialmente válido (ajustado por sobreposição com benefício)</p>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Detalhamento de Períodos Concomitantes }}
+  <h3>6.1. Detalhamento de Períodos Concomitantes</h3>
+  {{#if concomitantesParaDetalhe}}
+  {{#if (hasItems concomitantesParaDetalhe)}}
+  <p>Para o cálculo do tempo total, os períodos de trabalho simultâneo (concomitantes) são ajustados para evitar a dupla contagem, aproveitando-se o período mais longo de cada sobreposição.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Grupo</th>
+        <th>Seq.</th>
+        <th>Vínculo</th>
+        <th>Período Original</th>
+        <th>Duração Original</th>
+        <th>Análise de Concomitância</th>
+        <th>Tempo Válido para Soma</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each concomitantesParaDetalhe}}
+      <tr>
+        <td>{{grupo}}</td>
+        <td>{{seq}}</td>
+        <td>{{origem}}</td>
+        <td>{{periodoOriginal}}</td>
+        <td>{{duracaoOriginal}}</td>
+        <td>{{analise}}</td>
+        <td>{{tempoValidoSoma}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Demonstrativo de Impacto das Pendências }}
+  <h3>6.2. Demonstrativo de Impacto das Pendências</h3>
+  {{#if cnisAnalysis.indicadoresDePendencia}}
+  {{#if (hasItems cnisAnalysis.indicadoresDePendencia)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Causa da Pendência / Indicadores</th>
+        <th>Vínculos Afetados (Seq.)</th>
+        <th>Impacto Líquido no Tempo</th>
+        <th>Impacto Líquido na Carência</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.indicadoresDePendencia}}
+      <tr>
+        <td>{{indicadores}}</td>
+        <td>{{seq}}</td>
+        <td>{{anos}}a {{meses}}m {{dias}}d</td>
+        <td>{{carencia}}</td>
+      </tr>
+      {{/each}}
+      {{#if demonstrativoImpactoTotal}}
+      <tr class="total-row">
+        <td><strong>TOTAL CONSOLIDADO EM RISCO</strong></td>
+        <td>—</td>
+        <td><strong>{{demonstrativoImpactoTotal.impactoAnos}}a {{demonstrativoImpactoTotal.impactoMeses}}m {{demonstrativoImpactoTotal.impactoDias}}d</strong></td>
+        <td><strong>{{demonstrativoImpactoTotal.impactoCarencia}}</strong></td>
+      </tr>
+      {{/if}}
+    </tbody>
+  </table>
+  <p class="nota">As pendências nas remunerações podem impactar o vínculo inteiro; o total consolida o tempo e a carência em risco.</p>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Indicadores de Pendência }}
+  <h2>7. Indicadores de Pendência</h2>
+  {{#if cnisAnalysis.indicadoresDePendencia}}
+  {{#if (hasItems cnisAnalysis.indicadoresDePendencia)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Seq</th>
+        <th>Indicadores</th>
+        <th>Dias</th>
+        <th>Meses</th>
+        <th>Anos</th>
+        <th>Carência</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.indicadoresDePendencia}}
+      <tr>
+        <td>{{seq}}</td>
+        <td>{{indicadores}}</td>
+        <td>{{dias}}</td>
+        <td>{{meses}}</td>
+        <td>{{anos}}</td>
+        <td>{{carencia}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Período de Graça }}
+  <h2>8. Período de Graça</h2>
+  {{#if cnisAnalysis.periodoDeGraca}}
+  {{#if cnisAnalysis.periodoDeGraca.cenarios}}
+  {{#if (hasItems cnisAnalysis.periodoDeGraca.cenarios)}}
+  {{#each cnisAnalysis.periodoDeGraca.cenarios}}
+  <h3>{{this.type}}</h3>
+  <table>
+    <tbody>
+      <tr><th>Indicadores</th><td>Valor</td></tr>
+      <tr><th>Vínculos Considerados</th><td>{{arrayJoin this.[Vínculos Considerados] ", "}}</td></tr>
+      <tr><th>Total de Contribuições (meses)</th><td>{{this.[Total de Contribuições (meses)]}}</td></tr>
+      <tr><th>Total Contínuas (meses)</th><td>{{this.[Total de Contribuições Contínuas (meses, 0 se houver hiato >12m)]}}</td></tr>
+      <tr><th>Atingiu 120 contribuições?</th><td>{{this.[Atingiu 120 Contribuições?]}}</td></tr>
+      <tr><th>Direito à Prorrogação +12m</th><td>{{this.[Direito à Prorrogação de +12 meses no Período de Graça]}}</td></tr>
+    </tbody>
+  </table>
+  {{/each}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Data Final Qualidade de Segurado }}
+  <h2>9. Data Final da Qualidade de Segurado</h2>
+  {{#if cnisAnalysis.dataFinalDaQualidadedeDeSegurado}}
+  {{#if (hasItems cnisAnalysis.dataFinalDaQualidadedeDeSegurado)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th>Última Referência</th>
+        <th>Próximo Vínculo</th>
+        <th>Data Final (Adm.)</th>
+        <th>Data Final (Jud.)</th>
+        <th>Mantida?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cnisAnalysis.dataFinalDaQualidadedeDeSegurado}}
+      <tr>
+        <td>{{periodo_analisado}}</td>
+        <td>{{formatDate ultima_referencia}}</td>
+        <td>{{formatDate proximo_vinculo}}</td>
+        <td>{{formatDate data_final_qualidade_segurado_administrativa}}</td>
+        <td>{{formatDate data_final_qualidade_segurado_judicial}}</td>
+        <td>{{#if qualidade_segurado_foi_mantida}}Sim{{else}}Não{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Tempo com Restrições }}
+  <h2>10. Tempo Total com Restrições</h2>
+  {{#if cnisAnalysis.calculateTempoTotalComRestricoes}}
+  {{#if cnisAnalysis.calculateTempoTotalComRestricoes.tempoComRestricoesResumo}}
+  <table>
+    <tbody>
+      <tr><th>Tipo</th><td>Tempo Total com Restrições</td></tr>
+      <tr><th>Carência Total (restrições)</th><td>{{cnisAnalysis.calculateTempoTotalComRestricoes.tempoComRestricoesResumo.carenciaTotal}}</td></tr>
+      <tr><th>Tempo Total (restrições)</th><td>{{cnisAnalysis.calculateTempoTotalComRestricoes.tempoComRestricoesResumo.tempoTotalComRestricoesContribuicao.abreviado}}</td></tr>
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Salário Benefício e Ajuste }}
+  <h2>11. Salário de Benefício e Ajuste</h2>
+  <table>
+    <tbody>
+      <tr><th>Tipo</th><td>Salário</td></tr>
+      <tr><th>Salário SB Pós-Reforma</th><td>{{formatCurrency cnisAnalysis.salarioSBPosReforma.salarioBeneficio}}</td></tr>
+      <tr><th>Salário SB Pré-Reforma</th><td>{{formatCurrency cnisAnalysis.salarioSBPreReforma.salarioBeneficio}}</td></tr>
+      <tr><th>Ajuste Final (SB Pós)</th><td>{{formatCurrency cnisAnalysis.ajusteFinal.ajusteSbPos}}</td></tr>
+      <tr><th>Ajuste Final (SB Pré)</th><td>{{formatCurrency cnisAnalysis.ajusteFinal.ajusteSbPre}}</td></tr>
+    </tbody>
+  </table>
+
+  {{! Cálculo do Salário-de-Benefício (Art. 26, EC 103/2019) - prompt Seção 6 }}
+  <h3>11.1. Cálculo do Salário-de-Benefício (Art. 26, EC 103/2019)</h3>
+  {{#if resumoSalarioBeneficio}}
+  <table>
+    <tbody>
+      <tr><th>Descrição</th><th>Valor</th></tr>
+      <tr><th>Soma dos Salários Corrigidos</th><td>{{formatCurrency resumoSalarioBeneficio.somaSalariosCorrigidos}}</td></tr>
+      <tr><th>Número de Contribuições</th><td>{{resumoSalarioBeneficio.numeroContribuicoes}}</td></tr>
+      <tr><th>Cálculo da Média</th><td>{{formatCurrency resumoSalarioBeneficio.somaSalariosCorrigidos}} / {{resumoSalarioBeneficio.numeroContribuicoes}} = {{formatCurrency resumoSalarioBeneficio.calculoMedia}}</td></tr>
+      <tr><th>Salário-de-Benefício (SB) Resultante</th><td>{{formatCurrency resumoSalarioBeneficio.sbResultante}}</td></tr>
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Análise das 20% Menores Contribuições - prompt 6.1 }}
+  <h3>11.2. Análise das 20% Menores Contribuições</h3>
+  {{#if menoresContribuicoes20Pct}}
+  {{#if (hasItems menoresContribuicoes20Pct)}}
+  <table>
+    <thead>
+      <tr>
+        <th>Ordem</th>
+        <th>Mês/Ano (Competência)</th>
+        <th>Valor Corrigido (R$)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each menoresContribuicoes20Pct}}
+      <tr>
+        <td>{{ordem}}</td>
+        <td>{{competencia}}</td>
+        <td>{{formatCurrency valorCorrigido}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+
+  {{! Pedágio }}
+  <h2>12. Pedágio (Regras de Transição)</h2>
+  <table>
+    <tbody>
+      <tr><th>Tipo</th><td>Pedágio</td></tr>
+      <tr><th>Pedágio 100%</th><td>Contribuição à reforma: {{cnisAnalysis.tempoPedagio100.totalContributionAtReforma}} anos | Faltante: {{cnisAnalysis.tempoPedagio100.tempoFaltante}} | Pedágio: {{cnisAnalysis.tempoPedagio100.pedagio}} | Total necessário: {{cnisAnalysis.tempoPedagio100.tempoTotalNecessario}}</td></tr>
+      <tr><th>Pedágio 50%</th><td>Contribuição à reforma: {{cnisAnalysis.tempoPedagio50.totalContributionAtReforma}} anos | Faltante: {{cnisAnalysis.tempoPedagio50.tempoFaltante}} | Pedágio: {{cnisAnalysis.tempoPedagio50.pedagio}} | Total necessário: {{cnisAnalysis.tempoPedagio50.tempoTotalNecessario}}</td></tr>
+    </tbody>
+  </table>
+
+  {{! Análises de Aposentadoria }}
+  <h2>13. Análises de Aposentadoria</h2>
+  {{#if (hasItems aposentadoriaItems)}}
+  {{#each aposentadoriaItems}}
+  <div class="aposentadoria-block">
+    <h3>{{this.type}}</h3>
+    <p><strong>Elegível:</strong> {{#if this.eligibility.isEligible}}Sim{{else}}Não{{/if}}
+      {{#if this.eligibility.eligibilityDate}} | <strong>Data de elegibilidade:</strong> {{formatDate this.eligibility.eligibilityDate}}{{/if}}
+      {{#if this.eligibility.projectedFulfillmentDate}} | <strong>Previsão de cumprimento:</strong> {{formatDate this.eligibility.projectedFulfillmentDate}}{{/if}}
+    </p>
+    {{#if this.requirements}}
+    <table class="requirements">
+      <tbody>
+        <tr><th>Indicadores</th><td>Requisitos</td></tr>
+        {{#each this.requirementsEntries}}
+        <tr><th>{{this.key}}</th><td>{{formatValue this.value}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{/if}}
+  </div>
+  {{/each}}
+  {{else}}
+  <p class="sem-dados">Não há valores a contabilizar nesta seção.</p>
+  {{/if}}
+</div>
