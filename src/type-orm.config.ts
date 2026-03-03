@@ -13,7 +13,7 @@ const typeormDataSource = new DataSource({
   database: DatabaseApplicationVariable.DATABASE_NAME,
   username: DatabaseApplicationVariable.DATABASE_USERNAME,
   password: DatabaseApplicationVariable.DATABASE_PASSWORD,
-  synchronize: true,
+  synchronize: false,
   extra: {
     trustServerCertificate: true,
   },
