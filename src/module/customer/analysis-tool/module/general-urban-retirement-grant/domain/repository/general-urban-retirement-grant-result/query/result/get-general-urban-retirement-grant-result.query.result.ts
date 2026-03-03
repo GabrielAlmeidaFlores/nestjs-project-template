@@ -10,7 +10,11 @@ export class GetGeneralUrbanRetirementGrantResultQueryResult extends BaseBuildab
   public readonly clientLastAffiliationDate: Date | null;
   public readonly compareCnisCtps: string | null;
   public readonly compareCnisCtpsRaw: string | null;
-  public readonly result: string | null;
+  public readonly generalUrbanRetirementGrantCompleteAnalysis: string | null;
+  public readonly generalUrbanRetirementGrantSimplifiedAnalysis: string | null;
+  public readonly generalUrbanRetirementGrantCompleteAnalysisDownload:
+    | string
+    | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

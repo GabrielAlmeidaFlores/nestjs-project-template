@@ -9,5 +9,7 @@ export interface GeneralUrbanRetirementGrantResultEntityPropsInterface extends B
   clientLastAffiliationDate?: Date | null;
   compareCnisCtps?: string | null;
   compareCnisCtpsRaw?: string | null;
-  result?: string | null;
+  generalUrbanRetirementGrantCompleteAnalysis?: string | null;
+  generalUrbanRetirementGrantSimplifiedAnalysis?: string | null;
+  generalUrbanRetirementGrantCompleteAnalysisDownload?: string | null;
 }

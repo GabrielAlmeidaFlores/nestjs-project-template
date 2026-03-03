@@ -42,7 +42,7 @@ export class GetGeneralUrbanRetirementGrantUseCase {
           }),
         ) ?? undefined,
       generalUrbanRetirementGrantResult:
-        result.generalUrbanRetirementGrantResult != null
+        result.generalUrbanRetirementGrantResult !== null
           ? GetGeneralUrbanRetirementGrantResultResponseDto.build({
               clientName:
                 result.generalUrbanRetirementGrantResult.clientName ?? null,
@@ -61,6 +61,9 @@ export class GetGeneralUrbanRetirementGrantUseCase {
               compareCnisCtpsRaw:
                 result.generalUrbanRetirementGrantResult.compareCnisCtpsRaw ??
                 null,
+              generalUrbanRetirementGrantCompleteAnalysis:
+                result.generalUrbanRetirementGrantResult
+                  .generalUrbanRetirementGrantCompleteAnalysis ?? null,
             })
           : undefined,
       generalUrbanRetirementGrantLegalProceeding:

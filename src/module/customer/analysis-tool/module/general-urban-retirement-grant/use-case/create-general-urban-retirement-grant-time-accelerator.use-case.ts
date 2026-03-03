@@ -70,25 +70,29 @@ export class CreateGeneralUrbanRetirementGrantTimeAcceleratorUseCase {
       parsed = {};
     }
 
-    const generalUrbanRetirementGrant = analysisResult.generalUrbanRetirementGrant;
+    const generalUrbanRetirementGrant =
+      analysisResult.generalUrbanRetirementGrant;
     if (!generalUrbanRetirementGrant) {
       throw new GeneralUrbanRetirementGrantAnalysisResultNotFoundError();
     }
 
-    const timeAccelerator = new GeneralUrbanRetirementGrantTimeAcceleratorEntity({
-      timeType: parsed.tipo ?? 'N/A',
-      name: parsed.nome ?? 'N/A',
-      institution: parsed.empresa ?? 'N/A',
-      periodStart: parsed.periodoInicio ? new Date(parsed.periodoInicio) : null,
-      periodEnd: parsed.periodoFim ? new Date(parsed.periodoFim) : null,
-      viability: parsed.viabilidade ?? 'N/A',
-      technicalNote: parsed.observacaoTecnica ?? 'N/A',
-      affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
-      timeGained: parsed.tempoContribuicao ?? 'N/A',
-      recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
-      recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',
-      generalUrbanRetirementGrant,
-    });
+    const timeAccelerator =
+      new GeneralUrbanRetirementGrantTimeAcceleratorEntity({
+        timeType: parsed.tipo ?? 'N/A',
+        name: parsed.nome ?? 'N/A',
+        institution: parsed.empresa ?? 'N/A',
+        periodStart: parsed.periodoInicio
+          ? new Date(parsed.periodoInicio)
+          : null,
+        periodEnd: parsed.periodoFim ? new Date(parsed.periodoFim) : null,
+        viability: parsed.viabilidade ?? 'N/A',
+        technicalNote: parsed.observacaoTecnica ?? 'N/A',
+        affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
+        timeGained: parsed.tempoContribuicao ?? 'N/A',
+        recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
+        recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',
+        generalUrbanRetirementGrant,
+      });
 
     const createTx =
       this.generalUrbanRetirementGrantTimeAcceleratorCommandRepositoryGateway.createGeneralUrbanRetirementGrantTimeAccelerator(

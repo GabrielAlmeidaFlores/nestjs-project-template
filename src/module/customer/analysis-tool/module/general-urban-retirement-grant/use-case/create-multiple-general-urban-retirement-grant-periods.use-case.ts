@@ -36,11 +36,10 @@ export class CreateMultipleGeneralUrbanRetirementGrantPeriodsUseCase {
         GeneralUrbanRetirementGrantNotFoundError,
       );
 
-    const generalUrbanRetirementGrantEntity = new GeneralUrbanRetirementGrantEntity(
-      {
+    const generalUrbanRetirementGrantEntity =
+      new GeneralUrbanRetirementGrantEntity({
         ...generalUrbanRetirementGrant,
-      },
-    );
+      });
 
     const periodEntities: GeneralUrbanRetirementGrantPeriodEntity[] =
       dto.periods.map(

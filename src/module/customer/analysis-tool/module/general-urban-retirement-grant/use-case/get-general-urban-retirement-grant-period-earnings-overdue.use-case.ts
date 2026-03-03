@@ -48,8 +48,7 @@ export class GetGeneralUrbanRetirementGrantPeriodEarningsOverdueUseCase {
 
     if (
       period.isPendency === true &&
-      period.reasonPendency !==
-        ReasonPendencyEnum.INCONSISTENT_COMPETENCE
+      period.reasonPendency !== ReasonPendencyEnum.INCONSISTENT_COMPETENCE
     ) {
       return [];
     }
