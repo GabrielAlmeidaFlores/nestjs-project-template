@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type, plainToInstance } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
+import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
 
 import { BaseDtoProperty } from '@shared/api/util/decorator/property/dto-property/base/base-dto-property/base-dto-property.decorator';
 
@@ -160,6 +160,14 @@ export function BaseDtoObjectProperty(
 
   if (!propertyIsRequired) {
     decorators.unshift(IsOptional());
+  } else {
+    decorators.unshift(
+      IsDefined({
+        message: (args: ValidationArguments) => {
+          return `o campo '${args.property}' é obrigatório`;
+        },
+      }),
+    );
   }
 
   return applyDecorators(...decorators);

@@ -1,3 +1,4 @@
+// this is a test
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -18,6 +19,7 @@ import { InvalidInputErrorExceptionFilter } from '@shared/api/gateway/exception-
 import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filter/not-found.error.exception-filter';
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unexpected.error.exception-filter';
+import { LoggingInterceptor } from '@shared/api/gateway/interceptor/logging/logging.interceptor';
 import { TransformValidateInterceptor } from '@shared/api/gateway/interceptor/transform-validate/transform-validate.interceptor';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
@@ -110,6 +112,7 @@ export class AppConfig extends AppConfigUtils {
 
   public applyGlobalInterceptor(): this {
     const reflector = this.app.get(Reflector);
+    this.app.useGlobalInterceptors(new LoggingInterceptor());
     this.app.useGlobalInterceptors(new TransformValidateInterceptor(reflector));
 
     return this;

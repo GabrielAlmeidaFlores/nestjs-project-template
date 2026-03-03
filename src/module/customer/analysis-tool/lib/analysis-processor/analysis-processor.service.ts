@@ -214,4 +214,447 @@ Análise processada do CNIS:
       }),
     );
   }
+
+  public async getSpecialActivityCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+    asJson = true,
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: asJson
+          ? ResponseConfigInputModel.build({
+              responseMimeType:
+                GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+              jsonSchema: {
+                type: 'object',
+                properties: {
+                  periods: {
+                    type: 'array',
+                    description:
+                      'Lista de períodos de atividade especial analisados',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        label: {
+                          type: 'string',
+                          description: 'Rótulo descritivo do período',
+                        },
+                        start: {
+                          type: 'string',
+                          description: 'Data de início no formato YYYY-MM-DD',
+                        },
+                        end: {
+                          type: 'string',
+                          description: 'Data de término no formato YYYY-MM-DD',
+                        },
+                        recognized: {
+                          type: 'boolean',
+                          description:
+                            'Indica se o período foi reconhecido como atividade especial',
+                        },
+                        companyName: {
+                          type: 'string',
+                          description: 'Nome da empresa/empregador',
+                        },
+                        companyCNPJ: {
+                          type: 'string',
+                          description: 'CNPJ da empresa',
+                        },
+                        role: {
+                          type: 'string',
+                          description: 'Cargo/função exercida',
+                        },
+                        employmentLinkStartDate: {
+                          type: 'string',
+                          description: 'Data de início do vínculo',
+                        },
+                        employmentLinkEndDate: {
+                          type: 'string',
+                          description: 'Data de término do vínculo',
+                        },
+                        employmentLinkSupportingDocument: {
+                          type: 'string',
+                          description: 'Documento comprobatório do vínculo',
+                        },
+                        employmentLinkPresentInCNIS: {
+                          type: 'boolean',
+                          description: 'Indica se o vínculo consta no CNIS',
+                        },
+                        employmentLinkEarningsInCNIS: {
+                          type: 'boolean',
+                          description:
+                            'Indica se há remunerações registradas no CNIS',
+                        },
+                        harmfulAgentsHasAny: {
+                          type: 'boolean',
+                          description:
+                            'Indica se há agentes nocivos identificados',
+                        },
+                        harmfulAgentsExposureFrequency: {
+                          type: 'array',
+                          description:
+                            'Frequência e intensidade de exposição aos agentes',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              agent: {
+                                type: 'string',
+                                description: 'Nome do agente nocivo',
+                              },
+                              intensity: {
+                                type: 'string',
+                                description: 'Intensidade da exposição',
+                              },
+                              characteristic: {
+                                type: 'string',
+                                description: 'Característica do agente',
+                              },
+                            },
+                          },
+                        },
+                        harmfulAgentsInformationSource: {
+                          type: 'array',
+                          description: 'Fontes de informação sobre os agentes',
+                          items: {
+                            type: 'string',
+                          },
+                        },
+                        harmfulAgentsIdentifiedAgents: {
+                          type: 'array',
+                          description: 'Lista de agentes identificados',
+                          items: {
+                            type: 'string',
+                          },
+                        },
+                        harmfulAgentsEffectivePPE: {
+                          type: 'boolean',
+                          description:
+                            'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
+                        },
+                        legalFrameworkOccupationalCategoryDecree: {
+                          type: 'string',
+                          description:
+                            'Decreto aplicável à categoria profissional',
+                        },
+                        legalFrameworkOccupationalCategoryCode: {
+                          type: 'string',
+                          description: 'Código da categoria profissional',
+                        },
+                        legalFrameworkOccupationalCategoryDescription: {
+                          type: 'string',
+                          description: 'Descrição da categoria profissional',
+                        },
+                        legalFrameworkHarmfulAgentDecree: {
+                          type: 'string',
+                          description: 'Decreto aplicável ao agente nocivo',
+                        },
+                        legalFrameworkHarmfulAgentCode: {
+                          type: 'string',
+                          description: 'Código do agente nocivo',
+                        },
+                        legalFrameworkHarmfulAgentDescription: {
+                          type: 'string',
+                          description: 'Descrição do agente nocivo',
+                        },
+                        legalFrameworkCaseLawOrTechnicalStandardReference: {
+                          type: 'string',
+                          description: 'Referência da jurisprudência/norma',
+                        },
+                        legalFrameworkCaseLawOrTechnicalStandardCode: {
+                          type: 'string',
+                          description: 'Código da norma técnica',
+                        },
+                        legalFrameworkCaseLawOrTechnicalStandardDescription: {
+                          type: 'string',
+                          description: 'Descrição da norma técnica',
+                        },
+                        technicalConclusionSpecialTimeRecognized: {
+                          type: 'boolean',
+                          description:
+                            'Indica se o tempo especial foi reconhecido',
+                        },
+                        technicalConclusionJustification: {
+                          type: 'string',
+                          description: 'Justificativa da conclusão técnica',
+                        },
+                        additionalNotes: {
+                          type: 'string',
+                          description: 'Observações adicionais relevantes',
+                        },
+                      },
+                      required: [
+                        'label',
+                        'start',
+                        'end',
+                        'recognized',
+                        'companyName',
+                        'companyCNPJ',
+                        'role',
+                        'employmentLinkStartDate',
+                        'employmentLinkEndDate',
+                        'employmentLinkSupportingDocument',
+                        'employmentLinkPresentInCNIS',
+                        'employmentLinkEarningsInCNIS',
+                        'harmfulAgentsHasAny',
+                        'harmfulAgentsExposureFrequency',
+                        'harmfulAgentsInformationSource',
+                        'harmfulAgentsIdentifiedAgents',
+                        'harmfulAgentsEffectivePPE',
+                        'legalFrameworkOccupationalCategoryDecree',
+                        'legalFrameworkOccupationalCategoryCode',
+                        'legalFrameworkOccupationalCategoryDescription',
+                        'legalFrameworkHarmfulAgentDecree',
+                        'legalFrameworkHarmfulAgentCode',
+                        'legalFrameworkHarmfulAgentDescription',
+                        'legalFrameworkCaseLawOrTechnicalStandardReference',
+                        'legalFrameworkCaseLawOrTechnicalStandardCode',
+                        'legalFrameworkCaseLawOrTechnicalStandardDescription',
+                        'technicalConclusionSpecialTimeRecognized',
+                        'technicalConclusionJustification',
+                        'additionalNotes',
+                      ],
+                    },
+                  },
+                  analysisResult: {
+                    type: 'string',
+                    description: 'Análise completa em formato markdown',
+                  },
+                },
+                required: ['periods', 'analysisResult'],
+              },
+            })
+          : null,
+      }),
+    );
+  }
+
+  public async getSpecialActivitySimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMedicalQuestionGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMedicalQuestionGeneratorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+  public async getJudicialCaseAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getJudicialCaseAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAdministrativeProcedureInssAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAdministrativeProcedureInssAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAudienceQuestionGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getAudienceQuestionGeneratorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMedicalAndSocialReportObjectionGeneratorAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getMedicalAndSocialReportObjectionGeneratorAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpeechGeneratorCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getDisabilityAssessmentForBpcAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getSpeechGeneratorSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getDisabilityAssessmentForBpcAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getPerCapitaIncomeForBpcCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getPerCapitaIncomeForBpcSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getInsuranceQualityAnalysisCompleteAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
+  public async getInsuranceQualityAnalysisSimplifiedAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
 }

@@ -34,28 +34,32 @@ export class PdfUtil {
     for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
       const page = await pdfDocument.getPage(pageNum);
       const content = await page.getTextContent();
+      const viewport = page.getViewport({ scale: 1.0 });
       const items = content.items as PdfRawItemInterface[];
 
       const pageItems: PdfItemInterface[] = [];
 
       for (const item of items) {
-        const top = item.transform[4];
-        const left = item.transform[5];
-        const height = item.height;
-        const width = item.width;
+        const normalizedTransform = pdfjsLib.Util.transform(
+          viewport.transform,
+          item.transform,
+        ) as unknown as number[];
 
-        if (top !== undefined && left !== undefined) {
+        const x = normalizedTransform[4];
+        const y = normalizedTransform[5];
+
+        if (x !== undefined && y !== undefined) {
           pageItems.push({
             text: item.str,
             geometry: {
-              width,
-              height,
+              width: item.width,
+              height: item.height,
             },
             polygon: {
-              topLeft: { x: left, y: top },
-              topRight: { x: left + width, y: top },
-              bottomRight: { x: left + width, y: top + height },
-              bottomLeft: { x: left, y: top + height },
+              topLeft: { x: x, y: y },
+              topRight: { x: x + item.width, y: y },
+              bottomRight: { x: x + item.width, y: y + item.height },
+              bottomLeft: { x: x, y: y + item.height },
             },
             page: pageNum,
           });

@@ -1,0 +1,69 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ['develop-2']
+  workflow_dispatch:
+
+env:
+  PROJECT_NAME: agiliza-previ-backend
+  ACTION_ENV: dev
+  WORKING_DIRECTORY: /workspace/container/docker/dev/agiliza-previ
+
+jobs:
+  build:
+    runs-on: qa
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔐 Docker Login to Registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
+
+      - name: 🐳 Build Docker Image
+        id: build_1
+        continue-on-error: true
+        run: |
+          docker build -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} --no-cache .
+
+      - name: 🐳 Build Docker Image (Tentativa 2 - Retry)
+        if: steps.build_1.outcome == 'failure'
+        run: |
+          sleep 10
+          docker build -t ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }} --no-cache .
+
+      - name: 📤 Push Docker Image
+        run: |
+          docker push ${{ vars.REGISTRY_URL }}:${{ env.ACTION_ENV }}
+  deploy:
+    needs: build
+    runs-on: qa
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔐 Docker Login to Registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $(echo "${{ vars.REGISTRY_URL }}" | cut -d/ -f1) -u ${{ secrets.REGISTRY_USER }} --password-stdin
+
+      - name: 📥 Pull Docker Image
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          docker compose pull ${{ env.PROJECT_NAME }}
+
+      - name: 🧩 Save Container ENVs
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo -e '${{ vars.DEV_ENVS }}' > ${{ env.WORKING_DIRECTORY }}/.${{ env.ACTION_ENV }}-${{ env.PROJECT_NAME }}.env
+
+      - name: 🚀 Deploy Docker
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+
+          docker compose up -d --force-recreate --pull always ${{ env.PROJECT_NAME }}
+      - name: 🧾 Docker Status & Logs
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          sleep 30
+          docker compose logs --tail=50 ${{ env.PROJECT_NAME }}
