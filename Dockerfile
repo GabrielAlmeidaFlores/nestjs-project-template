@@ -49,8 +49,6 @@ RUN chown -R node:node /usr/src/app
 
 ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
 
-RUN mkdir -p /usr/src/app/logs && chown -R node:node /usr/src/app
-
 USER node
 
 CMD ["node", "dist/main"]
