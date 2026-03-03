@@ -7,7 +7,7 @@ import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementati
 export class LegalPleadingDocumentAnalysisTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'analysis',
-    type: 'text',
+    type: 'longtext',
     nullable: true,
   })
   public analysis: string | null;

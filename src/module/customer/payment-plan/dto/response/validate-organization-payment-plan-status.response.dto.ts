@@ -1,6 +1,7 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { PaymentPlanPaidResourceId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/value-object/payment-plan-paid-resource-id/payment-plan-paid-resource-id.value-object';
+import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
@@ -82,6 +83,9 @@ export class ValidateOrganizationPaymentPlanStatusResponseDto extends BaseBuilda
       'Valor mensal do plano de pagamento em reais (R$). Representa o preço que a organização paga mensalmente pela assinatura.',
   })
   public planPrice: DecimalValue;
+
+  @ResponseDtoEnumProperty(PaymentPlanCycleEnum)
+  public paymentPlanCycle: PaymentPlanCycleEnum;
 
   @ResponseDtoNumberProperty({
     description:

@@ -11,6 +11,7 @@ import {
   PreAuthIdentitySignInResponseDto,
 } from '@module/generic/auth-identity/dto/response/pre-auth-identity-sign-in.response.dto';
 import { SignInMFAOptionEnum } from '@module/generic/auth-identity/enum/sign-in-mfa-option.enum';
+import { AccountDeactivatedError } from '@module/generic/auth-identity/error/account-deactivated.error';
 import { AuthIdentitySessionConflictError } from '@module/generic/auth-identity/error/auth-identity-session-conflict.error';
 import { WrongSignInCredentialsError } from '@module/generic/auth-identity/error/wrong-sign-in-credentials.error';
 import { AuthIdentitySessionGateway } from '@module/generic/auth-identity/lib/auth-identity-session/auth-identity-session.gateway';
@@ -54,6 +55,10 @@ export class PreAuthIdentitySignInUseCase {
 
     if (!authIdentity) {
       throw new WrongSignInCredentialsError();
+    }
+
+    if (!authIdentity.isActive) {
+      throw new AccountDeactivatedError();
     }
 
     const userLevel = authIdentity.admin

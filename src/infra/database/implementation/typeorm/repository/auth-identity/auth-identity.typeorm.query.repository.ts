@@ -7,6 +7,7 @@ import { FederalDocument } from '@core/domain/schema/value-object/federal-docume
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AuthIdentityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/auth-identity.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AuthIdentityQueryRepositoryGateway } from '@module/generic/auth-identity/domain/repository/auth-identity/query/auth-identity.query.repository.gateway';
 import { GetAuthIdentityWithRelationsQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity-with-relations.query.result';
 import { GetAuthIdentityQueryResult } from '@module/generic/auth-identity/domain/repository/auth-identity/query/result/get-auth-identity.query.result';
@@ -107,6 +108,36 @@ export class AuthIdentityTypeormQueryRepository
       data,
       AuthIdentityTypeormEntity,
       GetAuthIdentityQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findOneAuthIdentityByCustomerId(
+    customerId: CustomerId,
+  ): Promise<GetAuthIdentityWithRelationsQueryResult | null> {
+    const data = await this.findOne({
+      where: {
+        customer: {
+          id: customerId.toString(),
+        },
+      },
+      relations: {
+        admin: true,
+        customer: true,
+      },
+    });
+
+    const dataDoesNotExists = data === null;
+
+    if (dataDoesNotExists) {
+      return null;
+    }
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AuthIdentityTypeormEntity,
+      GetAuthIdentityWithRelationsQueryResult,
     );
 
     return mappedData;

@@ -13,6 +13,7 @@ export class GetAuthIdentityWithRelationsQueryResult extends BaseBuildableObject
   public readonly federalDocument: FederalDocument;
   public readonly password: HashedPassword;
   public readonly authenticatorAppSecret: string | null;
+  public readonly isActive: boolean;
   public readonly customer: GetCustomerQueryResult | null;
   public readonly admin: GetAdminQueryResult | null;
   public readonly createdAt: Date;

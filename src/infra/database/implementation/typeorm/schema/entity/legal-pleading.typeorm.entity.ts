@@ -14,13 +14,13 @@ import { LegalPleadingDocumentTypeormEntity } from '@infra/database/implementati
 import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-history.typeorm.entity';
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
 import { OrganizationMemberTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-member.typeorm.entity';
-import { DateTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date.transformer';
+import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
-import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
-import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
-import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
-import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
-import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
+import { LegalPleadingBenefitTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-benefit-type.enum';
+import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
+import { LegalPleadingSocialSecurityObjectiveEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-objective.enum';
+import { LegalPleadingSocialSecuritySystemEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-social-security-system.enum';
+import { LegalPleadingWritOfMandamusObjectiveEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-writ-of-mandamus-objective.enum';
 
 @Entity({ name: 'legal_pleading' })
 export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
@@ -89,7 +89,7 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
     name: 'application_submission_date',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public readonly applicationSubmissionDate: Date | null;
 
@@ -97,7 +97,7 @@ export class LegalPleadingTypeormEntity extends BaseTypeormEntity {
     name: 'benefit_termination_date',
     type: 'date',
     nullable: true,
-    transformer: DateTransformer,
+    transformer: DateOnlyTransformer,
   })
   public readonly benefitTerminationDate: Date | null;
 

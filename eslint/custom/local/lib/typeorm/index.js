@@ -7,6 +7,7 @@ module.exports = {
         'restrict-non-typeorm-entity-references': require('./restrict-non-typeorm-entity-references.js'),
         'restrict-typeorm-relation-type': require('./restrict-typeorm-relation-type.js'),
         'require-column-name-and-match': require('./require-column-name-and-match.js'),
+        'require-date-transformer-for-date-columns': require('./require-date-transformer-for-date-columns.js'),
       },
     },
   },
@@ -16,5 +17,6 @@ module.exports = {
     'typeorm-rule/restrict-non-typeorm-entity-references': 'error',
     'typeorm-rule/restrict-typeorm-relation-type': 'error',
     'typeorm-rule/require-column-name-and-match': 'error',
+    'typeorm-rule/require-date-transformer-for-date-columns': 'error',
   },
 };

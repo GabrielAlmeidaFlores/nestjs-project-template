@@ -435,6 +435,8 @@ export class AnalysisToolClientLegalProceedingTypeormQueryRepository
             customer: true,
             organization: true,
           },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
         },
       },
     });

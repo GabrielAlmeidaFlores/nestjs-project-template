@@ -21,9 +21,10 @@ import { CnisFastAnalysisResultEntity } from '@module/customer/analysis-tool/mod
 import { CreateCnisFastAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/cnis-fast-analysis/dto/response/create-cnis-fast-analysis-result.response.dto';
 import { CnisDocumentRequiredError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-document-required.error';
 import { CnisFastAnalysisNotFoundError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-not-found.error';
+import { CnisFastAnalysisResultAlreadyExistsError } from '@module/customer/analysis-tool/module/cnis-fast-analysis/error/cnis-fast-analysis-result-already-exists.error';
+import { CnisFastAnalysisTemplateService } from '@module/customer/analysis-tool/module/cnis-fast-analysis/service/cnis-fast-analysis-template.service';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -52,8 +53,8 @@ export class CreateCnisFastAnalysisResultUseCase {
     private readonly cnisAnalysisGateway: CnisAnalyzerGateway,
     @Inject(ConsumeOrganizationCreditUseCaseGateway)
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
-    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
-    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
+    @Inject(CnisFastAnalysisTemplateService)
+    private readonly cnisFastAnalysisTemplateService: CnisFastAnalysisTemplateService,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
@@ -72,11 +73,6 @@ export class CreateCnisFastAnalysisResultUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
-
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.CNIS_FAST_ANALYSIS_COMPLETE_ANALYSIS,
-      );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
@@ -100,14 +96,17 @@ export class CreateCnisFastAnalysisResultUseCase {
       throw new CnisFastAnalysisNotFoundError();
     }
 
+    if (
+      analysisToolRecordQueryResult.cnisFastAnalysis?.cnisFastAnalysisResult !==
+      null
+    ) {
+      throw new CnisFastAnalysisResultAlreadyExistsError();
+    }
+
     if (cnisFastAnalysisQueryResult.cnisDocument === null) {
       throw new CnisDocumentRequiredError();
     }
 
-    const clientDataBuffer = Buffer.from(
-      JSON.stringify(analysisToolRecordQueryResult.analysisToolClient, null, 2),
-      'utf-8',
-    );
     const cnisDocumentBuffer = await this.fileProcessorGateway.getFileBuffer(
       cnisFastAnalysisQueryResult.cnisDocument,
     );
@@ -126,18 +125,8 @@ export class CreateCnisFastAnalysisResultUseCase {
         }),
       );
 
-    const jsonCnisAnalyzerResponse = JSON.stringify(
-      cnisAnalyzerResponse,
-      null,
-      2,
-    );
-
     const cnisCompleteAnalysis =
-      await this.analysisProcessorGateway.getCnisCompleteAnalysis(
-        promptResponse.prompt,
-        jsonCnisAnalyzerResponse,
-        [clientDataBuffer],
-      );
+      await this.cnisFastAnalysisTemplateService.render(cnisAnalyzerResponse);
 
     let clientLastAffiliationDate: Date | null = null;
 
@@ -167,9 +156,12 @@ export class CreateCnisFastAnalysisResultUseCase {
       },
     );
 
+    const analysisAsMarkdown =
+      this.exportDocumentGateway.convertHtmlToMarkdown(cnisCompleteAnalysis);
+
     const cnisFastAnalysisResult = new CnisFastAnalysisResultEntity({
       clientLastAffiliationDate,
-      cnisCompleteAnalysis,
+      cnisCompleteAnalysis: analysisAsMarkdown,
       clientBirthDate:
         cnisDocumentData.affiliateIdentification?.dataDeNascimento ?? null,
       clientName: cnisDocumentData.affiliateIdentification?.nome ?? null,
@@ -192,7 +184,9 @@ export class CreateCnisFastAnalysisResultUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      ...analysisToolRecordQueryResult,
+      id: analysisToolRecordQueryResult.id,
+      code: analysisToolRecordQueryResult.code,
+      type: analysisToolRecordQueryResult.type,
       status: AnalysisStatusEnum.COMPLETED,
       analysisToolClient,
       cnisFastAnalysis,
@@ -200,6 +194,12 @@ export class CreateCnisFastAnalysisResultUseCase {
       createdBy: analysisToolRecordQueryResult.createdBy.id,
       updatedBy: organizationMember.id,
       retirementPlanningRgps: null,
+      specialActivity: null,
+      judicialCaseAnalysis: null,
+      administrativeProcedureInssAnalysis: null,
+      medicalQuestionGenerator: null,
+      medicalAndSocialReportObjectionGeneratorAnalysis: null,
+      speechGenerator: null,
     });
 
     const updateAnalysisToolRecordTransaction =
@@ -226,16 +226,9 @@ export class CreateCnisFastAnalysisResultUseCase {
     ]);
     await transaction.commit();
 
-    const analysisAsHtml =
-      cnisFastAnalysisResult.cnisCompleteAnalysis !== null
-        ? await this.exportDocumentGateway.convertMarkdownToHtml(
-            cnisFastAnalysisResult.cnisCompleteAnalysis,
-          )
-        : null;
-
     return CreateCnisFastAnalysisResultResponseDto.build({
       ...cnisFastAnalysisResult,
-      cnisCompleteAnalysis: analysisAsHtml,
+      cnisCompleteAnalysis,
     });
   }
 }

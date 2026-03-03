@@ -6,9 +6,9 @@ import { TransactionType } from '@core/domain/repository/base/transaction/type/t
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
 import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-history.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { LegalPleadingHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/command/legal-pleading-history.command.repository.gateway';
-import { LegalPleadingHistoryEntity } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/legal-pleading-history.entity';
-import { LegalPleadingHistoryId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/value-object/legal-pleading-history-id/legal-pleading-history-id.value-object';
+import { LegalPleadingHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-history/command/legal-pleading-history.command.repository.gateway';
+import { LegalPleadingHistoryEntity } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-history/legal-pleading-history.entity';
+import { LegalPleadingHistoryId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-history/value-object/legal-pleading-history-id/legal-pleading-history-id.value-object';
 
 @Injectable()
 export class LegalPleadingHistoryTypeormCommandRepository

@@ -6,6 +6,7 @@ export interface TempoDeContribuicaoDetalhesInterface {
   dias: number;
   meses: number;
   anos: number;
+  totalContribuicao: string | undefined;
 }
 
 export interface TempoDeContribuicaoInterface {

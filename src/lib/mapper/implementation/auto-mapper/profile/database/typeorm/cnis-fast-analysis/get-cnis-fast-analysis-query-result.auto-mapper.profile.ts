@@ -27,6 +27,7 @@ export class GetCnisFastAnalysisQueryResultAutoMapperProfile {
       return GetCnisFastAnalysisQueryResult.build({
         ...source,
         id: new CnisFastAnalysisId(source.id),
+        cnisFastAnalysisResult: source.cnisFastAnalysisResult ?? null,
       });
     };
 
@@ -47,6 +48,7 @@ export class GetCnisFastAnalysisQueryResultAutoMapperProfile {
       return CnisFastAnalysisTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        cnisFastAnalysisResult: undefined,
       });
     };
 
