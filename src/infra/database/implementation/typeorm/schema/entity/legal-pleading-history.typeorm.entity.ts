@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { LegalPleadingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading.typeorm.entity';
-import { LegalPleadingHistoryTitleEnum } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/enum/legal-pleading-history-title.enum';
+import { LegalPleadingHistoryTitleEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-history/enum/legal-pleading-history-title.enum';
 
 @Entity('legal_pleading_history')
 export class LegalPleadingHistoryTypeormEntity extends BaseTypeormEntity {

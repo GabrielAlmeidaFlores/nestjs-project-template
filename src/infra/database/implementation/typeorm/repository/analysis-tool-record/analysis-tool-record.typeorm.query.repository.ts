@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Constructor } from 'type-fest';
 import {
+  Between,
   FindManyOptions,
   FindOptionsRelations,
   FindOptionsWhere,
+  IsNull,
   Like,
+  Not,
   Repository,
 } from 'typeorm';
 
@@ -17,17 +20,31 @@ import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { ListAnalysisToolRecordQueryParam } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/param/list-analysis-tool-record.query.param';
+import { GetAnalysisToolRecordStatisticsMonthlyQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics-monthly.query.result';
 import {
   AnalysisToolRecordStatisticsQueryResult,
   MonthlyStatisticsQueryResult,
 } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/analysis-tool-record-statistics.query.result';
+import { GetAnalysisToolRecordWithFullRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-full-relations.query.result';
 import { GetAnalysisToolRecordWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/result/get-analysis-tool-record-with-relations.query.result';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
-import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
-import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { AdministrativeProcedureInssAnalysisId } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/value-object/administrative-procedure-inss-analysis-id/administrative-procedure-inss-analysis-id.value-object';
+import { AudienceQuestionGeneratorId } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/value-object/audience-question-generator-id/audience-question-generator-id.value-object';
 import { CnisFastAnalysisId } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/value-object/cnis-fast-analysis-id/cnis-fast-analysis-id.value-object';
+import { DisabilityAssessmentForBpcAnalysisId } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/value-object/disability-assessment-for-bpc-analysis-id/disability-assessment-for-bpc-analysis-id.value-object';
+import { InsuranceQualityAnalysisId } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/value-object/insurance-quality-analysis-id/insurance-quality-analysis-id.value-object';
+import { JudicialCaseAnalysisId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/value-object/judicial-case-analysis-id/judicial-case-analysis-id.value-object';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisId } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/value-object/medical-and-social-report-objection-generator-analysis-id/medical-and-social-report-objection-generator-analysis-id.value-object';
+import { MedicalQuestionGeneratorId } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/value-object/medical-question-generator-id/medical-question-generator-id.value-object';
+import { PerCapitaIncomeForBpcAnalysisId } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/value-object/per-capita-income-for-bpc-analysis-id/per-capita-income-for-bpc-analysis-id.value-object';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
+import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
+import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
+import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
@@ -68,6 +85,24 @@ export class AnalysisToolRecordTypeormQueryRepository
         organization: { id: organizationId.toString() },
       },
     };
+
+    const atLeastOneRelationNotNull: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      [
+        { cnisFastAnalysis: Not(IsNull()) },
+        { retirementPlanningRgps: Not(IsNull()) },
+        { retirementPlanningRpps: Not(IsNull()) },
+        { disabilityAssessmentForBpcAnalysis: Not(IsNull()) },
+        { administrativeProcedureInssAnalysis: Not(IsNull()) },
+        { judicialCaseAnalysis: Not(IsNull()) },
+        { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
+        { speechGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
+        { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
+        { specialActivity: Not(IsNull()) },
+        { insuranceQualityAnalysis: Not(IsNull()) },
+        { ruralTimeline: Not(IsNull()) },
+        { audienceQuestionGenerator: Not(IsNull()) },
+      ];
 
     const withUpdatedBy = {
       ...baseWhere,
@@ -139,6 +174,10 @@ export class AnalysisToolRecordTypeormQueryRepository
       ];
     }
 
+    searchParams.where = searchParams.where.flatMap((cond) =>
+      atLeastOneRelationNotNull.map((rel) => ({ ...cond, ...rel })),
+    );
+
     const data = await this.list(listData, searchParams);
 
     const mappedData = this.mapperGateway.mapArray(
@@ -175,6 +214,35 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
 
     return total;
+  }
+
+  public async findMaxCodeByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<number> {
+    const whereClause = {
+      createdBy: {
+        organization: { id: organizationId.toString() },
+        customer: { authIdentity: { id: authIdentityId.toString() } },
+      },
+    };
+
+    const [record, count] = await Promise.all([
+      this.repository.findOne({
+        where: whereClause,
+        withDeleted: true,
+        order: { createdAt: 'DESC' },
+      }),
+      this.repository.count({
+        where: whereClause,
+        withDeleted: true,
+      }),
+    ]);
+
+    const codeFromRecord =
+      record !== null ? new AnalysisToolRecordCode(record.code).toNumber() : 0;
+
+    return Math.max(codeFromRecord, count);
   }
 
   public async findWithRelationsByClientIdAndOrganizationIdAndAuthIdentityId(
@@ -315,6 +383,67 @@ export class AnalysisToolRecordTypeormQueryRepository
             cnisFastAnalysisResult: true,
             cnisFastAnalysisInssBenefit: true,
             cnisFastAnalysisLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByInsuranceQualityAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    insuranceQualityAnalysisId: InsuranceQualityAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          insuranceQualityAnalysis: {
+            id: insuranceQualityAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          insuranceQualityAnalysis: {
+            insuranceQualityAnalysisResult: true,
           },
           createdBy: {
             customer: true,
@@ -484,6 +613,666 @@ export class AnalysisToolRecordTypeormQueryRepository
     return mappedData;
   }
 
+  public async findWithRelationsBySpecialActivityIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    specialActivityId: SpecialActivityId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          specialActivity: {
+            id: specialActivityId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+            updatedBy: {
+              customer: true,
+              organization: {
+                organizationMember: true,
+              },
+            },
+          },
+          specialActivity: {
+            specialActivityResult: true,
+            specialActivityDocuments: true,
+            specialActivityInssBenefit: true,
+            specialActivityLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+          updatedBy: {
+            customer: true,
+            organization: {
+              organizationMember: true,
+            },
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByAdministrativeProcedureInssAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    administrativeProcedureInssAnalysisId: AdministrativeProcedureInssAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          administrativeProcedureInssAnalysis: {
+            id: administrativeProcedureInssAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          administrativeProcedureInssAnalysis: {
+            administrativeProcedureInssAnalysisResult: true,
+            administrativeProcedureInssAnalysisBenefit: true,
+            administrativeProcedureInssAnalysisLegalProceeding: true,
+            administrativeProcedureInssAnalysisDocument: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByMedicalAndSocialReportObjectionGeneratorAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    medicalAndSocialReportObjectionGeneratorAnalysisId: MedicalAndSocialReportObjectionGeneratorAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          medicalAndSocialReportObjectionGeneratorAnalysis: {
+            id: medicalAndSocialReportObjectionGeneratorAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          medicalAndSocialReportObjectionGeneratorAnalysis: {
+            msReportObjectionAnalysisResult: true,
+            medicalAndSocialReportObjectionGeneratorAnalysisDocument: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsBySpeechGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    speechGeneratorId: SpeechGeneratorId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          speechGenerator: {
+            id: speechGeneratorId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          speechGenerator: {
+            speechGeneratorDocument: true,
+            speechGeneratorResult: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByJudicialCaseAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    judicialCaseAnalysisId: JudicialCaseAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          judicialCaseAnalysis: {
+            id: judicialCaseAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          judicialCaseAnalysis: {
+            judicialCaseAnalysisResult: true,
+            judicialCaseAnalysisBenefit: true,
+            judicialCaseAnalysisLegalProceeding: true,
+            judicialCaseAnalysisDocument: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByAudienceQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    audienceQuestionGeneratorId: AudienceQuestionGeneratorId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          audienceQuestionGenerator: {
+            id: audienceQuestionGeneratorId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          audienceQuestionGenerator: {
+            audienceQuestionGeneratorResult: true,
+            audienceQuestionGeneratorDocument: true,
+            audienceQuestionGeneratorBenefit: true,
+            audienceQuestionGeneratorLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByMedicalQuestionGeneratorIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    medicalQuestionGeneratorId: MedicalQuestionGeneratorId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          medicalQuestionGenerator: {
+            id: medicalQuestionGeneratorId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientLegalProceeding: true,
+            analysisToolClientInssBenefit: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          medicalQuestionGenerator: {
+            medicalQuestionGeneratorResult: true,
+            medicalQuestionGeneratorInssBenefit: true,
+            medicalQuestionGeneratorLegalProceeding: true,
+            medicalQuestionGeneratorDocument: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByDisabilityAssessmentForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    disabilityAssessmentForBpcAnalysisId: DisabilityAssessmentForBpcAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          disabilityAssessmentForBpcAnalysis: {
+            id: disabilityAssessmentForBpcAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          disabilityAssessmentForBpcAnalysis: {
+            disabilityAssessmentForBpcAnalysisResult: true,
+            disabilityAssessmentForBpcAnalysisBenefit: true,
+            disabilityAssessmentForBpcAnalysisLegalProceeding: true,
+            disabilityAssessmentForBpcAnalysisDocument: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    ruralTimelineAnalysisId: RuralTimelineAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          ruralTimeline: {
+            id: ruralTimelineAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          ruralTimeline: {
+            ruralTimelineAnalysisInssBenefit: true,
+            ruralTimelineAnalysisLegalProceeding: true,
+            ruralTimelinePeriod: true,
+            ruralTimelineDocument: true,
+            ruralTimelineCnisContributionPeriod: {
+              ruralTimelineCnisContributionPeriodPendingExitDate: true,
+              ruralTimelineCnisContributionPeriodUnderMinimum: true,
+              ruralTimelineCnisContributionPeriodOverdueContribution: true,
+            },
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
+  public async findWithRelationsByPerCapitaIncomeForBpcAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+    perCapitaIncomeForBpcAnalysisId: PerCapitaIncomeForBpcAnalysisId,
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+    err: ConstructorType<NotFoundError>,
+  ): Promise<GetAnalysisToolRecordWithRelationsQueryResult> {
+    const data = await this.findOneOrFail(
+      {
+        where: {
+          perCapitaIncomeForBpcAnalysis: {
+            id: perCapitaIncomeForBpcAnalysisId.toString(),
+          },
+          createdBy: {
+            organization: {
+              id: organizationId.toString(),
+            },
+            customer: {
+              authIdentity: {
+                id: authIdentityId.toString(),
+              },
+            },
+          },
+        },
+        relations: {
+          analysisToolClient: {
+            analysisToolClientInssBenefit: true,
+            analysisToolClientLegalProceeding: true,
+            createdBy: {
+              customer: true,
+              organization: true,
+            },
+            updatedBy: {
+              customer: true,
+              organization: true,
+            },
+          },
+          perCapitaIncomeForBpcAnalysis: {
+            perCapitaIncomeForBpcAnalysisResult: true,
+            perCapitaIncomeForBpcAnalysisDocument: true,
+            perCapitaIncomeForBpcAnalysisFamilyMember: {
+              perCapitaIncomeForBpcAnalysisFamilyMemberDocument: true,
+            },
+            perCapitaIncomeForBpcAnalysisBenefit: true,
+            perCapitaIncomeForBpcAnalysisLegalProceeding: true,
+          },
+          createdBy: {
+            customer: true,
+            organization: true,
+          },
+          updatedBy: {
+            customer: true,
+            organization: true,
+          },
+        },
+      },
+      err,
+    );
+
+    const mappedData = this.mapperGateway.map(
+      data,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return mappedData;
+  }
+
   public async getStatisticsByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
@@ -580,6 +1369,304 @@ export class AnalysisToolRecordTypeormQueryRepository
     });
   }
 
+  public async countAllAnalysesForYear(
+    year: number,
+    type?: AnalysisToolRecordTypeEnum,
+  ): Promise<number> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    if (type !== undefined) {
+      whereClause.type = type;
+    }
+
+    const count = await this.repository.count({
+      where: whereClause,
+    });
+
+    return count;
+  }
+
+  public async countAllMonthlyAnalysesForYear(
+    year: number,
+    type?: AnalysisToolRecordTypeEnum,
+  ): Promise<Array<GetAnalysisToolRecordStatisticsMonthlyQueryResult>> {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const whereClause: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    if (type !== undefined) {
+      whereClause.type = type;
+    }
+
+    const analyses = await this.repository.find({
+      where: whereClause,
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const analysesByMonth = new Map<number, number>();
+
+    for (const analysis of analyses) {
+      const month = analysis.createdAt.getMonth();
+      const currentCount = analysesByMonth.get(month) ?? 0;
+      analysesByMonth.set(month, currentCount + 1);
+    }
+
+    return Array.from(analysesByMonth.entries())
+      .sort(([monthA], [monthB]) => monthA - monthB)
+      .map(([month, totalCount]) =>
+        GetAnalysisToolRecordStatisticsMonthlyQueryResult.build({
+          month,
+          totalCount,
+        }),
+      );
+  }
+
+  public async listAllAnalysesForYear(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithRelationsQueryResult>
+  > {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const relationsClause = this.getRelationsClauseOperation();
+
+    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
+      where: [],
+      relations: relationsClause,
+    };
+
+    const baseWhere: FindOptionsWhere<AnalysisToolRecordTypeormEntity> = {
+      createdAt: Between(startDate, endDate),
+    };
+
+    const atLeastOneRelationNotNull: FindOptionsWhere<AnalysisToolRecordTypeormEntity>[] =
+      [
+        { cnisFastAnalysis: Not(IsNull()) },
+        { retirementPlanningRgps: Not(IsNull()) },
+        { retirementPlanningRpps: Not(IsNull()) },
+        { disabilityAssessmentForBpcAnalysis: Not(IsNull()) },
+        { administrativeProcedureInssAnalysis: Not(IsNull()) },
+        { judicialCaseAnalysis: Not(IsNull()) },
+        { medicalAndSocialReportObjectionGeneratorAnalysis: Not(IsNull()) },
+        { speechGenerator: Not(IsNull()) },
+        { medicalQuestionGenerator: Not(IsNull()) },
+        { perCapitaIncomeForBpcAnalysis: Not(IsNull()) },
+        { specialActivity: Not(IsNull()) },
+        { insuranceQualityAnalysis: Not(IsNull()) },
+        { ruralTimeline: Not(IsNull()) },
+        { audienceQuestionGenerator: Not(IsNull()) },
+      ];
+
+    for (const relationalClause of atLeastOneRelationNotNull) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).push({
+        ...baseWhere,
+        ...relationalClause,
+      });
+    }
+
+    if (listData.searchBy !== null) {
+      searchParams.where = (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).map((where) => ({
+        ...where,
+        code: Like(`${listData.searchBy}`),
+      }));
+    }
+
+    if (listData.type !== null) {
+      searchParams.where = (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>[]
+      ).map((where) => ({
+        ...where,
+        type: listData.type as AnalysisToolRecordTypeEnum,
+      }));
+    }
+
+    const skip = (listData.page - 1) * listData.limit;
+
+    const [items, total] = await this.repository.findAndCount({
+      ...searchParams,
+      skip,
+      take: listData.limit,
+      order: {
+        code: 'DESC',
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      items,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel({
+      resource: mappedData,
+      totalItems: total,
+      page: listData.page,
+      limit: listData.limit,
+    });
+  }
+
+  public async listAllAnalysesForYearWithFullRelations(
+    year: number,
+    listData: ListAnalysisToolRecordQueryParam,
+  ): Promise<
+    ListDataOutputModel<GetAnalysisToolRecordWithFullRelationsQueryResult>
+  > {
+    const JANUARY = 0;
+    const DECEMBER = 11;
+    const LAST_DAY_OF_MONTH = 31;
+    const LAST_HOUR = 23;
+    const LAST_MINUTE = 59;
+    const LAST_SECOND = 59;
+    const LAST_MILLISECOND = 999;
+
+    const startDate = new Date(year, JANUARY, 1);
+    const endDate = new Date(
+      year,
+      DECEMBER,
+      LAST_DAY_OF_MONTH,
+      LAST_HOUR,
+      LAST_MINUTE,
+      LAST_SECOND,
+      LAST_MILLISECOND,
+    );
+
+    const searchParams: FindManyOptions<AnalysisToolRecordTypeormEntity> = {
+      where: {
+        createdAt: Between(startDate, endDate),
+      },
+      relations: {
+        createdBy: {
+          customer: {
+            authIdentity: true,
+          },
+          organization: true,
+        },
+        updatedBy: {
+          customer: {
+            authIdentity: true,
+          },
+          organization: true,
+        },
+        analysisToolClient: {
+          createdBy: {
+            customer: {
+              authIdentity: true,
+            },
+            organization: true,
+          },
+          updatedBy: {
+            customer: {
+              authIdentity: true,
+            },
+            organization: true,
+          },
+          analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
+      },
+    };
+
+    if (listData.searchBy !== null) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
+      ).code = Like(`${listData.searchBy}`);
+    }
+
+    if (listData.type !== null) {
+      (
+        searchParams.where as FindOptionsWhere<AnalysisToolRecordTypeormEntity>
+      ).type = listData.type;
+    }
+
+    const skip = (listData.page - 1) * listData.limit;
+
+    const [items, total] = await this.repository.findAndCount({
+      ...searchParams,
+      skip,
+      take: listData.limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const mappedData = this.mapperGateway.mapArray(
+      items,
+      AnalysisToolRecordTypeormEntity,
+      GetAnalysisToolRecordWithFullRelationsQueryResult,
+    );
+
+    return new ListDataOutputModel({
+      resource: mappedData,
+      totalItems: total,
+      page: listData.page,
+      limit: listData.limit,
+    });
+  }
+
   private getRelationsClauseOperation(): FindOptionsRelations<AnalysisToolRecordTypeormEntity> {
     const relationsClause: FindOptionsRelations<AnalysisToolRecordTypeormEntity> =
       {
@@ -600,8 +1687,13 @@ export class AnalysisToolRecordTypeormQueryRepository
             customer: true,
             organization: true,
           },
-          analysisToolClientLegalProceeding: true,
           analysisToolClientInssBenefit: true,
+          analysisToolClientLegalProceeding: true,
+        },
+        speechGenerator: true,
+        ruralTimeline: {
+          ruralTimelineAnalysisInssBenefit: true,
+          ruralTimelineAnalysisLegalProceeding: true,
         },
       };
 
@@ -612,15 +1704,20 @@ export class AnalysisToolRecordTypeormQueryRepository
     return relationsClause;
   }
 
-  private getEntityRelationsKey(): (
-    | 'cnisFastAnalysis'
-    | 'retirementPlanningRpps'
-    | 'retirementPlanningRgps'
-  )[] {
+  private getEntityRelationsKey(): (keyof AnalysisToolRecordTypeormEntity)[] {
     return [
       'cnisFastAnalysis',
       'retirementPlanningRpps',
       'retirementPlanningRgps',
+      'specialActivity',
+      'administrativeProcedureInssAnalysis',
+      'judicialCaseAnalysis',
+      'medicalAndSocialReportObjectionGeneratorAnalysis',
+      'medicalQuestionGenerator',
+      'disabilityAssessmentForBpcAnalysis',
+      'perCapitaIncomeForBpcAnalysis',
+      'insuranceQualityAnalysis',
+      'audienceQuestionGenerator',
     ];
   }
 }

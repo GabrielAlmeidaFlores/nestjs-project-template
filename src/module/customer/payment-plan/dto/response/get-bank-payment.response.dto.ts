@@ -1,4 +1,5 @@
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -13,8 +14,14 @@ export class GetBankPaymentResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(BankPaymentId)
   public id: BankPaymentId;
 
+  @ResponseDtoStringProperty({ required: false })
+  public planName?: string;
+
   @ResponseDtoEnumProperty(PaymentStatusEnum)
   public status: PaymentStatusEnum;
+
+  @ResponseDtoEnumProperty(PaymentMethodEnum)
+  public paymentMethod: PaymentMethodEnum;
 
   @ResponseDtoValueObjectProperty(DecimalValue)
   public amount: DecimalValue;

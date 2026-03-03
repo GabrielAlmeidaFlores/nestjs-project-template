@@ -51,17 +51,61 @@ $ yarn run start:prod
 # unit tests
 $ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
 ```
+
+## Database Migrations
+
+This project uses TypeORM for database migrations. Migrations are version control for your database schema.
+
+### Running Migrations
+
+Execute all pending migrations:
+
+```bash
+$ yarn migration:run
+```
+
+### Creating a New Migration
+
+When you make changes to your entities (adding/modifying fields, tables, etc.), generate a migration:
+
+```bash
+$ yarn migration:generate src/migrations/DescriptiveName
+```
+
+This will automatically detect schema changes and create a migration file.
+
+### Reverting Migrations
+
+To undo the last executed migration:
+
+```bash
+$ yarn migration:revert
+```
+
+### Important Notes
+
+- **Always run migrations before deploying** to ensure database schema is up to date
+- **Migration files are located in** `src/migrations/`
+- **Migrations are ignored by ESLint** (configured in package.json)
+- Migrations run in chronological order based on their timestamp
+
+### Manual Migration Registration
+
+If you created tables manually without migrations and need to register them:
+
+```sql
+-- Connect to your database and run:
+INSERT INTO tb_migration (timestamp, name) 
+VALUES (1768402214340, 'InitDb1768402214340');
+```
+
+Replace the timestamp and name with your migration details.
 
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
+P
 If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash

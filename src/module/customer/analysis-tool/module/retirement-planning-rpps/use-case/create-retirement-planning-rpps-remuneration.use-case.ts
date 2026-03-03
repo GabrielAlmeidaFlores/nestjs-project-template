@@ -1,0 +1,137 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
+import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
+import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
+import { RetirementPlanningRppsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/retirement-planning-rpps.query.repository.gateway';
+import { RetirementPlanningRppsRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration/command/retirement-planning-rpps-remuneration.command.repository.gateway';
+import { RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration-calculation/command/retirement-planning-rpps-remuneration-calculation.command.repository.gateway';
+import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { RetirementPlanningRppsRemunerationEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-remuneration/retirement-planning-rpps-remuneration.entity';
+import { RetirementPlanningRppsRemunerationId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-remuneration/value-object/retirement-planning-rpps-remuneration-id.value-object';
+import { CreateRetirementPlanningRppsRemunerationRequestDto } from '@module/customer/analysis-tool/module/retirement-planning-rpps/dto/request/create-retirement-planning-rpps-remuneration.request.dto';
+import { CreateRetirementPlanningRppsRemunerationResponseDto } from '@module/customer/analysis-tool/module/retirement-planning-rpps/dto/response/create-retirement-planning-rpps-remuneration.response.dto';
+import { RetirementPlanningRppsNotFoundError } from '@module/customer/analysis-tool/module/retirement-planning-rpps/error/retirement-planning-rpps-not-found.error';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+
+@Injectable()
+export class CreateRetirementPlanningRppsRemunerationUseCase {
+  protected readonly _type =
+    CreateRetirementPlanningRppsRemunerationUseCase.name;
+
+  public constructor(
+    @Inject(RetirementPlanningRppsQueryRepositoryGateway)
+    private readonly retirementPlanningRppsQueryRepositoryGateway: RetirementPlanningRppsQueryRepositoryGateway,
+    @Inject(RetirementPlanningRppsRemunerationCommandRepositoryGateway)
+    private readonly retirementPlanningRppsRemunerationCommandRepositoryGateway: RetirementPlanningRppsRemunerationCommandRepositoryGateway,
+    @Inject(RetirementPlanningRppsCommandRepositoryGateway)
+    private readonly retirementPlanningRppsCommandRepositoryGateway: RetirementPlanningRppsCommandRepositoryGateway,
+    @Inject(
+      RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway,
+    )
+    private readonly retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway: RetirementPlanningRppsRemunerationCalculationCommandRepositoryGateway,
+    @Inject(RemunerationCalculatorGateway)
+    private readonly remunerationCalculatorGateway: RemunerationCalculatorGateway,
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+  ) {}
+
+  public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+    retirementPlanningRppsId: RetirementPlanningRppsId,
+    dto: CreateRetirementPlanningRppsRemunerationRequestDto,
+  ): Promise<CreateRetirementPlanningRppsRemunerationResponseDto> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
+    const retirementPlanningRpps =
+      await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
+        retirementPlanningRppsId,
+        organizationSessionData.organizationId,
+        RetirementPlanningRppsNotFoundError,
+      );
+
+    const transactionOperations = [];
+
+    const retirementPlanningRppsEntity = new RetirementPlanningRppsEntity({
+      id: retirementPlanningRpps.id,
+      careerStartDate: retirementPlanningRpps.careerStartDate,
+      publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
+    });
+
+    for (const remunerationDto of dto.remunerations) {
+      const normalizedDateToDayOne = new Date(
+        remunerationDto.remunerationDate.getFullYear(),
+        remunerationDto.remunerationDate.getMonth(),
+        1,
+      );
+
+      const remunerationEntity = new RetirementPlanningRppsRemunerationEntity({
+        id: new RetirementPlanningRppsRemunerationId(),
+        remunerationDate: normalizedDateToDayOne,
+        remunerationAmount: remunerationDto.remunerationAmount,
+        retirementPlanningRpps: retirementPlanningRppsEntity,
+      });
+
+      transactionOperations.push(
+        this.retirementPlanningRppsRemunerationCommandRepositoryGateway.createRetirementPlanningRppsRemuneration(
+          remunerationEntity,
+        ),
+      );
+    }
+
+    const retirementPlanningRppsRemunerationCalculation =
+      this.remunerationCalculatorGateway.calculate(
+        dto.remunerations.map((remunerationDto) =>
+          RemunerationDataInputModel.build({
+            remunerationAmount: remunerationDto.remunerationAmount,
+          }),
+        ),
+      );
+
+    transactionOperations.push(
+      this.retirementPlanningRppsRemunerationCalculationCommandRepositoryGateway.createRetirementPlanningRppsRemunerationCalculation(
+        retirementPlanningRppsRemunerationCalculation,
+      ),
+    );
+
+    const updatedRetirementPlanningRppsEntity =
+      new RetirementPlanningRppsEntity({
+        id: retirementPlanningRpps.id,
+        careerStartDate: retirementPlanningRpps.careerStartDate,
+        publicServiceStartDate: retirementPlanningRpps.publicServiceStartDate,
+        retirementPlanningRppsRemunerationCalculation,
+      });
+
+    transactionOperations.push(
+      this.retirementPlanningRppsCommandRepositoryGateway.updateRetirementPlanningRpps(
+        updatedRetirementPlanningRppsEntity.id,
+        updatedRetirementPlanningRppsEntity,
+      ),
+    );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionOperations,
+    );
+    await transaction.commit();
+
+    return CreateRetirementPlanningRppsRemunerationResponseDto.build({
+      retirementPlanningRppsId: retirementPlanningRpps.id,
+    });
+  }
+}

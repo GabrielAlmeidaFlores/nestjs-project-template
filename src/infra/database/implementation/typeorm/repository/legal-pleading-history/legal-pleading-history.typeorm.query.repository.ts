@@ -6,11 +6,11 @@ import { ListDataOutputModel } from '@core/domain/repository/base/query/model/ou
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { LegalPleadingHistoryTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-history.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
-import { LegalPleadingHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/legal-pleading-history.query.repository.gateway';
-import { ListLegalPleadingHistoryQueryParam } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/param/list-legal-pleading-history.query.param';
-import { GetLegalPleadingHistoryQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-history/query/result/get-legal-pleading-history.query.result';
-import { LegalPleadingId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
-import { LegalPleadingHistoryId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-history/value-object/legal-pleading-history-id/legal-pleading-history-id.value-object';
+import { LegalPleadingHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-history/query/legal-pleading-history.query.repository.gateway';
+import { ListLegalPleadingHistoryQueryParam } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-history/query/param/list-legal-pleading-history.query.param';
+import { GetLegalPleadingHistoryQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-history/query/result/get-legal-pleading-history.query.result';
+import { LegalPleadingId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
+import { LegalPleadingHistoryId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-history/value-object/legal-pleading-history-id/legal-pleading-history-id.value-object';
 
 @Injectable()
 export class LegalPleadingHistoryTypeormQueryRepository

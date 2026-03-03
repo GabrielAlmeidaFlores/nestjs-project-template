@@ -57,8 +57,11 @@ export class DownloadCnisCompleteAnalysisUseCase {
       throw new CnisFastAnalysisDoesNotContainCompleteAnalysisError();
     }
 
+    const cnisCompleteAnalysisAsHtml =
+      await this.exportDocumentGateway.convertMarkdownToHtml(responseAi);
+
     return this.exportDocumentGateway.downloadFileAsStreamable(
-      responseAi,
+      cnisCompleteAnalysisAsHtml,
       format,
       'analise_completa_rapida_cnis',
     );
