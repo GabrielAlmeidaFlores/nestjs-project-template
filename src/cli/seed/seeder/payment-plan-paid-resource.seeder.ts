@@ -34,7 +34,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_COMPLETE_ANALYSIS,
       creditCost: 5,
-      title: 'PEÇAS JURÍDICAS - ANÁLISE COMPLETA',
+      title: 'PEÇA PROCESSUAL - ANÁLISE COMPLETA',
       description:
         'Análise completa de petições iniciais, contestações, recursos e outras peças processuais com IA. Gera parecer detalhado sobre argumentação, fundamentação legal, pontos fortes e fracos, e sugestões de melhoria.',
     }),
@@ -43,7 +43,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
-      title: 'PEÇAS JURÍDICAS - ANÁLISE SIMPLIFICADA',
+      title: 'PEÇA PROCESSUAL - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada de peças processuais com IA, gerando parecer objetivo sobre adequação da argumentação, presença dos requisitos essenciais e principais pontos de atenção. Versão resumida para revisões rápidas.',
     }),
@@ -52,7 +52,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.LEGAL_PLEADING_QUICK_DOCUMENT_ANALYSIS,
       creditCost: 3,
-      title: 'PEÇAS JURÍDICAS - ANÁLISE RÁPIDA DE DOCUMENTOS',
+      title: 'PEÇA PROCESSUAL - ANÁLISE RÁPIDA DE DOCUMENTOS',
       description:
         'Análise expressa de documentos previdenciários (CNIS, CTPS, PPP, CTC) para suportar peças jurídicas. Extrai informações essenciais, identifica períodos relevantes e valida autenticidade documental com IA.',
     }),
@@ -69,7 +69,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('c32c6734-bb4a-405f-8c84-5199848b1dcb'),
       resource: PaymentPlanPaidResourceTypeEnum.LEGAL_PROCEEDING_MONITORING,
       creditCost: 0,
-      title: 'MONITORAMENTO DE PROCESSOS JURÍDICOS',
+      title: 'ACOMPANHAMENTO DE PROCESSOS - EPROC',
       description:
         'Acompanhamento automático e contínuo de processos jurídicos nos tribunais. Sistema monitora movimentações processuais em tempo real, emite notificações sobre atualizações importantes, mantém histórico completo de andamentos e alertas de prazos críticos.',
     }),
@@ -78,7 +78,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_SOCIAL_SECURITY_QUESTIONS,
       creditCost: 0.3,
-      title: 'CHAT ELOY - QUESTÕES PREVIDENCIÁRIAS',
+      title: 'ASSISTENTE ELOY - QUESTÕES PREVIDENCIÁRIAS',
       description:
         'Assistente de IA especializado em responder dúvidas sobre direito previdenciário. Esclarece questões sobre benefícios do INSS, requisitos para aposentadoria, pensão e auxílios, documentação necessária, prazos processuais e procedimentos administrativos, fornecendo fundamentação legal completa.',
     }),
@@ -86,7 +86,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('056fa86a-6a7e-49fc-941a-477ec9a28f56'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_LEGISLATION_QUESTIONS,
       creditCost: 0.3,
-      title: 'CHAT ELOY - CONSULTA DE LEGISLAÇÃO PREVIDENCIÁRIA',
+      title: 'ASSISTENTE ELOY - CONSULTA DE LEGISLAÇÃO PREVIDENCIÁRIA',
       description:
         'Assistente de IA especializado em legislação previdenciária. Consulta e interpreta leis, decretos, instruções normativas do INSS, portarias, medidas provisórias e regulamentos do RGPS e RPPS, fornecendo citações precisas com número da norma, artigo e interpretação contextualizada aplicada ao caso concreto.',
     }),
@@ -95,7 +95,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_WINNING_LEGAL_THESIS_RESEARCH,
       creditCost: 0.3,
-      title: 'CHAT ELOY - PESQUISA DE TESES JURÍDICAS VITORIOSAS',
+      title: 'ASSISTENTE ELOY - PESQUISA DE TESES JURÍDICAS VITORIOSAS',
       description:
         'Assistente de IA para pesquisa de teses jurídicas vitoriosas em direito previdenciário. Identifica precedentes favoráveis em tribunais superiores (STF, STJ, TNU), súmulas vinculantes e não vinculantes, recursos repetitivos com repercussão geral, jurisprudência consolidada e decisões recentes, fornecendo estratégias argumentativas baseadas em casos vencedores.',
     }),
@@ -103,7 +103,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       id: new PaymentPlanPaidResourceId('d146fdb8-8511-472e-9f0c-dc9d5fb0d2ad'),
       resource: PaymentPlanPaidResourceTypeEnum.ELOY_CHAT_ANALYSIS,
       creditCost: 0.3,
-      title: 'CHAT ELOY - ANÁLISE INTELIGENTE DE DOCUMENTOS E CASOS',
+      title: 'ASSISTENTE ELOY - ANÁLISE INTELIGENTE DE DOCUMENTOS E CASOS',
       description:
         'Assistente de IA para análise inteligente de documentos e casos previdenciários. Examina CNIS, CTPS, PPP, laudos médicos, processos administrativos do INSS, ações judiciais e recursos, identificando informações relevantes, inconsistências documentais, pontos fortes e fracos do caso, fornecendo insights estratégicos e sugestões de argumentação jurídica.',
     }),
@@ -237,7 +237,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE COMPLETA',
+      title: 'ANÁLISE DE QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE COMPLETA',
       description:
         'Análise completa da qualidade de segurado e carência com IA. Verifica manutenção da qualidade de segurado, calcula período de graça, conta carências por tipo de benefício (aposentadoria, auxílio-doença, salário-maternidade), identifica lacunas contributivas e risco de perda de qualidade.',
     }),
@@ -246,7 +246,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE SIMPLIFICADA',
+      title: 'ANÁLISE DE QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada da qualidade de segurado com IA. Verifica situação atual (segurado ativo ou em período de graça), informa carência total de contribuições, alerta sobre proximidade de perda da qualidade de segurado. Versão resumida para verificações rápidas.',
     }),
@@ -256,7 +256,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'PROCEDIMENTO ADMINISTRATIVO DO INSS - ANÁLISE COMPLETA',
+      title: 'PROCESSO ADMINISTRATIVO DO INSS - ANÁLISE COMPLETA',
       description:
         'Análise completa de processos administrativos no INSS com IA. Examina pedidos de benefício, recursos ao INSS, exigências documentais, pareceres médicos e sociais, indeferimentos, gerando relatório detalhado sobre andamento, prazos, irregularidades e estratégia de contestação ou complementação.',
     }),
@@ -265,7 +265,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_PROCEDURE_INSS_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'PROCEDIMENTO ADMINISTRATIVO DO INSS - ANÁLISE SIMPLIFICADA',
+      title: 'PROCESSO ADMINISTRATIVO DO INSS - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada de processos administrativos no INSS com IA. Identifica status atual do pedido, prazo decorrido, principais pendências ou motivos de indeferimento, próximos passos recomendados. Versão resumida para acompanhamento objetivo.',
     }),
@@ -274,7 +274,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'CASO JUDICIAL - ANÁLISE COMPLETA',
+      title: 'ANÁLISE DE PROCESSOS JUDICIAIS - ANÁLISE COMPLETA',
       description:
         'Análise completa de processos judiciais previdenciários com IA. Examina petição inicial, contestação, provas, laudos periciais, sentenças e acórdãos, identificando fundamentos jurídicos utilizados, teses defensivas, chances de êxito, pontos frágeis e estratégias processuais recomendadas.',
     }),
@@ -283,7 +283,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.JUDICIAL_CASE_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'CASO JUDICIAL - ANÁLISE SIMPLIFICADA',
+      title: 'ANÁLISE DE PROCESSOS JUDICIAIS - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada de processos judiciais previdenciários com IA. Identifica pedido principal, fundamentos jurídicos básicos, fase processual atual, argumentos da defesa e estimativa resumida de chances de êxito. Versão objetiva para visão geral rápida.',
     }),
@@ -292,7 +292,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 2,
-      title: 'GERADOR DE PERGUNTAS MÉDICAS - ANÁLISE COMPLETA',
+      title: 'GERADOR DE QUESITOS MÉDICOS - ANÁLISE COMPLETA',
       description:
         'Geração completa de perguntas médicas estratégicas com IA para laudos e perícias. Analisa patologias alegadas, CID relacionados, documentos médicos apresentados, gerando questionário técnico para médico assistente ou perito, visando comprovar incapacidade laborativa ou condições de saúde.',
     }),
@@ -301,7 +301,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_QUESTION_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE PERGUNTAS MÉDICAS - ANÁLISE SIMPLIFICADA',
+      title: 'GERADOR DE QUESITOS MÉDICOS - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de perguntas médicas essenciais com IA. Cria questionário objetivo baseado na patologia principal alegada, focando em perguntas diretas sobre sintomas, limitações funcionais e capacidade laborativa. Versão resumida para casos menos complexos.',
     }),
@@ -330,7 +330,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
       title:
-        'GERADOR DE IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE COMPLETA',
+        'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE COMPLETA',
       description:
         'Geração completa de impugnação a laudos periciais (médicos e sociais) do INSS com IA. Analisa laudo contestado, identifica inconsistências técnicas, contradições com documentação médica apresentada, gera argumentação jurídica fundamentada e quesitos técnicos para novo exame pericial.',
     }),
@@ -340,7 +340,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
       title:
-        'GERADOR DE IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE SIMPLIFICADA',
+        'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de impugnação a laudos periciais com IA. Identifica principais pontos de discordância entre laudo e documentação médica, gera argumentação objetiva e quesitos essenciais. Versão resumida para contestações de menor complexidade.',
     }),
@@ -367,7 +367,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'AVALIAÇÃO DE DEFICIÊNCIA PARA BPC - ANÁLISE COMPLETA',
+      title: 'AVALIAÇÃO DEFICIÊNCIA PARA BPC - ANÁLISE COMPLETA',
       description:
         'Análise completa da deficiência para Benefício de Prestação Continuada (BPC/LOAS) com IA. Examina laudos médicos, CIF (Classificação Internacional de Funcionalidade), avalia impedimentos de longo prazo, barreiras sociais e participação plena na sociedade, gerando parecer fundamentado sobre enquadramento legal da deficiência.',
     }),
@@ -376,7 +376,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.DISABILITY_ASSESSMENT_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'AVALIAÇÃO DE DEFICIÊNCIA PARA BPC - ANÁLISE SIMPLIFICADA',
+      title: 'AVALIAÇÃO DEFICIÊNCIA PARA BPC - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada da deficiência para BPC/LOAS com IA. Verifica presença de impedimentos de longo prazo documentados, avalia de forma objetiva se há indícios de deficiência elegível ao BPC conforme conceito legal. Versão resumida para triagem inicial de viabilidade.',
     }),
@@ -385,7 +385,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_COMPLETE_ANALYSIS,
       creditCost: 5,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE COMPLETA',
+      title: 'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE COMPLETA',
       description:
         'Análise completa da linha do tempo rural com IA, examinando todos os períodos de atividade rural cadastrados, documentos comprobatórios de cada período e contribuições CNIS relacionadas. Gera parecer técnico consolidado sobre viabilidade de reconhecimento, suficiência probatória, lacunas documentais e orientações estratégicas.',
     }),
@@ -395,7 +395,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_INDIVIDUAL_PERIOD_DOCUMENT_ANALYSIS,
       creditCost: 1,
       title:
-        'LINHA DO TEMPO RURAL - ANÁLISE DE DOCUMENTO INDIVIDUAL DE PERÍODO',
+        'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE DE DOCUMENTO INDIVIDUAL DE PERÍODO',
       description:
         'Análise individual de um único documento comprobatório de atividade rural com IA. Valida autenticidade formal, identifica período coberto, examina conteúdo probatório (declaração sindical, nota fiscal, contrato, ITR), avalia força probatória isolada e necessidade de documentos complementares para aquele período.',
     }),
@@ -405,7 +405,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_PERIOD_DOCUMENT_ANALYSIS,
       creditCost: 3,
       title:
-        'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA DE DOCUMENTOS DO PERÍODO',
+        'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA DE DOCUMENTOS DO PERÍODO',
       description:
         'Análise consolidada de todos os documentos comprobatórios de um único período de atividade rural específico com IA. Examina conjunto probatório daquele período, valida consistência temporal entre documentos, avalia suficiência do início de prova material e robustez probatória para reconhecimento judicial.',
     }),
@@ -433,7 +433,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_ANALYSIS_CONSOLIDATED_DOCUMENT_ANALYSIS,
       creditCost: 5,
       title:
-        'LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA GERAL DE TODOS OS DOCUMENTOS',
+        'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE CONSOLIDADA GERAL DE TODOS OS DOCUMENTOS',
       description:
         'Análise consolidada geral de todos os documentos comprobatórios de todos os períodos da linha do tempo rural com IA. Examina conjunto probatório completo considerando múltiplos períodos rurais, identifica sobreposições, lacunas temporais, consistência entre períodos distintos, gerando parecer técnico unificado sobre viabilidade global de reconhecimento.',
     }),
@@ -442,7 +442,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'RENDA PER CAPITA PARA BPC - ANÁLISE COMPLETA',
+      title: 'ANÁLISE DE RENDA PER CAPITA PARA BPC - ANÁLISE COMPLETA',
       description:
         'Análise completa da renda per capita familiar para elegibilidade ao BPC/LOAS com IA. Examina composição do grupo familiar, rendas de todos os membros, benefícios recebidos, despesas dedutíveis (medicamentos de uso contínuo), calcula renda per capita conforme legislação vigente e jurisprudência favorável, identifica possibilidades de enquadramento.',
     }),
@@ -451,7 +451,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'RENDA PER CAPITA PARA BPC - ANÁLISE SIMPLIFICADA',
+      title: 'ANÁLISE DE RENDA PER CAPITA PARA BPC - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada da renda per capita familiar para BPC/LOAS com IA. Calcula renda per capita básica dividindo renda total pelo número de membros do grupo familiar, compara com limite legal de 1/4 do salário mínimo, informa de forma objetiva se há elegibilidade pela renda. Versão resumida para triagem inicial.',
     }),
@@ -460,7 +460,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE PETIÇÃO INICIAL - GERAÇÃO COMPLETA',
+      title: 'GERADOR DE PETIÇÃO INICIAL - ANÁLISE COMPLETA',
       description:
         'Geração completa de petição inicial previdenciária com IA. Analisa documentos, fatos, direito aplicável, jurisprudência favorável, gerando peça processual estruturada com qualificação das partes, fundamentação jurídica detalhada, pedidos principais e alternativos, requerimentos de provas e valor da causa. Conteúdo pronto para revisão e ajustes finais.',
     }),
@@ -469,7 +469,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.INITIAL_PETITION_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE PETIÇÃO INICIAL - GERAÇÃO SIMPLIFICADA',
+      title: 'GERADOR DE PETIÇÃO INICIAL - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de petição inicial em linguagem acessível com IA. Cria minuta de petição com estrutura básica, fundamentação jurídica objetiva e pedidos essenciais, utilizando linguagem clara sem termos técnicos complexos. Ideal para apresentação ao cliente ou casos de menor complexidade jurídica.',
     }),
@@ -478,7 +478,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE REQUERIMENTO ADMINISTRATIVO - GERAÇÃO COMPLETA',
+      title: 'GERADOR DE REQUERIMENTO ADMINISTRATIVO - ANÁLISE COMPLETA',
       description:
         'Geração completa de requerimento administrativo ao INSS com IA. Analisa documentos, direito aplicável e instruções normativas do INSS, gerando requerimento estruturado com identificação do requerente, fundamentação legal e administrativa detalhada, pedido específico, anexação de documentos comprobatórios e protocolo. Conteúdo pronto para envio.',
     }),
@@ -487,7 +487,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.ADMINISTRATIVE_REQUEST_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE REQUERIMENTO ADMINISTRATIVO - GERAÇÃO SIMPLIFICADA',
+      title: 'GERADOR DE REQUERIMENTO ADMINISTRATIVO - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de requerimento administrativo ao INSS em linguagem acessível com IA. Cria minuta de requerimento com estrutura básica, fundamentação objetiva e pedido direto, utilizando linguagem clara. Ideal para apresentação ao cliente ou requerimentos administrativos de menor complexidade.',
     }),
@@ -496,7 +496,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE PARECER - GERAÇÃO COMPLETA',
+      title: 'GERADOR DE PARECER - ANÁLISE COMPLETA',
       description:
         'Geração completa de parecer jurídico previdenciário com IA. Analisa todo o caso, documentos, legislação e jurisprudência aplicável, gerando parecer técnico estruturado com relatório dos fatos, fundamentação jurídica aprofundada, análise de viabilidade, riscos processuais, teses aplicáveis e conclusão fundamentada. Documento técnico para orientação estratégica completa.',
     }),
@@ -505,7 +505,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.FULL_OPINION_GENERATOR_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'GERADOR DE PARECER - GERAÇÃO SIMPLIFICADA',
+      title: 'GERADOR DE PARECER - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de parecer jurídico em linguagem acessível com IA. Cria parecer objetivo com resumo dos fatos, fundamentação jurídica básica, análise sintética de viabilidade e conclusão clara, utilizando linguagem compreensível. Ideal para apresentação ao cliente ou pareceres consultivos de menor complexidade técnica.',
     }),
@@ -515,7 +515,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_IMPACT_ANALYSIS,
       creditCost: 2,
       title:
-        'LINHA DO TEMPO RURAL - ANÁLISE DE IMPACTO DE CONTRIBUIÇÃO EM ATRASO',
+        'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE DE IMPACTO DE CONTRIBUIÇÃO EM ATRASO',
       description:
         'Análise de impacto de contribuições em atraso sobre períodos de atividade rural com IA. Examina CNIS do período de contribuição, identifica recolhimentos em atraso, avalia se o atraso prejudica reconhecimento do tempo rural anterior, calcula consequências previdenciárias (perda de carência, qualidade de segurado), orienta sobre regularização contributiva.',
     }),
@@ -524,7 +524,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
-      title: 'LINHA DO TEMPO RURAL - ANÁLISE SIMPLIFICADA',
+      title: 'ANÁLISE DE LINHA DO TEMPO RURAL - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada da linha do tempo rural com IA. Examina períodos rurais cadastrados de forma objetiva, identifica documentação básica apresentada, verifica presença de início de prova material, calcula tempo rural total alegado e informa de forma resumida sobre viabilidade geral de reconhecimento. Versão rápida para triagem inicial.',
     }),
@@ -534,7 +534,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
       creditCost: 1,
       title:
-        'LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
+        'ANÁLISE DE LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
       description:
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
