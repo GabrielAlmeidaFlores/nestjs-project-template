@@ -268,7 +268,7 @@ Formatting Rules:
         const functionDeclarations = props.tools.map((tool) => ({
           name: tool.name,
           description: tool.description,
-          parameters: tool.parameters,
+          parameters: this.sanitizeJsonSchema(tool.parameters),
         }));
 
         toolsList.push({
@@ -552,5 +552,32 @@ Formatting Rules:
       .replace(/\n```$/gm, '')
       .replace(/```/g, '')
       .trim();
+  }
+
+  private sanitizeJsonSchema(schema: Record<string, unknown>): Record<string, unknown> {
+    const sanitized: Record<string, unknown> = { ...schema };
+
+    if (sanitized['type'] === 'array' && sanitized['items'] === undefined) {
+      sanitized['items'] = {};
+    }
+
+    if (sanitized['properties'] !== null && typeof sanitized['properties'] === 'object') {
+      const sanitizedProperties: Record<string, unknown> = {};
+
+      for (const [key, value] of Object.entries(sanitized['properties'] as Record<string, unknown>)) {
+        sanitizedProperties[key] =
+          value !== null && typeof value === 'object'
+            ? this.sanitizeJsonSchema(value as Record<string, unknown>)
+            : value;
+      }
+
+      sanitized['properties'] = sanitizedProperties;
+    }
+
+    if (sanitized['items'] !== null && typeof sanitized['items'] === 'object') {
+      sanitized['items'] = this.sanitizeJsonSchema(sanitized['items'] as Record<string, unknown>);
+    }
+
+    return sanitized;
   }
 }
