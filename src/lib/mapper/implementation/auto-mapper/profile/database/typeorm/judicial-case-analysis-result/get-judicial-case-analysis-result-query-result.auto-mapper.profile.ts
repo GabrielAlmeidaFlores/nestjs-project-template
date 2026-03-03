@@ -2,6 +2,7 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { JudicialCaseAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/judicial-case-analysis-result.typeorm.entity';
 import { GetJudicialCaseAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/repository/judicial-case-analysis-result/query/result/get-judicial-case-analysis-result.query.result';
 import { JudicialCaseAnalysisResultId } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis-result/value-object/judicial-case-analysis-result-id/judicial-case-analysis-result-id.value-object';
@@ -27,6 +28,10 @@ export class GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile {
       return GetJudicialCaseAnalysisResultQueryResult.build({
         ...source,
         id: new JudicialCaseAnalysisResultId(source.id),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? new FederalDocument(source.clientFederalDocument)
+            : null,
       });
     };
 
@@ -47,6 +52,10 @@ export class GetJudicialCaseAnalysisResultQueryResultAutoMapperProfile {
       return JudicialCaseAnalysisResultTypeormEntity.build({
         ...source,
         id: source.id.toString(),
+        clientFederalDocument:
+          source.clientFederalDocument !== null
+            ? source.clientFederalDocument.toString()
+            : null,
       });
     };
 

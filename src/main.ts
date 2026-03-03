@@ -1,3 +1,5 @@
+import '@base/instrumentation';
+
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 

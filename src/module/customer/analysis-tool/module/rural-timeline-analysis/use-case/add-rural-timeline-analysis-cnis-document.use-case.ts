@@ -186,6 +186,23 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
           matchingSocialSecurityRelation.socialSecurityAffiliationInfo
             .dataFim === undefined;
 
+        const earningsForAverage =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory.filter(
+            (e) => e.remuneracao !== undefined,
+          ) ?? [];
+
+        let averageContributionAmount: DecimalValue | null = null;
+        if (earningsForAverage.length > 0) {
+          const total = earningsForAverage.reduce(
+            (sum, e) =>
+              sum + Number(e.remuneracao?.replace(/\./g, '').replace(',', '.')),
+            0,
+          );
+          averageContributionAmount = new DecimalValue(
+            total / earningsForAverage.length,
+          );
+        }
+
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
@@ -198,7 +215,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             status: willHavePendingExitDates
               ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
               : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
-            averageContributionAmount: null,
+            averageContributionAmount,
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
             externalSupplementationIntent: false,
@@ -223,7 +240,9 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
               const year = earnings.competencia.getFullYear();
               const tetoData = TetoInssData.find((t) => t.ano === year);
               const salarioMinimo = tetoData?.salarioMinimo ?? 0;
-              const amount = parseFloat(earnings.remuneracao);
+              const amount = Number(
+                earnings.remuneracao.replace(/\./g, '').replace(',', '.'),
+              );
 
               if (salarioMinimo > 0 && amount < salarioMinimo) {
                 batchOperations.push(
@@ -262,7 +281,11 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
                     id: new RuralTimelineAnalysisPeriodPendingExitDateId(),
                     pendingDate: earnings.competencia,
                     pendingAmount: new DecimalValue(
-                      parseFloat(earnings.remuneracao),
+                      Number(
+                        earnings.remuneracao
+                          .replace(/\./g, '')
+                          .replace(',', '.'),
+                      ),
                     ),
                     ruralTimelineCnisContributionPeriodId:
                       contributionPeriodEntity.id,

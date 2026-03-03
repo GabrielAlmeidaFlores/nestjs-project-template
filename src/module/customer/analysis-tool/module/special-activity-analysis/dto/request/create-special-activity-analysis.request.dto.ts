@@ -34,8 +34,9 @@ export class CreateSpecialActivityAnalysisRequestDto extends BaseBuildableDtoObj
 
   @RequestDtoObjectProperty(() => CreateSpecialActivityDocumentDto, {
     isArray: true,
+    required: false,
   })
-  public documents: CreateSpecialActivityDocumentDto[];
+  public documents?: CreateSpecialActivityDocumentDto[];
 
   protected override readonly _type =
     CreateSpecialActivityAnalysisRequestDto.name;

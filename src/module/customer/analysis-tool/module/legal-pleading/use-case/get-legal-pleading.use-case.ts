@@ -45,6 +45,14 @@ export class GetLegalPleadingUseCase {
 
     const analysisToolClient = GetLegalPleadingClientResponseDto.build({
       ...legalPleadingQueryResult.analysisToolClient,
+      inssBenefitNumbers:
+        legalPleadingQueryResult.analysisToolClient.analysisToolClientInssBenefit.map(
+          (b) => b.inssBenefitNumber,
+        ),
+      legalProceedingNumbers:
+        legalPleadingQueryResult.analysisToolClient.analysisToolClientLegalProceeding.map(
+          (p) => p.legalProceedingNumber,
+        ),
     });
 
     const legalPleadingAddress = legalPleadingQueryResult.legalPleadingAddress
@@ -53,7 +61,7 @@ export class GetLegalPleadingUseCase {
         })
       : null;
 
-    const legalPleadingResult = legalPleadingQueryResult.legalPleadingAddress
+    const legalPleadingResult = legalPleadingQueryResult.legalPleadingResult
       ? GetLegalPleadingResultResponseDto.build({
           ...legalPleadingQueryResult.legalPleadingResult,
         })

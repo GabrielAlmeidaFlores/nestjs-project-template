@@ -36,6 +36,37 @@ export class InsuranceQualityAnalysisEntity extends BaseEntity<InsuranceQualityA
   @Description('Detalhes da atividade rural.')
   public readonly analysisRuralActivityDetails: string | null;
 
+  @Description(
+    'Indicador de acidente de trabalho ou doença grave (art. 30, III, Decreto 3.048/99).',
+  )
+  public readonly analysisIsWorkAccidentOrSeriousIllness: boolean | null;
+
+  @Description('Indicador de doença grave conforme Art. 151 da Lei 8.213/91.')
+  public readonly analysisIsSeriousIllnessArt151: boolean | null;
+
+  @Description('Doença grave identificada.')
+  public readonly analysisSeriousIllnesses: string | null;
+
+  @Description('Outra doença grave não listada.')
+  public readonly analysisOtherSeriousIllness: string | null;
+
+  @Description('Data de início da doença.')
+  public readonly analysisDiseaseStartDate: Date | null;
+
+  @Description('Data de início da atividade rural.')
+  public readonly analysisRuralStartDate: Date | null;
+
+  @Description('Data de fim da atividade rural.')
+  public readonly analysisRuralEndDate: Date | null;
+
+  @Description('Indicador de desemprego involuntário após última atividade.')
+  public readonly analysisHadInvoluntaryUnemployment: boolean | null;
+
+  @Description(
+    'Indicador de intenção de comprovar desemprego involuntário por testemunhal.',
+  )
+  public readonly analysisIntendsToProveByTestimony: boolean | null;
+
   @Description('Resultado da análise de qualidade de segurado e carência.')
   public readonly insuranceQualityAnalysisResult: InsuranceQualityAnalysisResultEntity | null;
 
@@ -59,6 +90,20 @@ export class InsuranceQualityAnalysisEntity extends BaseEntity<InsuranceQualityA
     this.analysisHasRuralActivity = props.analysisHasRuralActivity ?? null;
     this.analysisRuralActivityDetails =
       props.analysisRuralActivityDetails ?? null;
+    this.analysisIsWorkAccidentOrSeriousIllness =
+      props.analysisIsWorkAccidentOrSeriousIllness ?? null;
+    this.analysisIsSeriousIllnessArt151 =
+      props.analysisIsSeriousIllnessArt151 ?? null;
+    this.analysisSeriousIllnesses = props.analysisSeriousIllnesses ?? null;
+    this.analysisOtherSeriousIllness =
+      props.analysisOtherSeriousIllness ?? null;
+    this.analysisDiseaseStartDate = props.analysisDiseaseStartDate ?? null;
+    this.analysisRuralStartDate = props.analysisRuralStartDate ?? null;
+    this.analysisRuralEndDate = props.analysisRuralEndDate ?? null;
+    this.analysisHadInvoluntaryUnemployment =
+      props.analysisHadInvoluntaryUnemployment ?? null;
+    this.analysisIntendsToProveByTestimony =
+      props.analysisIntendsToProveByTestimony ?? null;
     this.insuranceQualityAnalysisResult =
       props.insuranceQualityAnalysisResult ?? null;
   }

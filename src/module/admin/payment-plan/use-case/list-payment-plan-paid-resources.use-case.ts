@@ -23,6 +23,9 @@ export class ListPaymentPlanPaidResourcesUseCase {
     const queryParameter = new ListPaymentPlanPaidResourceQueryParam({
       ...listData,
       resource: listData.resources ?? null,
+      searchBy: listData.search ?? null,
+      search: null,
+      field: null,
     });
 
     const paidResources =
