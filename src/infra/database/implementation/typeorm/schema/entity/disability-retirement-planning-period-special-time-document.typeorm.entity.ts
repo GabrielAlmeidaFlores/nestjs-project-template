@@ -5,9 +5,6 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@inf
 
 @Entity({ name: 'disability_retirement_planning_period_special_time_document' })
 export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.name;
-
   @Column({ name: 'document', type: 'varchar', length: 500 })
   public document: string;
 
@@ -15,6 +12,9 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity 
     () => DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity,
     (entity) => entity.disabilityRetirementPlanningPeriodSpecialTimeDocument,
   )
-  @JoinColumn({ name: 'special_time_id' })
+  @JoinColumn({ name: 'disability_retirement_planning_period_special_time_id' })
   public disabilityRetirementPlanningPeriodSpecialTime?: DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity.name;
 }

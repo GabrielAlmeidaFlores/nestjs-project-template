@@ -5,9 +5,6 @@ import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/imple
 
 @Entity({ name: 'disability_retirement_planning_legal_proceeding' })
 export class DisabilityRetirementPlanningLegalProceedingTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningLegalProceedingTypeormEntity.name;
-
   @Column({ name: 'legal_proceeding_number', type: 'varchar', length: 100 })
   public legalProceedingNumber: string;
 
@@ -17,4 +14,7 @@ export class DisabilityRetirementPlanningLegalProceedingTypeormEntity extends Ba
   )
   @JoinColumn({ name: 'disability_retirement_planning_id' })
   public disabilityRetirementPlanning?: DisabilityRetirementPlanningTypeormEntity;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningLegalProceedingTypeormEntity.name;
 }

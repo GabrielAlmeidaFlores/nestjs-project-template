@@ -7,9 +7,6 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 
 @Entity({ name: 'disability_retirement_planning_period_special_time' })
 export class DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity.name;
-
   @Column({
     name: 'start_date',
     type: 'date',
@@ -37,4 +34,7 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity extends 
     (entity) => entity.disabilityRetirementPlanningPeriodSpecialTime,
   )
   public disabilityRetirementPlanningPeriodSpecialTimeDocument?: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity.name;
 }

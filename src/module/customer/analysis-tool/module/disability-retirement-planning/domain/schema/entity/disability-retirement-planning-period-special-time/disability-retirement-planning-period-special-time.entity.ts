@@ -5,12 +5,12 @@ import type { DisabilityRetirementPlanningPeriodEntity } from '@module/customer/
 import type { DisabilityRetirementPlanningPeriodSpecialTimeEntityPropsInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.entity.props.interface';
 
 export class DisabilityRetirementPlanningPeriodSpecialTimeEntity extends BaseEntity<DisabilityRetirementPlanningPeriodSpecialTimeId> {
-  protected readonly _type =
-    DisabilityRetirementPlanningPeriodSpecialTimeEntity.name;
-
   public readonly disabilityRetirementPlanningPeriod: DisabilityRetirementPlanningPeriodEntity;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
+
+  protected readonly _type =
+    DisabilityRetirementPlanningPeriodSpecialTimeEntity.name;
 
   public constructor(
     props: DisabilityRetirementPlanningPeriodSpecialTimeEntityPropsInterface,

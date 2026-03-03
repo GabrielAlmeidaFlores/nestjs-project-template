@@ -14,9 +14,6 @@ import { FederativeEntityEnum } from '@module/customer/analysis-tool/module/disa
 
 @Entity({ name: 'disability_retirement_planning' })
 export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningTypeormEntity.name;
-
   @Column({ name: 'current_position', type: 'varchar', length: 255 })
   public currentPosition: string;
 
@@ -113,4 +110,7 @@ export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity
     (entity) => entity.disabilityRetirementPlanning,
   )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningTypeormEntity.name;
 }

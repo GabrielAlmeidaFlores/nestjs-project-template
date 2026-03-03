@@ -54,10 +54,16 @@ export class DisabilityRetirementPlanningRetirementOptionModel extends BaseBuild
 
 @ResponseDto()
 export class DisabilityRetirementPlanningCompleteAnalysisModel extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(() => DisabilityRetirementPlanningTimelinePeriodModel, { isArray: true })
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningTimelinePeriodModel,
+    { isArray: true },
+  )
   public readonly timeline: DisabilityRetirementPlanningTimelinePeriodModel[];
 
-  @ResponseDtoObjectProperty(() => DisabilityRetirementPlanningRetirementOptionModel, { isArray: true })
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningRetirementOptionModel,
+    { isArray: true },
+  )
   public readonly retirementOptionsSummary: DisabilityRetirementPlanningRetirementOptionModel[];
 
   @ResponseDtoStringProperty()

@@ -188,7 +188,7 @@ export class GetDisabilityRetirementPlanningUseCase {
         ? GetDisabilityRetirementPlanningResultResponseDto.build({
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysis !== null && {
-              disabilityRetirementPlanningCompleteAnalysis: (() => {
+              disabilityRetirementPlanningCompleteAnalysis: ((): DisabilityRetirementPlanningCompleteAnalysisModel => {
                 const stored =
                   queryResult.result.disabilityRetirementPlanningCompleteAnalysis;
 

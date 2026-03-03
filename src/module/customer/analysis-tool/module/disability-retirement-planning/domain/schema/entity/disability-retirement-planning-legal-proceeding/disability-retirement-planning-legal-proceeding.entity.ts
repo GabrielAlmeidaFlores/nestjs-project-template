@@ -5,11 +5,11 @@ import type { DisabilityRetirementPlanningEntity } from '@module/customer/analys
 import type { DisabilityRetirementPlanningLegalProceedingEntityPropsInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-legal-proceeding/disability-retirement-planning-legal-proceeding.entity.props.interface';
 
 export class DisabilityRetirementPlanningLegalProceedingEntity extends BaseEntity<DisabilityRetirementPlanningLegalProceedingId> {
-  protected readonly _type =
-    DisabilityRetirementPlanningLegalProceedingEntity.name;
-
   public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity;
   public readonly legalProceedingNumber: string;
+
+  protected readonly _type =
+    DisabilityRetirementPlanningLegalProceedingEntity.name;
 
   public constructor(
     props: DisabilityRetirementPlanningLegalProceedingEntityPropsInterface,
