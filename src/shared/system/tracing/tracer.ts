@@ -1,4 +1,5 @@
 import { trace, SpanStatusCode } from '@opentelemetry/api';
+
 import { SignozApplicationVariable } from '@shared/system/constant/application-variable/source/signoz.application-variable';
 
 import type { Span, Attributes } from '@opentelemetry/api';
@@ -20,8 +21,7 @@ export async function withSpan<T>(
       span.setStatus({ code: SpanStatusCode.OK });
       return result;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : String(error);
       span.setStatus({ code: SpanStatusCode.ERROR, message });
       span.recordException(error instanceof Error ? error : new Error(message));
       throw error;

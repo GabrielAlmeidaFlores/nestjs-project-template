@@ -10,14 +10,15 @@ import { logs, SeverityNumber } from '@opentelemetry/api-logs';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { LogRecord } from '@opentelemetry/api-logs';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private static readonly MAX_RESPONSE_LOG_LENGTH = 1000;
   private static readonly MAX_STACK_LOG_LENGTH = 500;
   private static readonly MAX_ARRAY_DISPLAY_LENGTH = 10;
+  private static readonly HTTP_INTERNAL_SERVER_ERROR_STATUS = 500;
   private static readonly SENSITIVE_FIELDS = [
     'password',
     'senha',
@@ -135,7 +136,9 @@ export class LoggingInterceptor implements NestInterceptor {
         error: (error: Error) => {
           const duration = Date.now() - now;
           const statusCode =
-            error instanceof HttpException ? error.getStatus() : 500;
+            error instanceof HttpException
+              ? error.getStatus()
+              : LoggingInterceptor.HTTP_INTERNAL_SERVER_ERROR_STATUS;
 
           const stackTrace =
             typeof error.stack === 'string'

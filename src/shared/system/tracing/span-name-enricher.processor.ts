@@ -1,8 +1,11 @@
 import { SpanKind } from '@opentelemetry/api';
 
 import type { Context } from '@opentelemetry/api';
-import type { ReadableSpan, SpanProcessor } from '@opentelemetry/sdk-trace-base';
-import type { Span } from '@opentelemetry/sdk-trace-base';
+import type {
+  ReadableSpan,
+  SpanProcessor,
+  Span,
+} from '@opentelemetry/sdk-trace-base';
 
 export class SpanNameEnricherProcessor implements SpanProcessor {
   protected readonly _type = SpanNameEnricherProcessor.name;
@@ -88,10 +91,7 @@ export class SpanNameEnricherProcessor implements SpanProcessor {
     return `${spanName} ${table}`;
   }
 
-  private extractTableFromSql(
-    operation: string,
-    sql: string,
-  ): string | null {
+  private extractTableFromSql(operation: string, sql: string): string | null {
     const opUpper = operation.toUpperCase();
 
     const patterns: RegExp[] = [];
@@ -115,7 +115,7 @@ export class SpanNameEnricherProcessor implements SpanProcessor {
     for (const pattern of patterns) {
       const match = pattern.exec(sql);
 
-      if (match !== null && match[1] !== undefined) {
+      if (match?.[1] !== undefined) {
         return match[1];
       }
     }
