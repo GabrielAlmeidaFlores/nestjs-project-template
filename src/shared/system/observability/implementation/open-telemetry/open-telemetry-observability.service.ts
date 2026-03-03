@@ -19,13 +19,11 @@ export class OpenTelemetryObservabilityService
   implements OnApplicationBootstrap
 {
   private static readonly BYTES_TO_MB = 1_048_576;
-  private static readonly MICROSECONDS_PER_MS = 1_000;
   private static readonly PERCENT = 100;
 
   protected readonly _type = OpenTelemetryObservabilityService.name;
 
-  private previousCpuUsage = process.cpuUsage();
-  private previousCpuTime = Date.now();
+  private previousCpuSnapshot = cpus();
 
   public onApplicationBootstrap(): void {
     if (!SignozApplicationVariable.SIGNOZ_ENABLED) {
@@ -81,66 +79,44 @@ export class OpenTelemetryObservabilityService
       .replace(/@/g, '_')
       .replace(/\./g, '_');
 
-    const cpuUserGauge = meter.createObservableGauge(
-      `${prefix}.process.cpu.user_percent`,
+    const cpuUsageGauge = meter.createObservableGauge(
+      `${prefix}.process.cpu.used_percent`,
       {
-        description: 'Process CPU user time as % of wall-clock time',
+        description: 'System CPU usage as % across all cores (same as htop)',
         unit: '%',
       },
     );
 
-    const cpuSystemGauge = meter.createObservableGauge(
-      `${prefix}.process.cpu.system_percent`,
-      {
-        description: 'Process CPU system time as % of wall-clock time',
-        unit: '%',
-      },
-    );
+    cpuUsageGauge.addCallback((result: ObservableResult) => {
+      const currentSnapshot = cpus();
+      let totalUsagePercent = 0;
 
-    meter.addBatchObservableCallback(
-      (observer) => {
-        const currentCpuUsage = process.cpuUsage();
-        const currentTime = Date.now();
-        const elapsedMs = currentTime - this.previousCpuTime;
+      for (let i = 0; i < currentSnapshot.length; i++) {
+        const prev = this.previousCpuSnapshot[i]?.times;
+        const curr = currentSnapshot[i]?.times;
 
-        if (elapsedMs > 0) {
-          const numCpus = cpus().length;
-          const elapsedMicros =
-            elapsedMs *
-            OpenTelemetryObservabilityService.MICROSECONDS_PER_MS *
-            numCpus;
+        if (!prev || !curr) continue;
 
-          const userPercent =
-            ((currentCpuUsage.user - this.previousCpuUsage.user) /
-              elapsedMicros) *
+        const prevTotal = Object.values(prev).reduce((a, b) => a + b, 0);
+        const currTotal = Object.values(curr).reduce((a, b) => a + b, 0);
+
+        const diffIdle = curr.idle - prev.idle;
+        const diffTotal = currTotal - prevTotal;
+
+        if (diffTotal > 0) {
+          const coreUsage =
+            (1 - diffIdle / diffTotal) *
             OpenTelemetryObservabilityService.PERCENT;
-
-          const systemPercent =
-            ((currentCpuUsage.system - this.previousCpuUsage.system) /
-              elapsedMicros) *
-            OpenTelemetryObservabilityService.PERCENT;
-
-          observer.observe(
-            cpuUserGauge,
-            Math.min(
-              OpenTelemetryObservabilityService.PERCENT,
-              Math.max(0, userPercent),
-            ),
-          );
-          observer.observe(
-            cpuSystemGauge,
-            Math.min(
-              OpenTelemetryObservabilityService.PERCENT,
-              Math.max(0, systemPercent),
-            ),
-          );
+          totalUsagePercent += coreUsage;
         }
+      }
 
-        this.previousCpuUsage = currentCpuUsage;
-        this.previousCpuTime = currentTime;
-      },
-      [cpuUserGauge, cpuSystemGauge],
-    );
+      const avgUsage = totalUsagePercent / currentSnapshot.length;
+
+      this.previousCpuSnapshot = currentSnapshot;
+
+      result.observe(Math.min(100, Math.max(0, avgUsage)));
+    });
 
     meter
       .createObservableGauge(`${prefix}.process.memory.heap_used_mb`, {
