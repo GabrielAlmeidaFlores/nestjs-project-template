@@ -1,3 +1,5 @@
+import { freemem, totalmem } from 'os';
+
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { metrics } from '@opentelemetry/api';
 import { logs, SeverityNumber } from '@opentelemetry/api-logs';
@@ -17,10 +19,13 @@ export class OpenTelemetryObservabilityService
   implements OnApplicationBootstrap
 {
   private static readonly BYTES_TO_MB = 1_048_576;
-  private static readonly CPU_MICROSECONDS_TO_PERCENT_DIVISOR = 10;
-  private static readonly CPU_PERCENT_MAX = 100;
+  private static readonly MICROSECONDS_PER_MS = 1_000;
+  private static readonly PERCENT = 100;
 
   protected readonly _type = OpenTelemetryObservabilityService.name;
+
+  private previousCpuUsage = process.cpuUsage();
+  private previousCpuTime = Date.now();
 
   public onApplicationBootstrap(): void {
     if (!SignozApplicationVariable.SIGNOZ_ENABLED) {
@@ -71,64 +76,68 @@ export class OpenTelemetryObservabilityService
     const meter = meterProvider.getMeter('process-metrics');
 
     const serviceName = SignozApplicationVariable.SIGNOZ_SERVICE_NAME;
-    const prefix = serviceName.replace(/-/g, '_');
+    const prefix = serviceName
+      .replace(/-/g, '_')
+      .replace(/@/g, '_')
+      .replace(/\./g, '_');
 
-    let previousCpuUsage = process.cpuUsage();
-    let previousTime = Date.now();
-
-    meter
-      .createObservableGauge(`${prefix}.process.cpu.user_percent`, {
-        description: 'Process CPU user time as a percentage of wall-clock time',
+    const cpuUserGauge = meter.createObservableGauge(
+      `${prefix}.process.cpu.user_percent`,
+      {
+        description: 'Process CPU user time as % of wall-clock time',
         unit: '%',
-      })
-      .addCallback((result: ObservableResult) => {
+      },
+    );
+
+    const cpuSystemGauge = meter.createObservableGauge(
+      `${prefix}.process.cpu.system_percent`,
+      {
+        description: 'Process CPU system time as % of wall-clock time',
+        unit: '%',
+      },
+    );
+
+    meter.addBatchObservableCallback(
+      (observer) => {
         const currentCpuUsage = process.cpuUsage();
         const currentTime = Date.now();
-        const elapsedMs = currentTime - previousTime;
+        const elapsedMs = currentTime - this.previousCpuTime;
 
         if (elapsedMs > 0) {
-          const userPercent =
-            (currentCpuUsage.user - previousCpuUsage.user) /
-            (elapsedMs *
-              OpenTelemetryObservabilityService.CPU_MICROSECONDS_TO_PERCENT_DIVISOR);
+          const elapsedMicros =
+            elapsedMs * OpenTelemetryObservabilityService.MICROSECONDS_PER_MS;
 
-          result.observe(
+          const userPercent =
+            ((currentCpuUsage.user - this.previousCpuUsage.user) /
+              elapsedMicros) *
+            OpenTelemetryObservabilityService.PERCENT;
+
+          const systemPercent =
+            ((currentCpuUsage.system - this.previousCpuUsage.system) /
+              elapsedMicros) *
+            OpenTelemetryObservabilityService.PERCENT;
+
+          observer.observe(
+            cpuUserGauge,
             Math.min(
-              OpenTelemetryObservabilityService.CPU_PERCENT_MAX,
+              OpenTelemetryObservabilityService.PERCENT,
               Math.max(0, userPercent),
             ),
           );
-        }
-
-        previousCpuUsage = currentCpuUsage;
-        previousTime = currentTime;
-      });
-
-    meter
-      .createObservableGauge(`${prefix}.process.cpu.system_percent`, {
-        description:
-          'Process CPU system time as a percentage of wall-clock time',
-        unit: '%',
-      })
-      .addCallback((result: ObservableResult) => {
-        const currentCpuUsage = process.cpuUsage();
-        const currentTime = Date.now();
-        const elapsedMs = currentTime - previousTime;
-
-        if (elapsedMs > 0) {
-          const systemPercent =
-            (currentCpuUsage.system - previousCpuUsage.system) /
-            (elapsedMs *
-              OpenTelemetryObservabilityService.CPU_MICROSECONDS_TO_PERCENT_DIVISOR);
-
-          result.observe(
+          observer.observe(
+            cpuSystemGauge,
             Math.min(
-              OpenTelemetryObservabilityService.CPU_PERCENT_MAX,
+              OpenTelemetryObservabilityService.PERCENT,
               Math.max(0, systemPercent),
             ),
           );
         }
-      });
+
+        this.previousCpuUsage = currentCpuUsage;
+        this.previousCpuTime = currentTime;
+      },
+      [cpuUserGauge, cpuSystemGauge],
+    );
 
     meter
       .createObservableGauge(`${prefix}.process.memory.heap_used_mb`, {
@@ -136,9 +145,9 @@ export class OpenTelemetryObservabilityService
         unit: 'MB',
       })
       .addCallback((result: ObservableResult) => {
-        const mem = process.memoryUsage();
         result.observe(
-          mem.heapUsed / OpenTelemetryObservabilityService.BYTES_TO_MB,
+          process.memoryUsage().heapUsed /
+            OpenTelemetryObservabilityService.BYTES_TO_MB,
         );
       });
 
@@ -148,9 +157,9 @@ export class OpenTelemetryObservabilityService
         unit: 'MB',
       })
       .addCallback((result: ObservableResult) => {
-        const mem = process.memoryUsage();
         result.observe(
-          mem.heapTotal / OpenTelemetryObservabilityService.BYTES_TO_MB,
+          process.memoryUsage().heapTotal /
+            OpenTelemetryObservabilityService.BYTES_TO_MB,
         );
       });
 
@@ -160,19 +169,22 @@ export class OpenTelemetryObservabilityService
         unit: 'MB',
       })
       .addCallback((result: ObservableResult) => {
-        const mem = process.memoryUsage();
-        result.observe(mem.rss / OpenTelemetryObservabilityService.BYTES_TO_MB);
+        result.observe(
+          process.memoryUsage().rss /
+            OpenTelemetryObservabilityService.BYTES_TO_MB,
+        );
       });
 
     meter
-      .createObservableGauge(`${prefix}.process.memory.external_mb`, {
-        description: 'Memory used by C++ objects bound to JavaScript objects',
-        unit: 'MB',
+      .createObservableGauge(`${prefix}.process.memory.system_used_percent`, {
+        description: 'System RAM used as a percentage of total',
+        unit: '%',
       })
       .addCallback((result: ObservableResult) => {
-        const mem = process.memoryUsage();
+        const total = totalmem();
+        const used = total - freemem();
         result.observe(
-          mem.external / OpenTelemetryObservabilityService.BYTES_TO_MB,
+          (used / total) * OpenTelemetryObservabilityService.PERCENT,
         );
       });
 
