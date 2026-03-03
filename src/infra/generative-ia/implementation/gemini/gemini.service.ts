@@ -7,9 +7,11 @@ import { GenerativeIaConnectionError } from '@infra/generative-ia/error/generati
 import { GenerativeIaFunctionHandlerNotFoundError } from '@infra/generative-ia/error/generative-ia-function-handler-not-found.error';
 import { GenerativeIaQuotaExceededError } from '@infra/generative-ia/error/generative-ia-quota-exceeded.error';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { GeminiResultOutputModel } from '@infra/generative-ia/implementation/gemini/model/output/gemini-result.output.model';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class GeminiService implements GenerativeIaGateway {
@@ -112,6 +114,43 @@ Formatting Rules:
     maxOutputTokens: number,
     isRetry = false,
   ): Promise<string | null> {
+    return withSpan(`Gemini.generateContent`, async (span) => {
+      span.setAttributes({
+        'llm.provider': 'google',
+        'llm.model': model,
+        'llm.max_output_tokens': maxOutputTokens,
+        'llm.is_retry': isRetry,
+        'llm.has_files': (props.promptFiles?.length ?? 0) > 0,
+        'llm.has_tools': (props.tools?.length ?? 0) > 0,
+        'llm.has_conversation_history':
+          (props.conversationHistory?.length ?? 0) > 0,
+        'llm.structured_json_mode': props.responseConfig !== undefined,
+      });
+
+      const result = await this.executeGenerateResponseFromPromptAndFiles(
+        props,
+        model,
+        maxOutputTokens,
+        isRetry,
+      );
+
+      span.setAttributes({
+        'llm.token.input': result.inputTokens,
+        'llm.token.output': result.outputTokens,
+        'llm.token.total': result.totalTokens,
+        'llm.model.used': result.model,
+      });
+
+      return result.text;
+    });
+  }
+
+  private async executeGenerateResponseFromPromptAndFiles(
+    props: GenerateResponseInputModel,
+    model: string,
+    maxOutputTokens: number,
+    isRetry = false,
+  ): Promise<GeminiResultOutputModel> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
 
@@ -235,15 +274,23 @@ Formatting Rules:
         return await this.generateWithFunctionCalling(
           contentConfig,
           props.toolHandlers,
+          model,
         );
       }
 
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-      return typeof result.text === 'string'
-        ? this.stripCodeFence(result.text)
-        : null;
+      return GeminiResultOutputModel.build({
+        text:
+          typeof result.text === 'string'
+            ? this.stripCodeFence(result.text)
+            : null,
+        model,
+        inputTokens: result.usageMetadata?.promptTokenCount ?? 0,
+        outputTokens: result.usageMetadata?.candidatesTokenCount ?? 0,
+        totalTokens: result.usageMetadata?.totalTokenCount ?? 0,
+      });
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
@@ -273,12 +320,19 @@ Formatting Rules:
           const fallbackModel = this.FALLBACK_MODELS[model];
 
           if (fallbackModel !== undefined && !isRetry) {
-            return await this.generateResponseFromPromptAndFiles(
+            const fallbackText = await this.generateResponseFromPromptAndFiles(
               props,
               fallbackModel,
               maxOutputTokens,
               true,
             );
+            return GeminiResultOutputModel.build({
+              text: fallbackText,
+              model: fallbackModel,
+              inputTokens: 0,
+              outputTokens: 0,
+              totalTokens: 0,
+            });
           }
         }
       }
@@ -293,9 +347,13 @@ Formatting Rules:
       string,
       (params: Record<string, unknown>) => Promise<unknown>
     >,
-  ): Promise<string | null> {
+    model: string,
+  ): Promise<GeminiResultOutputModel> {
     const MAX_FUNCTION_CALLS = 10;
     let callCount = 0;
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
+    let totalTokens = 0;
     const conversationHistory: Array<unknown> = Array.isArray(
       contentConfig.contents,
     )
@@ -309,10 +367,20 @@ Formatting Rules:
           contents: conversationHistory as never,
         });
 
+        totalInputTokens += result.usageMetadata?.promptTokenCount ?? 0;
+        totalOutputTokens += result.usageMetadata?.candidatesTokenCount ?? 0;
+        totalTokens += result.usageMetadata?.totalTokenCount ?? 0;
+
         const functionCalls = result.functionCalls;
 
         if (functionCalls === undefined || functionCalls.length === 0) {
-          return result.text ?? null;
+          return GeminiResultOutputModel.build({
+            text: result.text ?? null,
+            model,
+            inputTokens: totalInputTokens,
+            outputTokens: totalOutputTokens,
+            totalTokens,
+          });
         }
 
         const candidates = result.candidates;
@@ -403,7 +471,13 @@ Formatting Rules:
       }
     }
 
-    return 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.';
+    return GeminiResultOutputModel.build({
+      text: 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.',
+      model,
+      inputTokens: totalInputTokens,
+      outputTokens: totalOutputTokens,
+      totalTokens,
+    });
   }
 
   private async buildPartWithFileContent(
