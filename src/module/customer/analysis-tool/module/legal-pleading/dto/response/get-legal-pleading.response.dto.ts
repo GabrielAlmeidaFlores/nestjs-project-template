@@ -95,6 +95,12 @@ export class GetLegalPleadingClientResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
   public clientType?: AnalysisToolClientTypeEnum;
 
+  @ResponseDtoStringProperty({ isArray: true, required: false })
+  public inssBenefitNumbers?: string[];
+
+  @ResponseDtoStringProperty({ isArray: true, required: false })
+  public legalProceedingNumbers?: string[];
+
   protected override readonly _type = GetLegalPleadingClientResponseDto.name;
 }
 

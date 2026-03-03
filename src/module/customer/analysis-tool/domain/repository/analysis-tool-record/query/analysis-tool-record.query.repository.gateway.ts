@@ -39,6 +39,11 @@ export abstract class AnalysisToolRecordQueryRepositoryGateway {
     AuthIdentityId: AuthIdentityId,
   ): Promise<number>;
 
+  public abstract findMaxCodeByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<number>;
+
   public abstract listByOrganizationIdAndAuthIdentityId(
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,

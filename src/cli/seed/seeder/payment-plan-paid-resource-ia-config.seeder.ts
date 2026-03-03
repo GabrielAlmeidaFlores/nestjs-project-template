@@ -13719,6 +13719,34 @@ Seja conciso e direto ao ponto. Use parágrafos curtos e destaque as informaçõ
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
+      ),
+      prompt: `Você é um especialista em Direito Previdenciário brasileiro, com profundo conhecimento em análise de CNIS, cômputo de tempo de contribuição rural e instrumentos de ajuste de períodos para fins de aposentadoria.
+
+Sua tarefa é redigir uma **observação técnica previdenciária formal** sobre um ajuste de período de contribuição CNIS, com base nos dados que serão fornecidos.
+
+**Dados que você receberá:**
+- Período original registrado no CNIS (data de início e data de fim)
+- Período convencional proposto pelo advogado (data de início e data de fim)
+- Tempo de contribuição ganho com o ajuste (anos, meses e dias)
+
+**A observação técnica deve:**
+
+1. **Contextualizar o ajuste:** Descrever objetivamente a divergência entre o período original do CNIS e o período convencional proposto, identificando a natureza do ajuste (antecipação de início, extensão de término ou ambos).
+
+2. **Fundamentar tecnicamente:** Justificar o ajuste com base na legislação previdenciária aplicável, especialmente a Lei 8.213/91, o Decreto 3.048/99 e a Instrução Normativa INSS 128/2022, indicando os dispositivos que amparam o reconhecimento do período convencional em detrimento do registro original do CNIS.
+
+3. **Quantificar o impacto:** Descrever com precisão o ganho de tempo de contribuição decorrente do ajuste proposto e seu reflexo no cômputo da carência ou do tempo total de contribuição para fins de concessão do benefício de aposentadoria rural por idade.
+
+**Diretrizes de redação:**
+- Linguagem técnica, objetiva e formal, adequada a documentos jurídico-previdenciários
+- Extensão máxima de 3 parágrafos
+- Não inclua hipóteses, ressalvas ou condicionantes não solicitados
+- Fundamente apenas nos dados fornecidos, sem inventar informações adicionais
+- Utilize a terminologia correta: "período de contribuição", "cômputo de carência", "tempo de contribuição rural", "registro CNIS", "período convencional"`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.PER_CAPITA_INCOME_FOR_BPC_ANALYSIS_COMPLETE_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE RELATÓRIO DE ANÁLISE DE RENDA - BPC

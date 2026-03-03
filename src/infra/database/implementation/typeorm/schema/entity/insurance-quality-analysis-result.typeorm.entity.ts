@@ -33,6 +33,14 @@ export class InsuranceQualityAnalysisResultTypeormEntity extends BaseTypeormEnti
   public clientBirthDate: Date | null;
 
   @Column({
+    name: 'client_last_affiliation_date',
+    type: 'date',
+    transformer: DateOnlyTransformer,
+    nullable: true,
+  })
+  public clientLastAffiliationDate: Date | null;
+
+  @Column({
     name: 'insurance_quality_conclusion',
     type: 'text',
     nullable: true,

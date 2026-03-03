@@ -123,14 +123,14 @@ export class CreateAudienceQuestionGeneratorUseCase {
         }),
     );
 
-    const countRecords: number =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode: number =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      code: new AnalysisToolRecordCode(countRecords + 1),
+      code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.AUDIENCE_QUESTIONS_GENERATOR,
       audienceQuestionGenerator,
       analysisToolClient,

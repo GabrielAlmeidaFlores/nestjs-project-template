@@ -92,6 +92,12 @@ export class UpdateLegalPleadingDataRequestDto extends BaseBuildableDtoObject {
   })
   public legalPleadingAddress?: UpdateLegalPleadingAddressDataRequestDto;
 
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public inssBenefitNumbers?: string[];
+
+  @RequestDtoStringProperty({ required: false, isArray: true })
+  public legalProceedingNumbers?: string[];
+
   protected override readonly _type = UpdateLegalPleadingDataRequestDto.name;
 }
 

@@ -82,6 +82,18 @@ export class GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfil
         analysisContributionSituation: source.analysisContributionSituation,
         analysisHasRuralActivity: source.analysisHasRuralActivity,
         analysisRuralActivityDetails: source.analysisRuralActivityDetails,
+        analysisIsWorkAccidentOrSeriousIllness:
+          source.analysisIsWorkAccidentOrSeriousIllness,
+        analysisIsSeriousIllnessArt151: source.analysisIsSeriousIllnessArt151,
+        analysisSeriousIllnesses: source.analysisSeriousIllnesses,
+        analysisOtherSeriousIllness: source.analysisOtherSeriousIllness,
+        analysisDiseaseStartDate: source.analysisDiseaseStartDate,
+        analysisRuralStartDate: source.analysisRuralStartDate,
+        analysisRuralEndDate: source.analysisRuralEndDate,
+        analysisHadInvoluntaryUnemployment:
+          source.analysisHadInvoluntaryUnemployment,
+        analysisIntendsToProveByTestimony:
+          source.analysisIntendsToProveByTestimony,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         insuranceQualityAnalysisResult,

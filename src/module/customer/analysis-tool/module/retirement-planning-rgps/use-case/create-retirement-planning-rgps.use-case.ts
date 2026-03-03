@@ -114,8 +114,8 @@ export class CreateRetirementPlanningRgpsUseCase {
       retirementPlanningRgpsResult,
     );
 
-    const countRecords =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
@@ -127,7 +127,7 @@ export class CreateRetirementPlanningRgpsUseCase {
     });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      code: new AnalysisToolRecordCode(countRecords + 1),
+      code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.RETIREMENT_PLANNING_RGPS,
       cnisFastAnalysis: null,
       retirementPlanningRgps,

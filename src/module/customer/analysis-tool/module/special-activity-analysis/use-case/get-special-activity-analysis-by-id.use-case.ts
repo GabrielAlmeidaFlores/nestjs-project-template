@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpecialActivityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis/query/special-activity-analysis.query.repository.gateway';
 import { SpecialActivityId } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/value-object/special-activity-id.value-object';
@@ -26,6 +27,8 @@ export class GetSpecialActivityAnalysisByIdUseCase {
     private readonly specialActivityQueryRepositoryGateway: SpecialActivityAnalysisQueryRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(ExportDocumentGateway)
+    private readonly exportDocumentGateway: ExportDocumentGateway,
   ) {}
 
   public async execute(
@@ -66,7 +69,10 @@ export class GetSpecialActivityAnalysisByIdUseCase {
       }),
     );
 
-    const parsedSpecialActivityCompleteAnalysis =
+    const parsedSpecialActivityCompleteAnalysis: Record<
+      string,
+      unknown
+    > | null =
       specialActivityQueryResult.specialActivityResult
         ?.specialActivityCompleteAnalysis !== null &&
       specialActivityQueryResult.specialActivityResult
@@ -74,8 +80,19 @@ export class GetSpecialActivityAnalysisByIdUseCase {
         ? (JSON.parse(
             specialActivityQueryResult.specialActivityResult
               .specialActivityCompleteAnalysis,
-          ) as object)
+          ) as Record<string, unknown>)
         : null;
+
+    if (
+      parsedSpecialActivityCompleteAnalysis !== null &&
+      typeof parsedSpecialActivityCompleteAnalysis['analysisResult'] ===
+        'string'
+    ) {
+      parsedSpecialActivityCompleteAnalysis['analysisResult'] =
+        await this.exportDocumentGateway.convertMarkdownToHtml(
+          parsedSpecialActivityCompleteAnalysis['analysisResult'],
+        );
+    }
 
     const parsedSpecialActivitySimplifiedAnalysis =
       specialActivityQueryResult.specialActivityResult

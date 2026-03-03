@@ -131,6 +131,14 @@ export class CreateAdministrativeProcedureInssAnalysisResultUseCase {
 
     const administrativeProcedureInssAnalysisResult =
       new AdministrativeProcedureInssAnalysisResultEntity({
+        clientName:
+          analysisToolRecordQueryResult.analysisToolClient.name ?? null,
+        clientFederalDocument:
+          analysisToolRecordQueryResult.analysisToolClient.federalDocument ??
+          null,
+        clientBirthDate:
+          analysisToolRecordQueryResult.analysisToolClient.birthDate ?? null,
+        clientLastAffiliationDate: null,
         administrativeProcedureInssCompleteAnalysis:
           administrativeProcedureCompleteAnalysis,
       });

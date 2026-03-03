@@ -546,6 +546,16 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada da linha do tempo rural com IA. Examina períodos rurais cadastrados de forma objetiva, identifica documentação básica apresentada, verifica presença de início de prova material, calcula tempo rural total alegado e informa de forma resumida sobre viabilidade geral de reconhecimento. Versão rápida para triagem inicial.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('36bcef6c-889f-4493-93d8-ba3457398caa'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
+      creditCost: 1,
+      title:
+        'LINHA DO TEMPO RURAL - SIMULAÇÃO DE AJUSTE DE PERÍODO DE CONTRIBUIÇÃO',
+      description:
+        'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

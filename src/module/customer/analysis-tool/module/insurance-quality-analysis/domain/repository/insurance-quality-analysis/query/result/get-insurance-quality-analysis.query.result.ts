@@ -17,6 +17,15 @@ export class GetInsuranceQualityAnalysisQueryResult extends BaseBuildableObject 
   public readonly analysisContributionSituation: string | null;
   public readonly analysisHasRuralActivity: boolean | null;
   public readonly analysisRuralActivityDetails: string | null;
+  public readonly analysisIsWorkAccidentOrSeriousIllness: boolean | null;
+  public readonly analysisIsSeriousIllnessArt151: boolean | null;
+  public readonly analysisSeriousIllnesses: string | null;
+  public readonly analysisOtherSeriousIllness: string | null;
+  public readonly analysisDiseaseStartDate: Date | null;
+  public readonly analysisRuralStartDate: Date | null;
+  public readonly analysisRuralEndDate: Date | null;
+  public readonly analysisHadInvoluntaryUnemployment: boolean | null;
+  public readonly analysisIntendsToProveByTestimony: boolean | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 

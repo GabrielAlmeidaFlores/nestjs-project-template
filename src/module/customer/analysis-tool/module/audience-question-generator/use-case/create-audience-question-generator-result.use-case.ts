@@ -114,9 +114,14 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       ),
     );
 
+    const systemInstruction = this.buildCompleteAnalysisSystemInstruction(
+      promptResponse.prompt,
+      new Date(),
+    );
+
     const audienceQuestionCompleteAnalysis =
       await this.analysisProcessorGateway.getAudienceQuestionGeneratorCompleteAnalysis(
-        promptResponse.prompt,
+        systemInstruction,
         [...audienceQuestionDocumentsBuffer, clientDataBuffer],
       );
 
@@ -187,5 +192,12 @@ export class CreateAudienceQuestionGeneratorResultUseCase {
       audienceQuestionGeneratorCompleteAnalysis:
         audienceQuestionGeneratorResult.audienceQuestionGeneratorCompleteAnalysis,
     });
+  }
+
+  private buildCompleteAnalysisSystemInstruction(
+    basePrompt: string,
+    currentDate: Date,
+  ): string {
+    return `${basePrompt}\nuse the current date: ${currentDate.toISOString()}`;
   }
 }

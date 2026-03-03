@@ -81,15 +81,15 @@ export class CreateLegalPleadingUseCase {
           })
         : null;
 
-    const countLegalPleading =
-      await this.legalPleadingQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode =
+      await this.legalPleadingQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
 
     const legalPleading = new LegalPleadingEntity({
       ...dto.json,
-      code: new LegalPleadingCode(countLegalPleading + 1),
+      code: new LegalPleadingCode(maxCode + 1),
       legalPleadingAddress,
       analysisToolClient,
       status: AnalysisStatusEnum.IN_PROGRESS,
