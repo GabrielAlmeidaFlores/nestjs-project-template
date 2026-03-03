@@ -1,5 +1,5 @@
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
 
 import { GenerativeIaApiKeyInvalidError } from '@infra/generative-ia/error/generative-ia-api-key-invalid.error';
@@ -11,6 +11,8 @@ import { GeminiResultOutputModel } from '@infra/generative-ia/implementation/gem
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
+import { ObservabilityLogInputModel } from '@shared/system/observability/model/input/observability-log.input.model';
+import { ObservabilityGateway } from '@shared/system/observability/observability.gateway';
 import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
@@ -31,7 +33,10 @@ export class GeminiService implements GenerativeIaGateway {
   private readonly fileTypeCache: Map<string, string>;
   private readonly hashSubstringLength: number;
 
-  public constructor() {
+  public constructor(
+    @Inject(ObservabilityGateway)
+    private readonly observabilityGateway: ObservabilityGateway,
+  ) {
     this.hashSubstringLength = 32;
     this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/i;
     this.fileTypeCache = new Map<string, string>();
@@ -114,6 +119,8 @@ Formatting Rules:
     maxOutputTokens: number,
     isRetry = false,
   ): Promise<string | null> {
+    const startedAt = Date.now();
+
     return withSpan(`Gemini.generateContent`, async (span) => {
       span.setAttributes({
         'llm.provider': 'google',
@@ -140,6 +147,21 @@ Formatting Rules:
         'llm.token.total': result.totalTokens,
         'llm.model.used': result.model,
       });
+
+      this.observabilityGateway.emitInfo(
+        ObservabilityLogInputModel.build({
+          scope: GeminiService.name,
+          message: `Gemini.generateContent [${result.model}]`,
+          attributes: {
+            'llm.model': result.model,
+            'llm.token.input': result.inputTokens,
+            'llm.token.output': result.outputTokens,
+            'llm.token.total': result.totalTokens,
+            'llm.duration_ms': Date.now() - startedAt,
+            'llm.is_retry': isRetry,
+          },
+        }),
+      );
 
       return result.text;
     });
