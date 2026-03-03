@@ -216,6 +216,10 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
         disabilityRetirementPlanningId,
         disabilityRetirementPlanningEntity,
       ),
+      this.disabilityRetirementPlanningCommandRepositoryGateway.updateDisabilityRetirementPlanningResultId(
+        disabilityRetirementPlanningId,
+        resultId,
+      ),
       this.analysisToolRecordCommandRepositoryGateway.updateAnalysisToolRecord(
         analysisToolRecord.id,
         analysisToolRecord,

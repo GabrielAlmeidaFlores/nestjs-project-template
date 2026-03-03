@@ -189,56 +189,71 @@ export class GetDisabilityRetirementPlanningUseCase {
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysis !== null && {
               disabilityRetirementPlanningCompleteAnalysis: (() => {
-                const raw = JSON.parse(
-                  queryResult.result.disabilityRetirementPlanningCompleteAnalysis,
-                ) as {
-                  timeline: Array<{ startDate: string; endDate: string; activityType: DisabilityRetirementPlanningActivityTypeEnum; location: string }>;
-                  retirementOptionsSummary: Array<{
-                    retirementRuleName: string;
-                    isEligible: boolean;
-                    eligibilityAvailableAt?: string;
-                    expectedMonthlyBenefit: number;
-                    isBestMonthlyBenefit: boolean;
-                    hasHighestAdvantageValue: boolean;
-                    retirementAnalysis: string;
-                  }>;
-                  analysisResult: string;
-                  disabilityTime: string;
-                  commonTime: string;
-                  totalContributionTime: string;
-                  positionTenureTime: string;
-                  publicServiceTime: string;
-                  totalCareerTime: string;
-                  insuredAge: string;
-                  publicServiceStartDate: string;
-                };
+                const stored =
+                  queryResult.result.disabilityRetirementPlanningCompleteAnalysis;
 
-                return DisabilityRetirementPlanningCompleteAnalysisModel.build({
-                  timeline: raw.timeline.map((p) =>
-                    DisabilityRetirementPlanningTimelinePeriodModel.build(p),
-                  ),
-                  retirementOptionsSummary: raw.retirementOptionsSummary.map(
-                    (o) =>
-                      DisabilityRetirementPlanningRetirementOptionModel.build(o),
-                  ),
-                  analysisResult: raw.analysisResult,
-                  disabilityTime: raw.disabilityTime,
-                  commonTime: raw.commonTime,
-                  totalContributionTime: raw.totalContributionTime,
-                  positionTenureTime: raw.positionTenureTime,
-                  publicServiceTime: raw.publicServiceTime,
-                  totalCareerTime: raw.totalCareerTime,
-                  insuredAge: raw.insuredAge,
-                  publicServiceStartDate: raw.publicServiceStartDate,
-                });
+                try {
+                  const raw = JSON.parse(stored) as {
+                    timeline: Array<{ startDate: string; endDate: string; activityType: DisabilityRetirementPlanningActivityTypeEnum; location: string }>;
+                    retirementOptionsSummary: Array<{
+                      retirementRuleName: string;
+                      isEligible: boolean;
+                      eligibilityAvailableAt?: string;
+                      expectedMonthlyBenefit: number;
+                      isBestMonthlyBenefit: boolean;
+                      hasHighestAdvantageValue: boolean;
+                      retirementAnalysis: string;
+                    }>;
+                    analysisResult: string;
+                    disabilityTime: string;
+                    commonTime: string;
+                    totalContributionTime: string;
+                    positionTenureTime: string;
+                    publicServiceTime: string;
+                    totalCareerTime: string;
+                    insuredAge: string;
+                    publicServiceStartDate: string;
+                  };
+
+                  return DisabilityRetirementPlanningCompleteAnalysisModel.build({
+                    timeline: raw.timeline.map((p) =>
+                      DisabilityRetirementPlanningTimelinePeriodModel.build(p),
+                    ),
+                    retirementOptionsSummary: raw.retirementOptionsSummary.map(
+                      (o) =>
+                        DisabilityRetirementPlanningRetirementOptionModel.build(o),
+                    ),
+                    analysisResult: raw.analysisResult,
+                    disabilityTime: raw.disabilityTime,
+                    commonTime: raw.commonTime,
+                    totalContributionTime: raw.totalContributionTime,
+                    positionTenureTime: raw.positionTenureTime,
+                    publicServiceTime: raw.publicServiceTime,
+                    totalCareerTime: raw.totalCareerTime,
+                    insuredAge: raw.insuredAge,
+                    publicServiceStartDate: raw.publicServiceStartDate,
+                  });
+                } catch {
+                  return DisabilityRetirementPlanningCompleteAnalysisModel.build({
+                    timeline: [],
+                    retirementOptionsSummary: [],
+                    analysisResult: stored,
+                    disabilityTime: '',
+                    commonTime: '',
+                    totalContributionTime: '',
+                    positionTenureTime: '',
+                    publicServiceTime: '',
+                    totalCareerTime: '',
+                    insuredAge: '',
+                    publicServiceStartDate: '',
+                  });
+                }
               })(),
             }),
             ...(queryResult.result
               .disabilityRetirementPlanningSimplifiedAnalysis !== null && {
-              disabilityRetirementPlanningSimplifiedAnalysis: JSON.parse(
-                queryResult.result
-                  .disabilityRetirementPlanningSimplifiedAnalysis,
-              ) as object,
+              disabilityRetirementPlanningSimplifiedAnalysis:
+                queryResult.result.disabilityRetirementPlanningSimplifiedAnalysis,
             }),
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysisDownload !==
