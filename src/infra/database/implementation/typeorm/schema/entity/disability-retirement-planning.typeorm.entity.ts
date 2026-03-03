@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -71,8 +71,12 @@ export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity
   @OneToOne(
     () => DisabilityRetirementPlanningResultTypeormEntity,
     (entity) => entity.disabilityRetirementPlanning,
+    { nullable: true },
   )
-  public disabilityRetirementPlanningResult?: DisabilityRetirementPlanningResultTypeormEntity;
+  @JoinColumn({ name: 'disability_retirement_planning_result_id' })
+  public disabilityRetirementPlanningResult?:
+    | DisabilityRetirementPlanningResultTypeormEntity
+    | undefined;
 
   @OneToMany(
     () => DisabilityRetirementPlanningPeriodTypeormEntity,

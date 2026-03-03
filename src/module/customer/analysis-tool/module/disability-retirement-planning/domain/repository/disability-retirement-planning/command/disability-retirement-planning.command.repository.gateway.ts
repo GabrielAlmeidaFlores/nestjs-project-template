@@ -1,5 +1,6 @@
 import type { DisabilityRetirementPlanningEntity } from '../../../schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import type { DisabilityRetirementPlanningId } from '../../../schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import type { DisabilityRetirementPlanningResultId } from '../../../schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
 import type { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 
 export abstract class DisabilityRetirementPlanningCommandRepositoryGateway {
@@ -10,6 +11,11 @@ export abstract class DisabilityRetirementPlanningCommandRepositoryGateway {
   public abstract updateDisabilityRetirementPlanning(
     id: DisabilityRetirementPlanningId,
     props: DisabilityRetirementPlanningEntity,
+  ): TransactionType;
+
+  public abstract updateDisabilityRetirementPlanningResultId(
+    planningId: DisabilityRetirementPlanningId,
+    resultId: DisabilityRetirementPlanningResultId,
   ): TransactionType;
 
   public abstract deleteDisabilityRetirementPlanning(

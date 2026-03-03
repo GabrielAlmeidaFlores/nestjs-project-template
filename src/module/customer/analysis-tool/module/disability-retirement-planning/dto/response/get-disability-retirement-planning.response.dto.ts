@@ -27,8 +27,8 @@ export class GetDisabilityRetirementPlanningResultResponseDto extends BaseBuilda
   )
   public disabilityRetirementPlanningCompleteAnalysis?: DisabilityRetirementPlanningCompleteAnalysisModel;
 
-  @ResponseDtoObjectProperty(() => Object, { required: false })
-  public disabilityRetirementPlanningSimplifiedAnalysis?: object;
+  @ResponseDtoStringProperty({ required: false })
+  public disabilityRetirementPlanningSimplifiedAnalysis?: string;
 
   @ResponseDtoStringProperty({ required: false })
   public disabilityRetirementPlanningCompleteAnalysisDownload?: string;
