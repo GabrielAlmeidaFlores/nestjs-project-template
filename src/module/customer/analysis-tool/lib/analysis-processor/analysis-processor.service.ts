@@ -676,19 +676,22 @@ Análise processada do CNIS:
                 properties: {
                   timeline: {
                     type: 'array',
-                    description: 'Lista de períodos da linha do tempo do segurado',
+                    description:
+                      'Lista de períodos da linha do tempo do segurado',
                     items: {
                       type: 'object',
                       properties: {
                         startDate: {
                           type: 'string',
                           format: 'date',
-                          description: 'Data de início do período no formato YYYY-MM-DD',
+                          description:
+                            'Data de início do período no formato YYYY-MM-DD',
                         },
                         endDate: {
                           type: 'string',
                           format: 'date',
-                          description: 'Data de fim do período no formato YYYY-MM-DD',
+                          description:
+                            'Data de fim do período no formato YYYY-MM-DD',
                         },
                         activityType: {
                           type: 'string',
@@ -708,12 +711,18 @@ Análise processada do CNIS:
                             'Local do período. Exemplo: Assentamento Nova Vida, município de Araraquara/SP',
                         },
                       },
-                      required: ['startDate', 'endDate', 'activityType', 'location'],
+                      required: [
+                        'startDate',
+                        'endDate',
+                        'activityType',
+                        'location',
+                      ],
                     },
                   },
                   retirementOptionsSummary: {
                     type: 'array',
-                    description: 'Resumo das regras de aposentadoria analisadas',
+                    description:
+                      'Resumo das regras de aposentadoria analisadas',
                     items: {
                       type: 'object',
                       properties: {
@@ -737,7 +746,8 @@ Análise processada do CNIS:
                         },
                         isBestMonthlyBenefit: {
                           type: 'boolean',
-                          description: 'Indica se esta regra oferece a melhor RMI',
+                          description:
+                            'Indica se esta regra oferece a melhor RMI',
                         },
                         hasHighestAdvantageValue: {
                           type: 'boolean',
@@ -762,7 +772,8 @@ Análise processada do CNIS:
                   },
                   analysisResult: {
                     type: 'string',
-                    description: 'Resultado geral da análise em formato markdown',
+                    description:
+                      'Resultado geral da análise em formato markdown',
                   },
                   disabilityTime: {
                     type: 'string',
@@ -802,7 +813,8 @@ Análise processada do CNIS:
                   publicServiceStartDate: {
                     type: 'string',
                     format: 'date',
-                    description: 'Data de ingresso no serviço público no formato YYYY-MM-DD',
+                    description:
+                      'Data de ingresso no serviço público no formato YYYY-MM-DD',
                   },
                 },
                 required: [

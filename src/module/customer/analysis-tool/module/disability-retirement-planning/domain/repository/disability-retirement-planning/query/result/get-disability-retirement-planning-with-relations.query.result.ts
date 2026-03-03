@@ -10,25 +10,22 @@ import type { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/an
 import type { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
 export class GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult.name;
-
   public readonly id: string;
   public readonly document: string;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult.name;
-
   public readonly id: string;
   public readonly document: string;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningPeriodDisabilityQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningPeriodDisabilityQueryResult.name;
-
   public readonly id: string;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
@@ -39,22 +36,22 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityQueryResult extends 
   public readonly disabilityDescription: string;
   public readonly activityImpact: string;
   public readonly documents: GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult[];
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningPeriodDisabilityQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult.name;
-
   public readonly id: string;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
   public readonly documents: GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult[];
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningPeriodQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningPeriodQueryResult.name;
-
   public readonly id: string;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
@@ -64,58 +61,58 @@ export class GetDisabilityRetirementPlanningPeriodQueryResult extends BaseBuilda
   public readonly department: string;
   public readonly disabilities: GetDisabilityRetirementPlanningPeriodDisabilityQueryResult[];
   public readonly specialTimes: GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult[];
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningPeriodQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningDocumentQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningDocumentQueryResult.name;
-
   public readonly id: string;
   public readonly document: string;
   public readonly type: DisabilityRetirementPlanningDocumentTypeEnum;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningDocumentQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningInssBenefitQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningInssBenefitQueryResult.name;
-
   public readonly id: string;
   public readonly benefitNumber: string;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningInssBenefitQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningLegalProceedingQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningLegalProceedingQueryResult.name;
-
   public readonly id: string;
   public readonly legalProceedingNumber: string;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningLegalProceedingQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningRemunerationQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningRemunerationQueryResult.name;
-
   public readonly id: string;
   public readonly remunerationDate: Date;
   public readonly remunerationAmount: number;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningRemunerationQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningResultQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningResultQueryResult.name;
-
   public readonly id: string;
   public readonly disabilityRetirementPlanningCompleteAnalysis: string | null;
   public readonly disabilityRetirementPlanningSimplifiedAnalysis: string | null;
   public readonly disabilityRetirementPlanningCompleteAnalysisDownload:
     | string
     | null;
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningResultQueryResult.name;
 }
 
 export class GetDisabilityRetirementPlanningWithRelationsQueryResult extends BaseBuildableObject {
-  protected override readonly _type =
-    GetDisabilityRetirementPlanningWithRelationsQueryResult.name;
-
   public readonly id: DisabilityRetirementPlanningId;
   public readonly currentPosition: string;
   public readonly federativeEntity: FederativeEntityEnum;
@@ -133,4 +130,7 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResult extends Bas
   public readonly inssBenefits: GetDisabilityRetirementPlanningInssBenefitQueryResult[];
   public readonly legalProceedings: GetDisabilityRetirementPlanningLegalProceedingQueryResult[];
   public readonly remunerations: GetDisabilityRetirementPlanningRemunerationQueryResult[];
+
+  protected override readonly _type =
+    GetDisabilityRetirementPlanningWithRelationsQueryResult.name;
 }

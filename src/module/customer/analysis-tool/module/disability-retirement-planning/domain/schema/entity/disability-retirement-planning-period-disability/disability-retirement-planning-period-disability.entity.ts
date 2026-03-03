@@ -8,9 +8,6 @@ import type { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/an
 import type { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
 export class DisabilityRetirementPlanningPeriodDisabilityEntity extends BaseEntity<DisabilityRetirementPlanningPeriodDisabilityId> {
-  protected readonly _type =
-    DisabilityRetirementPlanningPeriodDisabilityEntity.name;
-
   public readonly disabilityRetirementPlanningPeriod: DisabilityRetirementPlanningPeriodEntity;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
@@ -20,6 +17,9 @@ export class DisabilityRetirementPlanningPeriodDisabilityEntity extends BaseEnti
   public readonly disabilityType: RetirementPlanningDisabilityTimeTypeEnum;
   public readonly disabilityDescription: string;
   public readonly activityImpact: string;
+
+  protected readonly _type =
+    DisabilityRetirementPlanningPeriodDisabilityEntity.name;
 
   public constructor(
     props: DisabilityRetirementPlanningPeriodDisabilityEntityPropsInterface,

@@ -6,9 +6,6 @@ import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/a
 
 @Entity({ name: 'disability_retirement_planning_document' })
 export class DisabilityRetirementPlanningDocumentTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningDocumentTypeormEntity.name;
-
   @Column({ name: 'document', type: 'varchar', length: 500 })
   public document: string;
 
@@ -25,4 +22,7 @@ export class DisabilityRetirementPlanningDocumentTypeormEntity extends BaseTypeo
   )
   @JoinColumn({ name: 'disability_retirement_planning_id' })
   public disabilityRetirementPlanning?: DisabilityRetirementPlanningTypeormEntity;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningDocumentTypeormEntity.name;
 }

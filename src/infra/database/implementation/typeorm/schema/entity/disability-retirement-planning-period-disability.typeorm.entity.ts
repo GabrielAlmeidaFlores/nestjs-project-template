@@ -11,9 +11,6 @@ import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analy
 
 @Entity({ name: 'disability_retirement_planning_period_disability' })
 export class DisabilityRetirementPlanningPeriodDisabilityTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningPeriodDisabilityTypeormEntity.name;
-
   @Column({
     name: 'start_date',
     type: 'date',
@@ -72,4 +69,7 @@ export class DisabilityRetirementPlanningPeriodDisabilityTypeormEntity extends B
     (entity) => entity.disabilityRetirementPlanningPeriodDisability,
   )
   public disabilityRetirementPlanningPeriodDisabilityDocument?: DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningPeriodDisabilityTypeormEntity.name;
 }

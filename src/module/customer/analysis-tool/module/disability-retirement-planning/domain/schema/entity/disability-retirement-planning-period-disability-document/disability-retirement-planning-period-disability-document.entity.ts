@@ -5,11 +5,11 @@ import type { DisabilityRetirementPlanningPeriodDisabilityEntity } from '@module
 import type { DisabilityRetirementPlanningPeriodDisabilityDocumentEntityPropsInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability-document/disability-retirement-planning-period-disability-document.entity.props.interface';
 
 export class DisabilityRetirementPlanningPeriodDisabilityDocumentEntity extends BaseEntity<DisabilityRetirementPlanningPeriodDisabilityDocumentId> {
-  protected readonly _type =
-    DisabilityRetirementPlanningPeriodDisabilityDocumentEntity.name;
-
   public readonly disabilityRetirementPlanningPeriodDisability: DisabilityRetirementPlanningPeriodDisabilityEntity;
   public readonly document: string;
+
+  protected readonly _type =
+    DisabilityRetirementPlanningPeriodDisabilityDocumentEntity.name;
 
   public constructor(
     props: DisabilityRetirementPlanningPeriodDisabilityDocumentEntityPropsInterface,

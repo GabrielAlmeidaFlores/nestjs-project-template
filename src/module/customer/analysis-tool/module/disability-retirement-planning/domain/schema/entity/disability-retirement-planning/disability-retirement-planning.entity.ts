@@ -6,8 +6,6 @@ import type { DisabilityRetirementPlanningEntityPropsInterface } from '@module/c
 import type { FederativeEntityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/federative-entity.enum';
 
 export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRetirementPlanningId> {
-  protected readonly _type = DisabilityRetirementPlanningEntity.name;
-
   public readonly currentPosition: string;
   public readonly federativeEntity: FederativeEntityEnum;
   public readonly state: StateCodeEnum | null;
@@ -16,6 +14,8 @@ export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRet
   public readonly careerStartDate: Date;
   public readonly analysisName: string | null;
   public readonly longTimeDisability: boolean;
+
+  protected readonly _type = DisabilityRetirementPlanningEntity.name;
 
   public constructor(props: DisabilityRetirementPlanningEntityPropsInterface) {
     super(DisabilityRetirementPlanningId, props);

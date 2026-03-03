@@ -11,7 +11,7 @@ import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/anal
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-interface RemunerationCalculationResult {
+interface RemunerationCalculationResultInterface {
   totalCompetencies: number;
   totalAmount: number;
   averageAmount: number;
@@ -22,6 +22,8 @@ interface RemunerationCalculationResult {
 
 @Injectable()
 export class GetDisabilityRetirementPlanningRemunerationCalculationUseCase {
+  private static readonly TOP_EIGHTY_PERCENT = 0.8;
+
   protected readonly _type =
     GetDisabilityRetirementPlanningRemunerationCalculationUseCase.name;
 
@@ -87,7 +89,7 @@ export class GetDisabilityRetirementPlanningRemunerationCalculationUseCase {
 
   private calculateRemuneration(
     remunerations: GetDisabilityRetirementPlanningRemunerationListQueryResult[],
-  ): RemunerationCalculationResult {
+  ): RemunerationCalculationResultInterface {
     const totalCompetencies = remunerations.length;
     const totalAmount = this.sumAmounts(remunerations);
     const averageAmount = totalAmount / totalCompetencies;
@@ -118,7 +120,7 @@ export class GetDisabilityRetirementPlanningRemunerationCalculationUseCase {
   }
 
   private computeTopEightyPercentCount(total: number): number {
-    return Math.ceil(total * 0.8);
+    return Math.ceil(total * GetDisabilityRetirementPlanningRemunerationCalculationUseCase.TOP_EIGHTY_PERCENT);
   }
 
   private computeTopEightyPercentAverage(

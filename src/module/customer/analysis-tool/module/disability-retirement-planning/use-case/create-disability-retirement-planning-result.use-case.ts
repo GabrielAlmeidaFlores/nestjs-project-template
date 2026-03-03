@@ -19,7 +19,11 @@ import { DisabilityRetirementPlanningResultEntity } from '@module/customer/analy
 import { DisabilityRetirementPlanningResultId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-result/value-object/disability-retirement-planning-result-id.value-object';
 import { CreateDisabilityRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-result.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
-import { DisabilityRetirementPlanningCompleteAnalysisModel, DisabilityRetirementPlanningRetirementOptionModel, DisabilityRetirementPlanningTimelinePeriodModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
+import {
+  DisabilityRetirementPlanningCompleteAnalysisModel,
+  DisabilityRetirementPlanningRetirementOptionModel,
+  DisabilityRetirementPlanningTimelinePeriodModel,
+} from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -137,7 +141,9 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
         cleanedJson = JSON.parse(cleanedJson) as string;
       }
 
-      const raw = JSON.parse(cleanedJson) as DisabilityRetirementPlanningCompleteAnalysisModel;
+      const raw = JSON.parse(
+        cleanedJson,
+      ) as DisabilityRetirementPlanningCompleteAnalysisModel;
 
       parsedAnalysis = DisabilityRetirementPlanningCompleteAnalysisModel.build({
         ...raw,
@@ -170,15 +176,15 @@ export class CreateDisabilityRetirementPlanningResultUseCase {
         disabilityRetirementPlanningId,
       );
 
-    const resultId = existingResultId ?? new DisabilityRetirementPlanningResultId();
+    const resultId =
+      existingResultId ?? new DisabilityRetirementPlanningResultId();
 
     const disabilityRetirementPlanningResultEntity =
       new DisabilityRetirementPlanningResultEntity({
         id: resultId,
         disabilityRetirementPlanning: disabilityRetirementPlanningEntity,
-        disabilityRetirementPlanningCompleteAnalysis: JSON.stringify(
-          parsedAnalysis,
-        ),
+        disabilityRetirementPlanningCompleteAnalysis:
+          JSON.stringify(parsedAnalysis),
         disabilityRetirementPlanningSimplifiedAnalysis: null,
         disabilityRetirementPlanningCompleteAnalysisDownload: null,
       });

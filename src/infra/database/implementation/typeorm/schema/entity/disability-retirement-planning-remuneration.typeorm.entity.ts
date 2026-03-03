@@ -6,9 +6,6 @@ import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/sche
 
 @Entity({ name: 'disability_retirement_planning_remuneration' })
 export class DisabilityRetirementPlanningRemunerationTypeormEntity extends BaseTypeormEntity {
-  protected override readonly _type =
-    DisabilityRetirementPlanningRemunerationTypeormEntity.name;
-
   @Column({
     name: 'remuneration_date',
     type: 'date',
@@ -30,4 +27,7 @@ export class DisabilityRetirementPlanningRemunerationTypeormEntity extends BaseT
   )
   @JoinColumn({ name: 'disability_retirement_planning_id' })
   public disabilityRetirementPlanning?: DisabilityRetirementPlanningTypeormEntity;
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningRemunerationTypeormEntity.name;
 }
