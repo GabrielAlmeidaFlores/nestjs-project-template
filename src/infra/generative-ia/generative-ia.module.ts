@@ -6,9 +6,10 @@ import { GeminiService } from '@infra/generative-ia/implementation/gemini/gemini
 import { LoremIpsumModule } from '@infra/generative-ia/implementation/lorem-ipsum/lorem-ipsum.module';
 import { LoremIpsumService } from '@infra/generative-ia/implementation/lorem-ipsum/lorem-ipsum.service';
 import { NodeApplicationVariable } from '@shared/system/constant/application-variable/source/node.application-variable';
+import { ObservabilityModule } from '@shared/system/observability/observability.module';
 
 @Module({
-  imports: [GeminiModule, LoremIpsumModule],
+  imports: [GeminiModule, LoremIpsumModule, ObservabilityModule],
   providers: [
     {
       provide: GenerativeIaGateway,
