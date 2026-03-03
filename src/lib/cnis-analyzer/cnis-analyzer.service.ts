@@ -1662,6 +1662,35 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
 
       for (const item of consolidado) {
         if (item.seq === beneficio.seq) {
+          if (!beneficio.isIntercalado) {
+            item.contributionTime = {
+              data: {
+                dataInicio: null,
+                dataFim: null,
+              },
+              abreviado: '0a 0m 0d',
+              dias: 0,
+              meses: 0,
+              anos: 0,
+              totalContribuicao: '0',
+            };
+            item.carencia = 0;
+          }
+
+          if (beneficio.isIntercalado && item.isConcomitante) {
+            item.contributionTime = {
+              data: {
+                dataInicio: null,
+                dataFim: null,
+              },
+              abreviado: '0a 0m 0d',
+              dias: 0,
+              meses: 0,
+              anos: 0,
+              totalContribuicao: '0',
+            };
+            item.carencia = 0;
+          }
           continue;
         }
 
@@ -1726,10 +1755,14 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       if (validIntervals.length === 0) {
         continuous = false;
       } else {
-        let prevEnd: Date = validIntervals[0]?.end ?? new Date();
+        let prevEnd: Date | undefined = validIntervals[0]?.end;
         for (let i = 1; i < validIntervals.length; i++) {
           const current = validIntervals[i];
           if (!current) {
+            continuous = false;
+            break;
+          }
+          if (!prevEnd) {
             continuous = false;
             break;
           }
@@ -2469,15 +2502,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const dataInicio = this.toDate(
         item.validContributionTime?.data?.dataInicio,
       );
-      let dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
+      const dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
 
-      if (!dataInicio) {
+      if (!dataInicio || !dataFim) {
         return;
       }
 
-      if (!dataFim || dataFim > this.REFORMA_DATE) {
-        dataFim = this.REFORMA_DATE;
-      }
+      // if (dataFim > this.REFORMA_DATE) {
+      //   dataFim = this.REFORMA_DATE;
+      // }
 
       if (dataInicio >= this.REFORMA_DATE) {
         return;
@@ -2567,15 +2600,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const dataInicio = this.toDate(
         item.validContributionTime?.data?.dataInicio,
       );
-      let dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
+      const dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
 
-      if (!dataInicio) {
+      if (!dataInicio || !dataFim) {
         return;
       }
 
-      if (!dataFim || dataFim > this.REFORMA_DATE) {
-        dataFim = this.REFORMA_DATE;
-      }
+      // if (dataFim > this.REFORMA_DATE) {
+      //   dataFim = this.REFORMA_DATE;
+      // }
 
       if (dataInicio >= this.REFORMA_DATE) {
         item.validContributionTime = {
@@ -2763,15 +2796,15 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       const dataInicio = this.toDate(
         item.validContributionTime?.data?.dataInicio,
       );
-      let dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
+      const dataFim = this.toDate(item.validContributionTime?.data?.dataFim);
 
-      if (!dataInicio) {
+      if (!dataInicio || !dataFim) {
         return;
       }
 
-      if (!dataFim || dataFim > CUTOFF_DATE) {
-        dataFim = CUTOFF_DATE;
-      }
+      // if (dataFim > CUTOFF_DATE) {
+      //   dataFim = CUTOFF_DATE;
+      // }
 
       if (dataInicio >= CUTOFF_DATE) {
         item.validContributionTime = {
