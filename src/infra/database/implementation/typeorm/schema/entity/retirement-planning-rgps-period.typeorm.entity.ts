@@ -100,6 +100,13 @@ export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity
   })
   public status: boolean | null;
 
+  @Column({
+    name: 'valid_contribution_time',
+    type: 'text',
+    nullable: true,
+  })
+  public validContributionTime: string | null;
+
   protected override readonly _type =
     RetirementPlanningRgpsPeriodTypeormEntity.name;
 }
