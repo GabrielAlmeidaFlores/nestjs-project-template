@@ -66,6 +66,9 @@ export class GetGeneralUrbanRetirementGrantResultResponseDto extends BaseBuildab
   @ResponseDtoStringProperty({ required: false })
   public compareCnisCtpsRaw?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public generalUrbanRetirementGrantCompleteAnalysis?: string;
+
   protected override readonly _type =
     GetGeneralUrbanRetirementGrantResultResponseDto.name;
 }

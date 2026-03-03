@@ -5,8 +5,8 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { GeneralUrbanRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/general-urban-retirement-grant.query.repository.gateway';
-import { GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-time-accelerator/query/result/get-general-urban-retirement-grant-time-accelerator.query.result';
 import { GeneralUrbanRetirementGrantTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-time-accelerator/query/general-urban-retirement-grant-time-accelerator.query.repository.gateway';
+import { GetGeneralUrbanRetirementGrantTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-time-accelerator/query/result/get-general-urban-retirement-grant-time-accelerator.query.result';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { GeneralUrbanRetirementGrantPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/general-urban-retirement-grant-period.entity';
 import { GetGeneralUrbanRetirementGrantDetailsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/get-general-urban-retirement-grant-details.response.dto';
@@ -58,7 +58,8 @@ export class GetGeneralUrbanRetirementGrantDetailsUseCase {
         GeneralUrbanRetirementGrantNotFoundError,
       );
 
-    const periods = generalUrbanRetirementGrant.generalUrbanRetirementGrantPeriod;
+    const periods =
+      generalUrbanRetirementGrant.generalUrbanRetirementGrantPeriod;
 
     const periodWithoutPendencies =
       periods && Array.isArray(periods)
@@ -194,8 +195,8 @@ export class GetGeneralUrbanRetirementGrantDetailsUseCase {
       carencyTimeWithAcceleration:
         totalCarenciaTimeWithAccelerationMonthsString,
       result:
-        generalUrbanRetirementGrant.generalUrbanRetirementGrantResult?.result ??
-        '',
+        generalUrbanRetirementGrant.generalUrbanRetirementGrantResult
+          ?.generalUrbanRetirementGrantCompleteAnalysis ?? '',
     });
   }
 

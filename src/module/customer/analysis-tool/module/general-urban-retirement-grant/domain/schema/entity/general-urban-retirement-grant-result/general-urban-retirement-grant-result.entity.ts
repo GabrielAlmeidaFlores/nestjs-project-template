@@ -23,8 +23,18 @@ export class GeneralUrbanRetirementGrantResultEntity extends BaseEntity<GeneralU
   @Description('Resultado bruto do método compare CNIS x CTPS (JSON).')
   public readonly compareCnisCtpsRaw: string | null;
 
-  @Description('Resultado da análise.')
-  public readonly result: string | null;
+  @Description('Análise completa em JSON (retornada ao frontend).')
+  public readonly generalUrbanRetirementGrantCompleteAnalysis: string | null;
+
+  @Description('Análise simplificada.')
+  public readonly generalUrbanRetirementGrantSimplifiedAnalysis: string | null;
+
+  @Description(
+    'Análise completa em markdown para download (não exposta ao frontend).',
+  )
+  public readonly generalUrbanRetirementGrantCompleteAnalysisDownload:
+    | string
+    | null;
 
   protected readonly _type = GeneralUrbanRetirementGrantResultEntity.name;
 
@@ -39,6 +49,11 @@ export class GeneralUrbanRetirementGrantResultEntity extends BaseEntity<GeneralU
     this.clientLastAffiliationDate = props.clientLastAffiliationDate ?? null;
     this.compareCnisCtps = props.compareCnisCtps ?? null;
     this.compareCnisCtpsRaw = props.compareCnisCtpsRaw ?? null;
-    this.result = props.result ?? null;
+    this.generalUrbanRetirementGrantCompleteAnalysis =
+      props.generalUrbanRetirementGrantCompleteAnalysis ?? null;
+    this.generalUrbanRetirementGrantSimplifiedAnalysis =
+      props.generalUrbanRetirementGrantSimplifiedAnalysis ?? null;
+    this.generalUrbanRetirementGrantCompleteAnalysisDownload =
+      props.generalUrbanRetirementGrantCompleteAnalysisDownload ?? null;
   }
 }

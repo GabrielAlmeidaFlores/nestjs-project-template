@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { ListGeneralUrbanRetirementGrantPeriodQueryParam } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period/query/param/list-general-urban-retirement-grant-period.query.param';
 import { GeneralUrbanRetirementGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period/query/general-urban-retirement-grant-period.query.repository.gateway';
+import { ListGeneralUrbanRetirementGrantPeriodQueryParam } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period/query/param/list-general-urban-retirement-grant-period.query.param';
 import { ListGeneralUrbanRetirementGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/list-general-urban-retirement-grant-period.request.dto';
 import { GetGeneralUrbanRetirementGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/get-general-urban-retirement-grant-period.response.dto';
 import { ListGeneralUrbanRetirementGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/list-general-urban-retirement-grant-period.response.dto';

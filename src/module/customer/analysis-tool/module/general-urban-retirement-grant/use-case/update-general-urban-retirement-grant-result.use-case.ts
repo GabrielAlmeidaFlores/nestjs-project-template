@@ -40,7 +40,8 @@ export class UpdateGeneralUrbanRetirementGrantResultUseCase {
 
     const updatedResult = new GeneralUrbanRetirementGrantResultEntity({
       ...generalUrbanRetirementGrant.generalUrbanRetirementGrantResult,
-      result: dto.result,
+      generalUrbanRetirementGrantCompleteAnalysis:
+        dto.generalUrbanRetirementGrantCompleteAnalysis,
     });
 
     const updateTransaction =

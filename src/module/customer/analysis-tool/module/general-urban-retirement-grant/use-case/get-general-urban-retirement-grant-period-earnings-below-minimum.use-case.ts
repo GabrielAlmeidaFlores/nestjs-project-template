@@ -48,8 +48,7 @@ export class GetGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase {
 
     if (
       period.isPendency === true &&
-      period.reasonPendency !==
-        ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
+      period.reasonPendency !== ReasonPendencyEnum.COMPETENCE_BELOW_MINIMUM
     ) {
       return [];
     }

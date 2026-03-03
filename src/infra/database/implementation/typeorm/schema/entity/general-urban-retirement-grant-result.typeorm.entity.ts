@@ -63,11 +63,25 @@ export class GeneralUrbanRetirementGrantResultTypeormEntity extends BaseTypeormE
   public compareCnisCtpsRaw: string | null;
 
   @Column({
-    name: 'result',
+    name: 'general_urban_retirement_grant_complete_analysis',
     type: 'longtext',
     nullable: true,
   })
-  public result: string | null;
+  public generalUrbanRetirementGrantCompleteAnalysis: string | null;
+
+  @Column({
+    name: 'general_urban_retirement_grant_simplified_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public generalUrbanRetirementGrantSimplifiedAnalysis: string | null;
+
+  @Column({
+    name: 'general_urban_retirement_grant_complete_analysis_download',
+    type: 'longtext',
+    nullable: true,
+  })
+  public generalUrbanRetirementGrantCompleteAnalysisDownload: string | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementGrantResultTypeormEntity.name;

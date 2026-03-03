@@ -78,7 +78,9 @@ export class CreateGeneralUrbanRetirementGrantUseCase {
         clientFederalDocument: analysisToolClientQueryResult.federalDocument,
         clientBirthDate: analysisToolClientQueryResult.birthDate,
         clientLastAffiliationDate: null,
-        result: null,
+        generalUrbanRetirementGrantCompleteAnalysis: null,
+        generalUrbanRetirementGrantSimplifiedAnalysis: null,
+        generalUrbanRetirementGrantCompleteAnalysisDownload: null,
       });
 
     const generalUrbanRetirementGrant = new GeneralUrbanRetirementGrantEntity({

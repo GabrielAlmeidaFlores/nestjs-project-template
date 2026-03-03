@@ -5,7 +5,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class UpdateGeneralUrbanRetirementGrantResultRequestDto extends BaseBuildableDtoObject {
   @RequestDtoStringProperty({ required: true })
-  public result: string;
+  public generalUrbanRetirementGrantCompleteAnalysis: string;
 
   protected override readonly _type =
     UpdateGeneralUrbanRetirementGrantResultRequestDto.name;
