@@ -1,27 +1,27 @@
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { hostname } from 'os';
+
+import { metrics } from '@opentelemetry/api';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
-import { BatchLogRecordProcessor } from '@opentelemetry/sdk-logs';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
-import {
-  MeterProvider,
-  PeriodicExportingMetricReader,
-} from '@opentelemetry/sdk-metrics';
-import { metrics } from '@opentelemetry/api';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { HostMetrics } from '@opentelemetry/host-metrics';
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { resourceFromAttributes } from '@opentelemetry/resources';
+import { BatchLogRecordProcessor } from '@opentelemetry/sdk-logs';
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { SEMRESATTRS_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
-import { hostname } from 'os';
-import { SpanNameEnricherProcessor } from '@shared/system/tracing/span-name-enricher.processor';
-import { SignozApplicationVariable } from '@shared/system/constant/application-variable/source/signoz.application-variable';
 
-import type { Resource } from '@opentelemetry/resources';
+import { SignozApplicationVariable } from '@shared/system/constant/application-variable/source/signoz.application-variable';
+import { SpanNameEnricherProcessor } from '@shared/system/tracing/span-name-enricher.processor';
+
 import type { ObservableResult } from '@opentelemetry/api';
 
 const METRICS_EXPORT_INTERVAL_MS = 15_000;
 const BYTES_TO_MB = 1_048_576;
+const CPU_MICROSECONDS_TO_PERCENT_DIVISOR = 10;
+const CPU_PERCENT_MAX = 100;
 
 function buildAuthHeaders(): Record<string, string> {
   const token = SignozApplicationVariable.SIGNOZ_ACCESS_TOKEN;
@@ -33,27 +33,8 @@ function buildAuthHeaders(): Record<string, string> {
   return { 'signoz-access-token': token };
 }
 
-function registerProcessMetrics(resource: Resource): MeterProvider {
-  const headers = buildAuthHeaders();
-  const endpoint = SignozApplicationVariable.SIGNOZ_ENDPOINT;
-
-  const metricExporter = new OTLPMetricExporter({
-    url: `${endpoint}/v1/metrics`,
-    headers,
-  });
-
-  const meterProvider = new MeterProvider({
-    resource,
-    readers: [
-      new PeriodicExportingMetricReader({
-        exporter: metricExporter,
-        exportIntervalMillis: METRICS_EXPORT_INTERVAL_MS,
-      }),
-    ],
-  });
-
-  metrics.setGlobalMeterProvider(meterProvider);
-
+function registerProcessMetrics(): void {
+  const meterProvider = metrics.getMeterProvider();
   const meter = meterProvider.getMeter('process-metrics');
 
   let previousCpuUsage = process.cpuUsage();
@@ -75,9 +56,9 @@ function registerProcessMetrics(resource: Resource): MeterProvider {
       if (elapsedMs > 0) {
         const userPercent =
           (currentCpuUsage.user - previousCpuUsage.user) /
-          (elapsedMs * 10);
+          (elapsedMs * CPU_MICROSECONDS_TO_PERCENT_DIVISOR);
 
-        result.observe(Math.min(100, Math.max(0, userPercent)));
+        result.observe(Math.min(CPU_PERCENT_MAX, Math.max(0, userPercent)));
       }
 
       previousCpuUsage = currentCpuUsage;
@@ -86,8 +67,7 @@ function registerProcessMetrics(resource: Resource): MeterProvider {
 
   meter
     .createObservableGauge(`${prefix}.process.cpu.system_percent`, {
-      description:
-        'Process CPU system time as a percentage of wall-clock time',
+      description: 'Process CPU system time as a percentage of wall-clock time',
       unit: '%',
     })
     .addCallback((result: ObservableResult) => {
@@ -98,9 +78,9 @@ function registerProcessMetrics(resource: Resource): MeterProvider {
       if (elapsedMs > 0) {
         const systemPercent =
           (currentCpuUsage.system - previousCpuUsage.system) /
-          (elapsedMs * 10);
+          (elapsedMs * CPU_MICROSECONDS_TO_PERCENT_DIVISOR);
 
-        result.observe(Math.min(100, Math.max(0, systemPercent)));
+        result.observe(Math.min(CPU_PERCENT_MAX, Math.max(0, systemPercent)));
       }
     });
 
@@ -146,8 +126,6 @@ function registerProcessMetrics(resource: Resource): MeterProvider {
 
   const hostMetrics = new HostMetrics({ meterProvider });
   hostMetrics.start();
-
-  return meterProvider;
 }
 
 function buildInstrumentation(): NodeSDK | null {
@@ -174,10 +152,19 @@ function buildInstrumentation(): NodeSDK | null {
     headers,
   });
 
-  registerProcessMetrics(resource);
+  const metricExporter = new OTLPMetricExporter({
+    url: `${endpoint}/v1/metrics`,
+    headers,
+  });
+
+  const metricReader = new PeriodicExportingMetricReader({
+    exporter: metricExporter,
+    exportIntervalMillis: METRICS_EXPORT_INTERVAL_MS,
+  });
 
   return new NodeSDK({
     resource,
+    metricReader,
     spanProcessors: [
       new SpanNameEnricherProcessor(new BatchSpanProcessor(traceExporter)),
     ],
@@ -194,6 +181,8 @@ const sdk = buildInstrumentation();
 
 if (sdk !== null) {
   sdk.start();
+
+  registerProcessMetrics();
 
   process.on('SIGTERM', () => {
     void sdk.shutdown();
