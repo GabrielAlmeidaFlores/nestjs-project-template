@@ -19,10 +19,10 @@ interface ElegibilidadeInterface {
 }
 
 interface RequerimentosInterface {
-  requiredAge?: number;
-  requiredPoints?: number;
-  requiredContributionYears?: number;
-  requiredCarenciaMonths?: number;
+  idadeRequerida?: number;
+  pontosRequeridos?: number;
+  anosDeContribuicaoRequeridos?: number;
+  mesesDeCarenciaRequeridos?: number;
   atingiuRequisitoDeIdade?: boolean;
   atingiuRequisitoDeContribuicao?: boolean;
   atingiuRequisitoDeCarencia?: boolean;
@@ -31,8 +31,8 @@ interface RequerimentosInterface {
   dataQueIraAtingirRequisitoDeContribuicao?: Date | null;
   dataQueIraAtingirRequisitoDeCarencia?: Date | null;
   dataQueIraAtingirRequisitoDePontos?: Date | null;
-  reachedContributionRequirementDate?: Date | null;
-  reachedCarenciaRequirementDate?: Date | null;
-  reachedPointsRequirementDate?: Date | null;
-  reachedAgeRequirementDate?: Date | null;
+  dataQueAtingiuRequisitoDeContribuicao?: Date | null;
+  dataQueAtingiuRequisitoDeCarencia?: Date | null;
+  dataQueAtingiuRequisitoDePontos?: Date | null;
+  dataQueAtingiuRequisitoDeIdade?: Date | null;
 }

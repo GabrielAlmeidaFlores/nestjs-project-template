@@ -5,12 +5,23 @@ import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-id/analysis-tool-record-id.value-objects';
-import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/analysis-tool/module/administrative-procedure-inss-analysis/domain/schema/entity/administrative-procedure-inss-analysis/administrative-procedure-inss-analysis.entity';
+import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
+import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
+import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
+import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
+import { MedicalQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/medical-question-generator/domain/schema/entity/medical-question-generator/medical-question-generator.entity';
+import { PerCapitaIncomeForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/schema/entity/per-capita-income-for-bpc-analysis/per-capita-income-for-bpc-analysis.entity';
+import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolRecordEntityPropsInterface } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity.props.interface';
-import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
+import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 
 export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   @Description('Status do registro da ferramenta de análise')
@@ -38,6 +49,61 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
   @Description(
+    'Atividade especial associada ao registro da ferramenta de análise',
+  )
+  public readonly specialActivity: SpecialActivityEntity | null;
+
+  @Description(
+    'Análise de caso judicial associada ao registro da ferramenta de análise',
+  )
+  public readonly judicialCaseAnalysis: JudicialCaseAnalysisEntity | null;
+
+  @Description(
+    'Análise administrativa do INSS associada ao registro da ferramenta de análise',
+  )
+  public readonly administrativeProcedureInssAnalysis: AdministrativeProcedureInssAnalysisEntity | null;
+
+  @Description(
+    'Gerador de perguntas médicas associado ao registro da ferramenta de análise',
+  )
+  public readonly medicalQuestionGenerator: MedicalQuestionGeneratorEntity | null;
+
+  @Description(
+    'Análise geradora de objeção de laudo médico e social associada ao registro da ferramenta de análise',
+  )
+  public readonly medicalAndSocialReportObjectionGeneratorAnalysis: MedicalAndSocialReportObjectionGeneratorAnalysisEntity | null;
+
+  @Description(
+    'Gerador de discurso associado ao registro da ferramenta de análise',
+  )
+  public readonly speechGenerator: SpeechGeneratorEntity | null;
+
+  @Description(
+    'Avaliação de deficiência para BPC associada ao registro da ferramenta de análise',
+  )
+  public readonly disabilityAssessmentForBpcAnalysis: DisabilityAssessmentForBpcAnalysisEntity | null;
+
+  @Description(
+    'Gerador de perguntas de audiência associado ao registro da ferramenta de análise',
+  )
+  public readonly audienceQuestionGenerator: AudienceQuestionGeneratorEntity | null;
+
+  @Description(
+    'Análise de renda per capita para BPC associada ao registro da ferramenta de análise',
+  )
+  public readonly perCapitaIncomeForBpcAnalysis: PerCapitaIncomeForBpcAnalysisEntity | null;
+
+  @Description(
+    'Análise de linha do tempo rural associada ao registro da ferramenta de análise',
+  )
+  public readonly ruralTimelineAnalysis: RuralTimelineAnalysisEntity | null;
+
+  @Description(
+    'Análise de qualidade de segurado associada ao registro da ferramenta de análise',
+  )
+  public readonly insuranceQualityAnalysis: InsuranceQualityAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -62,6 +128,21 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.cnisFastAnalysis = props.cnisFastAnalysis ?? null;
     this.retirementPlanningRpps = props.retirementPlanningRpps ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;
+    this.specialActivity = props.specialActivity ?? null;
+    this.judicialCaseAnalysis = props.judicialCaseAnalysis ?? null;
+    this.administrativeProcedureInssAnalysis =
+      props.administrativeProcedureInssAnalysis ?? null;
+    this.audienceQuestionGenerator = props.audienceQuestionGenerator ?? null;
+    this.medicalQuestionGenerator = props.medicalQuestionGenerator ?? null;
+    this.medicalAndSocialReportObjectionGeneratorAnalysis =
+      props.medicalAndSocialReportObjectionGeneratorAnalysis ?? null;
+    this.speechGenerator = props.speechGenerator ?? null;
+    this.disabilityAssessmentForBpcAnalysis =
+      props.disabilityAssessmentForBpcAnalysis ?? null;
+    this.perCapitaIncomeForBpcAnalysis =
+      props.perCapitaIncomeForBpcAnalysis ?? null;
+    this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
+    this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;
