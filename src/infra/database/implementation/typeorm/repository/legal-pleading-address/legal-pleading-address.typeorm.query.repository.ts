@@ -7,9 +7,9 @@ import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeo
 import { LegalPleadingAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-address.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
-import { LegalPleadingAddressQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/query/legal-pleading-address.query.repository.gateway';
-import { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-address/query/result/get-legal-pleading-address.query.result';
-import { LegalPleadingAddressId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-address/value-object/legal-pleading-address/legal-pleading-address-id.value-object';
+import { LegalPleadingAddressQueryRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-address/query/legal-pleading-address.query.repository.gateway';
+import { GetLegalPleadingAddressQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-address/query/result/get-legal-pleading-address.query.result';
+import { LegalPleadingAddressId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-address/value-object/legal-pleading-address/legal-pleading-address-id.value-object';
 import { ConstructorType } from '@shared/system/type/constructor.type';
 
 @Injectable()

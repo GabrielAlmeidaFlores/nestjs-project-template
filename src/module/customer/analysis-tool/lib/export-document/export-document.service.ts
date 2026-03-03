@@ -13,11 +13,77 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { UnexpectedHtmlToDocxReturnTypeError } from '@module/customer/analysis-tool/lib/export-document/error/unexpected-html-to-docx-return-type.error';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 
+/**
+ * Escapa conteúdo de célula para Markdown (pipes e quebras de linha).
+ */
+function escapeTableCell(text: string): string {
+  return text
+    .trim()
+    .replace(/\|/g, '\\|')
+    .replace(/\r?\n/g, ' ')
+    .replace(/\s+/g, ' ');
+}
+
+/**
+ * Converte qualquer <table> em tabela GFM (ida e volta).
+ */
+function addTableRule(service: TurndownService): void {
+  service.addRule('cnisTable', {
+    filter: (node) => node.nodeName === 'TABLE',
+
+    replacement: (_content, node) => {
+      const table = node as HTMLTableElement;
+      const rows: string[][] = [];
+      const thead = table.querySelector('thead');
+      const tbody = table.querySelector('tbody');
+      const trs: HTMLTableRowElement[] = [];
+      if (thead) {
+        trs.push(...Array.from(thead.querySelectorAll('tr')));
+      }
+      if (tbody) {
+        trs.push(...Array.from(tbody.querySelectorAll('tr')));
+      }
+
+      for (const tr of trs) {
+        const cells = tr.querySelectorAll('th, td');
+        const row = Array.from(cells).map((cell) =>
+          escapeTableCell((cell as HTMLElement).innerText || ''),
+        );
+        if (row.length > 0) {
+          rows.push(row);
+        }
+      }
+
+      if (rows.length === 0) {
+        return '';
+      }
+
+      const columnCount = Math.max(...rows.map((r) => r.length));
+      const pad = (r: string[]): string[] => [
+        ...r,
+        ...(Array(columnCount - r.length).fill('') as string[]),
+      ];
+      const header = '| ' + pad(rows[0] ?? []).join(' | ') + ' |';
+      const sep = '| ' + Array(columnCount).fill('---').join(' | ') + ' |';
+      const body = rows
+        .slice(1)
+        .map((r) => '| ' + pad(r).join(' | ') + ' |')
+        .join('\n');
+      return '\n\n' + header + '\n' + sep + '\n' + body + '\n\n';
+    },
+  });
+}
+
 @Injectable()
 export class ExportDocumentService implements ExportDocumentGateway {
   protected readonly _type = ExportDocumentService.name;
 
-  private readonly turndownService = new TurndownService();
+  private readonly turndownService: TurndownService;
+
+  public constructor() {
+    this.turndownService = new TurndownService();
+    addTableRule(this.turndownService);
+  }
 
   public convertHtmlToMarkdown(html: string): string {
     return this.turndownService.turndown(html);
@@ -75,7 +141,12 @@ export class ExportDocumentService implements ExportDocumentGateway {
     markdownContent: string,
     format: string,
   ): Promise<Buffer> {
-    const htmlContent = await this.convertMarkdownToHtml(markdownContent);
+    const isHtml =
+      typeof markdownContent === 'string' &&
+      markdownContent.trimStart().startsWith('<');
+    const htmlContent = isHtml
+      ? markdownContent
+      : await this.convertMarkdownToHtml(markdownContent);
 
     switch (format.toLowerCase()) {
       case 'pdf':

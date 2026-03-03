@@ -8,6 +8,7 @@ import type { BankPaymentId } from '@module/generic/bank/domain/schema/entity/ba
 
 export class GetBankPaymentQueryResult extends BaseBuildableObject {
   public readonly id: BankPaymentId;
+  public readonly planName?: string;
   public readonly bankExternalId: string;
   public readonly paymentMethod: PaymentMethodEnum;
   public readonly amount: DecimalValue;

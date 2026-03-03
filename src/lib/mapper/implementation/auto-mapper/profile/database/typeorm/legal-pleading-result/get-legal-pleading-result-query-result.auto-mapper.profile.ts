@@ -3,8 +3,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { LegalPleadingResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/legal-pleading-result.typeorm.entity';
-import { GetLegalPleadingResultQueryResult } from '@module/customer/analysis-tool/domain/repository/legal-pleading-result/query/result/get-legal-pleading-result.query.result';
-import { LegalPleadingResultId } from '@module/customer/analysis-tool/domain/schema/entity/legal-pleading-result/value-object/legal-pleading-result-id/legal-pleading-result-id.value-object';
+import { GetLegalPleadingResultQueryResult } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading-result/query/result/get-legal-pleading-result.query.result';
+import { LegalPleadingResultId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading-result/value-object/legal-pleading-result-id/legal-pleading-result-id.value-object';
 
 @Injectable()
 export class GetLegalPleadingResultQueryResultAutoMapperProfile {

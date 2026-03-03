@@ -1,0 +1,421 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
+import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
+import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
+import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
+import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
+import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
+import { RuralTimelineAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/command/rural-timeline-analysis-inss-benefit.command.repository.gateway';
+import { RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-legal-proceeding/command/rural-timeline-analysis-legal-proceeding.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period/command/rural-timeline-analysis-period.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-document/command/rural-timeline-analysis-period-document.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/command/rural-timeline-analysis-period-economic-aspects.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-family-group-member/command/rural-timeline-analysis-period-family-group-member.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-property/command/rural-timeline-analysis-period-property.command.repository.gateway';
+import { RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-residence/command/rural-timeline-analysis-period-residence.command.repository.gateway';
+import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
+import { RuralTimelineAnalysisInssBenefitEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-inss-benefit/rural-timeline-analysis-inss-benefit.entity';
+import { RuralTimelineAnalysisLegalProceedingEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-legal-proceeding/rural-timeline-analysis-legal-proceeding.entity';
+import { RuralTimelineAnalysisPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/rural-timeline-analysis-period.entity';
+import { RuralTimelineAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-document/rural-timeline-analysis-period-document.entity';
+import { RuralTimelineAnalysisPeriodEconomicAspectsEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/rural-timeline-analysis-period-economic-aspects.entity';
+import { RuralTimelineAnalysisPeriodFamilyGroupMemberEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-family-group-member/rural-timeline-analysis-period-family-group-member.entity';
+import { RuralTimelineAnalysisPeriodPropertyEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-property/rural-timeline-analysis-period-property.entity';
+import { RuralTimelineAnalysisPeriodResidenceEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-residence/rural-timeline-analysis-period-residence.entity';
+import { CreateRuralTimelineAnalysisRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/create-rural-timeline-analysis.request.dto';
+import { CreateRuralTimelineAnalysisResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/create-rural-timeline-analysis.response.dto';
+import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
+
+@Injectable()
+export class CreateRuralTimelineAnalysisUseCase {
+  protected readonly _type = CreateRuralTimelineAnalysisUseCase.name;
+
+  public constructor(
+    @Inject(OrganizationMemberQueryRepositoryGateway)
+    private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(RuralTimelineAnalysisCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisCommandRepositoryGateway: RuralTimelineAnalysisCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisInssBenefitCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisInssBenefitCommandRepositoryGateway: RuralTimelineAnalysisInssBenefitCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway: RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway,
+    @Inject(AnalysisToolClientQueryRepositoryGateway)
+    private readonly analysisToolClientQueryRepositoryGateway: AnalysisToolClientQueryRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodCommandRepositoryGateway: RuralTimelineAnalysisPeriodCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodDocumentCommandRepositoryGateway: RuralTimelineAnalysisPeriodDocumentCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway: RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodResidenceCommandRepositoryGateway: RuralTimelineAnalysisPeriodResidenceCommandRepositoryGateway,
+    @Inject(RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway)
+    private readonly ruralTimelineAnalysisPeriodPropertyCommandRepositoryGateway: RuralTimelineAnalysisPeriodPropertyCommandRepositoryGateway,
+    @Inject(
+      RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway,
+    )
+    private readonly ruralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway: RuralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway,
+    @Inject(BaseTransactionRepositoryGateway)
+    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordCommandRepositoryGateway)
+    private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
+  ) {}
+
+  public async execute(
+    sessionData: SessionDataModel,
+    organizationSessionData: OrganizationSessionDataModel,
+    dto: CreateRuralTimelineAnalysisRequestDto,
+  ): Promise<CreateRuralTimelineAnalysisResponseDto> {
+    const organizationMember =
+      await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
+        sessionData.authIdentityId,
+        organizationSessionData.organizationId,
+      );
+
+    if (organizationMember === null) {
+      throw new OrganizationMemberNotFoundError();
+    }
+
+    const analysisToolClientQueryResult =
+      await this.analysisToolClientQueryRepositoryGateway.findOneByAnalysisToolClientIdAndOrganizationIdOrFail(
+        dto.analysisToolClientId,
+        organizationSessionData.organizationId,
+        AnalysisToolClientNotFoundError,
+      );
+
+    const analysisToolClient = new AnalysisToolClientEntity({
+      ...analysisToolClientQueryResult,
+      createdBy: analysisToolClientQueryResult.createdBy.id,
+      updatedBy: analysisToolClientQueryResult.updatedBy.id,
+    });
+
+    const ruralTimelineAnalysis = new RuralTimelineAnalysisEntity({
+      workRegime: dto.workRegime,
+      ruralTimelineCompleteAnalysis: null,
+      ruralTimelineSimplifiedAnalysis: null,
+      ruralTimelinePeriodDocumentAnalysis: null,
+      analysisToolClientId: dto.analysisToolClientId,
+    });
+
+    const ruralTimelineAnalysisInssBenefit =
+      dto.inssBenefitNumber !== undefined
+        ? dto.inssBenefitNumber.map((value) => {
+            return new RuralTimelineAnalysisInssBenefitEntity({
+              inssBenefitNumber: value,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
+            });
+          })
+        : [];
+
+    const ruralTimelineAnalysisLegalProceeding =
+      dto.legalProceedingNumber !== undefined
+        ? dto.legalProceedingNumber.map((value) => {
+            return new RuralTimelineAnalysisLegalProceedingEntity({
+              legalProceedingNumber: value,
+              ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
+            });
+          })
+        : [];
+
+    const residenceMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodResidenceEntity
+    >();
+    const propertyMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodPropertyEntity
+    >();
+
+    for (const [index, periodDto] of dto.periods.entries()) {
+      if (periodDto.residence !== undefined) {
+        residenceMap.set(
+          index,
+          new RuralTimelineAnalysisPeriodResidenceEntity({
+            city: periodDto.residence.city,
+            stateCode: periodDto.residence.stateCode,
+            distanceToPropertyKm: periodDto.residence.distanceToPropertyKm,
+          }),
+        );
+      }
+      if (periodDto.property !== undefined) {
+        propertyMap.set(
+          index,
+          new RuralTimelineAnalysisPeriodPropertyEntity({
+            propertyName: periodDto.property.propertyName ?? null,
+            ownerName: periodDto.property.ownerName ?? null,
+            postalCode: periodDto.property.postalCode ?? null,
+            stateCode: periodDto.property.stateCode ?? null,
+            city: periodDto.property.city ?? null,
+            neighborhood: periodDto.property.neighborhood ?? null,
+            street: periodDto.property.street ?? null,
+            streetNumber: periodDto.property.streetNumber ?? null,
+            landOwnershipType: periodDto.property.landOwnershipType ?? null,
+          }),
+        );
+      }
+    }
+
+    const residences = [...residenceMap.values()];
+    const properties = [...propertyMap.values()];
+
+    const periods: RuralTimelineAnalysisPeriodEntity[] = dto.periods.map(
+      (periodDto, index) => {
+        const residenceId = residenceMap.get(index)?.id ?? null;
+
+        const propertyId = propertyMap.get(index)?.id ?? null;
+
+        return new RuralTimelineAnalysisPeriodEntity({
+          startDate: periodDto.startDate ?? null,
+          endDate: periodDto.endDate ?? null,
+          workerType: periodDto.workerType ?? null,
+          workRegimeType: periodDto.workRegimeType ?? null,
+          productionDestination: periodDto.productionDestination ?? null,
+          documentAnalysis: null,
+          ruralTimelineId: ruralTimelineAnalysis.id,
+          ruralTimelinePeriodPropertyId: propertyId,
+          ruralTimelinePeriodResidenceId: residenceId,
+        });
+      },
+    );
+
+    const documents: RuralTimelineAnalysisPeriodDocumentEntity[] = [];
+
+    for (const [index, periodDto] of dto.periods.entries()) {
+      if (periodDto.documents !== undefined) {
+        const period = periods[index];
+
+        if (period === undefined) {
+          continue;
+        }
+
+        for (const documentDto of periodDto.documents) {
+          const fileBuffer = documentDto.document.base64.decodeToBuffer();
+          const fileModel = FileModel.build({
+            buffer: fileBuffer,
+            originalName: documentDto.document.originalFileName,
+            size: fileBuffer.length,
+            encoding: 'base64',
+          });
+
+          const fileName =
+            await this.fileProcessorGateway.uploadFile(fileModel);
+
+          documents.push(
+            new RuralTimelineAnalysisPeriodDocumentEntity({
+              documentYear: documentDto.documentYear ?? null,
+              documentHolderType: documentDto.documentHolderType ?? null,
+              selfOwned: documentDto.selfOwned ?? null,
+              probatoryPurpose: documentDto.probatoryPurpose ?? null,
+              document: fileName,
+              type: documentDto.type,
+              ruralTimelinePeriodId: period.id,
+            }),
+          );
+        }
+      }
+    }
+
+    const economicAspects: RuralTimelineAnalysisPeriodEconomicAspectsEntity[] =
+      [];
+
+    for (const [index, periodDto] of dto.periods.entries()) {
+      if (periodDto.economicAspects !== undefined) {
+        const period = periods[index];
+
+        if (period === undefined) {
+          continue;
+        }
+
+        for (const economicAspectDto of periodDto.economicAspects) {
+          economicAspects.push(
+            new RuralTimelineAnalysisPeriodEconomicAspectsEntity({
+              type: economicAspectDto.type,
+              content: economicAspectDto.content ?? null,
+              ruralTimelinePeriodId: period.id,
+            }),
+          );
+        }
+      }
+    }
+
+    const familyGroupMembers: RuralTimelineAnalysisPeriodFamilyGroupMemberEntity[] =
+      [];
+
+    for (const [index, periodDto] of dto.periods.entries()) {
+      if (periodDto.familyGroupMembers !== undefined) {
+        const period = periods[index];
+
+        if (period === undefined) {
+          continue;
+        }
+
+        for (const memberDto of periodDto.familyGroupMembers) {
+          let cnisFileName: string | null = null;
+
+          if (memberDto.cnisDocument !== undefined) {
+            const fileBuffer = memberDto.cnisDocument.base64.decodeToBuffer();
+            const fileModel = FileModel.build({
+              buffer: fileBuffer,
+              originalName: memberDto.cnisDocument.originalFileName,
+              size: fileBuffer.length,
+              encoding: 'base64',
+            });
+
+            cnisFileName =
+              await this.fileProcessorGateway.uploadFile(fileModel);
+          }
+
+          familyGroupMembers.push(
+            new RuralTimelineAnalysisPeriodFamilyGroupMemberEntity({
+              name: memberDto.name,
+              federalDocument: memberDto.federalDocument,
+              kinship: memberDto.kinship,
+              receivesRuralBenefit: memberDto.receivesRuralBenefit,
+              benefitNumber: memberDto.benefitNumber ?? null,
+              cnisDocument: cnisFileName,
+              ruralTimelinePeriodId: period.id,
+            }),
+          );
+        }
+      }
+    }
+
+    const maxCode: number =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+      );
+
+    const analysisToolRecord = new AnalysisToolRecordEntity({
+      code: new AnalysisToolRecordCode(maxCode + 1),
+      type: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
+      ruralTimelineAnalysis,
+      analysisToolClient,
+      status: AnalysisStatusEnum.IN_PROGRESS,
+      createdBy: organizationMember.id,
+      updatedBy: organizationMember.id,
+    });
+
+    await this.createOnDatabase(
+      ruralTimelineAnalysis,
+      ruralTimelineAnalysisInssBenefit,
+      ruralTimelineAnalysisLegalProceeding,
+      periods,
+      documents,
+      residences,
+      properties,
+      economicAspects,
+      familyGroupMembers,
+      analysisToolRecord,
+    );
+
+    return CreateRuralTimelineAnalysisResponseDto.build({
+      ruralTimelineAnalysisId: ruralTimelineAnalysis.id,
+    });
+  }
+
+  private async createOnDatabase(
+    ruralTimelineAnalysis: RuralTimelineAnalysisEntity,
+    ruralTimelineAnalysisInssBenefit: RuralTimelineAnalysisInssBenefitEntity[],
+    ruralTimelineAnalysisLegalProceeding: RuralTimelineAnalysisLegalProceedingEntity[],
+    periods: RuralTimelineAnalysisPeriodEntity[],
+    documents: RuralTimelineAnalysisPeriodDocumentEntity[],
+    residences: RuralTimelineAnalysisPeriodResidenceEntity[],
+    properties: RuralTimelineAnalysisPeriodPropertyEntity[],
+    economicAspects: RuralTimelineAnalysisPeriodEconomicAspectsEntity[],
+    familyGroupMembers: RuralTimelineAnalysisPeriodFamilyGroupMemberEntity[],
+    analysisToolRecord: AnalysisToolRecordEntity,
+  ): Promise<void> {
+    const ruralTimelineAnalysisTransaction =
+      this.ruralTimelineAnalysisCommandRepositoryGateway.createRuralTimeline(
+        ruralTimelineAnalysis,
+      );
+
+    const ruralTimelineAnalysisInssBenefitTransactions =
+      ruralTimelineAnalysisInssBenefit.map((value) => {
+        return this.ruralTimelineAnalysisInssBenefitCommandRepositoryGateway.createRuralTimelineAnalysisInssBenefit(
+          value,
+        );
+      });
+
+    const ruralTimelineAnalysisLegalProceedingTransactions =
+      ruralTimelineAnalysisLegalProceeding.map((value) => {
+        return this.ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway.createRuralTimelineAnalysisLegalProceeding(
+          value,
+        );
+      });
+
+    const periodTransactions = periods.map((period) => {
+      return this.ruralTimelineAnalysisPeriodCommandRepositoryGateway.createRuralTimelineAnalysisPeriod(
+        period,
+      );
+    });
+
+    const documentTransactions = documents.map((document) => {
+      return this.ruralTimelineAnalysisPeriodDocumentCommandRepositoryGateway.createRuralTimelineAnalysisPeriodDocument(
+        document,
+      );
+    });
+
+    const residenceTransactions = residences.map((residence) => {
+      return this.ruralTimelineAnalysisPeriodResidenceCommandRepositoryGateway.createRuralTimelineAnalysisPeriodResidence(
+        residence,
+      );
+    });
+
+    const propertyTransactions = properties.map((property) => {
+      return this.ruralTimelineAnalysisPeriodPropertyCommandRepositoryGateway.createRuralTimelineAnalysisPeriodProperty(
+        property,
+      );
+    });
+
+    const economicAspectsTransactions = economicAspects.map(
+      (economicAspect) => {
+        return this.ruralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway.createRuralTimelineAnalysisPeriodEconomicAspects(
+          economicAspect,
+        );
+      },
+    );
+
+    const familyGroupMemberTransactions = familyGroupMembers.map((member) => {
+      return this.ruralTimelineAnalysisPeriodFamilyGroupMemberCommandRepositoryGateway.createRuralTimelineAnalysisPeriodFamilyGroupMember(
+        member,
+      );
+    });
+
+    const analysisToolRecordTransaction =
+      this.analysisToolRecordCommandRepositoryGateway.createAnalysisToolRecord(
+        analysisToolRecord,
+      );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      ruralTimelineAnalysisTransaction,
+      ...ruralTimelineAnalysisInssBenefitTransactions,
+      ...ruralTimelineAnalysisLegalProceedingTransactions,
+      ...residenceTransactions,
+      ...propertyTransactions,
+      ...periodTransactions,
+      ...documentTransactions,
+      ...economicAspectsTransactions,
+      ...familyGroupMemberTransactions,
+      analysisToolRecordTransaction,
+    ]);
+
+    await transaction.commit();
+  }
+}

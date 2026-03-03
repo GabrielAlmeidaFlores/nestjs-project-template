@@ -11,15 +11,15 @@ import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetRetirementPlanningRppsWithRelationsQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps-with-relations.query.result';
-import { GetRetirementPlanningRppsInssBenefitQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-inss-benefit/query/result/get-retirement-planning-rpps-inss-benefit.query.result';
-import { GetRetirementPlanningRppsLegalProceedingQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-legal-proceeding/query/result/get-retirement-planning-rpps-legal-proceeding.query.result';
-import { GetRetirementPlanningRppsPeriodQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period/query/result/get-retirement-planning-rpps-period.query.result';
-import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
-import { GetRetirementPlanningRppsRemunerationQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration/query/result/get-retirement-planning-rpps-remuneration.query.result';
-import { GetRetirementPlanningRppsRemunerationCalculationQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-remuneration-calculation/query/result/get-retirement-planning-rpps-remuneration-calculation.query.result';
-import { GetRetirementPlanningRppsResultQueryResult } from '@module/customer/analysis-tool/domain/repository/retirement-planning-rpps-result/query/result/get-retirement-planning-rpps-result.query.result';
-import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
+import { GetRetirementPlanningRppsWithRelationsQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/query/result/get-retirement-planning-rpps-with-relations.query.result';
+import { GetRetirementPlanningRppsInssBenefitQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-inss-benefit/query/result/get-retirement-planning-rpps-inss-benefit.query.result';
+import { GetRetirementPlanningRppsLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-legal-proceeding/query/result/get-retirement-planning-rpps-legal-proceeding.query.result';
+import { GetRetirementPlanningRppsPeriodQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-period/query/result/get-retirement-planning-rpps-period.query.result';
+import { GetRetirementPlanningRppsPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-period-document/query/result/get-retirement-planning-rpps-period-document.query.result';
+import { GetRetirementPlanningRppsRemunerationQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration/query/result/get-retirement-planning-rpps-remuneration.query.result';
+import { GetRetirementPlanningRppsRemunerationCalculationQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-remuneration-calculation/query/result/get-retirement-planning-rpps-remuneration-calculation.query.result';
+import { GetRetirementPlanningRppsResultQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps-result/query/result/get-retirement-planning-rpps-result.query.result';
+import { RetirementPlanningRppsId } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/value-object/retirement-planning-rpps-id.value-object';
 
 @Injectable()
 export class GetRetirementPlanningRppsWithRelationsQueryResultAutoMapperProfile {
