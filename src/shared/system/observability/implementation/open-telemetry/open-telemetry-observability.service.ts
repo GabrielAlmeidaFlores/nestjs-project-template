@@ -1,4 +1,4 @@
-import { freemem, totalmem } from 'os';
+import { cpus, freemem, totalmem } from 'os';
 
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { metrics } from '@opentelemetry/api';
@@ -104,8 +104,11 @@ export class OpenTelemetryObservabilityService
         const elapsedMs = currentTime - this.previousCpuTime;
 
         if (elapsedMs > 0) {
+          const numCpus = cpus().length;
           const elapsedMicros =
-            elapsedMs * OpenTelemetryObservabilityService.MICROSECONDS_PER_MS;
+            elapsedMs *
+            OpenTelemetryObservabilityService.MICROSECONDS_PER_MS *
+            numCpus;
 
           const userPercent =
             ((currentCpuUsage.user - this.previousCpuUsage.user) /
