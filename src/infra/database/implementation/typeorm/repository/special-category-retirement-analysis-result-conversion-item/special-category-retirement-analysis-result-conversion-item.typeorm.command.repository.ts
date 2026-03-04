@@ -7,18 +7,22 @@ import { BaseTypeormCommandRepository } from '@infra/database/implementation/typ
 import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-conversion-item.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-conversion-item/command/special-category-retirement-analysis-result-conversion-item.command.repository.gateway';
-import { SpecialCategoryRetirementAnalysisResultConversionItemEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.entity';
 import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
+import { SpecialCategoryRetirementAnalysisResultConversionItemEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.entity';
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity>
-  implements SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway
+  implements
+    SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {

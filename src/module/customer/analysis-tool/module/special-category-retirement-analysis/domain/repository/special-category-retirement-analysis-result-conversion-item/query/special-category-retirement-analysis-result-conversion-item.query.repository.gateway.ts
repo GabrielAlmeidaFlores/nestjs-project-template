@@ -4,5 +4,7 @@ import type { SpecialCategoryRetirementAnalysisResultId } from '@module/customer
 export abstract class SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway {
   public abstract listByResultId(
     resultId: SpecialCategoryRetirementAnalysisResultId,
-  ): Promise<GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult[]>;
+  ): Promise<
+    GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult[]
+  >;
 }

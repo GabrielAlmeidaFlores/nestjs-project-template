@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/command/special-category-retirement-analysis-work-period.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.entity';
 import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis-work-period.request.dto';
@@ -11,7 +11,8 @@ import { SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError } from '@modul
 
 @Injectable()
 export class UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
-  protected readonly _type = UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase.name;
+  protected readonly _type =
+    UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase.name;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway)
@@ -26,45 +27,44 @@ export class UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
     workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     dto: UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<UpdateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
-    const queryResult = await this.workPeriodQueryRepositoryGateway.findOneByIdOrFail(
-      workPeriodId,
-      SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError,
-    );
+    const queryResult =
+      await this.workPeriodQueryRepositoryGateway.findOneByIdOrFail(
+        workPeriodId,
+        SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError,
+      );
 
-    const updatedWorkPeriod = new SpecialCategoryRetirementAnalysisWorkPeriodEntity({
-      id: workPeriodId,
-      specialCategoryRetirementAnalysisId: queryResult.specialCategoryRetirementAnalysisId,
-      publicServiceAdmissionDate:
-        dto.publicServiceAdmissionDate !== undefined
-          ? dto.publicServiceAdmissionDate
-          : queryResult.publicServiceAdmissionDate,
-      publicServiceCareerStartDate:
-        dto.publicServiceCareerStartDate !== undefined
-          ? dto.publicServiceCareerStartDate
-          : queryResult.publicServiceCareerStartDate,
-      workPeriodStartDate: dto.workPeriodStartDate ?? queryResult.workPeriodStartDate,
-      workPeriodEndDate: dto.workPeriodEndDate ?? queryResult.workPeriodEndDate,
-      jobPositionTitle:
-        dto.jobPositionTitle !== undefined ? dto.jobPositionTitle : queryResult.jobPositionTitle,
-      careerPathName:
-        dto.careerPathName !== undefined ? dto.careerPathName : queryResult.careerPathName,
-      publicServiceTypeCategory:
-        dto.publicServiceTypeCategory !== undefined
-          ? dto.publicServiceTypeCategory
-          : queryResult.publicServiceTypeCategory,
-      specialTimeRegistrationType:
-        dto.specialTimeRegistrationType ?? queryResult.specialTimeRegistrationType,
-      effectiveSpecialWorkStartDate:
-        dto.effectiveSpecialWorkStartDate !== undefined
-          ? dto.effectiveSpecialWorkStartDate
-          : queryResult.effectiveSpecialWorkStartDate,
-      effectiveSpecialWorkEndDate:
-        dto.effectiveSpecialWorkEndDate !== undefined
-          ? dto.effectiveSpecialWorkEndDate
-          : queryResult.effectiveSpecialWorkEndDate,
-      createdAt: queryResult.createdAt,
-      updatedAt: new Date(),
-    });
+    const updatedWorkPeriod =
+      new SpecialCategoryRetirementAnalysisWorkPeriodEntity({
+        id: workPeriodId,
+        specialCategoryRetirementAnalysisId:
+          queryResult.specialCategoryRetirementAnalysisId,
+        publicServiceAdmissionDate:
+          dto.publicServiceAdmissionDate ??
+          queryResult.publicServiceAdmissionDate,
+        publicServiceCareerStartDate:
+          dto.publicServiceCareerStartDate ??
+          queryResult.publicServiceCareerStartDate,
+        workPeriodStartDate:
+          dto.workPeriodStartDate ?? queryResult.workPeriodStartDate,
+        workPeriodEndDate:
+          dto.workPeriodEndDate ?? queryResult.workPeriodEndDate,
+        jobPositionTitle: dto.jobPositionTitle ?? queryResult.jobPositionTitle,
+        careerPathName: dto.careerPathName ?? queryResult.careerPathName,
+        publicServiceTypeCategory:
+          dto.publicServiceTypeCategory ??
+          queryResult.publicServiceTypeCategory,
+        specialTimeRegistrationType:
+          dto.specialTimeRegistrationType ??
+          queryResult.specialTimeRegistrationType,
+        effectiveSpecialWorkStartDate:
+          dto.effectiveSpecialWorkStartDate ??
+          queryResult.effectiveSpecialWorkStartDate,
+        effectiveSpecialWorkEndDate:
+          dto.effectiveSpecialWorkEndDate ??
+          queryResult.effectiveSpecialWorkEndDate,
+        createdAt: queryResult.createdAt,
+        updatedAt: new Date(),
+      });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.workPeriodCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisWorkPeriod(

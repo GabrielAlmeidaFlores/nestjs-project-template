@@ -5,10 +5,10 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/special-category-retirement-analysis-result.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/command/special-category-retirement-analysis-result.command.repository.gateway';
-import { SpecialCategoryRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/special-category-retirement-analysis-result.entity';
+import { SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/special-category-retirement-analysis-result.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { SpecialCategoryRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/special-category-retirement-analysis-result.entity';
 import { GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-full-text.response.dto';
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -19,7 +19,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 
 @Injectable()
 export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
-  protected readonly _type = GenerateSpecialCategoryRetirementAnalysisFullTextUseCase.name;
+  protected readonly _type =
+    GenerateSpecialCategoryRetirementAnalysisFullTextUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -55,9 +56,10 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const promptResponse = await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-      PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
-    );
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+      );
 
     const queryResult =
       await this.specialCategoryRetirementAnalysisQueryRepositoryGateway.findOneByIdAndOrganizationIdWithRelationsOrFail(
@@ -66,11 +68,12 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
-    const creditTransaction = await this.consumeOrganizationCreditUseCase.execute(
-      organizationSessionData.organizationId,
-      PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
-      organizationMember.id,
-    );
+    const creditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+        organizationMember.id,
+      );
 
     const contextBuffer = Buffer.from(
       JSON.stringify(
@@ -85,12 +88,16 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
       'utf-8',
     );
 
-    const analysisText = await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
-      promptResponse.prompt,
-      [contextBuffer],
-    );
+    const analysisText =
+      await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
+        promptResponse.prompt,
+        [contextBuffer],
+      );
 
-    const existingResult = await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(analysisId);
+    const existingResult =
+      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
+        analysisId,
+      );
 
     let resultEntity: SpecialCategoryRetirementAnalysisResultEntity;
 
@@ -98,7 +105,8 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
       resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
         id: existingResult.specialCategoryRetirementAnalysisResultId,
         specialCategoryRetirementAnalysisId: analysisId,
-        simplifiedAnalysisSummaryText: existingResult.simplifiedAnalysisSummaryText,
+        simplifiedAnalysisSummaryText:
+          existingResult.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: analysisText,
         createdAt: existingResult.createdAt,
         updatedAt: new Date(),
@@ -122,7 +130,9 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
 
       const transaction = await this.baseTransactionRepositoryGateway.execute([
         creditTransaction,
-        this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(resultEntity),
+        this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
+          resultEntity,
+        ),
       ]);
 
       await transaction.commit();

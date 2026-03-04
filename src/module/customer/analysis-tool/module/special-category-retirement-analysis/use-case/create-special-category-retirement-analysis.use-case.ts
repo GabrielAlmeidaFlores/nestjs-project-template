@@ -21,7 +21,8 @@ import { SessionDataModel } from '@shared/api/util/decorator/property/get-sessio
 
 @Injectable()
 export class CreateSpecialCategoryRetirementAnalysisUseCase {
-  protected readonly _type = CreateSpecialCategoryRetirementAnalysisUseCase.name;
+  protected readonly _type =
+    CreateSpecialCategoryRetirementAnalysisUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -66,15 +67,20 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
       updatedBy: analysisToolClientQueryResult.updatedBy.id,
     });
 
-    const specialCategoryRetirementAnalysis = new SpecialCategoryRetirementAnalysisEntity({
-      analysisToolClientId: dto.analysisToolClientId,
-      analysisCustomName: dto.analysisCustomName ?? null,
-      retirementAnalysisObjectiveType: dto.retirementAnalysisObjectiveType ?? null,
-      publicServiceFederativeEntityName: dto.publicServiceFederativeEntityName ?? null,
-      publicServiceStateAbbreviation: dto.publicServiceStateAbbreviation ?? null,
-      hasConfirmedExposureToHarmfulAgents: dto.hasConfirmedExposureToHarmfulAgents ?? false,
-      currentWorkflowStepIndex: dto.currentWorkflowStepIndex ?? 1,
-    });
+    const specialCategoryRetirementAnalysis =
+      new SpecialCategoryRetirementAnalysisEntity({
+        analysisToolClientId: dto.analysisToolClientId,
+        analysisCustomName: dto.analysisCustomName ?? null,
+        retirementAnalysisObjectiveType:
+          dto.retirementAnalysisObjectiveType ?? null,
+        publicServiceFederativeEntityName:
+          dto.publicServiceFederativeEntityName ?? null,
+        publicServiceStateAbbreviation:
+          dto.publicServiceStateAbbreviation ?? null,
+        hasConfirmedExposureToHarmfulAgents:
+          dto.hasConfirmedExposureToHarmfulAgents ?? false,
+        currentWorkflowStepIndex: dto.currentWorkflowStepIndex ?? 1,
+      });
 
     const maxCode =
       await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(

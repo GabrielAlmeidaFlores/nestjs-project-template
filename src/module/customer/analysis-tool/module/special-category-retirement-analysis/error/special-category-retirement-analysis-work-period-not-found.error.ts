@@ -5,6 +5,8 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError extends No
     SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError.name;
 
   public constructor() {
-    super('Período de trabalho da análise de aposentadoria especial não encontrado.');
+    super(
+      'Período de trabalho da análise de aposentadoria especial não encontrado.',
+    );
   }
 }

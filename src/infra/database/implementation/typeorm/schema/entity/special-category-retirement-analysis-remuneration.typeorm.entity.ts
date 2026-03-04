@@ -28,7 +28,10 @@ export class SpecialCategoryRetirementAnalysisRemunerationTypeormEntity extends 
     (entity) => entity.remunerations,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_id' })
-  public specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisTypeormEntity | undefined;
+  public specialCategoryRetirementAnalysis?:
+    | SpecialCategoryRetirementAnalysisTypeormEntity
+    | undefined;
 
-  protected override readonly _type = SpecialCategoryRetirementAnalysisRemunerationTypeormEntity.name;
+  protected override readonly _type =
+    SpecialCategoryRetirementAnalysisRemunerationTypeormEntity.name;
 }

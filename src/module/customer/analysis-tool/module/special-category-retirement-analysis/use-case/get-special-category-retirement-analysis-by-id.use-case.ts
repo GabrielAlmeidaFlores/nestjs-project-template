@@ -15,7 +15,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
-  protected readonly _type = GetSpecialCategoryRetirementAnalysisByIdUseCase.name;
+  protected readonly _type =
+    GetSpecialCategoryRetirementAnalysisByIdUseCase.name;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
@@ -39,11 +40,13 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
     >();
 
     for (const doc of queryResult.periodDocuments) {
-      const workPeriodKey = doc.specialCategoryRetirementAnalysisWorkPeriodId.toString();
+      const workPeriodKey =
+        doc.specialCategoryRetirementAnalysisWorkPeriodId.toString();
       const existing = periodDocumentsByWorkPeriod.get(workPeriodKey) ?? [];
       existing.push(
         GetSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto.build({
-          specialCategoryRetirementAnalysisPeriodDocumentId: doc.specialCategoryRetirementAnalysisPeriodDocumentId,
+          specialCategoryRetirementAnalysisPeriodDocumentId:
+            doc.specialCategoryRetirementAnalysisPeriodDocumentId,
           retirementDocumentTypeCategory: doc.retirementDocumentTypeCategory,
           storedFileExternalName: doc.storedFileExternalName,
           originalFileUploadName: doc.originalFileUploadName,
@@ -55,81 +58,125 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
     }
 
     const workPeriods = queryResult.workPeriods.map((wp) => {
-      const docs = periodDocumentsByWorkPeriod.get(wp.specialCategoryRetirementAnalysisWorkPeriodId.toString()) ?? [];
+      const docs =
+        periodDocumentsByWorkPeriod.get(
+          wp.specialCategoryRetirementAnalysisWorkPeriodId.toString(),
+        ) ?? [];
       return GetSpecialCategoryRetirementAnalysisWorkPeriodResponseDto.build({
-        specialCategoryRetirementAnalysisWorkPeriodId: wp.specialCategoryRetirementAnalysisWorkPeriodId,
-        ...(wp.publicServiceAdmissionDate !== null && { publicServiceAdmissionDate: wp.publicServiceAdmissionDate }),
-        ...(wp.publicServiceCareerStartDate !== null && { publicServiceCareerStartDate: wp.publicServiceCareerStartDate }),
+        specialCategoryRetirementAnalysisWorkPeriodId:
+          wp.specialCategoryRetirementAnalysisWorkPeriodId,
+        ...(wp.publicServiceAdmissionDate !== null && {
+          publicServiceAdmissionDate: wp.publicServiceAdmissionDate,
+        }),
+        ...(wp.publicServiceCareerStartDate !== null && {
+          publicServiceCareerStartDate: wp.publicServiceCareerStartDate,
+        }),
         workPeriodStartDate: wp.workPeriodStartDate,
         workPeriodEndDate: wp.workPeriodEndDate,
-        ...(wp.jobPositionTitle !== null && { jobPositionTitle: wp.jobPositionTitle }),
-        ...(wp.careerPathName !== null && { careerPathName: wp.careerPathName }),
-        ...(wp.publicServiceTypeCategory !== null && { publicServiceTypeCategory: wp.publicServiceTypeCategory }),
+        ...(wp.jobPositionTitle !== null && {
+          jobPositionTitle: wp.jobPositionTitle,
+        }),
+        ...(wp.careerPathName !== null && {
+          careerPathName: wp.careerPathName,
+        }),
+        ...(wp.publicServiceTypeCategory !== null && {
+          publicServiceTypeCategory: wp.publicServiceTypeCategory,
+        }),
         specialTimeRegistrationType: wp.specialTimeRegistrationType,
-        ...(wp.effectiveSpecialWorkStartDate !== null && { effectiveSpecialWorkStartDate: wp.effectiveSpecialWorkStartDate }),
-        ...(wp.effectiveSpecialWorkEndDate !== null && { effectiveSpecialWorkEndDate: wp.effectiveSpecialWorkEndDate }),
+        ...(wp.effectiveSpecialWorkStartDate !== null && {
+          effectiveSpecialWorkStartDate: wp.effectiveSpecialWorkStartDate,
+        }),
+        ...(wp.effectiveSpecialWorkEndDate !== null && {
+          effectiveSpecialWorkEndDate: wp.effectiveSpecialWorkEndDate,
+        }),
         periodDocuments: docs,
         createdAt: wp.createdAt,
         updatedAt: wp.updatedAt,
       });
     });
 
-    let analysisResult: GetSpecialCategoryRetirementAnalysisResultResponseDto | undefined;
+    let analysisResult:
+      | GetSpecialCategoryRetirementAnalysisResultResponseDto
+      | undefined;
 
     if (queryResult.analysisResult !== null) {
       const conversionItems = queryResult.conversionItems.map((item) =>
-        GetSpecialCategoryRetirementAnalysisResultConversionItemResponseDto.build({
-          specialCategoryRetirementAnalysisResultConversionItemId: item.specialCategoryRetirementAnalysisResultConversionItemId,
-          originJobTitleDescription: item.originJobTitleDescription,
-          periodDateRangeText: item.periodDateRangeText,
-          harmfulExposureAgentsText: item.harmfulExposureAgentsText,
-          specialTimeDurationText: item.specialTimeDurationText,
-          convertedTimeDurationText: item.convertedTimeDurationText,
-          conversionFactorValue: item.conversionFactorValue,
-          recognitionStatusEnum: item.recognitionStatusEnum,
-        }),
+        GetSpecialCategoryRetirementAnalysisResultConversionItemResponseDto.build(
+          {
+            specialCategoryRetirementAnalysisResultConversionItemId:
+              item.specialCategoryRetirementAnalysisResultConversionItemId,
+            originJobTitleDescription: item.originJobTitleDescription,
+            periodDateRangeText: item.periodDateRangeText,
+            harmfulExposureAgentsText: item.harmfulExposureAgentsText,
+            specialTimeDurationText: item.specialTimeDurationText,
+            convertedTimeDurationText: item.convertedTimeDurationText,
+            conversionFactorValue: item.conversionFactorValue,
+            recognitionStatusEnum: item.recognitionStatusEnum,
+          },
+        ),
       );
 
       const ruleItems = queryResult.ruleItems.map((item) =>
         GetSpecialCategoryRetirementAnalysisResultRuleItemResponseDto.build({
-          specialCategoryRetirementAnalysisResultRuleItemId: item.specialCategoryRetirementAnalysisResultRuleItemId,
+          specialCategoryRetirementAnalysisResultRuleItemId:
+            item.specialCategoryRetirementAnalysisResultRuleItemId,
           retirementModalityName: item.retirementModalityName,
           isRequirementMet: item.isRequirementMet,
-          ...(item.projectedRetirementDate !== null && { projectedRetirementDate: item.projectedRetirementDate }),
-          ...(item.estimatedRmiAmount !== null && { estimatedRmiAmount: item.estimatedRmiAmount }),
+          ...(item.projectedRetirementDate !== null && {
+            projectedRetirementDate: item.projectedRetirementDate,
+          }),
+          ...(item.estimatedRmiAmount !== null && {
+            estimatedRmiAmount: item.estimatedRmiAmount,
+          }),
           isBestFinancialOption: item.isBestFinancialOption,
-          ...(item.ruleDetailedExplanationText !== null && { ruleDetailedExplanationText: item.ruleDetailedExplanationText }),
+          ...(item.ruleDetailedExplanationText !== null && {
+            ruleDetailedExplanationText: item.ruleDetailedExplanationText,
+          }),
         }),
       );
 
-      analysisResult = GetSpecialCategoryRetirementAnalysisResultResponseDto.build({
-        specialCategoryRetirementAnalysisResultId: queryResult.analysisResult.specialCategoryRetirementAnalysisResultId,
-        ...(queryResult.analysisResult.simplifiedAnalysisSummaryText !== null && {
-          simplifiedAnalysisSummaryText: queryResult.analysisResult.simplifiedAnalysisSummaryText,
-        }),
-        ...(queryResult.analysisResult.fullAnalysisConclusionText !== null && {
-          fullAnalysisConclusionText: queryResult.analysisResult.fullAnalysisConclusionText,
-        }),
-        conversionItems,
-        ruleItems,
-        createdAt: queryResult.analysisResult.createdAt,
-        updatedAt: queryResult.analysisResult.updatedAt,
-      });
+      analysisResult =
+        GetSpecialCategoryRetirementAnalysisResultResponseDto.build({
+          specialCategoryRetirementAnalysisResultId:
+            queryResult.analysisResult
+              .specialCategoryRetirementAnalysisResultId,
+          ...(queryResult.analysisResult.simplifiedAnalysisSummaryText !==
+            null && {
+            simplifiedAnalysisSummaryText:
+              queryResult.analysisResult.simplifiedAnalysisSummaryText,
+          }),
+          ...(queryResult.analysisResult.fullAnalysisConclusionText !==
+            null && {
+            fullAnalysisConclusionText:
+              queryResult.analysisResult.fullAnalysisConclusionText,
+          }),
+          conversionItems,
+          ruleItems,
+          createdAt: queryResult.analysisResult.createdAt,
+          updatedAt: queryResult.analysisResult.updatedAt,
+        });
     }
 
     return GetSpecialCategoryRetirementAnalysisResponseDto.build({
-      specialCategoryRetirementAnalysisId: queryResult.specialCategoryRetirementAnalysisId,
+      specialCategoryRetirementAnalysisId:
+        queryResult.specialCategoryRetirementAnalysisId,
       ...(queryResult.retirementAnalysisObjectiveType !== null && {
-        retirementAnalysisObjectiveType: queryResult.retirementAnalysisObjectiveType,
+        retirementAnalysisObjectiveType:
+          queryResult.retirementAnalysisObjectiveType,
       }),
-      ...(queryResult.analysisCustomName !== null && { analysisCustomName: queryResult.analysisCustomName }),
+      ...(queryResult.analysisCustomName !== null && {
+        analysisCustomName: queryResult.analysisCustomName,
+      }),
       ...(queryResult.publicServiceFederativeEntityName !== null && {
-        publicServiceFederativeEntityName: queryResult.publicServiceFederativeEntityName,
+        publicServiceFederativeEntityName:
+          queryResult.publicServiceFederativeEntityName,
       }),
       ...(queryResult.publicServiceStateAbbreviation !== null && {
-        publicServiceStateAbbreviation: queryResult.publicServiceStateAbbreviation,
+        publicServiceStateAbbreviation:
+          queryResult.publicServiceStateAbbreviation,
       }),
-      hasConfirmedExposureToHarmfulAgents: queryResult.hasConfirmedExposureToHarmfulAgents,
+      hasConfirmedExposureToHarmfulAgents:
+        queryResult.hasConfirmedExposureToHarmfulAgents,
       currentWorkflowStepIndex: queryResult.currentWorkflowStepIndex,
       workPeriods,
       ...(analysisResult !== undefined && { analysisResult }),

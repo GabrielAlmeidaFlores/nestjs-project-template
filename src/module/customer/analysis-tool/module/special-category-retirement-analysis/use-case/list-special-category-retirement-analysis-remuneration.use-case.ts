@@ -13,7 +13,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
-  protected readonly _type = ListSpecialCategoryRetirementAnalysisRemunerationUseCase.name;
+  protected readonly _type =
+    ListSpecialCategoryRetirementAnalysisRemunerationUseCase.name;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
@@ -34,31 +35,40 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
       );
 
     if (queryResult.workPeriods.length === 0) {
-      return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build({ data: [] });
+      return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build(
+        { data: [] },
+      );
     }
 
-    const allStartDates = queryResult.workPeriods.map((wp) => wp.workPeriodStartDate);
-    const allEndDates = queryResult.workPeriods.map((wp) => wp.workPeriodEndDate);
+    const allStartDates = queryResult.workPeriods.map(
+      (wp) => wp.workPeriodStartDate,
+    );
+    const allEndDates = queryResult.workPeriods.map(
+      (wp) => wp.workPeriodEndDate,
+    );
 
     const earliestStart = allStartDates.reduce((min, d) => (d < min ? d : min));
     const latestEnd = allEndDates.reduce((max, d) => (d > max ? d : max));
 
     const months = this.generateMonthRange(earliestStart, latestEnd);
 
-    const items: SpecialCategoryRetirementAnalysisRemunerationItemResponseDto[] = [];
+    const items: SpecialCategoryRetirementAnalysisRemunerationItemResponseDto[] =
+      [];
 
     for (const monthYear of months) {
-      const existing = await this.remunerationQueryRepositoryGateway.findOneByAnalysisIdAndMonthYear(
-        analysisId,
-        monthYear,
-      );
+      const existing =
+        await this.remunerationQueryRepositoryGateway.findOneByAnalysisIdAndMonthYear(
+          analysisId,
+          monthYear,
+        );
 
       if (existing !== null) {
         items.push(
           SpecialCategoryRetirementAnalysisRemunerationItemResponseDto.build({
             specialCategoryRetirementAnalysisRemunerationId:
               existing.specialCategoryRetirementAnalysisRemunerationId,
-            remunerationReferenceMonthYear: existing.remunerationReferenceMonthYear,
+            remunerationReferenceMonthYear:
+              existing.remunerationReferenceMonthYear,
             ...(existing.remunerationGrossAmount !== null && {
               remunerationGrossAmount: existing.remunerationGrossAmount,
             }),
@@ -67,14 +77,17 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
       } else {
         items.push(
           SpecialCategoryRetirementAnalysisRemunerationItemResponseDto.build({
-            specialCategoryRetirementAnalysisRemunerationId: new SpecialCategoryRetirementAnalysisRemunerationId(),
+            specialCategoryRetirementAnalysisRemunerationId:
+              new SpecialCategoryRetirementAnalysisRemunerationId(),
             remunerationReferenceMonthYear: monthYear,
           }),
         );
       }
     }
 
-    return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build({ data: items });
+    return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build({
+      data: items,
+    });
   }
 
   private generateMonthRange(startDate: Date, endDate: Date): Date[] {

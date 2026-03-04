@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/result/get-special-category-retirement-analysis-work-period.query.result';
 import { WorkPeriodItemTypeEnum } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/enum/work-period-item-type.enum';
+import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { SpecialTimeRegistrationTypeEnum } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/enum/special-time-registration-type.enum';
 import { GetSpecialCategoryRetirementAnalysisTimelineRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/get-special-category-retirement-analysis-timeline.request.dto';
 import {
@@ -10,17 +11,21 @@ import {
   SpecialCategoryRetirementAnalysisTimelineItemResponseDto,
 } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis-timeline.response.dto';
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
-import { GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/result/get-special-category-retirement-analysis-work-period.query.result';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 
 @Injectable()
 export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
-  protected readonly _type = GetSpecialCategoryRetirementAnalysisTimelineUseCase.name;
+  protected readonly _type =
+    GetSpecialCategoryRetirementAnalysisTimelineUseCase.name;
+
+  private readonly MONTHS_PER_YEAR: number;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
-  ) {}
+  ) {
+    this.MONTHS_PER_YEAR = 12;
+  }
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
@@ -37,18 +42,21 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
     let workPeriods = queryResult.workPeriods;
 
     if (filters.startDate !== undefined) {
+      const startDate = filters.startDate;
       workPeriods = workPeriods.filter(
-        (wp) => wp.workPeriodEndDate >= filters.startDate!,
+        (wp) => wp.workPeriodEndDate >= startDate,
       );
     }
 
     if (filters.endDate !== undefined) {
+      const endDate = filters.endDate;
       workPeriods = workPeriods.filter(
-        (wp) => wp.workPeriodStartDate <= filters.endDate!,
+        (wp) => wp.workPeriodStartDate <= endDate,
       );
     }
 
-    const items: SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] = [];
+    const items: SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] =
+      [];
 
     const showSpecialActivity = filters.showSpecialActivity !== false;
     const showCommonActivity = filters.showCommonActivity !== false;
@@ -57,7 +65,8 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
 
     for (const wp of workPeriods) {
       const isSpecial =
-        wp.specialTimeRegistrationType !== SpecialTimeRegistrationTypeEnum.NAO_E_PERIODO_ESPECIAL;
+        wp.specialTimeRegistrationType !==
+        SpecialTimeRegistrationTypeEnum.NAO_E_PERIODO_ESPECIAL;
 
       if (isSpecial && showSpecialActivity) {
         items.push(
@@ -71,7 +80,9 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
               wp.workPeriodStartDate,
               wp.workPeriodEndDate,
             ),
-            ...(wp.careerPathName !== null && { locationDescription: wp.careerPathName }),
+            ...(wp.careerPathName !== null && {
+              locationDescription: wp.careerPathName,
+            }),
             isActivePeriod: true,
           }),
         );
@@ -89,7 +100,9 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
               wp.workPeriodStartDate,
               wp.workPeriodEndDate,
             ),
-            ...(wp.careerPathName !== null && { locationDescription: wp.careerPathName }),
+            ...(wp.careerPathName !== null && {
+              locationDescription: wp.careerPathName,
+            }),
             isActivePeriod: true,
           }),
         );
@@ -115,11 +128,11 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
 
   private computeDurationDescription(startDate: Date, endDate: Date): string {
     const totalMonths =
-      (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+      (endDate.getFullYear() - startDate.getFullYear()) * this.MONTHS_PER_YEAR +
       (endDate.getMonth() - startDate.getMonth());
 
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
+    const years = Math.floor(totalMonths / this.MONTHS_PER_YEAR);
+    const months = totalMonths % this.MONTHS_PER_YEAR;
 
     if (years === 0 && months === 0) {
       return 'Menos de 1 mês';
@@ -141,19 +154,25 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
   private findOverlaps(
     workPeriods: GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult[],
   ): SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] {
-    const overlaps: SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] = [];
+    const overlaps: SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] =
+      [];
 
     for (let i = 0; i < workPeriods.length; i++) {
       for (let j = i + 1; j < workPeriods.length; j++) {
-        const a = workPeriods[i]!;
-        const b = workPeriods[j]!;
+        const a = workPeriods[i];
+        const b = workPeriods[j];
+        if (a === undefined || b === undefined) {
+          continue;
+        }
 
         const overlapStart =
           a.workPeriodStartDate > b.workPeriodStartDate
             ? a.workPeriodStartDate
             : b.workPeriodStartDate;
         const overlapEnd =
-          a.workPeriodEndDate < b.workPeriodEndDate ? a.workPeriodEndDate : b.workPeriodEndDate;
+          a.workPeriodEndDate < b.workPeriodEndDate
+            ? a.workPeriodEndDate
+            : b.workPeriodEndDate;
 
         if (overlapStart < overlapEnd) {
           overlaps.push(
@@ -163,7 +182,10 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
               displayTitle: 'Sobreposição',
               startDate: overlapStart,
               endDate: overlapEnd,
-              durationDescription: this.computeDurationDescription(overlapStart, overlapEnd),
+              durationDescription: this.computeDurationDescription(
+                overlapStart,
+                overlapEnd,
+              ),
               isActivePeriod: false,
             }),
           );
@@ -182,14 +204,18 @@ export class GetSpecialCategoryRetirementAnalysisTimelineUseCase {
     }
 
     const sorted = [...workPeriods].sort(
-      (a, b) => a.workPeriodStartDate.getTime() - b.workPeriodStartDate.getTime(),
+      (a, b) =>
+        a.workPeriodStartDate.getTime() - b.workPeriodStartDate.getTime(),
     );
 
     const gaps: SpecialCategoryRetirementAnalysisTimelineItemResponseDto[] = [];
 
     for (let i = 0; i < sorted.length - 1; i++) {
-      const current = sorted[i]!;
-      const next = sorted[i + 1]!;
+      const current = sorted[i];
+      const next = sorted[i + 1];
+      if (current === undefined || next === undefined) {
+        continue;
+      }
 
       if (current.workPeriodEndDate < next.workPeriodStartDate) {
         gaps.push(

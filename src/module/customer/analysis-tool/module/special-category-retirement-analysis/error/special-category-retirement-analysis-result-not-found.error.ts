@@ -5,6 +5,8 @@ export class SpecialCategoryRetirementAnalysisResultNotFoundError extends NotFou
     SpecialCategoryRetirementAnalysisResultNotFoundError.name;
 
   public constructor() {
-    super('Resultado da análise de aposentadoria por categoria especial não encontrado.');
+    super(
+      'Resultado da análise de aposentadoria por categoria especial não encontrado.',
+    );
   }
 }

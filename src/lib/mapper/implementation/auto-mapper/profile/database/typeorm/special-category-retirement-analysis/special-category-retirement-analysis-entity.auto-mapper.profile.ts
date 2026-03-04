@@ -2,13 +2,13 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-period-document.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-remuneration.typeorm.entity';
-import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-conversion-item.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-rule-item.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/result/get-special-category-retirement-analysis-with-relations.query.result';
@@ -23,7 +23,8 @@ import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-t
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
-  protected readonly _type = SpecialCategoryRetirementAnalysisEntityAutoMapperProfile.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -48,12 +49,16 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
 
       return new SpecialCategoryRetirementAnalysisEntity({
         id: new SpecialCategoryRetirementAnalysisId(source.id),
-        analysisToolClientId: new AnalysisToolClientId(source.analysisToolClient.id),
+        analysisToolClientId: new AnalysisToolClientId(
+          source.analysisToolClient.id,
+        ),
         analysisCustomName: source.analysisCustomName,
         retirementAnalysisObjectiveType: source.retirementAnalysisObjectiveType,
-        publicServiceFederativeEntityName: source.publicServiceFederativeEntityName,
+        publicServiceFederativeEntityName:
+          source.publicServiceFederativeEntityName,
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
-        hasConfirmedExposureToHarmfulAgents: source.hasConfirmedExposureToHarmfulAgents,
+        hasConfirmedExposureToHarmfulAgents:
+          source.hasConfirmedExposureToHarmfulAgents,
         currentWorkflowStepIndex: source.currentWorkflowStepIndex,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -77,11 +82,15 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
         id: source.id.toString(),
         analysisCustomName: source.analysisCustomName,
         retirementAnalysisObjectiveType: source.retirementAnalysisObjectiveType,
-        publicServiceFederativeEntityName: source.publicServiceFederativeEntityName,
+        publicServiceFederativeEntityName:
+          source.publicServiceFederativeEntityName,
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
-        hasConfirmedExposureToHarmfulAgents: source.hasConfirmedExposureToHarmfulAgents,
+        hasConfirmedExposureToHarmfulAgents:
+          source.hasConfirmedExposureToHarmfulAgents,
         currentWorkflowStepIndex: source.currentWorkflowStepIndex,
-        analysisToolClient: { id: source.analysisToolClientId.toString() } as any,
+        analysisToolClient: {
+          id: source.analysisToolClientId.toString(),
+        } as any,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -102,7 +111,8 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
     ): GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult => {
       if (!source.analysisToolClient) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult.name,
+          destinationClass:
+            GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult.name,
           sourceClass: SpecialCategoryRetirementAnalysisTypeormEntity.name,
         });
       }
@@ -162,15 +172,21 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
           )
         : [];
 
-      const result = new GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult();
+      const result =
+        new GetSpecialCategoryRetirementAnalysisWithRelationsQueryResult();
       Object.assign(result, {
-        specialCategoryRetirementAnalysisId: new SpecialCategoryRetirementAnalysisId(source.id),
-        analysisToolClientId: new AnalysisToolClientId(source.analysisToolClient.id),
+        specialCategoryRetirementAnalysisId:
+          new SpecialCategoryRetirementAnalysisId(source.id),
+        analysisToolClientId: new AnalysisToolClientId(
+          source.analysisToolClient.id,
+        ),
         analysisCustomName: source.analysisCustomName,
         retirementAnalysisObjectiveType: source.retirementAnalysisObjectiveType,
-        publicServiceFederativeEntityName: source.publicServiceFederativeEntityName,
+        publicServiceFederativeEntityName:
+          source.publicServiceFederativeEntityName,
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
-        hasConfirmedExposureToHarmfulAgents: source.hasConfirmedExposureToHarmfulAgents,
+        hasConfirmedExposureToHarmfulAgents:
+          source.hasConfirmedExposureToHarmfulAgents,
         currentWorkflowStepIndex: source.currentWorkflowStepIndex,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

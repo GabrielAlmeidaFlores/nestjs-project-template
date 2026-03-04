@@ -15,7 +15,8 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity>
   implements SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository.name;
 
   public constructor(
     @InjectRepository(SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity)

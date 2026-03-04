@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { AnalysisToolClientTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-client.typeorm.entity';
 import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/analysis-tool-record.typeorm.entity';
@@ -64,19 +71,25 @@ export class SpecialCategoryRetirementAnalysisTypeormEntity extends BaseTypeormE
     () => SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity,
     (entity) => entity.specialCategoryRetirementAnalysis,
   )
-  public workPeriods?: SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity[] | undefined;
+  public workPeriods?:
+    | SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity[]
+    | undefined;
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisRemunerationTypeormEntity,
     (entity) => entity.specialCategoryRetirementAnalysis,
   )
-  public remunerations?: SpecialCategoryRetirementAnalysisRemunerationTypeormEntity[] | undefined;
+  public remunerations?:
+    | SpecialCategoryRetirementAnalysisRemunerationTypeormEntity[]
+    | undefined;
 
   @OneToOne(
     () => SpecialCategoryRetirementAnalysisResultTypeormEntity,
     (entity) => entity.specialCategoryRetirementAnalysis,
   )
-  public analysisResult?: SpecialCategoryRetirementAnalysisResultTypeormEntity | undefined;
+  public analysisResult?:
+    | SpecialCategoryRetirementAnalysisResultTypeormEntity
+    | undefined;
 
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,
@@ -84,5 +97,6 @@ export class SpecialCategoryRetirementAnalysisTypeormEntity extends BaseTypeormE
   )
   public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
 
-  protected override readonly _type = SpecialCategoryRetirementAnalysisTypeormEntity.name;
+  protected override readonly _type =
+    SpecialCategoryRetirementAnalysisTypeormEntity.name;
 }

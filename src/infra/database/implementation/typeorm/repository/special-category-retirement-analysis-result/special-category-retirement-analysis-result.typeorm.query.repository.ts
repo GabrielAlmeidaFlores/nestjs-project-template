@@ -14,7 +14,8 @@ export class SpecialCategoryRetirementAnalysisResultTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisResultTypeormEntity>
   implements SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisResultTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisResultTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(SpecialCategoryRetirementAnalysisResultTypeormEntity)
@@ -34,7 +35,9 @@ export class SpecialCategoryRetirementAnalysisResultTypeormQueryRepository
       },
       relations: { specialCategoryRetirementAnalysis: true },
     });
-    if (!data) return null;
+    if (!data) {
+      return null;
+    }
     return this.mapperGateway.map(
       data,
       SpecialCategoryRetirementAnalysisResultTypeormEntity,

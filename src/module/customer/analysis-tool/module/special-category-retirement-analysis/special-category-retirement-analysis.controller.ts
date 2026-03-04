@@ -13,35 +13,35 @@ import { SpecialCategoryRetirementAnalysisPeriodDocumentId } from '@module/custo
 import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-remuneration/value-object/special-category-retirement-analysis-remuneration-id/special-category-retirement-analysis-remuneration-id.value-object';
 import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/add-special-category-retirement-analysis-period-document.request.dto';
-import { CreateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis.request.dto';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis-work-period.request.dto';
+import { CreateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis.request.dto';
 import { GetSpecialCategoryRetirementAnalysisTimelineRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/get-special-category-retirement-analysis-timeline.request.dto';
-import { UpdateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis.request.dto';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis-remuneration.request.dto';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis-work-period.request.dto';
+import { UpdateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis.request.dto';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/add-special-category-retirement-analysis-period-document.response.dto';
-import { CreateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis.response.dto';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis-work-period.response.dto';
-import { DeleteSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis.response.dto';
+import { CreateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis.response.dto';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis-period-document.response.dto';
 import { DeleteSpecialCategoryRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis-remuneration.response.dto';
 import { DeleteSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis-work-period.response.dto';
+import { DeleteSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis.response.dto';
 import { GenerateSpecialCategoryRetirementAnalysisConversionResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-conversion.response.dto';
 import { GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-full-text.response.dto';
 import { GenerateSpecialCategoryRetirementAnalysisRulesResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-rules.response.dto';
-import { GetSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis.response.dto';
 import { GetSpecialCategoryRetirementAnalysisTimelineResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis-timeline.response.dto';
+import { GetSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/get-special-category-retirement-analysis.response.dto';
 import { ListSpecialCategoryRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/list-special-category-retirement-analysis-remuneration.response.dto';
-import { UpdateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/update-special-category-retirement-analysis.response.dto';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/update-special-category-retirement-analysis-remuneration.response.dto';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/update-special-category-retirement-analysis-work-period.response.dto';
+import { UpdateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/update-special-category-retirement-analysis.response.dto';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
-import { CreateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
-import { DeleteSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis.use-case';
+import { CreateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-period-document.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-remuneration.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-work-period.use-case';
+import { DeleteSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis.use-case';
 import { DownloadSpecialCategoryRetirementAnalysisFullDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/download-special-category-retirement-analysis-full-document.use-case';
 import { DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/download-special-category-retirement-analysis-simplified-document.use-case';
 import { GenerateSpecialCategoryRetirementAnalysisConversionUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-conversion.use-case';
@@ -50,9 +50,9 @@ import { GenerateSpecialCategoryRetirementAnalysisRulesUseCase } from '@module/c
 import { GetSpecialCategoryRetirementAnalysisByIdUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-by-id.use-case';
 import { GetSpecialCategoryRetirementAnalysisTimelineUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-timeline.use-case';
 import { ListSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/list-special-category-retirement-analysis-remuneration.use-case';
-import { UpdateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-work-period.use-case';
+import { UpdateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -242,10 +242,7 @@ export class SpecialCategoryRetirementAnalysisController {
     workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     @Body() dto: UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<UpdateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
-    return await this.updateWorkPeriodUseCase.execute(
-      workPeriodId,
-      dto,
-    );
+    return await this.updateWorkPeriodUseCase.execute(workPeriodId, dto);
   }
 
   @BuildEndpointSpecification({
@@ -270,9 +267,7 @@ export class SpecialCategoryRetirementAnalysisController {
     )
     workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
-    return await this.deleteWorkPeriodUseCase.execute(
-      workPeriodId,
-    );
+    return await this.deleteWorkPeriodUseCase.execute(workPeriodId);
   }
 
   @BuildEndpointSpecification({
@@ -294,9 +289,7 @@ export class SpecialCategoryRetirementAnalysisController {
   public async addPeriodDocument(
     @Body() dto: AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto,
   ): Promise<AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto> {
-    return await this.addPeriodDocumentUseCase.execute(
-      dto,
-    );
+    return await this.addPeriodDocumentUseCase.execute(dto);
   }
 
   @BuildEndpointSpecification({
@@ -401,9 +394,7 @@ export class SpecialCategoryRetirementAnalysisController {
   public async updateRemuneration(
     @Param(
       'remunerationId',
-      new ParseValueObjectPipe(
-        SpecialCategoryRetirementAnalysisRemunerationId,
-      ),
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
     )
     remunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
     @Body() dto: UpdateSpecialCategoryRetirementAnalysisRemunerationRequestDto,
@@ -429,9 +420,7 @@ export class SpecialCategoryRetirementAnalysisController {
   public async deleteRemuneration(
     @Param(
       'remunerationId',
-      new ParseValueObjectPipe(
-        SpecialCategoryRetirementAnalysisRemunerationId,
-      ),
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
     )
     remunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisRemunerationResponseDto> {

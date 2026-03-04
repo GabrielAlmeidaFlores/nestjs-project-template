@@ -26,19 +26,26 @@ export class SpecialCategoryRetirementAnalysisResultTypeormEntity extends BaseTy
     (entity) => entity.analysisResult,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_id' })
-  public specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisTypeormEntity | undefined;
+  public specialCategoryRetirementAnalysis?:
+    | SpecialCategoryRetirementAnalysisTypeormEntity
+    | undefined;
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
     (entity) => entity.analysisResult,
   )
-  public conversionItems?: SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity[] | undefined;
+  public conversionItems?:
+    | SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity[]
+    | undefined;
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
     (entity) => entity.analysisResult,
   )
-  public ruleItems?: SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity[] | undefined;
+  public ruleItems?:
+    | SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity[]
+    | undefined;
 
-  protected override readonly _type = SpecialCategoryRetirementAnalysisResultTypeormEntity.name;
+  protected override readonly _type =
+    SpecialCategoryRetirementAnalysisResultTypeormEntity.name;
 }

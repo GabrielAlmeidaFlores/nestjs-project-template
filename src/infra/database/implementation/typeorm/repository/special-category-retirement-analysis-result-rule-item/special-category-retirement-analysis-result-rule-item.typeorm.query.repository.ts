@@ -12,12 +12,16 @@ import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/anal
 @Injectable()
 export class SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity>
-  implements SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway
+  implements
+    SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {

@@ -68,7 +68,10 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity 
     (entity) => entity.conversionItems,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_result_id' })
-  public analysisResult?: SpecialCategoryRetirementAnalysisResultTypeormEntity | undefined;
+  public analysisResult?:
+    | SpecialCategoryRetirementAnalysisResultTypeormEntity
+    | undefined;
 
-  protected override readonly _type = SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity.name;
+  protected override readonly _type =
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity.name;
 }

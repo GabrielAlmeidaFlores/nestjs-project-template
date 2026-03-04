@@ -13,12 +13,16 @@ import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/custome
 @Injectable()
 export class SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialCategoryRetirementAnalysisRemunerationTypeormEntity>
-  implements SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway
+  implements
+    SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisRemunerationTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisRemunerationTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisRemunerationTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {

@@ -6,15 +6,16 @@ import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/exp
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
-import { SpecialCategoryRetirementAnalysisResultNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-result-not-found.error';
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
+import { SpecialCategoryRetirementAnalysisResultNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-result-not-found.error';
 import { GenerateSpecialCategoryRetirementAnalysisFullTextUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/generate-special-category-retirement-analysis-full-text.use-case';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
 export class DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase {
-  protected readonly _type = DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase.name;
+  protected readonly _type =
+    DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase.name;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -50,11 +51,14 @@ export class DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase 
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
-    if (
-      queryResult.analysisResult === null ||
-      queryResult.analysisResult.simplifiedAnalysisSummaryText === null
-    ) {
-      await this.generateFullTextUseCase.execute(sessionData, organizationSessionData, analysisId);
+    const summaryTextInitial =
+      queryResult.analysisResult?.simplifiedAnalysisSummaryText ?? null;
+    if (summaryTextInitial === null) {
+      await this.generateFullTextUseCase.execute(
+        sessionData,
+        organizationSessionData,
+        analysisId,
+      );
 
       const updatedQueryResult =
         await this.specialCategoryRetirementAnalysisQueryRepositoryGateway.findOneByIdAndOrganizationIdWithRelationsOrFail(
@@ -80,7 +84,7 @@ export class DownloadSpecialCategoryRetirementAnalysisSimplifiedDocumentUseCase 
     }
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
-      queryResult.analysisResult.simplifiedAnalysisSummaryText,
+      summaryTextInitial,
       format,
       'analise_simplificada_aposentadoria_categoria_especial',
     );

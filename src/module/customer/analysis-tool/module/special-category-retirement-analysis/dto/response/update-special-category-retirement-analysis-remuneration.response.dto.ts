@@ -5,7 +5,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class UpdateSpecialCategoryRetirementAnalysisRemunerationResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(SpecialCategoryRetirementAnalysisRemunerationId)
+  @ResponseDtoValueObjectProperty(
+    SpecialCategoryRetirementAnalysisRemunerationId,
+  )
   public specialCategoryRetirementAnalysisRemunerationId: SpecialCategoryRetirementAnalysisRemunerationId;
 
   protected override readonly _type =
