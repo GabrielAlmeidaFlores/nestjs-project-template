@@ -1,6 +1,6 @@
-import { UnexpectedError } from '@core/error/unexpected.error';
+import { ServiceUnavailableError } from '@core/error/service-unavailable.error';
 
-export class GenerativeIaFunctionHandlerNotFoundError extends UnexpectedError {
+export class GenerativeIaFunctionHandlerNotFoundError extends ServiceUnavailableError {
   protected override readonly _type =
     GenerativeIaFunctionHandlerNotFoundError.name;
 

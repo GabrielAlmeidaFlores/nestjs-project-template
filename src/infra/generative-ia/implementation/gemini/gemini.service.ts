@@ -331,9 +331,7 @@ Formatting Rules:
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
-          throw new GenerativeIaConnectionError({
-            originalError: error.message,
-          });
+          throw new GenerativeIaConnectionError();
         }
 
         if (
@@ -484,9 +482,7 @@ Formatting Rules:
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message.includes('fetch failed')) {
-            throw new GenerativeIaConnectionError({
-              originalError: error.message,
-            });
+            throw new GenerativeIaConnectionError();
           }
 
           if (
