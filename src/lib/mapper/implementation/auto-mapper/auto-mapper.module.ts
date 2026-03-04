@@ -261,6 +261,13 @@ import { GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile }
 import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/get-special-activity-analysis-result-query-result.auto-mapper.profile';
 import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis/special-category-retirement-analysis-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result/special-category-retirement-analysis-result-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -447,6 +454,13 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetSpecialActivityAnalysisInssBenefitQueryResultAutoMapperProfile,
     SpecialActivityLegalProceedingEntityAutoMapperProfile,
     GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile,
