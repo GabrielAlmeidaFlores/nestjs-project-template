@@ -79,7 +79,7 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS,
       );
 
     const queryResult =
@@ -92,7 +92,7 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
     const creditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS,
         organizationMember.id,
       );
 
