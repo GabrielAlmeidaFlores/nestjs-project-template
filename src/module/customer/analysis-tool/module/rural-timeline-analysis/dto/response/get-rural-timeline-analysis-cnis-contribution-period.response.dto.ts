@@ -37,12 +37,30 @@ export class GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto extends Ba
 }
 
 @ResponseDto()
+export class GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public competence: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public paymentDate?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public impact?: string;
+
+  protected override readonly _type =
+    GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto.name;
+}
+
+@ResponseDto()
 export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(RuralTimelineAnalysisCnisContributionPeriodId)
   public id: RuralTimelineAnalysisCnisContributionPeriodId;
 
   @ResponseDtoStringProperty({ required: false })
   public employmentRelationshipSource?: string;
+
+  @ResponseDtoNumberProperty({ required: false })
+  public sequencial?: number;
 
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
@@ -88,6 +106,13 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends B
     { isArray: true, required: false },
   )
   public pendingExitDates?: GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () =>
+      GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto,
+    { isArray: true, required: false },
+  )
+  public lateContributions?: GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto[];
 
   @ResponseDtoDateProperty()
   public createdAt: Date;
