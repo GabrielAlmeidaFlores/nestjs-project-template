@@ -7,6 +7,7 @@ import type { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/cust
 
 export interface RuralTimelineAnalysisCnisContributionPeriodEntityPropsInterface extends BaseEntityPropsInterface<RuralTimelineAnalysisCnisContributionPeriodId> {
   ruralTimelineId?: RuralTimelineAnalysisId | null;
+  sequencial?: number | null;
   employmentRelationshipSource?: string | null;
   startDate?: Date | null;
   endDate?: Date | null;

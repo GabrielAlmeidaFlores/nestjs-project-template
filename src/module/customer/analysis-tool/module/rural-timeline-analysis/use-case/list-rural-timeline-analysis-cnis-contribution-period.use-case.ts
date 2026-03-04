@@ -8,6 +8,7 @@ import { ListRuralTimelineAnalysisCnisContributionPeriodQueryParam } from '@modu
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import {
+  GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
   GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
@@ -79,6 +80,19 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
             }),
         );
 
+      const lateContributions =
+        item.ruralTimelineCnisContributionPeriodOverdueContribution.map(
+          (overdue) =>
+            GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto.build(
+              {
+                competence: overdue.overdueDate.toISOString(),
+                ...(overdue.paymentDate !== null && {
+                  paymentDate: overdue.paymentDate.toISOString(),
+                }),
+              },
+            ),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -94,6 +108,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
 
       return GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
         id: item.id,
+        ...(item.sequencial !== null && { sequencial: item.sequencial }),
         ...(item.employmentRelationshipSource !== null && {
           employmentRelationshipSource: item.employmentRelationshipSource,
         }),
@@ -117,6 +132,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
         updatedAt: item.updatedAt,
         ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
         ...(pendingExitDates.length > 0 && { pendingExitDates }),
+        ...(lateContributions.length > 0 && { lateContributions }),
       });
     });
 

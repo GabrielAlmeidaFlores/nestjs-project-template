@@ -194,6 +194,7 @@ export class CreateRetirementPlanningRgpsCnisUseCase {
                     : '';
 
             const period = new RetirementPlanningRgpsPeriodEntity({
+              sequencial: relation.socialSecurityAffiliationInfo.seq ?? null,
               periodName:
                 relation.socialSecurityAffiliationInfo.origemDoVinculo ?? null,
               periodStart:
