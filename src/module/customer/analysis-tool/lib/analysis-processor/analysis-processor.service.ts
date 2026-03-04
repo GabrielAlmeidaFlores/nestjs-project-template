@@ -324,6 +324,20 @@ Análise processada do CNIS:
                     description:
                       'Tempo total comum. Exemplo: 29 anos e 3 meses',
                   },
+                  totalContributionTime: {
+                    type: 'string',
+                    description:
+                      'Tempo total de contribuição. Exemplo: 29 anos e 3 meses',
+                  },
+                  publicServiceTime: {
+                    type: 'string',
+                    description:
+                      'Tempo no serviço público. Exemplo: 25 anos e 1 mês',
+                  },
+                  positionTenureTime: {
+                    type: 'string',
+                    description: 'Tempo no cargo. Exemplo: 15 anos e 2 meses',
+                  },
                 },
                 required: [
                   'timeline',
@@ -331,6 +345,9 @@ Análise processada do CNIS:
                   'finalAnalysis',
                   'teacherTime',
                   'commonTime',
+                  'totalContributionTime',
+                  'publicServiceTime',
+                  'positionTenureTime',
                 ],
               },
             })

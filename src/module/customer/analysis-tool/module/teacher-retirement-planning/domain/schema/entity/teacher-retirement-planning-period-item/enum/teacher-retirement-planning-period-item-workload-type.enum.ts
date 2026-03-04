@@ -1,4 +1,4 @@
 export enum TeacherRetirementPlanningPeriodItemWorkloadTypeEnum {
-  FULL_TIME = 'FULL_TIME',
-  PART_TIME = 'PART_TIME',
+  FULL_TIME = 'full_time',
+  PART_TIME = 'part_time',
 }

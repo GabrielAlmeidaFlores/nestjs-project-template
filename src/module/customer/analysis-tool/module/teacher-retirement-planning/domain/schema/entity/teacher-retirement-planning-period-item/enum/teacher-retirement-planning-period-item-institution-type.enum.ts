@@ -1,4 +1,4 @@
 export enum TeacherRetirementPlanningPeriodItemInstitutionTypeEnum {
-  PRIVATE = 'PRIVATE',
-  PUBLIC = 'PUBLIC',
+  PRIVATE = 'private',
+  PUBLIC = 'public',
 }

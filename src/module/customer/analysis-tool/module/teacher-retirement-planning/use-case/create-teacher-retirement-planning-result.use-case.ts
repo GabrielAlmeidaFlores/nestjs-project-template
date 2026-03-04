@@ -10,9 +10,15 @@ import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module
 import { TeacherRetirementPlanningEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/teacher-retirement-planning.entity';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import { TeacherRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
-import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
+import {
+  CreateTeacherRetirementPlanningResultResponseDto,
+  TeacherRetirementPlanningCompleteAnalysisResultResponseDto,
+  TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto,
+  TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto,
+} from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
 import { FailedToGenerateTeacherRetirementPlanningAnalysisError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/failed-to-generate-teacher-retirement-planning-analysis.error';
 import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/model/generic/teacher-retirement-planning-complete-analysis-data.model';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -103,9 +109,11 @@ export class CreateTeacherRetirementPlanningResultUseCase {
       throw new FailedToGenerateTeacherRetirementPlanningAnalysisError();
     }
 
-    let parsedAnalysis: object;
+    let parsedAnalysis: TeacherRetirementPlanningCompleteAnalysisDataInterface;
     try {
-      parsedAnalysis = JSON.parse(completeAnalysis) as object;
+      parsedAnalysis = JSON.parse(
+        completeAnalysis,
+      ) as TeacherRetirementPlanningCompleteAnalysisDataInterface;
     } catch {
       throw new FailedToGenerateTeacherRetirementPlanningAnalysisError();
     }
@@ -151,8 +159,46 @@ export class CreateTeacherRetirementPlanningResultUseCase {
 
     await transaction.commit();
 
+    const completeAnalysisDto =
+      TeacherRetirementPlanningCompleteAnalysisResultResponseDto.build({
+        timeline: parsedAnalysis.timeline.map((item) =>
+          TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto.build(
+            {
+              startDate: item.startDate,
+              endDate: item.endDate,
+              activityType: item.activityType,
+              type: item.type,
+              location: item.location,
+            },
+          ),
+        ),
+        retirementRules: parsedAnalysis.retirementRules.map((rule) =>
+          TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto.build(
+            {
+              ruleName: rule.ruleName,
+              ...(rule.result !== undefined && { result: rule.result }),
+              ...(rule.rightDate !== undefined && {
+                rightDate: rule.rightDate,
+              }),
+              ...(rule.estimatedRMI !== undefined && {
+                estimatedRMI: rule.estimatedRMI,
+              }),
+              bestRMI: rule.bestRMI,
+              highestLawsuitValue: rule.highestLawsuitValue,
+              detailedRuleAnalysis: rule.detailedRuleAnalysis,
+            },
+          ),
+        ),
+        finalAnalysis: parsedAnalysis.finalAnalysis,
+        teacherTime: parsedAnalysis.teacherTime,
+        commonTime: parsedAnalysis.commonTime,
+        totalContributionTime: parsedAnalysis.totalContributionTime,
+        publicServiceTime: parsedAnalysis.publicServiceTime,
+        positionTenureTime: parsedAnalysis.positionTenureTime,
+      });
+
     return CreateTeacherRetirementPlanningResultResponseDto.build({
-      teacherRetirementPlanningCompleteAnalysis: parsedAnalysis,
+      teacherRetirementPlanningCompleteAnalysis: completeAnalysisDto,
     });
   }
 }
