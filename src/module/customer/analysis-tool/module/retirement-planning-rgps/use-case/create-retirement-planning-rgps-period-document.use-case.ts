@@ -158,8 +158,8 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 **Tipo de contribuição:** ${periodData.typeOfContribution ?? 'não informado'}
 **Período registrado no CNIS:** ${periodData.periodStart?.toLocaleDateString('pt-BR') ?? 'não informado'} a ${periodData.periodEnd?.toLocaleDateString('pt-BR') ?? 'em aberto (sem data de saída)'}
 **Média contributiva:** ${periodData.contributionAverage ? `R$ ${periodData.contributionAverage.toNumber().toFixed(2)}` : 'não informado'}
-**Pendência:** ${periodData.isPendency ? 'Sim' : 'Não'}
-**Motivo da pendência:** ${periodData.reasonPendency ? (reasonLabels[periodData.reasonPendency] ?? periodData.reasonPendency) : 'não informado'}
+**Pendência:** ${periodData.isPendency === true ? 'Sim' : 'Não'}
+**Motivo da pendência:** ${periodData.reasonPendency !== null && periodData.reasonPendency !== undefined ? (reasonLabels[periodData.reasonPendency] ?? periodData.reasonPendency) : 'não informado'}
 
 ## Histórico de Competências
 
