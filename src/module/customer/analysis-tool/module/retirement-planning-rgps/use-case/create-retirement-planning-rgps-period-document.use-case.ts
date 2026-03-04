@@ -220,7 +220,16 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 
 | Competência | Remuneração | Contribuição | Indicadores | Data Pagamento | Abaixo do Mínimo |
 |-------------|-------------|--------------|-------------|----------------|------------------|
-${earningsRows || '| Sem registros | - | - | - | - | - |'}`;
+${earningsRows || '| Sem registros | - | - | - | - | - |'}
+
+## Instrução para o campo "observacaoTecnica"
+
+Com base nos dados e documentos acima, gere uma observação técnica previdenciária detalhada.
+
+**IMPORTANTE — regras obrigatórias para o campo "observacaoTecnica":**
+- Use EXCLUSIVAMENTE Markdown puro: cabeçalhos com #/##/###, listas com -, tabelas com |, negrito com **
+- NÃO use tags HTML (<h1>, <strong>, <br>, etc.) em nenhuma hipótese
+- Estruture com as seções: 1. Identificação do vínculo e contextualização; 2. Fundamentação técnica e legal (Lei 8.213/91, Decreto 3.048/99, IN INSS 128/2022); 3. Análise dos documentos apresentados e determinação da data final; 4. Conclusão`;
 
     const result =
       (await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
@@ -241,7 +250,7 @@ ${earningsRows || '| Sem registros | - | - | - | - | - |'}`;
                 observacaoTecnica: {
                   type: 'string',
                   description:
-                    'Observações técnicas sobre a análise realizada com todos os detalhes.',
+                    'Observação técnica previdenciária detalhada em formato Markdown puro (use #/##/###, -, |, **). NÃO use HTML.',
                 },
                 dataFinalDoVinculo: {
                   type: 'string',
