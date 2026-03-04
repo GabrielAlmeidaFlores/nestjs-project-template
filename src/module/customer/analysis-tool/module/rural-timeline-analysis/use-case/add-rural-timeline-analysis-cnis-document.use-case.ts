@@ -19,8 +19,6 @@ import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositor
 import { RuralTimelineAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-document/command/rural-timeline-analysis-document.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/command/rural-timeline-analysis-period-pending-exit-date.command.repository.gateway';
 import { RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/command/rural-timeline-cnis-contribution-period-overdue-contribution.command.repository.gateway';
-import { RuralTimelineCnisContributionPeriodOverdueContributionEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.entity';
-import { RuralTimelineCnisContributionPeriodOverdueContributionId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/value-object/rural-timeline-cnis-contribution-period-overdue-contribution-id/rural-timeline-cnis-contribution-period-overdue-contribution-id.value-object';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
@@ -30,6 +28,8 @@ import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis
 import { RuralTimelineAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/rural-timeline-analysis-document.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/value-object/rural-timeline-analysis-period-pending-exit-date-id/rural-timeline-analysis-period-pending-exit-date-id.value-object';
+import { RuralTimelineCnisContributionPeriodOverdueContributionEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.entity';
+import { RuralTimelineCnisContributionPeriodOverdueContributionId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/value-object/rural-timeline-cnis-contribution-period-overdue-contribution-id/rural-timeline-cnis-contribution-period-overdue-contribution-id.value-object';
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -61,7 +61,9 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     private readonly ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
     @Inject(RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway: RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway,
-    @Inject(RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway)
+    @Inject(
+      RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
+    )
     private readonly ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway: RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -167,7 +169,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
 
     const batchSize = 5;
     const contributionPeriods = cnisAnalysis.tempoDeContribuicao.filter(
-      (period) => period.dados !== undefined && period.dados?.data?.dataInicio != null,
+      (period) => period.dados?.data?.dataInicio != null,
     );
 
     for (let i = 0; i < contributionPeriods.length; i += batchSize) {
@@ -212,7 +214,12 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
         const delayPayment =
           matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory.some(
             (earning) => {
-              if (earning.indicadores === undefined || earning.indicadores === '') return false;
+              if (
+                earning.indicadores === undefined ||
+                earning.indicadores === ''
+              ) {
+                return false;
+              }
               return indicadorPendencia.includes(earning.indicadores);
             },
           ) ?? false;
@@ -227,9 +234,10 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             endDate: contributionPeriod.dados?.data?.dataFim ?? null,
             category: contributionPeriod.tipoDoVinculo ?? null,
             qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
-            status: willHavePendingExitDates || delayPayment
-              ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
-              : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
+            status:
+              willHavePendingExitDates || delayPayment
+                ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
+                : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
             averageContributionAmount,
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
@@ -344,12 +352,15 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             ) {
               batchOperations.push(
                 this.ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway.createRuralTimelineCnisContributionPeriodOverdueContribution(
-                  new RuralTimelineCnisContributionPeriodOverdueContributionEntity({
-                    id: new RuralTimelineCnisContributionPeriodOverdueContributionId(),
-                    overdueDate: earnings.competencia,
-                    paymentDate: null,
-                    ruralTimelineCnisContributionPeriodId: contributionPeriodEntity.id,
-                  }),
+                  new RuralTimelineCnisContributionPeriodOverdueContributionEntity(
+                    {
+                      id: new RuralTimelineCnisContributionPeriodOverdueContributionId(),
+                      overdueDate: earnings.competencia,
+                      paymentDate: null,
+                      ruralTimelineCnisContributionPeriodId:
+                        contributionPeriodEntity.id,
+                    },
+                  ),
                 ),
               );
             }

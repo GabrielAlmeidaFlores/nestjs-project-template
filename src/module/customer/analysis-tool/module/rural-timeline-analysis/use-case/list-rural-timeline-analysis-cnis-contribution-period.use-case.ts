@@ -81,13 +81,16 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
         );
 
       const lateContributions =
-        item.ruralTimelineCnisContributionPeriodOverdueContribution.map((overdue) =>
-          GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto.build({
-            competence: overdue.overdueDate.toISOString(),
-            ...(overdue.paymentDate !== null && {
-              paymentDate: overdue.paymentDate.toISOString(),
-            }),
-          }),
+        item.ruralTimelineCnisContributionPeriodOverdueContribution.map(
+          (overdue) =>
+            GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto.build(
+              {
+                competence: overdue.overdueDate.toISOString(),
+                ...(overdue.paymentDate !== null && {
+                  paymentDate: overdue.paymentDate.toISOString(),
+                }),
+              },
+            ),
         );
 
       let cnisDocumentUrl: string | undefined;
