@@ -8,13 +8,16 @@ import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/respo
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
 import { RetirementPlanningRgpsEarningsHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-earnings-history/query/retirement-planning-rgps-earnings-history.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-period/query/retirement-planning-rgps-period.query.repository.gateway';
 import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsPeriodDocumentEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.entity';
 import { CreateRetirementPlanningRgpsPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/retirement-planning-rgps/dto/request/create-retirement-planning-rgps-period-document.request.dto';
 import { CreateRetirementPlanningRgpsPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/retirement-planning-rgps/dto/response/create-retirement-planning-rgps-period-document.response.dto';
+import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-tool/module/retirement-planning-rgps/error/retirement-planning-rgps-not-found.error';
 import { RetirementPlanningRgpsPeriodNotFoundError } from '@module/customer/analysis-tool/module/retirement-planning-rgps/error/retirement-planning-rgps-period-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
@@ -47,6 +50,8 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
     private readonly retirementPlanningRgpsPeriodQueryRepositoryGateway: RetirementPlanningRgpsPeriodQueryRepositoryGateway,
     @Inject(RetirementPlanningRgpsEarningsHistoryQueryRepositoryGateway)
     private readonly retirementPlanningRgpsEarningsHistoryQueryRepositoryGateway: RetirementPlanningRgpsEarningsHistoryQueryRepositoryGateway,
+    @Inject(RetirementPlanningRgpsQueryRepositoryGateway)
+    private readonly retirementPlanningRgpsQueryRepositoryGateway: RetirementPlanningRgpsQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -77,6 +82,15 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
         dto.json.retirementPlanningRgpsPeriodId,
       ),
     ]);
+
+    const rgpsId = new RetirementPlanningRgpsId(
+      periodData.retirementPlanningRgps?.id.toString() ?? '',
+    );
+    const rgpsData =
+      await this.retirementPlanningRgpsQueryRepositoryGateway.findOneByRetirementPlanningRgpsIdOrFailWithRelations(
+        rgpsId,
+        RetirementPlanningRgpsNotFoundError,
+      );
 
     const documents = await Promise.all(
       dto.documents.map(async (d) => {
@@ -129,6 +143,47 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
       files.push(Buffer.from(doc.file.base64.toString(), 'base64'));
     });
 
+    if (rgpsData.cnisDocument !== null) {
+      const cnisBuffer = await this.fileProcessorGateway.getFileBuffer(
+        rgpsData.cnisDocument,
+      );
+      files.push(cnisBuffer);
+    }
+
+    const clientResult = rgpsData.retirementPlanningRgpsResult;
+    const clientSection = clientResult
+      ? `## Dados do Cliente
+
+**Nome:** ${clientResult.clientName ?? 'não informado'}
+**CPF:** ${clientResult.clientFederalDocument?.toString() ?? 'não informado'}
+**Data de Nascimento:** ${clientResult.clientBirthDate?.toLocaleDateString('pt-BR') ?? 'não informado'}
+**Data da Última Filiação:** ${clientResult.clientLastAffiliationDate?.toLocaleDateString('pt-BR') ?? 'não informado'}
+`
+      : '';
+
+    const benefitsSection =
+      rgpsData.retirementPlanningRgpsBenefit !== null &&
+      rgpsData.retirementPlanningRgpsBenefit.length > 0
+        ? `## Benefícios INSS Registrados\n\n` +
+          rgpsData.retirementPlanningRgpsBenefit
+            .map((b) => `- Benefício nº ${b.inssBenefitNumber}`)
+            .join('\n') +
+          '\n'
+        : '';
+
+    const allPeriodsSection =
+      rgpsData.retirementPlanningRgpsPeriod !== null &&
+      rgpsData.retirementPlanningRgpsPeriod.length > 0
+        ? `## Todos os Períodos CNIS da Análise\n\n` +
+          rgpsData.retirementPlanningRgpsPeriod
+            .map(
+              (p) =>
+                `- Seq ${p.sequencial ?? '-'} | ${p.periodName ?? 'sem nome'} | ${p.periodStart?.toLocaleDateString('pt-BR') ?? '?'} a ${p.periodEnd?.toLocaleDateString('pt-BR') ?? 'em aberto'} | Pendente: ${p.isPendency === true ? 'Sim' : 'Não'}`,
+            )
+            .join('\n') +
+          '\n'
+        : '';
+
     const reasonLabels: Record<string, string> = {
       LEAVE_DATE: 'Data de saída ausente',
       COMPETENCE_BELOW_MINIMUM: 'Competências abaixo do mínimo',
@@ -150,7 +205,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
       )
       .join('\n');
 
-    const periodContext = `## Dados do Período de Contribuição RGPS
+    const periodContext = `${clientSection}${benefitsSection}${allPeriodsSection}## Dados do Período de Contribuição RGPS (Período Analisado)
 
 **Sequencial CNIS:** ${periodData.sequencial ?? 'não informado'}
 **Empregador / Nome do vínculo:** ${periodData.periodName ?? 'não informado'}
@@ -159,7 +214,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 **Período registrado no CNIS:** ${periodData.periodStart?.toLocaleDateString('pt-BR') ?? 'não informado'} a ${periodData.periodEnd?.toLocaleDateString('pt-BR') ?? 'em aberto (sem data de saída)'}
 **Média contributiva:** ${periodData.contributionAverage ? `R$ ${periodData.contributionAverage.toNumber().toFixed(2)}` : 'não informado'}
 **Pendência:** ${periodData.isPendency === true ? 'Sim' : 'Não'}
-**Motivo da pendência:** ${periodData.reasonPendency !== null && periodData.reasonPendency !== undefined ? (reasonLabels[periodData.reasonPendency] ?? periodData.reasonPendency) : 'não informado'}
+**Motivo da pendência:** ${periodData.reasonPendency !== null ? (reasonLabels[periodData.reasonPendency] ?? periodData.reasonPendency) : 'não informado'}
 
 ## Histórico de Competências
 
@@ -168,7 +223,7 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 ${earningsRows || '| Sem registros | - | - | - | - | - |'}`;
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           prompt: periodContext,
