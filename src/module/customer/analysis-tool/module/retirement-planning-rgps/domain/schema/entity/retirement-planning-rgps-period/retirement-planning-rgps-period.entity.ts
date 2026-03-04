@@ -7,6 +7,9 @@ import { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/m
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPlanningRgpsPeriodId> {
+  @Description('Número sequencial do vínculo no CNIS.')
+  public readonly sequencial: number | null;
+
   @Description('Nome do período de contribuição RGPS.')
   public readonly periodName: string | null;
 
@@ -47,6 +50,7 @@ export class RetirementPlanningRgpsPeriodEntity extends BaseEntity<RetirementPla
 
   public constructor(props: RetirementPlanningRgpsPeriodEntityPropsInterface) {
     super(RetirementPlanningRgpsPeriodId, props);
+    this.sequencial = props.sequencial ?? null;
     this.periodName = props.periodName ?? null;
     this.periodStart = props.periodStart ?? null;
     this.periodEnd = props.periodEnd ?? null;

@@ -43,6 +43,10 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapper
         mapFrom((source) => source.employmentRelationshipSource ?? null),
       ),
       forMember(
+        (destination) => destination.sequencial,
+        mapFrom((source) => source.sequencial ?? null),
+      ),
+      forMember(
         (destination) => destination.startDate,
         mapFrom((source) => source.startDate ?? null),
       ),
