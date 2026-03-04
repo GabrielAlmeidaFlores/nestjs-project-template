@@ -9,8 +9,8 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RetirementPlanningRgpsEarningsHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-earnings-history/query/retirement-planning-rgps-earnings-history.query.repository.gateway';
-import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
 import { RetirementPlanningRgpsPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-period/query/retirement-planning-rgps-period.query.repository.gateway';
+import { RetirementPlanningRgpsPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-period-document/command/retirement-planning-rgps-period-document.repository.gateway';
 import { RetirementPlanningRgpsPeriodEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/retirement-planning-rgps-period.entity';
 import { RetirementPlanningRgpsPeriodDocumentEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period-document/retirement-planning-rgps-period-document.entity';
 import { CreateRetirementPlanningRgpsPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/retirement-planning-rgps/dto/request/create-retirement-planning-rgps-period-document.request.dto';
@@ -137,12 +137,16 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
 
     const sortedEarnings = earnings
       .filter((e) => e.competence !== null)
-      .sort((a, b) => (a.competence!.getTime()) - (b.competence!.getTime()));
+      .sort(
+        (a, b) =>
+          (a.competence ?? new Date(0)).getTime() -
+          (b.competence ?? new Date(0)).getTime(),
+      );
 
     const earningsRows = sortedEarnings
       .map(
         (e) =>
-          `| ${e.competence!.toLocaleDateString('pt-BR')} | ${e.remuneration ?? '-'} | ${e.contribution ?? '-'} | ${e.indicators ?? '-'} | ${e.paymentDate?.toLocaleDateString('pt-BR') ?? '-'} | ${e.competenceBelowTheMinimum ? 'Sim' : 'Não'} |`,
+          `| ${(e.competence ?? new Date(0)).toLocaleDateString('pt-BR')} | ${e.remuneration ?? '-'} | ${e.contribution ?? '-'} | ${e.indicators ?? '-'} | ${e.paymentDate?.toLocaleDateString('pt-BR') ?? '-'} | ${e.competenceBelowTheMinimum === true ? 'Sim' : 'Não'} |`,
       )
       .join('\n');
 

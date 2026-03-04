@@ -108,7 +108,8 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends B
   public pendingExitDates?: GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto[];
 
   @ResponseDtoObjectProperty(
-    () => GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto,
+    () =>
+      GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto,
     { isArray: true, required: false },
   )
   public lateContributions?: GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto[];
