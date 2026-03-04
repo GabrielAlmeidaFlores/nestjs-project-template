@@ -8,6 +8,13 @@ import { ReasonPendencyEnum } from '@module/customer/analysis-tool/module/retire
 @Entity({ name: 'retirement_planning_rgps_period' })
 export class RetirementPlanningRgpsPeriodTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'sequencial',
+    type: 'int',
+    nullable: true,
+  })
+  public sequencial: number | null;
+
+  @Column({
     name: 'period_name',
     type: 'varchar',
     length: 255,
