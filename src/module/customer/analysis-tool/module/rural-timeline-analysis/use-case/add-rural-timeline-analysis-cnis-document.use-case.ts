@@ -18,6 +18,9 @@ import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } fro
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/command/rural-timeline-analysis-cnis-contribution-period-under-minimum.command.repository.gateway';
 import { RuralTimelineAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-document/command/rural-timeline-analysis-document.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/command/rural-timeline-analysis-period-pending-exit-date.command.repository.gateway';
+import { RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/command/rural-timeline-cnis-contribution-period-overdue-contribution.command.repository.gateway';
+import { RuralTimelineCnisContributionPeriodOverdueContributionEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.entity';
+import { RuralTimelineCnisContributionPeriodOverdueContributionId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/value-object/rural-timeline-cnis-contribution-period-overdue-contribution-id/rural-timeline-cnis-contribution-period-overdue-contribution-id.value-object';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
@@ -58,6 +61,8 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     private readonly ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
     @Inject(RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway: RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway,
+    @Inject(RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway)
+    private readonly ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway: RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -203,6 +208,15 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
           );
         }
 
+        const indicadorPendencia = ['PEXT'];
+        const delayPayment =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory.some(
+            (earning) => {
+              if (earning.indicadores === undefined || earning.indicadores === '') return false;
+              return indicadorPendencia.includes(earning.indicadores);
+            },
+          ) ?? false;
+
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
@@ -213,7 +227,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             endDate: contributionPeriod.dados?.data?.dataFim ?? null,
             category: contributionPeriod.tipoDoVinculo ?? null,
             qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
-            status: willHavePendingExitDates
+            status: willHavePendingExitDates || delayPayment
               ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
               : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
             averageContributionAmount,
@@ -316,6 +330,29 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
                 pendingExitDateEntity,
               ),
             );
+          }
+        }
+        if (
+          delayPayment &&
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
+        ) {
+          for (const earnings of matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory) {
+            if (
+              earnings.indicadores !== undefined &&
+              indicadorPendencia.includes(earnings.indicadores) &&
+              earnings.competencia !== undefined
+            ) {
+              batchOperations.push(
+                this.ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway.createRuralTimelineCnisContributionPeriodOverdueContribution(
+                  new RuralTimelineCnisContributionPeriodOverdueContributionEntity({
+                    id: new RuralTimelineCnisContributionPeriodOverdueContributionId(),
+                    overdueDate: earnings.competencia,
+                    paymentDate: null,
+                    ruralTimelineCnisContributionPeriodId: contributionPeriodEntity.id,
+                  }),
+                ),
+              );
+            }
           }
         }
       }
