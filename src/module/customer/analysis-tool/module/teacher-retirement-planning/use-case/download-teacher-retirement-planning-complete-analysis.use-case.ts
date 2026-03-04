@@ -1,19 +1,14 @@
 import { Inject, StreamableFile } from '@nestjs/common';
 
-import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
-import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
-import { TeacherRetirementPlanningResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning-result/command/teacher-retirement-planning-result.command.repository.gateway';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
-import { TeacherRetirementPlanningResultEntity } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-result/teacher-retirement-planning-result.entity';
 import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
 import { TeacherRetirementPlanningResultNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-result-not-found.error';
-import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
-import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { TeacherRetirementPlanningCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/model/generic/teacher-retirement-planning-complete-analysis-data.model';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -26,16 +21,8 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
     @Inject(TeacherRetirementPlanningQueryRepositoryGateway)
     private readonly teacherRetirementPlanningQueryRepositoryGateway: TeacherRetirementPlanningQueryRepositoryGateway,
-    @Inject(TeacherRetirementPlanningResultCommandRepositoryGateway)
-    private readonly teacherRetirementPlanningResultCommandRepositoryGateway: TeacherRetirementPlanningResultCommandRepositoryGateway,
-    @Inject(BaseTransactionRepositoryGateway)
-    private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
-    @Inject(AnalysisProcessorGateway)
-    private readonly analysisProcessorGateway: AnalysisProcessorGateway,
-    @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
-    private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
   ) {}
 
   public async execute(
@@ -53,11 +40,6 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
     if (organizationMember === null) {
       throw new OrganizationMemberNotFoundError();
     }
-
-    const promptResponse =
-      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.TEACHER_RETIREMENT_PLANNING_COMPLETE_ANALYSIS,
-      );
 
     const planning =
       await this.teacherRetirementPlanningQueryRepositoryGateway.findOneTeacherRetirementPlanningByIdWithRelations(
@@ -79,48 +61,22 @@ export class DownloadTeacherRetirementPlanningCompleteAnalysisUseCase {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 
-    let responseAi =
-      planning.result.teacherRetirementPlanningCompleteAnalysisDownload;
-
-    if (responseAi === null || responseAi === '') {
-      const completeAnalysisDownload =
-        await this.analysisProcessorGateway.getTeacherRetirementPlanningCompleteAnalysis(
-          promptResponse.prompt,
-          [
-            Buffer.from(
-              planning.result.teacherRetirementPlanningCompleteAnalysis,
-              'utf-8',
-            ),
-          ],
-          false,
-        );
-
-      const updatedResult = new TeacherRetirementPlanningResultEntity({
-        ...planning.result,
-        teacherRetirementPlanningCompleteAnalysisDownload:
-          completeAnalysisDownload,
-      });
-
-      const resultTransaction =
-        this.teacherRetirementPlanningResultCommandRepositoryGateway.updateTeacherRetirementPlanningResult(
-          updatedResult,
-        );
-
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        resultTransaction,
-      ]);
-
-      await transaction.commit();
-
-      responseAi = completeAnalysisDownload;
-    }
-
-    if (responseAi === null || responseAi === '') {
+    let parsedAnalysis: TeacherRetirementPlanningCompleteAnalysisDataInterface;
+    try {
+      parsedAnalysis = JSON.parse(
+        planning.result.teacherRetirementPlanningCompleteAnalysis,
+      ) as TeacherRetirementPlanningCompleteAnalysisDataInterface;
+    } catch {
       throw new TeacherRetirementPlanningResultNotFoundError();
     }
 
-    const htmlContent =
-      await this.exportDocumentGateway.convertMarkdownToHtml(responseAi);
+    if (!parsedAnalysis.finalAnalysis) {
+      throw new TeacherRetirementPlanningResultNotFoundError();
+    }
+
+    const htmlContent = await this.exportDocumentGateway.convertMarkdownToHtml(
+      parsedAnalysis.finalAnalysis,
+    );
 
     return this.exportDocumentGateway.downloadFileAsStreamable(
       htmlContent,

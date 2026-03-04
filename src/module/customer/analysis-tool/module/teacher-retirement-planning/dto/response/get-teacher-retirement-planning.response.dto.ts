@@ -6,6 +6,7 @@ import { TeacherRetirementPlanningPeriodServiceTypeEnum } from '@module/customer
 import { TeacherRetirementPlanningPeriodItemEducationLevelEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-education-level.enum';
 import { TeacherRetirementPlanningPeriodItemInstitutionTypeEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-institution-type.enum';
 import { TeacherRetirementPlanningPeriodItemRolePerformedEnum } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning-period-item/enum/teacher-retirement-planning-period-item-role-performed.enum';
+import { TeacherRetirementPlanningCompleteAnalysisResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
@@ -98,11 +99,14 @@ export class GetTeacherRetirementPlanningPeriodResponseDto extends BaseBuildable
 
 @ResponseDto()
 export class GetTeacherRetirementPlanningResultResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoObjectProperty(() => Object, { required: false })
-  public teacherRetirementPlanningCompleteAnalysis?: object;
+  @ResponseDtoObjectProperty(
+    () => TeacherRetirementPlanningCompleteAnalysisResultResponseDto,
+    { required: false },
+  )
+  public teacherRetirementPlanningCompleteAnalysis?: TeacherRetirementPlanningCompleteAnalysisResultResponseDto;
 
-  @ResponseDtoObjectProperty(() => Object, { required: false })
-  public teacherRetirementPlanningSimplifiedAnalysis?: object;
+  @ResponseDtoStringProperty({ required: false })
+  public teacherRetirementPlanningSimplifiedAnalysis?: string;
 
   protected override readonly _type =
     GetTeacherRetirementPlanningResultResponseDto.name;

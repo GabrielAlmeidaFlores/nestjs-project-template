@@ -38,7 +38,9 @@ export class TeacherRetirementPlanningTypeormCommandRepository
       publicServiceStartDate: props.publicServiceStartDate,
       careerStartDate: props.careerStartDate,
       ...(props.teacherRetirementPlanningResult !== null && {
-        result: { id: props.teacherRetirementPlanningResult.id.toString() },
+        teacherRetirementPlanningResult: {
+          id: props.teacherRetirementPlanningResult.id.toString(),
+        },
       }),
     });
   }
@@ -57,7 +59,9 @@ export class TeacherRetirementPlanningTypeormCommandRepository
       publicServiceStartDate: props.publicServiceStartDate,
       careerStartDate: props.careerStartDate,
       ...(props.teacherRetirementPlanningResult !== null && {
-        result: { id: props.teacherRetirementPlanningResult.id.toString() },
+        teacherRetirementPlanningResult: {
+          id: props.teacherRetirementPlanningResult.id.toString(),
+        },
       }),
     });
   }

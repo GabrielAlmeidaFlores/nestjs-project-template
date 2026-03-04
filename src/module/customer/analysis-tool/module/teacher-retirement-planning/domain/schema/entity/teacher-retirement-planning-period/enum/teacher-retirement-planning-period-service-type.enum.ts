@@ -1,7 +1,7 @@
 export enum TeacherRetirementPlanningPeriodServiceTypeEnum {
-  COMMON = 'COMMON',
-  SPECIAL = 'SPECIAL',
-  DISABILITY = 'DISABILITY',
-  TEACHER = 'TEACHER',
-  RGPS_CTC = 'RGPS_CTC',
+  COMMON = 'common',
+  SPECIAL = 'special',
+  DISABILITY = 'disability',
+  TEACHER = 'teacher',
+  RGPS_CTC = 'rgps_ctc',
 }

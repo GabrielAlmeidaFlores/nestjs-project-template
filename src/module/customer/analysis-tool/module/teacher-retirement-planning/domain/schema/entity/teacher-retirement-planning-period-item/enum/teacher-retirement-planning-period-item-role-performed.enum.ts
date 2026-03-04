@@ -1,5 +1,5 @@
 export enum TeacherRetirementPlanningPeriodItemRolePerformedEnum {
-  CLASSROOM = 'CLASSROOM',
-  PRINCIPAL = 'PRINCIPAL',
-  COORDINATOR = 'COORDINATOR',
+  CLASSROOM = 'classroom',
+  PRINCIPAL = 'principal',
+  COORDINATOR = 'coordinator',
 }

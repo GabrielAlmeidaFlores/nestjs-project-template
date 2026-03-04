@@ -7,6 +7,11 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { TeacherRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/repository/teacher-retirement-planning/query/teacher-retirement-planning.query.repository.gateway';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
 import {
+  TeacherRetirementPlanningCompleteAnalysisResultResponseDto,
+  TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto,
+  TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto,
+} from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
+import {
   GetTeacherRetirementPlanningDocumentResponseDto,
   GetTeacherRetirementPlanningPeriodItemDocumentResponseDto,
   GetTeacherRetirementPlanningPeriodItemResponseDto,
@@ -16,6 +21,7 @@ import {
   GetTeacherRetirementPlanningResultResponseDto,
 } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/get-teacher-retirement-planning.response.dto';
 import { TeacherRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/teacher-retirement-planning/error/teacher-retirement-planning-not-found.error';
+import { TeacherRetirementPlanningCompleteAnalysisDataInterface } from '@module/customer/analysis-tool/module/teacher-retirement-planning/model/generic/teacher-retirement-planning-complete-analysis-data.model';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -126,20 +132,62 @@ export class GetTeacherRetirementPlanningUseCase {
       ? GetTeacherRetirementPlanningResultResponseDto.build({
           ...(planning.result.teacherRetirementPlanningCompleteAnalysis !==
             null && {
-            teacherRetirementPlanningCompleteAnalysis: JSON.parse(
-              planning.result.teacherRetirementPlanningCompleteAnalysis,
-            ) as object,
+            teacherRetirementPlanningCompleteAnalysis:
+              ((): TeacherRetirementPlanningCompleteAnalysisResultResponseDto => {
+                const analysisData = JSON.parse(
+                  planning.result.teacherRetirementPlanningCompleteAnalysis,
+                ) as TeacherRetirementPlanningCompleteAnalysisDataInterface;
+                return TeacherRetirementPlanningCompleteAnalysisResultResponseDto.build(
+                  {
+                    timeline: analysisData.timeline.map((item) =>
+                      TeacherRetirementPlanningCompleteAnalysisTimelineItemResponseDto.build(
+                        {
+                          startDate: item.startDate,
+                          endDate: item.endDate,
+                          activityType: item.activityType,
+                          type: item.type,
+                          location: item.location,
+                        },
+                      ),
+                    ),
+                    retirementRules: analysisData.retirementRules.map((rule) =>
+                      TeacherRetirementPlanningCompleteAnalysisRetirementRuleResponseDto.build(
+                        {
+                          ruleName: rule.ruleName,
+                          ...(rule.result !== undefined && {
+                            result: rule.result,
+                          }),
+                          ...(rule.rightDate !== undefined && {
+                            rightDate: rule.rightDate,
+                          }),
+                          ...(rule.estimatedRMI !== undefined && {
+                            estimatedRMI: rule.estimatedRMI,
+                          }),
+                          bestRMI: rule.bestRMI,
+                          highestLawsuitValue: rule.highestLawsuitValue,
+                          detailedRuleAnalysis: rule.detailedRuleAnalysis,
+                        },
+                      ),
+                    ),
+                    finalAnalysis: analysisData.finalAnalysis,
+                    teacherTime: analysisData.teacherTime,
+                    commonTime: analysisData.commonTime,
+                    totalContributionTime: analysisData.totalContributionTime,
+                    publicServiceTime: analysisData.publicServiceTime,
+                    positionTenureTime: analysisData.positionTenureTime,
+                  },
+                );
+              })(),
           }),
           ...(planning.result.teacherRetirementPlanningSimplifiedAnalysis !==
             null && {
-            teacherRetirementPlanningSimplifiedAnalysis: JSON.parse(
+            teacherRetirementPlanningSimplifiedAnalysis:
               planning.result.teacherRetirementPlanningSimplifiedAnalysis,
-            ) as object,
           }),
         })
       : undefined;
 
-    return GetTeacherRetirementPlanningResponseDto.build({
+    const response = GetTeacherRetirementPlanningResponseDto.build({
       teacherRetirementPlanningId: planning.id,
       federativeEntity: planning.federativeEntity,
       ...(planning.state !== null && { state: planning.state.toString() }),
@@ -172,5 +220,7 @@ export class GetTeacherRetirementPlanningUseCase {
         teacherRetirementPlanningResult,
       }),
     });
+
+    return response;
   }
 }
