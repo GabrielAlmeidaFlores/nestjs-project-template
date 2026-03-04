@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
+import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
+import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
+import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
+import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { SpecialCategoryRetirementAnalysisController } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.controller';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
@@ -20,11 +24,23 @@ import { ListSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@modul
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-work-period.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis.use-case';
+import { OrganizationCreditModule } from '@module/customer/organization-credit/organization-credit.module';
+import { PaymentPlanModule } from '@module/customer/payment-plan/payment-plan.module';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 import { OrganizationSessionModule } from '@shared/api/gateway/guard/organization-session/organization-session.module';
 
 @Module({
-  imports: [DatabaseModule, AuthModule, OrganizationSessionModule],
+  imports: [
+    AnalysisProcessorModule,
+    AuthModule,
+    DatabaseModule,
+    ExportDocumentModule,
+    FileProcessorModule,
+    GenerativeIaModule,
+    OrganizationCreditModule,
+    OrganizationSessionModule,
+    PaymentPlanModule,
+  ],
   controllers: [SpecialCategoryRetirementAnalysisController],
   providers: [
     CreateSpecialCategoryRetirementAnalysisUseCase,
