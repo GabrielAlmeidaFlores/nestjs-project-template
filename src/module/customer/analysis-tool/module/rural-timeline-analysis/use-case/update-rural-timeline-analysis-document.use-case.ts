@@ -230,7 +230,7 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
-            sequencial: contributionPeriod.seq ?? null,
+            sequencial: contributionPeriod.seq,
             employmentRelationshipSource:
               contributionPeriod.origemDoVinculo ?? null,
             startDate: contributionPeriod.dados?.data?.dataInicio ?? null,

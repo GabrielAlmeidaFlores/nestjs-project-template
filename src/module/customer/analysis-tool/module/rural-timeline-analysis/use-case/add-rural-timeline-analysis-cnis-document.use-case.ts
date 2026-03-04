@@ -227,13 +227,12 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
-            sequencial: contributionPeriod.seq ?? null,
+            sequencial: contributionPeriod.seq,
             employmentRelationshipSource:
               contributionPeriod.origemDoVinculo ?? null,
             startDate: contributionPeriod.dados?.data?.dataInicio ?? null,
             endDate: contributionPeriod.dados?.data?.dataFim ?? null,
             category: contributionPeriod.tipoDoVinculo ?? null,
-            qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
             status:
               willHavePendingExitDates || delayPayment
                 ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING

@@ -19,6 +19,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
   )
   public readonly employmentRelationshipSource: string | null;
 
+  @Description('Número sequencial do vínculo conforme apresentado no CNIS.')
   public readonly sequencial: number | null;
 
   @Description(
