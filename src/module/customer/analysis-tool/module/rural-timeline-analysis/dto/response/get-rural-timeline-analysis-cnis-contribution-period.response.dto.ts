@@ -44,6 +44,9 @@ export class GetRuralTimelineAnalysisCnisContributionPeriodResponseDto extends B
   @ResponseDtoStringProperty({ required: false })
   public employmentRelationshipSource?: string;
 
+  @ResponseDtoNumberProperty({ required: false })
+  public sequencial?: number;
+
   @ResponseDtoDateProperty({ required: false })
   public startDate?: Date;
 

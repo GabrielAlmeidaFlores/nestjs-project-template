@@ -70,6 +70,7 @@ export class GetRetirementPlanningRgpsUseCase {
         result.retirementPlanningRgpsPeriod?.map((p) =>
           GetRetirementPlanningRgpsPeriodResponseDto.build({
             id: p.id,
+            sequencial: p.sequencial ?? null,
             periodName: p.periodName ?? null,
             periodStart: p.periodStart ?? null,
             periodEnd: p.periodEnd ?? null,
