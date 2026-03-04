@@ -219,7 +219,7 @@ export class UpdateRuralTimelineAnalysisDocumentUseCase {
 
     const batchSize = 5;
     const contributionPeriods = cnisAnalysis.tempoDeContribuicao.filter(
-      (period) => period.dados?.data?.dataInicio != null,
+      (period) => period.dados?.data?.dataInicio !== null,
     );
 
     for (let i = 0; i < contributionPeriods.length; i += batchSize) {
