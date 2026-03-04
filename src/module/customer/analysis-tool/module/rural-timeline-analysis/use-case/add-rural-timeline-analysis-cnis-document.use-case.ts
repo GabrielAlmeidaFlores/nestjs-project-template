@@ -162,7 +162,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
 
     const batchSize = 5;
     const contributionPeriods = cnisAnalysis.tempoDeContribuicao.filter(
-      (period) => period.dados !== undefined,
+      (period) => period.dados !== undefined && period.dados?.data?.dataInicio != null,
     );
 
     for (let i = 0; i < contributionPeriods.length; i += batchSize) {
@@ -206,6 +206,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
+            sequencial: contributionPeriod.seq ?? null,
             employmentRelationshipSource:
               contributionPeriod.origemDoVinculo ?? null,
             startDate: contributionPeriod.dados?.data?.dataInicio ?? null,

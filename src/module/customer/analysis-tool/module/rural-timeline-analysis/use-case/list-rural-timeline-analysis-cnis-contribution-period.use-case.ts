@@ -94,6 +94,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
 
       return GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
         id: item.id,
+        ...(item.sequencial !== null && { sequencial: item.sequencial }),
         ...(item.employmentRelationshipSource !== null && {
           employmentRelationshipSource: item.employmentRelationshipSource,
         }),
