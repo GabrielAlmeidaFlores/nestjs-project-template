@@ -246,7 +246,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.INSURANCE_QUALITY_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title: 'ANÁLISE DE QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE SIMPLIFICADA',
+      title:
+        'ANÁLISE DE QUALIDADE DE SEGURADO E CARÊNCIA - ANÁLISE SIMPLIFICADA',
       description:
         'Análise simplificada da qualidade de segurado com IA. Verifica situação atual (segurado ativo ou em período de graça), informa carência total de contribuições, alerta sobre proximidade de perda da qualidade de segurado. Versão resumida para verificações rápidas.',
     }),
@@ -329,8 +330,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_COMPLETE_ANALYSIS,
       creditCost: 1,
-      title:
-        'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE COMPLETA',
+      title: 'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE COMPLETA',
       description:
         'Geração completa de impugnação a laudos periciais (médicos e sociais) do INSS com IA. Analisa laudo contestado, identifica inconsistências técnicas, contradições com documentação médica apresentada, gera argumentação jurídica fundamentada e quesitos técnicos para novo exame pericial.',
     }),
@@ -339,8 +339,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.MEDICAL_AND_SOCIAL_REPORT_OBJECTION_GENERATOR_ANALYSIS_SIMPLIFIED_ANALYSIS,
       creditCost: 1,
-      title:
-        'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE SIMPLIFICADA',
+      title: 'IMPUGNAÇÃO A LAUDOS MÉDICOS E SOCIAIS - ANÁLISE SIMPLIFICADA',
       description:
         'Geração simplificada de impugnação a laudos periciais com IA. Identifica principais pontos de discordância entre laudo e documentação médica, gera argumentação objetiva e quesitos essenciais. Versão resumida para contestações de menor complexidade.',
     }),
