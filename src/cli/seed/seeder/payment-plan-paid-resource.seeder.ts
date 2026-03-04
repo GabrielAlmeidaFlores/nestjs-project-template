@@ -555,6 +555,24 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de aposentadoria por categoria especial com IA. Examina períodos especiais cadastrados de forma objetiva, identifica documentação básica apresentada, calcula tempo especial total alegado e informa de forma resumida sobre viabilidade geral de reconhecimento. Versão rápida para triagem inicial.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-9012-cdef-123456789012'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS,
+      creditCost: 8,
+      title: 'APOSENTADORIA CATEGORIA ESPECIAL - ANÁLISE DE CONVERSÃO',
+      description:
+        'Análise de conversão de tempo especial para comum via IA. Processa em lotes os períodos de trabalho especial cadastrados, calcula o fator de conversão aplicável, determina o tempo especial efetivo e o tempo convertido por período, e classifica o reconhecimento de cada bloco (reconhecido, parcial ou não reconhecido).',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-0123-defa-234567890123'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_RULES_ANALYSIS,
+      creditCost: 8,
+      title: 'APOSENTADORIA CATEGORIA ESPECIAL - ANÁLISE DE REGRAS',
+      description:
+        'Análise de regras de aposentadoria por categoria especial via IA. Verifica o enquadramento do segurado nas modalidades aplicáveis (aposentadoria especial, por pontos, por idade com tempo especial convertido), calcula datas projetadas, estima RMI e destaca a opção mais vantajosa financeiramente.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
