@@ -14,12 +14,16 @@ import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/
 @Injectable()
 export class SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity>
-  implements SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway
+  implements
+    SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {

@@ -5,13 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-rule-item.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/query/result/get-special-category-retirement-analysis-result-rule-item.query.result';
+import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
 import { SpecialCategoryRetirementAnalysisResultRuleItemEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.entity';
 import { SpecialCategoryRetirementAnalysisResultRuleItemId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/value-object/special-category-retirement-analysis-result-rule-item-id/special-category-retirement-analysis-result-rule-item-id.value-object';
-import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile {
-  protected readonly _type = SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -29,14 +30,19 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
     ): SpecialCategoryRetirementAnalysisResultRuleItemEntity => {
       if (!source.analysisResult) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: SpecialCategoryRetirementAnalysisResultRuleItemEntity.name,
-          sourceClass: SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.name,
+          destinationClass:
+            SpecialCategoryRetirementAnalysisResultRuleItemEntity.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.name,
         });
       }
 
       return new SpecialCategoryRetirementAnalysisResultRuleItemEntity({
         id: new SpecialCategoryRetirementAnalysisResultRuleItemId(source.id),
-        specialCategoryRetirementAnalysisResultId: new SpecialCategoryRetirementAnalysisResultId(source.analysisResult.id),
+        specialCategoryRetirementAnalysisResultId:
+          new SpecialCategoryRetirementAnalysisResultId(
+            source.analysisResult.id,
+          ),
         retirementModalityName: source.retirementModalityName,
         isRequirementMet: source.isRequirementMet,
         projectedRetirementDate: source.projectedRetirementDate,
@@ -61,19 +67,23 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisResultRuleItemEntity,
     ): SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity => {
-      return SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.build({
-        id: source.id.toString(),
-        analysisResult: { id: source.specialCategoryRetirementAnalysisResultId.toString() } as any,
-        retirementModalityName: source.retirementModalityName,
-        isRequirementMet: source.isRequirementMet,
-        projectedRetirementDate: source.projectedRetirementDate,
-        estimatedRmiAmount: source.estimatedRmiAmount,
-        isBestFinancialOption: source.isBestFinancialOption,
-        ruleDetailedExplanationText: source.ruleDetailedExplanationText,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      return SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.build(
+        {
+          id: source.id.toString(),
+          analysisResult: {
+            id: source.specialCategoryRetirementAnalysisResultId.toString(),
+          } as any,
+          retirementModalityName: source.retirementModalityName,
+          isRequirementMet: source.isRequirementMet,
+          projectedRetirementDate: source.projectedRetirementDate,
+          estimatedRmiAmount: source.estimatedRmiAmount,
+          isBestFinancialOption: source.isBestFinancialOption,
+          ruleDetailedExplanationText: source.ruleDetailedExplanationText,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        },
+      );
     };
 
     createMap(
@@ -90,15 +100,22 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
     ): GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult => {
       if (!source.analysisResult) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult.name,
-          sourceClass: SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.name,
+          destinationClass:
+            GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.name,
         });
       }
 
-      const result = new GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult();
+      const result =
+        new GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult();
       Object.assign(result, {
-        specialCategoryRetirementAnalysisResultRuleItemId: new SpecialCategoryRetirementAnalysisResultRuleItemId(source.id),
-        specialCategoryRetirementAnalysisResultId: new SpecialCategoryRetirementAnalysisResultId(source.analysisResult.id),
+        specialCategoryRetirementAnalysisResultRuleItemId:
+          new SpecialCategoryRetirementAnalysisResultRuleItemId(source.id),
+        specialCategoryRetirementAnalysisResultId:
+          new SpecialCategoryRetirementAnalysisResultId(
+            source.analysisResult.id,
+          ),
         retirementModalityName: source.retirementModalityName,
         isRequirementMet: source.isRequirementMet,
         projectedRetirementDate: source.projectedRetirementDate,

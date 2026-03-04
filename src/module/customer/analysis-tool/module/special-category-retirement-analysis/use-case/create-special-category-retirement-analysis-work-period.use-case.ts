@@ -11,7 +11,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
-  protected readonly _type = CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase.name;
+  protected readonly _type =
+    CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase.name;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
@@ -33,7 +34,8 @@ export class CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
     );
 
     const workPeriod = new SpecialCategoryRetirementAnalysisWorkPeriodEntity({
-      specialCategoryRetirementAnalysisId: dto.specialCategoryRetirementAnalysisId,
+      specialCategoryRetirementAnalysisId:
+        dto.specialCategoryRetirementAnalysisId,
       publicServiceAdmissionDate: dto.publicServiceAdmissionDate ?? null,
       publicServiceCareerStartDate: dto.publicServiceCareerStartDate ?? null,
       workPeriodStartDate: dto.workPeriodStartDate,
@@ -47,7 +49,9 @@ export class CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
     });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
-      this.workPeriodCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisWorkPeriod(workPeriod),
+      this.workPeriodCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisWorkPeriod(
+        workPeriod,
+      ),
     ]);
 
     await transaction.commit();

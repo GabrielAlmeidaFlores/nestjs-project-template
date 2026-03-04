@@ -5,13 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/result/get-special-category-retirement-analysis-work-period.query.result';
+import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { SpecialCategoryRetirementAnalysisWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.entity';
 import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
-import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile {
-  protected readonly _type = SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -29,14 +30,19 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile 
     ): SpecialCategoryRetirementAnalysisWorkPeriodEntity => {
       if (!source.specialCategoryRetirementAnalysis) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: SpecialCategoryRetirementAnalysisWorkPeriodEntity.name,
-          sourceClass: SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name,
+          destinationClass:
+            SpecialCategoryRetirementAnalysisWorkPeriodEntity.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name,
         });
       }
 
       return new SpecialCategoryRetirementAnalysisWorkPeriodEntity({
         id: new SpecialCategoryRetirementAnalysisWorkPeriodId(source.id),
-        specialCategoryRetirementAnalysisId: new SpecialCategoryRetirementAnalysisId(source.specialCategoryRetirementAnalysis.id),
+        specialCategoryRetirementAnalysisId:
+          new SpecialCategoryRetirementAnalysisId(
+            source.specialCategoryRetirementAnalysis.id,
+          ),
         publicServiceAdmissionDate: source.publicServiceAdmissionDate,
         publicServiceCareerStartDate: source.publicServiceCareerStartDate,
         workPeriodStartDate: source.workPeriodStartDate,
@@ -67,7 +73,9 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile 
     ): SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity => {
       return SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.build({
         id: source.id.toString(),
-        specialCategoryRetirementAnalysis: { id: source.specialCategoryRetirementAnalysisId.toString() } as any,
+        specialCategoryRetirementAnalysis: {
+          id: source.specialCategoryRetirementAnalysisId.toString(),
+        } as any,
         publicServiceAdmissionDate: source.publicServiceAdmissionDate,
         publicServiceCareerStartDate: source.publicServiceCareerStartDate,
         workPeriodStartDate: source.workPeriodStartDate,
@@ -98,15 +106,22 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile 
     ): GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult => {
       if (!source.specialCategoryRetirementAnalysis) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult.name,
-          sourceClass: SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name,
+          destinationClass:
+            GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name,
         });
       }
 
-      const result = new GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult();
+      const result =
+        new GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult();
       Object.assign(result, {
-        specialCategoryRetirementAnalysisWorkPeriodId: new SpecialCategoryRetirementAnalysisWorkPeriodId(source.id),
-        specialCategoryRetirementAnalysisId: new SpecialCategoryRetirementAnalysisId(source.specialCategoryRetirementAnalysis.id),
+        specialCategoryRetirementAnalysisWorkPeriodId:
+          new SpecialCategoryRetirementAnalysisWorkPeriodId(source.id),
+        specialCategoryRetirementAnalysisId:
+          new SpecialCategoryRetirementAnalysisId(
+            source.specialCategoryRetirementAnalysis.id,
+          ),
         publicServiceAdmissionDate: source.publicServiceAdmissionDate,
         publicServiceCareerStartDate: source.publicServiceCareerStartDate,
         workPeriodStartDate: source.workPeriodStartDate,

@@ -17,7 +17,8 @@ export class SpecialCategoryRetirementAnalysisTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisTypeormEntity>
   implements SpecialCategoryRetirementAnalysisQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(SpecialCategoryRetirementAnalysisTypeormEntity)

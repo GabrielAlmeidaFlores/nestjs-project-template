@@ -94,13 +94,18 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity extends Ba
     (entity) => entity.workPeriods,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_id' })
-  public specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisTypeormEntity | undefined;
+  public specialCategoryRetirementAnalysis?:
+    | SpecialCategoryRetirementAnalysisTypeormEntity
+    | undefined;
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.workPeriod,
   )
-  public periodDocuments?: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity[] | undefined;
+  public periodDocuments?:
+    | SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity[]
+    | undefined;
 
-  protected override readonly _type = SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name;
+  protected override readonly _type =
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity.name;
 }

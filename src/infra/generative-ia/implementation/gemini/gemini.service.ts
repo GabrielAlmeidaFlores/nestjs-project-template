@@ -554,17 +554,24 @@ Formatting Rules:
       .trim();
   }
 
-  private sanitizeJsonSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  private sanitizeJsonSchema(
+    schema: Record<string, unknown>,
+  ): Record<string, unknown> {
     const sanitized: Record<string, unknown> = { ...schema };
 
     if (sanitized['type'] === 'array' && sanitized['items'] === undefined) {
       sanitized['items'] = {};
     }
 
-    if (sanitized['properties'] !== null && typeof sanitized['properties'] === 'object') {
+    if (
+      sanitized['properties'] !== null &&
+      typeof sanitized['properties'] === 'object'
+    ) {
       const sanitizedProperties: Record<string, unknown> = {};
 
-      for (const [key, value] of Object.entries(sanitized['properties'] as Record<string, unknown>)) {
+      for (const [key, value] of Object.entries(
+        sanitized['properties'] as Record<string, unknown>,
+      )) {
         sanitizedProperties[key] =
           value !== null && typeof value === 'object'
             ? this.sanitizeJsonSchema(value as Record<string, unknown>)
@@ -575,7 +582,9 @@ Formatting Rules:
     }
 
     if (sanitized['items'] !== null && typeof sanitized['items'] === 'object') {
-      sanitized['items'] = this.sanitizeJsonSchema(sanitized['items'] as Record<string, unknown>);
+      sanitized['items'] = this.sanitizeJsonSchema(
+        sanitized['items'] as Record<string, unknown>,
+      );
     }
 
     return sanitized;

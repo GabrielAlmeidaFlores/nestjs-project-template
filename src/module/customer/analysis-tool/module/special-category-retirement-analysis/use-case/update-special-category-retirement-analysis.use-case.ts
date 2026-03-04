@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/command/special-category-retirement-analysis.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { UpdateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis.request.dto';
@@ -12,7 +12,8 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 
 @Injectable()
 export class UpdateSpecialCategoryRetirementAnalysisUseCase {
-  protected readonly _type = UpdateSpecialCategoryRetirementAnalysisUseCase.name;
+  protected readonly _type =
+    UpdateSpecialCategoryRetirementAnalysisUseCase.name;
 
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
@@ -38,27 +39,22 @@ export class UpdateSpecialCategoryRetirementAnalysisUseCase {
     const updatedEntity = new SpecialCategoryRetirementAnalysisEntity({
       id,
       analysisToolClientId: queryResult.analysisToolClientId,
-      analysisCustomName: dto.analysisCustomName !== undefined ? dto.analysisCustomName : queryResult.analysisCustomName,
+      analysisCustomName:
+        dto.analysisCustomName ?? queryResult.analysisCustomName,
       retirementAnalysisObjectiveType:
-        dto.retirementAnalysisObjectiveType !== undefined
-          ? dto.retirementAnalysisObjectiveType
-          : queryResult.retirementAnalysisObjectiveType,
+        dto.retirementAnalysisObjectiveType ??
+        queryResult.retirementAnalysisObjectiveType,
       publicServiceFederativeEntityName:
-        dto.publicServiceFederativeEntityName !== undefined
-          ? dto.publicServiceFederativeEntityName
-          : queryResult.publicServiceFederativeEntityName,
+        dto.publicServiceFederativeEntityName ??
+        queryResult.publicServiceFederativeEntityName,
       publicServiceStateAbbreviation:
-        dto.publicServiceStateAbbreviation !== undefined
-          ? dto.publicServiceStateAbbreviation
-          : queryResult.publicServiceStateAbbreviation,
+        dto.publicServiceStateAbbreviation ??
+        queryResult.publicServiceStateAbbreviation,
       hasConfirmedExposureToHarmfulAgents:
-        dto.hasConfirmedExposureToHarmfulAgents !== undefined
-          ? dto.hasConfirmedExposureToHarmfulAgents
-          : queryResult.hasConfirmedExposureToHarmfulAgents,
+        dto.hasConfirmedExposureToHarmfulAgents ??
+        queryResult.hasConfirmedExposureToHarmfulAgents,
       currentWorkflowStepIndex:
-        dto.currentWorkflowStepIndex !== undefined
-          ? dto.currentWorkflowStepIndex
-          : queryResult.currentWorkflowStepIndex,
+        dto.currentWorkflowStepIndex ?? queryResult.currentWorkflowStepIndex,
       createdAt: queryResult.createdAt,
       updatedAt: new Date(),
     });

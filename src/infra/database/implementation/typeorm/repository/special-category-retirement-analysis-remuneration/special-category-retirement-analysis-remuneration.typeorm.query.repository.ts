@@ -9,18 +9,21 @@ import { SpecialCategoryRetirementAnalysisRemunerationTypeormEntity } from '@inf
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GetSpecialCategoryRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/result/get-special-category-retirement-analysis-remuneration.query.result';
 import { SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/special-category-retirement-analysis-remuneration.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-remuneration/value-object/special-category-retirement-analysis-remuneration-id/special-category-retirement-analysis-remuneration-id.value-object';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-remuneration/value-object/special-category-retirement-analysis-remuneration-id/special-category-retirement-analysis-remuneration-id.value-object';
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisRemunerationTypeormEntity>
   implements SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisRemunerationTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisRemunerationTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisRemunerationTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -74,7 +77,9 @@ export class SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository
       },
       relations: { specialCategoryRetirementAnalysis: true },
     });
-    if (!data) return null;
+    if (!data) {
+      return null;
+    }
     return this.mapperGateway.map(
       data,
       SpecialCategoryRetirementAnalysisRemunerationTypeormEntity,

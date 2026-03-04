@@ -5,7 +5,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class DeleteSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(SpecialCategoryRetirementAnalysisPeriodDocumentId)
+  @ResponseDtoValueObjectProperty(
+    SpecialCategoryRetirementAnalysisPeriodDocumentId,
+  )
   public specialCategoryRetirementAnalysisPeriodDocumentId: SpecialCategoryRetirementAnalysisPeriodDocumentId;
 
   protected override readonly _type =

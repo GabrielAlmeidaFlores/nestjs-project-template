@@ -12,5 +12,6 @@ export class GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult {
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
 
-  protected readonly _type = GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult.name;
+  protected readonly _type =
+    GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult.name;
 }

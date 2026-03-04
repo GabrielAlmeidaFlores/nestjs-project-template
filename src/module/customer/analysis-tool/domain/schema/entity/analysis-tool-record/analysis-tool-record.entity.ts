@@ -149,7 +149,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
       props.perCapitaIncomeForBpcAnalysis ?? null;
     this.ruralTimelineAnalysis = props.ruralTimelineAnalysis ?? null;
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
-    this.specialCategoryRetirementAnalysis = props.specialCategoryRetirementAnalysis ?? null;
+    this.specialCategoryRetirementAnalysis =
+      props.specialCategoryRetirementAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

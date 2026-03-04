@@ -1230,24 +1230,34 @@ const classProvider: ClassProvider[] = [
     useClass: SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisPeriodDocumentQueryRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisPeriodDocumentQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository,
   },
   {
     provide: SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway,
@@ -1258,20 +1268,28 @@ const classProvider: ClassProvider[] = [
     useClass: SpecialCategoryRetirementAnalysisResultTypeormCommandRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository,
   },
   {
-    provide: SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
-    useClass: SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository,
+    provide:
+      SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository,
   },
   {
     provide: PerCapitaIncomeForBpcAnalysisCommandRepositoryGateway,

@@ -12,12 +12,16 @@ import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/anal
 @Injectable()
 export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity>
-  implements SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway
+  implements
+    SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository.name;
 
   public constructor(
-    @InjectRepository(SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity)
+    @InjectRepository(
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
+    )
     repository: Repository<SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity>,
     private readonly mapperGateway: MapperGateway,
   ) {
@@ -26,7 +30,9 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRe
 
   public async listByResultId(
     resultId: SpecialCategoryRetirementAnalysisResultId,
-  ): Promise<GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult[]> {
+  ): Promise<
+    GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult[]
+  > {
     const data = await this.repository.find({
       where: {
         analysisResult: { id: resultId.toString() },

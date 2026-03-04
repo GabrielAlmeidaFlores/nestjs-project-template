@@ -8,7 +8,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 
 @ResponseDto()
 export class SpecialCategoryRetirementAnalysisRemunerationItemResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(SpecialCategoryRetirementAnalysisRemunerationId)
+  @ResponseDtoValueObjectProperty(
+    SpecialCategoryRetirementAnalysisRemunerationId,
+  )
   public specialCategoryRetirementAnalysisRemunerationId: SpecialCategoryRetirementAnalysisRemunerationId;
 
   @ResponseDtoDateProperty()

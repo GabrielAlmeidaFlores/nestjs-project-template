@@ -11,7 +11,8 @@ import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile {
-  protected readonly _type = SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile.name;
 
   public constructor(@InjectMapper() private readonly mapper: Mapper) {
     this.createMappings();
@@ -29,14 +30,19 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
     ): SpecialCategoryRetirementAnalysisPeriodDocumentEntity => {
       if (!source.workPeriod) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: SpecialCategoryRetirementAnalysisPeriodDocumentEntity.name,
-          sourceClass: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.name,
+          destinationClass:
+            SpecialCategoryRetirementAnalysisPeriodDocumentEntity.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.name,
         });
       }
 
       return new SpecialCategoryRetirementAnalysisPeriodDocumentEntity({
         id: new SpecialCategoryRetirementAnalysisPeriodDocumentId(source.id),
-        specialCategoryRetirementAnalysisWorkPeriodId: new SpecialCategoryRetirementAnalysisWorkPeriodId(source.workPeriod.id),
+        specialCategoryRetirementAnalysisWorkPeriodId:
+          new SpecialCategoryRetirementAnalysisWorkPeriodId(
+            source.workPeriod.id,
+          ),
         storedFileExternalName: source.storedFileExternalName,
         originalFileUploadName: source.originalFileUploadName,
         retirementDocumentTypeCategory: source.retirementDocumentTypeCategory,
@@ -58,16 +64,20 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisPeriodDocumentEntity,
     ): SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity => {
-      return SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.build({
-        id: source.id.toString(),
-        workPeriod: { id: source.specialCategoryRetirementAnalysisWorkPeriodId.toString() } as any,
-        storedFileExternalName: source.storedFileExternalName,
-        originalFileUploadName: source.originalFileUploadName,
-        retirementDocumentTypeCategory: source.retirementDocumentTypeCategory,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt,
-      });
+      return SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.build(
+        {
+          id: source.id.toString(),
+          workPeriod: {
+            id: source.specialCategoryRetirementAnalysisWorkPeriodId.toString(),
+          } as any,
+          storedFileExternalName: source.storedFileExternalName,
+          originalFileUploadName: source.originalFileUploadName,
+          retirementDocumentTypeCategory: source.retirementDocumentTypeCategory,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
+        },
+      );
     };
 
     createMap(
@@ -84,15 +94,22 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
     ): GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult => {
       if (!source.workPeriod) {
         throw new IncompleteSourceDataForMappingError({
-          destinationClass: GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult.name,
-          sourceClass: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.name,
+          destinationClass:
+            GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult.name,
+          sourceClass:
+            SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.name,
         });
       }
 
-      const result = new GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult();
+      const result =
+        new GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult();
       Object.assign(result, {
-        specialCategoryRetirementAnalysisPeriodDocumentId: new SpecialCategoryRetirementAnalysisPeriodDocumentId(source.id),
-        specialCategoryRetirementAnalysisWorkPeriodId: new SpecialCategoryRetirementAnalysisWorkPeriodId(source.workPeriod.id),
+        specialCategoryRetirementAnalysisPeriodDocumentId:
+          new SpecialCategoryRetirementAnalysisPeriodDocumentId(source.id),
+        specialCategoryRetirementAnalysisWorkPeriodId:
+          new SpecialCategoryRetirementAnalysisWorkPeriodId(
+            source.workPeriod.id,
+          ),
         storedFileExternalName: source.storedFileExternalName,
         originalFileUploadName: source.originalFileUploadName,
         retirementDocumentTypeCategory: source.retirementDocumentTypeCategory,

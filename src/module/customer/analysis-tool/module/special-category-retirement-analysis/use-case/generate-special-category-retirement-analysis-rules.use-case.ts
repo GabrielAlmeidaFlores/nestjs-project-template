@@ -5,12 +5,12 @@ import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/accou
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/special-category-retirement-analysis-result.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/command/special-category-retirement-analysis-result.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/special-category-retirement-analysis-result.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/command/special-category-retirement-analysis-result-rule-item.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { SpecialCategoryRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/special-category-retirement-analysis-result.entity';
 import { SpecialCategoryRetirementAnalysisResultRuleItemEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.entity';
-import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { GenerateSpecialCategoryRetirementAnalysisRulesResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-rules.response.dto';
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
@@ -19,7 +19,7 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
-interface RuleItemData {
+interface RuleItemDataInterface {
   retirementModalityName: string;
   isRequirementMet: boolean;
   projectedRetirementDate?: string | null;
@@ -30,7 +30,10 @@ interface RuleItemData {
 
 @Injectable()
 export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
-  protected readonly _type = GenerateSpecialCategoryRetirementAnalysisRulesUseCase.name;
+  protected readonly _type =
+    GenerateSpecialCategoryRetirementAnalysisRulesUseCase.name;
+
+  private readonly BATCH_SIZE: number;
 
   public constructor(
     @Inject(OrganizationMemberQueryRepositoryGateway)
@@ -41,7 +44,9 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
     private readonly resultQueryRepositoryGateway: SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway,
     @Inject(SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway)
     private readonly resultCommandRepositoryGateway: SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway,
-    @Inject(SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway)
+    @Inject(
+      SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
+    )
     private readonly ruleItemCommandRepositoryGateway: SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
     @Inject(AnalysisProcessorGateway)
     private readonly analysisProcessorGateway: AnalysisProcessorGateway,
@@ -51,7 +56,9 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
     private readonly consumeOrganizationCreditUseCase: ConsumeOrganizationCreditUseCaseGateway,
     @Inject(GetPaymentPlanPaidResourcePromptUseCaseGateway)
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
-  ) {}
+  ) {
+    this.BATCH_SIZE = 10;
+  }
 
   public async execute(
     sessionData: SessionDataModel,
@@ -68,9 +75,10 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    const promptResponse = await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-      PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
-    );
+    const promptResponse =
+      await this.getPaymentPlanPaidResourcePromptUseCase.execute(
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+      );
 
     const queryResult =
       await this.specialCategoryRetirementAnalysisQueryRepositoryGateway.findOneByIdAndOrganizationIdWithRelationsOrFail(
@@ -79,35 +87,41 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
-    const creditTransaction = await this.consumeOrganizationCreditUseCase.execute(
-      organizationSessionData.organizationId,
-      PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
-      organizationMember.id,
-    );
+    const creditTransaction =
+      await this.consumeOrganizationCreditUseCase.execute(
+        organizationSessionData.organizationId,
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
+        organizationMember.id,
+      );
 
     let resultEntity: SpecialCategoryRetirementAnalysisResultEntity;
-    const existingResult = await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(analysisId);
+    const existingResult =
+      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
+        analysisId,
+      );
 
     if (existingResult !== null) {
       resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
         id: existingResult.specialCategoryRetirementAnalysisResultId,
         specialCategoryRetirementAnalysisId: analysisId,
-        simplifiedAnalysisSummaryText: existingResult.simplifiedAnalysisSummaryText,
+        simplifiedAnalysisSummaryText:
+          existingResult.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: existingResult.fullAnalysisConclusionText,
         createdAt: existingResult.createdAt,
         updatedAt: new Date(),
       });
 
-      const deleteTransaction = await this.baseTransactionRepositoryGateway.execute([
-        creditTransaction,
-        this.ruleItemCommandRepositoryGateway.deleteAllByResultId(
-          existingResult.specialCategoryRetirementAnalysisResultId,
-        ),
-        this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
-          existingResult.specialCategoryRetirementAnalysisResultId,
-          resultEntity,
-        ),
-      ]);
+      const deleteTransaction =
+        await this.baseTransactionRepositoryGateway.execute([
+          creditTransaction,
+          this.ruleItemCommandRepositoryGateway.deleteAllByResultId(
+            existingResult.specialCategoryRetirementAnalysisResultId,
+          ),
+          this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
+            existingResult.specialCategoryRetirementAnalysisResultId,
+            resultEntity,
+          ),
+        ]);
 
       await deleteTransaction.commit();
     } else {
@@ -117,15 +131,21 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
         fullAnalysisConclusionText: null,
       });
 
-      const createTransaction = await this.baseTransactionRepositoryGateway.execute([
-        creditTransaction,
-        this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(resultEntity),
-      ]);
+      const createTransaction =
+        await this.baseTransactionRepositoryGateway.execute([
+          creditTransaction,
+          this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
+            resultEntity,
+          ),
+        ]);
 
       await createTransaction.commit();
     }
 
-    const workPeriodBatches = this.createBatches(queryResult.workPeriods, 10);
+    const workPeriodBatches = this.createBatches(
+      queryResult.workPeriods,
+      this.BATCH_SIZE,
+    );
     let totalProcessed = 0;
 
     for (const batch of workPeriodBatches) {
@@ -142,17 +162,18 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
         'utf-8',
       );
 
-      const jsonResult = await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
-        promptResponse.prompt,
-        [contextBuffer],
-        true,
-      );
+      const jsonResult =
+        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
+          promptResponse.prompt,
+          [contextBuffer],
+          true,
+        );
 
       if (jsonResult === null) {
         continue;
       }
 
-      const items = JSON.parse(jsonResult) as RuleItemData[];
+      const items = JSON.parse(jsonResult) as RuleItemDataInterface[];
 
       const itemEntities = items.map(
         (item) =>
@@ -161,20 +182,25 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
             retirementModalityName: item.retirementModalityName,
             isRequirementMet: item.isRequirementMet,
             projectedRetirementDate:
-              item.projectedRetirementDate !== undefined && item.projectedRetirementDate !== null
+              item.projectedRetirementDate !== undefined &&
+              item.projectedRetirementDate !== null
                 ? new Date(item.projectedRetirementDate)
                 : null,
             estimatedRmiAmount: item.estimatedRmiAmount ?? null,
             isBestFinancialOption: item.isBestFinancialOption,
-            ruleDetailedExplanationText: item.ruleDetailedExplanationText ?? null,
+            ruleDetailedExplanationText:
+              item.ruleDetailedExplanationText ?? null,
           }),
       );
 
-      const batchTransaction = await this.baseTransactionRepositoryGateway.execute(
-        itemEntities.map((entity) =>
-          this.ruleItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultRuleItem(entity),
-        ),
-      );
+      const batchTransaction =
+        await this.baseTransactionRepositoryGateway.execute(
+          itemEntities.map((entity) =>
+            this.ruleItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultRuleItem(
+              entity,
+            ),
+          ),
+        );
 
       await batchTransaction.commit();
 

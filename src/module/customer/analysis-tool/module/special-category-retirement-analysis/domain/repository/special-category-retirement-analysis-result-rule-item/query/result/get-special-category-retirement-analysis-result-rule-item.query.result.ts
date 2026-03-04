@@ -1,5 +1,5 @@
-import type { SpecialCategoryRetirementAnalysisResultRuleItemId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/value-object/special-category-retirement-analysis-result-rule-item-id/special-category-retirement-analysis-result-rule-item-id.value-object';
 import type { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
+import type { SpecialCategoryRetirementAnalysisResultRuleItemId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/value-object/special-category-retirement-analysis-result-rule-item-id/special-category-retirement-analysis-result-rule-item-id.value-object';
 
 export class GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult {
   public readonly specialCategoryRetirementAnalysisResultRuleItemId: SpecialCategoryRetirementAnalysisResultRuleItemId;
@@ -14,5 +14,6 @@ export class GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult {
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
 
-  protected readonly _type = GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult.name;
+  protected readonly _type =
+    GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult.name;
 }

@@ -9,15 +9,16 @@ import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/result/get-special-category-retirement-analysis-work-period.query.result';
 import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 
 @Injectable()
 export class SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository
   extends BaseTypeormQueryRepository<SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity>
   implements SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway
 {
-  protected readonly _type = SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository.name;
+  protected readonly _type =
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository.name;
 
   public constructor(
     @InjectRepository(SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity)
