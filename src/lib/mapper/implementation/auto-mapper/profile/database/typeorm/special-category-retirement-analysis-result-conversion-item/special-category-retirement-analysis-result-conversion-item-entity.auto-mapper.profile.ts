@@ -2,7 +2,9 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-conversion-item.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-conversion-item/query/result/get-special-category-retirement-analysis-result-conversion-item.query.result';
 import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
@@ -28,7 +30,7 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapp
     const convert = (
       source: SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
     ): SpecialCategoryRetirementAnalysisResultConversionItemEntity => {
-      if (!source.analysisResult) {
+      if (!source.specialCategoryRetirementAnalysisResult) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             SpecialCategoryRetirementAnalysisResultConversionItemEntity.name,
@@ -43,14 +45,14 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapp
         ),
         specialCategoryRetirementAnalysisResultId:
           new SpecialCategoryRetirementAnalysisResultId(
-            source.analysisResult.id,
+            source.specialCategoryRetirementAnalysisResult.id,
           ),
         originJobTitleDescription: source.originJobTitleDescription,
         periodDateRangeText: source.periodDateRangeText,
         harmfulExposureAgentsText: source.harmfulExposureAgentsText,
         specialTimeDurationText: source.specialTimeDurationText,
         convertedTimeDurationText: source.convertedTimeDurationText,
-        conversionFactorValue: source.conversionFactorValue,
+        conversionFactorValue: new DecimalValue(source.conversionFactorValue),
         recognitionStatusEnum: source.recognitionStatusEnum,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -73,15 +75,15 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapp
       return SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity.build(
         {
           id: source.id.toString(),
-          analysisResult: {
+          specialCategoryRetirementAnalysisResult: {
             id: source.specialCategoryRetirementAnalysisResultId.toString(),
-          } as any,
+          } as unknown as SpecialCategoryRetirementAnalysisResultTypeormEntity,
           originJobTitleDescription: source.originJobTitleDescription,
           periodDateRangeText: source.periodDateRangeText,
           harmfulExposureAgentsText: source.harmfulExposureAgentsText,
           specialTimeDurationText: source.specialTimeDurationText,
           convertedTimeDurationText: source.convertedTimeDurationText,
-          conversionFactorValue: source.conversionFactorValue,
+          conversionFactorValue: source.conversionFactorValue.toString(),
           recognitionStatusEnum: source.recognitionStatusEnum,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
@@ -102,7 +104,7 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapp
     const convert = (
       source: SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
     ): GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult => {
-      if (!source.analysisResult) {
+      if (!source.specialCategoryRetirementAnalysisResult) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult.name,
@@ -120,14 +122,14 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapp
           ),
         specialCategoryRetirementAnalysisResultId:
           new SpecialCategoryRetirementAnalysisResultId(
-            source.analysisResult.id,
+            source.specialCategoryRetirementAnalysisResult.id,
           ),
         originJobTitleDescription: source.originJobTitleDescription,
         periodDateRangeText: source.periodDateRangeText,
         harmfulExposureAgentsText: source.harmfulExposureAgentsText,
         specialTimeDurationText: source.specialTimeDurationText,
         convertedTimeDurationText: source.convertedTimeDurationText,
-        conversionFactorValue: source.conversionFactorValue,
+        conversionFactorValue: new DecimalValue(source.conversionFactorValue),
         recognitionStatusEnum: source.recognitionStatusEnum,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

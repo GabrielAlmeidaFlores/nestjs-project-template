@@ -1440,6 +1440,41 @@ export class AnalysisTypeormEntity extends BaseTypeormEntity {
 - `CryptographyTransformer` - Encrypts/decrypts sensitive data
 - `HashTransformer` - One-way password hashing
 
+**⚠️ CRITICAL: Decimal Fields MUST use `DecimalValue` Value Object**
+
+For columns declared as `type: 'decimal'` in TypeORM:
+
+- **TypeORM entity**: Keep property type as `string` (or `string | null`) — TypeORM returns decimals as strings from MySQL
+- **Domain entity / Query result**: Use `DecimalValue` (or `DecimalValue | null`) from `@core/domain/schema/value-object/decimal/decimal.value-object`
+- **AutoMapper ORM→Domain**: `new DecimalValue(source.field)` or `source.field !== null ? new DecimalValue(source.field) : null`
+- **AutoMapper Domain→ORM**: `source.field.toString()` or `source.field !== null ? source.field.toString() : null`
+- **Request DTO**: `@RequestDtoValueObjectProperty(DecimalValue)` + `public field: DecimalValue`
+- **Response DTO**: `@ResponseDtoValueObjectProperty(DecimalValue)` + `public field: DecimalValue`
+- **NEVER use `number` type** or `parseFloat()` / `.toNumber()` for decimal persistence — always use `DecimalValue`
+
+```typescript
+// TypeORM entity — keep as string
+@Column({ name: 'gross_amount', type: 'decimal', precision: 15, scale: 2, nullable: true })
+public grossAmount: string | null;
+
+// Domain entity / Query result — use DecimalValue
+public readonly grossAmount: DecimalValue | null;
+
+// Mapper ORM→Domain
+grossAmount: source.grossAmount !== null ? new DecimalValue(source.grossAmount) : null,
+
+// Mapper Domain→ORM
+grossAmount: source.grossAmount !== null ? source.grossAmount.toString() : null,
+
+// Request DTO
+@RequestDtoValueObjectProperty(DecimalValue)
+public grossAmount: DecimalValue;
+
+// Response DTO
+@ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+public grossAmount?: DecimalValue;
+```
+
 **⚠️ CRITICAL: Choosing the Correct Date Transformer**
 
 MySQL has different date/time column types that require different transformers:

@@ -1,6 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { SpecialCategoryRetirementAnalysisResultRuleItemId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/value-object/special-category-retirement-analysis-result-rule-item-id/special-category-retirement-analysis-result-rule-item-id.value-object';
 
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
 import type { SpecialCategoryRetirementAnalysisResultRuleItemEntityPropsInterface } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.entity.props.interface';
 
@@ -9,7 +10,7 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntity extends BaseE
   public readonly retirementModalityName: string;
   public readonly isRequirementMet: boolean;
   public readonly projectedRetirementDate: Date | null;
-  public readonly estimatedRmiAmount: number | null;
+  public readonly estimatedRmiAmount: DecimalValue | null;
   public readonly isBestFinancialOption: boolean;
   public readonly ruleDetailedExplanationText: string | null;
 

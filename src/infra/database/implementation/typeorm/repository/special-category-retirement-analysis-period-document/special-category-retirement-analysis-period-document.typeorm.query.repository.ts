@@ -38,7 +38,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryReposito
     const data = await this.findOneOrFail(
       {
         where: { id: id.toString(), deletedAt: IsNull() },
-        relations: { workPeriod: true },
+        relations: { specialCategoryRetirementAnalysisWorkPeriod: true },
       },
       err,
     );
@@ -54,10 +54,12 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryReposito
   ): Promise<GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult[]> {
     const data = await this.repository.find({
       where: {
-        workPeriod: { id: workPeriodId.toString() },
+        specialCategoryRetirementAnalysisWorkPeriod: {
+          id: workPeriodId.toString(),
+        },
         deletedAt: IsNull(),
       },
-      relations: { workPeriod: true },
+      relations: { specialCategoryRetirementAnalysisWorkPeriod: true },
     });
     return this.mapperGateway.mapArray(
       data,

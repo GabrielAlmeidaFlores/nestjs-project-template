@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-period-document.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/query/result/get-special-category-retirement-analysis-period-document.query.result';
 import { SpecialCategoryRetirementAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.entity';
@@ -28,7 +29,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
     ): SpecialCategoryRetirementAnalysisPeriodDocumentEntity => {
-      if (!source.workPeriod) {
+      if (!source.specialCategoryRetirementAnalysisWorkPeriod) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             SpecialCategoryRetirementAnalysisPeriodDocumentEntity.name,
@@ -41,7 +42,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
         id: new SpecialCategoryRetirementAnalysisPeriodDocumentId(source.id),
         specialCategoryRetirementAnalysisWorkPeriodId:
           new SpecialCategoryRetirementAnalysisWorkPeriodId(
-            source.workPeriod.id,
+            source.specialCategoryRetirementAnalysisWorkPeriod.id,
           ),
         storedFileExternalName: source.storedFileExternalName,
         originalFileUploadName: source.originalFileUploadName,
@@ -67,9 +68,9 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
       return SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity.build(
         {
           id: source.id.toString(),
-          workPeriod: {
+          specialCategoryRetirementAnalysisWorkPeriod: {
             id: source.specialCategoryRetirementAnalysisWorkPeriodId.toString(),
-          } as any,
+          } as unknown as SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity,
           storedFileExternalName: source.storedFileExternalName,
           originalFileUploadName: source.originalFileUploadName,
           retirementDocumentTypeCategory: source.retirementDocumentTypeCategory,
@@ -92,7 +93,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
     ): GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult => {
-      if (!source.workPeriod) {
+      if (!source.specialCategoryRetirementAnalysisWorkPeriod) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetSpecialCategoryRetirementAnalysisPeriodDocumentQueryResult.name,
@@ -108,7 +109,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProf
           new SpecialCategoryRetirementAnalysisPeriodDocumentId(source.id),
         specialCategoryRetirementAnalysisWorkPeriodId:
           new SpecialCategoryRetirementAnalysisWorkPeriodId(
-            source.workPeriod.id,
+            source.specialCategoryRetirementAnalysisWorkPeriod.id,
           ),
         storedFileExternalName: source.storedFileExternalName,
         originalFileUploadName: source.originalFileUploadName,

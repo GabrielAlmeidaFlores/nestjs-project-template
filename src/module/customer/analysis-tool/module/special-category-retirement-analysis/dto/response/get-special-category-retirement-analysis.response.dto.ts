@@ -1,3 +1,4 @@
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { RetirementAnalysisObjectiveTypeEnum } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/enum/retirement-analysis-objective-type.enum';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { RetirementDocumentTypeCategoryEnum } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-period-document/enum/retirement-document-type-category.enum';
@@ -118,8 +119,8 @@ export class GetSpecialCategoryRetirementAnalysisResultConversionItemResponseDto
   @ResponseDtoStringProperty()
   public convertedTimeDurationText: string;
 
-  @ResponseDtoNumberProperty()
-  public conversionFactorValue: number;
+  @ResponseDtoValueObjectProperty(DecimalValue)
+  public conversionFactorValue: DecimalValue;
 
   @ResponseDtoEnumProperty(RecognitionStatusEnum)
   public recognitionStatusEnum: RecognitionStatusEnum;
@@ -144,8 +145,8 @@ export class GetSpecialCategoryRetirementAnalysisResultRuleItemResponseDto exten
   @ResponseDtoDateProperty({ required: false })
   public projectedRetirementDate?: Date;
 
-  @ResponseDtoNumberProperty({ required: false })
-  public estimatedRmiAmount?: number;
+  @ResponseDtoValueObjectProperty(DecimalValue, { required: false })
+  public estimatedRmiAmount?: DecimalValue;
 
   @ResponseDtoBooleanProperty()
   public isBestFinancialOption: boolean;

@@ -32,7 +32,7 @@ export class SpecialCategoryRetirementAnalysisResultTypeormEntity extends BaseTy
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
-    (entity) => entity.analysisResult,
+    (entity) => entity.specialCategoryRetirementAnalysisResult,
   )
   public conversionItems?:
     | SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity[]
@@ -40,7 +40,7 @@ export class SpecialCategoryRetirementAnalysisResultTypeormEntity extends BaseTy
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
-    (entity) => entity.analysisResult,
+    (entity) => entity.specialCategoryRetirementAnalysisResult,
   )
   public ruleItems?:
     | SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity[]

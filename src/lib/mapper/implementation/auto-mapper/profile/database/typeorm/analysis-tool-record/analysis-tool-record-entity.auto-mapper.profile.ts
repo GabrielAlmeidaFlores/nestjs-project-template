@@ -191,7 +191,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       const specialCategoryRetirementAnalysis =
-        source.specialCategoryRetirementAnalysis != null
+        source.specialCategoryRetirementAnalysis !== null
           ? this.mapper.map(
               source.specialCategoryRetirementAnalysis,
               SpecialCategoryRetirementAnalysisTypeormEntity,
@@ -363,7 +363,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
           : null;
 
       const specialCategoryRetirementAnalysis =
-        source.specialCategoryRetirementAnalysis != null
+        source.specialCategoryRetirementAnalysis !== null
           ? this.mapper.map(
               source.specialCategoryRetirementAnalysis,
               SpecialCategoryRetirementAnalysisEntity,

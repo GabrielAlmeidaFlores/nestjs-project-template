@@ -53,7 +53,7 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity 
     scale: 2,
     nullable: false,
   })
-  public conversionFactorValue: number;
+  public conversionFactorValue: string;
 
   @Column({
     name: 'recognition_status_enum',
@@ -68,7 +68,7 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity 
     (entity) => entity.conversionItems,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_result_id' })
-  public analysisResult?:
+  public specialCategoryRetirementAnalysisResult?:
     | SpecialCategoryRetirementAnalysisResultTypeormEntity
     | undefined;
 
