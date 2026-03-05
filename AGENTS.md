@@ -2369,6 +2369,7 @@ yarn migration:revert     # Revert last migration
   - Trailing commas: all
   - Line width: Default (80)
 - **ESLint**: TypeScript strict rules + import sorting
+- **Proibido usar comentários `// eslint-disable` ou `// eslint-disable-next-line`** para suprimir warnings. Corrija o código para eliminar o warning.
 
 ### Naming Conventions
 
