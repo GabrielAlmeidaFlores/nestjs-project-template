@@ -58,6 +58,9 @@ Formatting Rules:
 4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
 5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
 6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
+7. Do not mention the technologies you are using, for example, do not say Gemini.
+8. Never returns ids, uuids, codes, etc. Just the data requested by the user.
+9. Never mention technical terms, for example, do not say "UUID", "ID", "JSON". Just the data requested by the user.
 `,
     ];
   }
@@ -72,11 +75,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateFlashResponseFromPromptAndFiles(
@@ -89,11 +96,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateHighQualityResponseFromPromptAndFiles(
@@ -106,11 +117,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-pro-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-pro-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   private async generateResponseFromPromptAndFiles(
@@ -316,9 +331,7 @@ Formatting Rules:
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
-          throw new GenerativeIaConnectionError({
-            originalError: error.message,
-          });
+          throw new GenerativeIaConnectionError();
         }
 
         if (
@@ -469,9 +482,7 @@ Formatting Rules:
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message.includes('fetch failed')) {
-            throw new GenerativeIaConnectionError({
-              originalError: error.message,
-            });
+            throw new GenerativeIaConnectionError();
           }
 
           if (
@@ -554,17 +565,24 @@ Formatting Rules:
       .trim();
   }
 
-  private sanitizeJsonSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  private sanitizeJsonSchema(
+    schema: Record<string, unknown>,
+  ): Record<string, unknown> {
     const sanitized: Record<string, unknown> = { ...schema };
 
     if (sanitized['type'] === 'array' && sanitized['items'] === undefined) {
       sanitized['items'] = {};
     }
 
-    if (sanitized['properties'] !== null && typeof sanitized['properties'] === 'object') {
+    if (
+      sanitized['properties'] !== null &&
+      typeof sanitized['properties'] === 'object'
+    ) {
       const sanitizedProperties: Record<string, unknown> = {};
 
-      for (const [key, value] of Object.entries(sanitized['properties'] as Record<string, unknown>)) {
+      for (const [key, value] of Object.entries(
+        sanitized['properties'] as Record<string, unknown>,
+      )) {
         sanitizedProperties[key] =
           value !== null && typeof value === 'object'
             ? this.sanitizeJsonSchema(value as Record<string, unknown>)
@@ -575,7 +593,9 @@ Formatting Rules:
     }
 
     if (sanitized['items'] !== null && typeof sanitized['items'] === 'object') {
-      sanitized['items'] = this.sanitizeJsonSchema(sanitized['items'] as Record<string, unknown>);
+      sanitized['items'] = this.sanitizeJsonSchema(
+        sanitized['items'] as Record<string, unknown>,
+      );
     }
 
     return sanitized;
