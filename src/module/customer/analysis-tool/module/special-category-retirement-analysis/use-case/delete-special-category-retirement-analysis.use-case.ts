@@ -7,6 +7,7 @@ import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module
 import { SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/command/special-category-retirement-analysis-period-document.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/command/special-category-retirement-analysis-remuneration.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/special-category-retirement-analysis-remuneration.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/command/special-category-retirement-analysis-result.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-conversion-item/command/special-category-retirement-analysis-result-conversion-item.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/command/special-category-retirement-analysis-result-rule-item.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/command/special-category-retirement-analysis-work-period.command.repository.gateway';
@@ -45,6 +46,8 @@ export class DeleteSpecialCategoryRetirementAnalysisUseCase {
       SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
     )
     private readonly ruleItemCommandRepositoryGateway: SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
+    @Inject(SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway)
+    private readonly resultCommandRepositoryGateway: SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -94,6 +97,11 @@ export class DeleteSpecialCategoryRetirementAnalysisUseCase {
       );
       transactions.push(
         this.ruleItemCommandRepositoryGateway.deleteAllByResultId(
+          queryResult.analysisResult.specialCategoryRetirementAnalysisResultId,
+        ),
+      );
+      transactions.push(
+        this.resultCommandRepositoryGateway.deleteSpecialCategoryRetirementAnalysisResult(
           queryResult.analysisResult.specialCategoryRetirementAnalysisResultId,
         ),
       );
