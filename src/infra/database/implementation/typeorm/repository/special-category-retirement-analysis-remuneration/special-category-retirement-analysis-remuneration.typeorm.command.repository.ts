@@ -55,6 +55,6 @@ export class SpecialCategoryRetirementAnalysisRemunerationTypeormCommandReposito
   public deleteSpecialCategoryRetirementAnalysisRemuneration(
     id: SpecialCategoryRetirementAnalysisRemunerationId,
   ): TransactionType {
-    return this.update(id.toString(), { remunerationGrossAmount: null });
+    return this.delete(id.toString());
   }
 }
