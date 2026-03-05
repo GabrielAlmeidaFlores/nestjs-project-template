@@ -10,5 +10,4 @@ export interface SpecialCategoryRetirementAnalysisEntityPropsInterface extends B
   publicServiceFederativeEntityName?: string | null;
   publicServiceStateAbbreviation?: string | null;
   hasConfirmedExposureToHarmfulAgents: boolean;
-  currentWorkflowStepIndex: number;
 }

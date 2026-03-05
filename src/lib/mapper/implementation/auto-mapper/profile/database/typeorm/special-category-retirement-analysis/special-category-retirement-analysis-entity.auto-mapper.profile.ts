@@ -60,7 +60,6 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
         hasConfirmedExposureToHarmfulAgents:
           source.hasConfirmedExposureToHarmfulAgents,
-        currentWorkflowStepIndex: source.currentWorkflowStepIndex,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -88,7 +87,6 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
         hasConfirmedExposureToHarmfulAgents:
           source.hasConfirmedExposureToHarmfulAgents,
-        currentWorkflowStepIndex: source.currentWorkflowStepIndex,
         analysisToolClient: {
           id: source.analysisToolClientId.toString(),
         } as unknown as AnalysisToolClientTypeormEntity,
@@ -188,7 +186,6 @@ export class SpecialCategoryRetirementAnalysisEntityAutoMapperProfile {
         publicServiceStateAbbreviation: source.publicServiceStateAbbreviation,
         hasConfirmedExposureToHarmfulAgents:
           source.hasConfirmedExposureToHarmfulAgents,
-        currentWorkflowStepIndex: source.currentWorkflowStepIndex,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

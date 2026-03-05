@@ -56,13 +56,6 @@ export class SpecialCategoryRetirementAnalysisTypeormEntity extends BaseTypeormE
   })
   public hasConfirmedExposureToHarmfulAgents: boolean;
 
-  @Column({
-    name: 'current_workflow_step_index',
-    type: 'int',
-    default: 1,
-  })
-  public currentWorkflowStepIndex: number;
-
   @ManyToOne(() => AnalysisToolClientTypeormEntity)
   @JoinColumn({ name: 'analysis_tool_client_id' })
   public analysisToolClient?: AnalysisToolClientTypeormEntity | undefined;

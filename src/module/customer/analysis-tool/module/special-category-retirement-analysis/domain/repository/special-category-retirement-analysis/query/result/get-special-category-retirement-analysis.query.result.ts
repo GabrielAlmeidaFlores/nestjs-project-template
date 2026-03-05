@@ -10,7 +10,6 @@ export class GetSpecialCategoryRetirementAnalysisQueryResult {
   public readonly publicServiceFederativeEntityName: string | null;
   public readonly publicServiceStateAbbreviation: string | null;
   public readonly hasConfirmedExposureToHarmfulAgents: boolean;
-  public readonly currentWorkflowStepIndex: number;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

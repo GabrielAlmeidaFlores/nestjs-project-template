@@ -79,7 +79,6 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
           dto.publicServiceStateAbbreviation ?? null,
         hasConfirmedExposureToHarmfulAgents:
           dto.hasConfirmedExposureToHarmfulAgents ?? false,
-        currentWorkflowStepIndex: dto.currentWorkflowStepIndex ?? 1,
       });
 
     const maxCode =
