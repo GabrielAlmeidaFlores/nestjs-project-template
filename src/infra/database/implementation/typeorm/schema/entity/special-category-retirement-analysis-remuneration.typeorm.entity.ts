@@ -21,7 +21,7 @@ export class SpecialCategoryRetirementAnalysisRemunerationTypeormEntity extends 
     scale: 2,
     nullable: true,
   })
-  public remunerationGrossAmount: number | null;
+  public remunerationGrossAmount: string | null;
 
   @ManyToOne(
     () => SpecialCategoryRetirementAnalysisTypeormEntity,

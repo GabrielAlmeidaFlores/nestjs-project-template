@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { EntityManager, IsNull, Repository } from 'typeorm';
 
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { BaseTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.command.repository';
@@ -43,11 +43,17 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandReposi
   public deleteAllByResultId(
     resultId: SpecialCategoryRetirementAnalysisResultId,
   ): TransactionType {
-    return async (manager: any) => {
-      await manager.update(
-        SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
+    return async (executor: unknown) => {
+      const manager = executor as EntityManager;
+      const repo =
+        manager.getRepository<SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity>(
+          SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
+        );
+      await repo.update(
         {
-          analysisResult: { id: resultId.toString() },
+          specialCategoryRetirementAnalysisResult: {
+            id: resultId.toString(),
+          },
           deletedAt: IsNull(),
         },
         { deletedAt: new Date() },

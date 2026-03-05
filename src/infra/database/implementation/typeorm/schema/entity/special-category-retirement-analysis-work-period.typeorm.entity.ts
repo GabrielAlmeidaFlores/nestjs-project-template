@@ -100,7 +100,7 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity extends Ba
 
   @OneToMany(
     () => SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
-    (entity) => entity.workPeriod,
+    (entity) => entity.specialCategoryRetirementAnalysisWorkPeriod,
   )
   public periodDocuments?:
     | SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity[]

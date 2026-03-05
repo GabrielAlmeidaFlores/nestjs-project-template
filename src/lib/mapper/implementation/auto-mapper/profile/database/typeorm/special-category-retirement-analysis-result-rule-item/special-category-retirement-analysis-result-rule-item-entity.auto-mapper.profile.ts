@@ -2,7 +2,9 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-rule-item.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/query/result/get-special-category-retirement-analysis-result-rule-item.query.result';
 import { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
@@ -28,7 +30,7 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
     ): SpecialCategoryRetirementAnalysisResultRuleItemEntity => {
-      if (!source.analysisResult) {
+      if (!source.specialCategoryRetirementAnalysisResult) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             SpecialCategoryRetirementAnalysisResultRuleItemEntity.name,
@@ -41,12 +43,15 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
         id: new SpecialCategoryRetirementAnalysisResultRuleItemId(source.id),
         specialCategoryRetirementAnalysisResultId:
           new SpecialCategoryRetirementAnalysisResultId(
-            source.analysisResult.id,
+            source.specialCategoryRetirementAnalysisResult.id,
           ),
         retirementModalityName: source.retirementModalityName,
         isRequirementMet: source.isRequirementMet,
         projectedRetirementDate: source.projectedRetirementDate,
-        estimatedRmiAmount: source.estimatedRmiAmount,
+        estimatedRmiAmount:
+          source.estimatedRmiAmount !== null
+            ? new DecimalValue(source.estimatedRmiAmount)
+            : null,
         isBestFinancialOption: source.isBestFinancialOption,
         ruleDetailedExplanationText: source.ruleDetailedExplanationText,
         createdAt: source.createdAt,
@@ -70,13 +75,16 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
       return SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity.build(
         {
           id: source.id.toString(),
-          analysisResult: {
+          specialCategoryRetirementAnalysisResult: {
             id: source.specialCategoryRetirementAnalysisResultId.toString(),
-          } as any,
+          } as unknown as SpecialCategoryRetirementAnalysisResultTypeormEntity,
           retirementModalityName: source.retirementModalityName,
           isRequirementMet: source.isRequirementMet,
           projectedRetirementDate: source.projectedRetirementDate,
-          estimatedRmiAmount: source.estimatedRmiAmount,
+          estimatedRmiAmount:
+            source.estimatedRmiAmount !== null
+              ? source.estimatedRmiAmount.toString()
+              : null,
           isBestFinancialOption: source.isBestFinancialOption,
           ruleDetailedExplanationText: source.ruleDetailedExplanationText,
           createdAt: source.createdAt,
@@ -98,7 +106,7 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
     const convert = (
       source: SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
     ): GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult => {
-      if (!source.analysisResult) {
+      if (!source.specialCategoryRetirementAnalysisResult) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass:
             GetSpecialCategoryRetirementAnalysisResultRuleItemQueryResult.name,
@@ -114,12 +122,15 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProf
           new SpecialCategoryRetirementAnalysisResultRuleItemId(source.id),
         specialCategoryRetirementAnalysisResultId:
           new SpecialCategoryRetirementAnalysisResultId(
-            source.analysisResult.id,
+            source.specialCategoryRetirementAnalysisResult.id,
           ),
         retirementModalityName: source.retirementModalityName,
         isRequirementMet: source.isRequirementMet,
         projectedRetirementDate: source.projectedRetirementDate,
-        estimatedRmiAmount: source.estimatedRmiAmount,
+        estimatedRmiAmount:
+          source.estimatedRmiAmount !== null
+            ? new DecimalValue(source.estimatedRmiAmount)
+            : null,
         isBestFinancialOption: source.isBestFinancialOption,
         ruleDetailedExplanationText: source.ruleDetailedExplanationText,
         createdAt: source.createdAt,

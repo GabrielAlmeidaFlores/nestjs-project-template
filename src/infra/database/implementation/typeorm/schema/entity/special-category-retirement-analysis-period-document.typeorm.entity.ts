@@ -35,7 +35,7 @@ export class SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity extend
     (entity) => entity.periodDocuments,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_work_period_id' })
-  public workPeriod?:
+  public specialCategoryRetirementAnalysisWorkPeriod?:
     | SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity
     | undefined;
 

@@ -35,10 +35,10 @@ export class SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRe
   > {
     const data = await this.repository.find({
       where: {
-        analysisResult: { id: resultId.toString() },
+        specialCategoryRetirementAnalysisResult: { id: resultId.toString() },
         deletedAt: IsNull(),
       },
-      relations: { analysisResult: true },
+      relations: { specialCategoryRetirementAnalysisResult: true },
     });
     return this.mapperGateway.mapArray(
       data,

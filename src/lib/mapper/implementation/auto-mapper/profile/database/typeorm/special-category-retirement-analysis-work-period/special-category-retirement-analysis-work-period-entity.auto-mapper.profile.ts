@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisWorkPeriodQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/result/get-special-category-retirement-analysis-work-period.query.result';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
@@ -75,7 +76,7 @@ export class SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile 
         id: source.id.toString(),
         specialCategoryRetirementAnalysis: {
           id: source.specialCategoryRetirementAnalysisId.toString(),
-        } as any,
+        } as unknown as SpecialCategoryRetirementAnalysisTypeormEntity,
         publicServiceAdmissionDate: source.publicServiceAdmissionDate,
         publicServiceCareerStartDate: source.publicServiceCareerStartDate,
         workPeriodStartDate: source.workPeriodStartDate,

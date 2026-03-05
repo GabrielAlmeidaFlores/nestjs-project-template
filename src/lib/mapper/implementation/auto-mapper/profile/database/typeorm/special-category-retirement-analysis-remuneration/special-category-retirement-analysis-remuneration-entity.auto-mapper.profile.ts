@@ -2,7 +2,9 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { SpecialCategoryRetirementAnalysisRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-remuneration.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/result/get-special-category-retirement-analysis-remuneration.query.result';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
@@ -44,7 +46,10 @@ export class SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfil
             source.specialCategoryRetirementAnalysis.id,
           ),
         remunerationReferenceMonthYear: source.remunerationReferenceMonthYear,
-        remunerationGrossAmount: source.remunerationGrossAmount,
+        remunerationGrossAmount:
+          source.remunerationGrossAmount !== null
+            ? new DecimalValue(source.remunerationGrossAmount)
+            : null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -67,9 +72,12 @@ export class SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfil
         id: source.id.toString(),
         specialCategoryRetirementAnalysis: {
           id: source.specialCategoryRetirementAnalysisId.toString(),
-        } as any,
+        } as unknown as SpecialCategoryRetirementAnalysisTypeormEntity,
         remunerationReferenceMonthYear: source.remunerationReferenceMonthYear,
-        remunerationGrossAmount: source.remunerationGrossAmount,
+        remunerationGrossAmount:
+          source.remunerationGrossAmount !== null
+            ? source.remunerationGrossAmount.toString()
+            : null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
@@ -107,7 +115,10 @@ export class SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfil
             source.specialCategoryRetirementAnalysis.id,
           ),
         remunerationReferenceMonthYear: source.remunerationReferenceMonthYear,
-        remunerationGrossAmount: source.remunerationGrossAmount,
+        remunerationGrossAmount:
+          source.remunerationGrossAmount !== null
+            ? new DecimalValue(source.remunerationGrossAmount)
+            : null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,

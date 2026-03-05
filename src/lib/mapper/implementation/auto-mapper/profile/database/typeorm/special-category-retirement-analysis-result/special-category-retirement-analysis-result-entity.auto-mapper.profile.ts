@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { GetSpecialCategoryRetirementAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/result/get-special-category-retirement-analysis-result.query.result';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
@@ -66,7 +67,7 @@ export class SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile {
         id: source.id.toString(),
         specialCategoryRetirementAnalysis: {
           id: source.specialCategoryRetirementAnalysisId.toString(),
-        } as any,
+        } as unknown as SpecialCategoryRetirementAnalysisTypeormEntity,
         simplifiedAnalysisSummaryText: source.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: source.fullAnalysisConclusionText,
         createdAt: source.createdAt,

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -172,7 +173,11 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
               item.projectedRetirementDate !== null
                 ? new Date(item.projectedRetirementDate)
                 : null,
-            estimatedRmiAmount: item.estimatedRmiAmount ?? null,
+            estimatedRmiAmount:
+              item.estimatedRmiAmount !== undefined &&
+              item.estimatedRmiAmount !== null
+                ? new DecimalValue(item.estimatedRmiAmount)
+                : null,
             isBestFinancialOption: item.isBestFinancialOption,
             ruleDetailedExplanationText:
               item.ruleDetailedExplanationText ?? null,

@@ -1,3 +1,4 @@
+import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { SpecialCategoryRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result/value-object/special-category-retirement-analysis-result-id/special-category-retirement-analysis-result-id.value-object';
 import type { RecognitionStatusEnum } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-conversion-item/enum/recognition-status.enum';
 import type { SpecialCategoryRetirementAnalysisResultConversionItemId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-conversion-item/value-object/special-category-retirement-analysis-result-conversion-item-id/special-category-retirement-analysis-result-conversion-item-id.value-object';
@@ -10,7 +11,7 @@ export class GetSpecialCategoryRetirementAnalysisResultConversionItemQueryResult
   public readonly harmfulExposureAgentsText: string;
   public readonly specialTimeDurationText: string;
   public readonly convertedTimeDurationText: string;
-  public readonly conversionFactorValue: number;
+  public readonly conversionFactorValue: DecimalValue;
   public readonly recognitionStatusEnum: RecognitionStatusEnum;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;

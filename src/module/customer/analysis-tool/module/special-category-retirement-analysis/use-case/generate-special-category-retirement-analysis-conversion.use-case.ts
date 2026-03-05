@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
@@ -171,7 +172,7 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
             harmfulExposureAgentsText: item.harmfulExposureAgentsText,
             specialTimeDurationText: item.specialTimeDurationText,
             convertedTimeDurationText: item.convertedTimeDurationText,
-            conversionFactorValue: item.conversionFactorValue,
+            conversionFactorValue: new DecimalValue(item.conversionFactorValue),
             recognitionStatusEnum: item.recognitionStatusEnum,
           }),
       );

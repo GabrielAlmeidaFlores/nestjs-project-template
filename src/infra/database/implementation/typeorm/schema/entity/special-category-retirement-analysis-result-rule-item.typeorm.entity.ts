@@ -36,7 +36,7 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity extend
     scale: 2,
     nullable: true,
   })
-  public estimatedRmiAmount: number | null;
+  public estimatedRmiAmount: string | null;
 
   @Column({
     name: 'is_best_financial_option',
@@ -58,7 +58,7 @@ export class SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity extend
     (entity) => entity.ruleItems,
   )
   @JoinColumn({ name: 'special_category_retirement_analysis_result_id' })
-  public analysisResult?:
+  public specialCategoryRetirementAnalysisResult?:
     | SpecialCategoryRetirementAnalysisResultTypeormEntity
     | undefined;
 
