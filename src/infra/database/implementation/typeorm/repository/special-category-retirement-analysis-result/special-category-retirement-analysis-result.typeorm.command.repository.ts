@@ -48,4 +48,10 @@ export class SpecialCategoryRetirementAnalysisResultTypeormCommandRepository
     );
     return this.update(id.toString(), mappedData);
   }
+
+  public deleteSpecialCategoryRetirementAnalysisResult(
+    id: SpecialCategoryRetirementAnalysisResultId,
+  ): TransactionType {
+    return this.delete(id.toString());
+  }
 }

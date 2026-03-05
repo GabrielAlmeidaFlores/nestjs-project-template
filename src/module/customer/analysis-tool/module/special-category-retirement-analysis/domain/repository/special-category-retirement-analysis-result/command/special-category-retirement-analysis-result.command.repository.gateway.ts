@@ -11,4 +11,8 @@ export abstract class SpecialCategoryRetirementAnalysisResultCommandRepositoryGa
     id: SpecialCategoryRetirementAnalysisResultId,
     props: SpecialCategoryRetirementAnalysisResultEntity,
   ): TransactionType;
+
+  public abstract deleteSpecialCategoryRetirementAnalysisResult(
+    id: SpecialCategoryRetirementAnalysisResultId,
+  ): TransactionType;
 }
