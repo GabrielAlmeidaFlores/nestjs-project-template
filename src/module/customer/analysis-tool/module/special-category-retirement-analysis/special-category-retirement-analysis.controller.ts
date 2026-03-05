@@ -2,6 +2,7 @@ import {
   Body,
   HttpStatus,
   Param,
+  ParseEnumPipe,
   Query,
   RequestMethod,
   StreamableFile,
@@ -535,7 +536,8 @@ export class SpecialCategoryRetirementAnalysisController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
     id: SpecialCategoryRetirementAnalysisId,
-    @Query('format') format: ExportDocumentFormatEnum,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     return await this.downloadFullDocumentUseCase.execute(
       sessionData,
@@ -566,7 +568,8 @@ export class SpecialCategoryRetirementAnalysisController {
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
     id: SpecialCategoryRetirementAnalysisId,
-    @Query('format') format: ExportDocumentFormatEnum,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     return await this.downloadSimplifiedDocumentUseCase.execute(
       sessionData,
