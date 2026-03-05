@@ -33,9 +33,6 @@ export class GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisResponseDto ext
   public reconhecimentoJudicial?: string;
 
   @ResponseDtoStringProperty({ required: false })
-  public timeGained?: string;
-
-  @ResponseDtoStringProperty({ required: false })
   public technicalNote?: string;
 
   protected override readonly _type =
