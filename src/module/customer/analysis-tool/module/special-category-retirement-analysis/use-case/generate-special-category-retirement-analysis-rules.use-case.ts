@@ -115,25 +115,23 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
       updatedAt: new Date(),
     });
 
-    const deleteTransaction =
+    const creditAndUpdateTransaction =
       await this.baseTransactionRepositoryGateway.execute([
         creditTransaction,
-        this.ruleItemCommandRepositoryGateway.deleteAllByResultId(
-          existingResult.specialCategoryRetirementAnalysisResultId,
-        ),
         this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
           existingResult.specialCategoryRetirementAnalysisResultId,
           resultEntity,
         ),
       ]);
 
-    await deleteTransaction.commit();
+    await creditAndUpdateTransaction.commit();
 
     const workPeriodBatches = this.createBatches(
       queryResult.workPeriods,
       this.BATCH_SIZE,
     );
-    let totalProcessed = 0;
+    const allNewItemEntities: SpecialCategoryRetirementAnalysisResultRuleItemEntity[] =
+      [];
 
     for (const batch of workPeriodBatches) {
       const contextBuffer = Buffer.from(
@@ -162,45 +160,48 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
 
       const items = JSON.parse(jsonResult) as RuleItemDataInterface[];
 
-      const itemEntities = items.map(
-        (item) =>
-          new SpecialCategoryRetirementAnalysisResultRuleItemEntity({
-            specialCategoryRetirementAnalysisResultId: resultEntity.id,
-            retirementModalityName: item.retirementModalityName,
-            isRequirementMet: item.isRequirementMet,
-            projectedRetirementDate:
-              item.projectedRetirementDate !== undefined &&
-              item.projectedRetirementDate !== null
-                ? new Date(item.projectedRetirementDate)
-                : null,
-            estimatedRmiAmount:
-              item.estimatedRmiAmount !== undefined &&
-              item.estimatedRmiAmount !== null
-                ? new DecimalValue(item.estimatedRmiAmount)
-                : null,
-            isBestFinancialOption: item.isBestFinancialOption,
-            ruleDetailedExplanationText:
-              item.ruleDetailedExplanationText ?? null,
-          }),
+      allNewItemEntities.push(
+        ...items.map(
+          (item) =>
+            new SpecialCategoryRetirementAnalysisResultRuleItemEntity({
+              specialCategoryRetirementAnalysisResultId: resultEntity.id,
+              retirementModalityName: item.retirementModalityName,
+              isRequirementMet: item.isRequirementMet,
+              projectedRetirementDate:
+                item.projectedRetirementDate !== undefined &&
+                item.projectedRetirementDate !== null
+                  ? new Date(item.projectedRetirementDate)
+                  : null,
+              estimatedRmiAmount:
+                item.estimatedRmiAmount !== undefined &&
+                item.estimatedRmiAmount !== null
+                  ? new DecimalValue(item.estimatedRmiAmount)
+                  : null,
+              isBestFinancialOption: item.isBestFinancialOption,
+              ruleDetailedExplanationText:
+                item.ruleDetailedExplanationText ?? null,
+            }),
+        ),
       );
-
-      const batchTransaction =
-        await this.baseTransactionRepositoryGateway.execute(
-          itemEntities.map((entity) =>
-            this.ruleItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultRuleItem(
-              entity,
-            ),
-          ),
-        );
-
-      await batchTransaction.commit();
-
-      totalProcessed += itemEntities.length;
     }
+
+    const replaceTransaction =
+      await this.baseTransactionRepositoryGateway.execute([
+        this.ruleItemCommandRepositoryGateway.deleteAllByResultId(
+          existingResult.specialCategoryRetirementAnalysisResultId,
+        ),
+        ...allNewItemEntities.map((entity) =>
+          this.ruleItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultRuleItem(
+            entity,
+          ),
+        ),
+      ]);
+
+    await replaceTransaction.commit();
 
     return GenerateSpecialCategoryRetirementAnalysisRulesResponseDto.build({
       specialCategoryRetirementAnalysisResultId: resultEntity.id,
-      processedItemsCount: totalProcessed,
+      processedItemsCount: allNewItemEntities.length,
     });
   }
 

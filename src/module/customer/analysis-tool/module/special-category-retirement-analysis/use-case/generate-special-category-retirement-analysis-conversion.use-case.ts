@@ -117,25 +117,23 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
       updatedAt: new Date(),
     });
 
-    const deleteTransaction =
+    const creditAndUpdateTransaction =
       await this.baseTransactionRepositoryGateway.execute([
         creditTransaction,
-        this.conversionItemCommandRepositoryGateway.deleteAllByResultId(
-          existingResult.specialCategoryRetirementAnalysisResultId,
-        ),
         this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
           existingResult.specialCategoryRetirementAnalysisResultId,
           resultEntity,
         ),
       ]);
 
-    await deleteTransaction.commit();
+    await creditAndUpdateTransaction.commit();
 
     const workPeriodBatches = this.createBatches(
       queryResult.workPeriods,
       this.BATCH_SIZE,
     );
-    let totalProcessed = 0;
+    const allNewItemEntities: SpecialCategoryRetirementAnalysisResultConversionItemEntity[] =
+      [];
 
     for (const batch of workPeriodBatches) {
       const contextBuffer = Buffer.from(
@@ -163,38 +161,43 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
 
       const items = JSON.parse(jsonResult) as ConversionItemDataInterface[];
 
-      const itemEntities = items.map(
-        (item) =>
-          new SpecialCategoryRetirementAnalysisResultConversionItemEntity({
-            specialCategoryRetirementAnalysisResultId: resultEntity.id,
-            originJobTitleDescription: item.originJobTitleDescription,
-            periodDateRangeText: item.periodDateRangeText,
-            harmfulExposureAgentsText: item.harmfulExposureAgentsText,
-            specialTimeDurationText: item.specialTimeDurationText,
-            convertedTimeDurationText: item.convertedTimeDurationText,
-            conversionFactorValue: new DecimalValue(item.conversionFactorValue),
-            recognitionStatusEnum: item.recognitionStatusEnum,
-          }),
+      allNewItemEntities.push(
+        ...items.map(
+          (item) =>
+            new SpecialCategoryRetirementAnalysisResultConversionItemEntity({
+              specialCategoryRetirementAnalysisResultId: resultEntity.id,
+              originJobTitleDescription: item.originJobTitleDescription,
+              periodDateRangeText: item.periodDateRangeText,
+              harmfulExposureAgentsText: item.harmfulExposureAgentsText,
+              specialTimeDurationText: item.specialTimeDurationText,
+              convertedTimeDurationText: item.convertedTimeDurationText,
+              conversionFactorValue: new DecimalValue(
+                item.conversionFactorValue,
+              ),
+              recognitionStatusEnum: item.recognitionStatusEnum,
+            }),
+        ),
       );
-
-      const batchTransaction =
-        await this.baseTransactionRepositoryGateway.execute(
-          itemEntities.map((entity) =>
-            this.conversionItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultConversionItem(
-              entity,
-            ),
-          ),
-        );
-
-      await batchTransaction.commit();
-
-      totalProcessed += itemEntities.length;
     }
+
+    const replaceTransaction =
+      await this.baseTransactionRepositoryGateway.execute([
+        this.conversionItemCommandRepositoryGateway.deleteAllByResultId(
+          existingResult.specialCategoryRetirementAnalysisResultId,
+        ),
+        ...allNewItemEntities.map((entity) =>
+          this.conversionItemCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResultConversionItem(
+            entity,
+          ),
+        ),
+      ]);
+
+    await replaceTransaction.commit();
 
     return GenerateSpecialCategoryRetirementAnalysisConversionResponseDto.build(
       {
         specialCategoryRetirementAnalysisResultId: resultEntity.id,
-        processedItemsCount: totalProcessed,
+        processedItemsCount: allNewItemEntities.length,
       },
     );
   }
