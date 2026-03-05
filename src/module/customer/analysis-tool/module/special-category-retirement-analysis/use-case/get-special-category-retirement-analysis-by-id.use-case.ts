@@ -177,7 +177,6 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
       }),
       hasConfirmedExposureToHarmfulAgents:
         queryResult.hasConfirmedExposureToHarmfulAgents,
-      currentWorkflowStepIndex: queryResult.currentWorkflowStepIndex,
       workPeriods,
       ...(analysisResult !== undefined && { analysisResult }),
       createdAt: queryResult.createdAt,

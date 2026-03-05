@@ -53,8 +53,6 @@ export class UpdateSpecialCategoryRetirementAnalysisUseCase {
       hasConfirmedExposureToHarmfulAgents:
         dto.hasConfirmedExposureToHarmfulAgents ??
         queryResult.hasConfirmedExposureToHarmfulAgents,
-      currentWorkflowStepIndex:
-        dto.currentWorkflowStepIndex ?? queryResult.currentWorkflowStepIndex,
       createdAt: queryResult.createdAt,
       updatedAt: new Date(),
     });
