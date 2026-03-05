@@ -75,6 +75,52 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
         organizationMember.id,
       );
 
+    const existingResult =
+      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
+        analysisId,
+      );
+
+    let resultEntity: SpecialCategoryRetirementAnalysisResultEntity;
+
+    if (existingResult !== null) {
+      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
+        id: existingResult.specialCategoryRetirementAnalysisResultId,
+        specialCategoryRetirementAnalysisId: analysisId,
+        simplifiedAnalysisSummaryText:
+          existingResult.simplifiedAnalysisSummaryText,
+        fullAnalysisConclusionText: null,
+        createdAt: existingResult.createdAt,
+        updatedAt: new Date(),
+      });
+
+      const clearTransaction =
+        await this.baseTransactionRepositoryGateway.execute([
+          creditTransaction,
+          this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
+            existingResult.specialCategoryRetirementAnalysisResultId,
+            resultEntity,
+          ),
+        ]);
+
+      await clearTransaction.commit();
+    } else {
+      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
+        specialCategoryRetirementAnalysisId: analysisId,
+        simplifiedAnalysisSummaryText: null,
+        fullAnalysisConclusionText: null,
+      });
+
+      const createTransaction =
+        await this.baseTransactionRepositoryGateway.execute([
+          creditTransaction,
+          this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
+            resultEntity,
+          ),
+        ]);
+
+      await createTransaction.commit();
+    }
+
     const contextBuffer = Buffer.from(
       JSON.stringify(
         {
@@ -94,52 +140,29 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
         [contextBuffer],
       );
 
-    const existingResult =
-      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
-        analysisId,
-      );
-
-    let resultEntity: SpecialCategoryRetirementAnalysisResultEntity;
-
-    if (existingResult !== null) {
-      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
-        id: existingResult.specialCategoryRetirementAnalysisResultId,
+    const updatedResultEntity =
+      new SpecialCategoryRetirementAnalysisResultEntity({
+        id: resultEntity.id,
         specialCategoryRetirementAnalysisId: analysisId,
         simplifiedAnalysisSummaryText:
-          existingResult.simplifiedAnalysisSummaryText,
+          resultEntity.simplifiedAnalysisSummaryText,
         fullAnalysisConclusionText: analysisText,
-        createdAt: existingResult.createdAt,
+        createdAt: resultEntity.createdAt,
         updatedAt: new Date(),
       });
 
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        creditTransaction,
+    const updateTransaction =
+      await this.baseTransactionRepositoryGateway.execute(
         this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
-          existingResult.specialCategoryRetirementAnalysisResultId,
-          resultEntity,
+          resultEntity.id,
+          updatedResultEntity,
         ),
-      ]);
+      );
 
-      await transaction.commit();
-    } else {
-      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
-        specialCategoryRetirementAnalysisId: analysisId,
-        simplifiedAnalysisSummaryText: null,
-        fullAnalysisConclusionText: analysisText,
-      });
-
-      const transaction = await this.baseTransactionRepositoryGateway.execute([
-        creditTransaction,
-        this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
-          resultEntity,
-        ),
-      ]);
-
-      await transaction.commit();
-    }
+    await updateTransaction.commit();
 
     return GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto.build({
-      specialCategoryRetirementAnalysisResultId: resultEntity.id,
+      specialCategoryRetirementAnalysisResultId: updatedResultEntity.id,
     });
   }
 }

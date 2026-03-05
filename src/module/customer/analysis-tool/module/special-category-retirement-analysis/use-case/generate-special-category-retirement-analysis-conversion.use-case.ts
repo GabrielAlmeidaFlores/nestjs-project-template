@@ -14,6 +14,7 @@ import { RecognitionStatusEnum } from '@module/customer/analysis-tool/module/spe
 import { SpecialCategoryRetirementAnalysisResultConversionItemEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.entity';
 import { GenerateSpecialCategoryRetirementAnalysisConversionResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/generate-special-category-retirement-analysis-conversion.response.dto';
 import { SpecialCategoryRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-not-found.error';
+import { SpecialCategoryRetirementAnalysisResultNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-result-not-found.error';
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
@@ -89,6 +90,15 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
         SpecialCategoryRetirementAnalysisNotFoundError,
       );
 
+    const existingResult =
+      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
+        analysisId,
+      );
+
+    if (existingResult === null) {
+      throw new SpecialCategoryRetirementAnalysisResultNotFoundError();
+    }
+
     const creditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
@@ -96,53 +106,29 @@ export class GenerateSpecialCategoryRetirementAnalysisConversionUseCase {
         organizationMember.id,
       );
 
-    let resultEntity: SpecialCategoryRetirementAnalysisResultEntity;
-    const existingResult =
-      await this.resultQueryRepositoryGateway.findOneByAnalysisIdOrNull(
-        analysisId,
-      );
+    const resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
+      id: existingResult.specialCategoryRetirementAnalysisResultId,
+      specialCategoryRetirementAnalysisId: analysisId,
+      simplifiedAnalysisSummaryText:
+        existingResult.simplifiedAnalysisSummaryText,
+      fullAnalysisConclusionText: existingResult.fullAnalysisConclusionText,
+      createdAt: existingResult.createdAt,
+      updatedAt: new Date(),
+    });
 
-    if (existingResult !== null) {
-      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
-        id: existingResult.specialCategoryRetirementAnalysisResultId,
-        specialCategoryRetirementAnalysisId: analysisId,
-        simplifiedAnalysisSummaryText:
-          existingResult.simplifiedAnalysisSummaryText,
-        fullAnalysisConclusionText: existingResult.fullAnalysisConclusionText,
-        createdAt: existingResult.createdAt,
-        updatedAt: new Date(),
-      });
+    const deleteTransaction =
+      await this.baseTransactionRepositoryGateway.execute([
+        creditTransaction,
+        this.conversionItemCommandRepositoryGateway.deleteAllByResultId(
+          existingResult.specialCategoryRetirementAnalysisResultId,
+        ),
+        this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
+          existingResult.specialCategoryRetirementAnalysisResultId,
+          resultEntity,
+        ),
+      ]);
 
-      const deleteTransaction =
-        await this.baseTransactionRepositoryGateway.execute([
-          creditTransaction,
-          this.conversionItemCommandRepositoryGateway.deleteAllByResultId(
-            existingResult.specialCategoryRetirementAnalysisResultId,
-          ),
-          this.resultCommandRepositoryGateway.updateSpecialCategoryRetirementAnalysisResult(
-            existingResult.specialCategoryRetirementAnalysisResultId,
-            resultEntity,
-          ),
-        ]);
-
-      await deleteTransaction.commit();
-    } else {
-      resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
-        specialCategoryRetirementAnalysisId: analysisId,
-        simplifiedAnalysisSummaryText: null,
-        fullAnalysisConclusionText: null,
-      });
-
-      const createTransaction =
-        await this.baseTransactionRepositoryGateway.execute([
-          creditTransaction,
-          this.resultCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisResult(
-            resultEntity,
-          ),
-        ]);
-
-      await createTransaction.commit();
-    }
+    await deleteTransaction.commit();
 
     const workPeriodBatches = this.createBatches(
       queryResult.workPeriods,
