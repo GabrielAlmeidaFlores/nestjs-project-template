@@ -538,7 +538,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      id: new PaymentPlanPaidResourceId('a1b2c3d4-e5f6-4890-abcd-ef1234567890'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_COMPLETE_ANALYSIS,
       creditCost: 10,
@@ -547,7 +547,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise completa de aposentadoria por categoria especial com IA. Examina períodos de trabalho com exposição a agentes nocivos, verifica documentação probatória (PPP, LTCAT, laudos), calcula conversão de tempo especial para comum, verifica enquadramento nas regras de aposentadoria especial e gera parecer técnico detalhado com conclusões sobre viabilidade do benefício.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-8901-bcde-f12345678901'),
+      id: new PaymentPlanPaidResourceId('b2c3d4e5-f6a7-4901-bcde-f12345678901'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_SIMPLIFIED_ANALYSIS,
       creditCost: 5,
@@ -556,7 +556,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada de aposentadoria por categoria especial com IA. Examina períodos especiais cadastrados de forma objetiva, identifica documentação básica apresentada, calcula tempo especial total alegado e informa de forma resumida sobre viabilidade geral de reconhecimento. Versão rápida para triagem inicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-9012-cdef-123456789012'),
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4012-9def-123456789012'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_CONVERSION_ANALYSIS,
       creditCost: 8,
@@ -565,7 +565,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de conversão de tempo especial para comum via IA. Processa em lotes os períodos de trabalho especial cadastrados, calcula o fator de conversão aplicável, determina o tempo especial efetivo e o tempo convertido por período, e classifica o reconhecimento de cada bloco (reconhecido, parcial ou não reconhecido).',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-0123-defa-234567890123'),
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4123-aefa-234567890123'),
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_RULES_ANALYSIS,
       creditCost: 8,
