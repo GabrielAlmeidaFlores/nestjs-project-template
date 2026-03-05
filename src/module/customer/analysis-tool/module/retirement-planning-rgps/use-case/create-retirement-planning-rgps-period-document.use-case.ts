@@ -242,11 +242,6 @@ Com base nos dados e documentos acima, gere uma observação técnica previdenci
             jsonSchema: {
               type: 'object',
               properties: {
-                tempoContribuicao: {
-                  type: 'string',
-                  description:
-                    'Tempo de contribuição reconhecido. Ex. 2 anos e 3 meses e 20 dias.',
-                },
                 observacaoTecnica: {
                   type: 'string',
                   description:
@@ -259,7 +254,6 @@ Com base nos dados e documentos acima, gere uma observação técnica previdenci
                 },
               },
               required: [
-                'tempoContribuicao',
                 'observacaoTecnica',
                 'dataFinalDoVinculo',
               ],
