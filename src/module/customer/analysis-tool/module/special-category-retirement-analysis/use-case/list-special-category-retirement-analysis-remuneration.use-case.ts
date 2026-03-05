@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
-import { SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/special-category-retirement-analysis-remuneration.query.repository.gateway';
+import { GetSpecialCategoryRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/result/get-special-category-retirement-analysis-remuneration.query.result';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-remuneration/value-object/special-category-retirement-analysis-remuneration-id/special-category-retirement-analysis-remuneration-id.value-object';
 import {
@@ -19,8 +19,6 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
-    @Inject(SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway)
-    private readonly remunerationQueryRepositoryGateway: SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -52,15 +50,16 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
 
     const months = this.generateMonthRange(earliestStart, latestEnd);
 
+    const remunerationByMonthKey = this.buildRemunerationMap(
+      queryResult.remunerations,
+    );
+
     const items: SpecialCategoryRetirementAnalysisRemunerationItemResponseDto[] =
       [];
 
     for (const monthYear of months) {
-      const existing =
-        await this.remunerationQueryRepositoryGateway.findOneByAnalysisIdAndMonthYear(
-          analysisId,
-          monthYear,
-        );
+      const key = this.monthKey(monthYear);
+      const existing = remunerationByMonthKey.get(key) ?? null;
 
       if (existing !== null) {
         items.push(
@@ -88,6 +87,23 @@ export class ListSpecialCategoryRetirementAnalysisRemunerationUseCase {
     return ListSpecialCategoryRetirementAnalysisRemunerationResponseDto.build({
       data: items,
     });
+  }
+
+  private buildRemunerationMap(
+    remunerations: GetSpecialCategoryRetirementAnalysisRemunerationQueryResult[],
+  ): Map<string, GetSpecialCategoryRetirementAnalysisRemunerationQueryResult> {
+    const map = new Map<
+      string,
+      GetSpecialCategoryRetirementAnalysisRemunerationQueryResult
+    >();
+    for (const rem of remunerations) {
+      map.set(this.monthKey(rem.remunerationReferenceMonthYear), rem);
+    }
+    return map;
+  }
+
+  private monthKey(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
   }
 
   private generateMonthRange(startDate: Date, endDate: Date): Date[] {
