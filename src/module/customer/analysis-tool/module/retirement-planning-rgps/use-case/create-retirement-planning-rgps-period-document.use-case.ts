@@ -253,10 +253,7 @@ Com base nos dados e documentos acima, gere uma observação técnica previdenci
                     'Data final do vínculo trabalhista que foi analisado. Formato DD/MM/AAAA. Se não for possível determinar, retorne uma string vazia.',
                 },
               },
-              required: [
-                'observacaoTecnica',
-                'dataFinalDoVinculo',
-              ],
+              required: ['observacaoTecnica', 'dataFinalDoVinculo'],
             },
           }),
         }),
