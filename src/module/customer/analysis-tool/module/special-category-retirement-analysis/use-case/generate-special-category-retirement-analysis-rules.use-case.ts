@@ -148,17 +148,21 @@ export class GenerateSpecialCategoryRetirementAnalysisRulesUseCase {
       );
 
       const jsonResult =
-        await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
+        await this.analysisProcessorGateway.getSpecialCategoryRetirementRulesAnalysis(
           promptResponse.prompt,
           [contextBuffer],
-          true,
         );
 
       if (jsonResult === null) {
         continue;
       }
 
-      const items = JSON.parse(jsonResult) as RuleItemDataInterface[];
+      const parsed = JSON.parse(jsonResult) as {
+        items?: RuleItemDataInterface[];
+      };
+      const items: RuleItemDataInterface[] = Array.isArray(parsed)
+        ? parsed
+        : (parsed.items ?? []);
 
       allNewItemEntities.push(
         ...items.map(
