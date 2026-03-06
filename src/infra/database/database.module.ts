@@ -189,6 +189,20 @@ import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database
 import { SpecialActivityInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-inss-benefit/special-activity-inss-benefit.typeorm.command.repository';
 import { SpecialActivityLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-legal-proceeding/special-activity-legal-proceeding.typeorm.command.repository';
 import { SpecialActivityResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-result/special-activity-result.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis/special-category-retirement-analysis.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis/special-category-retirement-analysis.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result/special-category-retirement-analysis-result.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result/special-category-retirement-analysis-result.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.query.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
 import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
@@ -354,6 +368,20 @@ import { SpecialActivityAnalysisDocumentCommandRepositoryGateway } from '@module
 import { SpecialActivityAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-inss-benefit/command/special-activity-analysis-inss-benefit.command.repository.gateway';
 import { SpecialActivityAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-legal-proceeding/command/special-activity-analysis-legal-proceeding.command.repository.gateway';
 import { SpecialActivityAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/repository/special-activity-analysis-result/command/special-activity-analysis-result.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/command/special-category-retirement-analysis.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/command/special-category-retirement-analysis-period-document.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/query/special-category-retirement-analysis-period-document.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/command/special-category-retirement-analysis-remuneration.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-remuneration/query/special-category-retirement-analysis-remuneration.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/command/special-category-retirement-analysis-result.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result/query/special-category-retirement-analysis-result.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-conversion-item/command/special-category-retirement-analysis-result-conversion-item.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-conversion-item/query/special-category-retirement-analysis-result-conversion-item.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/command/special-category-retirement-analysis-result-rule-item.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-result-rule-item/query/special-category-retirement-analysis-result-rule-item.query.repository.gateway';
+import { SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/command/special-category-retirement-analysis-work-period.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
 import { SpeechGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator-benefit/command/speech-generator-benefit.command.repository.gateway';
@@ -1188,6 +1216,80 @@ const classProvider: ClassProvider[] = [
   {
     provide: SpecialActivityAnalysisLegalProceedingCommandRepositoryGateway,
     useClass: SpecialActivityLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
+    useClass: SpecialCategoryRetirementAnalysisTypeormQueryRepository,
+  },
+  {
+    provide: SpecialCategoryRetirementAnalysisCommandRepositoryGateway,
+    useClass: SpecialCategoryRetirementAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway,
+    useClass: SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisPeriodDocumentQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisRemunerationQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository,
+  },
+  {
+    provide: SpecialCategoryRetirementAnalysisResultQueryRepositoryGateway,
+    useClass: SpecialCategoryRetirementAnalysisResultTypeormQueryRepository,
+  },
+  {
+    provide: SpecialCategoryRetirementAnalysisResultCommandRepositoryGateway,
+    useClass: SpecialCategoryRetirementAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisResultConversionItemQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisResultConversionItemCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisResultRuleItemQueryRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository,
+  },
+  {
+    provide:
+      SpecialCategoryRetirementAnalysisResultRuleItemCommandRepositoryGateway,
+    useClass:
+      SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository,
   },
   {
     provide: PerCapitaIncomeForBpcAnalysisCommandRepositoryGateway,

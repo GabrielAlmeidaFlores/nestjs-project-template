@@ -657,4 +657,123 @@ Análise processada do CNIS:
       }),
     );
   }
+
+  public async getSpecialCategoryRetirementConversionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                description: 'Lista de itens de conversão de tempo especial',
+                items: {
+                  type: 'object',
+                  properties: {
+                    originJobTitleDescription: {
+                      type: 'string',
+                      description: 'Descrição do cargo/função de origem',
+                    },
+                    periodDateRangeText: {
+                      type: 'string',
+                      description:
+                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
+                    },
+                    harmfulExposureAgentsText: {
+                      type: 'string',
+                      description:
+                        'Descrição dos agentes nocivos identificados',
+                    },
+                    specialTimeDurationText: {
+                      type: 'string',
+                      description:
+                        'Duração do tempo especial em formato textual',
+                    },
+                    convertedTimeDurationText: {
+                      type: 'string',
+                      description:
+                        'Duração do tempo convertido em formato textual',
+                    },
+                    conversionFactorValue: {
+                      type: 'number',
+                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
+                    },
+                    recognitionStatusEnum: {
+                      type: 'string',
+                      description:
+                        'Status de reconhecimento do período especial',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      }),
+    );
+  }
+
+  public async getSpecialCategoryRetirementRulesAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                description: 'Lista de regras previdenciárias analisadas',
+                items: {
+                  type: 'object',
+                  properties: {
+                    retirementModalityName: {
+                      type: 'string',
+                      description: 'Nome da modalidade de aposentadoria',
+                    },
+                    isRequirementMet: {
+                      type: 'boolean',
+                      description: 'Indica se os requisitos foram cumpridos',
+                    },
+                    projectedRetirementDate: {
+                      type: 'string',
+                      description:
+                        'Data projetada de aposentadoria (YYYY-MM-DD)',
+                      nullable: true,
+                    },
+                    estimatedRmiAmount: {
+                      type: 'number',
+                      description: 'Valor estimado da RMI',
+                      nullable: true,
+                    },
+                    isBestFinancialOption: {
+                      type: 'boolean',
+                      description: 'Indica se é a melhor opção financeira',
+                    },
+                    ruleDetailedExplanationText: {
+                      type: 'string',
+                      description: 'Explicação detalhada da regra',
+                      nullable: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      }),
+    );
+  }
 }
