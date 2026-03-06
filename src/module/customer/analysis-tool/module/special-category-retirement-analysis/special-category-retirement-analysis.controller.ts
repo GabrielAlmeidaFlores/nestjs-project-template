@@ -138,9 +138,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<GetSpecialCategoryRetirementAnalysisResponseDto> {
-    return await this.getByIdUseCase.execute(organizationSessionData, id);
+    return await this.getByIdUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -163,10 +166,14 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
     @Body() dto: UpdateSpecialCategoryRetirementAnalysisRequestDto,
   ): Promise<UpdateSpecialCategoryRetirementAnalysisResponseDto> {
-    return await this.updateUseCase.execute(organizationSessionData, id, dto);
+    return await this.updateUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -188,9 +195,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisResponseDto> {
-    return await this.deleteUseCase.execute(organizationSessionData, id);
+    return await this.deleteUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -216,12 +226,12 @@ export class SpecialCategoryRetirementAnalysisController {
       'analysisId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
     )
-    analysisId: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
     @Body() dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
     return await this.createWorkPeriodUseCase.execute(
       organizationSessionData,
-      analysisId,
+      specialCategoryRetirementAnalysisId,
       dto,
     );
   }
@@ -244,18 +254,16 @@ export class SpecialCategoryRetirementAnalysisController {
   })
   public async updateWorkPeriod(
     @Param(
-      'analysisId',
-      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
-    )
-    _analysisId: SpecialCategoryRetirementAnalysisId,
-    @Param(
       'workPeriodId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
     )
-    workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
+    specialCategoryRetirementAnalysisWorkPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     @Body() dto: UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<UpdateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
-    return await this.updateWorkPeriodUseCase.execute(workPeriodId, dto);
+    return await this.updateWorkPeriodUseCase.execute(
+      specialCategoryRetirementAnalysisWorkPeriodId,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -275,17 +283,14 @@ export class SpecialCategoryRetirementAnalysisController {
   })
   public async deleteWorkPeriod(
     @Param(
-      'analysisId',
-      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
-    )
-    _analysisId: SpecialCategoryRetirementAnalysisId,
-    @Param(
       'workPeriodId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
     )
-    workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
+    specialCategoryRetirementAnalysisWorkPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
-    return await this.deleteWorkPeriodUseCase.execute(workPeriodId);
+    return await this.deleteWorkPeriodUseCase.execute(
+      specialCategoryRetirementAnalysisWorkPeriodId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -309,10 +314,13 @@ export class SpecialCategoryRetirementAnalysisController {
       'workPeriodId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
     )
-    workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
+    specialCategoryRetirementAnalysisWorkPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     @Body() dto: AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto,
   ): Promise<AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto> {
-    return await this.addPeriodDocumentUseCase.execute(workPeriodId, dto);
+    return await this.addPeriodDocumentUseCase.execute(
+      specialCategoryRetirementAnalysisWorkPeriodId,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -332,19 +340,16 @@ export class SpecialCategoryRetirementAnalysisController {
   })
   public async deletePeriodDocument(
     @Param(
-      'workPeriodId',
-      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
-    )
-    _workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
-    @Param(
       'periodDocumentId',
       new ParseValueObjectPipe(
         SpecialCategoryRetirementAnalysisPeriodDocumentId,
       ),
     )
-    periodDocumentId: SpecialCategoryRetirementAnalysisPeriodDocumentId,
+    specialCategoryRetirementAnalysisPeriodDocumentId: SpecialCategoryRetirementAnalysisPeriodDocumentId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto> {
-    return await this.deletePeriodDocumentUseCase.execute(periodDocumentId);
+    return await this.deletePeriodDocumentUseCase.execute(
+      specialCategoryRetirementAnalysisPeriodDocumentId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -366,12 +371,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
     @Query() filters: GetSpecialCategoryRetirementAnalysisTimelineRequestDto,
   ): Promise<GetSpecialCategoryRetirementAnalysisTimelineResponseDto> {
     return await this.getTimelineUseCase.execute(
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
       filters,
     );
   }
@@ -395,11 +400,11 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<ListSpecialCategoryRetirementAnalysisRemunerationResponseDto> {
     return await this.listRemunerationUseCase.execute(
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
     );
   }
 
@@ -421,18 +426,16 @@ export class SpecialCategoryRetirementAnalysisController {
   })
   public async updateRemuneration(
     @Param(
-      'analysisId',
-      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
-    )
-    _analysisId: SpecialCategoryRetirementAnalysisId,
-    @Param(
       'remunerationId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
     )
-    remunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
+    specialCategoryRetirementAnalysisRemunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
     @Body() dto: UpdateSpecialCategoryRetirementAnalysisRemunerationRequestDto,
   ): Promise<UpdateSpecialCategoryRetirementAnalysisRemunerationResponseDto> {
-    return await this.updateRemunerationUseCase.execute(remunerationId, dto);
+    return await this.updateRemunerationUseCase.execute(
+      specialCategoryRetirementAnalysisRemunerationId,
+      dto,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -452,17 +455,14 @@ export class SpecialCategoryRetirementAnalysisController {
   })
   public async deleteRemuneration(
     @Param(
-      'analysisId',
-      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
-    )
-    _analysisId: SpecialCategoryRetirementAnalysisId,
-    @Param(
       'remunerationId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
     )
-    remunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
+    specialCategoryRetirementAnalysisRemunerationId: SpecialCategoryRetirementAnalysisRemunerationId,
   ): Promise<DeleteSpecialCategoryRetirementAnalysisRemunerationResponseDto> {
-    return await this.deleteRemunerationUseCase.execute(remunerationId);
+    return await this.deleteRemunerationUseCase.execute(
+      specialCategoryRetirementAnalysisRemunerationId,
+    );
   }
 
   @BuildEndpointSpecification({
@@ -485,12 +485,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto> {
     return await this.generateFullTextUseCase.execute(
       sessionData,
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
     );
   }
 
@@ -514,12 +514,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<GenerateSpecialCategoryRetirementAnalysisConversionResponseDto> {
     return await this.generateConversionUseCase.execute(
       sessionData,
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
     );
   }
 
@@ -543,12 +543,12 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
   ): Promise<GenerateSpecialCategoryRetirementAnalysisRulesResponseDto> {
     return await this.generateRulesUseCase.execute(
       sessionData,
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
     );
   }
 
@@ -572,14 +572,14 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     return await this.downloadFullDocumentUseCase.execute(
       sessionData,
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
       format,
     );
   }
@@ -604,14 +604,14 @@ export class SpecialCategoryRetirementAnalysisController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
-    id: SpecialCategoryRetirementAnalysisId,
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
     @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
     format: ExportDocumentFormatEnum,
   ): Promise<StreamableFile> {
     return await this.downloadSimplifiedDocumentUseCase.execute(
       sessionData,
       organizationSessionData,
-      id,
+      specialCategoryRetirementAnalysisId,
       format,
     );
   }
