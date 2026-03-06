@@ -1884,6 +1884,89 @@ public async execute(
 - ✅ Consistent with established patterns in the codebase
 - ✅ Errors caught early (before reaching use case)
 
+#### ⚠️ CRITICAL: REST Resource Hierarchy in Route Paths
+
+**RULE**: Every endpoint that operates on a child resource MUST include the parent resource ID in the route path. Parent IDs **MUST NEVER** appear in the request body (DTO).
+
+This applies to all HTTP methods: POST, GET, PATCH, DELETE.
+
+**Examples of correct resource hierarchy:**
+
+```
+POST   /:analysisId/work-period                             ← create child
+PATCH  /:analysisId/work-period/:workPeriodId               ← update child
+DELETE /:analysisId/work-period/:workPeriodId               ← delete child
+POST   /:workPeriodId/period-document                       ← create grandchild
+DELETE /:workPeriodId/period-document/:periodDocumentId     ← delete grandchild
+PATCH  /:analysisId/remuneration/:remunerationId            ← update child
+DELETE /:analysisId/remuneration/:remunerationId            ← delete child
+```
+
+**❌ WRONG — parent ID in the request body:**
+
+```typescript
+// ❌ BAD: analysisId belongs in the route, not the body
+@RequestDto()
+export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(AnalysisId)
+  public analysisId: AnalysisId; // ❌ Should be a route param
+
+  @RequestDtoDateProperty()
+  public startDate: Date;
+}
+```
+
+**✅ CORRECT — parent ID as route param, use case receives it directly:**
+
+```typescript
+// ✅ DTO only contains data fields
+@RequestDto()
+export class CreateWorkPeriodRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoDateProperty()
+  public startDate: Date;
+}
+
+// ✅ Controller: parent ID comes from route
+@BuildEndpointSpecification({ http: { path: ':analysisId/work-period', method: RequestMethod.POST, ... }, ... })
+public async createWorkPeriod(
+  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
+  analysisId: AnalysisId,
+  @Body() dto: CreateWorkPeriodRequestDto,
+): Promise<CreateWorkPeriodResponseDto> {
+  return this.createWorkPeriodUseCase.execute(analysisId, dto);
+}
+
+// ✅ Use case receives parent ID as explicit parameter
+public async execute(
+  analysisId: AnalysisId,
+  dto: CreateWorkPeriodRequestDto,
+): Promise<CreateWorkPeriodResponseDto> { ... }
+```
+
+**When the parent ID is not used in the use case logic** (e.g., PATCH/DELETE where only the child ID is needed), still declare the `@Param` with a `_` prefix to signal intentional non-use:
+
+```typescript
+public async deleteWorkPeriod(
+  @Param('analysisId', new ParseValueObjectPipe(AnalysisId))
+  _analysisId: AnalysisId,           // ← declared for REST hierarchy, not used in logic
+  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
+  workPeriodId: WorkPeriodId,
+): Promise<DeleteWorkPeriodResponseDto> {
+  return this.deleteWorkPeriodUseCase.execute(workPeriodId);
+}
+```
+
+**Rules:**
+
+- ✅ Parent IDs MUST appear in the route path
+- ✅ All HTTP methods (POST, PATCH, DELETE) for child resources include the parent ID in the path
+- ✅ When the parent ID is unused in logic, prefix the parameter with `_`
+- ✅ DTOs contain only data fields — never entity relationship IDs
+- ❌ NO parent IDs in request body DTOs
+- ❌ NO flat routes like `work-period/:id` when a parent resource exists
+
+---
+
 #### ⚠️ CRITICAL: Query Parameter DTO Pattern
 
 **RULE**: When handling query parameters for pagination or filtering:

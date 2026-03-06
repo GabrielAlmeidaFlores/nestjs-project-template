@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/command/special-category-retirement-analysis-work-period.command.repository.gateway';
+import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import { SpecialCategoryRetirementAnalysisWorkPeriodEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.entity';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis-work-period.request.dto';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis-work-period.response.dto';
@@ -25,17 +26,17 @@ export class CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase {
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
+    analysisId: SpecialCategoryRetirementAnalysisId,
     dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
     await this.specialCategoryRetirementAnalysisQueryRepositoryGateway.findOneByIdAndOrganizationIdWithRelationsOrFail(
-      dto.specialCategoryRetirementAnalysisId,
+      analysisId,
       organizationSessionData.organizationId,
       SpecialCategoryRetirementAnalysisNotFoundError,
     );
 
     const workPeriod = new SpecialCategoryRetirementAnalysisWorkPeriodEntity({
-      specialCategoryRetirementAnalysisId:
-        dto.specialCategoryRetirementAnalysisId,
+      specialCategoryRetirementAnalysisId: analysisId,
       publicServiceAdmissionDate: dto.publicServiceAdmissionDate ?? null,
       publicServiceCareerStartDate: dto.publicServiceCareerStartDate ?? null,
       workPeriodStartDate: dto.workPeriodStartDate,

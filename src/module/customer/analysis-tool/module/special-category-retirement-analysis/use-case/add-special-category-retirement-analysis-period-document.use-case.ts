@@ -5,6 +5,7 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { SpecialCategoryRetirementAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-period-document/command/special-category-retirement-analysis-period-document.command.repository.gateway';
 import { SpecialCategoryRetirementAnalysisWorkPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis-work-period/query/special-category-retirement-analysis-work-period.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisPeriodDocumentEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.entity';
+import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/add-special-category-retirement-analysis-period-document.request.dto';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/add-special-category-retirement-analysis-period-document.response.dto';
 import { SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/special-category-retirement-analysis-work-period-not-found.error';
@@ -29,10 +30,11 @@ export class AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase {
   ) {}
 
   public async execute(
+    workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     dto: AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto,
   ): Promise<AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto> {
     await this.workPeriodQueryRepositoryGateway.findOneByIdOrFail(
-      dto.specialCategoryRetirementAnalysisWorkPeriodId,
+      workPeriodId,
       SpecialCategoryRetirementAnalysisWorkPeriodNotFoundError,
     );
 
@@ -50,8 +52,7 @@ export class AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase {
 
     const periodDocument =
       new SpecialCategoryRetirementAnalysisPeriodDocumentEntity({
-        specialCategoryRetirementAnalysisWorkPeriodId:
-          dto.specialCategoryRetirementAnalysisWorkPeriodId,
+        specialCategoryRetirementAnalysisWorkPeriodId: workPeriodId,
         storedFileExternalName,
         originalFileUploadName: dto.document.originalFileName,
         retirementDocumentTypeCategory: dto.retirementDocumentTypeCategory,
