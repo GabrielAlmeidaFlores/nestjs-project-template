@@ -132,7 +132,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Análise obtida com sucesso.',
       type: GetSpecialCategoryRetirementAnalysisResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getSpecialCategoryRetirementAnalysisById(
     @GetOrganizationSessionData()
@@ -157,7 +157,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Análise atualizada com sucesso.',
       type: UpdateSpecialCategoryRetirementAnalysisResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async updateSpecialCategoryRetirementAnalysis(
     @GetOrganizationSessionData()
@@ -182,7 +182,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Análise deletada com sucesso.',
       type: DeleteSpecialCategoryRetirementAnalysisResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async deleteSpecialCategoryRetirementAnalysis(
     @GetOrganizationSessionData()
@@ -207,7 +207,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Período de trabalho criado com sucesso.',
       type: CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createWorkPeriod(
     @GetOrganizationSessionData()
@@ -334,7 +334,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Linha do tempo obtida com sucesso.',
       type: GetSpecialCategoryRetirementAnalysisTimelineResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async getTimeline(
     @GetOrganizationSessionData()
@@ -363,7 +363,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Remunerações listadas com sucesso.',
       type: ListSpecialCategoryRetirementAnalysisRemunerationResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async listRemuneration(
     @GetOrganizationSessionData()
@@ -442,7 +442,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Texto gerado com sucesso.',
       type: GenerateSpecialCategoryRetirementAnalysisFullTextResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async generateFullText(
     @GetSessionData() sessionData: SessionDataModel,
@@ -471,7 +471,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Itens de conversão gerados com sucesso.',
       type: GenerateSpecialCategoryRetirementAnalysisConversionResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async generateConversion(
     @GetSessionData() sessionData: SessionDataModel,
@@ -500,7 +500,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Itens de regras gerados com sucesso.',
       type: GenerateSpecialCategoryRetirementAnalysisRulesResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async generateRules(
     @GetSessionData() sessionData: SessionDataModel,
@@ -529,7 +529,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Documento gerado com sucesso.',
       type: Object,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async downloadFullDocument(
     @GetSessionData() sessionData: SessionDataModel,
@@ -561,7 +561,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Documento simplificado gerado com sucesso.',
       type: Object,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async downloadSimplifiedDocument(
     @GetSessionData() sessionData: SessionDataModel,
