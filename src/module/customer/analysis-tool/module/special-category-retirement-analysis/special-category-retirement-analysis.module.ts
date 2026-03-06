@@ -6,6 +6,7 @@ import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
+import { MarkdownConverterModule } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.module';
 import { SpecialCategoryRetirementAnalysisController } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.controller';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
@@ -39,6 +40,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ExportDocumentModule,
     FileProcessorModule,
     GenerativeIaModule,
+    MarkdownConverterModule,
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
