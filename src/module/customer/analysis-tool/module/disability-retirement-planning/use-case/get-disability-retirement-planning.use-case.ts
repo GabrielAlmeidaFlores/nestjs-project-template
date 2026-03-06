@@ -289,6 +289,9 @@ export class GetDisabilityRetirementPlanningUseCase {
       ...(queryResult.analysisName !== null && {
         analysisName: queryResult.analysisName,
       }),
+      ...(queryResult.administrativeProcessAnalysis !== null && {
+        administrativeProcessAnalysis: queryResult.administrativeProcessAnalysis,
+      }),
       createdAt: queryResult.createdAt,
       updatedAt: queryResult.updatedAt,
       legalProceedingNumber,

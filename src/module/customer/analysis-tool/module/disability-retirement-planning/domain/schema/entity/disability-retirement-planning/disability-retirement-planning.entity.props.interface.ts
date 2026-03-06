@@ -12,4 +12,5 @@ export interface DisabilityRetirementPlanningEntityPropsInterface extends BaseEn
   careerStartDate: Date;
   analysisName?: string | null;
   longTimeDisability: boolean;
+  administrativeProcessAnalysis?: string | null;
 }

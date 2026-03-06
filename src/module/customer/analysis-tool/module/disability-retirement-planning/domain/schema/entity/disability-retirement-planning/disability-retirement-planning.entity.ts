@@ -14,6 +14,7 @@ export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRet
   public readonly careerStartDate: Date;
   public readonly analysisName: string | null;
   public readonly longTimeDisability: boolean;
+  public readonly administrativeProcessAnalysis: string | null;
 
   protected readonly _type = DisabilityRetirementPlanningEntity.name;
 
@@ -27,5 +28,6 @@ export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRet
     this.careerStartDate = props.careerStartDate;
     this.analysisName = props.analysisName ?? null;
     this.longTimeDisability = props.longTimeDisability;
+    this.administrativeProcessAnalysis = props.administrativeProcessAnalysis ?? null;
   }
 }

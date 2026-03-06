@@ -3,7 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DisabilityRetirementPlanningLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-legal-proceeding.typeorm.entity';
-import { GetDisabilityRetirementPlanningLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import { GetDisabilityRetirementPlanningLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-legal-proceeding/query/result/get-disability-retirement-planning-legal-proceeding.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningLegalProceedingQueryResultAutoMapperProfile {

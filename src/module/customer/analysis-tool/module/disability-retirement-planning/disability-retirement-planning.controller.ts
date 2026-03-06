@@ -26,6 +26,8 @@ import { GetDisabilityRetirementPlanningResponseDto } from '@module/customer/ana
 import { ListDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/list-disability-retirement-planning-remuneration.response.dto';
 import { UpdateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-periods.response.dto';
 import { UpdateDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-remuneration.response.dto';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/analyze-disability-retirement-planning-administrative-process.request.dto';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/analyze-disability-retirement-planning-administrative-process.response.dto';
 import { UpdateDisabilityRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning.response.dto';
 import { CreateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-period.use-case';
 import { CreateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-remuneration.use-case';
@@ -39,6 +41,7 @@ import { GetDisabilityRetirementPlanningUseCase } from '@module/customer/analysi
 import { ListDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/list-disability-retirement-planning-remuneration.use-case';
 import { UpdateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-period.use-case';
 import { UpdateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-remuneration.use-case';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { UpdateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -69,6 +72,7 @@ export class DisabilityRetirementPlanningController {
     private readonly getDisabilityRetirementPlanningRemunerationCalculationUseCase: GetDisabilityRetirementPlanningRemunerationCalculationUseCase,
     private readonly downloadDisabilityRetirementPlanningCompleteAnalysisUseCase: DownloadDisabilityRetirementPlanningCompleteAnalysisUseCase,
     private readonly downloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase: DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase,
+    private readonly analyzeDisabilityRetirementPlanningAdministrativeProcessUseCase: AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -520,6 +524,36 @@ export class DisabilityRetirementPlanningController {
       organizationSessionData,
       disabilityRetirementPlanningId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar processo administrativo do planejamento de aposentadoria da pessoa com deficiência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-administrative-process',
+      method: RequestMethod.POST,
+      type: AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto,
+    },
+    tag: ['planejamento-aposentadoria-pcd'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise do processo administrativo retornada com sucesso.',
+      type: AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeDisabilityRetirementPlanningAdministrativeProcess(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto,
+  ): Promise<AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto> {
+    return await this.analyzeDisabilityRetirementPlanningAdministrativeProcessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
     );
   }
 }

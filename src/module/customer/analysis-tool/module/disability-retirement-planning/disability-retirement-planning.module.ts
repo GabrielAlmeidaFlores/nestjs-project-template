@@ -11,6 +11,7 @@ import { CreateDisabilityRetirementPlanningResultUseCase } from '@module/custome
 import { CreateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning.use-case';
 import { DeleteDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/delete-disability-retirement-planning.use-case';
 import { DownloadDisabilityRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/download-disability-retirement-planning-complete-analysis.use-case';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/download-disability-retirement-planning-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/get-disability-retirement-planning-remuneration-calculation.use-case';
 import { GetDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/get-disability-retirement-planning.use-case';
@@ -49,6 +50,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     DeleteDisabilityRetirementPlanningUseCase,
     DownloadDisabilityRetirementPlanningCompleteAnalysisUseCase,
     DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase,
+    AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase,
   ],
   exports: [DeleteDisabilityRetirementPlanningUseCase],
 })

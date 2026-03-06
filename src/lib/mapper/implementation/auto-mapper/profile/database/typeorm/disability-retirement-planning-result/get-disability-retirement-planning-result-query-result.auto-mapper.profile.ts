@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
-import { GetDisabilityRetirementPlanningResultQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import { GetDisabilityRetirementPlanningResultQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/query/result/get-disability-retirement-planning-result.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningResultQueryResultAutoMapperProfile {

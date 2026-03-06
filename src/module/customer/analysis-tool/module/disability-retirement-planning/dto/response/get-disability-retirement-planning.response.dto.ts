@@ -237,6 +237,9 @@ export class GetDisabilityRetirementPlanningResponseDto extends BaseBuildableDto
   @ResponseDtoStringProperty({ required: false })
   public analysisName?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public administrativeProcessAnalysis?: string;
+
   @ResponseDtoDateProperty()
   public createdAt: Date;
 
