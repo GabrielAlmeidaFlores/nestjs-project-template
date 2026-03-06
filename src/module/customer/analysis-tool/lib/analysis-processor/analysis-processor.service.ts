@@ -683,19 +683,23 @@ Análise processada do CNIS:
                     },
                     periodDateRangeText: {
                       type: 'string',
-                      description: 'Texto descritivo do período (ex: 01/2010 a 12/2015)',
+                      description:
+                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
                     },
                     harmfulExposureAgentsText: {
                       type: 'string',
-                      description: 'Descrição dos agentes nocivos identificados',
+                      description:
+                        'Descrição dos agentes nocivos identificados',
                     },
                     specialTimeDurationText: {
                       type: 'string',
-                      description: 'Duração do tempo especial em formato textual',
+                      description:
+                        'Duração do tempo especial em formato textual',
                     },
                     convertedTimeDurationText: {
                       type: 'string',
-                      description: 'Duração do tempo convertido em formato textual',
+                      description:
+                        'Duração do tempo convertido em formato textual',
                     },
                     conversionFactorValue: {
                       type: 'number',
@@ -703,7 +707,8 @@ Análise processada do CNIS:
                     },
                     recognitionStatusEnum: {
                       type: 'string',
-                      description: 'Status de reconhecimento do período especial',
+                      description:
+                        'Status de reconhecimento do período especial',
                     },
                   },
                 },
@@ -744,7 +749,8 @@ Análise processada do CNIS:
                     },
                     projectedRetirementDate: {
                       type: 'string',
-                      description: 'Data projetada de aposentadoria (YYYY-MM-DD)',
+                      description:
+                        'Data projetada de aposentadoria (YYYY-MM-DD)',
                       nullable: true,
                     },
                     estimatedRmiAmount: {
