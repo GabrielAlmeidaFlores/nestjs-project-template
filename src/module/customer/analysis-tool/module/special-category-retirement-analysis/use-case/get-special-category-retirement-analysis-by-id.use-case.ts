@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { BucketGateway } from '@infra/bucket/bucket.gateway';
 import { SpecialCategoryRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/repository/special-category-retirement-analysis/query/special-category-retirement-analysis.query.repository.gateway';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
 import {
@@ -21,6 +22,8 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
+    @Inject(BucketGateway)
+    private readonly bucketGateway: BucketGateway,
   ) {}
 
   public async execute(
@@ -43,12 +46,15 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
       const workPeriodKey =
         doc.specialCategoryRetirementAnalysisWorkPeriodId.toString();
       const existing = periodDocumentsByWorkPeriod.get(workPeriodKey) ?? [];
+      const signedFileUrl = await this.bucketGateway.getSignedUrl(
+        doc.storedFileExternalName,
+      );
       existing.push(
         GetSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto.build({
           specialCategoryRetirementAnalysisPeriodDocumentId:
             doc.specialCategoryRetirementAnalysisPeriodDocumentId,
           retirementDocumentTypeCategory: doc.retirementDocumentTypeCategory,
-          storedFileExternalName: doc.storedFileExternalName,
+          signedFileUrl: signedFileUrl.toString(),
           originalFileUploadName: doc.originalFileUploadName,
           createdAt: doc.createdAt,
           updatedAt: doc.updatedAt,
