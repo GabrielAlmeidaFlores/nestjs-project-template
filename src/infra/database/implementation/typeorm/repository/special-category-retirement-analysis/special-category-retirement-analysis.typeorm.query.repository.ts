@@ -55,8 +55,12 @@ export class SpecialCategoryRetirementAnalysisTypeormQueryRepository
           },
           remunerations: true,
           analysisResult: {
-            conversionItems: true,
-            ruleItems: true,
+            conversionItems: {
+              specialCategoryRetirementAnalysisResult: true,
+            },
+            ruleItems: {
+              specialCategoryRetirementAnalysisResult: true,
+            },
             specialCategoryRetirementAnalysis: true,
           },
           analysisToolRecord: {

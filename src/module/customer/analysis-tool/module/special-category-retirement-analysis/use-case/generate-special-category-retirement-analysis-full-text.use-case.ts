@@ -138,6 +138,7 @@ export class GenerateSpecialCategoryRetirementAnalysisFullTextUseCase {
       await this.analysisProcessorGateway.getSpecialActivityCompleteAnalysis(
         promptResponse.prompt,
         [contextBuffer],
+        false,
       );
 
     const updatedResultEntity =
