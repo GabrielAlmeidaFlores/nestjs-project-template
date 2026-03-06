@@ -55,6 +55,9 @@ export class CreateDisabilityRetirementPlanningRequestDto extends BaseBuildableD
   @RequestDtoStringProperty({ required: false })
   public readonly analysisName?: string;
 
+  @RequestDtoStringProperty({ required: false })
+  public readonly administrativeProcessAnalysis?: string;
+
   @RequestDtoObjectProperty(
     () => CreateDisabilityRetirementPlanningDocumentRequestDto,
     { required: false, isArray: true },

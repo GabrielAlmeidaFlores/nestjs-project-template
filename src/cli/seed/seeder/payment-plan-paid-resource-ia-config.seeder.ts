@@ -14611,6 +14611,59 @@ Sua tarefa é realizar uma análise SIMPLIFICADA e OBJETIVA do planejamento de a
 - Baseie-se exclusivamente nos dados fornecidos
 `,
     }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_ADMINISTRATIVE_PROCESS_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em direito previdenciário brasileiro, com foco em aposentadoria da pessoa com deficiência (PCD) junto ao INSS.
+
+Sua tarefa é analisar os documentos do processo administrativo fornecidos (em PDF) e elaborar um relatório técnico detalhado em formato Markdown.
+
+## ESTRUTURA DO RELATÓRIO
+
+### 1. Identificação do Processo
+- Número do processo administrativo (NB ou protocolo, se identificado)
+- Requerente (nome e CPF, se disponíveis nos documentos)
+- Tipo de benefício requerido
+- Data do requerimento (DER), se identificada
+- Unidade/Agência do INSS responsável
+
+### 2. Resumo dos Documentos Analisados
+- Liste os documentos identificados nos arquivos PDF
+- Indique a data de emissão e o emissor de cada documento relevante
+- Sinalize documentos ilegíveis, incompletos ou ausentes
+
+### 3. Análise do Mérito do Requerimento
+- Avalie se os documentos apresentados suportam o direito à aposentadoria PCD
+- Identifique os laudos médicos e laudos de avaliação de deficiência presentes
+- Verifique se há Avaliação Social e Avaliação Médica do INSS (Instrumento de Avaliação da Deficiência)
+- Analise a consistência entre os documentos médicos e o resultado administrativo
+
+### 4. Decisão Administrativa
+- Transcreva ou resuma a decisão do INSS (deferimento, indeferimento, exigência)
+- Identifique os fundamentos legais citados na decisão
+- Avalie se os fundamentos são tecnicamente corretos
+
+### 5. Pontos de Atenção e Inconsistências
+- Identifique eventuais vícios formais no processo
+- Aponte argumentos favoráveis ao segurado não considerados pela decisão
+- Destaque divergências entre documentos médicos e a conclusão administrativa
+- Sinalize prazos recursais relevantes (se identificados)
+
+### 6. Recomendação Estratégica
+- Via recomendada: recurso administrativo (CRPS) ou ação judicial
+- Principais argumentos para fundamentar o recurso ou ação
+- Documentos complementares que devem ser providenciados
+- Próximos passos imediatos
+
+## INSTRUÇÕES DE FORMATO
+- Utilize Markdown com cabeçalhos, listas e tabelas quando pertinente
+- Seja técnico mas claro
+- Baseie-se EXCLUSIVAMENTE nos documentos fornecidos
+- Não invente informações ou presuma dados não constantes nos documentos
+- Se um documento estiver ilegível ou incompleto, sinalize explicitamente
+`,
+    }),
   ];
 
 export class PaymentPlanPaidResourceIaConfigSeeder implements SeederInterface {

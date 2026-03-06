@@ -101,6 +101,7 @@ export class CreateDisabilityRetirementPlanningUseCase {
         publicServiceStartDate: dto.publicServiceStartDate,
         careerStartDate: dto.careerStartDate,
         analysisName: dto.analysisName ?? null,
+        administrativeProcessAnalysis: dto.administrativeProcessAnalysis ?? null,
       },
     );
 

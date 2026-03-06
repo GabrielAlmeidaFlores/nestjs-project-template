@@ -65,6 +65,13 @@ export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity
   @Column({ name: 'long_time_disability', type: 'boolean' })
   public longTimeDisability: boolean;
 
+  @Column({
+    name: 'administrative_process_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public administrativeProcessAnalysis: string | null;
+
   @OneToOne(
     () => DisabilityRetirementPlanningResultTypeormEntity,
     (entity) => entity.disabilityRetirementPlanning,

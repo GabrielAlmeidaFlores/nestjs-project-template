@@ -557,6 +557,16 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise simplificada de planejamento de aposentadoria por invalidez com geração de parecer técnico previdenciário por IA. Avalia os principais elementos do processo como períodos de contribuição, benefícios INSS e afastamentos por incapacidade, gerando uma análise objetiva do direito à aposentadoria por invalidez com os próximos passos recomendados.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e8f9a0b1-c2d3-4e5f-ba8b-8c9d0e1f2a3b'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.DISABILITY_RETIREMENT_PLANNING_ADMINISTRATIVE_PROCESS_ANALYSIS,
+      creditCost: 3,
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA POR INVALIDEZ - ANÁLISE DE PROCESSO ADMINISTRATIVO',
+      description:
+        'Análise de documentos de processo administrativo para planejamento de aposentadoria da pessoa com deficiência com IA. Examina documentos PDF do processo administrativo do INSS, identifica informações relevantes sobre o requerimento, avalia fundamentos e inconsistências, e gera um relatório em markdown com análise técnica detalhada e orientações estratégicas.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

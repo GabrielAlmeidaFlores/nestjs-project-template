@@ -5,10 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodDisabilityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-disability.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import {
-  GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult,
-  GetDisabilityRetirementPlanningPeriodDisabilityQueryResult,
-} from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import { GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-disability-document/query/result/get-disability-retirement-planning-period-disability-document.query.result';
+import { GetDisabilityRetirementPlanningPeriodDisabilityQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-disability/query/result/get-disability-retirement-planning-period-disability.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningPeriodDisabilityQueryResultAutoMapperProfile {

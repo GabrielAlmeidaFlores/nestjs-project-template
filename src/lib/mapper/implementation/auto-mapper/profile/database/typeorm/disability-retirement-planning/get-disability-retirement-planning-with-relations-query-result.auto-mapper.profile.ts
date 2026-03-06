@@ -9,15 +9,13 @@ import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database
 import { DisabilityRetirementPlanningRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-remuneration.typeorm.entity';
 import { DisabilityRetirementPlanningResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-result.typeorm.entity';
 import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
-import {
-  GetDisabilityRetirementPlanningDocumentQueryResult,
-  GetDisabilityRetirementPlanningInssBenefitQueryResult,
-  GetDisabilityRetirementPlanningLegalProceedingQueryResult,
-  GetDisabilityRetirementPlanningPeriodQueryResult,
-  GetDisabilityRetirementPlanningRemunerationQueryResult,
-  GetDisabilityRetirementPlanningResultQueryResult,
-  GetDisabilityRetirementPlanningWithRelationsQueryResult,
-} from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
+import { GetDisabilityRetirementPlanningDocumentQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-document/query/result/get-disability-retirement-planning-document.query.result';
+import { GetDisabilityRetirementPlanningInssBenefitQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-inss-benefit/query/result/get-disability-retirement-planning-inss-benefit.query.result';
+import { GetDisabilityRetirementPlanningLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-legal-proceeding/query/result/get-disability-retirement-planning-legal-proceeding.query.result';
+import { GetDisabilityRetirementPlanningPeriodQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period/query/result/get-disability-retirement-planning-period.query.result';
+import { GetDisabilityRetirementPlanningRemunerationQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-remuneration/query/result/get-disability-retirement-planning-remuneration.query.result';
+import { GetDisabilityRetirementPlanningResultQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-result/query/result/get-disability-retirement-planning-result.query.result';
+import { GetDisabilityRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 
 @Injectable()
@@ -97,6 +95,7 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
         careerStartDate: source.careerStartDate,
         analysisName: source.analysisName,
         longTimeDisability: source.longTimeDisability,
+        administrativeProcessAnalysis: source.administrativeProcessAnalysis,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         result,
@@ -168,6 +167,7 @@ export class GetDisabilityRetirementPlanningWithRelationsQueryResultAutoMapperPr
         careerStartDate: source.careerStartDate,
         analysisName: source.analysisName,
         longTimeDisability: source.longTimeDisability,
+        administrativeProcessAnalysis: source.administrativeProcessAnalysis,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,
