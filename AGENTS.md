@@ -1864,8 +1864,12 @@ public async execute(
 - ✅ If controller has no Request DTO, use case should NOT have one either
 - ✅ Use cases accept only what they need (no unnecessary wrapper objects)
 - ✅ Request DTOs are used for **request body** validation and **complex query parameters**
+- ✅ **`@Param` variable name MUST match the Value Object class name in camelCase** (e.g., `SpecialCategoryRetirementAnalysisId` → `specialCategoryRetirementAnalysisId`)
+- ✅ If the parent ID param is not used in the method logic, **do not declare it at all** — NestJS will still match the route correctly
 - ❌ NO unnecessary Request DTOs just to wrap a single path parameter
 - ❌ NO intermediate wrapper objects in use case signatures
+- ❌ NO generic names like `id`, `analysisId`, `workPeriodId` — always use the full Value Object class name in camelCase
+- ❌ NO unused `@Param` declarations — if the param is not used, omit it entirely
 
 **How ParseValueObjectPipe Works:**
 
@@ -1874,6 +1878,27 @@ public async execute(
 3. Validates the Value Object during construction
 4. Returns the typed Value Object to the controller method
 5. Controller passes it directly to the use case
+
+**`@Param` Variable Naming Rule:**
+
+The variable name MUST match the Value Object class name in camelCase — never use generic names like `id`, `analysisId`, or `workPeriodId`.
+
+```typescript
+// ❌ WRONG — generic name
+@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
+id: SpecialCategoryRetirementAnalysisId,
+
+// ✅ CORRECT — name matches the Value Object class (camelCase)
+@Param('id', new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId))
+specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+
+// ✅ CORRECT — parent ID not used in logic: don't declare it at all
+// The route `:analysisId/work-period/:workPeriodId` still matches correctly
+public async deleteWorkPeriod(
+  @Param('workPeriodId', new ParseValueObjectPipe(WorkPeriodId))
+  specialCategoryRetirementAnalysisWorkPeriodId: WorkPeriodId,
+): Promise<...> { ... }
+```
 
 **Benefits:**
 
