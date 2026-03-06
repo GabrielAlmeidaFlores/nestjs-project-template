@@ -15,6 +15,7 @@ export class GetTeacherRetirementPlanningQueryResult extends BaseBuildableObject
   public readonly activityType: TeacherRetirementPlanningActivityTypeEnum;
   public readonly publicServiceStartDate: Date;
   public readonly careerStartDate: Date;
+  public readonly administrativeProcessAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

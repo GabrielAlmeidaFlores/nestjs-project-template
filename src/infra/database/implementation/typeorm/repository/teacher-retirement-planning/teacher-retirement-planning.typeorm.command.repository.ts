@@ -37,6 +37,7 @@ export class TeacherRetirementPlanningTypeormCommandRepository
       activityType: props.activityType,
       publicServiceStartDate: props.publicServiceStartDate,
       careerStartDate: props.careerStartDate,
+      administrativeProcessAnalysis: props.administrativeProcessAnalysis,
       ...(props.teacherRetirementPlanningResult !== null && {
         teacherRetirementPlanningResult: {
           id: props.teacherRetirementPlanningResult.id.toString(),
@@ -58,6 +59,7 @@ export class TeacherRetirementPlanningTypeormCommandRepository
       activityType: props.activityType,
       publicServiceStartDate: props.publicServiceStartDate,
       careerStartDate: props.careerStartDate,
+      administrativeProcessAnalysis: props.administrativeProcessAnalysis,
       ...(props.teacherRetirementPlanningResult !== null && {
         teacherRetirementPlanningResult: {
           id: props.teacherRetirementPlanningResult.id.toString(),

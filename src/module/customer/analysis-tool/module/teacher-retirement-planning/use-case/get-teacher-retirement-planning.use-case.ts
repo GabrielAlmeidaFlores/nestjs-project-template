@@ -203,6 +203,9 @@ export class GetTeacherRetirementPlanningUseCase {
       activityType: planning.activityType,
       publicServiceStartDate: planning.publicServiceStartDate,
       careerStartDate: planning.careerStartDate,
+      ...(planning.administrativeProcessAnalysis !== null && {
+        administrativeProcessAnalysis: planning.administrativeProcessAnalysis,
+      }),
       ...(planning.inssBenefits.length > 0 && {
         inssBenefitNumber: planning.inssBenefits.map(
           (inssBenefit) => inssBenefit.inssBenefitNumber,

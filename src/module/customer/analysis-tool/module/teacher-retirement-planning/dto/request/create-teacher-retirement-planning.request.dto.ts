@@ -169,6 +169,9 @@ export class CreateTeacherRetirementPlanningRequestDto extends BaseBuildableDtoO
   )
   public readonly documents?: CreateTeacherRetirementPlanningDocumentRequestDto[];
 
+  @RequestDtoStringProperty({ required: false })
+  public readonly administrativeProcessAnalysis?: string;
+
   protected override readonly _type =
     CreateTeacherRetirementPlanningRequestDto.name;
 }

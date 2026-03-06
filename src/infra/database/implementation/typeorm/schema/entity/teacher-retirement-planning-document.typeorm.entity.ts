@@ -7,7 +7,8 @@ import { TeacherRetirementPlanningTypeormEntity } from '@infra/database/implemen
 export class TeacherRetirementPlanningDocumentTypeormEntity extends BaseTypeormEntity {
   @Column({
     name: 'document',
-    type: 'longtext',
+    type: 'varchar',
+    length: 255,
     nullable: false,
   })
   public document: string;

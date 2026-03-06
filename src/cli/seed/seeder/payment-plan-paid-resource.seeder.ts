@@ -555,6 +555,17 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Simulação de ajuste de período de contribuição CNIS com geração de observação técnica previdenciária por IA. Compara o período original registrado no CNIS com o período convencional proposto, calcula o tempo de contribuição ganho com o ajuste e gera fundamentação técnica formal indicando a justificativa previdenciária e o impacto no cômputo do tempo de contribuição rural.',
     }),
+
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('36bcef4c-889f-4493-93d8-ba3457398caa'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS,
+      creditCost: 1,
+      title:
+        'PLANEJAMENTO DE APOSENTADORIA PARA PROFESSORES - ANÁLISE DE PROCESSO ADMINISTRATIVO',
+      description:
+        'Análise de processos administrativos relacionados à aposentadoria de professores com IA. Examina requerimentos administrativos, recursos, decisões do INSS, identificando fundamentos utilizados, requisitos legais aplicados, prazos e estratégias para otimização do processo administrativo visando reconhecimento da aposentadoria especial para professores.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {

@@ -62,6 +62,7 @@ export class TeacherRetirementPlanningTypeormQueryRepository
       activityType: entity.activityType,
       publicServiceStartDate: entity.publicServiceStartDate,
       careerStartDate: entity.careerStartDate,
+      administrativeProcessAnalysis: entity.administrativeProcessAnalysis,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       deletedAt: entity.deletedAt,
@@ -101,6 +102,7 @@ export class TeacherRetirementPlanningTypeormQueryRepository
       activityType: entity.activityType,
       publicServiceStartDate: entity.publicServiceStartDate,
       careerStartDate: entity.careerStartDate,
+      administrativeProcessAnalysis: entity.administrativeProcessAnalysis,
       inssBenefits: (entity.inssBenefits ?? []).map((item) =>
         GetTeacherRetirementPlanningInssBenefitQueryResult.build({
           id: new TeacherRetirementPlanningInssBenefitId(item.id),

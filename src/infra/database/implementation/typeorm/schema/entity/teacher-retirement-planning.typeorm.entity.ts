@@ -78,6 +78,13 @@ export class TeacherRetirementPlanningTypeormEntity extends BaseTypeormEntity {
   })
   public careerStartDate: Date;
 
+  @Column({
+    name: 'administrative_process_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public administrativeProcessAnalysis: string | null;
+
   @OneToOne(
     () => TeacherRetirementPlanningResultTypeormEntity,
     (entity) => entity.teacherRetirementPlanning,

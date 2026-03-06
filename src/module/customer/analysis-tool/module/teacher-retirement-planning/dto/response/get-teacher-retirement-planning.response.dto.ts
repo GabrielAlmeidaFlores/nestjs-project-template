@@ -165,6 +165,9 @@ export class GetTeacherRetirementPlanningResponseDto extends BaseBuildableDtoObj
   @ResponseDtoDateProperty()
   public careerStartDate: Date;
 
+  @ResponseDtoStringProperty({ required: false })
+  public administrativeProcessAnalysis?: string;
+
   @ResponseDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];
 

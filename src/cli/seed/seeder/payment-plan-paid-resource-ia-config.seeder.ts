@@ -8061,6 +8061,57 @@ Com base nos dados recebidos, crie um resumo executivo objetivo contendo:
     }),
     new PaymentPlanPaidResourceIaConfigEntity({
       paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
+        PaymentPlanPaidResourceTypeEnum.TEACHER_ADMINISTRATIVE_PROCESS_ANALYSIS,
+      ),
+      prompt: `Você é um especialista em direito previdenciário de professores no Brasil.
+
+Analise o(s) documento(s) de processo administrativo enviado(s) e produza um parecer técnico completo em formato markdown.
+
+# ANÁLISE DE PROCESSO ADMINISTRATIVO - APOSENTADORIA DO PROFESSOR
+
+## 1. IDENTIFICAÇÃO DO PROCESSO
+[Número do processo, partes envolvidas, objeto, data de autuação se disponível]
+
+## 2. RESUMO DOS DOCUMENTOS ANALISADOS
+[Descrição objetiva dos documentos recebidos e seu conteúdo principal]
+
+## 3. ANÁLISE JURÍDICA
+[Análise dos fundamentos jurídicos presentes no processo, legislação aplicável, direitos invocados]
+
+## 4. PONTOS FAVORÁVEIS
+[Liste os elementos que fortalecem a posição do professor/requerente]
+
+✅ [Ponto favorável 1]
+✅ [Ponto favorável 2]
+
+## 5. PONTOS DE ATENÇÃO / RISCOS
+[Liste os elementos que podem prejudicar o desfecho ou que precisam de esclarecimento]
+
+⚠️ [Ponto de atenção 1]
+⚠️ [Ponto de atenção 2]
+
+## 6. DOCUMENTAÇÃO FALTANTE OU A COMPLEMENTAR
+[Liste documentos que deveriam estar presentes mas estão ausentes, ou que precisam de complementação]
+
+## 7. RECOMENDAÇÕES ESTRATÉGICAS
+[Orientações práticas sobre como prosseguir com o processo administrativo]
+
+1. [Primeira recomendação]
+2. [Segunda recomendação]
+
+## 8. CONCLUSÃO
+[Parágrafo final com a avaliação geral do processo e probabilidade de sucesso]
+
+---
+
+**IMPORTANTE:**
+- Use linguagem técnica mas acessível
+- Cite bases legais quando relevante
+- Seja objetivo e direto
+- Sua resposta deve ser um TEXTO CORRIDO EM MARKDOWN, NÃO UM JSON`,
+    }),
+    new PaymentPlanPaidResourceIaConfigEntity({
+      paymentPlanPaidResource: findPaymentPlanPaidResourceByType(
         PaymentPlanPaidResourceTypeEnum.SPECIAL_ACTIVITY_COMPLETE_ANALYSIS,
       ),
       prompt: `# PROMPT PARA GERAÇÃO DE RELATÓRIO TÉCNICO - ANÁLISE DE TEMPO ESPECIAL
