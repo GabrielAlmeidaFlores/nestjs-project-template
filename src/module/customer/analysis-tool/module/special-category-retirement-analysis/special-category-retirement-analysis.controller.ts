@@ -197,7 +197,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Adicionar período de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'work-period',
+      path: ':analysisId/work-period',
       method: RequestMethod.POST,
       type: CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
     },
@@ -212,10 +212,16 @@ export class SpecialCategoryRetirementAnalysisController {
   public async createWorkPeriod(
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    analysisId: SpecialCategoryRetirementAnalysisId,
     @Body() dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
     return await this.createWorkPeriodUseCase.execute(
       organizationSessionData,
+      analysisId,
       dto,
     );
   }
@@ -224,7 +230,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Atualizar período de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'work-period/:workPeriodId',
+      path: ':analysisId/work-period/:workPeriodId',
       method: RequestMethod.PATCH,
       type: UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
     },
@@ -237,6 +243,11 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async updateWorkPeriod(
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    _analysisId: SpecialCategoryRetirementAnalysisId,
     @Param(
       'workPeriodId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
@@ -251,7 +262,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Remover período de trabalho',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'work-period/:workPeriodId',
+      path: ':analysisId/work-period/:workPeriodId',
       method: RequestMethod.DELETE,
     },
     tag: ['categoria-especial'],
@@ -263,6 +274,11 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async deleteWorkPeriod(
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    _analysisId: SpecialCategoryRetirementAnalysisId,
     @Param(
       'workPeriodId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
@@ -276,7 +292,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Adicionar documento a um período',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'period-document',
+      path: ':workPeriodId/period-document',
       method: RequestMethod.POST,
       type: AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto,
     },
@@ -289,16 +305,21 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async addPeriodDocument(
+    @Param(
+      'workPeriodId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
+    )
+    workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     @Body() dto: AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto,
   ): Promise<AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto> {
-    return await this.addPeriodDocumentUseCase.execute(dto);
+    return await this.addPeriodDocumentUseCase.execute(workPeriodId, dto);
   }
 
   @BuildEndpointSpecification({
     summary: 'Remover documento de um período',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'period-document/:periodDocumentId',
+      path: ':workPeriodId/period-document/:periodDocumentId',
       method: RequestMethod.DELETE,
     },
     tag: ['categoria-especial'],
@@ -310,6 +331,11 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async deletePeriodDocument(
+    @Param(
+      'workPeriodId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisWorkPeriodId),
+    )
+    _workPeriodId: SpecialCategoryRetirementAnalysisWorkPeriodId,
     @Param(
       'periodDocumentId',
       new ParseValueObjectPipe(
@@ -381,7 +407,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Atualizar remuneração',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'remuneration/:remunerationId',
+      path: ':analysisId/remuneration/:remunerationId',
       method: RequestMethod.PATCH,
       type: UpdateSpecialCategoryRetirementAnalysisRemunerationRequestDto,
     },
@@ -394,6 +420,11 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async updateRemuneration(
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    _analysisId: SpecialCategoryRetirementAnalysisId,
     @Param(
       'remunerationId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
@@ -408,7 +439,7 @@ export class SpecialCategoryRetirementAnalysisController {
     summary: 'Resetar remuneração',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
-      path: 'remuneration/:remunerationId',
+      path: ':analysisId/remuneration/:remunerationId',
       method: RequestMethod.DELETE,
     },
     tag: ['categoria-especial'],
@@ -420,6 +451,11 @@ export class SpecialCategoryRetirementAnalysisController {
     guard: [AuthGuard],
   })
   public async deleteRemuneration(
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    _analysisId: SpecialCategoryRetirementAnalysisId,
     @Param(
       'remunerationId',
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisRemunerationId),
