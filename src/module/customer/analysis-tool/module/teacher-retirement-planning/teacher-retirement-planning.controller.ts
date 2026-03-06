@@ -10,6 +10,7 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { TeacherRetirementPlanningId } from '@module/customer/analysis-tool/module/teacher-retirement-planning/domain/schema/entity/teacher-retirement-planning/value-object/teacher-retirement-planning-id.value-object';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/analyze-teacher-retirement-planning-administrative-process.request.dto';
 import { CreateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-period.request.dto';
 import { CreateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning-remuneration.request.dto';
 import { CreateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/create-teacher-retirement-planning.request.dto';
@@ -17,6 +18,7 @@ import { ListTeacherRetirementPlanningRemunerationRequestDto } from '@module/cus
 import { UpdateTeacherRetirementPlanningPeriodRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-period.request.dto';
 import { UpdateTeacherRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning-remuneration.request.dto';
 import { UpdateTeacherRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/request/update-teacher-retirement-planning.request.dto';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/analyze-teacher-retirement-planning-administrative-process.response.dto';
 import { CreateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-period.response.dto';
 import { CreateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-remuneration.response.dto';
 import { CreateTeacherRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/create-teacher-retirement-planning-result.response.dto';
@@ -28,6 +30,7 @@ import { ListTeacherRetirementPlanningRemunerationResponseDto } from '@module/cu
 import { UpdateTeacherRetirementPlanningPeriodResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-period.response.dto';
 import { UpdateTeacherRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning-remuneration.response.dto';
 import { UpdateTeacherRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/teacher-retirement-planning/dto/response/update-teacher-retirement-planning.response.dto';
+import { AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/analyze-teacher-retirement-planning-administrative-process.use-case';
 import { CreateTeacherRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-period.use-case';
 import { CreateTeacherRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-remuneration.use-case';
 import { CreateTeacherRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/teacher-retirement-planning/use-case/create-teacher-retirement-planning-result.use-case';
@@ -70,6 +73,7 @@ export class TeacherRetirementPlanningController {
     private readonly updateTeacherRetirementPlanningRemunerationUseCase: UpdateTeacherRetirementPlanningRemunerationUseCase,
     private readonly listTeacherRetirementPlanningRemunerationUseCase: ListTeacherRetirementPlanningRemunerationUseCase,
     private readonly getTeacherRetirementPlanningRemunerationCalculationUseCase: GetTeacherRetirementPlanningRemunerationCalculationUseCase,
+    private readonly analyzeTeacherRetirementPlanningAdministrativeProcessUseCase: AnalyzeTeacherRetirementPlanningAdministrativeProcessUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -508,6 +512,37 @@ export class TeacherRetirementPlanningController {
       organizationSessionData,
       teacherRetirementPlanningId,
       format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Analisar processo administrativo do planejamento previdenciário de professor',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'analyze-administrative-process',
+      method: RequestMethod.POST,
+      type: AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto,
+    },
+    tag: ['planejamento-previdenciario-professor'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Análise do processo administrativo realizada com sucesso.',
+      type: AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async analyzeAdministrativeProcess(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body()
+    dto: AnalyzeTeacherRetirementPlanningAdministrativeProcessRequestDto,
+  ): Promise<AnalyzeTeacherRetirementPlanningAdministrativeProcessResponseDto> {
+    return this.analyzeTeacherRetirementPlanningAdministrativeProcessUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      dto,
     );
   }
 }

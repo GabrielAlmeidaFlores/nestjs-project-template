@@ -95,6 +95,7 @@ export class UpdateTeacherRetirementPlanningUseCase {
       activityType: dto.activityType,
       publicServiceStartDate: dto.publicServiceStartDate,
       careerStartDate: dto.careerStartDate,
+      administrativeProcessAnalysis: dto.administrativeProcessAnalysis ?? null,
     });
 
     const transactionOperations: TransactionType[] = [
