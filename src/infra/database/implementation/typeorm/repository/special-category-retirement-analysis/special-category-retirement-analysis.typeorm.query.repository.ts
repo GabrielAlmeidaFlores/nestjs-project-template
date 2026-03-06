@@ -57,6 +57,7 @@ export class SpecialCategoryRetirementAnalysisTypeormQueryRepository
           analysisResult: {
             conversionItems: true,
             ruleItems: true,
+            specialCategoryRetirementAnalysis: true,
           },
           analysisToolRecord: {
             createdBy: true,
