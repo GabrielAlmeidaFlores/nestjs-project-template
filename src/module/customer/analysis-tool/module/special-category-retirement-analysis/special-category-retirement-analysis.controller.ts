@@ -55,6 +55,7 @@ import { UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@mod
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-work-period.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
+import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
 import { GetOrganizationSessionData } from '@shared/api/util/decorator/property/get-organization-session-data/get-organization-session-data.decorator';
@@ -103,7 +104,7 @@ export class SpecialCategoryRetirementAnalysisController {
       description: 'Análise criada com sucesso.',
       type: CreateSpecialCategoryRetirementAnalysisResponseDto,
     },
-    guard: [AuthGuard],
+    guard: [AuthGuard, OrganizationSessionGuard],
   })
   public async createSpecialCategoryRetirementAnalysis(
     @GetSessionData() sessionData: SessionDataModel,
