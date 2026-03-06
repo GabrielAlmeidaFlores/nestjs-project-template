@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { BucketModule } from '@infra/bucket/bucket.module';
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
@@ -33,6 +34,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AnalysisProcessorModule,
     AuthModule,
+    BucketModule,
     DatabaseModule,
     ExportDocumentModule,
     FileProcessorModule,

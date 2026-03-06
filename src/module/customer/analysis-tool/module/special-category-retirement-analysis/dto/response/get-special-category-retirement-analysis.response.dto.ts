@@ -30,7 +30,7 @@ export class GetSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto exten
   public retirementDocumentTypeCategory: RetirementDocumentTypeCategoryEnum;
 
   @ResponseDtoStringProperty()
-  public storedFileExternalName: string;
+  public signedFileUrl: string;
 
   @ResponseDtoStringProperty()
   public originalFileUploadName: string;
