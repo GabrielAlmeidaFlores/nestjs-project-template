@@ -49,6 +49,7 @@ export class SpecialCategoryRetirementAnalysisTypeormQueryRepository
           analysisToolClient: true,
           workPeriods: {
             periodDocuments: true,
+            specialCategoryRetirementAnalysis: true,
           },
           remunerations: true,
           analysisResult: {
