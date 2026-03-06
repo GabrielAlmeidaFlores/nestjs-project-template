@@ -1,5 +1,6 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { SpecialCategoryRetirementAnalysisId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/value-object/special-category-retirement-analysis-id/special-category-retirement-analysis-id.value-object';
+import { InvalidPublicServiceStateAbbreviationError } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/error/invalid-public-service-state-abbreviation.error';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 import type { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
@@ -34,6 +35,12 @@ export class SpecialCategoryRetirementAnalysisEntity extends BaseEntity<SpecialC
   public constructor(
     props: SpecialCategoryRetirementAnalysisEntityPropsInterface,
   ) {
+    if (typeof props.publicServiceStateAbbreviation === 'string') {
+      SpecialCategoryRetirementAnalysisEntity.validatePublicServiceStateAbbreviation(
+        props.publicServiceStateAbbreviation,
+      );
+    }
+
     super(SpecialCategoryRetirementAnalysisId, props);
     this.analysisToolClientId = props.analysisToolClientId;
     this.analysisCustomName = props.analysisCustomName ?? null;
@@ -45,5 +52,18 @@ export class SpecialCategoryRetirementAnalysisEntity extends BaseEntity<SpecialC
       props.publicServiceStateAbbreviation ?? null;
     this.hasConfirmedExposureToHarmfulAgents =
       props.hasConfirmedExposureToHarmfulAgents;
+  }
+
+  public static validatePublicServiceStateAbbreviation(
+    abbreviation: string,
+  ): void {
+    const maxLength = 2;
+
+    const hasMaximumLength = abbreviation.length <= maxLength;
+
+    this.validateAllOrThrow(
+      [hasMaximumLength],
+      () => new InvalidPublicServiceStateAbbreviationError(),
+    );
   }
 }

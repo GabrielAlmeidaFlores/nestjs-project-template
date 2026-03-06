@@ -191,6 +191,88 @@ export class AnalysisEntity extends BaseEntity<AnalysisId> {
 }
 ```
 
+#### Entity Field Validation Pattern ⚠️ MANDATORY
+
+**When a domain entity needs to validate a plain string (or primitive) field**, use `static validate*` methods with `validateAllOrThrow` — NOT inline logic in the constructor.
+
+**Rules**:
+- ✅ Validation logic in a `public static validate{FieldName}` method
+- ✅ Call the static validator **before** `super()` when the field is non-nullable; call it conditionally (guard for null/undefined) before `super()` when the field is optional/nullable
+- ✅ Use `this.validateAllOrThrow(conditions[], () => new SpecificError())` inside the static method
+- ✅ Throw a specific `InvalidInputError` subclass located in the module's `error/` folder
+- ❌ NO inline `if/throw` blocks in the constructor body
+- ❌ NO module-level constants for validation limits (keep them as local variables inside the static method)
+
+**Example — optional nullable field**:
+
+```typescript
+import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
+import { InvalidPublicServiceStateAbbreviationError } from '@module/.../error/invalid-public-service-state-abbreviation.error';
+
+export class SomeEntity extends BaseEntity<SomeId> {
+  public readonly publicServiceStateAbbreviation: string | null;
+
+  protected readonly _type = SomeEntity.name;
+
+  public constructor(props: SomeEntityPropsInterface) {
+    if (props.publicServiceStateAbbreviation != null) {
+      SomeEntity.validatePublicServiceStateAbbreviation(
+        props.publicServiceStateAbbreviation,
+      );
+    }
+
+    super(SomeId, props);
+    this.publicServiceStateAbbreviation =
+      props.publicServiceStateAbbreviation ?? null;
+  }
+
+  public static validatePublicServiceStateAbbreviation(
+    abbreviation: string,
+  ): void {
+    const maxLength = 2;
+
+    const hasMaximumLength = abbreviation.length <= maxLength;
+
+    this.validateAllOrThrow(
+      [hasMaximumLength],
+      () => new InvalidPublicServiceStateAbbreviationError(),
+    );
+  }
+}
+```
+
+**Example — required field (validated before `super()`)**:
+
+```typescript
+export class CustomerEntity extends BaseEntity<CustomerId> {
+  public readonly name: string;
+
+  protected readonly _type = CustomerEntity.name;
+
+  public constructor(props: CustomerEntityPropsInterface) {
+    CustomerEntity.validateName(props.name);
+
+    super(CustomerId, props);
+    this.name = props.name;
+  }
+
+  public static validateName(name: string): void {
+    const minLength = 3;
+    const maxLength = 50;
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+    this.validateAllOrThrow(
+      [
+        name.length >= minLength,
+        name.length <= maxLength,
+        nameRegex.test(name),
+      ],
+      () => new InvalidCustomerNameError({ minLength, maxLength }),
+    );
+  }
+}
+```
+
 #### Value Objects
 
 **Location**: `src/module/{domain}/domain/schema/value-object/`
