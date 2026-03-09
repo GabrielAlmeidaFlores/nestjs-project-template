@@ -21,6 +21,8 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
+  private static readonly AI_CALL_TIMEOUT_MS = 80_000;
+  private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
 
@@ -50,28 +52,18 @@ export class GeminiService implements GenerativeIaGateway {
     this.GENERATIVE_IA_RULES = [
       `
 role: act as a technical documentation specialist.
-
 task: generate responses exclusively in standard semantic markdown optimized for direct html parsing.
 
 formatting rules:
-
-structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
-
-data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
-
-lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
-
-diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
-
-output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
-
-document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
-
-technology references: do not mention internal tools, systems, or technologies used to generate the response.
-
-identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
-
-technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
+- structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
+- data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
+- lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
+- diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
+- output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
+- document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
+- technology references: do not mention internal tools, systems, or technologies used to generate the response.
+- identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
+- technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
 `,
     ];
   }
@@ -326,8 +318,9 @@ technical terms: avoid mentioning implementation terms related to internal data 
         );
       }
 
-      const result =
-        await this.googleGenerativeAI.models.generateContent(contentConfig);
+      const result = await this.withTimeout(
+        this.googleGenerativeAI.models.generateContent(contentConfig),
+      );
 
       return GeminiResultOutputModel.build({
         text:
@@ -361,7 +354,8 @@ technical terms: avoid mentioning implementation terms related to internal data 
 
         if (
           error.message.includes('UNAVAILABLE') ||
-          error.message.includes('503')
+          error.message.includes('503') ||
+          error.message === GeminiService.TIMEOUT_ERROR_MESSAGE
         ) {
           const fallbackModel = this.FALLBACK_MODELS[model];
 
@@ -408,10 +402,12 @@ technical terms: avoid mentioning implementation terms related to internal data 
 
     while (callCount < MAX_FUNCTION_CALLS) {
       try {
-        const result = await this.googleGenerativeAI.models.generateContent({
-          ...contentConfig,
-          contents: conversationHistory as never,
-        });
+        const result = await this.withTimeout(
+          this.googleGenerativeAI.models.generateContent({
+            ...contentConfig,
+            contents: conversationHistory as never,
+          }),
+        );
 
         totalInputTokens += result.usageMetadata?.promptTokenCount ?? 0;
         totalOutputTokens += result.usageMetadata?.candidatesTokenCount ?? 0;
@@ -524,6 +520,20 @@ technical terms: avoid mentioning implementation terms related to internal data 
     });
   }
 
+  private withTimeout<T>(promise: Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(GeminiService.TIMEOUT_ERROR_MESSAGE));
+      }, GeminiService.AI_CALL_TIMEOUT_MS);
+    });
+
+    return Promise.race([promise, timeoutPromise]).finally(() => {
+      clearTimeout(timer);
+    });
+  }
+
   private async buildPartWithFileContent(
     contentList: GenerativeIaPartType[],
   ): Promise<Part[]> {
@@ -533,7 +543,6 @@ technical terms: avoid mentioning implementation terms related to internal data 
           return { text: content } as Part;
         }
 
-        // Cria hash simples do buffer para cache
         const contentHash = Buffer.from(content)
           .toString('base64')
           .substring(0, this.hashSubstringLength);
