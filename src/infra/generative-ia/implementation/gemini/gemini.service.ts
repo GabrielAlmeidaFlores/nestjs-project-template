@@ -523,7 +523,6 @@ formatting rules:
           return { text: content } as Part;
         }
 
-        // Cria hash simples do buffer para cache
         const contentHash = Buffer.from(content)
           .toString('base64')
           .substring(0, this.hashSubstringLength);
