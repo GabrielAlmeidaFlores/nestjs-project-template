@@ -90,7 +90,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           promptFiles: files,
