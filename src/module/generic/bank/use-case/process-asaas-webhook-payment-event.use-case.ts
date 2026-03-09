@@ -52,6 +52,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       PENDING: this.processPaymentPending.bind(this),
       RECEIVED: this.processPaymentConfirmed.bind(this),
       CONFIRMED: this.processPaymentConfirmed.bind(this),
+      RECEIVED_IN_CASH: this.processPaymentConfirmed.bind(this),
       OVERDUE: this.processPaymentOverdue.bind(this),
     };
 
@@ -116,6 +117,7 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       OVERDUE: PaymentStatusEnum.OVERDUE,
       REFUNDED: PaymentStatusEnum.REFUNDED,
       RECEIVED: PaymentStatusEnum.CONFIRMED,
+      RECEIVED_IN_CASH: PaymentStatusEnum.CONFIRMED,
     };
 
     const status = statusMap[dto.payment.status] ?? PaymentStatusEnum.PENDING;
