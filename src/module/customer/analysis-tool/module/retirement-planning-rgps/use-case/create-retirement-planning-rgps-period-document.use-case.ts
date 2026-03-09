@@ -269,11 +269,22 @@ Com base nos dados e documentos acima, gere uma observação técnica previdenci
 
     await transactionCredit.commit();
 
-    const convertedResult =
-      await this.markdownConverterGateway.convertToHtml(result);
-
     return CreateRetirementPlanningRgpsPeriodDocumentResponseDto.build({
-      result: convertedResult,
+      result: await this.parseAndConvertToHtml(result),
     });
+  }
+
+  private async parseAndConvertToHtml(rawJson: string): Promise<string> {
+    try {
+      const parsed = JSON.parse(rawJson) as Record<string, unknown>;
+      const markdown =
+        typeof parsed['observacaoTecnica'] === 'string'
+          ? parsed['observacaoTecnica']
+          : rawJson;
+
+      return this.markdownConverterGateway.convertToHtml(markdown);
+    } catch {
+      return rawJson;
+    }
   }
 }
