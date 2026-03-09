@@ -8,6 +8,8 @@ import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-t
 export class GetRetirementPlanningRgpsPeriodWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: RetirementPlanningRgpsPeriodId;
 
+  public readonly sequencial: number | null;
+
   public readonly periodName: string | null;
 
   public readonly periodStart: Date | null;

@@ -12,6 +12,7 @@ import type { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/cust
 export class GetRuralTimelineAnalysisCnisContributionPeriodQueryResult extends BaseBuildableObject {
   public readonly id: RuralTimelineAnalysisCnisContributionPeriodId;
   public readonly employmentRelationshipSource: string | null;
+  public readonly sequencial: number | null;
   public readonly startDate: Date | null;
   public readonly endDate: Date | null;
   public readonly category: string | null;

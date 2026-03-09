@@ -13,6 +13,13 @@ import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/c
 @Entity({ name: 'rural_timeline_cnis_contribution_period' })
 export class RuralTimelineAnalysisCnisContributionPeriodTypeormEntity extends BaseTypeormEntity {
   @Column({
+    name: 'sequencial',
+    type: 'int',
+    nullable: true,
+  })
+  public sequencial?: number | null;
+
+  @Column({
     name: 'employment_relationship_source',
     type: 'varchar',
     length: 255,

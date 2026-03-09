@@ -1,6 +1,6 @@
-import { UnexpectedError } from '@core/error/unexpected.error';
+import { ServiceUnavailableError } from '@core/error/service-unavailable.error';
 
-export class GenerativeIaApiKeyInvalidError extends UnexpectedError {
+export class GenerativeIaApiKeyInvalidError extends ServiceUnavailableError {
   protected override readonly _type = GenerativeIaApiKeyInvalidError.name;
 
   public constructor() {
