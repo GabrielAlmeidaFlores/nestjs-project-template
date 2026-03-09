@@ -4,10 +4,13 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
+  HttpException,
 } from '@nestjs/common';
+import { logs, SeverityNumber } from '@opentelemetry/api-logs';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import type { LogRecord } from '@opentelemetry/api-logs';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 @Injectable()
@@ -15,6 +18,7 @@ export class LoggingInterceptor implements NestInterceptor {
   private static readonly MAX_RESPONSE_LOG_LENGTH = 1000;
   private static readonly MAX_STACK_LOG_LENGTH = 500;
   private static readonly MAX_ARRAY_DISPLAY_LENGTH = 10;
+  private static readonly HTTP_INTERNAL_SERVER_ERROR_STATUS = 500;
   private static readonly SENSITIVE_FIELDS = [
     'password',
     'senha',
@@ -44,6 +48,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
   protected readonly _type = LoggingInterceptor.name;
   private readonly logger = new Logger(LoggingInterceptor.name);
+  private readonly otlpLogger = logs.getLogger(LoggingInterceptor.name);
 
   public intercept(
     context: ExecutionContext,
@@ -114,9 +119,26 @@ export class LoggingInterceptor implements NestInterceptor {
 🔹 Duration: ${duration}ms${hasResponse ? `\n🔹 Response:\n${truncatedResponse}${isTruncated ? '\n... (truncated)' : ''}` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           `);
+
+          this.emitSuccessLog({
+            method,
+            url,
+            ip,
+            userAgent,
+            statusCode,
+            duration,
+            params: sanitizedParams,
+            query: sanitizedQuery,
+            body: sanitizedBody,
+            response: this.sanitizeResponse(responseData),
+          });
         },
         error: (error: Error) => {
           const duration = Date.now() - now;
+          const statusCode =
+            error instanceof HttpException
+              ? error.getStatus()
+              : LoggingInterceptor.HTTP_INTERNAL_SERVER_ERROR_STATUS;
 
           const stackTrace =
             typeof error.stack === 'string'
@@ -137,11 +159,26 @@ export class LoggingInterceptor implements NestInterceptor {
 
 ❌ ERROR
 
+🔹 Status: ${statusCode}
 🔹 Duration: ${duration}ms
 🔹 Error: ${error.message}
 🔹 Stack: ${stackTrace}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           `);
+
+          this.emitErrorLog({
+            method,
+            url,
+            ip,
+            userAgent,
+            statusCode,
+            duration,
+            params: sanitizedParams,
+            query: sanitizedQuery,
+            body: sanitizedBody,
+            errorMessage: error.message,
+            errorStack: stackTrace,
+          });
         },
       }),
     );
@@ -178,6 +215,72 @@ export class LoggingInterceptor implements NestInterceptor {
     }
 
     return sanitized;
+  }
+
+  private emitSuccessLog(props: {
+    method: string;
+    url: string;
+    ip: string;
+    userAgent: string;
+    statusCode: number;
+    duration: number;
+    params: unknown;
+    query: unknown;
+    body: unknown;
+    response: unknown;
+  }): void {
+    const record: LogRecord = {
+      severityNumber: SeverityNumber.INFO,
+      body: `${props.method} ${props.url} ${props.statusCode}`,
+      attributes: {
+        'http.method': props.method,
+        'http.url': props.url,
+        'http.status_code': props.statusCode,
+        'http.duration_ms': props.duration,
+        'http.client_ip': props.ip,
+        'http.user_agent': props.userAgent,
+        'http.request.params': JSON.stringify(props.params),
+        'http.request.query': JSON.stringify(props.query),
+        'http.request.body': JSON.stringify(props.body),
+        'http.response.body': JSON.stringify(props.response),
+      },
+    };
+
+    this.otlpLogger.emit(record);
+  }
+
+  private emitErrorLog(props: {
+    method: string;
+    url: string;
+    ip: string;
+    userAgent: string;
+    statusCode: number;
+    duration: number;
+    params: unknown;
+    query: unknown;
+    body: unknown;
+    errorMessage: string;
+    errorStack: string;
+  }): void {
+    const record: LogRecord = {
+      severityNumber: SeverityNumber.ERROR,
+      body: `${props.method} ${props.url} ${props.statusCode} ERROR: ${props.errorMessage}`,
+      attributes: {
+        'http.method': props.method,
+        'http.url': props.url,
+        'http.status_code': props.statusCode,
+        'http.duration_ms': props.duration,
+        'http.client_ip': props.ip,
+        'http.user_agent': props.userAgent,
+        'http.request.params': JSON.stringify(props.params),
+        'http.request.query': JSON.stringify(props.query),
+        'http.request.body': JSON.stringify(props.body),
+        'exception.message': props.errorMessage,
+        'exception.stacktrace': props.errorStack,
+      },
+    };
+
+    this.otlpLogger.emit(record);
   }
 
   private sanitizeResponse(data: unknown): unknown {

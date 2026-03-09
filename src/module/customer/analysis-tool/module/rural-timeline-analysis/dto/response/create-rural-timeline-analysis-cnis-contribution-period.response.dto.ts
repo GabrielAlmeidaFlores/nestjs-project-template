@@ -6,7 +6,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(RuralTimelineAnalysisCnisContributionPeriodId)
-  public contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId;
+  public ruralTimelineAnalysisCnisContributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId;
 
   protected override readonly _type =
     CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.name;

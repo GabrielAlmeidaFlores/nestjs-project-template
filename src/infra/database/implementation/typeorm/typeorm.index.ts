@@ -124,6 +124,8 @@ import { RetirementPlanningRppsLegalProceedingTypeormCommandRepository } from '@
 import { RuralTimelineAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.command.repository';
 import { RuralTimelineAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis/rural-timeline-analysis.typeorm.query.repository';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.typeorm.command.repository';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment.typeorm.command.repository';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment.typeorm.query.repository';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.command.repository';
 import { RuralTimelineAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-document/rural-timeline-analysis-document.typeorm.command.repository';
 import { RuralTimelineAnalysisPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/rural-timeline-analysis-period/rural-timeline-analysis-period.typeorm.command.repository';
@@ -140,6 +142,20 @@ import { SpecialActivityDocumentTypeormCommandRepository } from '@infra/database
 import { SpecialActivityInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-inss-benefit/special-activity-inss-benefit.typeorm.command.repository';
 import { SpecialActivityLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-legal-proceeding/special-activity-legal-proceeding.typeorm.command.repository';
 import { SpecialActivityResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-activity-result/special-activity-result.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis/special-category-retirement-analysis.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis/special-category-retirement-analysis.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result/special-category-retirement-analysis-result.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result/special-category-retirement-analysis-result.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item.typeorm.query.repository';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.command.repository';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period.typeorm.query.repository';
 import { SpeechGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.command.repository';
 import { SpeechGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/speech-generator/speech-generator.typeorm.query.repository';
 import { SpeechGeneratorBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-benefit/speech-generator-benefit.typeorm.command.repository';
@@ -254,6 +270,7 @@ import { RetirementPlanningRppsRemunerationCalculationTypeormEntity } from '@inf
 import { RetirementPlanningRppsRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-remuneration.typeorm.entity';
 import { RetirementPlanningRppsResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps-result.typeorm.entity';
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-adjustment.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum.typeorm.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-cnis-contribution-period.typeorm.entity';
 import { RuralTimelineAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-document.typeorm.entity';
@@ -274,6 +291,13 @@ import { SpecialActivityInssBenefitTypeormEntity } from '@infra/database/impleme
 import { SpecialActivityLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-inss-legal-proceeding.typeorm.entity';
 import { SpecialActivityResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity-result.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-period-document.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-remuneration.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-conversion-item.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result-rule-item.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-result.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis-work-period.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpeechGeneratorBenefitTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-benefit.typeorm.entity';
 import { SpeechGeneratorDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-document.typeorm.entity';
 import { SpeechGeneratorLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator-legal-proceeding.typeorm.entity';
@@ -379,6 +403,7 @@ export class TypeormIndex {
     RuralTimelineAnalysisPeriodPendingExitDateTypeormEntity,
     RuralTimelineCnisContributionPeriodOverdueContributionTypeormEntity,
     RuralTimelineCnisContributionPeriodDocumentTypeormEntity,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormEntity,
     RuralTimelineAnalysisInssBenefitTypeormEntity,
     RuralTimelineAnalysisLegalProceedingTypeormEntity,
     InsuranceQualityAnalysisTypeormEntity,
@@ -391,6 +416,13 @@ export class TypeormIndex {
     SpecialActivityResultTypeormEntity,
     SpecialActivityInssBenefitTypeormEntity,
     SpecialActivityLegalProceedingTypeormEntity,
+    SpecialCategoryRetirementAnalysisTypeormEntity,
+    SpecialCategoryRetirementAnalysisPeriodDocumentTypeormEntity,
+    SpecialCategoryRetirementAnalysisRemunerationTypeormEntity,
+    SpecialCategoryRetirementAnalysisResultTypeormEntity,
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormEntity,
+    SpecialCategoryRetirementAnalysisResultRuleItemTypeormEntity,
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormEntity,
     MedicalQuestionGeneratorDocumentTypeormEntity,
     MedicalQuestionGeneratorInssBenefitTypeormEntity,
     MedicalQuestionGeneratorLegalProceedingTypeormEntity,
@@ -545,6 +577,8 @@ export class TypeormIndex {
     RuralTimelineAnalysisCnisContributionPeriodUnderMinimumTypeormCommandRepository,
     RuralTimelineCnisContributionPeriodDocumentTypeormCommandRepository,
     RuralTimelineCnisContributionPeriodDocumentTypeormQueryRepository,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormCommandRepository,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentTypeormQueryRepository,
     InsuranceQualityAnalysisTypeormCommandRepository,
     InsuranceQualityAnalysisDocumentTypeormCommandRepository,
     InsuranceQualityAnalysisInssBenefitTypeormCommandRepository,
@@ -557,6 +591,20 @@ export class TypeormIndex {
     SpecialActivityDocumentTypeormCommandRepository,
     SpecialActivityInssBenefitTypeormCommandRepository,
     SpecialActivityLegalProceedingTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisPeriodDocumentTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisPeriodDocumentTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisRemunerationTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisRemunerationTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisResultTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisResultTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisResultConversionItemTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisResultRuleItemTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisResultRuleItemTypeormQueryRepository,
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormCommandRepository,
+    SpecialCategoryRetirementAnalysisWorkPeriodTypeormQueryRepository,
     PerCapitaIncomeForBpcAnalysisTypeormCommandRepository,
     PerCapitaIncomeForBpcAnalysisTypeormQueryRepository,
     PerCapitaIncomeForBpcAnalysisBenefitTypeormCommandRepository,

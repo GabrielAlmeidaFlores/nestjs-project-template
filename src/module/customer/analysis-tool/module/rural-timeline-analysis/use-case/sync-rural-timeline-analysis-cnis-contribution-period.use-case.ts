@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
@@ -8,15 +10,23 @@ import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-pr
 import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
 import { ListRuralTimelineAnalysisCnisContributionPeriodQueryParam } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/param/list-rural-timeline-analysis-cnis-contribution-period.query.param';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/command/rural-timeline-analysis-cnis-contribution-period-under-minimum.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period.entity';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum.entity';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period-under-minimum/value-object/rural-timeline-analysis-cnis-contribution-period-under-minimum-id/rural-timeline-analysis-cnis-contribution-period-under-minimum-id.value-object';
 import { SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/sync-rural-timeline-analysis-cnis-contribution-period.request.dto';
 import { SyncRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/sync-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { FileModel } from '@shared/system/model/generic/file.model';
+
+interface UnderMinimumMonthDataInterface {
+  contributionDate: Date;
+  contributionAmount: DecimalValue;
+}
 
 @Injectable()
 export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
@@ -32,6 +42,10 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
     private readonly ruralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway,
+    @Inject(
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
+    )
+    private readonly ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -66,9 +80,11 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
       cnisDocumentLocation,
     );
 
-    return SyncRuralTimelineAnalysisCnisContributionPeriodResponseDto.buildFromEntity(
-      contributionPeriodId,
-    );
+    await this.createUnderMinimumRecordsIfApplicable(contributionPeriodId, dto);
+
+    return SyncRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
+      ruralTimelineAnalysisCnisContributionPeriodId: contributionPeriodId,
+    });
   }
 
   private async validateOrganizationMember(
@@ -120,11 +136,14 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
     const batchSize = 10;
     for (let i = 0; i < existingPeriods.resource.length; i += batchSize) {
       const batch = existingPeriods.resource.slice(i, i + batchSize);
-      const deleteOperations = batch.map((period) =>
+      const deleteOperations = batch.flatMap((period) => [
+        this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.deleteAllByContributionPeriodId(
+          period.id,
+        ),
         this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.deleteRuralTimelineAnalysisCnisContributionPeriod(
           period.id,
         ),
-      );
+      ]);
 
       const deleteTransaction =
         await this.baseTransactionRepositoryGateway.execute(deleteOperations);
@@ -185,5 +204,75 @@ export class SyncRuralTimelineAnalysisCnisContributionPeriodUseCase {
     await transaction.commit();
 
     return contributionPeriodId;
+  }
+
+  private async createUnderMinimumRecordsIfApplicable(
+    contributionPeriodId: RuralTimelineAnalysisCnisContributionPeriodId,
+    dto: SyncRuralTimelineAnalysisCnisContributionPeriodRequestDto,
+  ): Promise<void> {
+    if (
+      dto.averageContributionAmount === undefined ||
+      dto.startDate === undefined
+    ) {
+      return;
+    }
+
+    const underMinimumMonths = this.findMonthsBelowMinimum(
+      dto.startDate,
+      dto.endDate ?? dto.startDate,
+      dto.averageContributionAmount,
+    );
+
+    if (underMinimumMonths.length === 0) {
+      return;
+    }
+
+    const batchSize = 10;
+    for (let i = 0; i < underMinimumMonths.length; i += batchSize) {
+      const batch = underMinimumMonths.slice(i, i + batchSize);
+      const createOperations = batch.map((month) =>
+        this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+          new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity({
+            id: new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumId(),
+            ruralTimelineCnisContributionPeriodId: contributionPeriodId,
+            contributionDate: month.contributionDate,
+            contributionAmount: month.contributionAmount,
+          }),
+        ),
+      );
+
+      const transaction =
+        await this.baseTransactionRepositoryGateway.execute(createOperations);
+      await transaction.commit();
+    }
+  }
+
+  private findMonthsBelowMinimum(
+    startDate: Date,
+    endDate: Date,
+    averageContributionAmount: DecimalValue,
+  ): UnderMinimumMonthDataInterface[] {
+    const amount = Number(averageContributionAmount.toString());
+    const result: UnderMinimumMonthDataInterface[] = [];
+
+    const current = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+    const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+
+    while (current <= end) {
+      const year = current.getFullYear();
+      const tetoData = TetoInssData.find((t) => t.ano === year);
+      const salarioMinimo = tetoData?.salarioMinimo ?? 0;
+
+      if (salarioMinimo > 0 && amount < salarioMinimo) {
+        result.push({
+          contributionDate: new Date(current),
+          contributionAmount: averageContributionAmount,
+        });
+      }
+
+      current.setMonth(current.getMonth() + 1);
+    }
+
+    return result;
   }
 }

@@ -8,7 +8,7 @@ import { RuralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway } fr
 import { RuralTimelineAnalysisPeriodEconomicAspectsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-economic-aspects/query/rural-timeline-analysis-period-economic-aspects.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period/value-object/rural-timeline-analysis-period-id/rural-timeline-analysis-period-id.value-object';
-import { RuralTimelineAnalysisPeriodEconomicAspectsId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/value-object/rural-timeline-analysis-period-economic-aspects-id/rural-timeline-analysis-period-economic-aspects-id.value-object';
+import { RuralTimelineAnalysisPeriodEconomicAspectTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-economic-aspects/enum/rural-timeline-analysis-period-economic-aspect-type.enum';
 import { DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-period-economic-aspects.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
 import { RuralTimelineAnalysisPeriodEconomicAspectsNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-period-economic-aspects-not-found.error';
@@ -38,7 +38,7 @@ export class DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
     periodId: RuralTimelineAnalysisPeriodId,
-    ruralTimelineAnalysisPeriodEconomicAspectsId: RuralTimelineAnalysisPeriodEconomicAspectsId,
+    type: RuralTimelineAnalysisPeriodEconomicAspectTypeEnum,
   ): Promise<DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -58,31 +58,25 @@ export class DeleteRuralTimelineAnalysisPeriodEconomicAspectsUseCase {
     );
 
     const existingEconomicAspects =
-      await this.ruralTimelineAnalysisPeriodEconomicAspectsQueryRepositoryGateway.findOneById(
-        ruralTimelineAnalysisPeriodEconomicAspectsId,
+      await this.ruralTimelineAnalysisPeriodEconomicAspectsQueryRepositoryGateway.findOneByPeriodIdAndType(
+        periodId,
+        type,
       );
 
     if (existingEconomicAspects === null) {
       throw new RuralTimelineAnalysisPeriodEconomicAspectsNotFoundError();
     }
 
-    if (
-      existingEconomicAspects.ruralTimelinePeriodId.toString() !==
-      periodId.toString()
-    ) {
-      throw new RuralTimelineAnalysisPeriodEconomicAspectsNotFoundError();
-    }
-
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.ruralTimelineAnalysisPeriodEconomicAspectsCommandRepositoryGateway.deleteRuralTimelineAnalysisPeriodEconomicAspects(
-        ruralTimelineAnalysisPeriodEconomicAspectsId,
+        existingEconomicAspects.id,
       ),
     ]);
 
     await transaction.commit();
 
-    return DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto.build(
-      {},
-    );
+    return DeleteRuralTimelineAnalysisPeriodEconomicAspectsResponseDto.build({
+      ruralTimelineAnalysisPeriodEconomicAspectsId: existingEconomicAspects.id,
+    });
   }
 }

@@ -18,6 +18,7 @@ import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-
 import { RetirementPlanningRppsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps/retirement-planning-rpps-entity';
 import { RuralTimelineAnalysisEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/rural-timeline-analysis.entity';
 import { SpecialActivityEntity } from '@module/customer/analysis-tool/module/special-activity-analysis/domain/schema/entity/special-activity/special-activity-entity';
+import { SpecialCategoryRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis/special-category-retirement-analysis.entity';
 import { SpeechGeneratorEntity } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/speech-generator.entity';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
@@ -110,6 +111,11 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisEntity | null;
 
   @Description(
+    'Análise de aposentadoria por categoria especial associada ao registro da ferramenta de análise',
+  )
+  public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
+
+  @Description(
     'Cliente da ferramenta de análise associado ao registro da ferramenta de análise',
   )
   public readonly analysisToolClient: AnalysisToolClientEntity;
@@ -151,6 +157,8 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
     this.generalUrbanRetirementAnalysis =
       props.generalUrbanRetirementAnalysis ?? null;
+    this.specialCategoryRetirementAnalysis =
+      props.specialCategoryRetirementAnalysis ?? null;
     this.status = props.status;
     this.analysisToolClient = props.analysisToolClient;
     this.createdBy = props.createdBy;

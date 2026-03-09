@@ -19,6 +19,9 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
   )
   public readonly employmentRelationshipSource: string | null;
 
+  @Description('Número sequencial do vínculo conforme apresentado no CNIS.')
+  public readonly sequencial: number | null;
+
   @Description(
     'Data de início do período de contribuição previdenciária registrado no CNIS.',
   )
@@ -88,6 +91,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntity extends BaseEntit
     super(RuralTimelineAnalysisCnisContributionPeriodId, props);
 
     this.ruralTimelineId = props.ruralTimelineId ?? null;
+    this.sequencial = props.sequencial ?? null;
     this.employmentRelationshipSource =
       props.employmentRelationshipSource ?? null;
     this.startDate = props.startDate ?? null;

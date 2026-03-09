@@ -17,6 +17,7 @@ import { ConflictErrorExceptionFilter } from '@shared/api/gateway/exception-filt
 import { ForbiddenErrorExceptionFilter } from '@shared/api/gateway/exception-filter/forbidden.error.exception-filter';
 import { InvalidInputErrorExceptionFilter } from '@shared/api/gateway/exception-filter/invalid-input.error.exception-filter';
 import { NotFoundErrorExceptionFilter } from '@shared/api/gateway/exception-filter/not-found.error.exception-filter';
+import { ServiceUnavailableErrorExceptionFilter } from '@shared/api/gateway/exception-filter/service-unavailable.error.exception-filter';
 import { UnauthorizedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unauthorized.error.exception-filter';
 import { UnexpectedErrorExceptionFilter } from '@shared/api/gateway/exception-filter/unexpected.error.exception-filter';
 import { LoggingInterceptor } from '@shared/api/gateway/interceptor/logging/logging.interceptor';
@@ -100,6 +101,7 @@ export class AppConfig extends AppConfigUtils {
     this.app.useGlobalFilters(new NotFoundErrorExceptionFilter());
     this.app.useGlobalFilters(new UnauthorizedErrorExceptionFilter());
     this.app.useGlobalFilters(new UnexpectedErrorExceptionFilter());
+    this.app.useGlobalFilters(new ServiceUnavailableErrorExceptionFilter());
 
     return this;
   }

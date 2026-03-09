@@ -57,6 +57,7 @@ import { GetCnisFastAnalysisLegalProceedingQueryResultAutoMapperProfile } from '
 import { CnisFastAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/cnis-fast-analysis-result-entity.auto-mapper.profile';
 import { GetCnisFastAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis-result/get-cnis-fast-analysis-result-query-result.auto-mapper.profile';
 import { CustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/customer-entity.auto-mapper.profile';
+import { GetCustomerProfileQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-profile-query-result.auto-mapper.profile';
 import { GetCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-query-result.auto-mapper.profile';
 import { GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-auth-identity-relation-query-result.auto-mapper.profile';
 import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-customer-address-relation-query-result.auto-mapper.profile';
@@ -233,6 +234,7 @@ import { GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile } fro
 import { RuralTimelineAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis/rural-timeline-analysis-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisCnisContributionPeriodQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/get-rural-timeline-analysis-cnis-contribution-period-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period/rural-timeline-analysis-cnis-contribution-period-entity.auto-mapper.profile';
+import { RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-adjustment/rural-timeline-analysis-cnis-contribution-period-adjustment-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/get-rural-timeline-analysis-cnis-contribution-period-under-minimum-query-result.auto-mapper.profile';
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-cnis-contribution-period-under-minimum/rural-timeline-analysis-cnis-contribution-period-under-minimum-entity.auto-mapper.profile';
 import { GetRuralTimelineAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/rural-timeline-analysis-document/get-rural-timeline-analysis-document-query-result.auto-mapper.profile';
@@ -268,6 +270,13 @@ import { GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile }
 import { SpecialActivityLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-legal-proceeding/special-activity-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpecialActivityAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/get-special-activity-analysis-result-query-result.auto-mapper.profile';
 import { SpecialActivityResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-activity-result/special-activity-result-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis/special-category-retirement-analysis-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-period-document/special-category-retirement-analysis-period-document-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-remuneration/special-category-retirement-analysis-remuneration-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result/special-category-retirement-analysis-result-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-conversion-item/special-category-retirement-analysis-result-conversion-item-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-result-rule-item/special-category-retirement-analysis-result-rule-item-entity.auto-mapper.profile';
+import { SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/special-category-retirement-analysis-work-period/special-category-retirement-analysis-work-period-entity.auto-mapper.profile';
 import { GetSpeechGeneratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-query-result.auto-mapper.profile';
 import { GetSpeechGeneratorWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/get-speech-generator-with-relations-query-result.auto-mapper.profile';
 import { SpeechGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator/speech-generator-entity.auto-mapper.profile';
@@ -298,6 +307,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetOrganizationMemberQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
     GetCustomerWithOrganizationForListQueryResultAutoMapperProfile,
+    GetCustomerProfileQueryResultAutoMapperProfile,
     GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile,
     GetCustomerWithAuthIdentityRelationQueryResultAutoMapperProfile,
     CustomerEntityAutoMapperProfile,
@@ -453,6 +463,13 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetSpecialActivityAnalysisInssBenefitQueryResultAutoMapperProfile,
     SpecialActivityLegalProceedingEntityAutoMapperProfile,
     GetSpecialActivityAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisPeriodDocumentEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisRemunerationEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultConversionItemEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisResultRuleItemEntityAutoMapperProfile,
+    SpecialCategoryRetirementAnalysisWorkPeriodEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisEntityAutoMapperProfile,
     AdministrativeProcedureInssAnalysisDocumentEntityAutoMapperProfile,
     GetAdministrativeProcedureInssAnalysisDocumentQueryResultAutoMapperProfile,
@@ -548,6 +565,7 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     RuralTimelineCnisContributionPeriodOverdueContributionEntityAutoMapperProfile,
     GetRuralTimelineCnisContributionPeriodOverdueContributionQueryResultAutoMapperProfile,
     RuralTimelineCnisContributionPeriodDocumentEntityAutoMapperProfile,
+    RuralTimelineAnalysisCnisContributionPeriodAdjustmentEntityAutoMapperProfile,
     RuralTimelineAnalysisPeriodEntityAutoMapperProfile,
     GetRuralTimelineAnalysisPeriodDocumentQueryResultAutoMapperProfile,
     RuralTimelineAnalysisPeriodDocumentEntityAutoMapperProfile,

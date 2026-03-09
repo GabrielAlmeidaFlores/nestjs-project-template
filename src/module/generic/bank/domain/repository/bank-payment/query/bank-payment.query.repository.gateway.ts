@@ -34,4 +34,6 @@ export abstract class BankPaymentQueryRepositoryGateway {
     customerId: CustomerId,
     listData: ListDataInputModel,
   ): Promise<ListDataOutputModel<GetBankPaymentQueryResult>>;
+
+  public abstract sumBankPaymentAmountByYear(year: number): Promise<number>;
 }

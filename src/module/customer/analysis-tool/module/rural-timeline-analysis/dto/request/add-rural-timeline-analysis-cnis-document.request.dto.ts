@@ -1,18 +1,16 @@
 import { RequestDto } from '@shared/api/util/decorator/class/dto-specification/request-dto.decorator';
-import { MimeTypeEnum } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/enum/mime-type.enum';
-import { RequestDtoFileProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-file-property/request-dto-file-property.decorator';
+import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
+import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
-import { FileModel } from '@shared/system/model/generic/file.model';
 
 @RequestDto()
 export class AddRuralTimelineAnalysisCnisDocumentRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoFileProperty({
+  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
     description:
       'Arquivo do documento CNIS (Cadastro Nacional de Informações Sociais)',
-    allowedMimeType: [MimeTypeEnum.APPLICATION_PDF],
     required: true,
   })
-  public cnisDocument: FileModel;
+  public cnisDocument: Base64FileRequestDto;
 
   protected override readonly _type =
     AddRuralTimelineAnalysisCnisDocumentRequestDto.name;

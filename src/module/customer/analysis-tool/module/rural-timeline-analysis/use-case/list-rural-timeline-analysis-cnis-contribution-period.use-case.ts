@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -7,6 +8,7 @@ import { ListRuralTimelineAnalysisCnisContributionPeriodQueryParam } from '@modu
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import {
+  GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodResponseDto,
   GetRuralTimelineAnalysisCnisContributionPeriodUnderMinimumResponseDto,
   GetRuralTimelineAnalysisPeriodPendingExitDateResponseDto,
@@ -14,7 +16,6 @@ import {
 import { ListRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/list-rural-timeline-analysis-cnis-contribution-period.response.dto';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
 
 @Injectable()
 export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
@@ -34,7 +35,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
     sessionData: SessionDataModel,
     organizationSessionData: OrganizationSessionDataModel,
     ruralTimelineAnalysisId: RuralTimelineAnalysisId,
-    dto: ListDataRequestDto,
+    pagination: ListDataInputModel,
   ): Promise<ListRuralTimelineAnalysisCnisContributionPeriodResponseDto> {
     const organizationMember =
       await this.organizationMemberQueryRepositoryGateway.findOneByCustomerIdAndAuthIdentityId(
@@ -48,7 +49,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
 
     const listParam =
       new ListRuralTimelineAnalysisCnisContributionPeriodQueryParam({
-        ...dto,
+        ...pagination,
         ruralTimelineAnalysis: ruralTimelineAnalysisId,
       });
 
@@ -79,6 +80,19 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
             }),
         );
 
+      const lateContributions =
+        item.ruralTimelineCnisContributionPeriodOverdueContribution.map(
+          (overdue) =>
+            GetRuralTimelineAnalysisCnisContributionPeriodLateContributionResponseDto.build(
+              {
+                competence: overdue.overdueDate.toISOString(),
+                ...(overdue.paymentDate !== null && {
+                  paymentDate: overdue.paymentDate.toISOString(),
+                }),
+              },
+            ),
+        );
+
       let cnisDocumentUrl: string | undefined;
       let cnisDocumentOriginalFileName: string | undefined;
 
@@ -94,13 +108,20 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
 
       return GetRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
         id: item.id,
-        employmentRelationshipSource: item.employmentRelationshipSource ?? null,
-        startDate: item.startDate ?? null,
-        endDate: item.endDate ?? null,
-        category: item.category ?? null,
-        qualifyingPeriod: item.qualifyingPeriod ?? null,
-        status: item.status ?? null,
-        averageContributionAmount: item.averageContributionAmount ?? null,
+        ...(item.sequencial !== null && { sequencial: item.sequencial }),
+        ...(item.employmentRelationshipSource !== null && {
+          employmentRelationshipSource: item.employmentRelationshipSource,
+        }),
+        ...(item.startDate !== null && { startDate: item.startDate }),
+        ...(item.endDate !== null && { endDate: item.endDate }),
+        ...(item.category !== null && { category: item.category }),
+        ...(item.qualifyingPeriod !== null && {
+          qualifyingPeriod: item.qualifyingPeriod,
+        }),
+        ...(item.status !== null && { status: item.status }),
+        ...(item.averageContributionAmount !== null && {
+          averageContributionAmount: item.averageContributionAmount,
+        }),
         contributionAdjustmentIntent: item.contributionAdjustmentIntent,
         externalSupplementationIntent: item.externalSupplementationIntent,
         ...(cnisDocumentUrl !== undefined && { cnisDocumentUrl }),
@@ -111,6 +132,7 @@ export class ListRuralTimelineAnalysisCnisContributionPeriodUseCase {
         updatedAt: item.updatedAt,
         ...(underMinimumPeriods.length > 0 && { underMinimumPeriods }),
         ...(pendingExitDates.length > 0 && { pendingExitDates }),
+        ...(lateContributions.length > 0 && { lateContributions }),
       });
     });
 

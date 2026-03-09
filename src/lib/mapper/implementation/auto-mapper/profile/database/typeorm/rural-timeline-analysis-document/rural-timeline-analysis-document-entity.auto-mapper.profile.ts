@@ -33,9 +33,13 @@ export class RuralTimelineAnalysisDocumentEntityAutoMapperProfile {
       );
 
       return new RuralTimelineAnalysisDocumentEntity({
-        ...source,
         id: new RuralTimelineAnalysisDocumentId(source.id),
+        type: source.type,
+        document: source.document,
         ruralTimelineId: ruralTimeline.id,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
