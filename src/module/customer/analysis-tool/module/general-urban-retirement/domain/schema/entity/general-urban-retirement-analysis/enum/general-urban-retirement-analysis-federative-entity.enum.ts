@@ -1,6 +1,6 @@
 export enum GeneralUrbanRetirementAnalysisFederativeEntityEnum {
-  STATE = 'Estado',
-  MUNICIPALITY = 'Município',
-  UNION = 'União',
-  DF = 'DF',
+  STATE = 'state',
+  MUNICIPALITY = 'municipality',
+  UNION = 'union',
+  DF = 'df',
 }
