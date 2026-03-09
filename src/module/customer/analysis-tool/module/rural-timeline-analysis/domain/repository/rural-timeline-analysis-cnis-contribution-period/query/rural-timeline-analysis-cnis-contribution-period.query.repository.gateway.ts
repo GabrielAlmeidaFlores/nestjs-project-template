@@ -18,4 +18,8 @@ export abstract class RuralTimelineAnalysisCnisContributionPeriodQueryRepository
   ): Promise<
     ListDataOutputModel<GetRuralTimelineAnalysisCnisContributionPeriodQueryResult>
   >;
+
+  public abstract findAllByRuralTimelineAnalysisId(
+    ruralTimelineAnalysisId: string,
+  ): Promise<GetRuralTimelineAnalysisCnisContributionPeriodQueryResult[]>;
 }

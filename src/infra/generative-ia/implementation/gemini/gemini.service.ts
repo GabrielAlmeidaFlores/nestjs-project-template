@@ -21,6 +21,8 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
+  private static readonly AI_CALL_TIMEOUT_MS = 80_000;
+  private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
 
@@ -49,15 +51,19 @@ export class GeminiService implements GenerativeIaGateway {
     };
     this.GENERATIVE_IA_RULES = [
       `
-Role: Act as a Technical Documentation Specialist.
-Task: Generate all responses exclusively in Standard Semantic Markdown optimized for direct HTML parsing.
-Formatting Rules:
-1. Strict Hierarchy: Use Markdown headers (#, ##, ###) to define the report structure. Never skip levels.
-2. Data Presentation: Use Markdown Tables (| column |) for all structured data. Do not use spaces, dashes, or tabs to visually simulate tables.
-3. Lists: Use standard bullet points (-) or numbered lists (1.) for sequential items.
-4. No ASCII Art/Visual Drawings: STRICTLY FORBIDDEN - Do not use ANY of the following to draw borders, boxes, diagrams or flowcharts: pipes (|), slashes (/\\), dashes (-), plus signs (+), equals signs (=), or Unicode box-drawing characters (┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ and similar). Use Markdown headers, bullet points and tables instead.
-5. Clean Text Focus: Avoid wrapping the response in JSON blocks unless explicitly requested. Provide raw Markdown text.
-6. Report Tone: Organize content with a clear Introduction, Body, and Conclusion.
+role: act as a technical documentation specialist.
+task: generate responses exclusively in standard semantic markdown optimized for direct html parsing.
+
+formatting rules:
+- structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
+- data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
+- lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
+- diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
+- output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
+- document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
+- technology references: do not mention internal tools, systems, or technologies used to generate the response.
+- identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
+- technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
 `,
     ];
   }
@@ -72,11 +78,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateFlashResponseFromPromptAndFiles(
@@ -89,11 +99,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateHighQualityResponseFromPromptAndFiles(
@@ -106,11 +120,15 @@ Formatting Rules:
       ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
       : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-pro-preview',
-      maxOutputTokens,
-    );
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-pro-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   private async generateResponseFromPromptAndFiles(
@@ -300,8 +318,9 @@ Formatting Rules:
         );
       }
 
-      const result =
-        await this.googleGenerativeAI.models.generateContent(contentConfig);
+      const result = await this.withTimeout(
+        this.googleGenerativeAI.models.generateContent(contentConfig),
+      );
 
       return GeminiResultOutputModel.build({
         text:
@@ -316,9 +335,7 @@ Formatting Rules:
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
-          throw new GenerativeIaConnectionError({
-            originalError: error.message,
-          });
+          throw new GenerativeIaConnectionError();
         }
 
         if (
@@ -337,7 +354,8 @@ Formatting Rules:
 
         if (
           error.message.includes('UNAVAILABLE') ||
-          error.message.includes('503')
+          error.message.includes('503') ||
+          error.message === GeminiService.TIMEOUT_ERROR_MESSAGE
         ) {
           const fallbackModel = this.FALLBACK_MODELS[model];
 
@@ -384,10 +402,12 @@ Formatting Rules:
 
     while (callCount < MAX_FUNCTION_CALLS) {
       try {
-        const result = await this.googleGenerativeAI.models.generateContent({
-          ...contentConfig,
-          contents: conversationHistory as never,
-        });
+        const result = await this.withTimeout(
+          this.googleGenerativeAI.models.generateContent({
+            ...contentConfig,
+            contents: conversationHistory as never,
+          }),
+        );
 
         totalInputTokens += result.usageMetadata?.promptTokenCount ?? 0;
         totalOutputTokens += result.usageMetadata?.candidatesTokenCount ?? 0;
@@ -469,9 +489,7 @@ Formatting Rules:
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message.includes('fetch failed')) {
-            throw new GenerativeIaConnectionError({
-              originalError: error.message,
-            });
+            throw new GenerativeIaConnectionError();
           }
 
           if (
@@ -502,6 +520,20 @@ Formatting Rules:
     });
   }
 
+  private withTimeout<T>(promise: Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(GeminiService.TIMEOUT_ERROR_MESSAGE));
+      }, GeminiService.AI_CALL_TIMEOUT_MS);
+    });
+
+    return Promise.race([promise, timeoutPromise]).finally(() => {
+      clearTimeout(timer);
+    });
+  }
+
   private async buildPartWithFileContent(
     contentList: GenerativeIaPartType[],
   ): Promise<Part[]> {
@@ -511,7 +543,6 @@ Formatting Rules:
           return { text: content } as Part;
         }
 
-        // Cria hash simples do buffer para cache
         const contentHash = Buffer.from(content)
           .toString('base64')
           .substring(0, this.hashSubstringLength);
@@ -554,17 +585,24 @@ Formatting Rules:
       .trim();
   }
 
-  private sanitizeJsonSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  private sanitizeJsonSchema(
+    schema: Record<string, unknown>,
+  ): Record<string, unknown> {
     const sanitized: Record<string, unknown> = { ...schema };
 
     if (sanitized['type'] === 'array' && sanitized['items'] === undefined) {
       sanitized['items'] = {};
     }
 
-    if (sanitized['properties'] !== null && typeof sanitized['properties'] === 'object') {
+    if (
+      sanitized['properties'] !== null &&
+      typeof sanitized['properties'] === 'object'
+    ) {
       const sanitizedProperties: Record<string, unknown> = {};
 
-      for (const [key, value] of Object.entries(sanitized['properties'] as Record<string, unknown>)) {
+      for (const [key, value] of Object.entries(
+        sanitized['properties'] as Record<string, unknown>,
+      )) {
         sanitizedProperties[key] =
           value !== null && typeof value === 'object'
             ? this.sanitizeJsonSchema(value as Record<string, unknown>)
@@ -575,7 +613,9 @@ Formatting Rules:
     }
 
     if (sanitized['items'] !== null && typeof sanitized['items'] === 'object') {
-      sanitized['items'] = this.sanitizeJsonSchema(sanitized['items'] as Record<string, unknown>);
+      sanitized['items'] = this.sanitizeJsonSchema(
+        sanitized['items'] as Record<string, unknown>,
+      );
     }
 
     return sanitized;
