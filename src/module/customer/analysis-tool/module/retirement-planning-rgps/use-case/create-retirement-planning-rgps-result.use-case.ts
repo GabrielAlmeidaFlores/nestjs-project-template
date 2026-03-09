@@ -191,13 +191,13 @@ export class CreateRetirementPlanningRgpsResultUseCase {
                   detalhes: {
                     type: 'string',
                     description: `
-Forneça uma análise técnica detalhada em formato Markdown. É OBRIGATÓRIO realizar o batimento de requisitos, comparando o que a regra exige com o que o segurado possui (Ex: Idade necessária vs. Idade atual). Se um requisito não foi atingido, explique detalhadamente o porquê.
+forneça uma análise técnica detalhada em formato markdown. é obrigatório realizar o batimento de requisitos, comparando o que a regra exige com o que o segurado possui (ex: idade necessária vs. idade atual). se um requisito não foi atingido, explique detalhadamente o porquê.
 
-Estruture a resposta incluindo:
-1. Requisitos Analisados: Tabela comparativa de Tempo de Contribuição, Idade e Carência (Alcançado vs. Necessário).
-2. Cálculo da RMI: Média salarial, coeficiente aplicado e RMI estimada.
-3. Valor da Causa: DIB, DER, meses de atrasados e valor total.
-4. Parecer Técnico: Vantagens, desvantagens e a explicação específica de impedimentos.
+estruture a resposta incluindo:
+- requisitos analisados: tabela comparativa de tempo de contribuição, idade e carência (alcançado vs. necessário).
+- cálculo da rmi: média salarial, coeficiente aplicado e rmi estimada.
+- valor da causa: dib, der, meses de atrasados e valor total.
+- estudo de elegibilidade: vantagens, desvantagens e a explicação específica de impedimentos.
 `,
                   },
                 },
