@@ -50,59 +50,61 @@ export class ListAnalysisToolRecordUseCase {
         new ListAnalysisToolRecordQueryParam(dto),
       );
 
-    const resource: GetAnalysisToolRecordResponseDto[] = [];
+    const resource = (
+      await Promise.all(
+        analysisToolRecordList.resource.map(async (analysisToolRecord) => {
+          const createdBy = GetAnalysisToolRecordResponsibleResponseDto.build({
+            ...analysisToolRecord.createdBy.customer,
+          });
 
-    await Promise.all(
-      analysisToolRecordList.resource.map(async (analysisToolRecord) => {
-        const createdBy = GetAnalysisToolRecordResponsibleResponseDto.build({
-          ...analysisToolRecord.createdBy.customer,
-        });
+          if (analysisToolRecord.createdBy.customer.profilePicture !== null) {
+            const profilePicture =
+              await this.fileProcessorGateway.getFileSignedUrl(
+                analysisToolRecord.createdBy.customer.profilePicture,
+              );
 
-        if (analysisToolRecord.createdBy.customer.profilePicture !== null) {
-          const profilePicture =
-            await this.fileProcessorGateway.getFileSignedUrl(
-              analysisToolRecord.createdBy.customer.profilePicture,
-            );
+            createdBy.profilePicture = profilePicture.toString();
+          }
 
-          createdBy.profilePicture = profilePicture.toString();
-        }
+          const updatedBy = GetAnalysisToolRecordResponsibleResponseDto.build({
+            ...analysisToolRecord.updatedBy.customer,
+          });
 
-        const updatedBy = GetAnalysisToolRecordResponsibleResponseDto.build({
-          ...analysisToolRecord.updatedBy.customer,
-        });
+          if (analysisToolRecord.updatedBy.customer.profilePicture !== null) {
+            const profilePicture =
+              await this.fileProcessorGateway.getFileSignedUrl(
+                analysisToolRecord.updatedBy.customer.profilePicture,
+              );
 
-        if (analysisToolRecord.updatedBy.customer.profilePicture !== null) {
-          const profilePicture =
-            await this.fileProcessorGateway.getFileSignedUrl(
-              analysisToolRecord.updatedBy.customer.profilePicture,
-            );
+            updatedBy.profilePicture = profilePicture.toString();
+          }
 
-          updatedBy.profilePicture = profilePicture.toString();
-        }
+          const client = GetAnalysisToolRecordClientResponseDto.build({
+            ...analysisToolRecord.analysisToolClient,
+          });
 
-        const client = GetAnalysisToolRecordClientResponseDto.build({
-          ...analysisToolRecord.analysisToolClient,
-        });
-
-        const analysis =
-          analysisToolRecord.cnisFastAnalysis ??
-          analysisToolRecord.retirementPlanningRpps ??
-          analysisToolRecord.retirementPlanningRgps ??
+          const analysis =
+            analysisToolRecord.cnisFastAnalysis ??
+            analysisToolRecord.retirementPlanningRpps ??
+            analysisToolRecord.retirementPlanningRgps ??
           analysisToolRecord.generalUrbanRetirementAnalysis ??
-          analysisToolRecord.judicialCaseAnalysis ??
-          analysisToolRecord.administrativeProcedureInssAnalysis ??
-          analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
-          analysisToolRecord.specialActivity ??
-          analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
-          analysisToolRecord.ruralTimelineAnalysis ??
-          analysisToolRecord.speechGenerator ??
-          analysisToolRecord.medicalQuestionGenerator ??
-          analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
-          analysisToolRecord.insuranceQualityAnalysis ??
-          analysisToolRecord.audienceQuestionGenerator;
+            analysisToolRecord.judicialCaseAnalysis ??
+            analysisToolRecord.administrativeProcedureInssAnalysis ??
+            analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??
+            analysisToolRecord.specialActivity ??
+            analysisToolRecord.disabilityAssessmentForBpcAnalysis ??
+            analysisToolRecord.ruralTimelineAnalysis ??
+            analysisToolRecord.speechGenerator ??
+            analysisToolRecord.medicalQuestionGenerator ??
+            analysisToolRecord.perCapitaIncomeForBpcAnalysis ??
+            analysisToolRecord.insuranceQualityAnalysis ??
+            analysisToolRecord.audienceQuestionGenerator;
 
-        if (analysis !== null) {
-          const data = GetAnalysisToolRecordResponseDto.build({
+          if (analysis === null) {
+            return null;
+          }
+
+          return GetAnalysisToolRecordResponseDto.build({
             ...analysisToolRecord,
             analysisId: analysis.id,
             status: analysisToolRecord.status,
@@ -110,13 +112,9 @@ export class ListAnalysisToolRecordUseCase {
             createdBy,
             updatedBy,
           });
-
-          resource.push(data);
-        }
-
-        return;
-      }),
-    );
+        }),
+      )
+    ).filter((item): item is GetAnalysisToolRecordResponseDto => item !== null);
 
     return ListAnalysisToolRecordResponseDto.build({
       ...analysisToolRecordList,

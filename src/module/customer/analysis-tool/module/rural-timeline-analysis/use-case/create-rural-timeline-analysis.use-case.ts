@@ -132,12 +132,19 @@ export class CreateRuralTimelineAnalysisUseCase {
           })
         : [];
 
-    const residences: RuralTimelineAnalysisPeriodResidenceEntity[] = [];
-    const properties: RuralTimelineAnalysisPeriodPropertyEntity[] = [];
+    const residenceMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodResidenceEntity
+    >();
+    const propertyMap = new Map<
+      number,
+      RuralTimelineAnalysisPeriodPropertyEntity
+    >();
 
-    for (const periodDto of dto.periods) {
+    for (const [index, periodDto] of dto.periods.entries()) {
       if (periodDto.residence !== undefined) {
-        residences.push(
+        residenceMap.set(
+          index,
           new RuralTimelineAnalysisPeriodResidenceEntity({
             city: periodDto.residence.city,
             stateCode: periodDto.residence.stateCode,
@@ -146,7 +153,8 @@ export class CreateRuralTimelineAnalysisUseCase {
         );
       }
       if (periodDto.property !== undefined) {
-        properties.push(
+        propertyMap.set(
+          index,
           new RuralTimelineAnalysisPeriodPropertyEntity({
             propertyName: periodDto.property.propertyName ?? null,
             ownerName: periodDto.property.ownerName ?? null,
@@ -162,17 +170,14 @@ export class CreateRuralTimelineAnalysisUseCase {
       }
     }
 
+    const residences = [...residenceMap.values()];
+    const properties = [...propertyMap.values()];
+
     const periods: RuralTimelineAnalysisPeriodEntity[] = dto.periods.map(
       (periodDto, index) => {
-        const residenceId =
-          periodDto.residence !== undefined
-            ? (residences.find((_, i) => i === index)?.id ?? null)
-            : null;
+        const residenceId = residenceMap.get(index)?.id ?? null;
 
-        const propertyId =
-          periodDto.property !== undefined
-            ? (properties.find((_, i) => i === index)?.id ?? null)
-            : null;
+        const propertyId = propertyMap.get(index)?.id ?? null;
 
         return new RuralTimelineAnalysisPeriodEntity({
           startDate: periodDto.startDate ?? null,
@@ -290,14 +295,14 @@ export class CreateRuralTimelineAnalysisUseCase {
       }
     }
 
-    const countRecords: number =
-      await this.analysisToolRecordQueryRepositoryGateway.countByOrganizationIdAndAuthIdentityId(
+    const maxCode: number =
+      await this.analysisToolRecordQueryRepositoryGateway.findMaxCodeByOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
       );
 
     const analysisToolRecord = new AnalysisToolRecordEntity({
-      code: new AnalysisToolRecordCode(countRecords + 1),
+      code: new AnalysisToolRecordCode(maxCode + 1),
       type: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
       ruralTimelineAnalysis,
       analysisToolClient,
@@ -402,10 +407,10 @@ export class CreateRuralTimelineAnalysisUseCase {
       ruralTimelineAnalysisTransaction,
       ...ruralTimelineAnalysisInssBenefitTransactions,
       ...ruralTimelineAnalysisLegalProceedingTransactions,
-      ...periodTransactions,
-      ...documentTransactions,
       ...residenceTransactions,
       ...propertyTransactions,
+      ...periodTransactions,
+      ...documentTransactions,
       ...economicAspectsTransactions,
       ...familyGroupMemberTransactions,
       analysisToolRecordTransaction,

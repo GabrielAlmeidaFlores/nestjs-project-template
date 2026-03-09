@@ -11,10 +11,12 @@ import { CustomerModule } from '@module/customer/customer.module';
 import { GenericModule } from '@module/generic/generic.module';
 import { CacheStorageApplicationVariable } from '@shared/system/constant/application-variable/source/cache-storage.application-variable';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
+import { ObservabilityModule } from '@shared/system/observability/observability.module';
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
+    ObservabilityModule,
     AdminModule,
     GenericModule,
     CustomerModule,

@@ -6,6 +6,7 @@ export interface InsuranceQualityAnalysisResultEntityPropsInterface extends Base
   clientName?: string | null;
   clientFederalDocument?: FederalDocument | null;
   clientBirthDate?: Date | null;
+  clientLastAffiliationDate?: Date | null;
   insuranceQualityConclusion?: string | null;
   gracePeriodConclusion?: string | null;
   finalRecommendation?: string | null;

@@ -71,9 +71,25 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
         ruralTimelineCnisContributionPeriodPendingExitDate: true,
         ruralTimelineCnisContributionPeriodOverdueContribution: true,
       },
+      order: { startDate: 'ASC' },
     });
 
-    const mappedResource = result.resource.map((item) =>
+    const sortedResource = result.resource.slice().sort((a, b) => {
+      const aNull = a.startDate === null || a.startDate === undefined;
+      const bNull = b.startDate === null || b.startDate === undefined;
+      if (aNull && bNull) {
+        return 0;
+      }
+      if (aNull) {
+        return 1;
+      }
+      if (bNull) {
+        return -1;
+      }
+      return (a.startDate?.getTime() ?? 0) - (b.startDate?.getTime() ?? 0);
+    });
+
+    const mappedResource = sortedResource.map((item) =>
       this.mapperGateway.map(
         item,
         RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
@@ -88,6 +104,28 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
         totalItems: result.totalItems,
         resource: mappedResource,
       },
+    );
+  }
+
+  public async findAllByRuralTimelineAnalysisId(
+    ruralTimelineAnalysisId: string,
+  ): Promise<GetRuralTimelineAnalysisCnisContributionPeriodQueryResult[]> {
+    const results = await this.find({
+      where: { ruralTimeline: { id: ruralTimelineAnalysisId } },
+      relations: {
+        ruralTimelineCnisContributionPeriodUnderMinimum: true,
+        ruralTimelineCnisContributionPeriodPendingExitDate: true,
+        ruralTimelineCnisContributionPeriodOverdueContribution: true,
+      },
+      order: { startDate: 'ASC' },
+    });
+
+    return results.map((item) =>
+      this.mapperGateway.map(
+        item,
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+        GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+      ),
     );
   }
 }

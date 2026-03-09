@@ -94,6 +94,7 @@ export class GenerateRuralTimelineAnalysisUseCase {
     const documentBuffers: Buffer[] = [];
 
     const cnisAnalysisResults = [];
+    const affiliationDates: Date[] = [];
     for (const doc of ruralTimelineAnalysis.ruralTimelineDocument) {
       const buffer = await this.fileProcessorGateway.getFileBuffer(
         doc.document,
@@ -102,6 +103,12 @@ export class GenerateRuralTimelineAnalysisUseCase {
 
       const cnisData =
         await this.cnisProcessorGateway.parseCnisDocument(buffer);
+
+      for (const relation of cnisData.socialSecurityRelations ?? []) {
+        if (relation.socialSecurityAffiliationInfo.dataFim !== undefined) {
+          affiliationDates.push(relation.socialSecurityAffiliationInfo.dataFim);
+        }
+      }
 
       const analysisToolClient = new AnalysisToolClientEntity({
         ...analysisToolRecordQueryResult.analysisToolClient,
@@ -177,8 +184,14 @@ export class GenerateRuralTimelineAnalysisUseCase {
 
     await transaction.commit();
 
+    const lastAffiliationDate =
+      affiliationDates.length > 0
+        ? affiliationDates.reduce((max, d) => (d > max ? d : max))
+        : undefined;
+
     return GenerateRuralTimelineAnalysisResponseDto.build({
       ruralTimelineCompleteAnalysis: analysisResult,
+      ...(lastAffiliationDate !== undefined && { lastAffiliationDate }),
     });
   }
 }

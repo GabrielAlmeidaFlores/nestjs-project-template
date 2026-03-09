@@ -44,9 +44,6 @@ export class RetirementPlanningRgpsTimeAcceleratorTypeormEntity extends BaseType
   })
   public affectsQualifyingPeriod: boolean | null;
 
-  @Column({ name: 'time_gained', type: 'varchar', length: 100, nullable: true })
-  public timeGained: string | null;
-
   @Column({ name: 'viability', type: 'varchar', length: 50, nullable: true })
   public viability: string | null;
 

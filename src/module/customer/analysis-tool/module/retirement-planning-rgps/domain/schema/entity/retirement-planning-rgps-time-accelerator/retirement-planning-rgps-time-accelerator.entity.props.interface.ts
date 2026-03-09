@@ -9,7 +9,6 @@ export interface RetirementPlanningRgpsTimeAcceleratorEntityPropsInterface exten
   periodStart?: Date | null;
   periodEnd?: Date | null;
   affectsQualifyingPeriod?: boolean | null;
-  timeGained?: string | null;
   viability?: string | null;
   technicalNote?: string | null;
   recognitionInss: string;

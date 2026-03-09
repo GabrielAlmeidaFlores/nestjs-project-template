@@ -33,6 +33,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
           source.ruralTimeline?.id !== undefined
             ? new RuralTimelineAnalysisId(source.ruralTimeline.id)
             : null,
+        sequencial: source.sequencial ?? null,
         employmentRelationshipSource:
           source.employmentRelationshipSource ?? null,
         startDate: source.startDate ?? null,
@@ -75,6 +76,7 @@ export class RuralTimelineAnalysisCnisContributionPeriodEntityAutoMapperProfile 
       const ormEntity =
         RuralTimelineAnalysisCnisContributionPeriodTypeormEntity.build({
           id: source.id.toString(),
+          sequencial: source.sequencial,
           employmentRelationshipSource: source.employmentRelationshipSource,
           startDate: source.startDate,
           endDate: source.endDate,
