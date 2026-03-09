@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -52,6 +53,8 @@ export class CreateRetirementPlanningRgpsPeriodDocumentUseCase {
     private readonly retirementPlanningRgpsEarningsHistoryQueryRepositoryGateway: RetirementPlanningRgpsEarningsHistoryQueryRepositoryGateway,
     @Inject(RetirementPlanningRgpsQueryRepositoryGateway)
     private readonly retirementPlanningRgpsQueryRepositoryGateway: RetirementPlanningRgpsQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -266,8 +269,11 @@ Com base nos dados e documentos acima, gere uma observação técnica previdenci
 
     await transactionCredit.commit();
 
+    const convertedResult =
+      await this.markdownConverterGateway.convertToHtml(result);
+
     return CreateRetirementPlanningRgpsPeriodDocumentResponseDto.build({
-      result,
+      result: convertedResult,
     });
   }
 }
