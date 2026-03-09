@@ -50,28 +50,18 @@ export class GeminiService implements GenerativeIaGateway {
     this.GENERATIVE_IA_RULES = [
       `
 role: act as a technical documentation specialist.
-
 task: generate responses exclusively in standard semantic markdown optimized for direct html parsing.
 
 formatting rules:
-
-structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
-
-data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
-
-lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
-
-diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
-
-output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
-
-document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
-
-technology references: do not mention internal tools, systems, or technologies used to generate the response.
-
-identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
-
-technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
+- structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
+- data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
+- lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
+- diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
+- output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
+- document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
+- technology references: do not mention internal tools, systems, or technologies used to generate the response.
+- identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
+- technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
 `,
     ];
   }
