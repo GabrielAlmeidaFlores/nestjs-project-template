@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
-import { MarkdownConverterService } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.service';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
+import { MarkdownConverterService } from '@lib/markdown-converter/markdown-converter.service';
 
 @Module({
   exports: [MarkdownConverterGateway],
