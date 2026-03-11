@@ -8,6 +8,7 @@ export class SpecialCategoryRetirementAnalysisResultEntity extends BaseEntity<Sp
   public readonly specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId;
   public readonly simplifiedAnalysisSummaryText: string | null;
   public readonly fullAnalysisConclusionText: string | null;
+  public readonly administrativeProcedureAnalysis: string | null;
 
   protected readonly _type = SpecialCategoryRetirementAnalysisResultEntity.name;
 
@@ -20,5 +21,7 @@ export class SpecialCategoryRetirementAnalysisResultEntity extends BaseEntity<Sp
     this.simplifiedAnalysisSummaryText =
       props.simplifiedAnalysisSummaryText ?? null;
     this.fullAnalysisConclusionText = props.fullAnalysisConclusionText ?? null;
+    this.administrativeProcedureAnalysis =
+      props.administrativeProcedureAnalysis ?? null;
   }
 }

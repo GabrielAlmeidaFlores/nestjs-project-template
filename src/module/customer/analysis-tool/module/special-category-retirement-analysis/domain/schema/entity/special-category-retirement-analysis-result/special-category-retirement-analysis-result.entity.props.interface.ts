@@ -6,4 +6,5 @@ export interface SpecialCategoryRetirementAnalysisResultEntityPropsInterface ext
   specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId;
   simplifiedAnalysisSummaryText?: string | null;
   fullAnalysisConclusionText?: string | null;
+  administrativeProcedureAnalysis?: string | null;
 }
