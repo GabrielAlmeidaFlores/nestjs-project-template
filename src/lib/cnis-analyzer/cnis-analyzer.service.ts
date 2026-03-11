@@ -341,7 +341,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
   private diffYmdInclusive(
     startDate?: Date | string | number | null,
     endDate?: Date | string | number | null,
+    isPeriodValid = true,
   ): DiferencaYmdResultadoInterface {
+    if (!isPeriodValid) {
+      return { years: 0, months: 0, days: 0, formatted: '0a 0m 0d' };
+    }
+
     const start = this.toDate(startDate);
     const end = this.toDate(endDate);
     const MONTHS_IN_YEAR = 12;
@@ -426,6 +431,12 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
     }
 
     return { years, months, days, formatted: `${years}a ${months}m ${days}d` };
+  }
+
+  private diffMonth(date: Date, monthsToRemove = 0): Date {
+    const result = new Date(date.getTime());
+    result.setMonth(result.getMonth() - monthsToRemove);
+    return result;
   }
 
   private calcularVinculosConcomitantes(
@@ -1114,8 +1125,9 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       [];
     data.socialSecurityRelations?.forEach((relation) => {
       const startDate = relation.socialSecurityAffiliationInfo.dataInicio;
-      const endDate = relation.socialSecurityAffiliationInfo.dataFim;
-      const lastDateRemun = relation.socialSecurityAffiliationInfo.ultRemun;
+      const endDate =
+        relation.socialSecurityAffiliationInfo.dataFim ??
+        relation.socialSecurityAffiliationInfo.ultRemun;
       const seq = relation.socialSecurityAffiliationInfo.seq;
       const totalContribuicao = this.calculateTotalContribuicao(
         relation.socialSecurityAffiliationEarningsHistory,
@@ -1147,9 +1159,25 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         endDate instanceof Date &&
         !isNaN(endDate.getTime())
       ) {
+        const competenciasAtribuidasAoSeq =
+          this.getCompetenciasAtribuidasPorSeq(data).get(seq ?? 0) ?? [];
+        const numeroDeCompetenciasInvalidas =
+          this.calculateValorMenorQueOMinimoDeCompetenciasAtribuidas(
+            competenciasAtribuidasAoSeq,
+          );
+
+        let endDateAdjusted = this.diffMonth(
+          endDate,
+          numeroDeCompetenciasInvalidas,
+        );
+
+        if (endDateAdjusted.getTime() < startDate.getTime()) {
+          endDateAdjusted = endDate;
+        }
+
         const { years, months, days, formatted } = this.diffYmdInclusive(
           startDate,
-          endDate,
+          endDateAdjusted,
         );
 
         calculatedContributionTime = {
@@ -1173,38 +1201,178 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         };
       }
 
-      if (
-        startDate instanceof Date &&
-        !isNaN(startDate.getTime()) &&
-        !endDate
-      ) {
-        const { years, months, days, formatted } = this.diffYmdInclusive(
-          startDate,
-          lastDateRemun,
-        );
-        calculatedContributionTime = {
-          seq: seq ?? 0,
-          origemDoVinculo:
-            relation.socialSecurityAffiliationInfo.origemDoVinculo ?? '',
-          tipoDoVinculo:
-            relation.socialSecurityAffiliationInfo.tipoFiliadoNoVinculo ?? '',
-          indicadores: relation.socialSecurityAffiliationInfo.indicadores ?? '',
-          dados: {
-            data: {
-              dataInicio: startDate,
-              dataFim: lastDateRemun,
-            },
-            abreviado: formatted,
-            dias: days,
-            meses: months,
-            anos: years,
-            totalContribuicao,
-          },
-        };
-      }
       calculatedContributionTimesResponse.push(calculatedContributionTime);
     });
     return calculatedContributionTimesResponse;
+  }
+
+  /**
+   * Para cada mês (competência) que aparece em mais de uma seq, atribui a competência
+   * à seq que tem a maior remuneração naquele mês. Retorna por seq a lista de
+   * competências atribuídas (com total do mês e flags) para validar depois.
+   */
+  private getCompetenciasAtribuidasPorSeq(data: CnisModel): Map<
+    number,
+    Array<{
+      totalRemuneracao: number;
+      ano: number;
+      hasBlockingIndicator: boolean;
+      hasAbaixoMinimoIndicador: boolean;
+    }>
+  > {
+    const invalidatingIndicators = [
+      'PREC-PMIG-DOM',
+      'PEXT',
+      'PVIN-IRREG',
+      'PREM-EXT',
+      'PEM-CAD',
+      'PADM-EMPR',
+    ];
+
+    // Por mesAno (YYYY-MM): total, seq com maior remuneração única no mês, ano, flags
+    const porMesAno = new Map<
+      string,
+      {
+        mesAno: string;
+        totalRemuneracao: number;
+        ano: number;
+        seqComMaiorRemuneracao: number;
+        maxRemuneracaoUnica: number;
+        hasBlockingIndicator: boolean;
+        hasAbaixoMinimoIndicador: boolean;
+      }
+    >();
+
+    data.socialSecurityRelations?.forEach((relation) => {
+      const seq = relation.socialSecurityAffiliationInfo.seq ?? 0;
+      const indicadoresHeader =
+        relation.socialSecurityAffiliationInfo.indicadores ?? null;
+      const indicadoresHeaderList =
+        indicadoresHeader !== null && indicadoresHeader.trim() !== ''
+          ? indicadoresHeader.split(/[,\s]+/).filter((i) => i.trim())
+          : [];
+
+      relation.socialSecurityAffiliationEarningsHistory.forEach((earning) => {
+        if (earning.competencia === undefined) {
+          return;
+        }
+        const competenciaDate =
+          earning.competencia instanceof Date
+            ? earning.competencia
+            : new Date(earning.competencia);
+        if (isNaN(competenciaDate.getTime())) {
+          return;
+        }
+        const mes = competenciaDate.getMonth() + 1;
+        const ano = competenciaDate.getFullYear();
+        const mesAno = `${ano}-${String(mes).padStart(2, '0')}`;
+
+        const rawRemuneracao = earning.remuneracao ?? '';
+        const valor = Number(
+          rawRemuneracao.replace(/\./g, '').replace(',', '.'),
+        );
+        const remuneracaoNum = Number.isNaN(valor) ? 0 : valor;
+
+        const indicadores =
+          earning.indicadores !== undefined && earning.indicadores.trim() !== ''
+            ? earning.indicadores.split(/[,\s]+/).filter((i) => i.trim())
+            : [];
+        const allIndicators = [...indicadores, ...indicadoresHeaderList];
+        const blockingIndicator = allIndicators.find((ind) => {
+          const indUpper = ind.toUpperCase().trim();
+          return invalidatingIndicators.some((block) =>
+            indUpper.includes(block),
+          );
+        });
+        const temAbaixoMinimoIndicador = allIndicators.some(
+          (ind) => ind.includes('PREC-MENOR') || ind.includes('PSC-MEN-SM'),
+        );
+
+        const atual = porMesAno.get(mesAno);
+        if (atual) {
+          atual.totalRemuneracao += remuneracaoNum;
+          if (remuneracaoNum > atual.maxRemuneracaoUnica) {
+            atual.maxRemuneracaoUnica = remuneracaoNum;
+            atual.seqComMaiorRemuneracao = seq;
+          }
+          if (blockingIndicator !== undefined) {
+            atual.hasBlockingIndicator = true;
+          }
+          if (temAbaixoMinimoIndicador) {
+            atual.hasAbaixoMinimoIndicador = true;
+          }
+        } else {
+          porMesAno.set(mesAno, {
+            mesAno,
+            totalRemuneracao: remuneracaoNum,
+            ano,
+            seqComMaiorRemuneracao: seq,
+            maxRemuneracaoUnica: remuneracaoNum,
+            hasBlockingIndicator: blockingIndicator !== undefined,
+            hasAbaixoMinimoIndicador: temAbaixoMinimoIndicador,
+          });
+        }
+      });
+    });
+
+    // Por seq: lista de competências atribuídas (só as que “venceram” nessa seq)
+    const porSeq = new Map<
+      number,
+      Array<{
+        mesAno: string;
+        totalRemuneracao: number;
+        ano: number;
+        hasBlockingIndicator: boolean;
+        hasAbaixoMinimoIndicador: boolean;
+      }>
+    >();
+
+    for (const [, info] of porMesAno) {
+      const seq = info.seqComMaiorRemuneracao;
+      const list = porSeq.get(seq) ?? [];
+      list.push({
+        mesAno: info.mesAno,
+        totalRemuneracao: info.totalRemuneracao,
+        ano: info.ano,
+        hasBlockingIndicator: info.hasBlockingIndicator,
+        hasAbaixoMinimoIndicador: info.hasAbaixoMinimoIndicador,
+      });
+      porSeq.set(seq, list);
+    }
+
+    return porSeq;
+  }
+
+  /**
+   * Conta quantas competências atribuídas são inválidas (Art. 209).
+   * Valida cada uma pelo total da competência vs salário mínimo.
+   */
+  private calculateValorMenorQueOMinimoDeCompetenciasAtribuidas(
+    competencias: Array<{
+      totalRemuneracao: number;
+      ano: number;
+      hasBlockingIndicator: boolean;
+      hasAbaixoMinimoIndicador: boolean;
+    }>,
+  ): number {
+    let numeroDeCompetenciasInvalidas = 0;
+    for (const info of competencias) {
+      const tetoAno = TetoInssData.find((t) => t.ano === info.ano);
+      const salarioMinimo = tetoAno?.salarioMinimo;
+      const temAbaixoMinimoValor =
+        typeof salarioMinimo === 'number' &&
+        info.totalRemuneracao > 0 &&
+        info.totalRemuneracao < salarioMinimo;
+      const temAbaixoMinimo =
+        info.hasAbaixoMinimoIndicador || temAbaixoMinimoValor;
+      const validaParaTempoECarencia =
+        !info.hasBlockingIndicator && !temAbaixoMinimo;
+
+      if (!validaParaTempoECarencia) {
+        numeroDeCompetenciasInvalidas += 1;
+      }
+    }
+    return numeroDeCompetenciasInvalidas;
   }
 
   private calculateConcomitancia(data: CnisModel): ConcomitanciaInterface[] {
@@ -1446,6 +1614,23 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
       endDate instanceof Date &&
       !isNaN(endDate.getTime())
     ) {
+      if (startDate.getTime() === endDate.getTime()) {
+        return {
+          seq,
+          dados: {
+            data: {
+              dataInicio: startDate,
+              dataFim: endDate,
+            },
+            abreviado: '0a 0m 0d',
+            dias: 0,
+            meses: 0,
+            anos: 0,
+            totalContribuicao: '0',
+          },
+        };
+      }
+
       const { years, months, days, formatted } = this.diffYmdInclusive(
         startDate,
         endDate,
@@ -2606,10 +2791,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      // if (dataFim > this.REFORMA_DATE) {
-      //   dataFim = this.REFORMA_DATE;
-      // }
-
       if (dataInicio >= this.REFORMA_DATE) {
         item.validContributionTime = {
           data: {
@@ -2625,21 +2806,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = this.diffYmdInclusive(
-        dataInicio,
-        dataFim,
-      );
-      item.validContributionTime = {
-        data: {
-          dataInicio,
-          dataFim,
-        },
-        abreviado: `${years}a ${months}m ${days}d`,
-        dias: days,
-        meses: months,
-        anos: years,
-        totalContribuicao: undefined,
-      };
     });
     const totals = this.calculateTotals(data);
 
@@ -2802,10 +2968,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      // if (dataFim > CUTOFF_DATE) {
-      //   dataFim = CUTOFF_DATE;
-      // }
-
       if (dataInicio >= CUTOFF_DATE) {
         item.validContributionTime = {
           data: {
@@ -2821,22 +2983,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         return;
       }
 
-      const { years, months, days } = this.diffYmdInclusive(
-        dataInicio,
-        dataFim,
-      );
-
-      item.validContributionTime = {
-        data: {
-          dataInicio,
-          dataFim,
-        },
-        abreviado: `${years}a ${months}m ${days}d`,
-        dias: days,
-        meses: months,
-        anos: years,
-        totalContribuicao: undefined,
-      };
     });
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
