@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/analyze-special-category-retirement-administrative-procedure.request.dto';
@@ -68,8 +68,10 @@ export class AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase {
       markdownResult ?? '',
     );
 
-    return AnalyzeSpecialCategoryRetirementAdministrativeProcedureResponseDto.build({
-      result: htmlResult,
-    });
+    return AnalyzeSpecialCategoryRetirementAdministrativeProcedureResponseDto.build(
+      {
+        result: htmlResult,
+      },
+    );
   }
 }

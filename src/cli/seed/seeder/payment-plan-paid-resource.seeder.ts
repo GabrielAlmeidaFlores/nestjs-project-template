@@ -578,7 +578,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       resource:
         PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_ADMINISTRATIVE_PROCEDURE_ANALYSIS,
       creditCost: 10,
-      title: 'APOSENTADORIA CATEGORIA ESPECIAL - ANÁLISE DE PROCESSO ADMINISTRATIVO',
+      title:
+        'APOSENTADORIA CATEGORIA ESPECIAL - ANÁLISE DE PROCESSO ADMINISTRATIVO',
       description:
         'Análise de processo administrativo de aposentadoria por categoria especial via IA. Examina os documentos do processo administrativo do INSS, identifica inconsistências, avalia fundamentos do indeferimento ou pendências, e emite parecer técnico detalhado sobre a viabilidade de contestação administrativa ou judicial.',
     }),
