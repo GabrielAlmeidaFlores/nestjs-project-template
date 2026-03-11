@@ -190,8 +190,15 @@ export class CreateRetirementPlanningRgpsResultUseCase {
                   },
                   detalhes: {
                     type: 'string',
-                    description:
-                      'Detalhes adicionais relevantes sobre essa aposentadoria, como vantagens, desvantagens, tempo de espera, etc. Ex.  Requisitos analisados:Tempo mínimo: 35 anos ➔ Idade mínima: 65 anos ➔ Carência mínima: 180 contribuições ➔ Cálculo da RMI:Média salarial: R$3.500,00 Coeficiente: 85% RMI estimada: R$ 2.980,00 Valor da causa: DIB: 15/12/2023 DER: 10/06/2024 Atrasados: 6 meses Valor da causa: R$ 17.880,00 (Estes detalhes devem ser sempre entregue em formato markdown)',
+                    description: `
+forneça uma análise técnica detalhada em formato markdown. é obrigatório realizar o batimento de requisitos, comparando o que a regra exige com o que o segurado possui (ex: idade necessária vs. idade atual). se um requisito não foi atingido, explique detalhadamente o porquê.
+
+estruture a resposta incluindo:
+- requisitos analisados: tabela comparativa de tempo de contribuição, idade e carência (alcançado vs. necessário).
+- cálculo da rmi: média salarial, coeficiente aplicado e rmi estimada.
+- valor da causa: dib, der, meses de atrasados e valor total.
+- estudo de elegibilidade: vantagens, desvantagens e a explicação específica de impedimentos.
+`,
                   },
                 },
                 required: [
