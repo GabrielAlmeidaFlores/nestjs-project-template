@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
-import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
+import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
 import { AnalysisToolClientQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client/query/analysis-tool-client.query.repository.gateway';
 import { AnalysisToolRecordCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/command/analysis-tool-record.command.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -118,7 +119,7 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
       specialCategoryRetirementAnalysis,
     });
 
-    const transactionItems: any[] = [
+    const transactionItems: TransactionType[] = [
       this.specialCategoryRetirementAnalysisCommandRepositoryGateway.createSpecialCategoryRetirementAnalysis(
         specialCategoryRetirementAnalysis,
       ),
@@ -127,13 +128,14 @@ export class CreateSpecialCategoryRetirementAnalysisUseCase {
       ),
     ];
 
-    if (dto.administrativeProcedureAnalysis) {
+    if (dto.administrativeProcedureAnalysis !== undefined) {
       const htmlAnalysis = await this.markdownConverterGateway.convertToHtml(
         dto.administrativeProcedureAnalysis,
       );
 
       const resultEntity = new SpecialCategoryRetirementAnalysisResultEntity({
-        specialCategoryRetirementAnalysisId: specialCategoryRetirementAnalysis.id,
+        specialCategoryRetirementAnalysisId:
+          specialCategoryRetirementAnalysis.id,
         administrativeProcedureAnalysis: htmlAnalysis,
         simplifiedAnalysisSummaryText: null,
         fullAnalysisConclusionText: null,

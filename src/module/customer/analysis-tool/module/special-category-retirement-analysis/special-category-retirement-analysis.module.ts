@@ -8,8 +8,8 @@ import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/anal
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { SpecialCategoryRetirementAnalysisController } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.controller';
-import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/analyze-special-category-retirement-administrative-procedure.use-case';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
+import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/analyze-special-category-retirement-administrative-procedure.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
 import { CreateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-period-document.use-case';
