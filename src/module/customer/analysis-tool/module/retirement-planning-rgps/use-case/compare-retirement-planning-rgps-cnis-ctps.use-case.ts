@@ -242,10 +242,27 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
 
     await transactions.commit();
 
+    const existingPeriods = retirementPlanningRgps.retirementPlanningRgpsPeriod ?? [];
+    let filteredResult = result;
+    try {
+      const parsedResult: { empresa: string; periodoInicio: string }[] = JSON.parse(result);
+      const filtered = parsedResult.filter((aiPeriod) => {
+        const aiDateStr = aiPeriod.periodoInicio?.replace(/\//g, '-') ?? '';
+        return !existingPeriods.some((existing) => {
+          if (!existing.periodName || !existing.periodStart) return false;
+          const nameMatch =
+            existing.periodName.trim().toLowerCase() ===
+            aiPeriod.empresa.trim().toLowerCase();
+          const dbDateStr = existing.periodStart.toISOString().slice(0, 10);
+          return nameMatch && aiDateStr === dbDateStr;
+        });
+      });
+      filteredResult = JSON.stringify(filtered);
+    } catch {}
+
     return CompareRetirementPlanningRgpsCnisCtpsResponseDto.build({
-      result,
-      compareCnisCtpsRaw:
-        updatedRetirementPlanningRgpsResult.compareCnisCtpsRaw ?? 'N/A',
+      result: filteredResult,
+      compareCnisCtpsRaw: filteredResult,
     });
   }
 }
