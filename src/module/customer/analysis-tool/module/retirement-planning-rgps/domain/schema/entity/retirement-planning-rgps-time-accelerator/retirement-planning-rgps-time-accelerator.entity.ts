@@ -25,11 +25,6 @@ export class RetirementPlanningRgpsTimeAcceleratorEntity extends BaseEntity<Reti
   @Description('Indica se afeta a carência (período de qualificação).')
   public readonly affectsQualifyingPeriod: boolean | null;
 
-  @Description(
-    'Tempo ganho, expresso como string legível (ex.: "2 anos e 3 meses").',
-  )
-  public readonly timeGained: string | null;
-
   @Description('Avaliação de viabilidade (Alta/Média/Baixa).')
   public readonly viability: string | null;
 
@@ -60,7 +55,6 @@ export class RetirementPlanningRgpsTimeAcceleratorEntity extends BaseEntity<Reti
     this.periodStart = props.periodStart ?? null;
     this.periodEnd = props.periodEnd ?? null;
     this.affectsQualifyingPeriod = props.affectsQualifyingPeriod ?? null;
-    this.timeGained = props.timeGained ?? null;
     this.viability = props.viability ?? null;
     this.technicalNote = props.technicalNote ?? null;
     this.retirementPlanningRgps = props.retirementPlanningRgps ?? null;

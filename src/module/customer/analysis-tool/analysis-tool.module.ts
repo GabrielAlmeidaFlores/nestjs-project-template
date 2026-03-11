@@ -24,6 +24,7 @@ import { RetirementPlanningRgpsModule } from '@module/customer/analysis-tool/mod
 import { RetirementPlanningRppsModule } from '@module/customer/analysis-tool/module/retirement-planning-rpps/retirement-planning-rpps.module';
 import { RuralTimelineAnalysisModule } from '@module/customer/analysis-tool/module/rural-timeline-analysis/rural-timeline-analysis.module';
 import { SpecialActivityAnalysisModule } from '@module/customer/analysis-tool/module/special-activity-analysis/special-activity-analysis.module';
+import { SpecialCategoryRetirementAnalysisModule } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.module';
 import { SpeechGeneratorModule } from '@module/customer/analysis-tool/module/speech-generator/speech-generator.module';
 import { TeacherRetirementPlanningModule } from '@module/customer/analysis-tool/module/teacher-retirement-planning/teacher-retirement-planning.module';
 import { CreateAnalysisToolClientUseCase } from '@module/customer/analysis-tool/use-case/create-analysis-tool-client.use-case';
@@ -76,6 +77,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
     TeacherRetirementPlanningModule,
+    SpecialCategoryRetirementAnalysisModule,
   ],
   controllers: [AnalysisToolController],
   providers: [
