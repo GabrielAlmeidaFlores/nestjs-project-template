@@ -6,6 +6,7 @@ export class GetSpecialCategoryRetirementAnalysisResultQueryResult {
   public readonly specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId;
   public readonly simplifiedAnalysisSummaryText: string | null;
   public readonly fullAnalysisConclusionText: string | null;
+  public readonly administrativeProcedureAnalysis: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;
