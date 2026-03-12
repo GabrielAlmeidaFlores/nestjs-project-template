@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
@@ -17,7 +18,6 @@ import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-t
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
-import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -270,10 +270,13 @@ export class AnalyzeRetirementPlanningRgpsPppUseCase {
 
     await transactions.commit();
 
-    const parsedArray: Record<string, unknown>[] = JSON.parse(result || '[]');
+    const parsedArray = JSON.parse(result || '[]') as Record<string, unknown>[];
     for (const item of parsedArray) {
       if (item['observacaoTecnica'] !== undefined) {
-        item['observacaoTecnica'] = await this.markdownConverterGateway.convertToHtml(item['observacaoTecnica'] as string);
+        item['observacaoTecnica'] =
+          await this.markdownConverterGateway.convertToHtml(
+            item['observacaoTecnica'] as string,
+          );
       }
     }
 
