@@ -17,6 +17,7 @@ import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-t
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -39,6 +40,8 @@ export class AnalyzeRetirementPlanningRgpsPppUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -153,7 +156,7 @@ export class AnalyzeRetirementPlanningRgpsPppUseCase {
                   observacaoTecnica: {
                     type: 'string',
                     description:
-                      'Observações técnicas, retorne vazio se não houver.',
+                      'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
                   },
                   contribuicaoMedia: {
                     type: 'string',
@@ -267,10 +270,17 @@ export class AnalyzeRetirementPlanningRgpsPppUseCase {
 
     await transactions.commit();
 
+    const parsedArray: Record<string, unknown>[] = JSON.parse(result || '[]');
+    for (const item of parsedArray) {
+      if (item['observacaoTecnica'] !== undefined) {
+        item['observacaoTecnica'] = await this.markdownConverterGateway.convertToHtml(item['observacaoTecnica'] as string);
+      }
+    }
+
     return AnalyzeRetirementPlanningRgpsPppResponseDto.build({
       retirementPlanningRgpsSpecialPeriodId:
         retirementPlanningRgpsSpecialPeriod.id,
-      analysis: JSON.stringify(result),
+      analysis: JSON.stringify(parsedArray),
     });
   }
 }
