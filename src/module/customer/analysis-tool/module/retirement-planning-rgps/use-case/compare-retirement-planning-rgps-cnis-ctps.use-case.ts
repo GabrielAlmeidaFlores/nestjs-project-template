@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -17,7 +18,6 @@ import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-t
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
-import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -245,23 +245,35 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
 
     await transactions.commit();
 
-    const existingPeriods = retirementPlanningRgps.retirementPlanningRgpsPeriod ?? [];
+    const existingPeriods =
+      retirementPlanningRgps.retirementPlanningRgpsPeriod ?? [];
     let filteredResult = result;
     try {
-      const parsedResult: { empresa: string; periodoInicio: string; observacaoTecnica?: string; [key: string]: unknown }[] = JSON.parse(result);
+      const parsedResult = JSON.parse(result) as {
+        [key: string]: unknown;
+        empresa: string;
+        periodoInicio: string;
+        observacaoTecnica?: string;
+      }[];
       for (const item of parsedResult) {
         if (item.observacaoTecnica !== undefined) {
-          item.observacaoTecnica = await this.markdownConverterGateway.convertToHtml(item.observacaoTecnica);
+          item.observacaoTecnica =
+            await this.markdownConverterGateway.convertToHtml(
+              item.observacaoTecnica,
+            );
         }
       }
       const filtered = parsedResult.filter((aiPeriod) => {
-        const aiDateStr = aiPeriod.periodoInicio?.replace(/\//g, '-') ?? '';
+        const aiDateStr = aiPeriod.periodoInicio.replace(/\//g, '-');
         return !existingPeriods.some((existing) => {
-          if (!existing.periodName || !existing.periodStart) return false;
+          if (existing.periodName === null || existing.periodStart === null) {
+            return false;
+          }
           const nameMatch =
             existing.periodName.trim().toLowerCase() ===
             aiPeriod.empresa.trim().toLowerCase();
-          const dbDateStr = existing.periodStart.toISOString().slice(0, 10);
+          const dbDateStr =
+            existing.periodStart.toISOString().split('T')[0] ?? '';
           return nameMatch && aiDateStr === dbDateStr;
         });
       });

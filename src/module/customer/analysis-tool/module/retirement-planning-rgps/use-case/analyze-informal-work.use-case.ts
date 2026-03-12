@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
@@ -20,7 +21,6 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 
 @Injectable()
 export class AnalyzeInformalWorkUseCase {
@@ -200,9 +200,12 @@ export class AnalyzeInformalWorkUseCase {
 
     await transactions.commit();
 
-    const parsedResult: Record<string, unknown> = JSON.parse(result || '{}');
+    const parsedResult = JSON.parse(result || '{}') as Record<string, unknown>;
     if (parsedResult['observacaoTecnica'] !== undefined) {
-      parsedResult['observacaoTecnica'] = await this.markdownConverterGateway.convertToHtml(parsedResult['observacaoTecnica'] as string);
+      parsedResult['observacaoTecnica'] =
+        await this.markdownConverterGateway.convertToHtml(
+          parsedResult['observacaoTecnica'] as string,
+        );
     }
     const resultHtml = JSON.stringify(parsedResult);
 
