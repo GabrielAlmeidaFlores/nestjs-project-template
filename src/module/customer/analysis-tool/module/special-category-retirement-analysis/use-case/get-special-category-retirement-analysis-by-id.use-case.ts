@@ -163,6 +163,11 @@ export class GetSpecialCategoryRetirementAnalysisByIdUseCase {
                 queryResult.analysisResult.fullAnalysisConclusionText,
               ),
           }),
+          ...(queryResult.analysisResult.administrativeProcedureAnalysis !==
+            null && {
+            administrativeProcedureAnalysis:
+              queryResult.analysisResult.administrativeProcedureAnalysis,
+          }),
           conversionItems,
           ruleItems,
           createdAt: queryResult.analysisResult.createdAt,

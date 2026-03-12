@@ -168,6 +168,9 @@ export class GetSpecialCategoryRetirementAnalysisResultResponseDto extends BaseB
   @ResponseDtoStringProperty({ required: false })
   public fullAnalysisConclusionText?: string;
 
+  @ResponseDtoStringProperty({ required: false })
+  public administrativeProcedureAnalysis?: string;
+
   @ResponseDtoObjectProperty(
     () => GetSpecialCategoryRetirementAnalysisResultConversionItemResponseDto,
     { isArray: true },

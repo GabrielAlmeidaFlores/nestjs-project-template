@@ -21,6 +21,13 @@ export class SpecialCategoryRetirementAnalysisResultTypeormEntity extends BaseTy
   })
   public fullAnalysisConclusionText: string | null;
 
+  @Column({
+    name: 'administrative_procedure_analysis',
+    type: 'longtext',
+    nullable: true,
+  })
+  public administrativeProcedureAnalysis: string | null;
+
   @OneToOne(
     () => SpecialCategoryRetirementAnalysisTypeormEntity,
     (entity) => entity.analysisResult,
