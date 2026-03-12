@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RetirementPlanningRgpsQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps/query/retirement-planning-rgps.query.repository.gateway';
@@ -40,6 +41,8 @@ export class AnalyzeRuralTimeUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -157,7 +160,7 @@ export class AnalyzeRuralTimeUseCase {
                 observacaoTecnica: {
                   type: 'string',
                   description:
-                    'Observações técnicas sobre a análise realizada com todos os detalhes.',
+                    'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
                 },
               },
               required: [
@@ -197,10 +200,19 @@ export class AnalyzeRuralTimeUseCase {
 
     await transactions.commit();
 
+    const parsedResult = JSON.parse(result || '{}') as Record<string, unknown>;
+    if (parsedResult['observacaoTecnica'] !== undefined) {
+      parsedResult['observacaoTecnica'] =
+        await this.markdownConverterGateway.convertToHtml(
+          parsedResult['observacaoTecnica'] as string,
+        );
+    }
+    const resultHtml = JSON.stringify(parsedResult);
+
     return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
       retirementPlanningRgpsAnalysisResultId:
         retirementPlanningRgpsAnalysisResultEntity.id,
-      result,
+      result: resultHtml,
     });
   }
 }
