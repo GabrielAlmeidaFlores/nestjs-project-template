@@ -157,7 +157,7 @@ export class AnalyzeApprenticeStudentUseCase {
                 observacaoTecnica: {
                   type: 'string',
                   description:
-                    'Observações técnicas sobre a análise realizada com todos os detalhes.',
+                    'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
                 },
               },
               required: [
