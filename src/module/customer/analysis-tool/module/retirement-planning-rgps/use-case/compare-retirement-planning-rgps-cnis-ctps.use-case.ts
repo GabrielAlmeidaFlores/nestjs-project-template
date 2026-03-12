@@ -17,6 +17,7 @@ import { RetirementPlanningRgpsNotFoundError } from '@module/customer/analysis-t
 import { ConsumeOrganizationCreditUseCaseGateway } from '@module/customer/organization-credit/use-case-gateway/consume-organization-credit.use-case-gateway';
 import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/domain/schema/entity/payment-plan-paid-resource/enum/payment-plan-paid-resource-type.enum';
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -41,6 +42,8 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -147,7 +150,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
                   observacaoTecnica: {
                     type: 'string',
                     description:
-                      'Observações técnicas, retorne vazio se não houver.',
+                      'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
                   },
                   contribuicaoMedia: {
                     type: 'string',
@@ -245,7 +248,12 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
     const existingPeriods = retirementPlanningRgps.retirementPlanningRgpsPeriod ?? [];
     let filteredResult = result;
     try {
-      const parsedResult: { empresa: string; periodoInicio: string }[] = JSON.parse(result);
+      const parsedResult: { empresa: string; periodoInicio: string; observacaoTecnica?: string; [key: string]: unknown }[] = JSON.parse(result);
+      for (const item of parsedResult) {
+        if (item.observacaoTecnica !== undefined) {
+          item.observacaoTecnica = await this.markdownConverterGateway.convertToHtml(item.observacaoTecnica);
+        }
+      }
       const filtered = parsedResult.filter((aiPeriod) => {
         const aiDateStr = aiPeriod.periodoInicio?.replace(/\//g, '-') ?? '';
         return !existingPeriods.some((existing) => {

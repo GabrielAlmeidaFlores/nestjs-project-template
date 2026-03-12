@@ -20,6 +20,7 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 
 @Injectable()
 export class AnalyzePublicServiceUseCase {
@@ -40,6 +41,8 @@ export class AnalyzePublicServiceUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -199,10 +202,16 @@ export class AnalyzePublicServiceUseCase {
 
     await transactions.commit();
 
+    const parsedResult: Record<string, unknown> = JSON.parse(result || '{}');
+    if (parsedResult['observacaoTecnica'] !== undefined) {
+      parsedResult['observacaoTecnica'] = await this.markdownConverterGateway.convertToHtml(parsedResult['observacaoTecnica'] as string);
+    }
+    const resultHtml = JSON.stringify(parsedResult);
+
     return AnalyzeRetirementPlanningRgpsCnisResponseDto.build({
       retirementPlanningRgpsAnalysisResultId:
         retirementPlanningRgpsAnalysisResultEntity.id,
-      result,
+      result: resultHtml,
     });
   }
 }
