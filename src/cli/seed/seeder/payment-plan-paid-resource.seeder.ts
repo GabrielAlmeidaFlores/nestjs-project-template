@@ -611,6 +611,16 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       description:
         'Análise de regras de aposentadoria por categoria especial via IA. Verifica o enquadramento do segurado nas modalidades aplicáveis (aposentadoria especial, por pontos, por idade com tempo especial convertido), calcula datas projetadas, estima RMI e destaca a opção mais vantajosa financeiramente.',
     }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4234-bfab-345678901234'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.SPECIAL_CATEGORY_RETIREMENT_ADMINISTRATIVE_PROCEDURE_ANALYSIS,
+      creditCost: 10,
+      title:
+        'APOSENTADORIA CATEGORIA ESPECIAL - ANÁLISE DE PROCESSO ADMINISTRATIVO',
+      description:
+        'Análise de processo administrativo de aposentadoria por categoria especial via IA. Examina os documentos do processo administrativo do INSS, identifica inconsistências, avalia fundamentos do indeferimento ou pendências, e emite parecer técnico detalhado sobre a viabilidade de contestação administrativa ou judicial.',
+    }),
   ];
 
 export class PaymentPlanPaidResourceSeeder implements SeederInterface {
