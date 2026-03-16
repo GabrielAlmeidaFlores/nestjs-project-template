@@ -5,13 +5,13 @@ import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/anal
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { DisabilityRetirementPlanningController } from '@module/customer/analysis-tool/module/disability-retirement-planning/disability-retirement-planning.controller';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { CreateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-period.use-case';
 import { CreateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-remuneration.use-case';
 import { CreateDisabilityRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-result.use-case';
 import { CreateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning.use-case';
 import { DeleteDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/delete-disability-retirement-planning.use-case';
 import { DownloadDisabilityRetirementPlanningCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/download-disability-retirement-planning-complete-analysis.use-case';
-import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { DownloadDisabilityRetirementPlanningSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/download-disability-retirement-planning-simplified-analysis.use-case';
 import { GetDisabilityRetirementPlanningRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/get-disability-retirement-planning-remuneration-calculation.use-case';
 import { GetDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/get-disability-retirement-planning.use-case';

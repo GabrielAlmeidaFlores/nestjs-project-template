@@ -46,11 +46,11 @@ export class CreateDisabilityRetirementPlanningRequestDto extends BaseBuildableD
   @RequestDtoBooleanProperty({ required: true })
   public readonly longTimeDisability: boolean;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly publicServiceStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly publicServiceStartDate?: Date;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly careerStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly careerStartDate?: Date;
 
   @RequestDtoStringProperty({ required: false })
   public readonly analysisName?: string;

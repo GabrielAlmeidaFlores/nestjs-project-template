@@ -8,9 +8,8 @@ import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-te
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
-import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
-import { DisabilityRetirementPlanningCompleteAnalysisModel, DisabilityRetirementPlanningRetirementOptionModel, DisabilityRetirementPlanningTimelinePeriodModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
+import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import {
   GetDisabilityRetirementPlanningCidResponseDto,
   GetDisabilityRetirementPlanningDocumentResponseDto,
@@ -23,6 +22,11 @@ import {
   GetDisabilityRetirementPlanningResultResponseDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/get-disability-retirement-planning.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
+import {
+  DisabilityRetirementPlanningCompleteAnalysisModel,
+  DisabilityRetirementPlanningRetirementOptionModel,
+  DisabilityRetirementPlanningTimelinePeriodModel,
+} from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -71,9 +75,7 @@ export class GetDisabilityRetirementPlanningUseCase {
           doc.document,
         );
         const originalFileName =
-          await this.fileProcessorGateway.getOriginalFileName(
-            doc.document,
-          );
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
         return GetDisabilityRetirementPlanningDocumentResponseDto.build({
           type: doc.type,
           document: Base64.encodeBuffer(fileBuffer),
@@ -89,9 +91,7 @@ export class GetDisabilityRetirementPlanningUseCase {
             const disabilityDocuments = await Promise.all(
               disability.documents.map(async (doc) => {
                 const fileBuffer =
-                  await this.fileProcessorGateway.getFileBuffer(
-                    doc.document,
-                  );
+                  await this.fileProcessorGateway.getFileBuffer(doc.document);
                 const originalFileName =
                   await this.fileProcessorGateway.getOriginalFileName(
                     doc.document,
@@ -142,9 +142,7 @@ export class GetDisabilityRetirementPlanningUseCase {
             const specialTimeDocuments = await Promise.all(
               specialTime.documents.map(async (doc) => {
                 const fileBuffer =
-                  await this.fileProcessorGateway.getFileBuffer(
-                    doc.document,
-                  );
+                  await this.fileProcessorGateway.getFileBuffer(doc.document);
                 const originalFileName =
                   await this.fileProcessorGateway.getOriginalFileName(
                     doc.document,
@@ -188,72 +186,88 @@ export class GetDisabilityRetirementPlanningUseCase {
         ? GetDisabilityRetirementPlanningResultResponseDto.build({
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysis !== null && {
-              disabilityRetirementPlanningCompleteAnalysis: ((): DisabilityRetirementPlanningCompleteAnalysisModel => {
-                const stored =
-                  queryResult.result.disabilityRetirementPlanningCompleteAnalysis;
+              disabilityRetirementPlanningCompleteAnalysis:
+                ((): DisabilityRetirementPlanningCompleteAnalysisModel => {
+                  const stored =
+                    queryResult.result
+                      .disabilityRetirementPlanningCompleteAnalysis;
 
-                try {
-                  const raw = JSON.parse(stored) as {
-                    timeline: Array<{ startDate: string; endDate: string; activityType: DisabilityRetirementPlanningActivityTypeEnum; location: string }>;
-                    retirementOptionsSummary: Array<{
-                      retirementRuleName: string;
-                      isEligible: boolean;
-                      eligibilityAvailableAt?: string;
-                      expectedMonthlyBenefit: number;
-                      isBestMonthlyBenefit: boolean;
-                      hasHighestAdvantageValue: boolean;
-                      retirementAnalysis: string;
-                    }>;
-                    analysisResult: string;
-                    disabilityTime: string;
-                    commonTime: string;
-                    totalContributionTime: string;
-                    positionTenureTime: string;
-                    publicServiceTime: string;
-                    totalCareerTime: string;
-                    insuredAge: string;
-                    publicServiceStartDate: string;
-                  };
+                  try {
+                    const raw = JSON.parse(stored) as {
+                      timeline: Array<{
+                        startDate: string;
+                        endDate: string;
+                        activityType: DisabilityRetirementPlanningActivityTypeEnum;
+                        location: string;
+                      }>;
+                      retirementOptionsSummary: Array<{
+                        retirementRuleName: string;
+                        isEligible: boolean;
+                        eligibilityAvailableAt?: string;
+                        expectedMonthlyBenefit: number;
+                        isBestMonthlyBenefit: boolean;
+                        hasHighestAdvantageValue: boolean;
+                        retirementAnalysis: string;
+                      }>;
+                      analysisResult: string;
+                      disabilityTime: string;
+                      commonTime: string;
+                      totalContributionTime: string;
+                      positionTenureTime: string;
+                      publicServiceTime: string;
+                      totalCareerTime: string;
+                      insuredAge: string;
+                      publicServiceStartDate: string;
+                    };
 
-                  return DisabilityRetirementPlanningCompleteAnalysisModel.build({
-                    timeline: raw.timeline.map((p) =>
-                      DisabilityRetirementPlanningTimelinePeriodModel.build(p),
-                    ),
-                    retirementOptionsSummary: raw.retirementOptionsSummary.map(
-                      (o) =>
-                        DisabilityRetirementPlanningRetirementOptionModel.build(o),
-                    ),
-                    analysisResult: raw.analysisResult,
-                    disabilityTime: raw.disabilityTime,
-                    commonTime: raw.commonTime,
-                    totalContributionTime: raw.totalContributionTime,
-                    positionTenureTime: raw.positionTenureTime,
-                    publicServiceTime: raw.publicServiceTime,
-                    totalCareerTime: raw.totalCareerTime,
-                    insuredAge: raw.insuredAge,
-                    publicServiceStartDate: raw.publicServiceStartDate,
-                  });
-                } catch {
-                  return DisabilityRetirementPlanningCompleteAnalysisModel.build({
-                    timeline: [],
-                    retirementOptionsSummary: [],
-                    analysisResult: stored,
-                    disabilityTime: '',
-                    commonTime: '',
-                    totalContributionTime: '',
-                    positionTenureTime: '',
-                    publicServiceTime: '',
-                    totalCareerTime: '',
-                    insuredAge: '',
-                    publicServiceStartDate: '',
-                  });
-                }
-              })(),
+                    return DisabilityRetirementPlanningCompleteAnalysisModel.build(
+                      {
+                        timeline: raw.timeline.map((p) =>
+                          DisabilityRetirementPlanningTimelinePeriodModel.build(
+                            p,
+                          ),
+                        ),
+                        retirementOptionsSummary:
+                          raw.retirementOptionsSummary.map((o) =>
+                            DisabilityRetirementPlanningRetirementOptionModel.build(
+                              o,
+                            ),
+                          ),
+                        analysisResult: raw.analysisResult,
+                        disabilityTime: raw.disabilityTime,
+                        commonTime: raw.commonTime,
+                        totalContributionTime: raw.totalContributionTime,
+                        positionTenureTime: raw.positionTenureTime,
+                        publicServiceTime: raw.publicServiceTime,
+                        totalCareerTime: raw.totalCareerTime,
+                        insuredAge: raw.insuredAge,
+                        publicServiceStartDate: raw.publicServiceStartDate,
+                      },
+                    );
+                  } catch {
+                    return DisabilityRetirementPlanningCompleteAnalysisModel.build(
+                      {
+                        timeline: [],
+                        retirementOptionsSummary: [],
+                        analysisResult: stored,
+                        disabilityTime: '',
+                        commonTime: '',
+                        totalContributionTime: '',
+                        positionTenureTime: '',
+                        publicServiceTime: '',
+                        totalCareerTime: '',
+                        insuredAge: '',
+                        publicServiceStartDate: '',
+                      },
+                    );
+                  }
+                })(),
             }),
             ...(queryResult.result
               .disabilityRetirementPlanningSimplifiedAnalysis !== null && {
               disabilityRetirementPlanningSimplifiedAnalysis:
-                queryResult.result.disabilityRetirementPlanningSimplifiedAnalysis,
+                queryResult.result
+                  .disabilityRetirementPlanningSimplifiedAnalysis,
             }),
             ...(queryResult.result
               .disabilityRetirementPlanningCompleteAnalysisDownload !==
@@ -284,13 +298,18 @@ export class GetDisabilityRetirementPlanningUseCase {
         municipality: queryResult.municipality,
       }),
       longTimeDisability: queryResult.longTimeDisability,
-      publicServiceStartDate: queryResult.publicServiceStartDate,
-      careerStartDate: queryResult.careerStartDate,
+      ...(queryResult.publicServiceStartDate !== null && {
+        publicServiceStartDate: queryResult.publicServiceStartDate,
+      }),
+      ...(queryResult.careerStartDate !== null && {
+        careerStartDate: queryResult.careerStartDate,
+      }),
       ...(queryResult.analysisName !== null && {
         analysisName: queryResult.analysisName,
       }),
       ...(queryResult.administrativeProcessAnalysis !== null && {
-        administrativeProcessAnalysis: queryResult.administrativeProcessAnalysis,
+        administrativeProcessAnalysis:
+          queryResult.administrativeProcessAnalysis,
       }),
       createdAt: queryResult.createdAt,
       updatedAt: queryResult.updatedAt,
