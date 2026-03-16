@@ -39,9 +39,6 @@ export class GetRetirementPlanningRgpsTimeAcceleratorResponseDto extends BaseBui
   public affectsQualifyingPeriod?: boolean;
 
   @ResponseDtoStringProperty({ required: false })
-  public timeGained?: string;
-
-  @ResponseDtoStringProperty({ required: false })
   public viability?: string;
 
   @ResponseDtoStringProperty({ required: false })

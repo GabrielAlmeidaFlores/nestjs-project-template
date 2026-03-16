@@ -137,12 +137,8 @@ export class McpToolsService implements McpToolsGateway {
       }
 
       return response.data.data.tools.map((tool) => McpToolModel.build(tool));
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Erro desconhecido ao buscar ferramentas';
-      throw new McpGetAvailableToolsError({ message: errorMessage });
+    } catch {
+      throw new McpGetAvailableToolsError();
     }
   }
 

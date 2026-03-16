@@ -14,4 +14,5 @@ export enum AnalysisToolRecordTypeEnum {
   AUDIENCE_QUESTIONS_GENERATOR = 'gerador_perguntas_audiencia',
   INSURANCE_QUALITY_ANALYSIS = 'analise_qualidade_segurado',
   DISABILITY_RETIREMENT_PLANNING = 'planejamento_aposentadoria_para_deficiente',
+  SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',
 }
