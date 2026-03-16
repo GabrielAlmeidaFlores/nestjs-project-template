@@ -15,11 +15,11 @@ import { FileModel } from '@shared/system/model/generic/file.model';
 
 @RequestDto()
 export class UpdateGeneralUrbanRetirementAnalysisJsonRequestDto extends BaseBuildableDtoObject {
-  @RequestDtoDateProperty({ required: true })
-  public readonly careerStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly careerStartDate?: Date;
 
-  @RequestDtoDateProperty({ required: true })
-  public readonly publicServiceStartDate: Date;
+  @RequestDtoDateProperty({ required: false })
+  public readonly publicServiceStartDate?: Date;
 
   @RequestDtoValueObjectProperty(AnalysisToolClientId)
   public readonly analysisToolClientId: AnalysisToolClientId;
@@ -45,6 +45,9 @@ export class UpdateGeneralUrbanRetirementAnalysisJsonRequestDto extends BaseBuil
     required: false,
   })
   public readonly benefitType?: GeneralUrbanRetirementAnalysisBenefitTypeEnum;
+
+  @RequestDtoStringProperty({ required: false })
+  public readonly currentPosition?: string;
 
   @RequestDtoStringProperty({ required: false })
   public readonly legalProceedingNumber?: string;

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import {
@@ -7,9 +8,19 @@ import {
   GetAnalysisToolClientResponsibleResponseDto,
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
+import {
+  GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto,
+  GetGeneralUrbanRetirementAnalysisPeriodResponseDto,
+  GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto,
+  GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto,
+  GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto,
+} from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-period.response.dto';
+import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
 import {
   GetGeneralUrbanRetirementAnalysisResponseDto,
   GetGeneralUrbanRetirementAnalysisResultResponseDto,
@@ -30,6 +41,8 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
     private readonly generalUrbanRetirementAnalysisQueryRepositoryGateway: GeneralUrbanRetirementAnalysisQueryRepositoryGateway,
     @Inject(AnalysisToolRecordQueryRepositoryGateway)
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(FileProcessorGateway)
+    private readonly fileProcessorGateway: FileProcessorGateway,
   ) {}
 
   public async execute(
@@ -121,20 +134,116 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
       }),
     );
 
+    const periods = await Promise.all(
+      analysisQueryResult.periods.map(async (p) => {
+        let specialTimePeriod:
+          | GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto
+          | undefined;
+        if (p.specialTimePeriod !== undefined) {
+          const documents = await this.buildPeriodDocuments(
+            p.specialTimePeriod.documents,
+          );
+          specialTimePeriod =
+            GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto.build({
+              id: p.specialTimePeriod.id,
+              type: p.specialTimePeriod.type,
+              startDate: p.specialTimePeriod.startDate,
+              endDate: p.specialTimePeriod.endDate,
+              ...(documents.length > 0 && { documents }),
+            });
+        }
+
+        let disabilityPeriod:
+          | GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto
+          | undefined;
+        if (p.disabilityPeriod !== undefined) {
+          const documents = await this.buildPeriodDocuments(
+            p.disabilityPeriod.documents,
+          );
+          disabilityPeriod =
+            GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto.build({
+              id: p.disabilityPeriod.id,
+              type: p.disabilityPeriod.type,
+              degree: p.disabilityPeriod.degree,
+              startDate: p.disabilityPeriod.startDate,
+              endDate: p.disabilityPeriod.endDate,
+              category: p.disabilityPeriod.category,
+              description: p.disabilityPeriod.description,
+              dailyImpact: p.disabilityPeriod.dailyImpact,
+              cid: GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto.build({
+                id: p.disabilityPeriod.cid.id,
+                code: p.disabilityPeriod.cid.code,
+                description: p.disabilityPeriod.cid.description,
+              }),
+              ...(documents.length > 0 && { documents }),
+            });
+        }
+
+        return GetGeneralUrbanRetirementAnalysisPeriodResponseDto.build({
+          id: p.id,
+          startDate: p.startDate,
+          endDate: p.endDate,
+          jobPosition: p.jobPosition,
+          career: p.career,
+          serviceType: p.serviceType,
+          department: p.department,
+          ...(specialTimePeriod !== undefined && { specialTimePeriod }),
+          ...(disabilityPeriod !== undefined && { disabilityPeriod }),
+          createdAt: p.createdAt,
+          updatedAt: p.updatedAt,
+        });
+      }),
+    );
+
+    const documents = analysisQueryResult.documents.map((d) =>
+      GetGeneralUrbanRetirementAnalysisDocumentResponseDto.build({
+        id: d.id,
+        type: d.type,
+        document: d.document,
+        createdAt: d.createdAt,
+        updatedAt: d.updatedAt,
+      }),
+    );
+
     return GetGeneralUrbanRetirementAnalysisResponseDto.build({
       id: analysisQueryResult.id,
-      careerStartDate: analysisQueryResult.careerStartDate,
-      publicServiceStartDate: analysisQueryResult.publicServiceStartDate,
+      careerStartDate: analysisQueryResult.careerStartDate ?? null,
+      publicServiceStartDate: analysisQueryResult.publicServiceStartDate ?? null,
       analysisToolClient,
       generalUrbanRetirementAnalysisResult,
       federativeEntity: analysisQueryResult.federativeEntity ?? null,
       state: analysisQueryResult.state ?? null,
       municipality: analysisQueryResult.municipality ?? null,
       name: analysisQueryResult.name ?? null,
+      ...(analysisQueryResult.benefitType !== null && { benefitType: analysisQueryResult.benefitType }),
+      ...(analysisQueryResult.currentPosition !== null && { currentPosition: analysisQueryResult.currentPosition }),
+      ...(analysisQueryResult.generalUrbanRetirementBenefitAnalysis !== null && { generalUrbanRetirementBenefitAnalysis: analysisQueryResult.generalUrbanRetirementBenefitAnalysis }),
+      ...(analysisQueryResult.legalProceedings[0] !== undefined && { legalProceedingNumber: analysisQueryResult.legalProceedings[0].legalProceeding }),
       remunerations,
+      periods,
+      documents,
       createdAt: analysisQueryResult.createdAt,
       updatedAt: analysisQueryResult.updatedAt,
     });
+  }
+
+  private async buildPeriodDocuments(
+    documents: GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult[],
+  ): Promise<GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto[]> {
+    return Promise.all(
+      documents.map(async (doc) => {
+        const buffer = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+        return GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto.build({
+          type: doc.documentType,
+          document: Base64.encodeBuffer(buffer),
+          originalFileName,
+        });
+      }),
+    );
   }
 }
 

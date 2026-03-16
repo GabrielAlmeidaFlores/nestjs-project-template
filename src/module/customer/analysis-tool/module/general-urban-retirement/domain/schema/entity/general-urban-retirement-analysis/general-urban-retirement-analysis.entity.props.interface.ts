@@ -6,8 +6,8 @@ import type { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis
 import type { GeneralUrbanRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.entity';
 
 export interface GeneralUrbanRetirementAnalysisEntityPropsInterface extends BaseEntityPropsInterface<GeneralUrbanRetirementAnalysisId> {
-  careerStartDate: Date;
-  publicServiceStartDate: Date;
+  careerStartDate?: Date | null;
+  publicServiceStartDate?: Date | null;
   generalUrbanRetirementBenefitAnalysis?: string | null;
   generalUrbanRetirementAnalysisResult?: GeneralUrbanRetirementAnalysisResultEntity | null;
   federativeEntity?: GeneralUrbanRetirementAnalysisFederativeEntityEnum | null;
@@ -15,4 +15,5 @@ export interface GeneralUrbanRetirementAnalysisEntityPropsInterface extends Base
   municipality?: string | null;
   name?: string | null;
   benefitType?: GeneralUrbanRetirementAnalysisBenefitTypeEnum | null;
+  currentPosition?: string | null;
 }

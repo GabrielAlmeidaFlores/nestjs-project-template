@@ -93,25 +93,25 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
 
     for (const period of analysis.periods) {
       if (
-        period.specialTimePeriod?.documentIds !== undefined &&
-        period.specialTimePeriod.documentIds.length > 0
+        period.specialTimePeriod?.documents !== undefined &&
+        period.specialTimePeriod.documents.length > 0
       ) {
-        for (const docId of period.specialTimePeriod.documentIds) {
+        for (const doc of period.specialTimePeriod.documents) {
           transactionOperations.push(
             this.generalUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway.deleteGeneralUrbanRetirementAnalysisPeriodDocument(
-              docId,
+              doc.id,
             ),
           );
         }
       }
       if (
-        period.disabilityPeriod?.documentIds !== undefined &&
-        period.disabilityPeriod.documentIds.length > 0
+        period.disabilityPeriod?.documents !== undefined &&
+        period.disabilityPeriod.documents.length > 0
       ) {
-        for (const docId of period.disabilityPeriod.documentIds) {
+        for (const doc of period.disabilityPeriod.documents) {
           transactionOperations.push(
             this.generalUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway.deleteGeneralUrbanRetirementAnalysisPeriodDocument(
-              docId,
+              doc.id,
             ),
           );
         }
@@ -198,7 +198,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
               files: docs.ppp ?? [],
             },
             {
-              type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.CPTS,
+              type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.CTPS,
               files: docs.ctps ?? [],
             },
             {
@@ -211,7 +211,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER,
-              files: docs.other ?? [],
+              files: docs.outros ?? [],
             },
           ];
           for (const entry of specialTimeDocEntries) {
@@ -288,11 +288,11 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
           }> = [
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.MEDICAL,
-              files: docs.medical ?? [],
+              files: docs.medico ?? [],
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files: docs.otherMedical ?? [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {

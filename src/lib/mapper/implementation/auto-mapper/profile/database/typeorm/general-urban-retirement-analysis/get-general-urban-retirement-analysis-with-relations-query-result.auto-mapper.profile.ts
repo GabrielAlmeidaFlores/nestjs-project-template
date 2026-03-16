@@ -3,6 +3,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { GeneralUrbanRetirementAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-document.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-legal-proceeding.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
@@ -10,6 +11,7 @@ import { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@modu
 import { GetGeneralUrbanRetirementAnalysisQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis.query.result';
 import { GetGeneralUrbanRetirementAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/query/result/get-general-urban-retirement-analysis-document.query.result';
 import { GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-legal-proceeding/query/result/get-general-urban-retirement-analysis-legal-proceeding.query.result';
+import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GetGeneralUrbanRetirementAnalysisPeriodQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period/query/result/get-general-urban-retirement-analysis-period.query.result';
 import { GetGeneralUrbanRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/result/get-general-urban-retirement-analysis-remuneration.query.result';
 import { GetGeneralUrbanRetirementAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-result/query/result/get-general-urban-retirement-analysis-result.query.result';
@@ -50,6 +52,7 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
         municipality: source.municipality ?? null,
         name: source.name ?? null,
         benefitType: source.benefitType ?? null,
+        currentPosition: source.currentPosition ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -120,25 +123,60 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
                 id: new GeneralUrbanRetirementAnalysisPeriodSpecialTimeId(
                   p.specialTimePeriod.id,
                 ),
-                documentIds: (p.specialTimePeriod.specialTimeDocuments ?? [])
+                type: p.specialTimePeriod.type,
+                startDate: p.specialTimePeriod.startDate,
+                endDate: p.specialTimePeriod.endDate,
+                documents: (p.specialTimePeriod.specialTimeDocuments ?? [])
                   .filter((d) => d?.id !== undefined)
-                  .map(
-                    (d) =>
-                      new GeneralUrbanRetirementAnalysisPeriodDocumentId(d.id),
+                  .map((d) =>
+                    GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult.build(
+                      {
+                        id: new GeneralUrbanRetirementAnalysisPeriodDocumentId(
+                          d.id,
+                        ),
+                        document: d.document,
+                        documentType: d.documentType,
+                        createdAt: d.createdAt,
+                        updatedAt: d.updatedAt,
+                        deletedAt: d.deletedAt ?? null,
+                      },
+                    ),
                   ),
               }
             : undefined;
         const disabilityPeriod =
-          p.disabilityPeriod?.id !== undefined
+          p.disabilityPeriod?.id !== undefined && p.disabilityPeriod.cid !== undefined
             ? {
                 id: new GeneralUrbanRetirementAnalysisPeriodDisabilityId(
                   p.disabilityPeriod.id,
                 ),
-                documentIds: (p.disabilityPeriod.disabilityDocuments ?? [])
+                type: p.disabilityPeriod.type,
+                degree: p.disabilityPeriod.degree,
+                startDate: p.disabilityPeriod.startDate,
+                endDate: p.disabilityPeriod.endDate,
+                category: p.disabilityPeriod.category,
+                description: p.disabilityPeriod.description,
+                dailyImpact: p.disabilityPeriod.dailyImpact,
+                cid: {
+                  id: new CidTenId(p.disabilityPeriod.cid.id),
+                  code: p.disabilityPeriod.cid.code,
+                  description: p.disabilityPeriod.cid.description,
+                },
+                documents: (p.disabilityPeriod.disabilityDocuments ?? [])
                   .filter((d) => d?.id !== undefined)
-                  .map(
-                    (d) =>
-                      new GeneralUrbanRetirementAnalysisPeriodDocumentId(d.id),
+                  .map((d) =>
+                    GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult.build(
+                      {
+                        id: new GeneralUrbanRetirementAnalysisPeriodDocumentId(
+                          d.id,
+                        ),
+                        document: d.document,
+                        documentType: d.documentType,
+                        createdAt: d.createdAt,
+                        updatedAt: d.updatedAt,
+                        deletedAt: d.deletedAt ?? null,
+                      },
+                    ),
                   ),
               }
             : undefined;
@@ -173,6 +211,7 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
           municipality: source.municipality ?? null,
           name: source.name ?? null,
           benefitType: source.benefitType ?? null,
+          currentPosition: source.currentPosition ?? null,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,
           deletedAt: source.deletedAt ?? null,

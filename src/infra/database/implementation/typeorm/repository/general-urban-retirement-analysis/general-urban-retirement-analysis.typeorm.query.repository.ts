@@ -53,7 +53,7 @@ export class GeneralUrbanRetirementAnalysisTypeormQueryRepository
           legalProceedings: true,
           periods: {
             specialTimePeriod: { specialTimeDocuments: true },
-            disabilityPeriod: { disabilityDocuments: true },
+            disabilityPeriod: { disabilityDocuments: true, cid: true },
           },
         },
       },

@@ -1,7 +1,10 @@
 import { StateCodeEnum } from '@core/domain/schema/enum/state-code.enum';
 import { GetAnalysisToolClientResponseDto } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
+import { GeneralUrbanRetirementAnalysisBenefitTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/enum/general-urban-retirement-analysis-benefit-type.enum';
 import { GeneralUrbanRetirementAnalysisFederativeEntityEnum } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/enum/general-urban-retirement-analysis-federative-entity.enum';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
+import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
+import { GetGeneralUrbanRetirementAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-period.response.dto';
 import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
 import { GeneralUrbanRetirementCompleteAnalysisInterface } from '@module/customer/analysis-tool/module/general-urban-retirement/model/general-urban-retirement-complete-analysis.model';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -35,11 +38,11 @@ export class GetGeneralUrbanRetirementAnalysisResponseDto extends BaseBuildableD
   @ResponseDtoValueObjectProperty(GeneralUrbanRetirementAnalysisId)
   public id: GeneralUrbanRetirementAnalysisId;
 
-  @ResponseDtoDateProperty()
-  public careerStartDate: Date;
+  @ResponseDtoDateProperty({required: false})
+  public careerStartDate?: Date ;
 
-  @ResponseDtoDateProperty()
-  public publicServiceStartDate: Date;
+  @ResponseDtoDateProperty({required: false})
+  public publicServiceStartDate?: Date;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)
   public analysisToolClient: GetAnalysisToolClientResponseDto;
@@ -64,11 +67,37 @@ export class GetGeneralUrbanRetirementAnalysisResponseDto extends BaseBuildableD
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
 
+  @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisBenefitTypeEnum, {
+    required: false,
+  })
+  public benefitType?: GeneralUrbanRetirementAnalysisBenefitTypeEnum;
+
+  @ResponseDtoStringProperty({ required: false })
+  public currentPosition?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public generalUrbanRetirementBenefitAnalysis?: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public legalProceedingNumber?: string;
+
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementAnalysisRemunerationResponseDto,
     { required: false, isArray: true },
   )
   public remunerations?: GetGeneralUrbanRetirementAnalysisRemunerationResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementAnalysisPeriodResponseDto,
+    { required: false, isArray: true },
+  )
+  public periods?: GetGeneralUrbanRetirementAnalysisPeriodResponseDto[];
+
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementAnalysisDocumentResponseDto,
+    { required: false, isArray: true },
+  )
+  public documents?: GetGeneralUrbanRetirementAnalysisDocumentResponseDto[];
 
   @ResponseDtoDateProperty()
   public createdAt: Date;

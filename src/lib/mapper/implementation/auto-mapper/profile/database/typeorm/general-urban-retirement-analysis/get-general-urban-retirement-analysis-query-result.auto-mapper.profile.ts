@@ -30,6 +30,7 @@ export class GetGeneralUrbanRetirementAnalysisQueryResultAutoMapperProfile {
         municipality: source.municipality ?? null,
         name: source.name ?? null,
         benefitType: source.benefitType ?? null,
+        currentPosition: source.currentPosition ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

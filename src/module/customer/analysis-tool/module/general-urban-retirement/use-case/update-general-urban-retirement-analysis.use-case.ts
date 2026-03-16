@@ -118,8 +118,8 @@ export class UpdateGeneralUrbanRetirementAnalysisUseCase {
     const generalUrbanRetirementAnalysis =
       new GeneralUrbanRetirementAnalysisEntity({
         id: analysisQueryResult.id,
-        careerStartDate: dto.json.careerStartDate,
-        publicServiceStartDate: dto.json.publicServiceStartDate,
+        careerStartDate: dto.json.careerStartDate ?? null,
+        publicServiceStartDate: dto.json.publicServiceStartDate ?? null,
         generalUrbanRetirementAnalysisResult,
         generalUrbanRetirementBenefitAnalysis:
           dto.json.generalUrbanRetirementBenefitAnalysis ??
@@ -134,6 +134,8 @@ export class UpdateGeneralUrbanRetirementAnalysisUseCase {
         name: dto.json.name ?? analysisQueryResult.name ?? null,
         benefitType:
           dto.json.benefitType ?? analysisQueryResult.benefitType ?? null,
+        currentPosition:
+          dto.json.currentPosition ?? analysisQueryResult.currentPosition ?? null,
       });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({

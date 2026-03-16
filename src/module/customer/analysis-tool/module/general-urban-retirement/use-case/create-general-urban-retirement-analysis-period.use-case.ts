@@ -154,7 +154,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
               files: docs.ppp ?? [],
             },
             {
-              type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.CPTS,
+              type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.CTPS,
               files: docs.ctps ?? [],
             },
             {
@@ -167,7 +167,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER,
-              files: docs.other ?? [],
+              files: docs.outros ?? [],
             },
           ];
           for (const entry of specialTimeDocEntries) {
@@ -244,11 +244,11 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
           }> = [
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.MEDICAL,
-              files: docs.medical ?? [],
+              files: docs.medico ?? [],
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files: docs.otherMedical ?? [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {
