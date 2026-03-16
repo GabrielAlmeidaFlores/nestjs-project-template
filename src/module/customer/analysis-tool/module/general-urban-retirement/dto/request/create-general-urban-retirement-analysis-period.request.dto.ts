@@ -89,7 +89,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodDisabilityDocumentsReques
     required: false,
     isArray: true,
   })
-  public readonly outros_medicos?: Base64FileRequestDto[];
+  public readonly outrosMedicos?: Base64FileRequestDto[];
 
   protected override readonly _type =
     CreateGeneralUrbanRetirementAnalysisPeriodDisabilityDocumentsRequestDto.name;

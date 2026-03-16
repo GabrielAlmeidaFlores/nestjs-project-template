@@ -1,3 +1,4 @@
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { GeneralUrbanRetirementAnalysisDocumentTypeEnum } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-document/enum/general-urban-retirement-analysis-document-type.enum';
 import { GeneralUrbanRetirementAnalysisDocumentId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-document/value-object/general-urban-retirement-analysis-document-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
@@ -15,8 +16,15 @@ export class GetGeneralUrbanRetirementAnalysisDocumentResponseDto extends BaseBu
   @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisDocumentTypeEnum)
   public type: GeneralUrbanRetirementAnalysisDocumentTypeEnum;
 
-  @ResponseDtoStringProperty()
-  public document: string;
+  @ResponseDtoValueObjectProperty(Base64, {
+    description: 'Arquivo em Base64',
+  })
+  public document: Base64;
+
+  @ResponseDtoStringProperty({
+    description: 'Nome original do arquivo',
+  })
+  public originalFileName: string;
 
   @ResponseDtoDateProperty()
   public createdAt: Date;

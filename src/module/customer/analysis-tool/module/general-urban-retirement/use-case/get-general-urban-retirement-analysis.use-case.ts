@@ -9,6 +9,7 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { GetGeneralUrbanRetirementAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/query/result/get-general-urban-retirement-analysis-document.query.result';
 import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
@@ -195,14 +196,8 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
       }),
     );
 
-    const documents = analysisQueryResult.documents.map((d) =>
-      GetGeneralUrbanRetirementAnalysisDocumentResponseDto.build({
-        id: d.id,
-        type: d.type,
-        document: d.document,
-        createdAt: d.createdAt,
-        updatedAt: d.updatedAt,
-      }),
+    const documents = await this.buildAnalysisDocuments(
+      analysisQueryResult.documents,
     );
 
     return GetGeneralUrbanRetirementAnalysisResponseDto.build({
@@ -225,6 +220,28 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
       createdAt: analysisQueryResult.createdAt,
       updatedAt: analysisQueryResult.updatedAt,
     });
+  }
+
+  private async buildAnalysisDocuments(
+    documents: GetGeneralUrbanRetirementAnalysisDocumentQueryResult[],
+  ): Promise<GetGeneralUrbanRetirementAnalysisDocumentResponseDto[]> {
+    return Promise.all(
+      documents.map(async (doc) => {
+        const buffer = await this.fileProcessorGateway.getFileBuffer(
+          doc.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(doc.document);
+        return GetGeneralUrbanRetirementAnalysisDocumentResponseDto.build({
+          id: doc.id,
+          type: doc.type,
+          document: Base64.encodeBuffer(buffer),
+          originalFileName,
+          createdAt: doc.createdAt,
+          updatedAt: doc.updatedAt,
+        });
+      }),
+    );
   }
 
   private async buildPeriodDocuments(
