@@ -109,8 +109,8 @@ export class UpdateDisabilityRetirementPlanningUseCase {
       state: dto.state ?? null,
       municipality: dto.municipality ?? null,
       longTimeDisability: dto.longTimeDisability,
-      publicServiceStartDate: dto.publicServiceStartDate,
-      careerStartDate: dto.careerStartDate,
+      publicServiceStartDate: dto.publicServiceStartDate ?? null,
+      careerStartDate: dto.careerStartDate ?? null,
       analysisName: dto.analysisName ?? null,
     });
 
