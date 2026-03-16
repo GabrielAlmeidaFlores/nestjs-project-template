@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
-import { GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-special-time-document/query/result/get-disability-retirement-planning-period-special-time-document.query.result';
 import { GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-special-time/query/result/get-disability-retirement-planning-period-special-time.query.result';
+import { GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning-period-special-time-document/query/result/get-disability-retirement-planning-period-special-time-document.query.result';
 
 @Injectable()
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapperProfile {

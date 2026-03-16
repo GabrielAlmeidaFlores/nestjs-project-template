@@ -10,8 +10,8 @@ export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRet
   public readonly federativeEntity: FederativeEntityEnum;
   public readonly state: StateCodeEnum | null;
   public readonly municipality: string | null;
-  public readonly publicServiceStartDate: Date;
-  public readonly careerStartDate: Date;
+  public readonly publicServiceStartDate: Date | null;
+  public readonly careerStartDate: Date | null;
   public readonly analysisName: string | null;
   public readonly longTimeDisability: boolean;
   public readonly administrativeProcessAnalysis: string | null;
@@ -24,10 +24,11 @@ export class DisabilityRetirementPlanningEntity extends BaseEntity<DisabilityRet
     this.federativeEntity = props.federativeEntity;
     this.state = props.state ?? null;
     this.municipality = props.municipality ?? null;
-    this.publicServiceStartDate = props.publicServiceStartDate;
-    this.careerStartDate = props.careerStartDate;
+    this.publicServiceStartDate = props.publicServiceStartDate ?? null;
+    this.careerStartDate = props.careerStartDate ?? null;
     this.analysisName = props.analysisName ?? null;
     this.longTimeDisability = props.longTimeDisability;
-    this.administrativeProcessAnalysis = props.administrativeProcessAnalysis ?? null;
+    this.administrativeProcessAnalysis =
+      props.administrativeProcessAnalysis ?? null;
   }
 }

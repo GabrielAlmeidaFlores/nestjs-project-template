@@ -43,16 +43,18 @@ export class DisabilityRetirementPlanningTypeormEntity extends BaseTypeormEntity
   @Column({
     name: 'public_service_start_date',
     type: 'date',
+    nullable: true,
     transformer: DateOnlyTransformer,
   })
-  public publicServiceStartDate: Date;
+  public publicServiceStartDate: Date | null;
 
   @Column({
     name: 'career_start_date',
     type: 'date',
+    nullable: true,
     transformer: DateOnlyTransformer,
   })
-  public careerStartDate: Date;
+  public careerStartDate: Date | null;
 
   @Column({
     name: 'analysis_name',

@@ -228,11 +228,11 @@ export class GetDisabilityRetirementPlanningResponseDto extends BaseBuildableDto
   @ResponseDtoBooleanProperty()
   public longTimeDisability: boolean;
 
-  @ResponseDtoDateProperty()
-  public publicServiceStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public publicServiceStartDate?: Date;
 
-  @ResponseDtoDateProperty()
-  public careerStartDate: Date;
+  @ResponseDtoDateProperty({ required: false })
+  public careerStartDate?: Date;
 
   @ResponseDtoStringProperty({ required: false })
   public analysisName?: string;

@@ -120,7 +120,10 @@ export class GetDisabilityRetirementPlanningRemunerationCalculationUseCase {
   }
 
   private computeTopEightyPercentCount(total: number): number {
-    return Math.ceil(total * GetDisabilityRetirementPlanningRemunerationCalculationUseCase.TOP_EIGHTY_PERCENT);
+    return Math.ceil(
+      total *
+        GetDisabilityRetirementPlanningRemunerationCalculationUseCase.TOP_EIGHTY_PERCENT,
+    );
   }
 
   private computeTopEightyPercentAverage(

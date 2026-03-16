@@ -10,12 +10,14 @@ import {
 
 import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/analyze-disability-retirement-planning-administrative-process.request.dto';
 import { CreateDisabilityRetirementPlanningPeriodsRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning-periods.request.dto';
 import { CreateDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning-remuneration.request.dto';
 import { CreateDisabilityRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning.request.dto';
 import { ListDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/list-disability-retirement-planning-remuneration.request.dto';
 import { UpdateDisabilityRetirementPlanningRemunerationRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/update-disability-retirement-planning-remuneration.request.dto';
 import { UpdateDisabilityRetirementPlanningRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/update-disability-retirement-planning.request.dto';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/analyze-disability-retirement-planning-administrative-process.response.dto';
 import { CreateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-periods.response.dto';
 import { CreateDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-remuneration.response.dto';
 import { CreateDisabilityRetirementPlanningResultResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-result.response.dto';
@@ -26,9 +28,8 @@ import { GetDisabilityRetirementPlanningResponseDto } from '@module/customer/ana
 import { ListDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/list-disability-retirement-planning-remuneration.response.dto';
 import { UpdateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-periods.response.dto';
 import { UpdateDisabilityRetirementPlanningRemunerationResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning-remuneration.response.dto';
-import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/analyze-disability-retirement-planning-administrative-process.request.dto';
-import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/analyze-disability-retirement-planning-administrative-process.response.dto';
 import { UpdateDisabilityRetirementPlanningResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/update-disability-retirement-planning.response.dto';
+import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { CreateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-period.use-case';
 import { CreateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-remuneration.use-case';
 import { CreateDisabilityRetirementPlanningResultUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/create-disability-retirement-planning-result.use-case';
@@ -41,7 +42,6 @@ import { GetDisabilityRetirementPlanningUseCase } from '@module/customer/analysi
 import { ListDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/list-disability-retirement-planning-remuneration.use-case';
 import { UpdateDisabilityRetirementPlanningPeriodUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-period.use-case';
 import { UpdateDisabilityRetirementPlanningRemunerationUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning-remuneration.use-case';
-import { AnalyzeDisabilityRetirementPlanningAdministrativeProcessUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/analyze-disability-retirement-planning-administrative-process.use-case';
 import { UpdateDisabilityRetirementPlanningUseCase } from '@module/customer/analysis-tool/module/disability-retirement-planning/use-case/update-disability-retirement-planning.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -548,7 +548,8 @@ export class DisabilityRetirementPlanningController {
     @GetSessionData() sessionData: SessionDataModel,
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
-    @Body() dto: AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto,
+    @Body()
+    dto: AnalyzeDisabilityRetirementPlanningAdministrativeProcessRequestDto,
   ): Promise<AnalyzeDisabilityRetirementPlanningAdministrativeProcessResponseDto> {
     return await this.analyzeDisabilityRetirementPlanningAdministrativeProcessUseCase.execute(
       sessionData,
