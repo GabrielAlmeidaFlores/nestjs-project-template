@@ -7,14 +7,15 @@ import type { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis
 
 export class GetGeneralUrbanRetirementAnalysisQueryResult extends BaseBuildableObject {
   public readonly id: GeneralUrbanRetirementAnalysisId;
-  public readonly careerStartDate: Date;
-  public readonly publicServiceStartDate: Date;
+  public readonly careerStartDate: Date | null;
+  public readonly publicServiceStartDate: Date | null;
   public readonly generalUrbanRetirementBenefitAnalysis: string | null;
   public readonly federativeEntity: GeneralUrbanRetirementAnalysisFederativeEntityEnum | null;
   public readonly state: StateCodeEnum | null;
   public readonly municipality: string | null;
   public readonly name: string | null;
   public readonly benefitType: GeneralUrbanRetirementAnalysisBenefitTypeEnum | null;
+  public readonly currentPosition: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

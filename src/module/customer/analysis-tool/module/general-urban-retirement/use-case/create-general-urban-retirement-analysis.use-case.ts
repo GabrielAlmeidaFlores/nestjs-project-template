@@ -90,8 +90,8 @@ export class CreateGeneralUrbanRetirementAnalysisUseCase {
 
     const generalUrbanRetirementAnalysis =
       new GeneralUrbanRetirementAnalysisEntity({
-        careerStartDate: dto.json.careerStartDate,
-        publicServiceStartDate: dto.json.publicServiceStartDate,
+        careerStartDate: dto.json.careerStartDate ?? null,
+        publicServiceStartDate: dto.json.publicServiceStartDate ?? null,
         generalUrbanRetirementBenefitAnalysis:
           dto.json.generalUrbanRetirementBenefitAnalysis ?? null,
         federativeEntity: dto.json.federativeEntity ?? null,
@@ -99,6 +99,7 @@ export class CreateGeneralUrbanRetirementAnalysisUseCase {
         municipality: dto.json.municipality ?? null,
         name: dto.json.name ?? null,
         benefitType: dto.json.benefitType,
+        currentPosition: dto.json.currentPosition ?? null,
       });
 
     const generalUrbanRetirementAnalysisLegalProceeding =

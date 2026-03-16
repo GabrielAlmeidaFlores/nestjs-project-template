@@ -37,8 +37,8 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
 
       return new GeneralUrbanRetirementAnalysisEntity({
         id: new GeneralUrbanRetirementAnalysisId(source.id),
-        careerStartDate: source.careerStartDate,
-        publicServiceStartDate: source.publicServiceStartDate,
+        careerStartDate: source.careerStartDate ?? null,
+        publicServiceStartDate: source.publicServiceStartDate ?? null,
         generalUrbanRetirementBenefitAnalysis:
           source.generalUrbanRetirementBenefitAnalysis ?? null,
         generalUrbanRetirementAnalysisResult,
@@ -47,6 +47,7 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
         municipality: source.municipality ?? null,
         name: source.name ?? null,
         benefitType: source.benefitType ?? null,
+        currentPosition: source.currentPosition ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
@@ -78,8 +79,8 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
 
       return GeneralUrbanRetirementAnalysisTypeormEntity.build({
         id: source.id.toString(),
-        careerStartDate: source.careerStartDate,
-        publicServiceStartDate: source.publicServiceStartDate,
+        careerStartDate: source.careerStartDate ?? null,
+        publicServiceStartDate: source.publicServiceStartDate ?? null,
         generalUrbanRetirementBenefitAnalysis:
           source.generalUrbanRetirementBenefitAnalysis ?? null,
         federativeEntity: source.federativeEntity ?? null,
@@ -87,6 +88,7 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
         municipality: source.municipality ?? null,
         name: source.name ?? null,
         benefitType: source.benefitType ?? null,
+        currentPosition: source.currentPosition ?? null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

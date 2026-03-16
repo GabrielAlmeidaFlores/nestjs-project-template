@@ -44,7 +44,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodSpecialTimeDocumentsReque
     required: false,
     isArray: true,
   })
-  public readonly other?: Base64FileRequestDto[];
+  public readonly outros?: Base64FileRequestDto[];
 
   protected override readonly _type =
     CreateGeneralUrbanRetirementAnalysisPeriodSpecialTimeDocumentsRequestDto.name;
@@ -83,13 +83,13 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodDisabilityDocumentsReques
     required: false,
     isArray: true,
   })
-  public readonly medical?: Base64FileRequestDto[];
+  public readonly medico?: Base64FileRequestDto[];
 
   @RequestDtoObjectProperty(() => Base64FileRequestDto, {
     required: false,
     isArray: true,
   })
-  public readonly otherMedical?: Base64FileRequestDto[];
+  public readonly outros_medicos?: Base64FileRequestDto[];
 
   protected override readonly _type =
     CreateGeneralUrbanRetirementAnalysisPeriodDisabilityDocumentsRequestDto.name;

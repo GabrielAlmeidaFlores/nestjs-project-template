@@ -10,10 +10,10 @@ import type { GeneralUrbanRetirementAnalysisEntityPropsInterface } from '@module
 
 export class GeneralUrbanRetirementAnalysisEntity extends BaseEntity<GeneralUrbanRetirementAnalysisId> {
   @Description('Data de início da carreira do cliente')
-  public readonly careerStartDate: Date;
+  public readonly careerStartDate: Date | null;
 
   @Description('Data de início do serviço público do cliente')
-  public readonly publicServiceStartDate: Date;
+  public readonly publicServiceStartDate: Date | null;
 
   @Description('Análise de benefícios do cliente')
   public readonly generalUrbanRetirementBenefitAnalysis: string | null;
@@ -36,14 +36,17 @@ export class GeneralUrbanRetirementAnalysisEntity extends BaseEntity<GeneralUrba
   @Description('Tipo de benefício do cliente')
   public benefitType: GeneralUrbanRetirementAnalysisBenefitTypeEnum | null;
 
+  @Description('Cargo atual do cliente')
+  public readonly currentPosition: string | null;
+
   protected readonly _type = GeneralUrbanRetirementAnalysisEntity.name;
 
   public constructor(
     props: GeneralUrbanRetirementAnalysisEntityPropsInterface,
   ) {
     super(GeneralUrbanRetirementAnalysisId, props);
-    this.careerStartDate = props.careerStartDate;
-    this.publicServiceStartDate = props.publicServiceStartDate;
+    this.careerStartDate = props.careerStartDate ?? null;
+    this.publicServiceStartDate = props.publicServiceStartDate ?? null;
     this.generalUrbanRetirementBenefitAnalysis =
       props.generalUrbanRetirementBenefitAnalysis ?? null;
     this.generalUrbanRetirementAnalysisResult =
@@ -53,5 +56,6 @@ export class GeneralUrbanRetirementAnalysisEntity extends BaseEntity<GeneralUrba
     this.municipality = props.municipality ?? null;
     this.name = props.name ?? null;
     this.benefitType = props.benefitType ?? null;
+    this.currentPosition = props.currentPosition ?? null;
   }
 }

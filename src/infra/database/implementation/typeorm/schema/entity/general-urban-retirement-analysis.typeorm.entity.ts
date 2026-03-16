@@ -19,17 +19,17 @@ export class GeneralUrbanRetirementAnalysisTypeormEntity extends BaseTypeormEnti
     name: 'career_start_date',
     type: 'date',
     transformer: DateOnlyTransformer,
-    nullable: false,
+    nullable: true,
   })
-  public careerStartDate: Date;
+  public careerStartDate: Date | null;
 
   @Column({
     name: 'public_service_start_date',
     type: 'date',
     transformer: DateOnlyTransformer,
-    nullable: false,
+    nullable: true,
   })
-  public publicServiceStartDate: Date;
+  public publicServiceStartDate: Date | null;
 
   @Column({
     name: 'general_urban_retirement_benefit_analysis',
@@ -77,6 +77,14 @@ export class GeneralUrbanRetirementAnalysisTypeormEntity extends BaseTypeormEnti
     enum: GeneralUrbanRetirementAnalysisBenefitTypeEnum,
   })
   public benefitType: GeneralUrbanRetirementAnalysisBenefitTypeEnum | null;
+
+  @Column({
+    name: 'current_position',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public currentPosition: string | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisResultTypeormEntity,

@@ -127,7 +127,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       const speechGenerator =
-        source.speechGenerator !== null
+        source.speechGenerator != null
           ? this.mapper.map(
               source.speechGenerator,
               SpeechGeneratorTypeormEntity,
@@ -177,7 +177,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       const generalUrbanRetirementAnalysis =
-        source.generalUrbanRetirementAnalysis !== null
+        source.generalUrbanRetirementAnalysis != null
           ? (() => {
               const g =
                 source.generalUrbanRetirementAnalysis as GeneralUrbanRetirementAnalysisTypeormEntity;
@@ -229,6 +229,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
                     municipality: g.municipality ?? null,
                     name: g.name ?? null,
                     benefitType: g.benefitType ?? null,
+                    currentPosition: g.currentPosition ?? null,
                     createdAt: g.createdAt,
                     updatedAt: g.updatedAt,
                     deletedAt: g.deletedAt ?? null,
@@ -343,7 +344,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       const speechGenerator =
-        source.speechGenerator !== null
+        source.speechGenerator != null
           ? this.mapper.map(
               source.speechGenerator,
               GetSpeechGeneratorQueryResult,
@@ -388,7 +389,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       const generalUrbanRetirementAnalysis =
-        source.generalUrbanRetirementAnalysis !== null
+        source.generalUrbanRetirementAnalysis != null
           ? ({
               id: source.generalUrbanRetirementAnalysis.id.toString(),
               careerStartDate:
