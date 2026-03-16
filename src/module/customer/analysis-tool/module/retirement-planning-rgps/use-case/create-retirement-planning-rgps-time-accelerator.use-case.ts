@@ -18,7 +18,6 @@ type RetirementPlanningRgpsTimeAcceleratorJsonType = {
   reconhecimentoINSS?: string;
   impactoCarencia?: string;
   reconhecimentoJudicial?: string;
-  tempoContribuicao?: string;
   observacaoTecnica?: string;
 };
 
@@ -79,7 +78,6 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
       viability: parsed.viabilidade ?? 'N/A',
       technicalNote: parsed.observacaoTecnica ?? 'N/A',
       affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
-      timeGained: parsed.tempoContribuicao ?? 'N/A',
       recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
       recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',
       retirementPlanningRgps: analysisResult.retirementPlanningRgps,

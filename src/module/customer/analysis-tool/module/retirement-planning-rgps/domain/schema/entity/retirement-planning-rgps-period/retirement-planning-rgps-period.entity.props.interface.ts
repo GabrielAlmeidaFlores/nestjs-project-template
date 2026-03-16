@@ -5,6 +5,7 @@ import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/module/r
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 
 export interface RetirementPlanningRgpsPeriodEntityPropsInterface extends BaseEntityPropsInterface<RetirementPlanningRgpsPeriodId> {
+  sequencial?: number | null;
   periodName?: string | null;
   periodStart?: Date | null;
   periodEnd?: Date | null;

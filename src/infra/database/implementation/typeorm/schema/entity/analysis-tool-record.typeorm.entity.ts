@@ -17,6 +17,7 @@ import { RetirementPlanningRgpsTypeormEntity } from '@infra/database/implementat
 import { RetirementPlanningRppsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rpps.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { SpecialActivityTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-activity.typeorm.entity';
+import { SpecialCategoryRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/special-category-retirement-analysis.typeorm.entity';
 import { SpeechGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/speech-generator.typeorm.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
@@ -82,6 +83,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @OneToOne(() => SpecialActivityTypeormEntity, { nullable: true })
   @JoinColumn({ name: 'special_activity_id' })
   public specialActivity?: SpecialActivityTypeormEntity | null;
+
+  @OneToOne(
+    () => SpecialCategoryRetirementAnalysisTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'special_category_retirement_analysis_id' })
+  public specialCategoryRetirementAnalysis?: SpecialCategoryRetirementAnalysisTypeormEntity | null;
   @OneToOne(
     () => JudicialCaseAnalysisTypeormEntity,
     (entity) => entity.analysisToolRecord,

@@ -106,4 +106,26 @@ export class RuralTimelineAnalysisCnisContributionPeriodTypeormQueryRepository
       },
     );
   }
+
+  public async findAllByRuralTimelineAnalysisId(
+    ruralTimelineAnalysisId: string,
+  ): Promise<GetRuralTimelineAnalysisCnisContributionPeriodQueryResult[]> {
+    const results = await this.find({
+      where: { ruralTimeline: { id: ruralTimelineAnalysisId } },
+      relations: {
+        ruralTimelineCnisContributionPeriodUnderMinimum: true,
+        ruralTimelineCnisContributionPeriodPendingExitDate: true,
+        ruralTimelineCnisContributionPeriodOverdueContribution: true,
+      },
+      order: { startDate: 'ASC' },
+    });
+
+    return results.map((item) =>
+      this.mapperGateway.map(
+        item,
+        RuralTimelineAnalysisCnisContributionPeriodTypeormEntity,
+        GetRuralTimelineAnalysisCnisContributionPeriodQueryResult,
+      ),
+    );
+  }
 }
