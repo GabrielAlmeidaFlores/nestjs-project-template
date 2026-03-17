@@ -15,6 +15,8 @@ import { SpecialCategoryRetirementAnalysisRemunerationId } from '@module/custome
 import { SpecialCategoryRetirementAnalysisWorkPeriodId } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/domain/schema/entity/special-category-retirement-analysis-work-period/value-object/special-category-retirement-analysis-work-period-id/special-category-retirement-analysis-work-period-id.value-object';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/add-special-category-retirement-analysis-period-document.request.dto';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/analyze-special-category-retirement-administrative-procedure.request.dto';
+import { CreateSpecialCategoryRetirementAnalysisRemunerationBatchRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis-remuneration-batch.request.dto';
+import { CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis-work-period-batch.request.dto';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis-work-period.request.dto';
 import { CreateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/create-special-category-retirement-analysis.request.dto';
 import { GetSpecialCategoryRetirementAnalysisTimelineRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/get-special-category-retirement-analysis-timeline.request.dto';
@@ -23,6 +25,8 @@ import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto } from '@mo
 import { UpdateSpecialCategoryRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/request/update-special-category-retirement-analysis.request.dto';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/add-special-category-retirement-analysis-period-document.response.dto';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/analyze-special-category-retirement-administrative-procedure.response.dto';
+import { CreateSpecialCategoryRetirementAnalysisRemunerationBatchResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis-remuneration-batch.response.dto';
+import { CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis-work-period-batch.response.dto';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis-work-period.response.dto';
 import { CreateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/create-special-category-retirement-analysis.response.dto';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/delete-special-category-retirement-analysis-period-document.response.dto';
@@ -40,6 +44,8 @@ import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto } from '@m
 import { UpdateSpecialCategoryRetirementAnalysisResponseDto } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/dto/response/update-special-category-retirement-analysis.response.dto';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/analyze-special-category-retirement-administrative-procedure.use-case';
+import { CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-remuneration-batch.use-case';
+import { CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period-batch.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
 import { CreateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-period-document.use-case';
@@ -78,6 +84,7 @@ export class SpecialCategoryRetirementAnalysisController {
     private readonly updateUseCase: UpdateSpecialCategoryRetirementAnalysisUseCase,
     private readonly deleteUseCase: DeleteSpecialCategoryRetirementAnalysisUseCase,
     private readonly createWorkPeriodUseCase: CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
+    private readonly createWorkPeriodBatchUseCase: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase,
     private readonly updateWorkPeriodUseCase: UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     private readonly deleteWorkPeriodUseCase: DeleteSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     private readonly addPeriodDocumentUseCase: AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
@@ -86,6 +93,7 @@ export class SpecialCategoryRetirementAnalysisController {
     private readonly listRemunerationUseCase: ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
     private readonly updateRemunerationUseCase: UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     private readonly deleteRemunerationUseCase: DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
+    private readonly createRemunerationBatchUseCase: CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
     private readonly generateFullTextUseCase: GenerateSpecialCategoryRetirementAnalysisFullTextUseCase,
     private readonly generateConversionUseCase: GenerateSpecialCategoryRetirementAnalysisConversionUseCase,
     private readonly generateRulesUseCase: GenerateSpecialCategoryRetirementAnalysisRulesUseCase,
@@ -234,6 +242,39 @@ export class SpecialCategoryRetirementAnalysisController {
     @Body() dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodResponseDto> {
     return await this.createWorkPeriodUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Adicionar períodos de trabalho em lote',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':analysisId/work-period/batch',
+      method: RequestMethod.POST,
+      type: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchRequestDto,
+    },
+    tag: ['categoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Períodos de trabalho criados com sucesso.',
+      type: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createWorkPeriodBatch(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+    @Body() dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchRequestDto,
+  ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchResponseDto> {
+    return await this.createWorkPeriodBatchUseCase.execute(
       organizationSessionData,
       specialCategoryRetirementAnalysisId,
       dto,
@@ -409,6 +450,39 @@ export class SpecialCategoryRetirementAnalysisController {
     return await this.listRemunerationUseCase.execute(
       organizationSessionData,
       specialCategoryRetirementAnalysisId,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar remunerações em lote',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':analysisId/remuneration/batch',
+      method: RequestMethod.POST,
+      type: CreateSpecialCategoryRetirementAnalysisRemunerationBatchRequestDto,
+    },
+    tag: ['categoria-especial'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Remunerações criadas com sucesso.',
+      type: CreateSpecialCategoryRetirementAnalysisRemunerationBatchResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async createRemunerationBatch(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'analysisId',
+      new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
+    )
+    specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
+    @Body() dto: CreateSpecialCategoryRetirementAnalysisRemunerationBatchRequestDto,
+  ): Promise<CreateSpecialCategoryRetirementAnalysisRemunerationBatchResponseDto> {
+    return await this.createRemunerationBatchUseCase.execute(
+      organizationSessionData,
+      specialCategoryRetirementAnalysisId,
+      dto,
     );
   }
 
