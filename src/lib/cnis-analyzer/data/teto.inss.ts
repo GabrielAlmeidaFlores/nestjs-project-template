@@ -159,4 +159,9 @@ export const TetoInssData = [
     salarioMinimo: 1518.0,
     tetoInss: 8157.41,
   },
+  {
+    ano: 2026,
+    salarioMinimo: 1621.0,
+    tetoInss: 8475.55,
+  },
 ];

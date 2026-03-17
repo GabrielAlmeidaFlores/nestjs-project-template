@@ -21,6 +21,8 @@ export class GeminiService implements GenerativeIaGateway {
   private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
   private static readonly TOP_P_VALUE = 0.95;
   private static readonly TOP_K_VALUE = 40;
+  private static readonly AI_CALL_TIMEOUT_MS = 80_000;
+  private static readonly TIMEOUT_ERROR_MESSAGE = 'GEMINI_CALL_TIMEOUT';
 
   protected readonly _type = GeminiService.name;
 
@@ -316,8 +318,9 @@ formatting rules:
         );
       }
 
-      const result =
-        await this.googleGenerativeAI.models.generateContent(contentConfig);
+      const result = await this.withTimeout(
+        this.googleGenerativeAI.models.generateContent(contentConfig),
+      );
 
       return GeminiResultOutputModel.build({
         text:
@@ -351,7 +354,8 @@ formatting rules:
 
         if (
           error.message.includes('UNAVAILABLE') ||
-          error.message.includes('503')
+          error.message.includes('503') ||
+          error.message === GeminiService.TIMEOUT_ERROR_MESSAGE
         ) {
           const fallbackModel = this.FALLBACK_MODELS[model];
 
@@ -398,10 +402,12 @@ formatting rules:
 
     while (callCount < MAX_FUNCTION_CALLS) {
       try {
-        const result = await this.googleGenerativeAI.models.generateContent({
-          ...contentConfig,
-          contents: conversationHistory as never,
-        });
+        const result = await this.withTimeout(
+          this.googleGenerativeAI.models.generateContent({
+            ...contentConfig,
+            contents: conversationHistory as never,
+          }),
+        );
 
         totalInputTokens += result.usageMetadata?.promptTokenCount ?? 0;
         totalOutputTokens += result.usageMetadata?.candidatesTokenCount ?? 0;
@@ -514,6 +520,20 @@ formatting rules:
     });
   }
 
+  private withTimeout<T>(promise: Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(GeminiService.TIMEOUT_ERROR_MESSAGE));
+      }, GeminiService.AI_CALL_TIMEOUT_MS);
+    });
+
+    return Promise.race([promise, timeoutPromise]).finally(() => {
+      clearTimeout(timer);
+    });
+  }
+
   private async buildPartWithFileContent(
     contentList: GenerativeIaPartType[],
   ): Promise<Part[]> {
@@ -523,7 +543,6 @@ formatting rules:
           return { text: content } as Part;
         }
 
-        // Cria hash simples do buffer para cache
         const contentHash = Buffer.from(content)
           .toString('base64')
           .substring(0, this.hashSubstringLength);
