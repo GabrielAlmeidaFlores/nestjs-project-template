@@ -27,6 +27,8 @@ import { GenerateSpecialCategoryRetirementAnalysisRulesUseCase } from '@module/c
 import { GetSpecialCategoryRetirementAnalysisByIdUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-by-id.use-case';
 import { GetSpecialCategoryRetirementAnalysisTimelineUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/get-special-category-retirement-analysis-timeline.use-case';
 import { ListSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/list-special-category-retirement-analysis-remuneration.use-case';
+import { UpdateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration-batch.use-case';
+import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-work-period-batch.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-remuneration.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis-work-period.use-case';
 import { UpdateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/update-special-category-retirement-analysis.use-case';
@@ -67,6 +69,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
     CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
+    UpdateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase,
+    UpdateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
     GenerateSpecialCategoryRetirementAnalysisFullTextUseCase,
     GenerateSpecialCategoryRetirementAnalysisConversionUseCase,
     GenerateSpecialCategoryRetirementAnalysisRulesUseCase,
@@ -91,6 +95,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
     CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
+    UpdateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase,
+    UpdateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
     GenerateSpecialCategoryRetirementAnalysisFullTextUseCase,
     GenerateSpecialCategoryRetirementAnalysisConversionUseCase,
     GenerateSpecialCategoryRetirementAnalysisRulesUseCase,
