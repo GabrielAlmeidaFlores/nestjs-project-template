@@ -10,6 +10,9 @@ import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-pro
 import { SpecialCategoryRetirementAnalysisController } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/special-category-retirement-analysis.controller';
 import { AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/add-special-category-retirement-analysis-period-document.use-case';
 import { AnalyzeSpecialCategoryRetirementAdministrativeProcedureUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/analyze-special-category-retirement-administrative-procedure.use-case';
+import { CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-remuneration-batch.use-case';
+import { CreateSpecialCategoryRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-remuneration.use-case';
+import { CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period-batch.use-case';
 import { CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis-work-period.use-case';
 import { CreateSpecialCategoryRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/create-special-category-retirement-analysis.use-case';
 import { DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/special-category-retirement-analysis/use-case/delete-special-category-retirement-analysis-period-document.use-case';
@@ -53,14 +56,17 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateSpecialCategoryRetirementAnalysisUseCase,
     DeleteSpecialCategoryRetirementAnalysisUseCase,
     CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
+    CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase,
     UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     DeleteSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     GetSpecialCategoryRetirementAnalysisTimelineUseCase,
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
+    CreateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
+    CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
     GenerateSpecialCategoryRetirementAnalysisFullTextUseCase,
     GenerateSpecialCategoryRetirementAnalysisConversionUseCase,
     GenerateSpecialCategoryRetirementAnalysisRulesUseCase,
@@ -74,14 +80,17 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     UpdateSpecialCategoryRetirementAnalysisUseCase,
     DeleteSpecialCategoryRetirementAnalysisUseCase,
     CreateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
+    CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchUseCase,
     UpdateSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     DeleteSpecialCategoryRetirementAnalysisWorkPeriodUseCase,
     AddSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     DeleteSpecialCategoryRetirementAnalysisPeriodDocumentUseCase,
     GetSpecialCategoryRetirementAnalysisTimelineUseCase,
     ListSpecialCategoryRetirementAnalysisRemunerationUseCase,
+    CreateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     UpdateSpecialCategoryRetirementAnalysisRemunerationUseCase,
     DeleteSpecialCategoryRetirementAnalysisRemunerationUseCase,
+    CreateSpecialCategoryRetirementAnalysisRemunerationBatchUseCase,
     GenerateSpecialCategoryRetirementAnalysisFullTextUseCase,
     GenerateSpecialCategoryRetirementAnalysisConversionUseCase,
     GenerateSpecialCategoryRetirementAnalysisRulesUseCase,
