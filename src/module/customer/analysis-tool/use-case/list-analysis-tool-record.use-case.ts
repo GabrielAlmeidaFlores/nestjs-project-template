@@ -88,6 +88,7 @@ export class ListAnalysisToolRecordUseCase {
             analysisToolRecord.retirementPlanningRpps ??
             analysisToolRecord.retirementPlanningRgps ??
             analysisToolRecord.generalUrbanRetirementGrant ??
+            analysisToolRecord.generalUrbanRetirementAnalysis ??
             analysisToolRecord.judicialCaseAnalysis ??
             analysisToolRecord.administrativeProcedureInssAnalysis ??
             analysisToolRecord.medicalAndSocialReportObjectionGeneratorAnalysis ??

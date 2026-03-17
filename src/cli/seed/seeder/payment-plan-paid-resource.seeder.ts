@@ -690,6 +690,8 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
       title: 'CONCESSÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE REGRAS FINAIS',
       description:
         'Análise comparativa final de todas as regras de aposentadoria disponíveis no RGPS usando IA para concessão de aposentadoria urbana geral. Simula aposentadoria por idade, tempo de contribuição, regras de transição, calcula valores estimados, identifica regra mais vantajosa e melhor momento para requerer.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('36bcef6c-889f-4493-93d8-ba3457398caa'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,
