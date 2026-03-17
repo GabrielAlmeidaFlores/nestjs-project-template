@@ -2,6 +2,8 @@ import { Mapper, constructUsing, createMap } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { RuralTimelineAnalysisPeriodPropertyTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-property.typeorm.entity';
+import { RuralTimelineAnalysisPeriodResidenceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period-residence.typeorm.entity';
 import { RuralTimelineAnalysisPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis-period.typeorm.entity';
 import { RuralTimelineAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/rural-timeline-analysis.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
@@ -104,6 +106,18 @@ export class RuralTimelineAnalysisPeriodEntityAutoMapperProfile {
         ormEntity.ruralTimeline = {
           id: source.ruralTimelineId.toString(),
         } as unknown as RuralTimelineAnalysisTypeormEntity;
+      }
+
+      if (source.ruralTimelinePeriodPropertyId) {
+        ormEntity.ruralTimelinePeriodProperty = {
+          id: source.ruralTimelinePeriodPropertyId.toString(),
+        } as unknown as RuralTimelineAnalysisPeriodPropertyTypeormEntity;
+      }
+
+      if (source.ruralTimelinePeriodResidenceId) {
+        ormEntity.ruralTimelinePeriodResidence = {
+          id: source.ruralTimelinePeriodResidenceId.toString(),
+        } as unknown as RuralTimelineAnalysisPeriodResidenceTypeormEntity;
       }
 
       return ormEntity;

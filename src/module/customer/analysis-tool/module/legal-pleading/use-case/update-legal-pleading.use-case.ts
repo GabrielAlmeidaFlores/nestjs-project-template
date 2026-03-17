@@ -3,7 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolClientInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-inss-benefit/command/analysis-tool-client-inss-benefit.command.repository.gateway';
+import { AnalysisToolClientLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-client-legal-proceeding/command/analysis-tool-client-legal-proceeding.command.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolClientInssBenefitEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-inss-benefit/analysis-tool-client-inss-benefit.entity';
+import { AnalysisToolClientLegalProceedingEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client-legal-proceeding/analysis-tool-client-legal-proceeding.entity';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { LegalPleadingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/command/legal-pleading.repository.gateway';
@@ -40,6 +44,10 @@ export class UpdateLegalPleadingUseCase {
     private readonly legalPleadingCommandRepositoryGateway: LegalPleadingCommandRepositoryGateway,
     @Inject(LegalPleadingQueryRepositoryGateway)
     private readonly legalPleadingQueryRepositoryGateway: LegalPleadingQueryRepositoryGateway,
+    @Inject(AnalysisToolClientInssBenefitCommandRepositoryGateway)
+    private readonly analysisToolClientInssBenefitCommandRepositoryGateway: AnalysisToolClientInssBenefitCommandRepositoryGateway,
+    @Inject(AnalysisToolClientLegalProceedingCommandRepositoryGateway)
+    private readonly analysisToolClientLegalProceedingCommandRepositoryGateway: AnalysisToolClientLegalProceedingCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -199,6 +207,44 @@ export class UpdateLegalPleadingUseCase {
       await this.updateLegalPleadingDocuments(updatedLegalPleading, dto);
 
     transactions.push(...legalPleadingDocumentTransaction);
+
+    if (dto.json.inssBenefitNumbers !== undefined) {
+      const deleteOld =
+        existingLegalPleading.analysisToolClient.analysisToolClientInssBenefit.map(
+          (b) =>
+            this.analysisToolClientInssBenefitCommandRepositoryGateway.deleteAnalysisToolClientInssBenefit(
+              b.id,
+            ),
+        );
+      const createNew = dto.json.inssBenefitNumbers.map((number) =>
+        this.analysisToolClientInssBenefitCommandRepositoryGateway.createAnalysisToolClientInssBenefit(
+          new AnalysisToolClientInssBenefitEntity({
+            inssBenefitNumber: number,
+            analysisToolClient,
+          }),
+        ),
+      );
+      transactions.push(...deleteOld, ...createNew);
+    }
+
+    if (dto.json.legalProceedingNumbers !== undefined) {
+      const deleteOld =
+        existingLegalPleading.analysisToolClient.analysisToolClientLegalProceeding.map(
+          (p) =>
+            this.analysisToolClientLegalProceedingCommandRepositoryGateway.deleteAnalysisToolClientLegalProceeding(
+              p.id,
+            ),
+        );
+      const createNew = dto.json.legalProceedingNumbers.map((number) =>
+        this.analysisToolClientLegalProceedingCommandRepositoryGateway.createAnalysisToolClientLegalProceeding(
+          new AnalysisToolClientLegalProceedingEntity({
+            legalProceedingNumber: number,
+            analysisToolClient,
+          }),
+        ),
+      );
+      transactions.push(...deleteOld, ...createNew);
+    }
 
     const transactionResult =
       await this.baseTransactionRepositoryGateway.execute(transactions);

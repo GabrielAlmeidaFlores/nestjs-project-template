@@ -183,7 +183,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
     const systemInstruction = promptResponse.prompt;
 
-    const results = await Promise.all(
+    const settledResults = await Promise.allSettled(
       documentsToAnalyze.map(async (documentQueryResult) => {
         const creditTransaction =
           await this.consumeOrganizationCreditUseCase.execute(
@@ -197,7 +197,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         );
 
         const analysisResult =
-          await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+          await this.generativeIaGateway.generateFlashLiteResponseFromPromptAndFiles(
             GenerateResponseInputModel.build({
               systemInstruction,
               prompt: periodContext,
@@ -216,7 +216,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
                     probatoryPurpose: {
                       type: ['string', 'null'],
                       description:
-                        'Finalidade probatória do documento (string ou null)',
+                        'Identificação do tipo do documento + Finalidade probatória do documento (string ou null)',
                     },
                   },
                   required: ['documentYear', 'probatoryPurpose'],
@@ -259,7 +259,7 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
 
         const analyzedDocument =
           AnalyzeRuralTimelineAnalysisPeriodDocumentItemResponseDto.build({
-            documentId: documentQueryResult.id.toString(),
+            ruralTimelineAnalysisPeriodDocumentId: documentQueryResult.id,
             ...(parsedResult.documentYear !== null && {
               documentYear: parsedResult.documentYear,
             }),
@@ -281,6 +281,17 @@ export class AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase {
         };
       }),
     );
+
+    const results = settledResults.flatMap((r) =>
+      r.status === 'fulfilled' ? [r.value] : [],
+    );
+
+    if (results.length === 0) {
+      return AnalyzeRuralTimelineAnalysisPeriodDocumentResponseDto.build({
+        analyzedDocuments: [],
+        totalAnalyzed: 0,
+      });
+    }
 
     const creditTransactions = results.map((r) => r.creditTransaction);
     const updatedDocuments = results.map((r) => r.updatedDocument);

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import rehypeRaw from 'rehype-raw';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
@@ -12,14 +13,11 @@ export class MarkdownConverterService extends MarkdownConverterGateway {
   protected override readonly _type = MarkdownConverterService.name;
 
   public async convertToHtml(markdown: string): Promise<string> {
-    if (/<[a-z][\s\S]*>/i.test(markdown)) {
-      return markdown;
-    }
-
     const file = await unified()
       .use(remarkParse)
       .use(remarkGfm)
-      .use(remarkRehype)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeRaw)
       .use(rehypeStringify)
       .process(markdown);
 

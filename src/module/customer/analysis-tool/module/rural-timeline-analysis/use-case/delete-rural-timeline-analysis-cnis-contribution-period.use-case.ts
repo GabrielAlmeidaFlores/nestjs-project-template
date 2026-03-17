@@ -6,6 +6,7 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/command/rural-timeline-analysis-cnis-contribution-period.command.repository.gateway';
 import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period/query/rural-timeline-analysis-cnis-contribution-period.query.repository.gateway';
+import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/command/rural-timeline-analysis-cnis-contribution-period-under-minimum.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { RuralTimelineAnalysisCnisContributionPeriodId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/value-object/rural-timeline-analysis-cnis-contribution-period-id/rural-timeline-analysis-cnis-contribution-period-id.value-object';
 import { DeleteRuralTimelineAnalysisCnisContributionPeriodResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/delete-rural-timeline-analysis-cnis-contribution-period.response.dto';
@@ -28,6 +29,10 @@ export class DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase {
     private readonly ruralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway,
     @Inject(RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway,
+    @Inject(
+      RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
+    )
+    private readonly ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
   ) {}
@@ -72,11 +77,14 @@ export class DeleteRuralTimelineAnalysisCnisContributionPeriodUseCase {
       throw new RuralTimelineAnalysisCnisContributionPeriodNotFoundError();
     }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute(
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.deleteAllByContributionPeriodId(
+        contributionPeriodId,
+      ),
       this.ruralTimelineAnalysisCnisContributionPeriodCommandRepositoryGateway.deleteRuralTimelineAnalysisCnisContributionPeriod(
         contributionPeriodId,
       ),
-    );
+    ]);
 
     await transaction.commit();
 
