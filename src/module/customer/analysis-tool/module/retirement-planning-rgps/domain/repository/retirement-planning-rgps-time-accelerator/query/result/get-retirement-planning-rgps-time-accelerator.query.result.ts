@@ -13,7 +13,6 @@ export class GetRetirementPlanningRgpsTimeAcceleratorQueryResult extends BaseBui
   public readonly periodStart: Date | null;
   public readonly periodEnd: Date | null;
   public readonly affectsQualifyingPeriod: boolean | null;
-  public readonly timeGained: string | null;
   public readonly viability: string | null;
   public readonly technicalNote: string | null;
   public readonly recognitionInss: string;

@@ -1,70 +1,194 @@
 import { GenerateContentParameters, GoogleGenAI, Part } from '@google/genai';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as fileType from 'file-type';
-import jsPDF from 'jspdf';
 
 import { GenerativeIaApiKeyInvalidError } from '@infra/generative-ia/error/generative-ia-api-key-invalid.error';
 import { GenerativeIaConnectionError } from '@infra/generative-ia/error/generative-ia-connection.error';
 import { GenerativeIaFunctionHandlerNotFoundError } from '@infra/generative-ia/error/generative-ia-function-handler-not-found.error';
 import { GenerativeIaQuotaExceededError } from '@infra/generative-ia/error/generative-ia-quota-exceeded.error';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
+import { GeminiResultOutputModel } from '@infra/generative-ia/implementation/gemini/model/output/gemini-result.output.model';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { GenerativeIaPartType } from '@infra/generative-ia/type/generative-ia-part.type';
 import { GenerativeIaApplicationVariable } from '@shared/system/constant/application-variable/source/generative-ia.application-variable';
+import { ObservabilityLogInputModel } from '@shared/system/observability/model/input/observability-log.input.model';
+import { ObservabilityGateway } from '@shared/system/observability/observability.gateway';
+import { withSpan } from '@shared/system/tracing/tracer';
 
 @Injectable()
 export class GeminiService implements GenerativeIaGateway {
+  private static readonly TEMPERATURE_FOR_JSON_MODE = 0;
+  private static readonly TEMPERATURE_FOR_MARKDOWN_MODE = 0.1;
+  private static readonly TOP_P_VALUE = 0.95;
+  private static readonly TOP_K_VALUE = 40;
+
   protected readonly _type = GeminiService.name;
 
-  private readonly googleGenerativeAI: GoogleGenAI;
+  private readonly FALLBACK_MODELS: Record<string, string>;
 
-  public constructor() {
+  private readonly GENERATIVE_IA_RULES: string[];
+
+  private readonly googleGenerativeAI: GoogleGenAI;
+  private readonly urlRegex: RegExp;
+  private readonly fileTypeCache: Map<string, string>;
+  private readonly hashSubstringLength: number;
+
+  public constructor(
+    @Inject(ObservabilityGateway)
+    private readonly observabilityGateway: ObservabilityGateway,
+  ) {
+    this.hashSubstringLength = 32;
+    this.urlRegex = /\bhttps?:\/\/[^\s"'<>]+/i;
+    this.fileTypeCache = new Map<string, string>();
     this.googleGenerativeAI = new GoogleGenAI({
       apiKey: GenerativeIaApplicationVariable.GENERATIVE_IA_GEMINI_API_KEY,
     });
+    this.FALLBACK_MODELS = {
+      'gemini-3-pro-preview': 'gemini-3-flash-preview',
+      'gemini-3-flash-preview': 'gemini-2.0-flash',
+    };
+    this.GENERATIVE_IA_RULES = [
+      `
+role: act as a technical documentation specialist.
+task: generate responses exclusively in standard semantic markdown optimized for direct html parsing.
+
+formatting rules:
+- structure: organize the response using markdown headers (#, ##, ###). follow a strict hierarchy and never skip levels.
+- data representation: present all structured data using markdown tables with column separators (| column |). never simulate tables using spaces, tabs, or alignment.
+- lists: use simple bullet points (-) or numbered lists (1.) only when necessary for sequences or grouped items. avoid excessive nesting.
+- diagrams and drawings: do not create ascii diagrams, visual layouts, borders, flowcharts, or text drawings. do not use characters such as /, , +, =, or unicode box-drawing symbols to simulate structure. structure must rely only on headers, tables, and minimal lists.
+- output format: return raw markdown only. do not wrap the response in code blocks and do not use json unless explicitly requested.
+- document organization: structure the content as a clear report containing an introduction, a main body, and a conclusion.
+- technology references: do not mention internal tools, systems, or technologies used to generate the response.
+- identifiers and metadata: do not return identifiers, system references, codes, tracking values, or any form of metadata. return only the human-readable information requested by the user.
+- technical terms: avoid mentioning implementation terms related to internal data structures or system identifiers. present only the final information relevant to the user.
+`,
+    ];
   }
 
   public async generateFlashLiteResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 5_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 2_000;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
+
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateFlashResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 8_192;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 6_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 4_000;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-flash-preview',
-      maxOutputTokens,
-    );
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
+
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-flash-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   public async generateHighQualityResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
   ): Promise<string | null> {
-    const maxOutputTokens = 10_000;
+    const MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE = 16_000;
+    const MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE = 8_192;
 
-    return await this.generateResponseFromPromptAndFiles(
-      props,
-      'gemini-3-pro-preview',
-      maxOutputTokens,
-    );
+    const maxOutputTokens = props.responseConfig
+      ? MAX_OUTPUT_TOKENS_FOR_JSON_RESPONSE
+      : MAX_OUTPUT_TOKENS_FOR_MARKDOWN_RESPONSE;
+
+    try {
+      return await this.generateResponseFromPromptAndFiles(
+        props,
+        'gemini-3-pro-preview',
+        maxOutputTokens,
+      );
+    } catch {
+      throw new GenerativeIaConnectionError();
+    }
   }
 
   private async generateResponseFromPromptAndFiles(
     props: GenerateResponseInputModel,
     model: string,
     maxOutputTokens: number,
+    isRetry = false,
   ): Promise<string | null> {
+    const startedAt = Date.now();
+
+    return withSpan(`Gemini.generateContent`, async (span) => {
+      span.setAttributes({
+        'llm.provider': 'google',
+        'llm.model': model,
+        'llm.max_output_tokens': maxOutputTokens,
+        'llm.is_retry': isRetry,
+        'llm.has_files': (props.promptFiles?.length ?? 0) > 0,
+        'llm.has_tools': (props.tools?.length ?? 0) > 0,
+        'llm.has_conversation_history':
+          (props.conversationHistory?.length ?? 0) > 0,
+        'llm.structured_json_mode': props.responseConfig !== undefined,
+      });
+
+      const result = await this.executeGenerateResponseFromPromptAndFiles(
+        props,
+        model,
+        maxOutputTokens,
+        isRetry,
+      );
+
+      span.setAttributes({
+        'llm.token.input': result.inputTokens,
+        'llm.token.output': result.outputTokens,
+        'llm.token.total': result.totalTokens,
+        'llm.model.used': result.model,
+      });
+
+      this.observabilityGateway.emitInfo(
+        ObservabilityLogInputModel.build({
+          scope: GeminiService.name,
+          message: `Gemini.generateContent [${result.model}]`,
+          attributes: {
+            'llm.model': result.model,
+            'llm.token.input': result.inputTokens,
+            'llm.token.output': result.outputTokens,
+            'llm.token.total': result.totalTokens,
+            'llm.duration_ms': Date.now() - startedAt,
+            'llm.is_retry': isRetry,
+          },
+        }),
+      );
+
+      return result.text;
+    });
+  }
+
+  private async executeGenerateResponseFromPromptAndFiles(
+    props: GenerateResponseInputModel,
+    model: string,
+    maxOutputTokens: number,
+    isRetry = false,
+  ): Promise<GeminiResultOutputModel> {
     const promptPart: Part[] = [];
     const systemInstructionParts: Part[] = [];
 
@@ -75,6 +199,10 @@ export class GeminiService implements GenerativeIaGateway {
     if (props.systemInstruction !== undefined) {
       systemInstructionParts.push({ text: props.systemInstruction });
     }
+
+    this.GENERATIVE_IA_RULES.forEach((rule) => {
+      systemInstructionParts.push({ text: rule });
+    });
 
     if (props.promptFiles !== undefined) {
       const fileParts = await this.buildPartWithFileContent(props.promptFiles);
@@ -102,15 +230,22 @@ export class GeminiService implements GenerativeIaGateway {
       });
     }
 
+    const isStructuredJsonMode = props.responseConfig !== undefined;
+    const temperature = isStructuredJsonMode
+      ? GeminiService.TEMPERATURE_FOR_JSON_MODE
+      : GeminiService.TEMPERATURE_FOR_MARKDOWN_MODE;
+
     const contentConfig = {
       model,
       contents: contents.length > 0 ? contents : { role: 'user', parts: [] },
-      config: {
-        temperature: 0.1,
-        maxOutputTokens,
-        topP: 0.95,
-        topK: 40,
-      },
+      config: isStructuredJsonMode
+        ? { temperature, maxOutputTokens }
+        : {
+            temperature,
+            maxOutputTokens,
+            topP: GeminiService.TOP_P_VALUE,
+            topK: GeminiService.TOP_K_VALUE,
+          },
     } as GenerateContentParameters;
 
     if (props.responseConfig !== undefined) {
@@ -131,10 +266,10 @@ export class GeminiService implements GenerativeIaGateway {
       }
     }
 
-    const unifiedInstruction = `${props.systemInstruction ?? ''} ${props.prompt ?? ''}`;
-
-    const URL_REGEX = /\bhttps?:\/\/[^\s"'<>]+/gi;
-    const hasUrl = URL_REGEX.test(unifiedInstruction);
+    const hasUrl =
+      (props.systemInstruction !== undefined &&
+        this.urlRegex.test(props.systemInstruction)) ||
+      (props.prompt !== undefined && this.urlRegex.test(props.prompt));
 
     if (contentConfig.config) {
       const toolsList: Array<unknown> = [];
@@ -149,7 +284,7 @@ export class GeminiService implements GenerativeIaGateway {
         const functionDeclarations = props.tools.map((tool) => ({
           name: tool.name,
           description: tool.description,
-          parameters: tool.parameters,
+          parameters: this.sanitizeJsonSchema(tool.parameters),
         }));
 
         toolsList.push({
@@ -168,28 +303,36 @@ export class GeminiService implements GenerativeIaGateway {
       };
     }
 
-    if (
-      props.tools !== undefined &&
-      props.toolHandlers !== undefined &&
-      props.tools.length > 0
-    ) {
-      return await this.generateWithFunctionCalling(
-        contentConfig,
-        props.toolHandlers,
-      );
-    }
-
     try {
+      if (
+        props.tools !== undefined &&
+        props.toolHandlers !== undefined &&
+        props.tools.length > 0
+      ) {
+        return await this.generateWithFunctionCalling(
+          contentConfig,
+          props.toolHandlers,
+          model,
+        );
+      }
+
       const result =
         await this.googleGenerativeAI.models.generateContent(contentConfig);
 
-      return result.text ?? null;
+      return GeminiResultOutputModel.build({
+        text:
+          typeof result.text === 'string'
+            ? this.stripCodeFence(result.text)
+            : null,
+        model,
+        inputTokens: result.usageMetadata?.promptTokenCount ?? 0,
+        outputTokens: result.usageMetadata?.candidatesTokenCount ?? 0,
+        totalTokens: result.usageMetadata?.totalTokenCount ?? 0,
+      });
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes('fetch failed')) {
-          throw new GenerativeIaConnectionError({
-            originalError: error.message,
-          });
+          throw new GenerativeIaConnectionError();
         }
 
         if (
@@ -205,6 +348,29 @@ export class GeminiService implements GenerativeIaGateway {
         ) {
           throw new GenerativeIaQuotaExceededError();
         }
+
+        if (
+          error.message.includes('UNAVAILABLE') ||
+          error.message.includes('503')
+        ) {
+          const fallbackModel = this.FALLBACK_MODELS[model];
+
+          if (fallbackModel !== undefined && !isRetry) {
+            const fallbackText = await this.generateResponseFromPromptAndFiles(
+              props,
+              fallbackModel,
+              maxOutputTokens,
+              true,
+            );
+            return GeminiResultOutputModel.build({
+              text: fallbackText,
+              model: fallbackModel,
+              inputTokens: 0,
+              outputTokens: 0,
+              totalTokens: 0,
+            });
+          }
+        }
       }
 
       throw error;
@@ -217,9 +383,13 @@ export class GeminiService implements GenerativeIaGateway {
       string,
       (params: Record<string, unknown>) => Promise<unknown>
     >,
-  ): Promise<string | null> {
+    model: string,
+  ): Promise<GeminiResultOutputModel> {
     const MAX_FUNCTION_CALLS = 10;
     let callCount = 0;
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
+    let totalTokens = 0;
     const conversationHistory: Array<unknown> = Array.isArray(
       contentConfig.contents,
     )
@@ -233,10 +403,20 @@ export class GeminiService implements GenerativeIaGateway {
           contents: conversationHistory as never,
         });
 
+        totalInputTokens += result.usageMetadata?.promptTokenCount ?? 0;
+        totalOutputTokens += result.usageMetadata?.candidatesTokenCount ?? 0;
+        totalTokens += result.usageMetadata?.totalTokenCount ?? 0;
+
         const functionCalls = result.functionCalls;
 
         if (functionCalls === undefined || functionCalls.length === 0) {
-          return result.text ?? null;
+          return GeminiResultOutputModel.build({
+            text: result.text ?? null,
+            model,
+            inputTokens: totalInputTokens,
+            outputTokens: totalOutputTokens,
+            totalTokens,
+          });
         }
 
         const candidates = result.candidates;
@@ -303,9 +483,7 @@ export class GeminiService implements GenerativeIaGateway {
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message.includes('fetch failed')) {
-            throw new GenerativeIaConnectionError({
-              originalError: error.message,
-            });
+            throw new GenerativeIaConnectionError();
           }
 
           if (
@@ -327,7 +505,13 @@ export class GeminiService implements GenerativeIaGateway {
       }
     }
 
-    return 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.';
+    return GeminiResultOutputModel.build({
+      text: 'Houve um erro ao processar sua mensagem. Por favor, tente novamente.',
+      model,
+      inputTokens: totalInputTokens,
+      outputTokens: totalOutputTokens,
+      totalTokens,
+    });
   }
 
   private async buildPartWithFileContent(
@@ -339,54 +523,82 @@ export class GeminiService implements GenerativeIaGateway {
           return { text: content } as Part;
         }
 
-        let fileData = await fileType.fileTypeFromBuffer(content);
+        // Cria hash simples do buffer para cache
+        const contentHash = Buffer.from(content)
+          .toString('base64')
+          .substring(0, this.hashSubstringLength);
 
-        if (fileData === undefined) {
-          const textContext = content.toString('utf-8');
-          const pdfBuffer = this.generatePdfFromText(textContext);
-          fileData = await fileType.fileTypeFromBuffer(pdfBuffer);
-          content = pdfBuffer;
-        }
+        let mimeType = this.fileTypeCache.get(contentHash);
 
-        if (fileData === undefined) {
-          return null;
+        if (mimeType === undefined) {
+          const fileData = await fileType.fileTypeFromBuffer(content);
+
+          if (fileData !== undefined) {
+            mimeType = fileData.mime;
+          } else {
+            mimeType = 'text/plain';
+          }
+
+          this.fileTypeCache.set(contentHash, mimeType);
         }
 
         return {
           inlineData: {
-            mimeType: fileData.mime,
+            mimeType,
             data: content.toString('base64'),
           },
         } as Part;
       }),
     );
 
-    return results.filter((part): part is Part => part !== null);
+    return results;
   }
 
-  private generatePdfFromText(text: string): Buffer {
-    const doc = new jsPDF();
-    const margin = 10;
-    const lineHeight = 7;
-    let y = margin;
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const maxWidth = pageWidth - margin * 2;
-    const textLines = doc.splitTextToSize(text, maxWidth) as string[];
-
-    for (const line of textLines) {
-      if (y + lineHeight > pageHeight - margin) {
-        doc.addPage();
-        y = margin;
-      }
-      doc.text(line, margin, y);
-      y += lineHeight;
+  private stripCodeFence(text: string | null): string | null {
+    if (text === null) {
+      return text;
     }
 
-    const pdfArrayBuffer = doc.output('arraybuffer');
-    const pdfBuffer = Buffer.from(pdfArrayBuffer);
+    return text
+      .replace(/^```(?:\w+)?\n/gm, '')
+      .replace(/\n```$/gm, '')
+      .replace(/```/g, '')
+      .trim();
+  }
 
-    return pdfBuffer;
+  private sanitizeJsonSchema(
+    schema: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const sanitized: Record<string, unknown> = { ...schema };
+
+    if (sanitized['type'] === 'array' && sanitized['items'] === undefined) {
+      sanitized['items'] = {};
+    }
+
+    if (
+      sanitized['properties'] !== null &&
+      typeof sanitized['properties'] === 'object'
+    ) {
+      const sanitizedProperties: Record<string, unknown> = {};
+
+      for (const [key, value] of Object.entries(
+        sanitized['properties'] as Record<string, unknown>,
+      )) {
+        sanitizedProperties[key] =
+          value !== null && typeof value === 'object'
+            ? this.sanitizeJsonSchema(value as Record<string, unknown>)
+            : value;
+      }
+
+      sanitized['properties'] = sanitizedProperties;
+    }
+
+    if (sanitized['items'] !== null && typeof sanitized['items'] === 'object') {
+      sanitized['items'] = this.sanitizeJsonSchema(
+        sanitized['items'] as Record<string, unknown>,
+      );
+    }
+
+    return sanitized;
   }
 }

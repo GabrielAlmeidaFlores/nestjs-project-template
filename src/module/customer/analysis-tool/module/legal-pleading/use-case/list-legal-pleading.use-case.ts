@@ -72,7 +72,7 @@ export class ListLegalPleadingUseCase {
               : null;
 
           const legalPleadingResult =
-            legalPleadingQueryResult.legalPleadingAddress
+            legalPleadingQueryResult.legalPleadingResult
               ? GetLegalPleadingResultResponseDto.build({
                   ...legalPleadingQueryResult.legalPleadingResult,
                 })

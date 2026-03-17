@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
 import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { CnisProcessorModule } from '@lib/cnis-processor/cnis-processor.module';
+import { MarkdownConverterModule } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
 import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
@@ -11,6 +12,7 @@ import { RuralTimelineAnalysisController } from '@module/customer/analysis-tool/
 import { AddRuralTimelineAnalysisCnisDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-cnis-document.use-case';
 import { AddRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/add-rural-timeline-analysis-period-document.use-case';
 import { AnalyzeRuralTimelineAnalysisPeriodDocumentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/analyze-rural-timeline-analysis-period-document.use-case';
+import { CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
 import { CreateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { CreateRuralTimelineAnalysisPeriodEconomicAspectsUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-economic-aspects.use-case';
 import { CreateRuralTimelineAnalysisPeriodFamilyGroupMemberUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/create-rural-timeline-analysis-period-family-group-member.use-case';
@@ -38,6 +40,7 @@ import { GenerateRuralTimelineConsolidatedDocumentAnalysisUseCase } from '@modul
 import { GetRuralTimelineAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-analysis.use-case';
 import { GetRuralTimelineCnisAnalysisUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/get-rural-timeline-cnis-analysis.use-case';
 import { ListRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/list-rural-timeline-analysis-cnis-contribution-period.use-case';
+import { SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/simulate-rural-timeline-analysis-cnis-contribution-period-adjustment.use-case';
 import { SyncRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/sync-rural-timeline-analysis-cnis-contribution-period.use-case';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUnderMinimumUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-cnis-contribution-period-under-minimum.use-case';
 import { UpdateRuralTimelineAnalysisCnisContributionPeriodUseCase } from '@module/customer/analysis-tool/module/rural-timeline-analysis/use-case/update-rural-timeline-analysis-cnis-contribution-period.use-case';
@@ -67,6 +70,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     ExportDocumentModule,
     FileProcessorModule,
     GenerativeIaModule,
+    MarkdownConverterModule,
     OrganizationCreditModule,
     OrganizationSessionModule,
     PaymentPlanModule,
@@ -117,6 +121,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
     UpdateRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
     DeleteRuralTimelineCnisContributionPeriodOverdueContributionUseCase,
+    SimulateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
+    CreateRuralTimelineAnalysisCnisContributionPeriodAdjustmentUseCase,
   ],
   exports: [],
 })

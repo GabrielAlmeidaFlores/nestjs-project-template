@@ -1,5 +1,9 @@
+import { GenderEnum } from '@core/domain/schema/enum/gender.enum';
+import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
+import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
+import { AnalysisToolClientTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/enum/analysis-tool-client-type.enum';
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { SpeechGeneratorId } from '@module/customer/analysis-tool/module/speech-generator/domain/schema/entity/speech-generator/value-object/speech-generator-id/speech-generator-id.value-object';
@@ -18,6 +22,24 @@ export class GetSpeechGeneratorClientResponseDto extends BaseBuildableDtoObject 
 
   @ResponseDtoStringProperty({ required: false })
   public name?: string;
+
+  @ResponseDtoValueObjectProperty(FederalDocument, { required: false })
+  public federalDocument?: FederalDocument;
+
+  @ResponseDtoValueObjectProperty(Email, { required: false })
+  public email?: Email;
+
+  @ResponseDtoValueObjectProperty(PhoneNumber, { required: false })
+  public phoneNumber?: PhoneNumber;
+
+  @ResponseDtoDateProperty({ required: false })
+  public birthDate?: Date;
+
+  @ResponseDtoEnumProperty(GenderEnum, { required: false })
+  public gender?: GenderEnum;
+
+  @ResponseDtoEnumProperty(AnalysisToolClientTypeEnum, { required: false })
+  public clientType?: AnalysisToolClientTypeEnum;
 
   @ResponseDtoStringProperty({ required: false })
   public profilePicture?: string;

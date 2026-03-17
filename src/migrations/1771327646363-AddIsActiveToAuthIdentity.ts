@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddIsActiveToAuthIdentity1740326400000 implements MigrationInterface {
-  name = 'AddIsActiveToAuthIdentity1740326400000';
+export class AddIsActiveToAuthIdentity1771327646363 implements MigrationInterface {
+  name = 'AddIsActiveToAuthIdentity1771327646363';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

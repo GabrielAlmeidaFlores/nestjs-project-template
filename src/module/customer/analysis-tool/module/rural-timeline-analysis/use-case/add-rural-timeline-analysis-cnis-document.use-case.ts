@@ -5,6 +5,7 @@ import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.v
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { CnisAnalyzerGateway } from '@lib/cnis-analyzer/cnis-analyzer-gateway';
+import { TetoInssData } from '@lib/cnis-analyzer/data/teto.inss';
 import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
@@ -17,6 +18,7 @@ import { RuralTimelineAnalysisCnisContributionPeriodQueryRepositoryGateway } fro
 import { RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-cnis-contribution-period-under-minimum/command/rural-timeline-analysis-cnis-contribution-period-under-minimum.command.repository.gateway';
 import { RuralTimelineAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-document/command/rural-timeline-analysis-document.command.repository.gateway';
 import { RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-period-pending-exit-date/command/rural-timeline-analysis-period-pending-exit-date.command.repository.gateway';
+import { RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-cnis-contribution-period-overdue-contribution/command/rural-timeline-cnis-contribution-period-overdue-contribution.command.repository.gateway';
 import { RuralTimelineAnalysisId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis/value-object/rural-timeline-analysis-id/rural-timeline-analysis-id.value-object';
 import { ContributionAdjustmentIntentTypeEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/contribution-adjustment-intent-type.enum';
 import { RuralTimelineAnalysisCnisContributionPeriodStatusEnum } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-cnis-contribution-period/enum/rural-timeline-analysis-cnis-contribution-period-status.enum';
@@ -26,6 +28,8 @@ import { RuralTimelineAnalysisDocumentTypeEnum } from '@module/customer/analysis
 import { RuralTimelineAnalysisDocumentEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-document/rural-timeline-analysis-document.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/rural-timeline-analysis-period-pending-exit-date.entity';
 import { RuralTimelineAnalysisPeriodPendingExitDateId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-analysis-period-pending-exit-date/value-object/rural-timeline-analysis-period-pending-exit-date-id/rural-timeline-analysis-period-pending-exit-date-id.value-object';
+import { RuralTimelineCnisContributionPeriodOverdueContributionEntity } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/rural-timeline-cnis-contribution-period-overdue-contribution.entity';
+import { RuralTimelineCnisContributionPeriodOverdueContributionId } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/schema/entity/rural-timeline-cnis-contribution-period-overdue-contribution/value-object/rural-timeline-cnis-contribution-period-overdue-contribution-id/rural-timeline-cnis-contribution-period-overdue-contribution-id.value-object';
 import { AddRuralTimelineAnalysisCnisDocumentRequestDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/request/add-rural-timeline-analysis-cnis-document.request.dto';
 import { AddRuralTimelineAnalysisCnisDocumentResponseDto } from '@module/customer/analysis-tool/module/rural-timeline-analysis/dto/response/add-rural-timeline-analysis-cnis-document.response.dto';
 import { RuralTimelineAnalysisNotFoundError } from '@module/customer/analysis-tool/module/rural-timeline-analysis/error/rural-timeline-analysis-not-found.error';
@@ -34,6 +38,7 @@ import { PaymentPlanPaidResourceTypeEnum } from '@module/customer/payment-plan/d
 import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer/payment-plan/use-case-gateway/get-payment-plan-paid-resource-prompt.use-case-gateway';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
+import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
 export class AddRuralTimelineAnalysisCnisDocumentUseCase {
@@ -56,6 +61,10 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     private readonly ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway: RuralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway,
     @Inject(RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway)
     private readonly ruralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway: RuralTimelineAnalysisPeriodPendingExitDateCommandRepositoryGateway,
+    @Inject(
+      RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
+    )
+    private readonly ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway: RuralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(FileProcessorGateway)
@@ -96,9 +105,15 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
         RuralTimelineAnalysisNotFoundError,
       );
 
-    const bucketKey = await this.fileProcessorGateway.uploadFile(
-      dto.cnisDocument,
-    );
+    const fileBuffer = dto.cnisDocument.base64.decodeToBuffer();
+    const fileModel = FileModel.build({
+      buffer: fileBuffer,
+      originalName: dto.cnisDocument.originalFileName,
+      size: fileBuffer.length,
+      encoding: 'base64',
+    });
+
+    const bucketKey = await this.fileProcessorGateway.uploadFile(fileModel);
 
     const cnisDocumentEntity = new RuralTimelineAnalysisDocumentEntity({
       type: RuralTimelineAnalysisDocumentTypeEnum.CNIS,
@@ -106,9 +121,8 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       ruralTimelineId: ruralTimelineAnalysisId,
     });
 
-    const cnisData = await this.cnisProcessorGateway.parseCnisDocument(
-      dto.cnisDocument.buffer,
-    );
+    const cnisData =
+      await this.cnisProcessorGateway.parseCnisDocument(fileBuffer);
 
     const analysisToolClient = new AnalysisToolClientEntity({
       ...analysisToolRecordQueryResult.analysisToolClient,
@@ -155,7 +169,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
 
     const batchSize = 5;
     const contributionPeriods = cnisAnalysis.tempoDeContribuicao.filter(
-      (period) => period.dados !== undefined,
+      (period) => period.dados?.data?.dataInicio !== null,
     );
 
     for (let i = 0; i < contributionPeriods.length; i += batchSize) {
@@ -163,17 +177,67 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
       const batchOperations = [];
 
       for (const contributionPeriod of batch) {
+        const matchingSocialSecurityRelation =
+          cnisData.socialSecurityRelations?.find(
+            (relation) =>
+              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
+                contributionPeriod.origemDoVinculo &&
+              contributionPeriod.dados !== undefined &&
+              relation.socialSecurityAffiliationInfo.dataInicio ===
+                contributionPeriod.dados.data?.dataInicio,
+          );
+
+        const willHavePendingExitDates =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationInfo !==
+            undefined &&
+          matchingSocialSecurityRelation.socialSecurityAffiliationInfo
+            .dataFim === undefined;
+
+        const earningsForAverage =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory.filter(
+            (e) => e.remuneracao !== undefined,
+          ) ?? [];
+
+        let averageContributionAmount: DecimalValue | null = null;
+        if (earningsForAverage.length > 0) {
+          const total = earningsForAverage.reduce(
+            (sum, e) =>
+              sum + Number(e.remuneracao?.replace(/\./g, '').replace(',', '.')),
+            0,
+          );
+          averageContributionAmount = new DecimalValue(
+            total / earningsForAverage.length,
+          );
+        }
+
+        const indicadorPendencia = ['PEXT'];
+        const delayPayment =
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory.some(
+            (earning) => {
+              if (
+                earning.indicadores === undefined ||
+                earning.indicadores === ''
+              ) {
+                return false;
+              }
+              return indicadorPendencia.includes(earning.indicadores);
+            },
+          ) ?? false;
+
         const contributionPeriodEntity =
           new RuralTimelineAnalysisCnisContributionPeriodEntity({
             ruralTimelineId: ruralTimelineAnalysisId,
+            sequencial: contributionPeriod.seq,
             employmentRelationshipSource:
               contributionPeriod.origemDoVinculo ?? null,
             startDate: contributionPeriod.dados?.data?.dataInicio ?? null,
             endDate: contributionPeriod.dados?.data?.dataFim ?? null,
             category: contributionPeriod.tipoDoVinculo ?? null,
-            qualifyingPeriod: contributionPeriod.dados?.meses ?? 0,
-            status: RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
-            averageContributionAmount: null,
+            status:
+              willHavePendingExitDates || delayPayment
+                ? RuralTimelineAnalysisCnisContributionPeriodStatusEnum.PENDING
+                : RuralTimelineAnalysisCnisContributionPeriodStatusEnum.VALID,
+            averageContributionAmount,
             contributionAdjustmentIntent:
               ContributionAdjustmentIntentTypeEnum.PROVISIONAL,
             externalSupplementationIntent: false,
@@ -187,16 +251,6 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
           ),
         );
 
-        const matchingSocialSecurityRelation =
-          cnisData.socialSecurityRelations?.find(
-            (relation) =>
-              relation.socialSecurityAffiliationInfo.origemDoVinculo ===
-                contributionPeriod.origemDoVinculo &&
-              contributionPeriod.dados !== undefined &&
-              relation.socialSecurityAffiliationInfo.dataInicio ===
-                contributionPeriod.dados.data?.dataInicio,
-          );
-
         if (
           matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
         ) {
@@ -205,23 +259,27 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
               earnings.competencia !== undefined &&
               earnings.remuneracao !== undefined
             ) {
-              const underMinimumEntity =
-                new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
-                  {
-                    contributionDate: earnings.competencia,
-                    contributionAmount: new DecimalValue(
-                      parseFloat(earnings.remuneracao),
-                    ),
-                    ruralTimelineCnisContributionPeriodId:
-                      contributionPeriodEntity.id,
-                  },
-                );
-
-              batchOperations.push(
-                this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
-                  underMinimumEntity,
-                ),
+              const year = earnings.competencia.getFullYear();
+              const tetoData = TetoInssData.find((t) => t.ano === year);
+              const salarioMinimo = tetoData?.salarioMinimo ?? 0;
+              const amount = Number(
+                earnings.remuneracao.replace(/\./g, '').replace(',', '.'),
               );
+
+              if (salarioMinimo > 0 && amount < salarioMinimo) {
+                batchOperations.push(
+                  this.ruralTimelineAnalysisCnisContributionPeriodUnderMinimumCommandRepositoryGateway.createRuralTimelineAnalysisCnisContributionPeriodUnderMinimum(
+                    new RuralTimelineAnalysisCnisContributionPeriodUnderMinimumEntity(
+                      {
+                        contributionDate: earnings.competencia,
+                        contributionAmount: new DecimalValue(amount),
+                        ruralTimelineCnisContributionPeriodId:
+                          contributionPeriodEntity.id,
+                      },
+                    ),
+                  ),
+                );
+              }
             }
           }
         }
@@ -245,7 +303,11 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
                     id: new RuralTimelineAnalysisPeriodPendingExitDateId(),
                     pendingDate: earnings.competencia,
                     pendingAmount: new DecimalValue(
-                      parseFloat(earnings.remuneracao),
+                      Number(
+                        earnings.remuneracao
+                          .replace(/\./g, '')
+                          .replace(',', '.'),
+                      ),
                     ),
                     ruralTimelineCnisContributionPeriodId:
                       contributionPeriodEntity.id,
@@ -277,6 +339,32 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
             );
           }
         }
+        if (
+          delayPayment &&
+          matchingSocialSecurityRelation?.socialSecurityAffiliationEarningsHistory
+        ) {
+          for (const earnings of matchingSocialSecurityRelation.socialSecurityAffiliationEarningsHistory) {
+            if (
+              earnings.indicadores !== undefined &&
+              indicadorPendencia.includes(earnings.indicadores) &&
+              earnings.competencia !== undefined
+            ) {
+              batchOperations.push(
+                this.ruralTimelineCnisContributionPeriodOverdueContributionCommandRepositoryGateway.createRuralTimelineCnisContributionPeriodOverdueContribution(
+                  new RuralTimelineCnisContributionPeriodOverdueContributionEntity(
+                    {
+                      id: new RuralTimelineCnisContributionPeriodOverdueContributionId(),
+                      overdueDate: earnings.competencia,
+                      paymentDate: null,
+                      ruralTimelineCnisContributionPeriodId:
+                        contributionPeriodEntity.id,
+                    },
+                  ),
+                ),
+              );
+            }
+          }
+        }
       }
 
       const batchTransaction =
@@ -292,7 +380,7 @@ export class AddRuralTimelineAnalysisCnisDocumentUseCase {
     );
 
     return AddRuralTimelineAnalysisCnisDocumentResponseDto.build({
-      cnisDocumentId: cnisDocumentEntity.id.toString(),
+      ruralTimelineAnalysisDocumentId: cnisDocumentEntity.id,
     });
   }
 

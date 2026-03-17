@@ -20,6 +20,7 @@ import {
   LegalPleadingStatisticsQueryResult,
 } from '@module/customer/analysis-tool/module/legal-pleading/domain/repository/legal-pleading/query/result/legal-pleading-statistics.query.result';
 import { LegalPleadingPetitionTypeEnum } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/enum/legal-pleading-petition-type.enum';
+import { LegalPleadingCode } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-code/legal-pleading-code.value-object';
 import { LegalPleadingId } from '@module/customer/analysis-tool/module/legal-pleading/domain/schema/entity/legal-pleading/value-object/legal-pleading-id/legal-pleading-id.value-object';
 import { AuthIdentityId } from '@module/generic/auth-identity/domain/schema/entity/auth-identity/value-object/auth-identity-id/auth-identity-id.value-object';
 
@@ -282,6 +283,35 @@ export class LegalPleadingTypeormQueryRepository
     });
 
     return total;
+  }
+
+  public async findMaxCodeByOrganizationIdAndAuthIdentityId(
+    organizationId: OrganizationId,
+    authIdentityId: AuthIdentityId,
+  ): Promise<number> {
+    const whereClause = {
+      createdBy: {
+        organization: { id: organizationId.toString() },
+        customer: { authIdentity: { id: authIdentityId.toString() } },
+      },
+    };
+
+    const [record, count] = await Promise.all([
+      this.repository.findOne({
+        where: whereClause,
+        withDeleted: true,
+        order: { createdAt: 'DESC' },
+      }),
+      this.repository.count({
+        where: whereClause,
+        withDeleted: true,
+      }),
+    ]);
+
+    const codeFromRecord =
+      record !== null ? new LegalPleadingCode(record.code).toNumber() : 0;
+
+    return Math.max(codeFromRecord, count);
   }
 
   public async countByLegalPleadingIdAndOrganizationIdAndAuthIdentityId(

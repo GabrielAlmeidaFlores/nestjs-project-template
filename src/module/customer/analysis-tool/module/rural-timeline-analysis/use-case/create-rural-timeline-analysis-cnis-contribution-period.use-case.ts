@@ -89,7 +89,7 @@ export class CreateRuralTimelineAnalysisCnisContributionPeriodUseCase {
     await transaction.commit();
 
     return CreateRuralTimelineAnalysisCnisContributionPeriodResponseDto.build({
-      contributionPeriodId,
+      ruralTimelineAnalysisCnisContributionPeriodId: contributionPeriodId,
     });
   }
 

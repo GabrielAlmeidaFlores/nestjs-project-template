@@ -36,6 +36,7 @@ export class GetInsuranceQualityAnalysisResultQueryResultAutoMapperProfile {
             ? new FederalDocument(source.clientFederalDocument)
             : null,
         clientBirthDate: source.clientBirthDate,
+        clientLastAffiliationDate: source.clientLastAffiliationDate,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
       });
