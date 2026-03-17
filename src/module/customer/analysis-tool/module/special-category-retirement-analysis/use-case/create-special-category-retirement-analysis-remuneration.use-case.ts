@@ -18,7 +18,9 @@ export class CreateSpecialCategoryRetirementAnalysisRemunerationUseCase {
   public constructor(
     @Inject(SpecialCategoryRetirementAnalysisQueryRepositoryGateway)
     private readonly specialCategoryRetirementAnalysisQueryRepositoryGateway: SpecialCategoryRetirementAnalysisQueryRepositoryGateway,
-    @Inject(SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway)
+    @Inject(
+      SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway,
+    )
     private readonly remunerationCommandRepositoryGateway: SpecialCategoryRetirementAnalysisRemunerationCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
@@ -35,13 +37,12 @@ export class CreateSpecialCategoryRetirementAnalysisRemunerationUseCase {
       SpecialCategoryRetirementAnalysisNotFoundError,
     );
 
-    const remuneration = new SpecialCategoryRetirementAnalysisRemunerationEntity(
-      {
+    const remuneration =
+      new SpecialCategoryRetirementAnalysisRemunerationEntity({
         specialCategoryRetirementAnalysisId: analysisId,
         remunerationReferenceMonthYear: dto.remunerationReferenceMonthYear,
         remunerationGrossAmount: dto.remunerationGrossAmount ?? null,
-      },
-    );
+      });
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       this.remunerationCommandRepositoryGateway.createSpecialCategoryRetirementAnalysisRemuneration(

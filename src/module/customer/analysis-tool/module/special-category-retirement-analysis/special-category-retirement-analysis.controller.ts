@@ -272,7 +272,8 @@ export class SpecialCategoryRetirementAnalysisController {
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
     )
     specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
-    @Body() dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchRequestDto,
+    @Body()
+    dto: CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisWorkPeriodBatchResponseDto> {
     return await this.createWorkPeriodBatchUseCase.execute(
       organizationSessionData,
@@ -477,7 +478,8 @@ export class SpecialCategoryRetirementAnalysisController {
       new ParseValueObjectPipe(SpecialCategoryRetirementAnalysisId),
     )
     specialCategoryRetirementAnalysisId: SpecialCategoryRetirementAnalysisId,
-    @Body() dto: CreateSpecialCategoryRetirementAnalysisRemunerationBatchRequestDto,
+    @Body()
+    dto: CreateSpecialCategoryRetirementAnalysisRemunerationBatchRequestDto,
   ): Promise<CreateSpecialCategoryRetirementAnalysisRemunerationBatchResponseDto> {
     return await this.createRemunerationBatchUseCase.execute(
       organizationSessionData,
