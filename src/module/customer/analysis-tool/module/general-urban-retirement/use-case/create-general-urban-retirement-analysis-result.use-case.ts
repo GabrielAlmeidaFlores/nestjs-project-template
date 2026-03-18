@@ -102,6 +102,8 @@ export class CreateGeneralUrbanRetirementAnalysisResultUseCase {
         generalUrbanRetirementAnalysisQueryResult.careerStartDate,
       publicServiceStartDate:
         generalUrbanRetirementAnalysisQueryResult.publicServiceStartDate,
+      currentPosition:
+        generalUrbanRetirementAnalysisQueryResult.currentPosition,
       generalUrbanRetirementBenefitAnalysis:
         generalUrbanRetirementAnalysisQueryResult.generalUrbanRetirementBenefitAnalysis,
       periods: generalUrbanRetirementAnalysisQueryResult.periods,
@@ -162,6 +164,8 @@ export class CreateGeneralUrbanRetirementAnalysisResultUseCase {
       name: generalUrbanRetirementAnalysisQueryResult.name ?? null,
       benefitType:
         generalUrbanRetirementAnalysisQueryResult.benefitType ?? null,
+      currentPosition:
+        generalUrbanRetirementAnalysisQueryResult.currentPosition ?? null,
       generalUrbanRetirementBenefitAnalysis:
         generalUrbanRetirementAnalysisQueryResult.generalUrbanRetirementBenefitAnalysis ??
         null,
