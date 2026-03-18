@@ -26,22 +26,22 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async getCnisCompleteAnalysis(
+ public async getCnisCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON;
-- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS, nÃ£o realize calculos como valores salÃ¡riais, use estritamente os fornecidos.
-- NÃ£o incluir tag <br> na resposta.
-Para a SeÃ§Ã£o 6 (CÃLCULOS), siga rigorosamente as instruÃ§Ãµes abaixo:
-1. Para cÃ¡lculos ja efetuados, nÃ£o calcule novamente, use os valores fornecidos na anÃ¡lise do CNIS.
-2. Garanta precisÃ£o absoluta nos cÃ¡lculos numÃ©ricos e de datas que precisar fazer.
-3. Formate todos os valores monetÃ¡rios no padrÃ£o brasileiro: prefixo "R$ ", milhar com ponto e decimal com vÃ­rgula (ex.: R$ 1.234,56).
+- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
+- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
+- Não incluir tag <br> na resposta.
+Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
+1. Para cálculos ja efetuados, não calcule novamente, use os valores fornecidos na análise do CNIS.
+2. Garanta precisão absoluta nos cálculos numéricos e de datas que precisar fazer.
+3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56).
 
-AnÃ¡lise processada do CNIS:
+Análise processada do CNIS:
   ${cnisAnalysisJson}
 `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -101,7 +101,7 @@ AnÃ¡lise processada do CNIS:
     );
   }
 
-  public async getRetirementPlanningRppsCompleteAnalysis(
+public async getRetirementPlanningRppsCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -117,12 +117,12 @@ AnÃ¡lise processada do CNIS:
               totalContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuiÃ§Ã£o de serviÃ§o. Exemplo: 44 anos, 3 meses e 12 dias',
+                  'Tempo total de contribuição de serviço. Exemplo: 44 anos, 3 meses e 12 dias',
               },
               publicServiceContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuiÃ§Ã£o em serviÃ§o pÃºblico. Exemplo: 30 anos, 2 meses e 5 dias',
+                  'Tempo total de contribuição em serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
               },
               positionTenureTime: {
                 type: 'string',
@@ -136,17 +136,17 @@ AnÃ¡lise processada do CNIS:
               },
               insuredProfession: {
                 type: 'string',
-                description: 'ProfissÃ£o do segurado',
+                description: 'Profissão do segurado',
               },
               totalCareerTime: {
                 type: 'string',
                 description:
-                  'Tempo total de carreira. Exemplo: 50 anos, 1 mÃªs e 20 dias',
+                  'Tempo total de carreira. Exemplo: 50 anos, 1 mês e 20 dias',
               },
               publicServiceStartDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de ingresso no serviÃ§o pÃºblico',
+                description: 'Data de ingresso no serviço público',
               },
               retirementOptions: {
                 type: 'array',
@@ -170,22 +170,22 @@ AnÃ¡lise processada do CNIS:
                     hasHighestAdvantageValue: {
                       type: 'boolean',
                       description:
-                        'Indica se a regra oferece o maior valor no cenÃ¡rio mais vantajoso',
+                        'Indica se a regra oferece o maior valor no cenário mais vantajoso',
                     },
                     retirementAnalysis: {
                       type: 'string',
                       description:
-                        'AnÃ¡lise detalhada da aposentadoria em formato markdown',
+                        'Análise detalhada da aposentadoria em formato markdown',
                     },
                     isEligible: {
                       type: 'boolean',
                       description:
-                        'Indica se o segurado Ã© elegÃ­vel para a regra',
+                        'Indica se o segurado é elegível para a regra',
                     },
                     eligibilityAvailableAt: {
                       type: 'string',
                       description:
-                        'Data em que o segurado se tornarÃ¡ elegÃ­vel para a regra, se aplicÃ¡vel',
+                        'Data em que o segurado se tornará elegível para a regra, se aplicável',
                     },
                   },
                   required: [
@@ -234,26 +234,26 @@ AnÃ¡lise processada do CNIS:
                   periods: {
                     type: 'array',
                     description:
-                      'Lista de perÃ­odos de atividade especial analisados',
+                      'Lista de períodos de atividade especial analisados',
                     items: {
                       type: 'object',
                       properties: {
                         label: {
                           type: 'string',
-                          description: 'RÃ³tulo descritivo do perÃ­odo',
+                          description: 'Rótulo descritivo do período',
                         },
                         start: {
                           type: 'string',
-                          description: 'Data de inÃ­cio no formato YYYY-MM-DD',
+                          description: 'Data de início no formato YYYY-MM-DD',
                         },
                         end: {
                           type: 'string',
-                          description: 'Data de tÃ©rmino no formato YYYY-MM-DD',
+                          description: 'Data de término no formato YYYY-MM-DD',
                         },
                         recognized: {
                           type: 'boolean',
                           description:
-                            'Indica se o perÃ­odo foi reconhecido como atividade especial',
+                            'Indica se o período foi reconhecido como atividade especial',
                         },
                         companyName: {
                           type: 'string',
@@ -265,38 +265,38 @@ AnÃ¡lise processada do CNIS:
                         },
                         role: {
                           type: 'string',
-                          description: 'Cargo/funÃ§Ã£o exercida',
+                          description: 'Cargo/função exercida',
                         },
                         employmentLinkStartDate: {
                           type: 'string',
-                          description: 'Data de inÃ­cio do vÃ­nculo',
+                          description: 'Data de início do vínculo',
                         },
                         employmentLinkEndDate: {
                           type: 'string',
-                          description: 'Data de tÃ©rmino do vÃ­nculo',
+                          description: 'Data de término do vínculo',
                         },
                         employmentLinkSupportingDocument: {
                           type: 'string',
-                          description: 'Documento comprobatÃ³rio do vÃ­nculo',
+                          description: 'Documento comprobatório do vínculo',
                         },
                         employmentLinkPresentInCNIS: {
                           type: 'boolean',
-                          description: 'Indica se o vÃ­nculo consta no CNIS',
+                          description: 'Indica se o vínculo consta no CNIS',
                         },
                         employmentLinkEarningsInCNIS: {
                           type: 'boolean',
                           description:
-                            'Indica se hÃ¡ remuneraÃ§Ãµes registradas no CNIS',
+                            'Indica se há remunerações registradas no CNIS',
                         },
                         harmfulAgentsHasAny: {
                           type: 'boolean',
                           description:
-                            'Indica se hÃ¡ agentes nocivos identificados',
+                            'Indica se há agentes nocivos identificados',
                         },
                         harmfulAgentsExposureFrequency: {
                           type: 'array',
                           description:
-                            'FrequÃªncia e intensidade de exposiÃ§Ã£o aos agentes',
+                            'Frequência e intensidade de exposição aos agentes',
                           items: {
                             type: 'object',
                             properties: {
@@ -306,19 +306,18 @@ AnÃ¡lise processada do CNIS:
                               },
                               intensity: {
                                 type: 'string',
-                                description: 'Intensidade da exposiÃ§Ã£o',
+                                description: 'Intensidade da exposição',
                               },
                               characteristic: {
                                 type: 'string',
-                                description: 'CaracterÃ­stica do agente',
+                                description: 'Característica do agente',
                               },
                             },
                           },
                         },
                         harmfulAgentsInformationSource: {
                           type: 'array',
-                          description:
-                            'Fontes de informaÃ§Ã£o sobre os agentes',
+                          description: 'Fontes de informação sobre os agentes',
                           items: {
                             type: 'string',
                           },
@@ -333,44 +332,44 @@ AnÃ¡lise processada do CNIS:
                         harmfulAgentsEffectivePPE: {
                           type: 'boolean',
                           description:
-                            'Indica se havia EPI (Equipamento de ProteÃ§Ã£o Individual) eficaz',
+                            'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
                         },
                         legalFrameworkOccupationalCategoryDecree: {
                           type: 'string',
                           description:
-                            'Decreto aplicÃ¡vel Ã  categoria profissional',
+                            'Decreto aplicável à categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryCode: {
                           type: 'string',
-                          description: 'CÃ³digo da categoria profissional',
+                          description: 'Código da categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryDescription: {
                           type: 'string',
-                          description: 'DescriÃ§Ã£o da categoria profissional',
+                          description: 'Descrição da categoria profissional',
                         },
                         legalFrameworkHarmfulAgentDecree: {
                           type: 'string',
-                          description: 'Decreto aplicÃ¡vel ao agente nocivo',
+                          description: 'Decreto aplicável ao agente nocivo',
                         },
                         legalFrameworkHarmfulAgentCode: {
                           type: 'string',
-                          description: 'CÃ³digo do agente nocivo',
+                          description: 'Código do agente nocivo',
                         },
                         legalFrameworkHarmfulAgentDescription: {
                           type: 'string',
-                          description: 'DescriÃ§Ã£o do agente nocivo',
+                          description: 'Descrição do agente nocivo',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardReference: {
                           type: 'string',
-                          description: 'ReferÃªncia da jurisprudÃªncia/norma',
+                          description: 'Referência da jurisprudência/norma',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardCode: {
                           type: 'string',
-                          description: 'CÃ³digo da norma tÃ©cnica',
+                          description: 'Código da norma técnica',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardDescription: {
                           type: 'string',
-                          description: 'DescriÃ§Ã£o da norma tÃ©cnica',
+                          description: 'Descrição da norma técnica',
                         },
                         technicalConclusionSpecialTimeRecognized: {
                           type: 'boolean',
@@ -379,11 +378,11 @@ AnÃ¡lise processada do CNIS:
                         },
                         technicalConclusionJustification: {
                           type: 'string',
-                          description: 'Justificativa da conclusÃ£o tÃ©cnica',
+                          description: 'Justificativa da conclusão técnica',
                         },
                         additionalNotes: {
                           type: 'string',
-                          description: 'ObservaÃ§Ãµes adicionais relevantes',
+                          description: 'Observações adicionais relevantes',
                         },
                       },
                       required: [
@@ -421,7 +420,7 @@ AnÃ¡lise processada do CNIS:
                   },
                   analysisResult: {
                     type: 'string',
-                    description: 'AnÃ¡lise completa em formato markdown',
+                    description: 'Análise completa em formato markdown',
                   },
                 },
                 required: ['periods', 'analysisResult'],
@@ -742,43 +741,42 @@ AnÃ¡lise processada do CNIS:
             properties: {
               items: {
                 type: 'array',
-                description: 'Lista de itens de conversÃ£o de tempo especial',
+                description: 'Lista de itens de conversão de tempo especial',
                 items: {
                   type: 'object',
                   properties: {
                     originJobTitleDescription: {
                       type: 'string',
-                      description: 'DescriÃ§Ã£o do cargo/funÃ§Ã£o de origem',
+                      description: 'Descrição do cargo/função de origem',
                     },
                     periodDateRangeText: {
                       type: 'string',
                       description:
-                        'Texto descritivo do perÃ­odo (ex: 01/2010 a 12/2015)',
+                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
                     },
                     harmfulExposureAgentsText: {
                       type: 'string',
                       description:
-                        'DescriÃ§Ã£o dos agentes nocivos identificados',
+                        'Descrição dos agentes nocivos identificados',
                     },
                     specialTimeDurationText: {
                       type: 'string',
                       description:
-                        'DuraÃ§Ã£o do tempo especial em formato textual',
+                        'Duração do tempo especial em formato textual',
                     },
                     convertedTimeDurationText: {
                       type: 'string',
                       description:
-                        'DuraÃ§Ã£o do tempo convertido em formato textual',
+                        'Duração do tempo convertido em formato textual',
                     },
                     conversionFactorValue: {
                       type: 'number',
-                      description:
-                        'Fator de conversÃ£o aplicado (ex: 1.4, 1.2)',
+                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
                     },
                     recognitionStatusEnum: {
                       type: 'string',
                       description:
-                        'Status de reconhecimento do perÃ­odo especial',
+                        'Status de reconhecimento do período especial',
                     },
                   },
                 },
@@ -853,42 +851,42 @@ AnÃ¡lise processada do CNIS:
       properties: {
         label: {
           type: 'string',
-          description: 'RÃ³tulo descritivo do perÃ­odo',
+          description: 'Rótulo descritivo do período',
         },
         start: {
           type: 'string',
-          description: 'Data de inÃ­cio no formato YYYY-MM-DD',
+          description: 'Data de início no formato YYYY-MM-DD',
         },
         end: {
           type: 'string',
-          description: 'Data de tÃ©rmino no formato YYYY-MM-DD',
+          description: 'Data de término no formato YYYY-MM-DD',
         },
         recognized: {
           type: 'boolean',
-          description: 'Indica se o perÃ­odo foi reconhecido',
+          description: 'Indica se o período foi reconhecido',
         },
         companyName: { type: 'string', description: 'Nome da empresa' },
         companyCNPJ: { type: 'string', description: 'CNPJ da empresa' },
-        role: { type: 'string', description: 'Cargo/funÃ§Ã£o' },
+        role: { type: 'string', description: 'Cargo/função' },
         employmentLinkStartDate: {
           type: 'string',
-          description: 'InÃ­cio do vÃ­nculo',
+          description: 'Início do vínculo',
         },
         employmentLinkEndDate: {
           type: 'string',
-          description: 'Fim do vÃ­nculo',
+          description: 'Fim do vínculo',
         },
         employmentLinkSupportingDocument: {
           type: 'string',
-          description: 'Documento comprobatÃ³rio',
+          description: 'Documento comprobatório',
         },
         employmentLinkPresentInCNIS: {
           type: 'boolean',
-          description: 'VÃ­nculo consta no CNIS',
+          description: 'Vínculo consta no CNIS',
         },
         employmentLinkEarningsInCNIS: {
           type: 'boolean',
-          description: 'RemuneraÃ§Ãµes no CNIS',
+          description: 'Remunerações no CNIS',
         },
         harmfulAgentsExposureFrequency: {
           type: 'array',
@@ -929,9 +927,9 @@ AnÃ¡lise processada do CNIS:
     const pcdPeriodSchema = {
       type: 'object',
       properties: {
-        label: { type: 'string', description: 'RÃ³tulo do perÃ­odo PCD' },
-        start: { type: 'string', description: 'Data de inÃ­cio YYYY-MM-DD' },
-        end: { type: 'string', description: 'Data de tÃ©rmino YYYY-MM-DD' },
+        label: { type: 'string', description: 'Rótulo do período PCD' },
+        start: { type: 'string', description: 'Data de início YYYY-MM-DD' },
+        end: { type: 'string', description: 'Data de término YYYY-MM-DD' },
         recognized: {
           type: 'boolean',
           description: 'Tempo como PCD reconhecido',
@@ -946,7 +944,7 @@ AnÃ¡lise processada do CNIS:
         employmentLinkEarningsInCNIS: { type: 'boolean' },
         disabilityType: {
           type: 'string',
-          description: 'Tipo de deficiÃªncia (ex: FÃ­sica)',
+          description: 'Tipo de deficiência (ex: Física)',
         },
         cidCodes: {
           type: 'array',
@@ -955,11 +953,11 @@ AnÃ¡lise processada do CNIS:
         },
         cifClassification: {
           type: 'string',
-          description: 'ClassificaÃ§Ã£o CIF',
+          description: 'Classificação CIF',
         },
         disabilityDegree: {
           type: 'string',
-          description: 'Grau da deficiÃªncia (Leve, Moderado, Grave)',
+          description: 'Grau da deficiência (Leve, Moderado, Grave)',
         },
         legalFrameworkByDisabilityType: { type: 'string' },
         legalFrameworkMainLaw: { type: 'string' },
@@ -991,7 +989,7 @@ AnÃ¡lise processada do CNIS:
             ni: { type: 'string', description: 'NI' },
             lawsuitNumber: {
               type: 'string',
-              description: 'NÃºmero do processo judicial',
+              description: 'Número do processo judicial',
             },
           },
           required: ['name', 'birthDate'],
@@ -999,7 +997,7 @@ AnÃ¡lise processada do CNIS:
         rulesSummary: {
           type: 'object',
           description:
-            'NÃºmero total de regras analisadas, elegÃ­veis e nÃ£o elegÃ­veis',
+            'Número total de regras analisadas, elegíveis e não elegíveis',
           properties: {
             totalAnalyzed: {
               type: 'number',
@@ -1007,11 +1005,11 @@ AnÃ¡lise processada do CNIS:
             },
             eligibleCount: {
               type: 'number',
-              description: 'Quantidade de regras elegÃ­veis',
+              description: 'Quantidade de regras elegíveis',
             },
             nonEligibleCount: {
               type: 'number',
-              description: 'Quantidade de regras nÃ£o elegÃ­veis',
+              description: 'Quantidade de regras não elegíveis',
             },
           },
           required: ['totalAnalyzed', 'eligibleCount', 'nonEligibleCount'],
@@ -1032,12 +1030,12 @@ AnÃ¡lise processada do CNIS:
               },
               result: {
                 type: 'boolean',
-                description: 'Se o segurado Ã© elegÃ­vel',
+                description: 'Se o segurado é elegível',
               },
               rightDate: {
                 type: 'string',
                 description:
-                  'Data do direito no formato YYYY-MM-DD (quando elegÃ­vel)',
+                  'Data do direito no formato YYYY-MM-DD (quando elegível)',
               },
               estimatedRMI: {
                 type: 'number',
@@ -1049,12 +1047,12 @@ AnÃ¡lise processada do CNIS:
               },
               highestLawsuitValue: {
                 type: 'boolean',
-                description: 'Indica se possui o maior valor de aÃ§Ã£o',
+                description: 'Indica se possui o maior valor de ação',
               },
               detailedRuleAnalysis: {
                 type: 'string',
                 description:
-                  'AnÃ¡lise detalhada da regra (requisitos, cÃ¡lculo RMI, valor da causa)',
+                  'Análise detalhada da regra (requisitos, cálculo RMI, valor da causa)',
               },
             },
             required: [
@@ -1074,7 +1072,7 @@ AnÃ¡lise processada do CNIS:
             properties: {
               startDate: {
                 type: 'string',
-                description: 'Data de inÃ­cio YYYY-MM-DD',
+                description: 'Data de início YYYY-MM-DD',
               },
               endDate: {
                 type: 'string',
@@ -1093,12 +1091,12 @@ AnÃ¡lise processada do CNIS:
               },
               type: {
                 type: 'string',
-                description: 'ClassificaÃ§Ã£o do perÃ­odo',
+                description: 'Classificação do período',
               },
-              location: { type: 'string', description: 'Local do perÃ­odo' },
+              location: { type: 'string', description: 'Local do período' },
               duration: {
                 type: 'string',
-                description: 'DuraÃ§Ã£o (ex: 4 anos)',
+                description: 'Duração (ex: 4 anos)',
               },
             },
             required: [
@@ -1113,27 +1111,27 @@ AnÃ¡lise processada do CNIS:
         specialTimeAnalysis: {
           type: 'array',
           description:
-            'AnÃ¡lise do tempo especial (perÃ­odos com agentes nocivos)',
+            'Análise do tempo especial (períodos com agentes nocivos)',
           items: specialTimePeriodSchema,
         },
         pcdTimeAnalysis: {
           type: 'array',
           description:
-            'AnÃ¡lise do tempo PCD (perÃ­odos como pessoa com deficiÃªncia)',
+            'Análise do tempo PCD (períodos como pessoa com deficiência)',
           items: pcdPeriodSchema,
         },
         contributionTimeSummary: {
           type: 'object',
-          description: 'Tempo de ServiÃ§o/ContribuiÃ§Ã£o',
+          description: 'Tempo de Serviço/Contribuição',
           properties: {
             totalContributionTime: {
               type: 'string',
               description:
-                'Tempo total de contribuiÃ§Ã£o. Ex: 44 anos, 5 meses e 22 dias',
+                'Tempo total de contribuição. Ex: 44 anos, 5 meses e 22 dias',
             },
             publicServiceContributionTime: {
               type: 'string',
-              description: 'Tempo no serviÃ§o pÃºblico',
+              description: 'Tempo no serviço público',
             },
             positionTenureTime: {
               type: 'string',
@@ -1150,7 +1148,7 @@ AnÃ¡lise processada do CNIS:
             publicServiceStartDate: {
               type: 'string',
               description:
-                'Ingresso no serviÃ§o pÃºblico (anterior/posterior a 16/12/1998 ou data)',
+                'Ingresso no serviço público (anterior/posterior a 16/12/1998 ou data)',
             },
             pcdTime: {
               type: 'string',
@@ -1160,6 +1158,21 @@ AnÃ¡lise processada do CNIS:
               type: 'string',
               description: 'Tempo comum. Ex: 12 anos 3 meses',
             },
+            contributionTimeWithoutResolvingOutstandingIssues: {
+              type: 'string',
+              description:
+                'Tempo de contribuição sem resolver pendências. Ex: 10 anos 2 meses',
+            },
+            contributionTimeAfterResolvingOutstandingIssues: {
+              type: 'string',
+              description:
+                'Tempo de contribuição após resolver pendências. Ex: 22 anos 5 meses',
+            },
+            contributionTimeWithAccelerators: {
+              type: 'string',
+              description:
+                'Tempo de contribuição considerando aceleradores. Ex: 30 anos 8 meses',
+            }
           },
           required: [
             'totalContributionTime',
@@ -1172,16 +1185,16 @@ AnÃ¡lise processada do CNIS:
         rppsSummary: {
           type: 'string',
           description:
-            'Resumo de Regras AplicÃ¡veis para Aposentadoria Urbana Comum (RPPS)',
+            'Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS)',
         },
         finalAnalysis: {
           type: 'string',
-          description: 'AnÃ¡lise final consolidada',
+          description: 'Análise final consolidada',
         },
         completeAnalysisReport: {
           type: 'string',
           description:
-            'RelatÃ³rio completo da anÃ¡lise em Markdown, pronto para exportaÃ§Ã£o em PDF/DOCX. Deve conter todas as seÃ§Ãµes: Dados do cliente, Tempo de ServiÃ§o/ContribuiÃ§Ã£o, AnÃ¡lise de Regras de Aposentadoria, resumo e lista de regras (elegÃ­veis e nÃ£o elegÃ­veis), Linha do tempo integrada, AnÃ¡lise do tempo especial, AnÃ¡lise do tempo PCD, Resumo de Regras AplicÃ¡veis para Aposentadoria Urbana Comum (RPPS) e AnÃ¡lise final. Formate com tÃ­tulos (##), listas e tabelas em Markdown quando aplicÃ¡vel.',
+            'Relatório completo da análise em Markdown, pronto para exportação em PDF/DOCX. Deve conter todas as seções: Dados do cliente, Tempo de Serviço/Contribuição, Análise de Regras de Aposentadoria, resumo e lista de regras (elegíveis e não elegíveis), Linha do tempo integrada, Análise do tempo especial, Análise do tempo PCD, Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS) e Análise final. Formate com títulos (##), listas e tabelas em Markdown quando aplicável.',
         },
       },
       required: [
