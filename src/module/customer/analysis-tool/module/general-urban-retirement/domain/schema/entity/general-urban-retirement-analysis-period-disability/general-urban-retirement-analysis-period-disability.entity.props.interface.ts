@@ -14,6 +14,7 @@ export interface GeneralUrbanRetirementAnalysisPeriodDisabilityEntityPropsInterf
   category: GeneralUrbanRetirementAnalysisPeriodDisabilityCategoryEnum;
   description: string;
   dailyImpact: string;
+  lawyerObservations?: string | null;
   cidTen: CidTenEntity;
   generalUrbanRetirementAnalysisPeriod: GeneralUrbanRetirementAnalysisPeriodEntity;
 }

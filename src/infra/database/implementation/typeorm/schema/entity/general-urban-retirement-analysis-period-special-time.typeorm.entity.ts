@@ -32,6 +32,13 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity extend
   })
   public endDate: Date;
 
+  @Column({
+    name: 'lawyer_observations',
+    type: 'text',
+    nullable: true,
+  })
+  public lawyerObservations: string | null;
+
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriodSpecialTime,

@@ -39,6 +39,7 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormCommandReposit
       category: props.category,
       description: props.description,
       dailyImpact: props.dailyImpact,
+      lawyerObservations: props.lawyerObservations,
       cid: {
         id: props.cidTen.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity['cid'],

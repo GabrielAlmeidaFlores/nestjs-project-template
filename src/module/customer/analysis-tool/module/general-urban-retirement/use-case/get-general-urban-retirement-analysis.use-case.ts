@@ -151,6 +151,10 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
                 type: p.specialTimePeriod.type,
                 startDate: p.specialTimePeriod.startDate,
                 endDate: p.specialTimePeriod.endDate,
+                ...(p.specialTimePeriod.lawyerObservations !== undefined && {
+                  lawyerObservations:
+                    p.specialTimePeriod.lawyerObservations,
+                }),
                 ...(documents.length > 0 && { documents }),
               },
             );
@@ -173,6 +177,9 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
               category: p.disabilityPeriod.category,
               description: p.disabilityPeriod.description,
               dailyImpact: p.disabilityPeriod.dailyImpact,
+              ...(p.disabilityPeriod.lawyerObservations !== undefined && {
+                lawyerObservations: p.disabilityPeriod.lawyerObservations,
+              }),
               cid: GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto.build({
                 id: p.disabilityPeriod.cid.id,
                 code: p.disabilityPeriod.cid.code,

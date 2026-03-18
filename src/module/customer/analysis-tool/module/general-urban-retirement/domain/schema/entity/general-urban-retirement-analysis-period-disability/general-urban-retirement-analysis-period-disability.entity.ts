@@ -30,6 +30,9 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityEntity extends BaseEn
   @Description('Impacto diário da deficiência')
   public readonly dailyImpact: string;
 
+  @Description('Observações do advogado sobre a deficiência')
+  public readonly lawyerObservations: string | null;
+
   @Description('CID-10 associado à deficiência')
   public readonly cidTen: CidTenEntity;
 
@@ -50,6 +53,7 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityEntity extends BaseEn
     this.category = props.category;
     this.description = props.description;
     this.dailyImpact = props.dailyImpact;
+    this.lawyerObservations = props.lawyerObservations ?? null;
     this.cidTen = props.cidTen;
     this.generalUrbanRetirementAnalysisPeriod =
       props.generalUrbanRetirementAnalysisPeriod;

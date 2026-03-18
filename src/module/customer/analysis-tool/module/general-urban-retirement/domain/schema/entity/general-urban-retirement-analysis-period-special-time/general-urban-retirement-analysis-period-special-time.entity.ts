@@ -16,6 +16,9 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeEntity extends BaseE
   @Description('Data de término do tempo especial')
   public readonly endDate: Date;
 
+  @Description('Observações do advogado sobre o tempo especial')
+  public readonly lawyerObservations: string | null;
+
   @Description('Período associado ao tempo especial')
   public readonly generalUrbanRetirementAnalysisPeriod: GeneralUrbanRetirementAnalysisPeriodEntity | null;
 
@@ -29,6 +32,7 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeEntity extends BaseE
     this.type = props.type;
     this.startDate = props.startDate;
     this.endDate = props.endDate;
+    this.lawyerObservations = props.lawyerObservations ?? null;
     this.generalUrbanRetirementAnalysisPeriod =
       props.generalUrbanRetirementAnalysisPeriod ?? null;
   }

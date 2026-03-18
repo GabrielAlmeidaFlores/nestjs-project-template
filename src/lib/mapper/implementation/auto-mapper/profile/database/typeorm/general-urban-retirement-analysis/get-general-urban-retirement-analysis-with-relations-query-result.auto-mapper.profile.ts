@@ -129,6 +129,10 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
                 type: p.specialTimePeriod.type,
                 startDate: p.specialTimePeriod.startDate,
                 endDate: p.specialTimePeriod.endDate,
+                ...(p.specialTimePeriod.lawyerObservations !== null && {
+                  lawyerObservations:
+                    p.specialTimePeriod.lawyerObservations,
+                }),
                 documents: (p.specialTimePeriod.specialTimeDocuments ?? []).map(
                   (d) =>
                     GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult.build(
@@ -160,6 +164,10 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
                 category: p.disabilityPeriod.category,
                 description: p.disabilityPeriod.description,
                 dailyImpact: p.disabilityPeriod.dailyImpact,
+                ...(p.disabilityPeriod.lawyerObservations !== null && {
+                  lawyerObservations:
+                    p.disabilityPeriod.lawyerObservations,
+                }),
                 cid: {
                   id: new CidTenId(p.disabilityPeriod.cid.id),
                   code: p.disabilityPeriod.cid.code,
