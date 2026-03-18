@@ -47,7 +47,7 @@ export class GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapp
       return GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        generalUrbanRetirementAnalysis: undefined,
+        generalUrbanRetirementAnalysis: null,
         deletedAt: null,
       });
     };

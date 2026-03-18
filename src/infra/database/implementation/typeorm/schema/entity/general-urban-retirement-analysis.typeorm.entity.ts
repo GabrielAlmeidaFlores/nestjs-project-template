@@ -91,55 +91,51 @@ export class GeneralUrbanRetirementAnalysisTypeormEntity extends BaseTypeormEnti
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_result_id' })
-  public generalUrbanRetirementAnalysisResult?:
-    | GeneralUrbanRetirementAnalysisResultTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysisResult: GeneralUrbanRetirementAnalysisResultTypeormEntity | null;
 
   @OneToOne(
     () => AnalysisToolRecordTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public analysisToolRecord?: AnalysisToolRecordTypeormEntity | undefined;
+  public analysisToolRecord: AnalysisToolRecordTypeormEntity | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public documents?:
+  public documents:
     | GeneralUrbanRetirementAnalysisDocumentTypeormEntity[]
-    | undefined;
+    | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisRemunerationTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public remunerations?:
+  public remunerations:
     | GeneralUrbanRetirementAnalysisRemunerationTypeormEntity[]
-    | undefined;
+    | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public legalProceedings?:
+  public legalProceedings:
     | GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity[]
-    | undefined;
+    | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisPeriodTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public periods?:
-    | GeneralUrbanRetirementAnalysisPeriodTypeormEntity[]
-    | undefined;
+  public periods: GeneralUrbanRetirementAnalysisPeriodTypeormEntity[] | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysis,
   )
-  public periodDocuments?:
+  public periodDocuments:
     | GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[]
-    | undefined;
+    | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisTypeormEntity.name;
