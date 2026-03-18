@@ -7,5 +7,6 @@ export interface GeneralUrbanRetirementAnalysisPeriodSpecialTimeEntityPropsInter
   type: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum;
   startDate: Date;
   endDate: Date;
+  lawyerObservations?: string | null;
   generalUrbanRetirementAnalysisPeriod?: GeneralUrbanRetirementAnalysisPeriodEntity | null;
 }

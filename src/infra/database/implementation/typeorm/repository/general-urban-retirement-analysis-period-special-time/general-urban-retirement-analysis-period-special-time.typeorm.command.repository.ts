@@ -35,6 +35,7 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandReposi
       type: props.type,
       startDate: props.startDate,
       endDate: props.endDate,
+      lawyerObservations: props.lawyerObservations,
       generalUrbanRetirementAnalysisPeriod: {
         id: props.generalUrbanRetirementAnalysisPeriod?.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity['generalUrbanRetirementAnalysisPeriod'],

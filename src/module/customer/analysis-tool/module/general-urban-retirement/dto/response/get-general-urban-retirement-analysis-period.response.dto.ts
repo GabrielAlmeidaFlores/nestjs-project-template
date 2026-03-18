@@ -69,6 +69,9 @@ export class GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto exten
   @ResponseDtoDateProperty()
   public endDate: Date;
 
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservations?: string;
+
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto,
     { required: false, isArray: true },
@@ -112,6 +115,9 @@ export class GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto extend
 
   @ResponseDtoStringProperty()
   public dailyImpact: string;
+
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservations?: string;
 
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto,

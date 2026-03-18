@@ -72,6 +72,13 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity extends
   })
   public description: string;
 
+  @Column({
+    name: 'lawyer_observations',
+    type: 'text',
+    nullable: true,
+  })
+  public lawyerObservations: string | null;
+
   @ManyToOne(() => CidTenTypeormEntity)
   @JoinColumn({ name: 'cid_id' })
   public cid: CidTenTypeormEntity | null;
