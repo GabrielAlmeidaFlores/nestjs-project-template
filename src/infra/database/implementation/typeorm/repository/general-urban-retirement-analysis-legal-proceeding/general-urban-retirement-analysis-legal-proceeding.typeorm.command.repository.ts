@@ -12,7 +12,8 @@ import { GeneralUrbanRetirementAnalysisLegalProceedingId } from '@module/custome
 @Injectable()
 export class GeneralUrbanRetirementAnalysisLegalProceedingTypeormCommandRepository
   extends BaseTypeormCommandRepository<GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity>
-  implements GeneralUrbanRetirementAnalysisLegalProceedingCommandRepositoryGateway
+  implements
+    GeneralUrbanRetirementAnalysisLegalProceedingCommandRepositoryGateway
 {
   protected readonly _type =
     GeneralUrbanRetirementAnalysisLegalProceedingTypeormCommandRepository.name;

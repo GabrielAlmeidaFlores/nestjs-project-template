@@ -12,7 +12,8 @@ import { GeneralUrbanRetirementAnalysisPeriodDocumentId } from '@module/customer
 @Injectable()
 export class GeneralUrbanRetirementAnalysisPeriodDocumentTypeormCommandRepository
   extends BaseTypeormCommandRepository<GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity>
-  implements GeneralUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway
+  implements
+    GeneralUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway
 {
   protected readonly _type =
     GeneralUrbanRetirementAnalysisPeriodDocumentTypeormCommandRepository.name;
@@ -27,22 +28,23 @@ export class GeneralUrbanRetirementAnalysisPeriodDocumentTypeormCommandRepositor
   public createGeneralUrbanRetirementAnalysisPeriodDocument(
     props: GeneralUrbanRetirementAnalysisPeriodDocumentEntity,
   ): TransactionType {
-    const payload: Partial<GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity> = {
-      id: props.id.toString(),
-      document: props.document,
-      documentType: props.documentType,
-    };
-    if (props.generalUrbanRetirementAnalysisPeriodSpecialTime != null) {
+    const payload: Partial<GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity> =
+      {
+        id: props.id.toString(),
+        document: props.document,
+        documentType: props.documentType,
+      };
+    if (props.generalUrbanRetirementAnalysisPeriodSpecialTime !== null) {
       payload.generalUrbanRetirementAnalysisPeriodSpecialTime = {
         id: props.generalUrbanRetirementAnalysisPeriodSpecialTime.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity['generalUrbanRetirementAnalysisPeriodSpecialTime'];
     }
-    if (props.generalUrbanRetirementAnalysisPeriodDisability != null) {
+    if (props.generalUrbanRetirementAnalysisPeriodDisability !== null) {
       payload.generalUrbanRetirementAnalysisPeriodDisability = {
         id: props.generalUrbanRetirementAnalysisPeriodDisability.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity['generalUrbanRetirementAnalysisPeriodDisability'];
     }
-    if (props.generalUrbanRetirementAnalysis != null) {
+    if (props.generalUrbanRetirementAnalysis !== null) {
       payload.generalUrbanRetirementAnalysis = {
         id: props.generalUrbanRetirementAnalysis.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity['generalUrbanRetirementAnalysis'];

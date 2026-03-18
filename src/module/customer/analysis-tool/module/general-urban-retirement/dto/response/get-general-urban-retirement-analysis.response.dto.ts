@@ -18,7 +18,7 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @ResponseDto()
 export class GetGeneralUrbanRetirementAnalysisResultResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(() => Object, { required: false })
-  public generalUrbanRetirementCompleteAnalysis?: GeneralUrbanRetirementCompleteAnalysisInterface | null;
+  public generalUrbanRetirementCompleteAnalysis?: GeneralUrbanRetirementCompleteAnalysisInterface;
 
   @ResponseDtoObjectProperty(() => Object, { required: false })
   public generalUrbanRetirementSimplifiedAnalysis?: object;
@@ -38,10 +38,10 @@ export class GetGeneralUrbanRetirementAnalysisResponseDto extends BaseBuildableD
   @ResponseDtoValueObjectProperty(GeneralUrbanRetirementAnalysisId)
   public id: GeneralUrbanRetirementAnalysisId;
 
-  @ResponseDtoDateProperty({required: false})
-  public careerStartDate?: Date ;
+  @ResponseDtoDateProperty({ required: false })
+  public careerStartDate?: Date;
 
-  @ResponseDtoDateProperty({required: false})
+  @ResponseDtoDateProperty({ required: false })
   public publicServiceStartDate?: Date;
 
   @ResponseDtoObjectProperty(() => GetAnalysisToolClientResponseDto)

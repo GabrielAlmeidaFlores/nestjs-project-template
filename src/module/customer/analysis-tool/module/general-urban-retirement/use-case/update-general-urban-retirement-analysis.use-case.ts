@@ -135,7 +135,9 @@ export class UpdateGeneralUrbanRetirementAnalysisUseCase {
         benefitType:
           dto.json.benefitType ?? analysisQueryResult.benefitType ?? null,
         currentPosition:
-          dto.json.currentPosition ?? analysisQueryResult.currentPosition ?? null,
+          dto.json.currentPosition ??
+          analysisQueryResult.currentPosition ??
+          null,
       });
 
     const analysisToolRecord = new AnalysisToolRecordEntity({

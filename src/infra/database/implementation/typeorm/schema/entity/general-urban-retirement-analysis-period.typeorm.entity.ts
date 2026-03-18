@@ -61,26 +61,20 @@ export class GeneralUrbanRetirementAnalysisPeriodTypeormEntity extends BaseTypeo
     () => GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriod,
   )
-  public specialTimePeriod?:
-    | GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity
-    | undefined;
+  public specialTimePeriod: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriod,
   )
-  public disabilityPeriod?:
-    | GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity
-    | undefined;
+  public disabilityPeriod: GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity | null;
 
   @ManyToOne(
     () => GeneralUrbanRetirementAnalysisTypeormEntity,
     (entity) => entity.periods,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis?:
-    | GeneralUrbanRetirementAnalysisTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisPeriodTypeormEntity.name;

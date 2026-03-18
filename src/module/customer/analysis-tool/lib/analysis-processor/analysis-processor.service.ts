@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+﻿import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
@@ -33,15 +33,15 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
   ): Promise<string | null> {
     const prompt = `
 # IMPORTANTE
-- A análise técnica deve se basear prioritariamente na análise já processada do CNIS em formato JSON;
-- Calcule somente os valores que não estiverem presentes na análise já fornecida do CNIS, não realize calculos como valores saláriais, use estritamente os fornecidos.
-- Não incluir tag <br> na resposta.
-Para a Seção 6 (CÁLCULOS), siga rigorosamente as instruções abaixo:
-1. Para cálculos ja efetuados, não calcule novamente, use os valores fornecidos na análise do CNIS.
-2. Garanta precisão absoluta nos cálculos numéricos e de datas que precisar fazer.
-3. Formate todos os valores monetários no padrão brasileiro: prefixo "R$ ", milhar com ponto e decimal com vírgula (ex.: R$ 1.234,56).
+- A anÃ¡lise tÃ©cnica deve se basear prioritariamente na anÃ¡lise jÃ¡ processada do CNIS em formato JSON;
+- Calcule somente os valores que nÃ£o estiverem presentes na anÃ¡lise jÃ¡ fornecida do CNIS, nÃ£o realize calculos como valores salÃ¡riais, use estritamente os fornecidos.
+- NÃ£o incluir tag <br> na resposta.
+Para a SeÃ§Ã£o 6 (CÃLCULOS), siga rigorosamente as instruÃ§Ãµes abaixo:
+1. Para cÃ¡lculos ja efetuados, nÃ£o calcule novamente, use os valores fornecidos na anÃ¡lise do CNIS.
+2. Garanta precisÃ£o absoluta nos cÃ¡lculos numÃ©ricos e de datas que precisar fazer.
+3. Formate todos os valores monetÃ¡rios no padrÃ£o brasileiro: prefixo "R$ ", milhar com ponto e decimal com vÃ­rgula (ex.: R$ 1.234,56).
 
-Análise processada do CNIS:
+AnÃ¡lise processada do CNIS:
   ${cnisAnalysisJson}
 `;
     return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
@@ -117,12 +117,12 @@ Análise processada do CNIS:
               totalContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuição de serviço. Exemplo: 44 anos, 3 meses e 12 dias',
+                  'Tempo total de contribuiÃ§Ã£o de serviÃ§o. Exemplo: 44 anos, 3 meses e 12 dias',
               },
               publicServiceContributionTime: {
                 type: 'string',
                 description:
-                  'Tempo total de contribuição em serviço público. Exemplo: 30 anos, 2 meses e 5 dias',
+                  'Tempo total de contribuiÃ§Ã£o em serviÃ§o pÃºblico. Exemplo: 30 anos, 2 meses e 5 dias',
               },
               positionTenureTime: {
                 type: 'string',
@@ -136,17 +136,17 @@ Análise processada do CNIS:
               },
               insuredProfession: {
                 type: 'string',
-                description: 'Profissão do segurado',
+                description: 'ProfissÃ£o do segurado',
               },
               totalCareerTime: {
                 type: 'string',
                 description:
-                  'Tempo total de carreira. Exemplo: 50 anos, 1 mês e 20 dias',
+                  'Tempo total de carreira. Exemplo: 50 anos, 1 mÃªs e 20 dias',
               },
               publicServiceStartDate: {
                 type: 'string',
                 format: 'date-time',
-                description: 'Data de ingresso no serviço público',
+                description: 'Data de ingresso no serviÃ§o pÃºblico',
               },
               retirementOptions: {
                 type: 'array',
@@ -170,22 +170,22 @@ Análise processada do CNIS:
                     hasHighestAdvantageValue: {
                       type: 'boolean',
                       description:
-                        'Indica se a regra oferece o maior valor no cenário mais vantajoso',
+                        'Indica se a regra oferece o maior valor no cenÃ¡rio mais vantajoso',
                     },
                     retirementAnalysis: {
                       type: 'string',
                       description:
-                        'Análise detalhada da aposentadoria em formato markdown',
+                        'AnÃ¡lise detalhada da aposentadoria em formato markdown',
                     },
                     isEligible: {
                       type: 'boolean',
                       description:
-                        'Indica se o segurado é elegível para a regra',
+                        'Indica se o segurado Ã© elegÃ­vel para a regra',
                     },
                     eligibilityAvailableAt: {
                       type: 'string',
                       description:
-                        'Data em que o segurado se tornará elegível para a regra, se aplicável',
+                        'Data em que o segurado se tornarÃ¡ elegÃ­vel para a regra, se aplicÃ¡vel',
                     },
                   },
                   required: [
@@ -234,26 +234,26 @@ Análise processada do CNIS:
                   periods: {
                     type: 'array',
                     description:
-                      'Lista de períodos de atividade especial analisados',
+                      'Lista de perÃ­odos de atividade especial analisados',
                     items: {
                       type: 'object',
                       properties: {
                         label: {
                           type: 'string',
-                          description: 'Rótulo descritivo do período',
+                          description: 'RÃ³tulo descritivo do perÃ­odo',
                         },
                         start: {
                           type: 'string',
-                          description: 'Data de início no formato YYYY-MM-DD',
+                          description: 'Data de inÃ­cio no formato YYYY-MM-DD',
                         },
                         end: {
                           type: 'string',
-                          description: 'Data de término no formato YYYY-MM-DD',
+                          description: 'Data de tÃ©rmino no formato YYYY-MM-DD',
                         },
                         recognized: {
                           type: 'boolean',
                           description:
-                            'Indica se o período foi reconhecido como atividade especial',
+                            'Indica se o perÃ­odo foi reconhecido como atividade especial',
                         },
                         companyName: {
                           type: 'string',
@@ -265,38 +265,38 @@ Análise processada do CNIS:
                         },
                         role: {
                           type: 'string',
-                          description: 'Cargo/função exercida',
+                          description: 'Cargo/funÃ§Ã£o exercida',
                         },
                         employmentLinkStartDate: {
                           type: 'string',
-                          description: 'Data de início do vínculo',
+                          description: 'Data de inÃ­cio do vÃ­nculo',
                         },
                         employmentLinkEndDate: {
                           type: 'string',
-                          description: 'Data de término do vínculo',
+                          description: 'Data de tÃ©rmino do vÃ­nculo',
                         },
                         employmentLinkSupportingDocument: {
                           type: 'string',
-                          description: 'Documento comprobatório do vínculo',
+                          description: 'Documento comprobatÃ³rio do vÃ­nculo',
                         },
                         employmentLinkPresentInCNIS: {
                           type: 'boolean',
-                          description: 'Indica se o vínculo consta no CNIS',
+                          description: 'Indica se o vÃ­nculo consta no CNIS',
                         },
                         employmentLinkEarningsInCNIS: {
                           type: 'boolean',
                           description:
-                            'Indica se há remunerações registradas no CNIS',
+                            'Indica se hÃ¡ remuneraÃ§Ãµes registradas no CNIS',
                         },
                         harmfulAgentsHasAny: {
                           type: 'boolean',
                           description:
-                            'Indica se há agentes nocivos identificados',
+                            'Indica se hÃ¡ agentes nocivos identificados',
                         },
                         harmfulAgentsExposureFrequency: {
                           type: 'array',
                           description:
-                            'Frequência e intensidade de exposição aos agentes',
+                            'FrequÃªncia e intensidade de exposiÃ§Ã£o aos agentes',
                           items: {
                             type: 'object',
                             properties: {
@@ -306,18 +306,19 @@ Análise processada do CNIS:
                               },
                               intensity: {
                                 type: 'string',
-                                description: 'Intensidade da exposição',
+                                description: 'Intensidade da exposiÃ§Ã£o',
                               },
                               characteristic: {
                                 type: 'string',
-                                description: 'Característica do agente',
+                                description: 'CaracterÃ­stica do agente',
                               },
                             },
                           },
                         },
                         harmfulAgentsInformationSource: {
                           type: 'array',
-                          description: 'Fontes de informação sobre os agentes',
+                          description:
+                            'Fontes de informaÃ§Ã£o sobre os agentes',
                           items: {
                             type: 'string',
                           },
@@ -332,44 +333,44 @@ Análise processada do CNIS:
                         harmfulAgentsEffectivePPE: {
                           type: 'boolean',
                           description:
-                            'Indica se havia EPI (Equipamento de Proteção Individual) eficaz',
+                            'Indica se havia EPI (Equipamento de ProteÃ§Ã£o Individual) eficaz',
                         },
                         legalFrameworkOccupationalCategoryDecree: {
                           type: 'string',
                           description:
-                            'Decreto aplicável à categoria profissional',
+                            'Decreto aplicÃ¡vel Ã  categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryCode: {
                           type: 'string',
-                          description: 'Código da categoria profissional',
+                          description: 'CÃ³digo da categoria profissional',
                         },
                         legalFrameworkOccupationalCategoryDescription: {
                           type: 'string',
-                          description: 'Descrição da categoria profissional',
+                          description: 'DescriÃ§Ã£o da categoria profissional',
                         },
                         legalFrameworkHarmfulAgentDecree: {
                           type: 'string',
-                          description: 'Decreto aplicável ao agente nocivo',
+                          description: 'Decreto aplicÃ¡vel ao agente nocivo',
                         },
                         legalFrameworkHarmfulAgentCode: {
                           type: 'string',
-                          description: 'Código do agente nocivo',
+                          description: 'CÃ³digo do agente nocivo',
                         },
                         legalFrameworkHarmfulAgentDescription: {
                           type: 'string',
-                          description: 'Descrição do agente nocivo',
+                          description: 'DescriÃ§Ã£o do agente nocivo',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardReference: {
                           type: 'string',
-                          description: 'Referência da jurisprudência/norma',
+                          description: 'ReferÃªncia da jurisprudÃªncia/norma',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardCode: {
                           type: 'string',
-                          description: 'Código da norma técnica',
+                          description: 'CÃ³digo da norma tÃ©cnica',
                         },
                         legalFrameworkCaseLawOrTechnicalStandardDescription: {
                           type: 'string',
-                          description: 'Descrição da norma técnica',
+                          description: 'DescriÃ§Ã£o da norma tÃ©cnica',
                         },
                         technicalConclusionSpecialTimeRecognized: {
                           type: 'boolean',
@@ -378,11 +379,11 @@ Análise processada do CNIS:
                         },
                         technicalConclusionJustification: {
                           type: 'string',
-                          description: 'Justificativa da conclusão técnica',
+                          description: 'Justificativa da conclusÃ£o tÃ©cnica',
                         },
                         additionalNotes: {
                           type: 'string',
-                          description: 'Observações adicionais relevantes',
+                          description: 'ObservaÃ§Ãµes adicionais relevantes',
                         },
                       },
                       required: [
@@ -420,7 +421,7 @@ Análise processada do CNIS:
                   },
                   analysisResult: {
                     type: 'string',
-                    description: 'Análise completa em formato markdown',
+                    description: 'AnÃ¡lise completa em formato markdown',
                   },
                 },
                 required: ['periods', 'analysisResult'],
@@ -694,6 +695,18 @@ Análise processada do CNIS:
     );
   }
 
+  public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getGeneralUrbanRetirementCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -714,347 +727,6 @@ Análise processada do CNIS:
       }),
     );
   }
-
-  private getGeneralUrbanRetirementCompleteAnalysisJsonSchema(): object {
-    const specialTimePeriodSchema = {
-      type: 'object',
-      properties: {
-        label: { type: 'string', description: 'Rótulo descritivo do período' },
-        start: {
-          type: 'string',
-          description: 'Data de início no formato YYYY-MM-DD',
-        },
-        end: {
-          type: 'string',
-          description: 'Data de término no formato YYYY-MM-DD',
-        },
-        recognized: {
-          type: 'boolean',
-          description: 'Indica se o período foi reconhecido',
-        },
-        companyName: { type: 'string', description: 'Nome da empresa' },
-        companyCNPJ: { type: 'string', description: 'CNPJ da empresa' },
-        role: { type: 'string', description: 'Cargo/função' },
-        employmentLinkStartDate: {
-          type: 'string',
-          description: 'Início do vínculo',
-        },
-        employmentLinkEndDate: {
-          type: 'string',
-          description: 'Fim do vínculo',
-        },
-        employmentLinkSupportingDocument: {
-          type: 'string',
-          description: 'Documento comprobatório',
-        },
-        employmentLinkPresentInCNIS: {
-          type: 'boolean',
-          description: 'Vínculo consta no CNIS',
-        },
-        employmentLinkEarningsInCNIS: {
-          type: 'boolean',
-          description: 'Remunerações no CNIS',
-        },
-        harmfulAgentsExposureFrequency: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              agent: { type: 'string' },
-              intensity: { type: 'string' },
-              characteristic: { type: 'string' },
-            },
-          },
-        },
-        harmfulAgentsInformationSource: {
-          type: 'array',
-          items: { type: 'string' },
-        },
-        harmfulAgentsIdentifiedAgents: {
-          type: 'array',
-          items: { type: 'string' },
-        },
-        harmfulAgentsEffectivePPE: {
-          type: 'boolean',
-          description: 'EPI eficaz',
-        },
-        legalFrameworkOccupationalCategoryDecree: { type: 'string' },
-        legalFrameworkOccupationalCategoryCode: { type: 'string' },
-        legalFrameworkHarmfulAgentDecree: { type: 'string' },
-        legalFrameworkHarmfulAgentCode: { type: 'string' },
-        legalFrameworkCaseLawOrTechnicalStandardReference: { type: 'string' },
-        legalFrameworkCaseLawOrTechnicalStandardCode: { type: 'string' },
-        technicalConclusionSpecialTimeRecognized: { type: 'boolean' },
-        technicalConclusionJustification: { type: 'string' },
-        additionalNotes: { type: 'string' },
-      },
-      required: ['label', 'start', 'end', 'recognized'],
-    };
-
-    const pcdPeriodSchema = {
-      type: 'object',
-      properties: {
-        label: { type: 'string', description: 'Rótulo do período PCD' },
-        start: { type: 'string', description: 'Data de início YYYY-MM-DD' },
-        end: { type: 'string', description: 'Data de término YYYY-MM-DD' },
-        recognized: {
-          type: 'boolean',
-          description: 'Tempo como PCD reconhecido',
-        },
-        companyName: { type: 'string' },
-        companyCNPJ: { type: 'string' },
-        role: { type: 'string' },
-        employmentLinkStartDate: { type: 'string' },
-        employmentLinkEndDate: { type: 'string' },
-        employmentLinkSupportingDocument: { type: 'string' },
-        employmentLinkPresentInCNIS: { type: 'boolean' },
-        employmentLinkEarningsInCNIS: { type: 'boolean' },
-        disabilityType: {
-          type: 'string',
-          description: 'Tipo de deficiência (ex: Física)',
-        },
-        cidCodes: {
-          type: 'array',
-          items: { type: 'string' },
-          description: 'CID(s) identificados',
-        },
-        cifClassification: { type: 'string', description: 'Classificação CIF' },
-        disabilityDegree: {
-          type: 'string',
-          description: 'Grau da deficiência (Leve, Moderado, Grave)',
-        },
-        legalFrameworkByDisabilityType: { type: 'string' },
-        legalFrameworkMainLaw: { type: 'string' },
-        legalFrameworkAssessmentMethodology: { type: 'string' },
-        technicalConclusionPcdTimeRecognized: { type: 'boolean' },
-        technicalConclusionJustification: { type: 'string' },
-        additionalNotes: { type: 'string' },
-      },
-      required: ['label', 'start', 'end', 'recognized'],
-    };
-
-    return {
-      type: 'object',
-      properties: {
-        clientData: {
-          type: 'object',
-          description: 'Dados do cliente',
-          properties: {
-            name: { type: 'string', description: 'Nome completo' },
-            cpfCnpj: { type: 'string', description: 'CPF ou CNPJ' },
-            birthDate: {
-              type: 'string',
-              description: 'Data de nascimento YYYY-MM-DD',
-            },
-            gender: { type: 'string', description: 'Sexo' },
-            email: { type: 'string', description: 'E-mail' },
-            phone: { type: 'string', description: 'Telefone' },
-            currentPosition: { type: 'string', description: 'Cargo atual' },
-            ni: { type: 'string', description: 'NI' },
-            lawsuitNumber: {
-              type: 'string',
-              description: 'Número do processo judicial',
-            },
-          },
-          required: ['name', 'birthDate'],
-        },
-        rulesSummary: {
-          type: 'object',
-          description:
-            'Número total de regras analisadas, elegíveis e não elegíveis',
-          properties: {
-            totalAnalyzed: {
-              type: 'number',
-              description: 'Total de regras analisadas',
-            },
-            eligibleCount: {
-              type: 'number',
-              description: 'Quantidade de regras elegíveis',
-            },
-            nonEligibleCount: {
-              type: 'number',
-              description: 'Quantidade de regras não elegíveis',
-            },
-          },
-          required: ['totalAnalyzed', 'eligibleCount', 'nonEligibleCount'],
-        },
-        retirementRules: {
-          type: 'array',
-          description: 'Lista das regras de aposentadoria analisadas',
-          items: {
-            type: 'object',
-            properties: {
-              ruleName: {
-                type: 'string',
-                description: 'Nome da regra de aposentadoria',
-              },
-              regime: {
-                type: 'string',
-                description: 'Regime (ex: RPPS Federal)',
-              },
-              result: {
-                type: 'boolean',
-                description: 'Se o segurado é elegível',
-              },
-              rightDate: {
-                type: 'string',
-                description:
-                  'Data do direito no formato YYYY-MM-DD (quando elegível)',
-              },
-              estimatedRMI: {
-                type: 'number',
-                description: 'Renda mensal inicial estimada',
-              },
-              bestRMI: {
-                type: 'boolean',
-                description: 'Indica se possui a melhor RMI',
-              },
-              highestLawsuitValue: {
-                type: 'boolean',
-                description: 'Indica se possui o maior valor de ação',
-              },
-              detailedRuleAnalysis: {
-                type: 'string',
-                description:
-                  'Análise detalhada da regra (requisitos, cálculo RMI, valor da causa)',
-              },
-            },
-            required: [
-              'ruleName',
-              'result',
-              'bestRMI',
-              'highestLawsuitValue',
-              'detailedRuleAnalysis',
-            ],
-          },
-        },
-        timeline: {
-          type: 'array',
-          description: 'Linha do tempo integrada de atividades e lacunas',
-          items: {
-            type: 'object',
-            properties: {
-              startDate: {
-                type: 'string',
-                description: 'Data de início YYYY-MM-DD',
-              },
-              endDate: {
-                type: 'string',
-                description: 'Data de fim YYYY-MM-DD',
-              },
-              activityType: {
-                type: 'string',
-                enum: [
-                  'Atividade como PCD (Grave)',
-                  'Atividade como PCD (Leve)',
-                  'Atividade como PCD (Moderada)',
-                  'Atividade comum',
-                  'Lacuna',
-                ],
-                description: 'Tipo de atividade ou lacuna',
-              },
-              type: { type: 'string', description: 'Classificação do período' },
-              location: { type: 'string', description: 'Local do período' },
-              duration: { type: 'string', description: 'Duração (ex: 4 anos)' },
-            },
-            required: [
-              'startDate',
-              'endDate',
-              'activityType',
-              'type',
-              'location',
-            ],
-          },
-        },
-        specialTimeAnalysis: {
-          type: 'array',
-          description:
-            'Análise do tempo especial (períodos com agentes nocivos)',
-          items: specialTimePeriodSchema,
-        },
-        pcdTimeAnalysis: {
-          type: 'array',
-          description:
-            'Análise do tempo PCD (períodos como pessoa com deficiência)',
-          items: pcdPeriodSchema,
-        },
-        contributionTimeSummary: {
-          type: 'object',
-          description: 'Tempo de Serviço/Contribuição',
-          properties: {
-            totalContributionTime: {
-              type: 'string',
-              description:
-                'Tempo total de contribuição. Ex: 44 anos, 5 meses e 22 dias',
-            },
-            publicServiceContributionTime: {
-              type: 'string',
-              description: 'Tempo no serviço público',
-            },
-            positionTenureTime: {
-              type: 'string',
-              description: 'Tempo no cargo',
-            },
-            currentAge: {
-              type: 'string',
-              description: 'Idade atual. Ex: 41 anos, 7 meses e 23 dias',
-            },
-            totalCareerTime: {
-              type: 'string',
-              description: 'Tempo de carreira',
-            },
-            publicServiceStartDate: {
-              type: 'string',
-              description:
-                'Ingresso no serviço público (anterior/posterior a 16/12/1998 ou data)',
-            },
-            pcdTime: {
-              type: 'string',
-              description: 'Tempo como PCD. Ex: 23 anos 7 meses',
-            },
-            commonTime: {
-              type: 'string',
-              description: 'Tempo comum. Ex: 12 anos 3 meses',
-            },
-          },
-          required: [
-            'totalContributionTime',
-            'publicServiceContributionTime',
-            'positionTenureTime',
-            'currentAge',
-            'totalCareerTime',
-          ],
-        },
-        rppsSummary: {
-          type: 'string',
-          description:
-            'Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS)',
-        },
-        finalAnalysis: {
-          type: 'string',
-          description: 'Análise final consolidada',
-        },
-        completeAnalysisReport: {
-          type: 'string',
-          description:
-            'Relatório completo da análise em Markdown, pronto para exportação em PDF/DOCX. Deve conter todas as seções: Dados do cliente, Tempo de Serviço/Contribuição, Análise de Regras de Aposentadoria, resumo e lista de regras (elegíveis e não elegíveis), Linha do tempo integrada, Análise do tempo especial, Análise do tempo PCD, Resumo de Regras Aplicáveis para Aposentadoria Urbana Comum (RPPS) e Análise final. Formate com títulos (##), listas e tabelas em Markdown quando aplicável.',
-        },
-      },
-      required: [
-        'clientData',
-        'rulesSummary',
-        'retirementRules',
-        'timeline',
-        'specialTimeAnalysis',
-        'pcdTimeAnalysis',
-        'contributionTimeSummary',
-        'rppsSummary',
-        'finalAnalysis',
-        'completeAnalysisReport',
-      ],
-    };
-  }
-
   public async getSpecialCategoryRetirementConversionAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -1070,42 +742,43 @@ Análise processada do CNIS:
             properties: {
               items: {
                 type: 'array',
-                description: 'Lista de itens de conversão de tempo especial',
+                description: 'Lista de itens de conversÃ£o de tempo especial',
                 items: {
                   type: 'object',
                   properties: {
                     originJobTitleDescription: {
                       type: 'string',
-                      description: 'Descrição do cargo/função de origem',
+                      description: 'DescriÃ§Ã£o do cargo/funÃ§Ã£o de origem',
                     },
                     periodDateRangeText: {
                       type: 'string',
                       description:
-                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
+                        'Texto descritivo do perÃ­odo (ex: 01/2010 a 12/2015)',
                     },
                     harmfulExposureAgentsText: {
                       type: 'string',
                       description:
-                        'Descrição dos agentes nocivos identificados',
+                        'DescriÃ§Ã£o dos agentes nocivos identificados',
                     },
                     specialTimeDurationText: {
                       type: 'string',
                       description:
-                        'Duração do tempo especial em formato textual',
+                        'DuraÃ§Ã£o do tempo especial em formato textual',
                     },
                     convertedTimeDurationText: {
                       type: 'string',
                       description:
-                        'Duração do tempo convertido em formato textual',
+                        'DuraÃ§Ã£o do tempo convertido em formato textual',
                     },
                     conversionFactorValue: {
                       type: 'number',
-                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
+                      description:
+                        'Fator de conversÃ£o aplicado (ex: 1.4, 1.2)',
                     },
                     recognitionStatusEnum: {
                       type: 'string',
                       description:
-                        'Status de reconhecimento do período especial',
+                        'Status de reconhecimento do perÃ­odo especial',
                     },
                   },
                 },
@@ -1174,15 +847,355 @@ Análise processada do CNIS:
     );
   }
 
-  public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        promptFiles: files,
-      }),
-    );
+  private getGeneralUrbanRetirementCompleteAnalysisJsonSchema(): object {
+    const specialTimePeriodSchema = {
+      type: 'object',
+      properties: {
+        label: {
+          type: 'string',
+          description: 'RÃ³tulo descritivo do perÃ­odo',
+        },
+        start: {
+          type: 'string',
+          description: 'Data de inÃ­cio no formato YYYY-MM-DD',
+        },
+        end: {
+          type: 'string',
+          description: 'Data de tÃ©rmino no formato YYYY-MM-DD',
+        },
+        recognized: {
+          type: 'boolean',
+          description: 'Indica se o perÃ­odo foi reconhecido',
+        },
+        companyName: { type: 'string', description: 'Nome da empresa' },
+        companyCNPJ: { type: 'string', description: 'CNPJ da empresa' },
+        role: { type: 'string', description: 'Cargo/funÃ§Ã£o' },
+        employmentLinkStartDate: {
+          type: 'string',
+          description: 'InÃ­cio do vÃ­nculo',
+        },
+        employmentLinkEndDate: {
+          type: 'string',
+          description: 'Fim do vÃ­nculo',
+        },
+        employmentLinkSupportingDocument: {
+          type: 'string',
+          description: 'Documento comprobatÃ³rio',
+        },
+        employmentLinkPresentInCNIS: {
+          type: 'boolean',
+          description: 'VÃ­nculo consta no CNIS',
+        },
+        employmentLinkEarningsInCNIS: {
+          type: 'boolean',
+          description: 'RemuneraÃ§Ãµes no CNIS',
+        },
+        harmfulAgentsExposureFrequency: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              agent: { type: 'string' },
+              intensity: { type: 'string' },
+              characteristic: { type: 'string' },
+            },
+          },
+        },
+        harmfulAgentsInformationSource: {
+          type: 'array',
+          items: { type: 'string' },
+        },
+        harmfulAgentsIdentifiedAgents: {
+          type: 'array',
+          items: { type: 'string' },
+        },
+        harmfulAgentsEffectivePPE: {
+          type: 'boolean',
+          description: 'EPI eficaz',
+        },
+        legalFrameworkOccupationalCategoryDecree: { type: 'string' },
+        legalFrameworkOccupationalCategoryCode: { type: 'string' },
+        legalFrameworkHarmfulAgentDecree: { type: 'string' },
+        legalFrameworkHarmfulAgentCode: { type: 'string' },
+        legalFrameworkCaseLawOrTechnicalStandardReference: { type: 'string' },
+        legalFrameworkCaseLawOrTechnicalStandardCode: { type: 'string' },
+        technicalConclusionSpecialTimeRecognized: { type: 'boolean' },
+        technicalConclusionJustification: { type: 'string' },
+        additionalNotes: { type: 'string' },
+      },
+      required: ['label', 'start', 'end', 'recognized'],
+    };
+
+    const pcdPeriodSchema = {
+      type: 'object',
+      properties: {
+        label: { type: 'string', description: 'RÃ³tulo do perÃ­odo PCD' },
+        start: { type: 'string', description: 'Data de inÃ­cio YYYY-MM-DD' },
+        end: { type: 'string', description: 'Data de tÃ©rmino YYYY-MM-DD' },
+        recognized: {
+          type: 'boolean',
+          description: 'Tempo como PCD reconhecido',
+        },
+        companyName: { type: 'string' },
+        companyCNPJ: { type: 'string' },
+        role: { type: 'string' },
+        employmentLinkStartDate: { type: 'string' },
+        employmentLinkEndDate: { type: 'string' },
+        employmentLinkSupportingDocument: { type: 'string' },
+        employmentLinkPresentInCNIS: { type: 'boolean' },
+        employmentLinkEarningsInCNIS: { type: 'boolean' },
+        disabilityType: {
+          type: 'string',
+          description: 'Tipo de deficiÃªncia (ex: FÃ­sica)',
+        },
+        cidCodes: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'CID(s) identificados',
+        },
+        cifClassification: {
+          type: 'string',
+          description: 'ClassificaÃ§Ã£o CIF',
+        },
+        disabilityDegree: {
+          type: 'string',
+          description: 'Grau da deficiÃªncia (Leve, Moderado, Grave)',
+        },
+        legalFrameworkByDisabilityType: { type: 'string' },
+        legalFrameworkMainLaw: { type: 'string' },
+        legalFrameworkAssessmentMethodology: { type: 'string' },
+        technicalConclusionPcdTimeRecognized: { type: 'boolean' },
+        technicalConclusionJustification: { type: 'string' },
+        additionalNotes: { type: 'string' },
+      },
+      required: ['label', 'start', 'end', 'recognized'],
+    };
+
+    return {
+      type: 'object',
+      properties: {
+        clientData: {
+          type: 'object',
+          description: 'Dados do cliente',
+          properties: {
+            name: { type: 'string', description: 'Nome completo' },
+            cpfCnpj: { type: 'string', description: 'CPF ou CNPJ' },
+            birthDate: {
+              type: 'string',
+              description: 'Data de nascimento YYYY-MM-DD',
+            },
+            gender: { type: 'string', description: 'Sexo' },
+            email: { type: 'string', description: 'E-mail' },
+            phone: { type: 'string', description: 'Telefone' },
+            currentPosition: { type: 'string', description: 'Cargo atual' },
+            ni: { type: 'string', description: 'NI' },
+            lawsuitNumber: {
+              type: 'string',
+              description: 'NÃºmero do processo judicial',
+            },
+          },
+          required: ['name', 'birthDate'],
+        },
+        rulesSummary: {
+          type: 'object',
+          description:
+            'NÃºmero total de regras analisadas, elegÃ­veis e nÃ£o elegÃ­veis',
+          properties: {
+            totalAnalyzed: {
+              type: 'number',
+              description: 'Total de regras analisadas',
+            },
+            eligibleCount: {
+              type: 'number',
+              description: 'Quantidade de regras elegÃ­veis',
+            },
+            nonEligibleCount: {
+              type: 'number',
+              description: 'Quantidade de regras nÃ£o elegÃ­veis',
+            },
+          },
+          required: ['totalAnalyzed', 'eligibleCount', 'nonEligibleCount'],
+        },
+        retirementRules: {
+          type: 'array',
+          description: 'Lista das regras de aposentadoria analisadas',
+          items: {
+            type: 'object',
+            properties: {
+              ruleName: {
+                type: 'string',
+                description: 'Nome da regra de aposentadoria',
+              },
+              regime: {
+                type: 'string',
+                description: 'Regime (ex: RPPS Federal)',
+              },
+              result: {
+                type: 'boolean',
+                description: 'Se o segurado Ã© elegÃ­vel',
+              },
+              rightDate: {
+                type: 'string',
+                description:
+                  'Data do direito no formato YYYY-MM-DD (quando elegÃ­vel)',
+              },
+              estimatedRMI: {
+                type: 'number',
+                description: 'Renda mensal inicial estimada',
+              },
+              bestRMI: {
+                type: 'boolean',
+                description: 'Indica se possui a melhor RMI',
+              },
+              highestLawsuitValue: {
+                type: 'boolean',
+                description: 'Indica se possui o maior valor de aÃ§Ã£o',
+              },
+              detailedRuleAnalysis: {
+                type: 'string',
+                description:
+                  'AnÃ¡lise detalhada da regra (requisitos, cÃ¡lculo RMI, valor da causa)',
+              },
+            },
+            required: [
+              'ruleName',
+              'result',
+              'bestRMI',
+              'highestLawsuitValue',
+              'detailedRuleAnalysis',
+            ],
+          },
+        },
+        timeline: {
+          type: 'array',
+          description: 'Linha do tempo integrada de atividades e lacunas',
+          items: {
+            type: 'object',
+            properties: {
+              startDate: {
+                type: 'string',
+                description: 'Data de inÃ­cio YYYY-MM-DD',
+              },
+              endDate: {
+                type: 'string',
+                description: 'Data de fim YYYY-MM-DD',
+              },
+              activityType: {
+                type: 'string',
+                enum: [
+                  'Atividade como PCD (Grave)',
+                  'Atividade como PCD (Leve)',
+                  'Atividade como PCD (Moderada)',
+                  'Atividade comum',
+                  'Lacuna',
+                ],
+                description: 'Tipo de atividade ou lacuna',
+              },
+              type: {
+                type: 'string',
+                description: 'ClassificaÃ§Ã£o do perÃ­odo',
+              },
+              location: { type: 'string', description: 'Local do perÃ­odo' },
+              duration: {
+                type: 'string',
+                description: 'DuraÃ§Ã£o (ex: 4 anos)',
+              },
+            },
+            required: [
+              'startDate',
+              'endDate',
+              'activityType',
+              'type',
+              'location',
+            ],
+          },
+        },
+        specialTimeAnalysis: {
+          type: 'array',
+          description:
+            'AnÃ¡lise do tempo especial (perÃ­odos com agentes nocivos)',
+          items: specialTimePeriodSchema,
+        },
+        pcdTimeAnalysis: {
+          type: 'array',
+          description:
+            'AnÃ¡lise do tempo PCD (perÃ­odos como pessoa com deficiÃªncia)',
+          items: pcdPeriodSchema,
+        },
+        contributionTimeSummary: {
+          type: 'object',
+          description: 'Tempo de ServiÃ§o/ContribuiÃ§Ã£o',
+          properties: {
+            totalContributionTime: {
+              type: 'string',
+              description:
+                'Tempo total de contribuiÃ§Ã£o. Ex: 44 anos, 5 meses e 22 dias',
+            },
+            publicServiceContributionTime: {
+              type: 'string',
+              description: 'Tempo no serviÃ§o pÃºblico',
+            },
+            positionTenureTime: {
+              type: 'string',
+              description: 'Tempo no cargo',
+            },
+            currentAge: {
+              type: 'string',
+              description: 'Idade atual. Ex: 41 anos, 7 meses e 23 dias',
+            },
+            totalCareerTime: {
+              type: 'string',
+              description: 'Tempo de carreira',
+            },
+            publicServiceStartDate: {
+              type: 'string',
+              description:
+                'Ingresso no serviÃ§o pÃºblico (anterior/posterior a 16/12/1998 ou data)',
+            },
+            pcdTime: {
+              type: 'string',
+              description: 'Tempo como PCD. Ex: 23 anos 7 meses',
+            },
+            commonTime: {
+              type: 'string',
+              description: 'Tempo comum. Ex: 12 anos 3 meses',
+            },
+          },
+          required: [
+            'totalContributionTime',
+            'publicServiceContributionTime',
+            'positionTenureTime',
+            'currentAge',
+            'totalCareerTime',
+          ],
+        },
+        rppsSummary: {
+          type: 'string',
+          description:
+            'Resumo de Regras AplicÃ¡veis para Aposentadoria Urbana Comum (RPPS)',
+        },
+        finalAnalysis: {
+          type: 'string',
+          description: 'AnÃ¡lise final consolidada',
+        },
+        completeAnalysisReport: {
+          type: 'string',
+          description:
+            'RelatÃ³rio completo da anÃ¡lise em Markdown, pronto para exportaÃ§Ã£o em PDF/DOCX. Deve conter todas as seÃ§Ãµes: Dados do cliente, Tempo de ServiÃ§o/ContribuiÃ§Ã£o, AnÃ¡lise de Regras de Aposentadoria, resumo e lista de regras (elegÃ­veis e nÃ£o elegÃ­veis), Linha do tempo integrada, AnÃ¡lise do tempo especial, AnÃ¡lise do tempo PCD, Resumo de Regras AplicÃ¡veis para Aposentadoria Urbana Comum (RPPS) e AnÃ¡lise final. Formate com tÃ­tulos (##), listas e tabelas em Markdown quando aplicÃ¡vel.',
+        },
+      },
+      required: [
+        'clientData',
+        'rulesSummary',
+        'retirementRules',
+        'timeline',
+        'specialTimeAnalysis',
+        'pcdTimeAnalysis',
+        'contributionTimeSummary',
+        'rppsSummary',
+        'finalAnalysis',
+        'completeAnalysisReport',
+      ],
+    };
   }
 }

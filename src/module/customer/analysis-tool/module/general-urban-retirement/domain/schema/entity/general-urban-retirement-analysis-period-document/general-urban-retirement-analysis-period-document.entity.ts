@@ -24,7 +24,8 @@ export class GeneralUrbanRetirementAnalysisPeriodDocumentEntity extends BaseEnti
   @Description('Análise de aposentadoria urbana geral associada ao documento')
   public readonly generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisEntity | null;
 
-  protected readonly _type = GeneralUrbanRetirementAnalysisPeriodDocumentEntity.name;
+  protected readonly _type =
+    GeneralUrbanRetirementAnalysisPeriodDocumentEntity.name;
 
   public constructor(
     props: GeneralUrbanRetirementAnalysisPeriodDocumentEntityPropsInterface,

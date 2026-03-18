@@ -27,7 +27,7 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
       source: GeneralUrbanRetirementAnalysisTypeormEntity,
     ): GeneralUrbanRetirementAnalysisEntity => {
       const generalUrbanRetirementAnalysisResult =
-        source.generalUrbanRetirementAnalysisResult !== undefined
+        source.generalUrbanRetirementAnalysisResult !== null
           ? this.mapper.map(
               source.generalUrbanRetirementAnalysisResult,
               GeneralUrbanRetirementAnalysisResultTypeormEntity,
@@ -92,13 +92,14 @@ export class GeneralUrbanRetirementAnalysisEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,
-        generalUrbanRetirementAnalysisResult,
-        analysisToolRecord: undefined,
-        documents: undefined,
-        remunerations: undefined,
-        legalProceedings: undefined,
-        periods: undefined,
-        periodDocuments: undefined,
+        generalUrbanRetirementAnalysisResult:
+          generalUrbanRetirementAnalysisResult ?? null,
+        analysisToolRecord: null,
+        documents: null,
+        remunerations: null,
+        legalProceedings: null,
+        periods: null,
+        periodDocuments: null,
       });
     };
 

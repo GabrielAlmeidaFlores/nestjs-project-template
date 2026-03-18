@@ -47,7 +47,7 @@ export class GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfi
       return GeneralUrbanRetirementAnalysisDocumentTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        generalUrbanRetirementAnalysis: undefined,
+        generalUrbanRetirementAnalysis: null,
         deletedAt: null,
       });
     };
