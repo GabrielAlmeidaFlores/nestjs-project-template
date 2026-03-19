@@ -3,6 +3,7 @@ import { BaseBuildableObject } from '@shared/system/object/base-buildable.object
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { RetirementPlanningRgpsEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/retirement-planning-rgps.entity';
 import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/enum/reason-pendency.enum';
+import type { ValidContributionTimeEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/valid-contribution-time/valid-contribution-time.entity';
 import type { RetirementPlanningRgpsPeriodId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-period/value-object/retirement-planning-rgps-period-id.value-object';
 
 export class GetRetirementPlanningRgpsPeriodWithRelationsQueryResult extends BaseBuildableObject {
@@ -35,6 +36,8 @@ export class GetRetirementPlanningRgpsPeriodWithRelationsQueryResult extends Bas
   public readonly deletedAt: Date | null;
 
   public readonly reasonPendency: ReasonPendencyEnum | null;
+
+  public readonly validContributionTime: ValidContributionTimeEntity | null;
 
   public readonly retirementPlanningRgps: RetirementPlanningRgpsEntity | null;
 
