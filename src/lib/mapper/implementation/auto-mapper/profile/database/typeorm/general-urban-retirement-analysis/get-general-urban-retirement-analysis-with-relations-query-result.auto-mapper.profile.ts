@@ -71,7 +71,7 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
       source: GeneralUrbanRetirementAnalysisTypeormEntity,
     ): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
       const generalUrbanRetirementAnalysisResult =
-        source.generalUrbanRetirementAnalysisResult !== null
+        source.generalUrbanRetirementAnalysisResult != null
           ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
               id: new GeneralUrbanRetirementAnalysisResultId(
                 source.generalUrbanRetirementAnalysisResult.id,
@@ -145,8 +145,7 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
               }
             : undefined;
         const disabilityPeriod =
-          p.disabilityPeriod?.id !== undefined &&
-          p.disabilityPeriod.cid !== null
+          p.disabilityPeriod?.id !== undefined && p.disabilityPeriod.cid != null
             ? {
                 id: new GeneralUrbanRetirementAnalysisPeriodDisabilityId(
                   p.disabilityPeriod.id,
