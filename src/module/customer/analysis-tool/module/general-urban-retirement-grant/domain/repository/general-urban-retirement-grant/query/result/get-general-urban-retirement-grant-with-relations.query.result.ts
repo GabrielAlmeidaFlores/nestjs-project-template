@@ -9,6 +9,7 @@ import type { GeneralUrbanRetirementGrantResultEntity } from '@module/customer/a
 export class GetGeneralUrbanRetirementGrantWithRelationsQueryResult extends BaseBuildableObject {
   public readonly id: GeneralUrbanRetirementGrantId;
   public readonly cnisDocument: string | null;
+  public readonly analysisName: string | null;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

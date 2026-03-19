@@ -9,6 +9,7 @@ import { GeneralUrbanRetirementGrantAnalysisResultTypeormEntity } from '@infra/d
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/query/general-urban-retirement-grant-analysis-result.query.repository.gateway';
 import { GetGeneralUrbanRetirementGrantAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/query/result/get-general-urban-retirement-grant-analysis-result.query.result';
+import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { GeneralUrbanRetirementGrantAnalysisResultId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-analysis-result/value-object/general-urban-retirement-grant-analysis-result-id.value-object';
 
 @Injectable()
@@ -25,6 +26,28 @@ export class GeneralUrbanRetirementGrantAnalysisResultTypeormQueryRepository
     private readonly mapperGateway: MapperGateway,
   ) {
     super(repository);
+  }
+
+  public async findManyByGeneralUrbanRetirementGrantId(
+    generalUrbanRetirementGrantId: GeneralUrbanRetirementGrantId,
+  ): Promise<GetGeneralUrbanRetirementGrantAnalysisResultQueryResult[]> {
+    const data = await this.find({
+      relations: { generalUrbanRetirementGrant: true },
+      where: {
+        generalUrbanRetirementGrant: {
+          id: generalUrbanRetirementGrantId.toString(),
+        },
+      },
+      order: { createdAt: 'ASC' },
+    });
+
+    return data.map((item) =>
+      this.mapperGateway.map(
+        item,
+        GeneralUrbanRetirementGrantAnalysisResultTypeormEntity,
+        GetGeneralUrbanRetirementGrantAnalysisResultQueryResult,
+      ),
+    );
   }
 
   public async findOneByGeneralUrbanRetirementGrantAnalysisResultIdOrFail(

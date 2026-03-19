@@ -8,9 +8,12 @@ import { GeneralUrbanRetirementGrantPeriodTypeormEntity } from '@infra/database/
 import { GeneralUrbanRetirementGrantResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant-result.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { GetGeneralUrbanRetirementGrantWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/result/get-general-urban-retirement-grant-with-relations.query.result';
+import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 import { GeneralUrbanRetirementGrantInssBenefitEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-inss-benefit/general-urban-retirement-grant-inss-benefit.entity';
+import { GeneralUrbanRetirementGrantInssBenefitId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-inss-benefit/value-object/general-urban-retirement-grant-inss-benefit-id.value-object';
 import { GeneralUrbanRetirementGrantLegalProceedingEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-legal-proceeding/general-urban-retirement-grant-legal-proceeding.entity';
+import { GeneralUrbanRetirementGrantLegalProceedingId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-legal-proceeding/value-object/general-urban-retirement-grant-legal-proceeding-id.value-object';
 import { GeneralUrbanRetirementGrantPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/general-urban-retirement-grant-period.entity';
 import { GeneralUrbanRetirementGrantResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-result/general-urban-retirement-grant-result.entity';
 
@@ -41,22 +44,38 @@ export class GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperPro
             )
           : null;
 
+      const grantEntity = this.mapper.map(
+        source,
+        GeneralUrbanRetirementGrantTypeormEntity,
+        GeneralUrbanRetirementGrantEntity,
+      );
+
       const generalUrbanRetirementGrantPeriod = this.mapper.mapArray(
         source.generalUrbanRetirementGrantPeriod ?? [],
         GeneralUrbanRetirementGrantPeriodTypeormEntity,
         GeneralUrbanRetirementGrantPeriodEntity,
       );
 
-      const generalUrbanRetirementGrantBenefit = this.mapper.mapArray(
-        source.generalUrbanRetirementGrantBenefit ?? [],
-        GeneralUrbanRetirementGrantInssBenefitTypeormEntity,
-        GeneralUrbanRetirementGrantInssBenefitEntity,
+      const generalUrbanRetirementGrantBenefit = (
+        source.generalUrbanRetirementGrantBenefit ?? []
+      ).map(
+        (b) =>
+          new GeneralUrbanRetirementGrantInssBenefitEntity({
+            id: new GeneralUrbanRetirementGrantInssBenefitId(b.id),
+            inssBenefitNumber: b.inssBenefitNumber,
+            generalUrbanRetirementGrant: grantEntity,
+          }),
       );
 
-      const generalUrbanRetirementGrantLegalProceeding = this.mapper.mapArray(
-        source.generalUrbanRetirementGrantLegalProceeding ?? [],
-        GeneralUrbanRetirementGrantLegalProceedingTypeormEntity,
-        GeneralUrbanRetirementGrantLegalProceedingEntity,
+      const generalUrbanRetirementGrantLegalProceeding = (
+        source.generalUrbanRetirementGrantLegalProceeding ?? []
+      ).map(
+        (lp) =>
+          new GeneralUrbanRetirementGrantLegalProceedingEntity({
+            id: new GeneralUrbanRetirementGrantLegalProceedingId(lp.id),
+            legalProceedingNumber: lp.legalProceedingNumber,
+            generalUrbanRetirementGrant: grantEntity,
+          }),
       );
 
       return GetGeneralUrbanRetirementGrantWithRelationsQueryResult.build({
@@ -117,7 +136,7 @@ export class GetGeneralUrbanRetirementGrantWithRelationsQueryResultAutoMapperPro
         generalUrbanRetirementGrantPeriod,
         generalUrbanRetirementGrantBenefit,
         generalUrbanRetirementGrantLegalProceeding,
-      } as any);
+      } as GeneralUrbanRetirementGrantTypeormEntity);
     };
 
     const mappingFunction = constructUsing(convertQueryResultToOrmEntity);

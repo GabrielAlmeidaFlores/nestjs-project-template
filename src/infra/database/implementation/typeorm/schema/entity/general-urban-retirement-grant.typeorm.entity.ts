@@ -19,6 +19,14 @@ export class GeneralUrbanRetirementGrantTypeormEntity extends BaseTypeormEntity 
   })
   public cnisDocument: string | null;
 
+  @Column({
+    name: 'analysis_name',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  public analysisName: string | null;
+
   @OneToOne(
     () => GeneralUrbanRetirementGrantResultTypeormEntity,
     (entity) => entity.generalUrbanRetirementGrant,

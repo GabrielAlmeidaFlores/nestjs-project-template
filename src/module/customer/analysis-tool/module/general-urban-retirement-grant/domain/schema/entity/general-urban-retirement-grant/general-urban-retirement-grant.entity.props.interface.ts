@@ -4,5 +4,6 @@ import type { GeneralUrbanRetirementGrantResultEntity } from '@module/customer/a
 
 export interface GeneralUrbanRetirementGrantEntityPropsInterface extends BaseEntityPropsInterface<GeneralUrbanRetirementGrantId> {
   cnisDocument?: string | null;
+  analysisName?: string | null;
   generalUrbanRetirementGrantResult?: GeneralUrbanRetirementGrantResultEntity | null;
 }

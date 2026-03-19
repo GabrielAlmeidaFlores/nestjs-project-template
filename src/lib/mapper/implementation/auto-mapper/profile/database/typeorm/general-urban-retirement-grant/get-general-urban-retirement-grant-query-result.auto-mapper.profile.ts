@@ -69,6 +69,7 @@ export class GetGeneralUrbanRetirementGrantQueryResultAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         generalUrbanRetirementGrantResult,
+        analysisName: source.analysisName ?? null,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,

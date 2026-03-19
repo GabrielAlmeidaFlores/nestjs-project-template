@@ -11,6 +11,9 @@ export class GeneralUrbanRetirementGrantEntity extends BaseEntity<GeneralUrbanRe
   )
   public readonly cnisDocument: string | null;
 
+  @Description('Nome da análise.')
+  public readonly analysisName: string | null;
+
   @Description('Resultado da análise de concessão de aposentadoria urbana.')
   public readonly generalUrbanRetirementGrantResult: GeneralUrbanRetirementGrantResultEntity | null;
 
@@ -20,6 +23,7 @@ export class GeneralUrbanRetirementGrantEntity extends BaseEntity<GeneralUrbanRe
     super(GeneralUrbanRetirementGrantId, props);
 
     this.cnisDocument = props.cnisDocument ?? null;
+    this.analysisName = props.analysisName ?? null;
     this.generalUrbanRetirementGrantResult =
       props.generalUrbanRetirementGrantResult ?? null;
   }

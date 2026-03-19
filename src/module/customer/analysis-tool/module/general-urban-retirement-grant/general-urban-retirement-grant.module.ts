@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@infra/database/database.module';
 import { GenerativeIaModule } from '@infra/generative-ia/generative-ia.module';
+import { CnisAnalyzerModule } from '@lib/cnis-analyzer/cnis-analyzer.module';
 import { AnalysisProcessorModule } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.module';
+import { ExportDocumentModule } from '@module/customer/analysis-tool/lib/export-document/export-document.module';
 import { FileProcessorModule } from '@module/customer/analysis-tool/lib/file-processor/file-processor.module';
 import { GeneralUrbanRetirementGrantController } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/general-urban-retirement-grant.controller';
 import { AnalyzeApprenticeStudentUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/analyze-apprentice-student.use-case';
@@ -24,6 +26,8 @@ import { CreateGeneralUrbanRetirementGrantTimeAcceleratorUseCase } from '@module
 import { CreateGeneralUrbanRetirementGrantUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/create-general-urban-retirement-grant.use-case';
 import { CreateMultipleGeneralUrbanRetirementGrantPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/create-multiple-general-urban-retirement-grant-periods.use-case';
 import { DeleteGeneralUrbanRetirementGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/delete-general-urban-retirement-grant-time-accelerator.use-case';
+import { DownloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/download-general-urban-retirement-grant-complete-analysis.use-case';
+import { DownloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/download-general-urban-retirement-grant-simplified-analysis.use-case';
 import { GetGeneralUrbanRetirementGrantDetailsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-details.use-case';
 import { GetGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-period-earnings-below-minimum.use-case';
 import { GetGeneralUrbanRetirementGrantPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-period-earnings-overdue.use-case';
@@ -46,12 +50,15 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
   imports: [
     AuthModule,
     DatabaseModule,
+    AnalysisProcessorModule,
     GenerativeIaModule,
     OrganizationSessionModule,
     OrganizationCreditModule,
     PaymentPlanModule,
     FileProcessorModule,
     AnalysisProcessorModule,
+    CnisAnalyzerModule,
+    ExportDocumentModule,
   ],
   controllers: [GeneralUrbanRetirementGrantController],
   providers: [
@@ -74,6 +81,8 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateGeneralUrbanRetirementGrantUseCase,
     CreateMultipleGeneralUrbanRetirementGrantPeriodsUseCase,
     DeleteGeneralUrbanRetirementGrantTimeAcceleratorUseCase,
+    DownloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase,
+    DownloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase,
     GetGeneralUrbanRetirementGrantDetailsUseCase,
     GetGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase,
     GetGeneralUrbanRetirementGrantPeriodEarningsOverdueUseCase,
