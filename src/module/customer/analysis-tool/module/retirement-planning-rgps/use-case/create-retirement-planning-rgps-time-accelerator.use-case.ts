@@ -79,9 +79,13 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
       periodStart: parsed.periodoInicio ? new Date(parsed.periodoInicio) : null,
       periodEnd: parsed.periodoFim ? new Date(parsed.periodoFim) : null,
       viability: parsed.viabilidade ?? 'N/A',
-      technicalNote: parsed.observacaoTecnica
-        ? await this.markdownConverterGateway.convertToHtml(parsed.observacaoTecnica)
-        : 'N/A',
+      technicalNote:
+        parsed.observacaoTecnica !== undefined &&
+        parsed.observacaoTecnica !== ''
+          ? await this.markdownConverterGateway.convertToHtml(
+              parsed.observacaoTecnica,
+            )
+          : 'N/A',
       affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
       recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
       recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',

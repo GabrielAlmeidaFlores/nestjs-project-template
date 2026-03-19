@@ -84,9 +84,13 @@ export class GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase {
         recognitionINSS: parsed.reconhecimentoINSS as string,
         impactoCarencia: parsed.impactoCarencia as string,
         reconhecimentoJudicial: parsed.reconhecimentoJudicial as string,
-        technicalNote: parsed.observacaoTecnica
-          ? await this.markdownConverterGateway.convertToHtml(parsed.observacaoTecnica)
-          : null,
+        technicalNote:
+          parsed.observacaoTecnica !== undefined &&
+          parsed.observacaoTecnica !== ''
+            ? await this.markdownConverterGateway.convertToHtml(
+                parsed.observacaoTecnica,
+              )
+            : null,
       },
     );
   }
