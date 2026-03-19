@@ -9,10 +9,10 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
-import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
+import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
-import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
+import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
 import {
   GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto,
   GetGeneralUrbanRetirementAnalysisPeriodResponseDto,
@@ -20,7 +20,7 @@ import {
   GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto,
   GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto,
 } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-period.response.dto';
-import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
+import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
 import {
   GetGeneralUrbanRetirementAnalysisResponseDto,
   GetGeneralUrbanRetirementAnalysisResultResponseDto,
