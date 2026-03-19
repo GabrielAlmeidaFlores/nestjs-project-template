@@ -76,7 +76,9 @@ export class PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase 
         (p) => p.id.toString() === periodItem.periodId,
       );
 
-      if (matchingPeriod === undefined) continue;
+      if (matchingPeriod === undefined) {
+        continue;
+      }
 
       if (
         matchingPeriod.specialTimePeriod !== undefined &&

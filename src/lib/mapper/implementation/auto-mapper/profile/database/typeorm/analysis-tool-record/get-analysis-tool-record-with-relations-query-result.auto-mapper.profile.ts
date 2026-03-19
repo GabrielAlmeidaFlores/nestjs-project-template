@@ -170,7 +170,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       );
 
       const generalUrbanRetirementAnalysis =
-        source.generalUrbanRetirementAnalysis != null
+        source.generalUrbanRetirementAnalysis !== null
           ? this.mapper.map(
               source.generalUrbanRetirementAnalysis,
               GeneralUrbanRetirementAnalysisTypeormEntity,

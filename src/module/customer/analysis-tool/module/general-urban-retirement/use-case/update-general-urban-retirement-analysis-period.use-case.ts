@@ -32,7 +32,6 @@ import { UpdateGeneralUrbanRetirementAnalysisPeriodResponseDto } from '@module/c
 import { GeneralUrbanRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement/error/general-urban-retirement-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
-import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { FileModel } from '@shared/system/model/generic/file.model';
 
 @Injectable()
@@ -296,9 +295,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files:
-                (docs.outros_medicos as Base64FileRequestDto[] | undefined) ??
-                [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {
