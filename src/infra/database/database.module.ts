@@ -52,6 +52,17 @@ import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormCommandReposito
 import { DisabilityAssessmentForBpcAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.command.repository';
 import { FullOpinionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result.typeorm.query.repository';
+import { GeneralUrbanRetirementAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis/general-urban-retirement-analysis.typeorm.query.repository';
+import { GeneralUrbanRetirementAnalysisDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-document/general-urban-retirement-analysis-document.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-legal-proceeding/general-urban-retirement-analysis-legal-proceeding.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-period/general-urban-retirement-analysis-period.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-period-disability/general-urban-retirement-analysis-period-disability.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-period-document/general-urban-retirement-analysis-period-document.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-period-special-time/general-urban-retirement-analysis-period-special-time.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.command.repository';
+import { GeneralUrbanRetirementAnalysisRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.query.repository';
+import { GeneralUrbanRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.typeorm.command.repository';
 import { InitialPetitionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.command.repository';
 import { InitialPetitionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.query.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
@@ -257,6 +268,17 @@ import { DisabilityAssessmentForBpcAnalysisBenefitCommandRepositoryGateway } fro
 import { DisabilityAssessmentForBpcAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis-document/command/disability-assessment-for-bpc-analysis-document.command.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis-legal-proceeding/command/disability-assessment-for-bpc-analysis-legal-proceeding.command.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis-result/command/disability-assessment-for-bpc-analysis-result.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/command/general-urban-retirement-analysis.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
+import { GeneralUrbanRetirementAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/command/general-urban-retirement-analysis-document.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-legal-proceeding/command/general-urban-retirement-analysis-legal-proceeding.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period/command/general-urban-retirement-analysis-period.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisPeriodDisabilityCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-disability/command/general-urban-retirement-analysis-period-disability.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/command/general-urban-retirement-analysis-period-document.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-special-time/command/general-urban-retirement-analysis-period-special-time.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/command/general-urban-retirement-analysis-remuneration.command.repository.gateway';
+import { GeneralUrbanRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/general-urban-retirement-analysis-remuneration.query.repository.gateway';
+import { GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-result/command/general-urban-retirement-analysis-result.command.repository.gateway';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
 import { InsuranceQualityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-document/command/insurance-quality-analysis-document.command.repository.gateway';
@@ -927,6 +949,59 @@ const classProvider: ClassProvider[] = [
   {
     provide: OrganizationPaymentPlanBankPaymentQueryRepositoryGateway,
     useClass: OrganizationPaymentPlanBankPaymentTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide:
+      GeneralUrbanRetirementAnalysisLegalProceedingCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementAnalysisLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisPeriodCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisPeriodTypeormCommandRepository,
+  },
+  {
+    provide:
+      GeneralUrbanRetirementAnalysisPeriodDisabilityCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormCommandRepository,
+  },
+  {
+    provide:
+      GeneralUrbanRetirementAnalysisPeriodDocumentCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementAnalysisPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide:
+      GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisDocumentCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisDocumentTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisRemunerationCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementAnalysisRemunerationTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementAnalysisRemunerationQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementAnalysisRemunerationTypeormQueryRepository,
   },
   {
     provide: RetirementPlanningRppsCommandRepositoryGateway,

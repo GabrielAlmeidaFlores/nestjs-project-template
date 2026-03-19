@@ -528,6 +528,44 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise simplificada da linha do tempo rural com IA. Examina períodos rurais cadastrados de forma objetiva, identifica documentação básica apresentada, verifica presença de início de prova material, calcula tempo rural total alegado e informa de forma resumida sobre viabilidade geral de reconhecimento. Versão rápida para triagem inicial.',
     }),
     new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('1cc78d22-38c4-42bf-859c-719f1955132f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_COMPLETE_ANALYSIS,
+      creditCost: 5,
+      title: 'ANÁLISE DE APOSENTADORIA URBANA GERAL - ANÁLISE COMPLETA',
+      description:
+        'Análise completa de aposentadoria urbana geral com IA. Examina documentos, legislação, jurisprudência aplicável, gerando parecer técnico estruturado com relatório dos fatos, fundamentação jurídica aprofundada, análise de viabilidade, riscos processuais, teses aplicáveis e conclusão fundamentada. Documento técnico para orientação estratégica completa.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('04d68adc-e0a0-4200-a64a-89a3d094dfda'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_SIMPLIFIED_ANALYSIS,
+      creditCost: 5,
+      title: 'ANÁLISE DE APOSENTADORIA URBANA GERAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Análise simplificada de aposentadoria urbana geral com IA. Examina documentos, legislação, jurisprudência aplicável, gerando parecer técnico estruturado com resumo dos fatos, fundamentação jurídica básica, análise sintética de viabilidade e conclusão clara. Documento técnico para orientação estratégica simplificada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('cdbb873c-f734-4120-81e7-5302631d3a29'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_ADMINISTRATIVE_REQUEST_DENIED_ANALYSIS,
+      creditCost: 5,
+      title:
+        'ANÁLISE DE APOSENTADORIA URBANA GERAL - ANÁLISE DE PROCESSO ADMINISTRATIVO INDEFERIDO',
+      description:
+        'Análise de processo administrativo indeferido para aposentadoria urbana geral com IA. Examina documentos, legislação, jurisprudência aplicável, gerando parecer técnico estruturado com resumo dos fatos, fundamentação jurídica básica, análise sintética de viabilidade e conclusão clara. Documento técnico para orientação estratégica simplificada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('2059110f-7ad7-4cbf-9761-80b3796d857f'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_BENEFIT_AWARD_LETTER_ANALYSIS,
+      creditCost: 5,
+      title:
+        'ANÁLISE DE APOSENTADORIA URBANA GERAL - ANÁLISE DE CARTA DE CONCESSÃO',
+      description:
+        'Análise de carta de concessão para aposentadoria urbana geral com IA. Examina documentos, legislação, jurisprudência aplicável, gerando parecer técnico estruturado com resumo dos fatos, fundamentação jurídica básica, análise sintética de viabilidade e conclusão clara. Documento técnico para orientação estratégica simplificada.',
+    }),
+    new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('36bcef6c-889f-4493-93d8-ba3457398caa'),
       resource:
         PaymentPlanPaidResourceTypeEnum.RURAL_TIMELINE_CNIS_CONTRIBUTION_PERIOD_ADJUSTMENT_SIMULATION,

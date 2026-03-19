@@ -80,6 +80,15 @@ import { GetDisabilityAssessmentForBpcAnalysisLegalProceedingQueryResultAutoMapp
 import { DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/disability-assessment-for-bpc-analysis-result-entity.auto-mapper.profile';
 import { GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/disability-assessment-for-bpc-analysis-result/get-disability-assessment-for-bpc-analysis-result-query-result.auto-mapper.profile';
 import { FullOpinionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/full-opinion-generator-analysis-result/full-opinion-generator-analysis-result-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/general-urban-retirement-analysis-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementAnalysisQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/get-general-urban-retirement-analysis-query-result.auto-mapper.profile';
+import { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis/get-general-urban-retirement-analysis-with-relations-query-result.auto-mapper.profile';
+import { GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-document/get-general-urban-retirement-analysis-document-query-result.auto-mapper.profile';
+import { GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-legal-proceeding/get-general-urban-retirement-analysis-legal-proceeding-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementAnalysisPeriodEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-period/general-urban-retirement-analysis-period-entity.auto-mapper.profile';
+import { GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration-entity.auto-mapper.profile';
+import { GetGeneralUrbanRetirementAnalysisRemunerationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-remuneration/get-general-urban-retirement-analysis-remuneration-query-result.auto-mapper.profile';
+import { GeneralUrbanRetirementAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result-entity.auto-mapper.profile';
 import { InitialPetitionGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result-entity.auto-mapper.profile';
 import { GetInsuranceQualityAnalysisWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/get-insurance-quality-analysis-with-relations-query-result.auto-mapper.profile';
 import { InsuranceQualityAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/insurance-quality-analysis/insurance-quality-analysis-entity.auto-mapper.profile';
@@ -482,6 +491,15 @@ import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implem
     GetDisabilityAssessmentForBpcAnalysisLegalProceedingQueryResultAutoMapperProfile,
     DisabilityAssessmentForBpcAnalysisResultEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisResultQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementAnalysisEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementAnalysisDocumentQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile,
+    GetGeneralUrbanRetirementAnalysisRemunerationQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementAnalysisQueryResultAutoMapperProfile,
+    GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapperProfile,
+    GeneralUrbanRetirementAnalysisPeriodEntityAutoMapperProfile,
+    GeneralUrbanRetirementAnalysisResultEntityAutoMapperProfile,
     GetDisabilityAssessmentForBpcAnalysisWithRelationsQueryResultAutoMapperProfile,
     PerCapitaIncomeForBpcAnalysisEntityAutoMapperProfile,
     GetPerCapitaIncomeForBpcAnalysisQueryResultAutoMapperProfile,
