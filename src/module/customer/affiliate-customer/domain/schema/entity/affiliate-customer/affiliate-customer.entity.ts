@@ -1,8 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AffiliateCustomerEntityPropsInterface } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/affiliate-customer.entity.props.interface';
-import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { PixAddressKey } from '@module/customer/affiliate-customer/domain/schema/value-object/pix-address-key/pix-address-key.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 

@@ -59,7 +59,9 @@ export class AffiliateCustomerEntityAutoMapperProfile {
     const convertDomainEntityToOrmEntity = (
       source: AffiliateCustomerEntity,
     ): AffiliateCustomerTypeormEntity => {
-      const customer = { id: source.customerId.toString() } as CustomerTypeormEntity;
+      const customer = {
+        id: source.customerId.toString(),
+      } as CustomerTypeormEntity;
 
       return AffiliateCustomerTypeormEntity.build({
         ...source,
