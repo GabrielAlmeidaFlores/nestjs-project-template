@@ -140,7 +140,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
           ),
         );
 
-        const docs = periodDto.specialTime.documents;
+        const docs = periodDto.specialTime?.documents;
         if (docs !== undefined) {
           const specialTimeDocEntries: Array<{
             type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum;
@@ -248,7 +248,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files: docs.outrosMedicos ?? [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {
@@ -301,10 +301,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
     ) {
       return { startDate: periodDto.startDate, endDate: periodDto.endDate };
     }
-    if (
-      specialTimeDto.startDate !== undefined &&
-      specialTimeDto.endDate !== undefined
-    ) {
+    if (specialTimeDto.startDate !== null && specialTimeDto.endDate !== null) {
       return {
         startDate: specialTimeDto.startDate ?? periodDto.startDate,
         endDate: specialTimeDto.endDate ?? periodDto.endDate,

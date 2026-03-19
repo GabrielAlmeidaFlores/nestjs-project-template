@@ -26,7 +26,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
- public async getCnisCompleteAnalysis(
+  public async getCnisCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -101,7 +101,7 @@ Análise processada do CNIS:
     );
   }
 
-public async getRetirementPlanningRppsCompleteAnalysis(
+  public async getRetirementPlanningRppsCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -921,7 +921,30 @@ public async getRetirementPlanningRppsCompleteAnalysis(
         technicalConclusionJustification: { type: 'string' },
         additionalNotes: { type: 'string' },
       },
-      required: ['label', 'start', 'end', 'recognized'],
+      required: [
+        'label',
+        'start',
+        'end',
+        'recognized',
+        'companyName',
+        'companyCNPJ',
+        'role',
+        'employmentLinkStartDate',
+        'employmentLinkEndDate',
+        'employmentLinkSupportingDocument',
+        'employmentLinkPresentInCNIS',
+        'employmentLinkEarningsInCNIS',
+        'harmfulAgentsExposureFrequency',
+        'harmfulAgentsInformationSource',
+        'harmfulAgentsIdentifiedAgents',
+        'harmfulAgentsEffectivePPE',
+        'legalFrameworkOccupationalCategoryDecree',
+        'legalFrameworkHarmfulAgentDecree',
+        'legalFrameworkCaseLawOrTechnicalStandardReference',
+        'technicalConclusionSpecialTimeRecognized',
+        'technicalConclusionJustification',
+        'additionalNotes',
+      ],
     };
 
     const pcdPeriodSchema = {
@@ -966,7 +989,30 @@ public async getRetirementPlanningRppsCompleteAnalysis(
         technicalConclusionJustification: { type: 'string' },
         additionalNotes: { type: 'string' },
       },
-      required: ['label', 'start', 'end', 'recognized'],
+      required: [
+        'label',
+        'start',
+        'end',
+        'recognized',
+        'companyName',
+        'companyCNPJ',
+        'role',
+        'employmentLinkStartDate',
+        'employmentLinkEndDate',
+        'employmentLinkSupportingDocument',
+        'employmentLinkPresentInCNIS',
+        'employmentLinkEarningsInCNIS',
+        'disabilityType',
+        'cidCodes',
+        'cifClassification',
+        'disabilityDegree',
+        'legalFrameworkByDisabilityType',
+        'legalFrameworkMainLaw',
+        'legalFrameworkAssessmentMethodology',
+        'technicalConclusionPcdTimeRecognized',
+        'technicalConclusionJustification',
+        'additionalNotes',
+      ],
     };
 
     return {
@@ -1172,7 +1218,7 @@ public async getRetirementPlanningRppsCompleteAnalysis(
               type: 'string',
               description:
                 'Tempo de contribuição considerando aceleradores. Ex: 30 anos 8 meses',
-            }
+            },
           },
           required: [
             'totalContributionTime',

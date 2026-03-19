@@ -16,6 +16,7 @@ import { DownloadGeneralUrbanRetirementSimplifiedAnalysisUseCase } from '@module
 import { GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/get-general-urban-retirement-analysis-remuneration-calculation.use-case';
 import { GetGeneralUrbanRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/get-general-urban-retirement-analysis.use-case';
 import { ListGeneralUrbanRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/list-general-urban-retirement-analysis-remuneration.use-case';
+import { PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/patch-general-urban-retirement-analysis-period-lawyer-observations.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis-period.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis-remuneration.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis.use-case';
@@ -42,6 +43,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     CreateGeneralUrbanRetirementAnalysisPeriodUseCase,
     CreateGeneralUrbanRetirementAnalysisRemunerationUseCase,
     UpdateGeneralUrbanRetirementAnalysisPeriodUseCase,
+    PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase,
     UpdateGeneralUrbanRetirementAnalysisRemunerationUseCase,
     GetGeneralUrbanRetirementAnalysisUseCase,
     GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase,
