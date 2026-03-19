@@ -2805,7 +2805,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         };
         return;
       }
-
     });
     const totals = this.calculateTotals(data);
 
@@ -2982,7 +2981,6 @@ export class CnisAnalyzerService implements CnisAnalyzerGateway {
         };
         return;
       }
-
     });
 
     const totalCarenciaMonths = this.calculateTotalCarencia(data);
