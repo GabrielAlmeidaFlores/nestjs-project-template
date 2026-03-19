@@ -32,6 +32,7 @@ export class AffiliateCustomerTypeormQueryRepository
   ): Promise<GetAffiliateCustomerQueryResult | null> {
     const data = await this.findOne({
       where: { id: id.toString() },
+      relations: { customer: true },
     });
 
     if (!data) {
@@ -52,6 +53,7 @@ export class AffiliateCustomerTypeormQueryRepository
       where: {
         customer: { id: customerId.toString() },
       },
+      relations: { customer: true },
     });
 
     if (!data) {
@@ -66,7 +68,7 @@ export class AffiliateCustomerTypeormQueryRepository
   }
 
   public async listAll(): Promise<GetAffiliateCustomerQueryResult[]> {
-    const data = await this.find({});
+    const data = await this.find({ relations: { customer: true } });
 
     return this.mapperGateway.mapArray(
       data,
@@ -78,7 +80,7 @@ export class AffiliateCustomerTypeormQueryRepository
   public async listWithPagination(
     param: ListAffiliateCustomersQueryParam,
   ): Promise<ListDataOutputModel<GetAffiliateCustomerQueryResult>> {
-    const result = await this.list(param);
+    const result = await this.list(param, { relations: { customer: true } });
 
     const resource = await this.mapperGateway.mapArray(
       result.resource,
