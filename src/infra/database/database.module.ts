@@ -63,6 +63,24 @@ import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository
 import { GeneralUrbanRetirementAnalysisRemunerationTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.command.repository';
 import { GeneralUrbanRetirementAnalysisRemunerationTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.typeorm.query.repository';
 import { GeneralUrbanRetirementAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant/general-urban-retirement-grant.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantAnalysisResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-analysis-result/general-urban-retirement-grant-analysis-result.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantEarningsHistoryTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-earnings-history/general-urban-retirement-grant-earnings-history.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantEarningsHistoryTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-earnings-history/general-urban-retirement-grant-earnings-history.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantInssBenefitTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-inss-benefit/general-urban-retirement-grant-inss-benefit.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-legal-proceeding/general-urban-retirement-grant-legal-proceeding.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-period/general-urban-retirement-grant-period.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-period/general-urban-retirement-grant-period.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantPeriodDocumentTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-period-document/general-urban-retirement-grant-period-document.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantPeriodDocumentTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-period-document/general-urban-retirement-grant-period-document.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-result/general-urban-retirement-grant-result.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantResultTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-result/general-urban-retirement-grant-result.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantSpecialPeriodTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-special-period/general-urban-retirement-grant-special-period.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantSpecialPeriodTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-special-period/general-urban-retirement-grant-special-period.typeorm.query.repository';
+import { GeneralUrbanRetirementGrantTimeAcceleratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-time-accelerator/general-urban-retirement-grant-time-accelerator.typeorm.command.repository';
+import { GeneralUrbanRetirementGrantTimeAcceleratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/general-urban-retirement-grant-time-accelerator/general-urban-retirement-grant-time-accelerator.typeorm.query.repository';
 import { InitialPetitionGeneratorTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.command.repository';
 import { InitialPetitionGeneratorTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/initial-petition-generator-analysis-result/initial-petition-generator-analysis-result.typeorm.query.repository';
 import { InsuranceQualityAnalysisTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/insurance-quality-analysis/insurance-quality-analysis.typeorm.command.repository';
@@ -279,6 +297,24 @@ import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepositoryGateway
 import { GeneralUrbanRetirementAnalysisRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/command/general-urban-retirement-analysis-remuneration.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/general-urban-retirement-analysis-remuneration.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-result/command/general-urban-retirement-analysis-result.command.repository.gateway';
+import { GeneralUrbanRetirementGrantCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/command/general-urban-retirement-grant.command.repository.gateway';
+import { GeneralUrbanRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/general-urban-retirement-grant.query.repository.gateway';
+import { GeneralUrbanRetirementGrantAnalysisResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/command/general-urban-retirement-grant-analysis-result.command.repository.gateway';
+import { GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/query/general-urban-retirement-grant-analysis-result.query.repository.gateway';
+import { GeneralUrbanRetirementGrantEarningsHistoryCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-earnings-history/command/general-urban-retirement-grant-earnings-history.command.repository.gateway';
+import { GeneralUrbanRetirementGrantEarningsHistoryQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-earnings-history/query/general-urban-retirement-grant-earnings-history.query.repository.gateway';
+import { GeneralUrbanRetirementGrantInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-inss-benefit/command/general-urban-retirement-grant-inss-benefit.command.repository.gateway';
+import { GeneralUrbanRetirementGrantLegalProceedingCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-legal-proceeding/command/general-urban-retirement-grant-legal-proceeding.command.repository.gateway';
+import { GeneralUrbanRetirementGrantPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period/command/general-urban-retirement-grant-period.command.repository.gateway';
+import { GeneralUrbanRetirementGrantPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period/query/general-urban-retirement-grant-period.query.repository.gateway';
+import { GeneralUrbanRetirementGrantPeriodDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period-document/command/general-urban-retirement-grant-period-document.command.repository.gateway';
+import { GeneralUrbanRetirementGrantPeriodDocumentQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-period-document/query/general-urban-retirement-grant-period-document.query.repository.gateway';
+import { GeneralUrbanRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-result/command/general-urban-retirement-grant-result.command.repository.gateway';
+import { GeneralUrbanRetirementGrantResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-result/query/general-urban-retirement-grant-result.query.repository.gateway';
+import { GeneralUrbanRetirementGrantSpecialPeriodCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-special-period/command/general-urban-retirement-grant-special-period.command.repository.gateway';
+import { GeneralUrbanRetirementGrantSpecialPeriodQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-special-period/query/general-urban-retirement-grant-special-period.query.repository.gateway';
+import { GeneralUrbanRetirementGrantTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-time-accelerator/command/general-urban-retirement-grant-time-accelerator.command.repository.gateway';
+import { GeneralUrbanRetirementGrantTimeAcceleratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-time-accelerator/query/general-urban-retirement-grant-time-accelerator.query.repository.gateway';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/query/insurance-quality-analysis.query.repository.gateway';
 import { InsuranceQualityAnalysisDocumentCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis-document/command/insurance-quality-analysis-document.command.repository.gateway';
@@ -1126,6 +1162,81 @@ const classProvider: ClassProvider[] = [
   {
     provide: RetirementPlanningRgpsSpecialPeriodQueryRepositoryGateway,
     useClass: RetirementPlanningRgpsSpecialPeriodTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantResultCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantResultTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantResultQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantResultTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantAnalysisResultCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantAnalysisResultTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantAnalysisResultTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantPeriodCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantPeriodTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantPeriodQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantPeriodTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantEarningsHistoryCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementGrantEarningsHistoryTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantEarningsHistoryQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantEarningsHistoryTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantInssBenefitCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantInssBenefitTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantLegalProceedingCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementGrantLegalProceedingTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantSpecialPeriodCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantSpecialPeriodTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantSpecialPeriodQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantSpecialPeriodTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantTimeAcceleratorCommandRepositoryGateway,
+    useClass:
+      GeneralUrbanRetirementGrantTimeAcceleratorTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantTimeAcceleratorQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantTimeAcceleratorTypeormQueryRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantPeriodDocumentCommandRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantPeriodDocumentTypeormCommandRepository,
+  },
+  {
+    provide: GeneralUrbanRetirementGrantPeriodDocumentQueryRepositoryGateway,
+    useClass: GeneralUrbanRetirementGrantPeriodDocumentTypeormQueryRepository,
   },
   {
     provide: RuralTimelineAnalysisCommandRepositoryGateway,
