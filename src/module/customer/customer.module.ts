@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AccountModule } from '@module/customer/account/account.module';
+import { AffiliateCustomerModule } from '@module/customer/affiliate-customer/affiliate-customer.module';
 import { AiConversationModule } from '@module/customer/ai-conversation/ai-conversation.module';
 import { AnalysisToolModule } from '@module/customer/analysis-tool/analysis-tool.module';
 import { DocumentsToBeGeneratedModule } from '@module/customer/documents-to-be-generated/documents-to-be-generated.module';
@@ -13,6 +14,7 @@ import { CustomerTutorialModule } from '@module/customer/tutorial/tutorial.modul
 @Module({
   imports: [
     AccountModule,
+    AffiliateCustomerModule,
     AnalysisToolModule,
     TranscriptionModule,
     LegalProceedingModule,
