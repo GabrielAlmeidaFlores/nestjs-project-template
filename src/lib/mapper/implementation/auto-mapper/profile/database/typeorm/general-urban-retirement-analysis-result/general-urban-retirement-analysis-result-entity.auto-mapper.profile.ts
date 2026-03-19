@@ -60,6 +60,7 @@ export class GeneralUrbanRetirementAnalysisResultEntityAutoMapperProfile {
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: null,
+        generalUrbanRetirementAnalysis: null,
       });
     };
 

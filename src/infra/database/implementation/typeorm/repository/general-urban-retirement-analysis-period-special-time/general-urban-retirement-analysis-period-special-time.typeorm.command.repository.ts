@@ -12,13 +12,16 @@ import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeId } from '@module/custo
 @Injectable()
 export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository
   extends BaseTypeormCommandRepository<GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity>
-  implements GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepositoryGateway
+  implements
+    GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepositoryGateway
 {
   protected readonly _type =
     GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandRepository.name;
 
   public constructor(
-    @InjectRepository(GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity)
+    @InjectRepository(
+      GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity,
+    )
     repository: Repository<GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity>,
   ) {
     super(repository);
@@ -32,6 +35,7 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandReposi
       type: props.type,
       startDate: props.startDate,
       endDate: props.endDate,
+      lawyerObservations: props.lawyerObservations,
       generalUrbanRetirementAnalysisPeriod: {
         id: props.generalUrbanRetirementAnalysisPeriod?.id.toString(),
       } as GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity['generalUrbanRetirementAnalysisPeriod'],

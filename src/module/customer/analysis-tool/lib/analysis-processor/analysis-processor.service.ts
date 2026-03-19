@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+﻿import { Inject, Injectable } from '@nestjs/common';
 
 import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/generative-ia-response-mime-type.enum';
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
@@ -26,7 +26,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
-  public async getCnisCompleteAnalysis(
+ public async getCnisCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -101,7 +101,7 @@ Análise processada do CNIS:
     );
   }
 
-  public async getRetirementPlanningRppsCompleteAnalysis(
+public async getRetirementPlanningRppsCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -694,6 +694,18 @@ Análise processada do CNIS:
     );
   }
 
+  public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+      }),
+    );
+  }
+
   public async getGeneralUrbanRetirementCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
@@ -714,12 +726,133 @@ Análise processada do CNIS:
       }),
     );
   }
+  public async getSpecialCategoryRetirementConversionAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                description: 'Lista de itens de conversão de tempo especial',
+                items: {
+                  type: 'object',
+                  properties: {
+                    originJobTitleDescription: {
+                      type: 'string',
+                      description: 'Descrição do cargo/função de origem',
+                    },
+                    periodDateRangeText: {
+                      type: 'string',
+                      description:
+                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
+                    },
+                    harmfulExposureAgentsText: {
+                      type: 'string',
+                      description:
+                        'Descrição dos agentes nocivos identificados',
+                    },
+                    specialTimeDurationText: {
+                      type: 'string',
+                      description:
+                        'Duração do tempo especial em formato textual',
+                    },
+                    convertedTimeDurationText: {
+                      type: 'string',
+                      description:
+                        'Duração do tempo convertido em formato textual',
+                    },
+                    conversionFactorValue: {
+                      type: 'number',
+                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
+                    },
+                    recognitionStatusEnum: {
+                      type: 'string',
+                      description:
+                        'Status de reconhecimento do período especial',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      }),
+    );
+  }
+
+  public async getSpecialCategoryRetirementRulesAnalysis(
+    systemInstruction: string,
+    files: Buffer[],
+  ): Promise<string | null> {
+    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
+      GenerateResponseInputModel.build({
+        systemInstruction,
+        promptFiles: files,
+        responseConfig: ResponseConfigInputModel.build({
+          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
+          jsonSchema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                description: 'Lista de regras previdenciárias analisadas',
+                items: {
+                  type: 'object',
+                  properties: {
+                    retirementModalityName: {
+                      type: 'string',
+                      description: 'Nome da modalidade de aposentadoria',
+                    },
+                    isRequirementMet: {
+                      type: 'boolean',
+                      description: 'Indica se os requisitos foram cumpridos',
+                    },
+                    projectedRetirementDate: {
+                      type: 'string',
+                      description:
+                        'Data projetada de aposentadoria (YYYY-MM-DD)',
+                      nullable: true,
+                    },
+                    estimatedRmiAmount: {
+                      type: 'number',
+                      description: 'Valor estimado da RMI',
+                      nullable: true,
+                    },
+                    isBestFinancialOption: {
+                      type: 'boolean',
+                      description: 'Indica se é a melhor opção financeira',
+                    },
+                    ruleDetailedExplanationText: {
+                      type: 'string',
+                      description: 'Explicação detalhada da regra',
+                      nullable: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      }),
+    );
+  }
 
   private getGeneralUrbanRetirementCompleteAnalysisJsonSchema(): object {
     const specialTimePeriodSchema = {
       type: 'object',
       properties: {
-        label: { type: 'string', description: 'Rótulo descritivo do período' },
+        label: {
+          type: 'string',
+          description: 'Rótulo descritivo do período',
+        },
         start: {
           type: 'string',
           description: 'Data de início no formato YYYY-MM-DD',
@@ -818,7 +951,10 @@ Análise processada do CNIS:
           items: { type: 'string' },
           description: 'CID(s) identificados',
         },
-        cifClassification: { type: 'string', description: 'Classificação CIF' },
+        cifClassification: {
+          type: 'string',
+          description: 'Classificação CIF',
+        },
         disabilityDegree: {
           type: 'string',
           description: 'Grau da deficiência (Leve, Moderado, Grave)',
@@ -953,9 +1089,15 @@ Análise processada do CNIS:
                 ],
                 description: 'Tipo de atividade ou lacuna',
               },
-              type: { type: 'string', description: 'Classificação do período' },
+              type: {
+                type: 'string',
+                description: 'Classificação do período',
+              },
               location: { type: 'string', description: 'Local do período' },
-              duration: { type: 'string', description: 'Duração (ex: 4 anos)' },
+              duration: {
+                type: 'string',
+                description: 'Duração (ex: 4 anos)',
+              },
             },
             required: [
               'startDate',
@@ -1016,6 +1158,21 @@ Análise processada do CNIS:
               type: 'string',
               description: 'Tempo comum. Ex: 12 anos 3 meses',
             },
+            contributionTimeWithoutResolvingOutstandingIssues: {
+              type: 'string',
+              description:
+                'Tempo de contribuição sem resolver pendências. Ex: 10 anos 2 meses',
+            },
+            contributionTimeAfterResolvingOutstandingIssues: {
+              type: 'string',
+              description:
+                'Tempo de contribuição após resolver pendências. Ex: 22 anos 5 meses',
+            },
+            contributionTimeWithAccelerators: {
+              type: 'string',
+              description:
+                'Tempo de contribuição considerando aceleradores. Ex: 30 anos 8 meses',
+            }
           },
           required: [
             'totalContributionTime',
@@ -1053,136 +1210,5 @@ Análise processada do CNIS:
         'completeAnalysisReport',
       ],
     };
-  }
-
-  public async getSpecialCategoryRetirementConversionAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        promptFiles: files,
-        responseConfig: ResponseConfigInputModel.build({
-          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-          jsonSchema: {
-            type: 'object',
-            properties: {
-              items: {
-                type: 'array',
-                description: 'Lista de itens de conversão de tempo especial',
-                items: {
-                  type: 'object',
-                  properties: {
-                    originJobTitleDescription: {
-                      type: 'string',
-                      description: 'Descrição do cargo/função de origem',
-                    },
-                    periodDateRangeText: {
-                      type: 'string',
-                      description:
-                        'Texto descritivo do período (ex: 01/2010 a 12/2015)',
-                    },
-                    harmfulExposureAgentsText: {
-                      type: 'string',
-                      description:
-                        'Descrição dos agentes nocivos identificados',
-                    },
-                    specialTimeDurationText: {
-                      type: 'string',
-                      description:
-                        'Duração do tempo especial em formato textual',
-                    },
-                    convertedTimeDurationText: {
-                      type: 'string',
-                      description:
-                        'Duração do tempo convertido em formato textual',
-                    },
-                    conversionFactorValue: {
-                      type: 'number',
-                      description: 'Fator de conversão aplicado (ex: 1.4, 1.2)',
-                    },
-                    recognitionStatusEnum: {
-                      type: 'string',
-                      description:
-                        'Status de reconhecimento do período especial',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        }),
-      }),
-    );
-  }
-
-  public async getSpecialCategoryRetirementRulesAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        promptFiles: files,
-        responseConfig: ResponseConfigInputModel.build({
-          responseMimeType: GenerativeIaResponseMimeTypeEnum.APPLICATION_JSON,
-          jsonSchema: {
-            type: 'object',
-            properties: {
-              items: {
-                type: 'array',
-                description: 'Lista de regras previdenciárias analisadas',
-                items: {
-                  type: 'object',
-                  properties: {
-                    retirementModalityName: {
-                      type: 'string',
-                      description: 'Nome da modalidade de aposentadoria',
-                    },
-                    isRequirementMet: {
-                      type: 'boolean',
-                      description: 'Indica se os requisitos foram cumpridos',
-                    },
-                    projectedRetirementDate: {
-                      type: 'string',
-                      description:
-                        'Data projetada de aposentadoria (YYYY-MM-DD)',
-                      nullable: true,
-                    },
-                    estimatedRmiAmount: {
-                      type: 'number',
-                      description: 'Valor estimado da RMI',
-                      nullable: true,
-                    },
-                    isBestFinancialOption: {
-                      type: 'boolean',
-                      description: 'Indica se é a melhor opção financeira',
-                    },
-                    ruleDetailedExplanationText: {
-                      type: 'string',
-                      description: 'Explicação detalhada da regra',
-                      nullable: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        }),
-      }),
-    );
-  }
-
-  public async getSpecialCategoryRetirementAdministrativeProcedureAnalysis(
-    systemInstruction: string,
-    files: Buffer[],
-  ): Promise<string | null> {
-    return await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
-      GenerateResponseInputModel.build({
-        systemInstruction,
-        promptFiles: files,
-      }),
-    );
   }
 }

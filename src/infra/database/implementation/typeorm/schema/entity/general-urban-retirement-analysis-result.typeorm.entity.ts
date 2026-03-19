@@ -30,9 +30,7 @@ export class GeneralUrbanRetirementAnalysisResultTypeormEntity extends BaseTypeo
     () => GeneralUrbanRetirementAnalysisTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisResult,
   )
-  public generalUrbanRetirementAnalysis?:
-    | GeneralUrbanRetirementAnalysisTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisResultTypeormEntity.name;

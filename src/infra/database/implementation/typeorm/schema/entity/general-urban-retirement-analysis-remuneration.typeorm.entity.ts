@@ -28,9 +28,7 @@ export class GeneralUrbanRetirementAnalysisRemunerationTypeormEntity extends Bas
     (entity) => entity.remunerations,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis?:
-    | GeneralUrbanRetirementAnalysisTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisRemunerationTypeormEntity.name;

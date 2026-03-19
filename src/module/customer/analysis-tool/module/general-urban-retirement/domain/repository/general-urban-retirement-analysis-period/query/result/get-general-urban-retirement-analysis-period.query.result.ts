@@ -27,6 +27,7 @@ export class GetGeneralUrbanRetirementAnalysisPeriodQueryResult extends BaseBuil
     type: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum;
     startDate: Date;
     endDate: Date;
+    lawyerObservations?: string;
     documents: GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult[];
   };
   public readonly disabilityPeriod?: {
@@ -38,6 +39,7 @@ export class GetGeneralUrbanRetirementAnalysisPeriodQueryResult extends BaseBuil
     category: GeneralUrbanRetirementAnalysisPeriodDisabilityCategoryEnum;
     description: string;
     dailyImpact: string;
+    lawyerObservations?: string;
     cid: {
       id: CidTenId;
       code: string;

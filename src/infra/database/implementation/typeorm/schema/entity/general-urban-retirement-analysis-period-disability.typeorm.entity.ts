@@ -72,26 +72,29 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity extends
   })
   public description: string;
 
+  @Column({
+    name: 'lawyer_observations',
+    type: 'text',
+    nullable: true,
+  })
+  public lawyerObservations: string | null;
+
   @ManyToOne(() => CidTenTypeormEntity)
   @JoinColumn({ name: 'cid_id' })
-  public cid?: CidTenTypeormEntity | undefined;
+  public cid: CidTenTypeormEntity | null;
 
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriodDisability,
   )
-  public disabilityDocuments?:
-    | GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[]
-    | undefined;
+  public disabilityDocuments: GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[] | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisPeriodTypeormEntity,
     (entity) => entity.disabilityPeriod,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_period_id' })
-  public generalUrbanRetirementAnalysisPeriod?:
-    | GeneralUrbanRetirementAnalysisPeriodTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysisPeriod: GeneralUrbanRetirementAnalysisPeriodTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity.name;

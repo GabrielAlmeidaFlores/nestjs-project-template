@@ -198,7 +198,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
     },
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisTypeormEntity | null;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,

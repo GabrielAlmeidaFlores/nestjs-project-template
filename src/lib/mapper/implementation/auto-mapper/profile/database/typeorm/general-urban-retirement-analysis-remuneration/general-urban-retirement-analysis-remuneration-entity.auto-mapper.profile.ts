@@ -28,7 +28,7 @@ export class GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: GeneralUrbanRetirementAnalysisRemunerationTypeormEntity,
     ): GeneralUrbanRetirementAnalysisRemunerationEntity => {
-      if (source.generalUrbanRetirementAnalysis === undefined) {
+      if (source.generalUrbanRetirementAnalysis === null) {
         throw new IncompleteSourceDataForMappingError({
           sourceClass:
             GeneralUrbanRetirementAnalysisRemunerationTypeormEntity.name,
@@ -70,12 +70,9 @@ export class GeneralUrbanRetirementAnalysisRemunerationEntityAutoMapperProfile {
         id: source.id.toString(),
         remunerationDate: source.remunerationDate,
         remunerationAmount: source.remunerationAmount.toString(),
-        generalUrbanRetirementAnalysis:
-          source.generalUrbanRetirementAnalysis?.id !== null
-            ? ({
-                id: source.generalUrbanRetirementAnalysis.id.toString(),
-              } as GeneralUrbanRetirementAnalysisTypeormEntity)
-            : undefined,
+        generalUrbanRetirementAnalysis: {
+          id: source.generalUrbanRetirementAnalysis.id.toString(),
+        } as GeneralUrbanRetirementAnalysisTypeormEntity,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

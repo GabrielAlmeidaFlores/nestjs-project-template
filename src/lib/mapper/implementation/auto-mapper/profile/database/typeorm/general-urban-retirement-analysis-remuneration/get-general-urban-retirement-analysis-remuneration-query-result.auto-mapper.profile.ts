@@ -50,6 +50,7 @@ export class GetGeneralUrbanRetirementAnalysisRemunerationQueryResultAutoMapperP
         ...source,
         id: source.id.toString(),
         remunerationAmount: source.remunerationAmount.toString(),
+        generalUrbanRetirementAnalysis: null,
       });
     };
 

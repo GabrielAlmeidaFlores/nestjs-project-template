@@ -1,4 +1,5 @@
 import { BaseBuildableObject } from '@shared/system/object/base-buildable.object';
+
 import type { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import type { GeneralUrbanRetirementAnalysisRemunerationId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-remuneration/value-object/general-urban-retirement-analysis-remuneration-id.value-object';
 
