@@ -6,20 +6,26 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
-import { MarkdownConverterGateway } from '@module/customer/ai-conversation/lib/markdown-converter/markdown-converter.gateway';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 
 @Injectable()
 export class MarkdownConverterService extends MarkdownConverterGateway {
   protected override readonly _type = MarkdownConverterService.name;
 
   public async convertToHtml(markdown: string): Promise<string> {
+    const normalized = markdown
+      .replace(/\\r\\n/g, '\n')
+      .replace(/\\r/g, '\n')
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t');
+
     const file = await unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeRaw)
       .use(rehypeStringify)
-      .process(markdown);
+      .process(normalized);
 
     return String(file);
   }
