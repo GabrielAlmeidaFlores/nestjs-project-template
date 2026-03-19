@@ -14,6 +14,7 @@ import { AdministrativeProcedureInssAnalysisModule } from '@module/customer/anal
 import { AudienceQuestionGeneratorModule } from '@module/customer/analysis-tool/module/audience-question-generator/audience-question-generator.module';
 import { CnisFastAnalysisModule } from '@module/customer/analysis-tool/module/cnis-fast-analysis/cnis-fast-analysis.module';
 import { DisabilityAssessmentForBpcAnalysisModule } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.module';
+import { GeneralUrbanRetirementModule } from '@module/customer/analysis-tool/module/general-urban-retirement/general-urban-retirement.module';
 import { InsuranceQualityAnalysisModule } from '@module/customer/analysis-tool/module/insurance-quality-analysis/insurance-quality-analysis.module';
 import { JudicialCaseAnalysisModule } from '@module/customer/analysis-tool/module/judicial-case-analysis/judicial-case-analysis.module';
 import { LegalPleadingModule } from '@module/customer/analysis-tool/module/legal-pleading/legal-pleading.module';
@@ -75,6 +76,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     RuralTimelineAnalysisModule,
     RetirementPlanningRgpsModule,
     RetirementPlanningRppsModule,
+    GeneralUrbanRetirementModule,
     SpecialCategoryRetirementAnalysisModule,
   ],
   controllers: [AnalysisToolController],
