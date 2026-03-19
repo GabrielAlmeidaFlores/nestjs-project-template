@@ -33,9 +33,6 @@ import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
-import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
-import { GeneralUrbanRetirementAnalysisResultEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-result/general-urban-retirement-analysis-result.entity';
-import { GeneralUrbanRetirementAnalysisResultId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-result/value-object/general-urban-retirement-analysis-result-id.value-object';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
@@ -208,46 +205,11 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
 
       const generalUrbanRetirementAnalysis =
         source.generalUrbanRetirementAnalysis !== null
-          ? (() => {
-              const g = source.generalUrbanRetirementAnalysis;
-              const result =
-                g?.generalUrbanRetirementAnalysisResult !== undefined
-                  ? new GeneralUrbanRetirementAnalysisResultEntity({
-                      id: new GeneralUrbanRetirementAnalysisResultId(
-                        g.generalUrbanRetirementAnalysisResult.id,
-                      ),
-                      generalUrbanRetirementCompleteAnalysis:
-                        g.generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementCompleteAnalysis ?? null,
-                      generalUrbanRetirementCompleteAnalysisDownload:
-                        g.generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementCompleteAnalysisDownload ??
-                        null,
-                      generalUrbanRetirementSimplifiedAnalysis:
-                        g.generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementSimplifiedAnalysis ?? null,
-                    })
-                  : null;
-
-              const generalUrbanRetirementAnalysisEntity =
-                g !== undefined
-                  ? new GeneralUrbanRetirementAnalysisEntity({
-                      id: new GeneralUrbanRetirementAnalysisId(g.id),
-                      careerStartDate: g.careerStartDate,
-                      publicServiceStartDate: g.publicServiceStartDate,
-                      generalUrbanRetirementBenefitAnalysis:
-                        g.generalUrbanRetirementBenefitAnalysis ?? null,
-                      generalUrbanRetirementAnalysisResult: result,
-                      federativeEntity: g.federativeEntity ?? null,
-                      state: g.state ?? null,
-                      municipality: g.municipality ?? null,
-                      name: g.name ?? null,
-                      benefitType: g.benefitType ?? null,
-                    })
-                  : null;
-
-              return generalUrbanRetirementAnalysisEntity;
-            })()
+          ? this.mapper.map(
+              source.generalUrbanRetirementAnalysis,
+              GeneralUrbanRetirementAnalysisTypeormEntity,
+              GeneralUrbanRetirementAnalysisEntity,
+            )
           : null;
 
       const specialCategoryRetirementAnalysis =
@@ -435,43 +397,11 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
 
       const generalUrbanRetirementAnalysis =
         source.generalUrbanRetirementAnalysis !== null
-          ? ({
-              id: source.generalUrbanRetirementAnalysis.id.toString(),
-              careerStartDate:
-                source.generalUrbanRetirementAnalysis.careerStartDate,
-              publicServiceStartDate:
-                source.generalUrbanRetirementAnalysis.publicServiceStartDate,
-              generalUrbanRetirementBenefitAnalysis:
-                source.generalUrbanRetirementAnalysis
-                  .generalUrbanRetirementBenefitAnalysis ?? null,
-              federativeEntity:
-                source.generalUrbanRetirementAnalysis.federativeEntity ?? null,
-              state: source.generalUrbanRetirementAnalysis.state ?? null,
-              municipality:
-                source.generalUrbanRetirementAnalysis.municipality ?? null,
-              name: source.generalUrbanRetirementAnalysis.name ?? null,
-              benefitType:
-                source.generalUrbanRetirementAnalysis.benefitType ?? null,
-              generalUrbanRetirementAnalysisResult:
-                source.generalUrbanRetirementAnalysis
-                  .generalUrbanRetirementAnalysisResult !== null
-                  ? {
-                      id: source.generalUrbanRetirementAnalysis.generalUrbanRetirementAnalysisResult.id.toString(),
-                      generalUrbanRetirementCompleteAnalysis:
-                        source.generalUrbanRetirementAnalysis
-                          .generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementCompleteAnalysis,
-                      generalUrbanRetirementCompleteAnalysisDownload:
-                        source.generalUrbanRetirementAnalysis
-                          .generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementCompleteAnalysisDownload,
-                      generalUrbanRetirementSimplifiedAnalysis:
-                        source.generalUrbanRetirementAnalysis
-                          .generalUrbanRetirementAnalysisResult
-                          .generalUrbanRetirementSimplifiedAnalysis,
-                    }
-                  : undefined,
-            } as unknown as GeneralUrbanRetirementAnalysisTypeormEntity)
+          ? this.mapper.map(
+              source.generalUrbanRetirementAnalysis,
+              GeneralUrbanRetirementAnalysisEntity,
+              GeneralUrbanRetirementAnalysisTypeormEntity,
+            )
           : null;
 
       const specialCategoryRetirementAnalysis =

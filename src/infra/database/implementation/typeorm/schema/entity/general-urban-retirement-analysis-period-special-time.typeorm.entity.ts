@@ -32,22 +32,25 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity extend
   })
   public endDate: Date;
 
+  @Column({
+    name: 'lawyer_observations',
+    type: 'text',
+    nullable: true,
+  })
+  public lawyerObservations: string | null;
+
   @OneToMany(
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriodSpecialTime,
   )
-  public specialTimeDocuments?:
-    | GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[]
-    | undefined;
+  public specialTimeDocuments: GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[] | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisPeriodTypeormEntity,
     (entity) => entity.specialTimePeriod,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_period_id' })
-  public generalUrbanRetirementAnalysisPeriod?:
-    | GeneralUrbanRetirementAnalysisPeriodTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysisPeriod: GeneralUrbanRetirementAnalysisPeriodTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity.name;

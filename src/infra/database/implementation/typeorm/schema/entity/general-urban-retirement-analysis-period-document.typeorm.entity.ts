@@ -33,9 +33,7 @@ export class GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity extends B
   @JoinColumn({
     name: 'general_urban_retirement_analysis_period_special_time_id',
   })
-  public generalUrbanRetirementAnalysisPeriodSpecialTime?:
-    | GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysisPeriodSpecialTime: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity | null;
 
   @ManyToOne(
     () => GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity,
@@ -45,9 +43,7 @@ export class GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity extends B
   @JoinColumn({
     name: 'general_urban_retirement_analysis_period_disability_id',
   })
-  public generalUrbanRetirementAnalysisPeriodDisability?:
-    | GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysisPeriodDisability: GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity | null;
 
   @ManyToOne(
     () => GeneralUrbanRetirementAnalysisTypeormEntity,
@@ -55,9 +51,7 @@ export class GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity extends B
     { nullable: true },
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis?:
-    | GeneralUrbanRetirementAnalysisTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity.name;

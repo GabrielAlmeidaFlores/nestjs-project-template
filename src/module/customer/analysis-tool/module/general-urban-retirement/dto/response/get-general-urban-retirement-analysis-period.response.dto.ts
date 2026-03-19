@@ -53,10 +53,14 @@ export class GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto extends BaseB
 
 @ResponseDto()
 export class GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(GeneralUrbanRetirementAnalysisPeriodSpecialTimeId)
+  @ResponseDtoValueObjectProperty(
+    GeneralUrbanRetirementAnalysisPeriodSpecialTimeId,
+  )
   public id: GeneralUrbanRetirementAnalysisPeriodSpecialTimeId;
 
-  @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum)
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum,
+  )
   public type: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum;
 
   @ResponseDtoDateProperty()
@@ -64,6 +68,9 @@ export class GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto exten
 
   @ResponseDtoDateProperty()
   public endDate: Date;
+
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservations?: string;
 
   @ResponseDtoObjectProperty(
     () => GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto,
@@ -77,13 +84,19 @@ export class GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto exten
 
 @ResponseDto()
 export class GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto extends BaseBuildableDtoObject {
-  @ResponseDtoValueObjectProperty(GeneralUrbanRetirementAnalysisPeriodDisabilityId)
+  @ResponseDtoValueObjectProperty(
+    GeneralUrbanRetirementAnalysisPeriodDisabilityId,
+  )
   public id: GeneralUrbanRetirementAnalysisPeriodDisabilityId;
 
-  @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisPeriodDisabilityTimeTypeEnum)
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementAnalysisPeriodDisabilityTimeTypeEnum,
+  )
   public type: GeneralUrbanRetirementAnalysisPeriodDisabilityTimeTypeEnum;
 
-  @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisPeriodDisabilityDegreeEnum)
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementAnalysisPeriodDisabilityDegreeEnum,
+  )
   public degree: GeneralUrbanRetirementAnalysisPeriodDisabilityDegreeEnum;
 
   @ResponseDtoDateProperty()
@@ -92,7 +105,9 @@ export class GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto extend
   @ResponseDtoDateProperty()
   public endDate: Date;
 
-  @ResponseDtoEnumProperty(GeneralUrbanRetirementAnalysisPeriodDisabilityCategoryEnum)
+  @ResponseDtoEnumProperty(
+    GeneralUrbanRetirementAnalysisPeriodDisabilityCategoryEnum,
+  )
   public category: GeneralUrbanRetirementAnalysisPeriodDisabilityCategoryEnum;
 
   @ResponseDtoStringProperty()
@@ -101,7 +116,12 @@ export class GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto extend
   @ResponseDtoStringProperty()
   public dailyImpact: string;
 
-  @ResponseDtoObjectProperty(() => GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto)
+  @ResponseDtoStringProperty({ required: false })
+  public lawyerObservations?: string;
+
+  @ResponseDtoObjectProperty(
+    () => GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto,
+  )
   public cid: GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto;
 
   @ResponseDtoObjectProperty(

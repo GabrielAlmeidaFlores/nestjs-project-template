@@ -9,11 +9,11 @@ import {
 } from '@module/customer/analysis-tool/dto/response/get-analysis-tool-client.response.dto';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
+import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GetGeneralUrbanRetirementAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/query/result/get-general-urban-retirement-analysis-document.query.result';
 import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
-import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
-import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
+import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
 import {
   GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto,
   GetGeneralUrbanRetirementAnalysisPeriodResponseDto,
@@ -21,7 +21,7 @@ import {
   GetGeneralUrbanRetirementAnalysisPeriodDisabilityResponseDto,
   GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto,
 } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-period.response.dto';
-import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
+import { GetGeneralUrbanRetirementAnalysisRemunerationResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-remuneration.response.dto';
 import {
   GetGeneralUrbanRetirementAnalysisResponseDto,
   GetGeneralUrbanRetirementAnalysisResultResponseDto,
@@ -145,13 +145,19 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
             p.specialTimePeriod.documents,
           );
           specialTimePeriod =
-            GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto.build({
-              id: p.specialTimePeriod.id,
-              type: p.specialTimePeriod.type,
-              startDate: p.specialTimePeriod.startDate,
-              endDate: p.specialTimePeriod.endDate,
-              ...(documents.length > 0 && { documents }),
-            });
+            GetGeneralUrbanRetirementAnalysisPeriodSpecialTimeResponseDto.build(
+              {
+                id: p.specialTimePeriod.id,
+                type: p.specialTimePeriod.type,
+                startDate: p.specialTimePeriod.startDate,
+                endDate: p.specialTimePeriod.endDate,
+                ...(p.specialTimePeriod.lawyerObservations !== undefined && {
+                  lawyerObservations:
+                    p.specialTimePeriod.lawyerObservations,
+                }),
+                ...(documents.length > 0 && { documents }),
+              },
+            );
         }
 
         let disabilityPeriod:
@@ -171,6 +177,9 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
               category: p.disabilityPeriod.category,
               description: p.disabilityPeriod.description,
               dailyImpact: p.disabilityPeriod.dailyImpact,
+              ...(p.disabilityPeriod.lawyerObservations !== undefined && {
+                lawyerObservations: p.disabilityPeriod.lawyerObservations,
+              }),
               cid: GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto.build({
                 id: p.disabilityPeriod.cid.id,
                 code: p.disabilityPeriod.cid.code,
@@ -203,17 +212,29 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
     return GetGeneralUrbanRetirementAnalysisResponseDto.build({
       id: analysisQueryResult.id,
       careerStartDate: analysisQueryResult.careerStartDate ?? null,
-      publicServiceStartDate: analysisQueryResult.publicServiceStartDate ?? null,
+      publicServiceStartDate:
+        analysisQueryResult.publicServiceStartDate ?? null,
       analysisToolClient,
       generalUrbanRetirementAnalysisResult,
       federativeEntity: analysisQueryResult.federativeEntity ?? null,
       state: analysisQueryResult.state ?? null,
       municipality: analysisQueryResult.municipality ?? null,
       name: analysisQueryResult.name ?? null,
-      ...(analysisQueryResult.benefitType !== null && { benefitType: analysisQueryResult.benefitType }),
-      ...(analysisQueryResult.currentPosition !== null && { currentPosition: analysisQueryResult.currentPosition }),
-      ...(analysisQueryResult.generalUrbanRetirementBenefitAnalysis !== null && { generalUrbanRetirementBenefitAnalysis: analysisQueryResult.generalUrbanRetirementBenefitAnalysis }),
-      ...(analysisQueryResult.legalProceedings[0] !== undefined && { legalProceedingNumber: analysisQueryResult.legalProceedings[0].legalProceeding }),
+      ...(analysisQueryResult.benefitType !== null && {
+        benefitType: analysisQueryResult.benefitType,
+      }),
+      ...(analysisQueryResult.currentPosition !== null && {
+        currentPosition: analysisQueryResult.currentPosition,
+      }),
+      ...(analysisQueryResult.generalUrbanRetirementBenefitAnalysis !==
+        null && {
+        generalUrbanRetirementBenefitAnalysis:
+          analysisQueryResult.generalUrbanRetirementBenefitAnalysis,
+      }),
+      ...(analysisQueryResult.legalProceedings[0] !== undefined && {
+        legalProceedingNumber:
+          analysisQueryResult.legalProceedings[0].legalProceeding,
+      }),
       remunerations,
       periods,
       documents,
@@ -254,11 +275,13 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
         );
         const originalFileName =
           await this.fileProcessorGateway.getOriginalFileName(doc.document);
-        return GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto.build({
-          type: doc.documentType,
-          document: Base64.encodeBuffer(buffer),
-          originalFileName,
-        });
+        return GetGeneralUrbanRetirementAnalysisPeriodDocumentResponseDto.build(
+          {
+            type: doc.documentType,
+            document: Base64.encodeBuffer(buffer),
+            originalFileName,
+          },
+        );
       }),
     );
   }

@@ -27,9 +27,7 @@ export class GeneralUrbanRetirementAnalysisDocumentTypeormEntity extends BaseTyp
     (entity) => entity.documents,
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis?:
-    | GeneralUrbanRetirementAnalysisTypeormEntity
-    | undefined;
+  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   protected override readonly _type =
     GeneralUrbanRetirementAnalysisDocumentTypeormEntity.name;
