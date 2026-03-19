@@ -87,7 +87,9 @@ export class GeneralUrbanRetirementAnalysisPeriodDisabilityTypeormEntity extends
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriodDisability,
   )
-  public disabilityDocuments: GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[] | null;
+  public disabilityDocuments:
+    | GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[]
+    | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisPeriodTypeormEntity,

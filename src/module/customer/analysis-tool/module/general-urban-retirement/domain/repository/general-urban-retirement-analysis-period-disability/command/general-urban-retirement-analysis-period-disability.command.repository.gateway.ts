@@ -10,4 +10,9 @@ export abstract class GeneralUrbanRetirementAnalysisPeriodDisabilityCommandRepos
   public abstract deleteGeneralUrbanRetirementAnalysisPeriodDisability(
     id: GeneralUrbanRetirementAnalysisPeriodDisabilityId,
   ): TransactionType;
+
+  public abstract updateLawyerObservations(
+    id: GeneralUrbanRetirementAnalysisPeriodDisabilityId,
+    lawyerObservations: string | null,
+  ): TransactionType;
 }

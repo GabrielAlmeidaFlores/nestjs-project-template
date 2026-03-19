@@ -15,6 +15,7 @@ import { CreateGeneralUrbanRetirementAnalysisPeriodRequestDto } from '@module/cu
 import { CreateGeneralUrbanRetirementAnalysisRemunerationRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/create-general-urban-retirement-analysis-remuneration.request.dto';
 import { CreateGeneralUrbanRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/create-general-urban-retirement-analysis.request.dto';
 import { ListGeneralUrbanRetirementAnalysisRemunerationRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/list-general-urban-retirement-analysis-remuneration.request.dto';
+import { PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/patch-general-urban-retirement-analysis-period-lawyer-observations.request.dto';
 import { UpdateGeneralUrbanRetirementAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/update-general-urban-retirement-analysis-period.request.dto';
 import { UpdateGeneralUrbanRetirementAnalysisRemunerationRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/update-general-urban-retirement-analysis-remuneration.request.dto';
 import { UpdateGeneralUrbanRetirementAnalysisRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/update-general-urban-retirement-analysis.request.dto';
@@ -39,6 +40,7 @@ import { DownloadGeneralUrbanRetirementSimplifiedAnalysisUseCase } from '@module
 import { GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/get-general-urban-retirement-analysis-remuneration-calculation.use-case';
 import { GetGeneralUrbanRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/get-general-urban-retirement-analysis.use-case';
 import { ListGeneralUrbanRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/list-general-urban-retirement-analysis-remuneration.use-case';
+import { PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/patch-general-urban-retirement-analysis-period-lawyer-observations.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisPeriodUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis-period.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisRemunerationUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis-remuneration.use-case';
 import { UpdateGeneralUrbanRetirementAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement/use-case/update-general-urban-retirement-analysis.use-case';
@@ -62,6 +64,7 @@ export class GeneralUrbanRetirementController {
     private readonly createGeneralUrbanRetirementAnalysisPeriodUseCase: CreateGeneralUrbanRetirementAnalysisPeriodUseCase,
     private readonly createGeneralUrbanRetirementAnalysisRemunerationUseCase: CreateGeneralUrbanRetirementAnalysisRemunerationUseCase,
     private readonly updateGeneralUrbanRetirementAnalysisPeriodUseCase: UpdateGeneralUrbanRetirementAnalysisPeriodUseCase,
+    private readonly patchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase: PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase,
     private readonly updateGeneralUrbanRetirementAnalysisRemunerationUseCase: UpdateGeneralUrbanRetirementAnalysisRemunerationUseCase,
     private readonly getGeneralUrbanRetirementAnalysisUseCase: GetGeneralUrbanRetirementAnalysisUseCase,
     private readonly getGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase: GetGeneralUrbanRetirementAnalysisRemunerationCalculationUseCase,
@@ -200,6 +203,42 @@ export class GeneralUrbanRetirementController {
     @Body() dto: UpdateGeneralUrbanRetirementAnalysisPeriodRequestDto,
   ): Promise<UpdateGeneralUrbanRetirementAnalysisPeriodResponseDto> {
     return await this.updateGeneralUrbanRetirementAnalysisPeriodUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementAnalysisId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar observações do advogado dos períodos especial e PCD',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':generalUrbanRetirementAnalysisId/period/lawyer-observations',
+      method: RequestMethod.PATCH,
+      type: PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsRequestDto,
+    },
+    tag: ['analise-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Observações do advogado atualizadas com sucesso.',
+      type: UpdateGeneralUrbanRetirementAnalysisPeriodResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async patchGeneralUrbanRetirementAnalysisPeriodLawyerObservations(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'generalUrbanRetirementAnalysisId',
+      new ParseValueObjectPipe(GeneralUrbanRetirementAnalysisId),
+    )
+    generalUrbanRetirementAnalysisId: GeneralUrbanRetirementAnalysisId,
+    @Body()
+    dto: PatchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsRequestDto,
+  ): Promise<UpdateGeneralUrbanRetirementAnalysisPeriodResponseDto> {
+    return await this.patchGeneralUrbanRetirementAnalysisPeriodLawyerObservationsUseCase.execute(
       sessionData,
       organizationSessionData,
       generalUrbanRetirementAnalysisId,
