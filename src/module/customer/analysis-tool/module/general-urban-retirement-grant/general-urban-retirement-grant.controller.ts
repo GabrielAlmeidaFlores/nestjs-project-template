@@ -1,10 +1,19 @@
-import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  ParseEnumPipe,
+  Query,
+  RequestMethod,
+  StreamableFile,
+} from '@nestjs/common';
 
 import { AnalysisToolClientId } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/value-object/analysis-tool-client-id/analysis-tool-client-id.value-object';
 import { PeriodConsiderationActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-consideration-action.request.dto';
 import { PeriodLeaveDateActionRequestDto } from '@module/customer/analysis-tool/dto/request/period-leave-date-action.request.dto';
-import { GeneralUrbanRetirementGrantAnalysisResultId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-analysis-result/value-object/general-urban-retirement-grant-analysis-result-id.value-object';
+import { ExportDocumentFormatEnum } from '@module/customer/analysis-tool/lib/export-document/enum/export-document-type.enum';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
+import { GeneralUrbanRetirementGrantAnalysisResultId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-analysis-result/value-object/general-urban-retirement-grant-analysis-result-id.value-object';
 import { GeneralUrbanRetirementGrantPeriodId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/value-object/general-urban-retirement-grant-period-id.value-object';
 import { GeneralUrbanRetirementGrantTimeAcceleratorId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-time-accelerator/value-object/general-urban-retirement-grant-time-accelerator-id.value-object';
 import { AnalyzeGeneralUrbanRetirementGrantCnisRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/analyze-general-urban-retirement-grant-cnis.request.dto';
@@ -14,8 +23,8 @@ import { ConvertGeneralUrbanRetirementGrantSpecialPeriodRequestDto } from '@modu
 import { CreateGeneralUrbanRetirementGrantCnisRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant-cnis.request.dto';
 import { CreateGeneralUrbanRetirementGrantPeriodDocumentRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant-period-document.request.dto';
 import { CreateGeneralUrbanRetirementGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant-period.request.dto';
-import { CreateGeneralUrbanRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant.request.dto';
 import { CreateGeneralUrbanRetirementGrantTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant-time-accelerator.request.dto';
+import { CreateGeneralUrbanRetirementGrantRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-general-urban-retirement-grant.request.dto';
 import { CreateMultipleGeneralUrbanRetirementGrantPeriodsRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/create-multiple-general-urban-retirement-grant-periods.request.dto';
 import { ListGeneralUrbanRetirementGrantPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/list-general-urban-retirement-grant-period.request.dto';
 import { ListGeneralUrbanRetirementGrantTimeAcceleratorRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/request/list-general-urban-retirement-grant-time-accelerator.request.dto';
@@ -28,9 +37,9 @@ import { ConvertGeneralUrbanRetirementGrantSpecialPeriodResponseDto } from '@mod
 import { CreateGeneralUrbanRetirementGrantCnisResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant-cnis.response.dto';
 import { CreateGeneralUrbanRetirementGrantPeriodDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant-period-document.response.dto';
 import { CreateGeneralUrbanRetirementGrantPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant-period.response.dto';
-import { CreateGeneralUrbanRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant.response.dto';
 import { CreateGeneralUrbanRetirementGrantResultResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant-result.response.dto';
 import { CreateGeneralUrbanRetirementGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant-time-accelerator.response.dto';
+import { CreateGeneralUrbanRetirementGrantResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-general-urban-retirement-grant.response.dto';
 import { CreateMultipleGeneralUrbanRetirementGrantPeriodsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/create-multiple-general-urban-retirement-grant-periods.response.dto';
 import { DeleteGeneralUrbanRetirementGrantTimeAcceleratorResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/delete-general-urban-retirement-grant-time-accelerator.response.dto';
 import { GetGeneralUrbanRetirementGrantDetailsResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/dto/response/get-general-urban-retirement-grant-details.response.dto';
@@ -60,6 +69,8 @@ import { CreateGeneralUrbanRetirementGrantTimeAcceleratorUseCase } from '@module
 import { CreateGeneralUrbanRetirementGrantUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/create-general-urban-retirement-grant.use-case';
 import { CreateMultipleGeneralUrbanRetirementGrantPeriodsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/create-multiple-general-urban-retirement-grant-periods.use-case';
 import { DeleteGeneralUrbanRetirementGrantTimeAcceleratorUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/delete-general-urban-retirement-grant-time-accelerator.use-case';
+import { DownloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/download-general-urban-retirement-grant-complete-analysis.use-case';
+import { DownloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/download-general-urban-retirement-grant-simplified-analysis.use-case';
 import { GetGeneralUrbanRetirementGrantDetailsUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-details.use-case';
 import { GetGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-period-earnings-below-minimum.use-case';
 import { GetGeneralUrbanRetirementGrantPeriodEarningsOverdueUseCase } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/use-case/get-general-urban-retirement-grant-period-earnings-overdue.use-case';
@@ -109,6 +120,8 @@ export class GeneralUrbanRetirementGrantController {
     private readonly analyzeCtpsOutsideCnisUseCase: AnalyzeCtpsOutsideCnisUseCase,
     private readonly createGeneralUrbanRetirementGrantTimeAcceleratorUseCase: CreateGeneralUrbanRetirementGrantTimeAcceleratorUseCase,
     private readonly deleteGeneralUrbanRetirementGrantTimeAcceleratorUseCase: DeleteGeneralUrbanRetirementGrantTimeAcceleratorUseCase,
+    private readonly downloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase: DownloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase,
+    private readonly downloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase: DownloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase,
     private readonly listGeneralUrbanRetirementGrantTimeAcceleratorUseCase: ListGeneralUrbanRetirementGrantTimeAcceleratorUseCase,
     private readonly listGeneralUrbanRetirementGrantPeriodUseCase: ListGeneralUrbanRetirementGrantPeriodUseCase,
     private readonly getGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase: GetGeneralUrbanRetirementGrantPeriodEarningsBelowMinimumUseCase,
@@ -155,7 +168,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Adicionar documento CNIS à análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Adicionar documento CNIS à análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'cnis',
@@ -186,7 +200,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Adicionar período à análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Adicionar período à análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'period',
@@ -211,7 +226,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Adicionar múltiplos períodos à análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Adicionar múltiplos períodos à análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'many',
@@ -266,7 +282,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Criar e salvar o resultado da análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Criar e salvar o resultado da análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':generalUrbanRetirementGrantId/result',
@@ -298,7 +315,80 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Atualizar resultado da análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Baixar análise simplificada da concessão de aposentadoria urbana geral',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':generalUrbanRetirementGrantId/download/simplified-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['concessao-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo da análise simplificada retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadGeneralUrbanRetirementGrantSimplifiedById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'generalUrbanRetirementGrantId',
+      new ParseValueObjectPipe(GeneralUrbanRetirementGrantId),
+    )
+    generalUrbanRetirementGrantId: GeneralUrbanRetirementGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadGeneralUrbanRetirementGrantSimplifiedAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementGrantId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Baixar análise completa da concessão de aposentadoria urbana geral',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: ':generalUrbanRetirementGrantId/download/complete-version',
+      method: RequestMethod.GET,
+    },
+    tag: ['concessao-aposentadoria-urbana-geral'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Arquivo da análise completa retornado para download.',
+      type: Buffer,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard],
+  })
+  public async downloadGeneralUrbanRetirementGrantCompleteById(
+    @GetSessionData() sessionData: SessionDataModel,
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'generalUrbanRetirementGrantId',
+      new ParseValueObjectPipe(GeneralUrbanRetirementGrantId),
+    )
+    generalUrbanRetirementGrantId: GeneralUrbanRetirementGrantId,
+    @Query('format', new ParseEnumPipe(ExportDocumentFormatEnum))
+    format: ExportDocumentFormatEnum = ExportDocumentFormatEnum.PDF,
+  ): Promise<StreamableFile> {
+    return await this.downloadGeneralUrbanRetirementGrantCompleteAnalysisUseCase.execute(
+      sessionData,
+      organizationSessionData,
+      generalUrbanRetirementGrantId,
+      format,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary:
+      'Atualizar resultado da análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':generalUrbanRetirementGrantId/result',
@@ -329,7 +419,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Alterar cliente da análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Alterar cliente da análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':generalUrbanRetirementGrantId/client/:analysisToolClientId',
@@ -338,8 +429,7 @@ export class GeneralUrbanRetirementGrantController {
     tag: ['concessao-aposentadoria-urbana-geral'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description:
-        'Cliente da análise atualizado com sucesso.',
+      description: 'Cliente da análise atualizado com sucesso.',
       type: UpdateGeneralUrbanRetirementGrantResultResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -393,7 +483,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Comparar CNIS e CTPS para análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Comparar CNIS e CTPS para análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'period/compare-cnis-ctps',
@@ -736,7 +827,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Listar períodos da análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Listar períodos da análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'period',
@@ -745,8 +837,7 @@ export class GeneralUrbanRetirementGrantController {
     tag: ['concessao-aposentadoria-urbana-geral'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description:
-        'Lista de períodos retornada com sucesso.',
+      description: 'Lista de períodos retornada com sucesso.',
       type: ListGeneralUrbanRetirementGrantPeriodResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -775,8 +866,7 @@ export class GeneralUrbanRetirementGrantController {
     tag: ['concessao-aposentadoria-urbana-geral'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description:
-        'Lista de aceleradores de tempo retornada com sucesso.',
+      description: 'Lista de aceleradores de tempo retornada com sucesso.',
       type: ListGeneralUrbanRetirementGrantTimeAcceleratorResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -860,8 +950,7 @@ export class GeneralUrbanRetirementGrantController {
     tag: ['concessao-aposentadoria-urbana-geral'],
     successResponse: {
       statusCode: HttpStatus.CREATED,
-      description:
-        'Análise de documento sem data de saída criada com sucesso.',
+      description: 'Análise de documento sem data de saída criada com sucesso.',
       type: CreateGeneralUrbanRetirementGrantPeriodDocumentResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -880,8 +969,7 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Listar ganhos abaixo do mínimo de um período',
+    summary: 'Listar ganhos abaixo do mínimo de um período',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'period/:generalUrbanRetirementGrantPeriodId/earnings/below-minimum',
@@ -913,8 +1001,7 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary:
-      'Listar ganhos sem data de saída de um período',
+    summary: 'Listar ganhos sem data de saída de um período',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: 'period/:generalUrbanRetirementGrantPeriodId/earnings/without-leave-date',
@@ -955,8 +1042,7 @@ export class GeneralUrbanRetirementGrantController {
     tag: ['concessao-aposentadoria-urbana-geral'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description:
-        'Ganhos com competências em atraso retornados com sucesso.',
+      description: 'Ganhos com competências em atraso retornados com sucesso.',
       type: GetGeneralUrbanRetirementGrantPeriodEarningResponseDto,
     },
     guard: [AuthGuard, OrganizationSessionGuard],
@@ -1039,7 +1125,8 @@ export class GeneralUrbanRetirementGrantController {
   }
 
   @BuildEndpointSpecification({
-    summary: 'Obter todos os detalhes da análise de concessão de aposentadoria urbana geral',
+    summary:
+      'Obter todos os detalhes da análise de concessão de aposentadoria urbana geral',
     userLevel: [UserLevelEnum.CUSTOMER],
     http: {
       path: ':generalUrbanRetirementGrantId/details',

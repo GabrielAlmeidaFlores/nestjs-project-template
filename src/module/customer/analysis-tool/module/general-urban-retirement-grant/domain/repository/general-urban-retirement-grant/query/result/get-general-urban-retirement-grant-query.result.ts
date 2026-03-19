@@ -6,6 +6,7 @@ import type { GeneralUrbanRetirementGrantResultEntity } from '@module/customer/a
 export class GetGeneralUrbanRetirementGrantQueryResult extends BaseBuildableObject {
   public readonly id: GeneralUrbanRetirementGrantId;
   public readonly cnisDocument: string | null;
+  public readonly analysisName: string | null;
   public readonly generalUrbanRetirementGrantResult: GeneralUrbanRetirementGrantResultEntity | null;
 
   protected override readonly _type =

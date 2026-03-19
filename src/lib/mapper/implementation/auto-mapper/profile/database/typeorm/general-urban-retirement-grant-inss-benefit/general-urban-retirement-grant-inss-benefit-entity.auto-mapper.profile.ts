@@ -69,7 +69,7 @@ export class GeneralUrbanRetirementGrantInssBenefitEntityAutoMapperProfile {
         ...source,
         id: source.id.toString(),
         generalUrbanRetirementGrant,
-      } as any);
+      } as GeneralUrbanRetirementGrantInssBenefitTypeormEntity);
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);

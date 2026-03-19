@@ -30,7 +30,7 @@ export class GetGeneralUrbanRetirementGrantUseCase {
       );
 
     return {
-      id: result.id,
+      id: result.id.toString(),
       cnisDocument: result.cnisDocument ?? undefined,
       generalUrbanRetirementGrantBenefit:
         result.generalUrbanRetirementGrantBenefit?.map((b) =>

@@ -584,7 +584,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Comparação inteligente entre vínculos do CNIS e anotações da CTPS com IA para concessão de aposentadoria urbana geral. Identifica períodos divergentes, vínculos omissos no CNIS, inconsistências de datas e dados, gerando relatório de períodos que podem ser reconhecidos judicialmente ou administrativamente.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f'),
+      id: new PaymentPlanPaidResourceId('c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_SPECIAL_PERIOD_PPP_ANALYSIS,
       creditCost: 6,
@@ -594,7 +594,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de períodos de trabalho especial com base no PPP para concessão de aposentadoria urbana geral usando IA. Identifica exposição a agentes nocivos, valida enquadramento legal por período histórico, calcula conversão de tempo especial em comum e impacto na aposentadoria.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a'),
+      id: new PaymentPlanPaidResourceId('d4e5f6a7-b8c9-4d0e-8f2a-3b4c5d6e7f8a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_NO_END_DATE_DOCUMENTS_ANALYSIS,
       creditCost: 5,
@@ -604,7 +604,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de vínculos empregatícios e atividades sem data de término usando IA para concessão de aposentadoria urbana geral. Examina contratos de trabalho vigentes, atividades autônomas em andamento, vínculos não baixados no CNIS, calculando projeções de tempo futuro e elegibilidade progressiva.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b'),
+      id: new PaymentPlanPaidResourceId('e5f6a7b8-c9d0-4e1f-8a3b-4c5d6e7f8a9b'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_RURAL_TIME_ANALYSIS,
       creditCost: 4,
@@ -613,7 +613,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de períodos de atividade rural com IA para reconhecimento previdenciário na concessão de aposentadoria urbana geral. Examina documentos comprobatórios, valida início de prova material, calcula tempo rural computável e orienta sobre reconhecimento judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c'),
+      id: new PaymentPlanPaidResourceId('f6a7b8c9-d0e1-4f2a-8b4c-5d6e7f8a9b0c'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_MILITARY_SERVICE_ANALYSIS,
       creditCost: 4,
@@ -623,7 +623,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo de serviço militar obrigatório com IA para cômputo previdenciário na concessão de aposentadoria urbana geral. Valida certificados de reservista, calcula período computável, verifica sobreposição com vínculos civis, orienta sobre procedimento de averbação.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d'),
+      id: new PaymentPlanPaidResourceId('a7b8c9d0-e1f2-4a3b-8c5d-6e7f8a9b0c1d'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_PUBLIC_SERVICE_ANALYSIS,
       creditCost: 5,
@@ -633,7 +633,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo de serviço público com IA para averbação no RGPS na concessão de aposentadoria urbana geral. Examina CTC, valida períodos computáveis, identifica possíveis recusas de averbação e orienta sobre contestação administrativa ou judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e'),
+      id: new PaymentPlanPaidResourceId('b8c9d0e1-f2a3-4b4c-8d6e-7f8a9b0c1d2e'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_CTPS_OUTSIDE_CNIS_ANALYSIS,
       creditCost: 4,
@@ -643,7 +643,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de vínculos anotados na CTPS mas ausentes no CNIS usando IA para concessão de aposentadoria urbana geral. Identifica períodos omissos, valida autenticidade das anotações, avalia viabilidade de reconhecimento administrativo ou necessidade de ação judicial.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f'),
+      id: new PaymentPlanPaidResourceId('c9d0e1f2-a3b4-4c5d-8e7f-8a9b0c1d2e3f'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_STUDENT_APPRENTICE_ANALYSIS,
       creditCost: 3,
@@ -653,7 +653,7 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de tempo como estudante aprendiz com IA para reconhecimento previdenciário na concessão de aposentadoria urbana geral. Valida contratos de aprendizagem, verifica recolhimentos ao INSS, calcula período computável conforme legislação vigente à época.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('d0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a'),
+      id: new PaymentPlanPaidResourceId('d0e1f2a3-b4c5-4d6e-8f8a-9b0c1d2e3f4a'),
       resource:
         PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_WORK_ABROAD_ANALYSIS,
       creditCost: 5,
@@ -683,13 +683,22 @@ export const PAYMENT_PLAN_PAID_RESOURCE_SEED: Array<PaymentPlanPaidResourceEntit
         'Análise de sentenças e acordos trabalhistas com IA para reconhecimento de vínculo previdenciário na concessão de aposentadoria urbana geral. Examina decisões judiciais transitadas em julgado, valida reconhecimento de vínculo empregatício, calcula período e salários de contribuição homologados.',
     }),
     new PaymentPlanPaidResourceEntity({
-      id: new PaymentPlanPaidResourceId('a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d'),
+      id: new PaymentPlanPaidResourceId('a3b4c5d6-e7f8-4a9b-8c1d-2e3f4a5b6c7d'),
       resource:
-        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_FINAL_RULES_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
       creditCost: 5,
       title: 'CONCESSÃO APOSENTADORIA URBANA GERAL - ANÁLISE DE REGRAS FINAIS',
       description:
         'Análise comparativa final de todas as regras de aposentadoria disponíveis no RGPS usando IA para concessão de aposentadoria urbana geral. Simula aposentadoria por idade, tempo de contribuição, regras de transição, calcula valores estimados, identifica regra mais vantajosa e melhor momento para requerer.',
+    }),
+    new PaymentPlanPaidResourceEntity({
+      id: new PaymentPlanPaidResourceId('b4c5d6e7-f8a9-4b0c-9d2e-3f4a5b6c7d8e'),
+      resource:
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_SIMPLIFIED_ANALYSIS,
+      creditCost: 3,
+      title: 'CONCESSÃO APOSENTADORIA URBANA GERAL - ANÁLISE SIMPLIFICADA',
+      description:
+        'Versão simplificada da análise final de concessão de aposentadoria urbana geral com IA. Resume regras elegíveis, datas projetadas, RMI estimada e recomendação prática em linguagem acessível, mantendo os principais pontos técnicos para tomada de decisão rápida.',
     }),
     new PaymentPlanPaidResourceEntity({
       id: new PaymentPlanPaidResourceId('36bcef6c-889f-4493-93d8-ba3457398caa'),

@@ -16,6 +16,9 @@ export class DataGeneralUrbanRetirementGrantRequestDto extends BaseBuildableDtoO
   @RequestDtoStringProperty({ required: false, isArray: true })
   public inssBenefitNumber?: string[];
 
+  @RequestDtoStringProperty({ required: false })
+  public analysisName?: string;
+
   protected override readonly _type =
     DataGeneralUrbanRetirementGrantRequestDto.name;
 }

@@ -85,6 +85,7 @@ export class CreateGeneralUrbanRetirementGrantUseCase {
 
     const generalUrbanRetirementGrant = new GeneralUrbanRetirementGrantEntity({
       cnisDocument: null,
+      analysisName: dto.json.analysisName ?? null,
       generalUrbanRetirementGrantResult,
     });
 

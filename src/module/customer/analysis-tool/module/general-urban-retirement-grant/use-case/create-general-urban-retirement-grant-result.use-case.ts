@@ -15,6 +15,8 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GeneralUrbanRetirementGrantQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant/query/general-urban-retirement-grant.query.repository.gateway';
+import { GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/query/general-urban-retirement-grant-analysis-result.query.repository.gateway';
+import { GetGeneralUrbanRetirementGrantAnalysisResultQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-analysis-result/query/result/get-general-urban-retirement-grant-analysis-result.query.result';
 import { GeneralUrbanRetirementGrantResultCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/repository/general-urban-retirement-grant-result/command/general-urban-retirement-grant-result.command.repository.gateway';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
@@ -27,6 +29,11 @@ import { GetPaymentPlanPaidResourcePromptUseCaseGateway } from '@module/customer
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
+type ParsedIaResponseType = {
+  analiseCompletaJson?: unknown;
+  analiseCompletaMarkdown?: unknown;
+};
+
 @Injectable()
 export class CreateGeneralUrbanRetirementGrantResultUseCase {
   protected readonly _type =
@@ -35,6 +42,8 @@ export class CreateGeneralUrbanRetirementGrantResultUseCase {
   public constructor(
     @Inject(GeneralUrbanRetirementGrantQueryRepositoryGateway)
     private readonly generalUrbanRetirementGrantQueryRepositoryGateway: GeneralUrbanRetirementGrantQueryRepositoryGateway,
+    @Inject(GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway)
+    private readonly generalUrbanRetirementGrantAnalysisResultQueryRepositoryGateway: GeneralUrbanRetirementGrantAnalysisResultQueryRepositoryGateway,
     @Inject(GeneralUrbanRetirementGrantResultCommandRepositoryGateway)
     private readonly generalUrbanRetirementGrantResultCommandRepositoryGateway: GeneralUrbanRetirementGrantResultCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
@@ -113,16 +122,35 @@ export class CreateGeneralUrbanRetirementGrantResultUseCase {
       null,
       2,
     );
+    const analysisResultQueryRepository = this
+      .generalUrbanRetirementGrantAnalysisResultQueryRepositoryGateway as {
+      findManyByGeneralUrbanRetirementGrantId: (
+        generalUrbanRetirementGrantId: GeneralUrbanRetirementGrantId,
+      ) => Promise<GetGeneralUrbanRetirementGrantAnalysisResultQueryResult[]>;
+    };
+
+    const analysisResults =
+      await analysisResultQueryRepository.findManyByGeneralUrbanRetirementGrantId(
+        generalUrbanRetirementGrantId,
+      );
+    const jsonAcceleratorAnalysisResults = JSON.stringify(
+      analysisResults.map((analysisResult) => ({
+        analysisType: analysisResult.analysisType,
+        response: analysisResult.response,
+      })),
+      null,
+      2,
+    );
 
     const promptResponse =
       await this.getPaymentPlanPaidResourcePromptUseCase.execute(
-        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_FINAL_RULES_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
       );
 
     const consumeCreditTransaction =
       await this.consumeOrganizationCreditUseCase.execute(
         organizationSessionData.organizationId,
-        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_FINAL_RULES_ANALYSIS,
+        PaymentPlanPaidResourceTypeEnum.GENERAL_URBAN_RETIREMENT_GRANT_COMPLETE_ANALYSIS,
         organizationMember.id,
       );
 
@@ -132,10 +160,11 @@ export class CreateGeneralUrbanRetirementGrantResultUseCase {
           systemInstruction: promptResponse.prompt,
           promptFiles: [],
           prompt: [
-            JSON.stringify(
+            `PERIODOS_GERAL_URBAN_RETIREMENT_GRANT:\n${JSON.stringify(
               generalUrbanRetirementGrant.generalUrbanRetirementGrantPeriod,
-            ),
-            jsonCnisAnalyzerResponse,
+            )}`,
+            `CNIS_ANALYZER_RESPONSE:\n${jsonCnisAnalyzerResponse}`,
+            `ACELERADORES_ANALISADOS:\n${jsonAcceleratorAnalysisResults}`,
           ].join('\n\n'),
           responseConfig: ResponseConfigInputModel.build({
             jsonSchema: {
@@ -218,18 +247,99 @@ export class CreateGeneralUrbanRetirementGrantResultUseCase {
                   description:
                     'Versão em markdown da análise completa das regras de aposentadoria, formatada para leitura e download.',
                 },
+                recomendacaoDoSistema: {
+                  type: 'object',
+                  description:
+                    'Resumo estruturado da seção "Recomendação do Sistema", contendo as opções comparativas principais.',
+                  properties: {
+                    opcaoMaiorRmi: {
+                      type: 'object',
+                      properties: {
+                        regra: {
+                          type: 'string',
+                        },
+                        dib: {
+                          type: 'string',
+                          description: 'Data formatada como DD/MM/AAAA.',
+                        },
+                        rmi: {
+                          type: 'string',
+                          description: 'Valor formatado como moeda brasileira.',
+                        },
+                        valorDaCausa: {
+                          type: 'string',
+                          description: 'Valor formatado como moeda brasileira.',
+                        },
+                      },
+                      required: ['regra', 'dib', 'rmi', 'valorDaCausa'],
+                    },
+                    opcaoMaiorValorDaCausa: {
+                      type: 'object',
+                      properties: {
+                        regra: {
+                          type: 'string',
+                        },
+                        dib: {
+                          type: 'string',
+                          description: 'Data formatada como DD/MM/AAAA.',
+                        },
+                        rmi: {
+                          type: 'string',
+                          description: 'Valor formatado como moeda brasileira.',
+                        },
+                        valorDaCausa: {
+                          type: 'string',
+                          description: 'Valor formatado como moeda brasileira.',
+                        },
+                      },
+                      required: ['regra', 'dib', 'rmi', 'valorDaCausa'],
+                    },
+                    estrategiaRecomendada: {
+                      type: 'string',
+                    },
+                    regraRecomendada: {
+                      type: 'string',
+                    },
+                    fundamentacao: {
+                      type: 'string',
+                    },
+                  },
+                  required: [
+                    'opcaoMaiorRmi',
+                    'opcaoMaiorValorDaCausa',
+                    'estrategiaRecomendada',
+                    'regraRecomendada',
+                    'fundamentacao',
+                  ],
+                },
+                resultadosDaAnalise: {
+                  type: 'string',
+                  description:
+                    'Texto corrido técnico da seção "Resultados da Análise", sem conteúdo genérico.',
+                },
               },
-              required: ['analiseCompletaJson', 'analiseCompletaMarkdown'],
+              required: [
+                'analiseCompletaJson',
+                'analiseCompletaMarkdown',
+                'recomendacaoDoSistema',
+                'resultadosDaAnalise',
+              ],
             },
           }),
         }),
-      )) as {
-        analiseCompletaJson: unknown[];
-        analiseCompletaMarkdown: string;
-      } | null;
+      )) as unknown;
 
-    const analiseCompletaJson = iaResponse?.analiseCompletaJson ?? [];
-    const analiseCompletaMarkdown = iaResponse?.analiseCompletaMarkdown ?? '';
+    const normalizedIaResponse = this.parseIaResponse(iaResponse);
+
+    const analiseCompletaJson = Array.isArray(
+      normalizedIaResponse?.analiseCompletaJson,
+    )
+      ? normalizedIaResponse.analiseCompletaJson
+      : [];
+    const analiseCompletaMarkdown =
+      typeof normalizedIaResponse?.analiseCompletaMarkdown === 'string'
+        ? normalizedIaResponse.analiseCompletaMarkdown
+        : '';
     const generalUrbanRetirementGrantCompleteAnalysis = JSON.stringify(
       analiseCompletaJson,
       null,
@@ -304,5 +414,26 @@ export class CreateGeneralUrbanRetirementGrantResultUseCase {
     return CreateGeneralUrbanRetirementGrantResultResponseDto.build({
       response: generalUrbanRetirementGrantCompleteAnalysis,
     });
+  }
+
+  private parseIaResponse(response: unknown): ParsedIaResponseType | null {
+    if (response === null) {
+      return null;
+    }
+
+    if (typeof response === 'string') {
+      try {
+        const parsed = JSON.parse(response) as unknown;
+        return typeof parsed === 'object' && parsed !== null
+          ? (parsed as ParsedIaResponseType)
+          : null;
+      } catch {
+        return null;
+      }
+    }
+
+    return typeof response === 'object'
+      ? (response as ParsedIaResponseType)
+      : null;
   }
 }
