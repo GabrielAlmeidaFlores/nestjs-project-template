@@ -2,8 +2,8 @@ import { BaseValueObject } from '@core/domain/schema/value-object/base/base.valu
 import { Email } from '@core/domain/schema/value-object/email/email.value-object';
 import { FederalDocument } from '@core/domain/schema/value-object/federal-document/federal-document.value-object';
 import { PhoneNumber } from '@core/domain/schema/value-object/phone-number/phone-number.value-object';
-import { InvalidPixAddressKeyError } from '@module/customer/affiliate-customer/domain/schema/value-object/pix-address-key/error/invalid-pix-address-key.error';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
+import { InvalidPixAddressKeyError } from '@module/customer/affiliate-customer/domain/schema/value-object/pix-address-key/error/invalid-pix-address-key.error';
 
 export class PixAddressKey extends BaseValueObject<PixAddressKey> {
   protected readonly _type = PixAddressKey.name;

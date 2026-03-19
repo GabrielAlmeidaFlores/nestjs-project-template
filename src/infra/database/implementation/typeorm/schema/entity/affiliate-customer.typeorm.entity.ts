@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
+import { AffiliateCustomerPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment-plan.typeorm.entity';
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
-import { AffiliateCustomerPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer-payment-plan.typeorm.entity';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
 
 @Entity({ name: 'affiliate_customer' })
@@ -11,10 +11,20 @@ export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'customer_id' })
   public customer: CustomerTypeormEntity;
 
-  @Column({ name: 'pix_address_key', type: 'varchar', length: 255, nullable: true })
+  @Column({
+    name: 'pix_address_key',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
   public pixAddressKey: string | null;
 
-  @Column({ name: 'pix_address_key_type', type: 'varchar', length: 100, nullable: true })
+  @Column({
+    name: 'pix_address_key_type',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   public pixAddressKeyType: PixAddressKeyTypeEnum | null;
 
   @Column({ name: 'payment_commission_percentage', type: 'integer' })
