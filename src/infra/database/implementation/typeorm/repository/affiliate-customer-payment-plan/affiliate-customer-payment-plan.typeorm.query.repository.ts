@@ -32,6 +32,10 @@ export class AffiliateCustomerPaymentPlanTypeormQueryRepository
       where: {
         affiliateCustomer: { id: affiliateCustomerId.toString() },
       },
+      relations: {
+        affiliateCustomer: true,
+        paymentPlan: true,
+      },
     });
 
     return this.mapperGateway.mapArray(
