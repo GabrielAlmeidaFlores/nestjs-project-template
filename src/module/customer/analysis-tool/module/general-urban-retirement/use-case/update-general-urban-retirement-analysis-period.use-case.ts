@@ -26,10 +26,8 @@ import { GeneralUrbanRetirementAnalysisPeriodDocumentEntity } from '@module/cust
 import { GeneralUrbanRetirementAnalysisPeriodDocumentId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-period-document/value-object/general-urban-retirement-analysis-period-document-id.value-object';
 import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-period-special-time/general-urban-retirement-analysis-period-special-time.entity';
 import { GeneralUrbanRetirementAnalysisPeriodSpecialTimeId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-period-special-time/value-object/general-urban-retirement-analysis-period-special-time-id.value-object';
-import {
-  UpdateGeneralUrbanRetirementAnalysisPeriodItemRequestDto,
-  UpdateGeneralUrbanRetirementAnalysisPeriodRequestDto,
-} from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/update-general-urban-retirement-analysis-period.request.dto';
+import { CreateGeneralUrbanRetirementAnalysisPeriodItemRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/create-general-urban-retirement-analysis-period.request.dto';
+import { UpdateGeneralUrbanRetirementAnalysisPeriodRequestDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/request/update-general-urban-retirement-analysis-period.request.dto';
 import { UpdateGeneralUrbanRetirementAnalysisPeriodResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/update-general-urban-retirement-analysis-period.response.dto';
 import { GeneralUrbanRetirementAnalysisNotFoundError } from '@module/customer/analysis-tool/module/general-urban-retirement/error/general-urban-retirement-analysis-not-found.error';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
@@ -272,8 +270,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
             category: periodDto.disability.category,
             description: periodDto.disability.description,
             dailyImpact: periodDto.disability.dailyImpact,
-            lawyerObservations:
-              periodDto.disability.lawyerObservations ?? null,
+            lawyerObservations: periodDto.disability.lawyerObservations ?? null,
             cidTen: cidTenEntity,
             generalUrbanRetirementAnalysisPeriod: period,
           });
@@ -298,7 +295,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files: docs.outrosMedicos ?? [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {
@@ -338,7 +335,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
   }
 
   private resolveSpecialTimeDates(
-    periodDto: UpdateGeneralUrbanRetirementAnalysisPeriodItemRequestDto,
+    periodDto: CreateGeneralUrbanRetirementAnalysisPeriodItemRequestDto,
     specialTimeDto: {
       type: GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeEnum;
       startDate?: Date;
@@ -364,7 +361,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
   }
 
   private resolveDisabilityDates(
-    periodDto: UpdateGeneralUrbanRetirementAnalysisPeriodItemRequestDto,
+    periodDto: CreateGeneralUrbanRetirementAnalysisPeriodItemRequestDto,
     disabilityDto: {
       type: GeneralUrbanRetirementAnalysisPeriodDisabilityTimeTypeEnum;
       startDate?: Date;

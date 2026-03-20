@@ -9,7 +9,9 @@ export class GeneralUrbanRetirementGrantSpecialPeriodEntity extends BaseEntity<G
   @Description('Resposta da análise do período especial.')
   public readonly response: string;
 
-  @Description('Concessão de aposentadoria urbana associada ao período especial.')
+  @Description(
+    'Concessão de aposentadoria urbana associada ao período especial.',
+  )
   public readonly generalUrbanRetirementGrant: GeneralUrbanRetirementGrantEntity | null;
 
   protected readonly _type =

@@ -47,6 +47,7 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapp
           source.id,
         ),
         document: source.document,
+        type: source.type,
         disabilityRetirementPlanningPeriodSpecialTime,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -76,6 +77,7 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntityAutoMapp
         {
           id: source.id.toString(),
           document: source.document,
+          type: source.type,
           disabilityRetirementPlanningPeriodSpecialTime,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,

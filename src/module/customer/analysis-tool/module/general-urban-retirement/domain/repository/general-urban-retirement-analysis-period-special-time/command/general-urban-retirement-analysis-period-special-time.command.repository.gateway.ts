@@ -10,4 +10,9 @@ export abstract class GeneralUrbanRetirementAnalysisPeriodSpecialTimeCommandRepo
   public abstract deleteGeneralUrbanRetirementAnalysisPeriodSpecialTime(
     id: GeneralUrbanRetirementAnalysisPeriodSpecialTimeId,
   ): TransactionType;
+
+  public abstract updateLawyerObservations(
+    id: GeneralUrbanRetirementAnalysisPeriodSpecialTimeId,
+    lawyerObservations: string | null,
+  ): TransactionType;
 }

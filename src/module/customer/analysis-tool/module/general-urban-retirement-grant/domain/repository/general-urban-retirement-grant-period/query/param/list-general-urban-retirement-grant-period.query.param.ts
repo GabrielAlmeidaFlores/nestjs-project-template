@@ -3,7 +3,9 @@ import { ListDataInputModel } from '@core/domain/repository/base/query/model/inp
 import type { GeneralUrbanRetirementGrantId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/value-object/general-urban-retirement-grant-id.value-object';
 
 export class ListGeneralUrbanRetirementGrantPeriodQueryParam extends ListDataInputModel {
-  public generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantId | undefined;
+  public generalUrbanRetirementGrant?:
+    | GeneralUrbanRetirementGrantId
+    | undefined;
 
   protected override readonly _type =
     ListGeneralUrbanRetirementGrantPeriodQueryParam.name;
@@ -12,6 +14,7 @@ export class ListGeneralUrbanRetirementGrantPeriodQueryParam extends ListDataInp
     props: Partial<ListGeneralUrbanRetirementGrantPeriodQueryParam> = {},
   ) {
     super(props);
-    this.generalUrbanRetirementGrant = props.generalUrbanRetirementGrant ?? undefined;
+    this.generalUrbanRetirementGrant =
+      props.generalUrbanRetirementGrant ?? undefined;
   }
 }
