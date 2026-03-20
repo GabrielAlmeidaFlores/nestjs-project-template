@@ -5,6 +5,8 @@ import { FederativeEntityEnum } from '@module/customer/analysis-tool/module/disa
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-document/enum/disability-retirement-planning-document-type.enum';
 import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
+import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability-document/enum/disability-retirement-planning-period-disability-document-type.enum';
+import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/enum/disability-retirement-planning-period-special-time-document-type.enum';
 import { DisabilityRetirementPlanningCompleteAnalysisModel } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
@@ -60,6 +62,11 @@ export class GetDisabilityRetirementPlanningCidResponseDto extends BaseBuildable
 
 @ResponseDto()
 export class GetDisabilityRetirementPlanningPeriodDisabilityDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoEnumProperty(
+    DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum,
+  )
+  public type: DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum;
+
   @ResponseDtoValueObjectProperty(Base64, {
     description: 'Arquivo em Base64',
   })
@@ -76,6 +83,11 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityDocumentResponseDto 
 
 @ResponseDto()
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoEnumProperty(
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum,
+  )
+  public type: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum;
+
   @ResponseDtoValueObjectProperty(Base64, {
     description: 'Arquivo em Base64',
   })
@@ -135,6 +147,9 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityResponseDto extends 
 
 @ResponseDto()
 export class GetDisabilityRetirementPlanningPeriodSpecialTimeResponseDto extends BaseBuildableDtoObject {
+  @ResponseDtoEnumProperty(RetirementPlanningDisabilityTimeTypeEnum)
+  public specialPeriodType: RetirementPlanningDisabilityTimeTypeEnum;
+
   @ResponseDtoDateProperty()
   public startDate: Date;
 

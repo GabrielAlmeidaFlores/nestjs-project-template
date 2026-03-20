@@ -183,14 +183,11 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetInsuranceQualityAnalysisWithRelationsQueryResult,
       );
 
-      const disabilityRetirementPlanning =
-        source.disabilityRetirementPlanning !== null
-          ? this.mapper.map(
-              source.disabilityRetirementPlanning,
-              DisabilityRetirementPlanningTypeormEntity,
-              GetDisabilityRetirementPlanningWithRelationsQueryResult,
-            )
-          : null;
+      const disabilityRetirementPlanning = this.mapper.map(
+        source.disabilityRetirementPlanning,
+        DisabilityRetirementPlanningTypeormEntity,
+        GetDisabilityRetirementPlanningWithRelationsQueryResult,
+      );
 
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
@@ -198,10 +195,14 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetAnalysisToolClientWithRelationsQueryResult,
       );
 
+      const generalUrbanRetirementAnalysisSource =
+        source.generalUrbanRetirementAnalysis;
+
       const generalUrbanRetirementAnalysis =
-        source.generalUrbanRetirementAnalysis !== null
+        generalUrbanRetirementAnalysisSource !== null &&
+        generalUrbanRetirementAnalysisSource !== undefined
           ? ((): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
-              const g = source.generalUrbanRetirementAnalysis ?? null;
+              const g = generalUrbanRetirementAnalysisSource;
               const result =
                 g.generalUrbanRetirementAnalysisResult?.id !== undefined
                   ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
@@ -414,14 +415,11 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         InsuranceQualityAnalysisTypeormEntity,
       );
 
-      const disabilityRetirementPlanning =
-        source.disabilityRetirementPlanning !== null
-          ? this.mapper.map(
-              source.disabilityRetirementPlanning,
-              GetDisabilityRetirementPlanningWithRelationsQueryResult,
-              DisabilityRetirementPlanningTypeormEntity,
-            )
-          : null;
+      const disabilityRetirementPlanning = this.mapper.map(
+        source.disabilityRetirementPlanning,
+        GetDisabilityRetirementPlanningWithRelationsQueryResult,
+        DisabilityRetirementPlanningTypeormEntity,
+      );
 
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,

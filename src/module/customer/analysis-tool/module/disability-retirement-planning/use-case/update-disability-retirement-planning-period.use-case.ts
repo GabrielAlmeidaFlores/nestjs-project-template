@@ -325,6 +325,7 @@ export class UpdateDisabilityRetirementPlanningPeriodUseCase {
         disabilityRetirementPlanningPeriod: period,
         startDate: specialTimeDto.startDate,
         endDate: specialTimeDto.endDate ?? null,
+        specialPeriodType: specialTimeDto.specialPeriodType,
       },
     );
 

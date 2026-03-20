@@ -6,7 +6,7 @@ import { DisabilityRetirementPlanningDocumentTypeEnum } from '@module/customer/a
 
 @Entity({ name: 'disability_retirement_planning_document' })
 export class DisabilityRetirementPlanningDocumentTypeormEntity extends BaseTypeormEntity {
-  @Column({ name: 'document', type: 'varchar', length: 255 })
+  @Column({ name: 'document', type: 'varchar', length: 500 })
   public document: string;
 
   @Column({

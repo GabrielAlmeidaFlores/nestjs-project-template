@@ -1,3 +1,4 @@
+import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
 import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
@@ -53,6 +54,57 @@ export class DisabilityRetirementPlanningRetirementOptionModel extends BaseBuild
 }
 
 @ResponseDto()
+export class DisabilityRetirementPlanningDocumentAnalysisModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly documentName: string;
+
+  @ResponseDtoEnumProperty(DisabilityDocumentViabilityEnum)
+  public readonly viability: DisabilityDocumentViabilityEnum;
+
+  @ResponseDtoStringProperty()
+  public readonly cid: string;
+
+  @ResponseDtoStringProperty()
+  public readonly degree: string;
+
+  @ResponseDtoStringProperty()
+  public readonly date: string;
+
+  @ResponseDtoStringProperty()
+  public readonly crm: string;
+
+  @ResponseDtoStringProperty({ isArray: true })
+  public readonly observations: string[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningDocumentAnalysisModel.name;
+}
+
+@ResponseDto()
+export class DisabilityRetirementPlanningDisabilityAnalysisModel extends BaseBuildableDtoObject {
+  @ResponseDtoStringProperty()
+  public readonly predominantDisabilityDegree: string;
+
+  @ResponseDtoNumberProperty()
+  public readonly lightDisabilityPercentage: number;
+
+  @ResponseDtoNumberProperty()
+  public readonly moderateDisabilityPercentage: number;
+
+  @ResponseDtoNumberProperty()
+  public readonly severeDisabilityPercentage: number;
+
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningDocumentAnalysisModel,
+    { isArray: true },
+  )
+  public readonly documents: DisabilityRetirementPlanningDocumentAnalysisModel[];
+
+  protected override readonly _type =
+    DisabilityRetirementPlanningDisabilityAnalysisModel.name;
+}
+
+@ResponseDto()
 export class DisabilityRetirementPlanningCompleteAnalysisModel extends BaseBuildableDtoObject {
   @ResponseDtoObjectProperty(
     () => DisabilityRetirementPlanningTimelinePeriodModel,
@@ -92,6 +144,11 @@ export class DisabilityRetirementPlanningCompleteAnalysisModel extends BaseBuild
 
   @ResponseDtoStringProperty()
   public readonly publicServiceStartDate: string;
+
+  @ResponseDtoObjectProperty(
+    () => DisabilityRetirementPlanningDisabilityAnalysisModel,
+  )
+  public readonly disabilityAnalysis: DisabilityRetirementPlanningDisabilityAnalysisModel;
 
   protected override readonly _type =
     DisabilityRetirementPlanningCompleteAnalysisModel.name;

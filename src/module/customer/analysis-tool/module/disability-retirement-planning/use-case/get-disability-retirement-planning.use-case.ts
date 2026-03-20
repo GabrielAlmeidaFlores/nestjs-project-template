@@ -8,6 +8,7 @@ import { CidTenNotFoundError } from '@module/customer/analysis-tool/error/cid-te
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityRetirementPlanningQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/disability-retirement-planning.query.repository.gateway';
+import { DisabilityDocumentViabilityEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-document-viability.enum';
 import { DisabilityRetirementPlanningActivityTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/enum/disability-retirement-planning-activity-type.enum';
 import { DisabilityRetirementPlanningId } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/value-object/disability-retirement-planning-id.value-object';
 import {
@@ -24,6 +25,8 @@ import {
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
 import {
   DisabilityRetirementPlanningCompleteAnalysisModel,
+  DisabilityRetirementPlanningDisabilityAnalysisModel,
+  DisabilityRetirementPlanningDocumentAnalysisModel,
   DisabilityRetirementPlanningRetirementOptionModel,
   DisabilityRetirementPlanningTimelinePeriodModel,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/model/generic/disability-retirement-planning-complete-analysis.model';
@@ -98,6 +101,7 @@ export class GetDisabilityRetirementPlanningUseCase {
                   );
                 return GetDisabilityRetirementPlanningPeriodDisabilityDocumentResponseDto.build(
                   {
+                    type: doc.type,
                     document: Base64.encodeBuffer(fileBuffer),
                     originalFileName,
                   },
@@ -149,6 +153,7 @@ export class GetDisabilityRetirementPlanningUseCase {
                   );
                 return GetDisabilityRetirementPlanningPeriodSpecialTimeDocumentResponseDto.build(
                   {
+                    type: doc.type,
                     document: Base64.encodeBuffer(fileBuffer),
                     originalFileName,
                   },
@@ -158,6 +163,7 @@ export class GetDisabilityRetirementPlanningUseCase {
 
             return GetDisabilityRetirementPlanningPeriodSpecialTimeResponseDto.build(
               {
+                specialPeriodType: specialTime.specialPeriodType,
                 startDate: specialTime.startDate,
                 ...(specialTime.endDate !== null && {
                   endDate: specialTime.endDate,
@@ -218,6 +224,21 @@ export class GetDisabilityRetirementPlanningUseCase {
                       totalCareerTime: string;
                       insuredAge: string;
                       publicServiceStartDate: string;
+                      disabilityAnalysis: {
+                        predominantDisabilityDegree: string;
+                        lightDisabilityPercentage: number;
+                        moderateDisabilityPercentage: number;
+                        severeDisabilityPercentage: number;
+                        documents: Array<{
+                          documentName: string;
+                          viability: DisabilityDocumentViabilityEnum;
+                          cid: string;
+                          degree: string;
+                          date: string;
+                          crm: string;
+                          observations: string[];
+                        }>;
+                      };
                     };
 
                     return DisabilityRetirementPlanningCompleteAnalysisModel.build(
@@ -242,6 +263,29 @@ export class GetDisabilityRetirementPlanningUseCase {
                         totalCareerTime: raw.totalCareerTime,
                         insuredAge: raw.insuredAge,
                         publicServiceStartDate: raw.publicServiceStartDate,
+                        disabilityAnalysis:
+                          DisabilityRetirementPlanningDisabilityAnalysisModel.build(
+                            {
+                              predominantDisabilityDegree:
+                                raw.disabilityAnalysis
+                                  .predominantDisabilityDegree,
+                              lightDisabilityPercentage:
+                                raw.disabilityAnalysis
+                                  .lightDisabilityPercentage,
+                              moderateDisabilityPercentage:
+                                raw.disabilityAnalysis
+                                  .moderateDisabilityPercentage,
+                              severeDisabilityPercentage:
+                                raw.disabilityAnalysis
+                                  .severeDisabilityPercentage,
+                              documents: raw.disabilityAnalysis.documents.map(
+                                (d) =>
+                                  DisabilityRetirementPlanningDocumentAnalysisModel.build(
+                                    d,
+                                  ),
+                              ),
+                            },
+                          ),
                       },
                     );
                   } catch {
@@ -258,6 +302,16 @@ export class GetDisabilityRetirementPlanningUseCase {
                         totalCareerTime: '',
                         insuredAge: '',
                         publicServiceStartDate: '',
+                        disabilityAnalysis:
+                          DisabilityRetirementPlanningDisabilityAnalysisModel.build(
+                            {
+                              predominantDisabilityDegree: '',
+                              lightDisabilityPercentage: 0,
+                              moderateDisabilityPercentage: 0,
+                              severeDisabilityPercentage: 0,
+                              documents: [],
+                            },
+                          ),
                       },
                     );
                   }
