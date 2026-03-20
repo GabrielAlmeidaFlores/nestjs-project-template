@@ -3,8 +3,7 @@ import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysi
 import type { GeneralUrbanRetirementGrantEarningsHistoryId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-earnings-history/value-object/general-urban-retirement-grant-earnings-history-id.value-object';
 import type { GeneralUrbanRetirementGrantPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/general-urban-retirement-grant-period.entity';
 
-export interface GeneralUrbanRetirementGrantEarningsHistoryEntityPropsInterface
-  extends BaseEntityPropsInterface<GeneralUrbanRetirementGrantEarningsHistoryId> {
+export interface GeneralUrbanRetirementGrantEarningsHistoryEntityPropsInterface extends BaseEntityPropsInterface<GeneralUrbanRetirementGrantEarningsHistoryId> {
   competence?: Date | null;
   remuneration?: string | null;
   indicators?: string | null;

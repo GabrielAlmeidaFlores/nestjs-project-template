@@ -28,6 +28,7 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResultA
         {
           id: source.id,
           document: source.document,
+          type: source.type,
         },
       );
     };
@@ -48,6 +49,7 @@ export class GetDisabilityRetirementPlanningPeriodDisabilityDocumentQueryResultA
         {
           id: source.id,
           document: source.document,
+          type: source.type,
           disabilityRetirementPlanningPeriodDisability:
             undefined as unknown as DisabilityRetirementPlanningPeriodDisabilityTypeormEntity,
           createdAt: new Date(),

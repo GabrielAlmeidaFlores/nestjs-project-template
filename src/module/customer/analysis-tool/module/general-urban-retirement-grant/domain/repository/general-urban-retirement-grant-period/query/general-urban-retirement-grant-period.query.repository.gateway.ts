@@ -13,7 +13,9 @@ export abstract class GeneralUrbanRetirementGrantPeriodQueryRepositoryGateway {
     organizationId: OrganizationId,
     authIdentityId: AuthIdentityId,
     listData: ListGeneralUrbanRetirementGrantPeriodQueryParam,
-  ): Promise<ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>>;
+  ): Promise<
+    ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>
+  >;
 
   public abstract findOneByGeneralUrbanRetirementGrantPeriodIdOrFail(
     id: GeneralUrbanRetirementGrantPeriodId,

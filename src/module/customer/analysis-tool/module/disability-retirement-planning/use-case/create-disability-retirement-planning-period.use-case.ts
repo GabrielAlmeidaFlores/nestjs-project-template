@@ -30,7 +30,9 @@ import {
   CreateDisabilityRetirementPlanningPeriodsRequestDto,
   CreateDisabilityRetirementPlanningPeriodRequestDto,
   CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto,
+  CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto,
   CreateDisabilityRetirementPlanningPeriodSpecialTimeRequestDto,
+  CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto,
 } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/request/create-disability-retirement-planning-periods.request.dto';
 import { CreateDisabilityRetirementPlanningPeriodsResponseDto } from '@module/customer/analysis-tool/module/disability-retirement-planning/dto/response/create-disability-retirement-planning-periods.response.dto';
 import { DisabilityRetirementPlanningNotFoundError } from '@module/customer/analysis-tool/module/disability-retirement-planning/error/disability-retirement-planning-not-found.error';
@@ -228,30 +230,35 @@ export class CreateDisabilityRetirementPlanningPeriodUseCase {
 
     if (disabilityDto.documents && disabilityDto.documents.length > 0) {
       const documentTransactions = await Promise.all(
-        disabilityDto.documents.map(async (documentDto) => {
-          const buffer = documentDto.base64.decodeToBuffer();
+        disabilityDto.documents.map(
+          async (
+            documentDto: CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto,
+          ) => {
+            const buffer = documentDto.base64.decodeToBuffer();
 
-          const fileModel = FileModel.build({
-            buffer,
-            originalName: documentDto.originalFileName,
-            size: buffer.length,
-            encoding: '7bit',
-          });
-
-          const documentUrl =
-            await this.fileProcessorGateway.uploadFile(fileModel);
-
-          const documentEntity =
-            new DisabilityRetirementPlanningPeriodDisabilityDocumentEntity({
-              id: new DisabilityRetirementPlanningPeriodDisabilityDocumentId(),
-              disabilityRetirementPlanningPeriodDisability: disability,
-              document: documentUrl,
+            const fileModel = FileModel.build({
+              buffer,
+              originalName: documentDto.originalFileName,
+              size: buffer.length,
+              encoding: '7bit',
             });
 
-          return this.periodDisabilityDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodDisabilityDocument(
-            documentEntity,
-          );
-        }),
+            const documentUrl =
+              await this.fileProcessorGateway.uploadFile(fileModel);
+
+            const documentEntity =
+              new DisabilityRetirementPlanningPeriodDisabilityDocumentEntity({
+                id: new DisabilityRetirementPlanningPeriodDisabilityDocumentId(),
+                disabilityRetirementPlanningPeriodDisability: disability,
+                document: documentUrl,
+                type: documentDto.type,
+              });
+
+            return this.periodDisabilityDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodDisabilityDocument(
+              documentEntity,
+            );
+          },
+        ),
       );
 
       operations.push(...documentTransactions);
@@ -285,30 +292,35 @@ export class CreateDisabilityRetirementPlanningPeriodUseCase {
 
     if (specialTimeDto.documents && specialTimeDto.documents.length > 0) {
       const documentTransactions = await Promise.all(
-        specialTimeDto.documents.map(async (documentDto) => {
-          const buffer = documentDto.base64.decodeToBuffer();
+        specialTimeDto.documents.map(
+          async (
+            documentDto: CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto,
+          ) => {
+            const buffer = documentDto.base64.decodeToBuffer();
 
-          const fileModel = FileModel.build({
-            buffer,
-            originalName: documentDto.originalFileName,
-            size: buffer.length,
-            encoding: '7bit',
-          });
-
-          const documentUrl =
-            await this.fileProcessorGateway.uploadFile(fileModel);
-
-          const documentEntity =
-            new DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity({
-              id: new DisabilityRetirementPlanningPeriodSpecialTimeDocumentId(),
-              disabilityRetirementPlanningPeriodSpecialTime: specialTime,
-              document: documentUrl,
+            const fileModel = FileModel.build({
+              buffer,
+              originalName: documentDto.originalFileName,
+              size: buffer.length,
+              encoding: '7bit',
             });
 
-          return this.periodSpecialTimeDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodSpecialTimeDocument(
-            documentEntity,
-          );
-        }),
+            const documentUrl =
+              await this.fileProcessorGateway.uploadFile(fileModel);
+
+            const documentEntity =
+              new DisabilityRetirementPlanningPeriodSpecialTimeDocumentEntity({
+                id: new DisabilityRetirementPlanningPeriodSpecialTimeDocumentId(),
+                disabilityRetirementPlanningPeriodSpecialTime: specialTime,
+                document: documentUrl,
+                type: documentDto.type,
+              });
+
+            return this.periodSpecialTimeDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodSpecialTimeDocument(
+              documentEntity,
+            );
+          },
+        ),
       );
 
       operations.push(...documentTransactions);

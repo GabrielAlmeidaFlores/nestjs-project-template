@@ -39,7 +39,7 @@ export class CreateDisabilityRetirementPlanningTables1772210000000
     );
 
     await queryRunner.query(
-      `CREATE TABLE \`disability_retirement_planning_period_disability_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(500) NOT NULL, \`disability_retirement_planning_period_disability_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`disability_retirement_planning_period_disability_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(500) NOT NULL, \`type\` varchar(50) NOT NULL, \`disability_retirement_planning_period_disability_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
 
     await queryRunner.query(
@@ -47,7 +47,7 @@ export class CreateDisabilityRetirementPlanningTables1772210000000
     );
 
     await queryRunner.query(
-      `CREATE TABLE \`disability_retirement_planning_period_special_time_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(500) NOT NULL, \`disability_retirement_planning_period_special_time_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`disability_retirement_planning_period_special_time_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`document\` varchar(500) NOT NULL, \`type\` varchar(50) NOT NULL, \`disability_retirement_planning_period_special_time_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
 
     await queryRunner.query(
