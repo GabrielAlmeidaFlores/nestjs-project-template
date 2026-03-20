@@ -13,7 +13,7 @@ import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/cre
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { ResolveAffiliatePlanDiscountService } from '@module/customer/affiliate-customer/service/resolve-affiliate-plan-discount.service';
+import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
@@ -54,7 +54,8 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     private readonly deleteOrganizationPaymentPlanUseCase: DeleteOrganizationPaymentPlanUseCase,
     @Inject(EmailGateway)
     private readonly emailGateway: EmailGateway,
-    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountService,
+    @Inject(ResolveAffiliatePlanDiscountGateway)
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
   ) {}
 
   public async execute(
@@ -85,7 +86,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     const nextDueDate = moment().startOf('day').toDate();
 
-    const discountPercentage =
+    const discountResult =
       await this.resolveAffiliatePlanDiscountService.resolveDiscount(
         reply.request.cookies[ApiCookieEnum.AFFILIATE],
         paymentPlan.id,
@@ -94,11 +95,11 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     const HUNDRED_PERCENT = 100;
     const MINIMUM_BILLING_VALUE = 5;
     const subscriptionValue =
-      discountPercentage !== null
+      discountResult !== null
         ? new DecimalValue(
             Math.max(
               paymentPlan.price.toNumber() *
-                (1 - discountPercentage / HUNDRED_PERCENT),
+                (1 - discountResult.percentage / HUNDRED_PERCENT),
               MINIMUM_BILLING_VALUE,
             ).toFixed(2),
           )
@@ -151,6 +152,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       organization: organizationSessionData.organizationId,
       paymentPlan: paymentPlan.id,
       canceled: false,
+      affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
     });
 
     const organizationPaymentPlanTransaction =
