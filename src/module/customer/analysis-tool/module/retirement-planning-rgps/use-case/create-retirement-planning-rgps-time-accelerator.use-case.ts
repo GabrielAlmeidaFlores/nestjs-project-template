@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-analysis-result/query/retirement-planning-rgps-analysis-result.query.repository.gateway.ts';
 import { RetirementPlanningRgpsTimeAcceleratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-time-accelerator/command/retirement-planning-rgps-time-accelerator.repository.gateway';
 import { RetirementPlanningRgpsTimeAcceleratorEntity } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-time-accelerator/retirement-planning-rgps-time-accelerator.entity';
@@ -33,6 +34,8 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
     private readonly retirementPlanningRgpsTimeAcceleratorCommandRepositoryGateway: RetirementPlanningRgpsTimeAcceleratorCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -76,7 +79,13 @@ export class CreateRetirementPlanningRgpsTimeAcceleratorUseCase {
       periodStart: parsed.periodoInicio ? new Date(parsed.periodoInicio) : null,
       periodEnd: parsed.periodoFim ? new Date(parsed.periodoFim) : null,
       viability: parsed.viabilidade ?? 'N/A',
-      technicalNote: parsed.observacaoTecnica ?? 'N/A',
+      technicalNote:
+        parsed.observacaoTecnica !== undefined &&
+        parsed.observacaoTecnica !== ''
+          ? await this.markdownConverterGateway.convertToHtml(
+              parsed.observacaoTecnica,
+            )
+          : 'N/A',
       affectsQualifyingPeriod: parsed.impactoCarencia === 'true',
       recognitionInss: parsed.reconhecimentoINSS ?? 'N/A',
       recognitionJudicial: parsed.reconhecimentoJudicial ?? 'N/A',

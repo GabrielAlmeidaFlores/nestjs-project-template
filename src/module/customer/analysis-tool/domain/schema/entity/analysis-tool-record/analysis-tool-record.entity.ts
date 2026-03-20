@@ -9,6 +9,8 @@ import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/anal
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
+import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { JudicialCaseAnalysisEntity } from '@module/customer/analysis-tool/module/judicial-case-analysis/domain/schema/entity/judicial-case-analysis/judicial-case-analysis.entity';
 import { MedicalAndSocialReportObjectionGeneratorAnalysisEntity } from '@module/customer/analysis-tool/module/medical-and-social-report-objection-generator-analysis/domain/schema/entity/medical-and-social-report-objection-generator-analysis/medical-and-social-report-objection-generator-analysis.entity';
@@ -111,6 +113,16 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
   public readonly disabilityRetirementPlanning: DisabilityRetirementPlanningEntity | null;
 
   @Description(
+    'Concessão de aposentadoria urbana geral associada ao registro da ferramenta de análise',
+  )
+  public readonly generalUrbanRetirementGrant: GeneralUrbanRetirementGrantEntity | null;
+
+  @Description(
+    'Análise de aposentadoria urbana geral associada ao registro da ferramenta de análise',
+  )
+  public readonly generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisEntity | null;
+
+  @Description(
     'Análise de aposentadoria por categoria especial associada ao registro da ferramenta de análise',
   )
   public readonly specialCategoryRetirementAnalysis: SpecialCategoryRetirementAnalysisEntity | null;
@@ -157,6 +169,10 @@ export class AnalysisToolRecordEntity extends BaseEntity<AnalysisToolRecordId> {
     this.insuranceQualityAnalysis = props.insuranceQualityAnalysis ?? null;
     this.disabilityRetirementPlanning =
       props.disabilityRetirementPlanning ?? null;
+    this.generalUrbanRetirementGrant =
+      props.generalUrbanRetirementGrant ?? null;
+    this.generalUrbanRetirementAnalysis =
+      props.generalUrbanRetirementAnalysis ?? null;
     this.specialCategoryRetirementAnalysis =
       props.specialCategoryRetirementAnalysis ?? null;
     this.status = props.status;
