@@ -4,18 +4,24 @@ import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { TransferStatusEnum } from '@infra/payment-gateway/enum/transfer-status.enum';
 import { InvalidBankCustomerDataError } from '@infra/payment-gateway/implementation/asaas/error/invalid-bank-customer-data.error';
 import { PaymentNotApprovedError } from '@infra/payment-gateway/implementation/asaas/error/payment-not-approved.error';
+import { TransferFailedError } from '@infra/payment-gateway/implementation/asaas/error/transfer-failed.error';
 import { AsaasApiErrorResponseType } from '@infra/payment-gateway/implementation/asaas/type/asaas-api-error-response.type';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { CreateCustomerInputModel } from '@infra/payment-gateway/model/input/create-customer.input.model';
 import { CreateSubscriptionInputModel } from '@infra/payment-gateway/model/input/create-subscription.input.model';
+import { CreateTransferInputModel } from '@infra/payment-gateway/model/input/create-transfer.input.model';
 import { PayBillingInputModel } from '@infra/payment-gateway/model/input/pay-billing.input.model';
 import { CreateBillingOutputModel } from '@infra/payment-gateway/model/output/create-billing.output.model';
 import { CreateCustomerOutputModel } from '@infra/payment-gateway/model/output/create-customer.output.model';
 import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/output/create-subscription.output.model';
+import { CreateTransferOutputModel } from '@infra/payment-gateway/model/output/create-transfer.output.model';
 import { PayBillingOutputModel } from '@infra/payment-gateway/model/output/pay-billing.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
+import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { PaymentGatewayApplicationVariable } from '@shared/system/constant/application-variable/source/payment-gateway.application-variable';
 
@@ -254,6 +260,58 @@ export class AsaasService extends PaymentGateway {
       this.handleAsaasApiError(
         error,
         (message) => new PaymentNotApprovedError({ message }),
+      );
+    }
+  }
+
+  public async transfer(
+    props: CreateTransferInputModel,
+  ): Promise<CreateTransferOutputModel> {
+    const isHmlEnvironment =
+      PaymentGatewayApplicationVariable.BANK_ACCESS_TOKEN.includes('hml');
+
+    if (isHmlEnvironment) {
+      return CreateTransferOutputModel.build({
+        id: new Guid().toString(),
+        value: props.value,
+        status: TransferStatusEnum.PENDING,
+      });
+    }
+
+    const pixAddressKeyTypeMap: Record<PixAddressKeyTypeEnum, string> = {
+      [PixAddressKeyTypeEnum.CPF]: 'CPF',
+      [PixAddressKeyTypeEnum.CNPJ]: 'CNPJ',
+      [PixAddressKeyTypeEnum.EMAIL]: 'EMAIL',
+      [PixAddressKeyTypeEnum.PHONE]: 'PHONE',
+      [PixAddressKeyTypeEnum.RANDOM]: 'EVP',
+    };
+
+    try {
+      const data: Record<string, unknown> = {
+        value: props.value.toNumber(),
+        pixAddressKey: props.pixAddressKey,
+        pixAddressKeyType: pixAddressKeyTypeMap[props.pixAddressKeyType],
+        operationType: 'PIX',
+      };
+
+      if (props.description !== undefined) {
+        data['description'] = props.description;
+      }
+
+      const response = await this.makeRequest<
+        Record<string, unknown>,
+        { id: string; value: number; status: TransferStatusEnum }
+      >('transfers', 'post', data);
+
+      return CreateTransferOutputModel.build({
+        id: response.id,
+        value: new DecimalValue(response.value),
+        status: response.status,
+      });
+    } catch (error) {
+      this.handleAsaasApiError(
+        error,
+        (message) => new TransferFailedError({ message }),
       );
     }
   }
