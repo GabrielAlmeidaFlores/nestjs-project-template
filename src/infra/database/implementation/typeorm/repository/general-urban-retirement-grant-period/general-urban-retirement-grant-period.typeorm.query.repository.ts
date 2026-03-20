@@ -36,7 +36,9 @@ export class GeneralUrbanRetirementGrantPeriodTypeormQueryRepository
     _organizationId: OrganizationId,
     _authIdentityId: AuthIdentityId,
     listData: ListGeneralUrbanRetirementGrantPeriodQueryParam,
-  ): Promise<ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>> {
+  ): Promise<
+    ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>
+  > {
     const where = listData.generalUrbanRetirementGrant
       ? {
           generalUrbanRetirementGrant: {
@@ -53,12 +55,14 @@ export class GeneralUrbanRetirementGrantPeriodTypeormQueryRepository
       GetGeneralUrbanRetirementGrantPeriodQueryResult,
     );
 
-    return new ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>({
-      page: result.page,
-      limit: result.limit,
-      totalItems: result.totalItems,
-      resource,
-    });
+    return new ListDataOutputModel<GetGeneralUrbanRetirementGrantPeriodQueryResult>(
+      {
+        page: result.page,
+        limit: result.limit,
+        totalItems: result.totalItems,
+        resource,
+      },
+    );
   }
 
   public async findOneByGeneralUrbanRetirementGrantPeriodIdOrFail(

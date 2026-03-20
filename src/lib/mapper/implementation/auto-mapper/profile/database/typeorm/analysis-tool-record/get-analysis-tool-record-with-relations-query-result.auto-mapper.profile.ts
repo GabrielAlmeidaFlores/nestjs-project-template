@@ -190,7 +190,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
       const generalUrbanRetirementAnalysis =
         source.generalUrbanRetirementAnalysis !== null
           ? ((): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
-              const g = source.generalUrbanRetirementAnalysis ?? null;
+              const g = source.generalUrbanRetirementAnalysis;
               const result =
                 g.generalUrbanRetirementAnalysisResult?.id !== undefined
                   ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
