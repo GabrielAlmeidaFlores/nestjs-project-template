@@ -20,10 +20,10 @@ export class GetAffiliateCustomerResponseDto extends BaseBuildableDtoObject {
   public customerId: CustomerId;
 
   @ResponseDtoStringProperty({ required: false })
-  public pixAddressKey: string | null;
+  public pixAddressKey?: string;
 
   @ResponseDtoEnumProperty(PixAddressKeyTypeEnum, { required: false })
-  public pixAddressKeyType: PixAddressKeyTypeEnum | null;
+  public pixAddressKeyType?: PixAddressKeyTypeEnum;
 
   @ResponseDtoNumberProperty()
   public paymentCommissionPercentage: number;

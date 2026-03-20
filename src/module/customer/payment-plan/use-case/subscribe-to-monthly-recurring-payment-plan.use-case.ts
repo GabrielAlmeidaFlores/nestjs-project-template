@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { EmailGateway } from '@infra/email/email.gateway';
 import { SendHTMLEmailInputModel } from '@infra/email/model/input/send-html-email.input.model';
 import { SubscriptionCycleEnum } from '@infra/payment-gateway/enum/subscription-cycle.enum';
@@ -11,6 +13,7 @@ import { CreditCardInfoInputModel } from '@infra/payment-gateway/model/input/cre
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { ResolveAffiliatePlanDiscountService } from '@module/customer/affiliate-customer/service/resolve-affiliate-plan-discount.service';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
@@ -24,6 +27,7 @@ import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/custom
 import { SubscribeToMonthlyRecurringPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/subscribe-to-monthly-recurring-payment-plan.response.dto';
 import { InvalidPaymentPlanCycleError } from '@module/customer/payment-plan/error/invalid-payment-plan-cycle.error';
 import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/delete-organization-payment-plan.use-case';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
@@ -50,12 +54,14 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     private readonly deleteOrganizationPaymentPlanUseCase: DeleteOrganizationPaymentPlanUseCase,
     @Inject(EmailGateway)
     private readonly emailGateway: EmailGateway,
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountService,
   ) {}
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: SubscribeToMonthlyRecurringPaymentPlanRequestDto,
+    reply: FastifyReply,
   ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     const paymentPlan =
       await this.paymentPlanQueryRepository.findOnePaymentPlanByIdOrFail(
@@ -79,6 +85,25 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     const nextDueDate = moment().startOf('day').toDate();
 
+    const discountPercentage =
+      await this.resolveAffiliatePlanDiscountService.resolveDiscount(
+        reply.request.cookies[ApiCookieEnum.AFFILIATE],
+        paymentPlan.id,
+      );
+
+    const HUNDRED_PERCENT = 100;
+    const MINIMUM_BILLING_VALUE = 5;
+    const subscriptionValue =
+      discountPercentage !== null
+        ? new DecimalValue(
+            Math.max(
+              paymentPlan.price.toNumber() *
+                (1 - discountPercentage / HUNDRED_PERCENT),
+              MINIMUM_BILLING_VALUE,
+            ).toFixed(2),
+          )
+        : paymentPlan.price;
+
     const creditCardInfo = CreditCardInfoInputModel.build({
       holderName: dto.creditCardInfo.holderName,
       number: dto.creditCardInfo.number,
@@ -98,7 +123,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     const subscriptionInput = CreateSubscriptionInputModel.build({
       customerId: customer.bankExternalId,
-      value: paymentPlan.price,
+      value: subscriptionValue,
       nextDueDate,
       cycle: SubscriptionCycleEnum.MONTHLY_RECURRING,
       description: paymentPlan.name,
@@ -153,6 +178,8 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
 
     await transaction.commit();
 
+    reply.clearCookie(ApiCookieEnum.AFFILIATE);
+
     const response = SubscribeToMonthlyRecurringPaymentPlanResponseDto.build({
       organizationPaymentPlanId: organizationPaymentPlan.id,
     });
@@ -162,19 +189,21 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
       currency: 'BRL',
     }).format(organizationPaymentPlan.price.toNumber());
 
-    await this.emailGateway.sendHTMLEmail(
-      SendHTMLEmailInputModel.build({
-        to: creditCardHolderInfo.email.toString(),
-        subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
-        emailTemplateName:
-          EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
-        emailTemplateParameters: {
-          name: creditCardHolderInfo.name,
-          planName: organizationPaymentPlan.name,
-          amount,
-        },
-      }),
-    );
+    this.emailGateway
+      .sendHTMLEmail(
+        SendHTMLEmailInputModel.build({
+          to: creditCardHolderInfo.email.toString(),
+          subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
+          emailTemplateName:
+            EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
+          emailTemplateParameters: {
+            name: creditCardHolderInfo.name,
+            planName: organizationPaymentPlan.name,
+            amount,
+          },
+        }),
+      )
+      .catch(() => undefined);
 
     return response;
   }

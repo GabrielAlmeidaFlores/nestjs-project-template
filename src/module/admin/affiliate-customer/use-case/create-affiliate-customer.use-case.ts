@@ -84,7 +84,7 @@ export class CreateAffiliateCustomerUseCase {
     return GetAffiliateCustomerResponseDto.build({
       ...affiliateCustomer,
       pixAddressKey: affiliateCustomer.pixAddressKey?.toString() ?? null,
-      pixAddressKeyType: affiliateCustomer.pixAddressKeyType,
+      pixAddressKeyType: affiliateCustomer.pixAddressKeyType ?? null,
       paymentPlanIds: linkedPlans.map((p) => p.paymentPlanId),
     });
   }

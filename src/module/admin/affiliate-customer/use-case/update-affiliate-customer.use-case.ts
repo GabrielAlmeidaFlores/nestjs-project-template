@@ -110,7 +110,7 @@ export class UpdateAffiliateCustomerUseCase {
     return GetAffiliateCustomerResponseDto.build({
       ...updatedAffiliate,
       pixAddressKey: updatedAffiliate.pixAddressKey?.toString() ?? null,
-      pixAddressKeyType: updatedAffiliate.pixAddressKeyType,
+      pixAddressKeyType: updatedAffiliate.pixAddressKeyType ?? null,
       paymentPlanIds: updatedPlans.map((p) => p.paymentPlanId),
     });
   }

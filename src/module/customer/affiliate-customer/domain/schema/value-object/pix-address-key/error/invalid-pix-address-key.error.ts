@@ -5,7 +5,7 @@ import type { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/
 export class InvalidPixAddressKeyError extends InvalidInputError {
   protected override readonly _type = InvalidPixAddressKeyError.name;
 
-  public constructor(type: PixAddressKeyTypeEnum) {
-    super(`A chave Pix informada não é válida para o tipo "${type}"`);
+  public constructor(props: { type: PixAddressKeyTypeEnum }) {
+    super(`A chave Pix informada não é válida para o tipo "${props.type}"`);
   }
 }
