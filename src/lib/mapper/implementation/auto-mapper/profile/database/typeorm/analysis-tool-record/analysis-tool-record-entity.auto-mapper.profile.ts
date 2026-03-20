@@ -8,6 +8,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
@@ -32,6 +33,7 @@ import { AdministrativeProcedureInssAnalysisEntity } from '@module/customer/anal
 import { AudienceQuestionGeneratorEntity } from '@module/customer/analysis-tool/module/audience-question-generator/domain/schema/entity/audience-question-generator/audience-question-generator.entity';
 import { CnisFastAnalysisEntity } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/schema/entity/cnis-fast-analysis/cnis-fast-analysis.entity';
 import { DisabilityAssessmentForBpcAnalysisEntity } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/schema/entity/disability-assessment-for-bpc-analysis/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning/disability-retirement-planning.entity';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
@@ -203,6 +205,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanning =
+        source.disabilityRetirementPlanning !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanning,
+              DisabilityRetirementPlanningTypeormEntity,
+              DisabilityRetirementPlanningEntity,
+            )
+          : null;
+
       const generalUrbanRetirementAnalysis =
         source.generalUrbanRetirementAnalysis !== null
           ? this.mapper.map(
@@ -243,6 +254,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
       });
@@ -395,6 +407,15 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
             )
           : null;
 
+      const disabilityRetirementPlanning =
+        source.disabilityRetirementPlanning !== null
+          ? this.mapper.map(
+              source.disabilityRetirementPlanning,
+              DisabilityRetirementPlanningEntity,
+              DisabilityRetirementPlanningTypeormEntity,
+            )
+          : null;
+
       const generalUrbanRetirementAnalysis =
         source.generalUrbanRetirementAnalysis !== null
           ? this.mapper.map(
@@ -440,6 +461,7 @@ export class AnalysisToolRecordEntityAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
         generalUrbanRetirementAnalysis,
         specialCategoryRetirementAnalysis,
         analysisToolClient,

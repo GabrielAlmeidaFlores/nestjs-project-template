@@ -13,6 +13,7 @@ export enum AnalysisToolRecordTypeEnum {
   RURAL_TIMELINE_ANALYSIS = 'analise_linha_tempo_rural',
   AUDIENCE_QUESTIONS_GENERATOR = 'gerador_perguntas_audiencia',
   INSURANCE_QUALITY_ANALYSIS = 'analise_qualidade_segurado',
+  DISABILITY_RETIREMENT_PLANNING = 'planejamento_aposentadoria_para_deficiente',
   GENERAL_URBAN_RETIREMENT_GRANT = 'concessao_aposentadoria_urbana_geral',
   GENERAL_URBAN_RETIREMENT_ANALYSIS = 'analise_aposentadoria_urbana_geral',
   SPECIAL_CATEGORY_RETIREMENT = 'aposentadoria_categoria_especial',

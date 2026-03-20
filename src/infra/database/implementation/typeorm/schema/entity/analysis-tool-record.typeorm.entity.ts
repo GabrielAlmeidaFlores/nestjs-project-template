@@ -6,6 +6,7 @@ import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implemen
 import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/base.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
@@ -186,6 +187,16 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
   @JoinColumn({ name: 'per_capita_income_for_bpc_analysis_id' })
   public perCapitaIncomeForBpcAnalysis?: PerCapitaIncomeForBpcAnalysisTypeormEntity | null;
 
+  @OneToOne(
+    () => DisabilityRetirementPlanningTypeormEntity,
+    (entity) => entity.analysisToolRecord,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'disability_retirement_planning_id' })
+  public disabilityRetirementPlanning?: DisabilityRetirementPlanningTypeormEntity | null;
+
   @ManyToOne(() => GeneralUrbanRetirementGrantTypeormEntity)
   @JoinColumn({ name: 'general_urban_retirement_grant_id' })
   public generalUrbanRetirementGrant?: GeneralUrbanRetirementGrantTypeormEntity | null;
@@ -198,7 +209,7 @@ export class AnalysisToolRecordTypeormEntity extends BaseTypeormEntity {
     },
   )
   @JoinColumn({ name: 'general_urban_retirement_analysis_id' })
-  public generalUrbanRetirementAnalysis: GeneralUrbanRetirementAnalysisTypeormEntity | null;
+  public generalUrbanRetirementAnalysis?: GeneralUrbanRetirementAnalysisTypeormEntity | null;
 
   @ManyToOne(
     () => AnalysisToolClientTypeormEntity,
