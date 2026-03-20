@@ -19,7 +19,7 @@ export class CustomerTutorialController {
 
   @BuildEndpointSpecification({
     summary: 'Listar tutoriais',
-    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    userLevel: [UserLevelEnum.CUSTOMER],
     http: { path: '', method: RequestMethod.GET },
     tag: ['tutorial'],
     successResponse: {
