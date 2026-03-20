@@ -9,6 +9,7 @@ import { AnalysisToolRecordTypeormEntity } from '@infra/database/implementation/
 import { AudienceQuestionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/audience-question-generator.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { DisabilityRetirementPlanningTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { GeneralUrbanRetirementGrantTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-grant.typeorm.entity';
 import { InsuranceQualityAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis.typeorm.entity';
@@ -31,6 +32,7 @@ import { GetAdministrativeProcedureInssAnalysisQueryResult } from '@module/custo
 import { GetAudienceQuestionGeneratorWithRelationsQueryResult } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/query/result/get-audience-question-generator-with-relations.query.result';
 import { GetCnisFastAnalysisQueryResult } from '@module/customer/analysis-tool/module/cnis-fast-analysis/domain/repository/cnis-fast-analysis/query/result/get-cnis-fast-analysis.query.result';
 import { GetDisabilityAssessmentForBpcAnalysisQueryResult } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/result/get-disability-assessment-for-bpc-analysis.query.result';
+import { GetDisabilityRetirementPlanningWithRelationsQueryResult } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/repository/disability-retirement-planning/query/result/get-disability-retirement-planning-with-relations.query.result';
 import { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis-with-relations.query.result';
 import { GetGeneralUrbanRetirementAnalysisQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis.query.result';
 import { GetGeneralUrbanRetirementAnalysisRemunerationQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/result/get-general-urban-retirement-analysis-remuneration.query.result';
@@ -181,16 +183,26 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         GetInsuranceQualityAnalysisWithRelationsQueryResult,
       );
 
+      const disabilityRetirementPlanning = this.mapper.map(
+        source.disabilityRetirementPlanning,
+        DisabilityRetirementPlanningTypeormEntity,
+        GetDisabilityRetirementPlanningWithRelationsQueryResult,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         AnalysisToolClientTypeormEntity,
         GetAnalysisToolClientWithRelationsQueryResult,
       );
 
+      const generalUrbanRetirementAnalysisSource =
+        source.generalUrbanRetirementAnalysis;
+
       const generalUrbanRetirementAnalysis =
-        source.generalUrbanRetirementAnalysis !== null
+        generalUrbanRetirementAnalysisSource !== null &&
+        generalUrbanRetirementAnalysisSource !== undefined
           ? ((): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
-              const g = source.generalUrbanRetirementAnalysis;
+              const g = generalUrbanRetirementAnalysisSource;
               const result =
                 g.generalUrbanRetirementAnalysisResult?.id !== undefined
                   ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
@@ -272,6 +284,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimelineAnalysis,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
         analysisToolClient,
@@ -402,6 +415,12 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         InsuranceQualityAnalysisTypeormEntity,
       );
 
+      const disabilityRetirementPlanning = this.mapper.map(
+        source.disabilityRetirementPlanning,
+        GetDisabilityRetirementPlanningWithRelationsQueryResult,
+        DisabilityRetirementPlanningTypeormEntity,
+      );
+
       const analysisToolClient = this.mapper.map(
         source.analysisToolClient,
         GetAnalysisToolClientWithRelationsQueryResult,
@@ -484,6 +503,7 @@ export class GetAnalysisToolRecordWithRelationsQueryResultAutoMapperProfile {
         perCapitaIncomeForBpcAnalysis,
         ruralTimeline,
         insuranceQualityAnalysis,
+        disabilityRetirementPlanning,
         generalUrbanRetirementGrant,
         generalUrbanRetirementAnalysis,
         analysisToolClient,

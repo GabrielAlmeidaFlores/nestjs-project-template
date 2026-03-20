@@ -74,11 +74,11 @@ export class GeneralUrbanRetirementGrantLegalProceedingEntityAutoMapperProfile {
 
       return GeneralUrbanRetirementGrantLegalProceedingTypeormEntity.build({
         id: source.id.toString(),
-        legalProceedingNumber: source.legalProceedingNumber,
-        generalUrbanRetirementGrant,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt,
+        legalProceedingNumber: source.legalProceedingNumber,
+        generalUrbanRetirementGrant,
       });
     };
 
