@@ -4,7 +4,6 @@ import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
-import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
@@ -18,6 +17,7 @@ import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/r
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
+import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { OrganizationPaymentPlanBankPaymentEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -75,21 +75,6 @@ export class GenerateYearlyPaymentBillingUseCase {
         PaymentPlanNotFoundError,
       );
 
-    let organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-      bankExternalId: Guid.toString(),
-      name: paymentPlan.name,
-      description: `Cobrança - ${paymentPlan.name}`,
-      price: paymentPlan.price,
-      maxMemberCount: paymentPlan.maxMemberCount,
-      monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
-      cycle: paymentPlan.cycle,
-      organization: new OrganizationId(organizationId),
-      paymentPlan: paymentPlan.id,
-      totalInstallments: dto.installments,
-      canceled: false,
-      affiliateCustomerId: null,
-    });
-
     if (paymentPlan.cycle !== PaymentPlanCycleEnum.YEARLY) {
       throw new InvalidPaymentPlanCycleError();
     }
@@ -125,13 +110,15 @@ export class GenerateYearlyPaymentBillingUseCase {
           )
         : paymentPlan.price;
 
+    const organizationPaymentPlanId = new OrganizationPaymentPlanId();
+
     const createBillingResult = await this.paymentGateway.createBilling(
       CreateBillingInputModel.build({
         customerId: customer.bankExternalId,
         value: billingValue,
         dueDate,
         description: paymentPlan.name,
-        externalReference: organizationPaymentPlan.id.toString(),
+        externalReference: organizationPaymentPlanId.toString(),
         installmentCount: dto.installments,
       }),
     );
@@ -140,9 +127,19 @@ export class GenerateYearlyPaymentBillingUseCase {
       throw new MissingInstallmentInfoError();
     }
     {
-      organizationPaymentPlan = new OrganizationPaymentPlanEntity({
-        ...organizationPaymentPlan,
+      const organizationPaymentPlan = new OrganizationPaymentPlanEntity({
+        id: organizationPaymentPlanId,
         bankExternalId: createBillingResult.installment,
+        name: paymentPlan.name,
+        description: `Cobrança - ${paymentPlan.name}`,
+        price: paymentPlan.price,
+        maxMemberCount: paymentPlan.maxMemberCount,
+        monthlyCreditAmount: paymentPlan.monthlyCreditAmount,
+        cycle: paymentPlan.cycle,
+        organization: new OrganizationId(organizationId),
+        paymentPlan: paymentPlan.id,
+        totalInstallments: dto.installments,
+        canceled: false,
         affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
       });
 
