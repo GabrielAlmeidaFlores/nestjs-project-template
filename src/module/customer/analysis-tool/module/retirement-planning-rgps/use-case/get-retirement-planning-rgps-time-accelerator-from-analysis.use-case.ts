@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-analysis-result/query/retirement-planning-rgps-analysis-result.query.repository.gateway.ts';
 import { RetirementPlanningRgpsAnalysisResultId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-analysis-result/value-object/retirement-planning-rgps-analysis-result-id.value-object';
 import { GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisResponseDto } from '@module/customer/analysis-tool/module/retirement-planning-rgps/dto/response/get-retirement-planning-rgps-time-accelerator-from-analysis.response.dto';
@@ -26,6 +27,8 @@ export class GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase {
   public constructor(
     @Inject(RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway)
     private readonly retirementPlanningRgpsAnalysisResultQueryRepositoryGateway: RetirementPlanningRgpsAnalysisResultQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -81,7 +84,13 @@ export class GetRetirementPlanningRgpsTimeAcceleratorFromAnalysisUseCase {
         recognitionINSS: parsed.reconhecimentoINSS as string,
         impactoCarencia: parsed.impactoCarencia as string,
         reconhecimentoJudicial: parsed.reconhecimentoJudicial as string,
-        technicalNote: parsed.observacaoTecnica as string,
+        technicalNote:
+          parsed.observacaoTecnica !== undefined &&
+          parsed.observacaoTecnica !== ''
+            ? await this.markdownConverterGateway.convertToHtml(
+                parsed.observacaoTecnica,
+              )
+            : null,
       },
     );
   }

@@ -5,6 +5,7 @@ import { GenerativeIaResponseMimeTypeEnum } from '@infra/generative-ia/enum/gene
 import { GenerativeIaGateway } from '@infra/generative-ia/generative-ia.gateway';
 import { GenerateResponseInputModel } from '@infra/generative-ia/model/input/generate-response.input.model';
 import { ResponseConfigInputModel } from '@infra/generative-ia/model/input/response-config.input.model';
+import { MarkdownConverterGateway } from '@lib/markdown-converter/markdown-converter.gateway';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -41,6 +42,8 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(MarkdownConverterGateway)
+    private readonly markdownConverterGateway: MarkdownConverterGateway,
   ) {}
 
   public async execute(
@@ -90,7 +93,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
     });
 
     const result =
-      (await this.generativeIaGateway.generateFlashResponseFromPromptAndFiles(
+      (await this.generativeIaGateway.generateHighQualityResponseFromPromptAndFiles(
         GenerateResponseInputModel.build({
           systemInstruction: promptResponse.prompt,
           promptFiles: files,
@@ -147,7 +150,7 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
                   observacaoTecnica: {
                     type: 'string',
                     description:
-                      'Observações técnicas, retorne vazio se não houver.',
+                      'Observações técnicas detalhadas sobre a análise realizada. Use formatação markdown: ## para títulos de seções, **texto** para negrito, - para listas com marcadores. Estruture em seções claras com títulos descritivos.',
                   },
                   contribuicaoMedia: {
                     type: 'string',
@@ -242,10 +245,44 @@ export class CompareRetirementPlanningRgpsCnisCtpsUseCase {
 
     await transactions.commit();
 
+    const existingPeriods =
+      retirementPlanningRgps.retirementPlanningRgpsPeriod ?? [];
+    let filteredResult = result;
+    try {
+      const parsedResult = JSON.parse(result) as {
+        [key: string]: unknown;
+        empresa: string;
+        periodoInicio: string;
+        observacaoTecnica?: string;
+      }[];
+      for (const item of parsedResult) {
+        if (item.observacaoTecnica !== undefined) {
+          item.observacaoTecnica =
+            await this.markdownConverterGateway.convertToHtml(
+              item.observacaoTecnica,
+            );
+        }
+      }
+      const filtered = parsedResult.filter((aiPeriod) => {
+        const aiDateStr = aiPeriod.periodoInicio.replace(/\//g, '-');
+        return !existingPeriods.some((existing) => {
+          if (existing.periodName === null || existing.periodStart === null) {
+            return false;
+          }
+          const nameMatch =
+            existing.periodName.trim().toLowerCase() ===
+            aiPeriod.empresa.trim().toLowerCase();
+          const dbDateStr =
+            existing.periodStart.toISOString().split('T')[0] ?? '';
+          return nameMatch && aiDateStr === dbDateStr;
+        });
+      });
+      filteredResult = JSON.stringify(filtered);
+    } catch {}
+
     return CompareRetirementPlanningRgpsCnisCtpsResponseDto.build({
-      result,
-      compareCnisCtpsRaw:
-        updatedRetirementPlanningRgpsResult.compareCnisCtpsRaw ?? 'N/A',
+      result: filteredResult,
+      compareCnisCtpsRaw: filteredResult,
     });
   }
 }
