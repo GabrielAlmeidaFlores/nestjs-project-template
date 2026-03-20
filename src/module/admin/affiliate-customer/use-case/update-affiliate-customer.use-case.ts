@@ -58,6 +58,7 @@ export class UpdateAffiliateCustomerUseCase {
       paymentPlanDiscountRedemptionLimit:
         dto.paymentPlanDiscountRedemptionLimit ??
         existing.paymentPlanDiscountRedemptionLimit,
+      isActive: dto.isActive ?? existing.isActive,
       updatedAt: new Date(),
     });
 
