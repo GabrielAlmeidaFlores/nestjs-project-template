@@ -12,4 +12,5 @@ export interface AffiliateCustomerEntityPropsInterface extends BaseEntityPropsIn
   paymentPlanDiscountPercentage: number;
   paymentPlanDiscountValidUntil: Date;
   paymentPlanDiscountRedemptionLimit: number;
+  isActive?: boolean;
 }

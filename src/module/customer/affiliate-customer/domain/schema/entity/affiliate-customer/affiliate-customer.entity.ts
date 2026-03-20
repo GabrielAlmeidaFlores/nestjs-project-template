@@ -28,6 +28,9 @@ export class AffiliateCustomerEntity extends BaseEntity<AffiliateCustomerId> {
   @Description('Limite de resgates do desconto no plano')
   public readonly paymentPlanDiscountRedemptionLimit: number;
 
+  @Description('Indica se o afiliado está ativo')
+  public readonly isActive: boolean;
+
   protected readonly _type = AffiliateCustomerEntity.name;
 
   public constructor(props: AffiliateCustomerEntityPropsInterface) {
@@ -41,5 +44,6 @@ export class AffiliateCustomerEntity extends BaseEntity<AffiliateCustomerId> {
     this.paymentPlanDiscountValidUntil = props.paymentPlanDiscountValidUntil;
     this.paymentPlanDiscountRedemptionLimit =
       props.paymentPlanDiscountRedemptionLimit;
+    this.isActive = props.isActive ?? true;
   }
 }

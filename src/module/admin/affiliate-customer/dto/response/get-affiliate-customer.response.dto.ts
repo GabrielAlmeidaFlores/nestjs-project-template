@@ -3,6 +3,7 @@ import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domai
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
+import { ResponseDtoBooleanProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-boolean-property/response-dto-boolean-property.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoEnumProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-enum-property/response-dto-enum-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
@@ -35,6 +36,9 @@ export class GetAffiliateCustomerResponseDto extends BaseBuildableDtoObject {
 
   @ResponseDtoNumberProperty()
   public paymentPlanDiscountRedemptionLimit: number;
+
+  @ResponseDtoBooleanProperty()
+  public isActive: boolean;
 
   @ResponseDtoValueObjectProperty(PaymentPlanId, { isArray: true })
   public paymentPlanIds: PaymentPlanId[];

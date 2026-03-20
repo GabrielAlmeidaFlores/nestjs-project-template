@@ -14,6 +14,7 @@ export class GetAffiliateCustomerQueryResult extends BaseBuildableObject {
   public readonly paymentPlanDiscountPercentage: number;
   public readonly paymentPlanDiscountValidUntil: Date;
   public readonly paymentPlanDiscountRedemptionLimit: number;
+  public readonly isActive: boolean;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
   public readonly deletedAt: Date | null;

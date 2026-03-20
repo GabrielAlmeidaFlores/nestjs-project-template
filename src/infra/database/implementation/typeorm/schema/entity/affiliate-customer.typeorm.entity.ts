@@ -39,6 +39,9 @@ export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
   @Column({ name: 'payment_plan_discount_redemption_limit', type: 'integer' })
   public paymentPlanDiscountRedemptionLimit: number;
 
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  public isActive: boolean;
+
   @OneToMany(
     () => AffiliateCustomerPaymentPlanTypeormEntity,
     (entity) => entity.affiliateCustomer,
