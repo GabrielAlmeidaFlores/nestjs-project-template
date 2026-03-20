@@ -49,6 +49,7 @@ export class CreateAffiliateCustomerUseCase {
       paymentPlanDiscountValidUntil: dto.paymentPlanDiscountValidUntil,
       paymentPlanDiscountRedemptionLimit:
         dto.paymentPlanDiscountRedemptionLimit,
+      isActive: dto.isActive ?? true,
     });
 
     const transactions: TransactionType[] = [
