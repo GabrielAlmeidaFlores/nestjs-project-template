@@ -4,8 +4,7 @@ import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysi
 import type { ReasonPendencyEnum } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/enum/reason-pendency.enum';
 import type { GeneralUrbanRetirementGrantPeriodId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/value-object/general-urban-retirement-grant-period-id.value-object';
 
-export interface GeneralUrbanRetirementGrantPeriodEntityPropsInterface
-  extends BaseEntityPropsInterface<GeneralUrbanRetirementGrantPeriodId> {
+export interface GeneralUrbanRetirementGrantPeriodEntityPropsInterface extends BaseEntityPropsInterface<GeneralUrbanRetirementGrantPeriodId> {
   periodName?: string | null;
   periodStart?: Date | null;
   periodEnd?: Date | null;

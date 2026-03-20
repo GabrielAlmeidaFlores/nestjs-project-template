@@ -43,10 +43,21 @@ export class GeneralUrbanRetirementGrantPeriodEntityAutoMapperProfile {
           : null;
 
       return new GeneralUrbanRetirementGrantPeriodEntity({
-        ...source,
         id: new GeneralUrbanRetirementGrantPeriodId(source.id),
+        periodName: source.periodName,
+        periodStart: source.periodStart,
+        periodEnd: source.periodEnd,
+        category: source.category,
+        isPendency: source.isPendency,
+        reasonPendency: source.reasonPendency,
+        competenceBelowTheMinimum: source.competenceBelowTheMinimum,
         contributionAverage,
+        typeOfContribution: source.typeOfContribution,
         generalUrbanRetirementGrant,
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
       });
     };
 
@@ -71,7 +82,7 @@ export class GeneralUrbanRetirementGrantPeriodEntityAutoMapperProfile {
               GeneralUrbanRetirementGrantEntity,
               GeneralUrbanRetirementGrantTypeormEntity,
             )
-          : undefined;
+          : null;
 
       const contributionAverage =
         source.contributionAverage !== null
@@ -79,11 +90,22 @@ export class GeneralUrbanRetirementGrantPeriodEntityAutoMapperProfile {
           : null;
 
       return GeneralUrbanRetirementGrantPeriodTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        periodName: source.periodName,
+        periodStart: source.periodStart,
+        periodEnd: source.periodEnd,
+        category: source.category,
+        isPendency: source.isPendency,
+        reasonPendency: source.reasonPendency,
+        competenceBelowTheMinimum: source.competenceBelowTheMinimum,
         contributionAverage,
+        typeOfContribution: source.typeOfContribution,
         generalUrbanRetirementGrant,
-      } as any);
+        status: source.status,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
+      });
     };
 
     const mappingFunction = constructUsing(convertDomainEntityToOrmEntity);

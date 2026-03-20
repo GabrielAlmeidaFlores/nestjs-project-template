@@ -2,8 +2,8 @@ import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { GeneralUrbanRetirementGrantEarningsHistoryId } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-earnings-history/value-object/general-urban-retirement-grant-earnings-history-id.value-object';
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
-import type { GeneralUrbanRetirementGrantEarningsHistoryEntityPropsInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-earnings-history/general-urban-retirement-grant-earnings-history.entity.props.interface';
 import type { GeneralUrbanRetirementGrantEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant/general-urban-retirement-grant.entity';
+import type { GeneralUrbanRetirementGrantEarningsHistoryEntityPropsInterface } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-earnings-history/general-urban-retirement-grant-earnings-history.entity.props.interface';
 import type { GeneralUrbanRetirementGrantPeriodEntity } from '@module/customer/analysis-tool/module/general-urban-retirement-grant/domain/schema/entity/general-urban-retirement-grant-period/general-urban-retirement-grant-period.entity';
 
 export class GeneralUrbanRetirementGrantEarningsHistoryEntity extends BaseEntity<GeneralUrbanRetirementGrantEarningsHistoryId> {

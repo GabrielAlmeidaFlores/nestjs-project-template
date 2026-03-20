@@ -10,7 +10,6 @@ import {
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
-import { GetGeneralUrbanRetirementAnalysisDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-document/query/result/get-general-urban-retirement-analysis-document.query.result';
 import { GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-period-document/query/result/get-general-urban-retirement-analysis-period-document.query.result';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GetGeneralUrbanRetirementAnalysisDocumentResponseDto } from '@module/customer/analysis-tool/module/general-urban-retirement/dto/response/get-general-urban-retirement-analysis-document.response.dto';
@@ -151,10 +150,7 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
                 type: p.specialTimePeriod.type,
                 startDate: p.specialTimePeriod.startDate,
                 endDate: p.specialTimePeriod.endDate,
-                ...(p.specialTimePeriod.lawyerObservations !== undefined && {
-                  lawyerObservations:
-                    p.specialTimePeriod.lawyerObservations,
-                }),
+                lawyerObservations: p.specialTimePeriod.lawyerObservations,
                 ...(documents.length > 0 && { documents }),
               },
             );
@@ -177,9 +173,7 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
               category: p.disabilityPeriod.category,
               description: p.disabilityPeriod.description,
               dailyImpact: p.disabilityPeriod.dailyImpact,
-              ...(p.disabilityPeriod.lawyerObservations !== undefined && {
-                lawyerObservations: p.disabilityPeriod.lawyerObservations,
-              }),
+              lawyerObservations: p.disabilityPeriod.lawyerObservations,
               cid: GetGeneralUrbanRetirementAnalysisPeriodCidResponseDto.build({
                 id: p.disabilityPeriod.cid.id,
                 code: p.disabilityPeriod.cid.code,
@@ -205,8 +199,22 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
       }),
     );
 
-    const documents = await this.buildAnalysisDocuments(
-      analysisQueryResult.documents,
+    const documents = await Promise.all(
+      analysisQueryResult.documents.map(async (d) => {
+        const buffer = await this.fileProcessorGateway.getFileBuffer(
+          d.document,
+        );
+        const originalFileName =
+          await this.fileProcessorGateway.getOriginalFileName(d.document);
+        return GetGeneralUrbanRetirementAnalysisDocumentResponseDto.build({
+          id: d.id,
+          type: d.type,
+          document: Base64.encodeBuffer(buffer),
+          originalFileName,
+          createdAt: d.createdAt,
+          updatedAt: d.updatedAt,
+        });
+      }),
     );
 
     return GetGeneralUrbanRetirementAnalysisResponseDto.build({
@@ -241,28 +249,6 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
       createdAt: analysisQueryResult.createdAt,
       updatedAt: analysisQueryResult.updatedAt,
     });
-  }
-
-  private async buildAnalysisDocuments(
-    documents: GetGeneralUrbanRetirementAnalysisDocumentQueryResult[],
-  ): Promise<GetGeneralUrbanRetirementAnalysisDocumentResponseDto[]> {
-    return Promise.all(
-      documents.map(async (doc) => {
-        const buffer = await this.fileProcessorGateway.getFileBuffer(
-          doc.document,
-        );
-        const originalFileName =
-          await this.fileProcessorGateway.getOriginalFileName(doc.document);
-        return GetGeneralUrbanRetirementAnalysisDocumentResponseDto.build({
-          id: doc.id,
-          type: doc.type,
-          document: Base64.encodeBuffer(buffer),
-          originalFileName,
-          createdAt: doc.createdAt,
-          updatedAt: doc.updatedAt,
-        });
-      }),
-    );
   }
 
   private async buildPeriodDocuments(

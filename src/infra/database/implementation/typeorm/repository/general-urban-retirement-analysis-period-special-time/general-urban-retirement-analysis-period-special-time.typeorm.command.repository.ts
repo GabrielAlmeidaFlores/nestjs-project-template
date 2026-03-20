@@ -47,4 +47,14 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormCommandReposi
   ): TransactionType {
     return this.delete(id.toString());
   }
+
+  public updateLawyerObservations(
+    id: GeneralUrbanRetirementAnalysisPeriodSpecialTimeId,
+    lawyerObservations: string | null,
+  ): TransactionType {
+    return this.update(id.toString(), { lawyerObservations } as Pick<
+      GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity,
+      'lawyerObservations'
+    >);
+  }
 }
