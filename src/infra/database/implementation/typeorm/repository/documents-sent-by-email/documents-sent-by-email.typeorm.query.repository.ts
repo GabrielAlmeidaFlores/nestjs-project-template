@@ -68,17 +68,18 @@ export class DocumentsSentByEmailTypeormQueryRepository
       },
     };
 
-    const where = (() => {
-      const baseWhere = {
-        ...sentByWhere,
-        ...(createdAtWhere ? { createdAt: createdAtWhere } : {}),
-      };
+    let where = {};
+    const baseWhere = {
+      ...sentByWhere,
+      ...(createdAtWhere ? { createdAt: createdAtWhere } : {}),
+    };
 
-      if (filters.search === null) {
-        return baseWhere;
-      }
+    if (filters.search === null) {
+      where = baseWhere;
+    }
 
-      return [
+    if (filters.search !== null) {
+      where = [
         {
           ...baseWhere,
           subject: Like(`%${filters.search}%`),
@@ -88,7 +89,7 @@ export class DocumentsSentByEmailTypeormQueryRepository
           emails: Like(`%${filters.search}%`),
         },
       ];
-    })();
+    }
 
     const [items, totalItems] = await this.repository.findAndCount({
       where,
