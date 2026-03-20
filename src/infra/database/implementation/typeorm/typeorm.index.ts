@@ -161,6 +161,8 @@ import { CnisFastAnalysisLegalProceedingTypeormEntity } from '@infra/database/im
 import { CnisFastAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis-result.typeorm.entity';
 import { CnisFastAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/cnis-fast-analysis.typeorm.entity';
 import { CustomerAddressTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-address.typeorm.entity';
+import { CustomerEmailSentAttachmentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-email-sent-attachment.typeorm.entity';
+import { CustomerEmailSentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-email-sent.typeorm.entity';
 import { CustomerTermsAcceptanceTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms-acceptance.typeorm.entity';
 import { CustomerTermsTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer-terms.typeorm.entity';
 import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
@@ -277,6 +279,8 @@ export class TypeormIndex {
     AdministrativeProcedureInssAnalysisDocumentTypeormEntity,
     AuthIdentityTypeormEntity,
     CustomerAddressTypeormEntity,
+    CustomerEmailSentTypeormEntity,
+    CustomerEmailSentAttachmentTypeormEntity,
     CustomerTypeormEntity,
     OrganizationCreditPurchaseTypeormEntity,
     OrganizationCreditUsageTypeormEntity,
