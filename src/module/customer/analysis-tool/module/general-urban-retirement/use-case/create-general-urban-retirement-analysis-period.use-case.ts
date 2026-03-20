@@ -248,7 +248,7 @@ export class CreateGeneralUrbanRetirementAnalysisPeriodUseCase {
             },
             {
               type: GeneralUrbanRetirementAnalysisPeriodDocumentTypeEnum.OTHER_MEDICAL,
-              files: docs.outrosMedicos ?? [],
+              files: docs.outros_medicos ?? [],
             },
           ];
           for (const entry of disabilityDocEntries) {

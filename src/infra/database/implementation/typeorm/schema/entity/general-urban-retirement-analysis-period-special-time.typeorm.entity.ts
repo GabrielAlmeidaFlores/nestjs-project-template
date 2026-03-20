@@ -43,7 +43,9 @@ export class GeneralUrbanRetirementAnalysisPeriodSpecialTimeTypeormEntity extend
     () => GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity,
     (entity) => entity.generalUrbanRetirementAnalysisPeriodSpecialTime,
   )
-  public specialTimeDocuments: GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[] | null;
+  public specialTimeDocuments:
+    | GeneralUrbanRetirementAnalysisPeriodDocumentTypeormEntity[]
+    | null;
 
   @OneToOne(
     () => GeneralUrbanRetirementAnalysisPeriodTypeormEntity,
