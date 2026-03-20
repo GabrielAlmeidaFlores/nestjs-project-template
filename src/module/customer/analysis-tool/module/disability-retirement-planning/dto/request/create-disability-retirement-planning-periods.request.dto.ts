@@ -1,5 +1,8 @@
+import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { DisabilityRetirementPlanningPeriodDisabilityCategoryEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability/enum/disability-retirement-planning-period-disability-category.enum';
+import { DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-disability-document/enum/disability-retirement-planning-period-disability-document-type.enum';
+import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time-document/enum/disability-retirement-planning-period-special-time-document-type.enum';
 import { RetirementPlanningPeriodServiceTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period/enum/retirement-planning-period-service-type.enum';
 import { RetirementPlanningDisabilityDegreeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-degree-enum';
 import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
@@ -9,8 +12,43 @@ import { RequestDtoEnumProperty } from '@shared/api/util/decorator/property/dto-
 import { RequestDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-object-property/request-dto-object-property.decorator';
 import { RequestDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-string-property/request-dto-string-property.decorator';
 import { RequestDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/request/request-dto-value-object-property/request-dto-value-object-property.decorator';
-import { Base64FileRequestDto } from '@shared/api/util/dto/request/base64-file.request.dto';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
+
+@RequestDto()
+export class CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly base64: Base64;
+
+  @RequestDtoStringProperty({ required: true })
+  public readonly originalFileName: string;
+
+  @RequestDtoEnumProperty(
+    DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum,
+    { required: true },
+  )
+  public readonly type: DisabilityRetirementPlanningPeriodDisabilityDocumentTypeEnum;
+
+  protected override readonly _type =
+    CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto.name;
+}
+
+@RequestDto()
+export class CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto extends BaseBuildableDtoObject {
+  @RequestDtoValueObjectProperty(Base64)
+  public readonly base64: Base64;
+
+  @RequestDtoStringProperty({ required: true })
+  public readonly originalFileName: string;
+
+  @RequestDtoEnumProperty(
+    DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum,
+    { required: true },
+  )
+  public readonly type: DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeEnum;
+
+  protected override readonly _type =
+    CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto.name;
+}
 
 @RequestDto()
 export class CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto extends BaseBuildableDtoObject {
@@ -47,11 +85,14 @@ export class CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto extend
   @RequestDtoStringProperty({ required: true })
   public readonly activityImpact: string;
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
-    required: false,
-    isArray: true,
-  })
-  public readonly documents?: Base64FileRequestDto[];
+  @RequestDtoObjectProperty(
+    () => CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public readonly documents?: CreateDisabilityRetirementPlanningPeriodDisabilityDocumentRequestDto[];
 
   protected override readonly _type =
     CreateDisabilityRetirementPlanningPeriodDisabilityRequestDto.name;
@@ -65,11 +106,14 @@ export class CreateDisabilityRetirementPlanningPeriodSpecialTimeRequestDto exten
   @RequestDtoDateProperty({ required: false })
   public readonly endDate?: Date;
 
-  @RequestDtoObjectProperty(() => Base64FileRequestDto, {
-    required: false,
-    isArray: true,
-  })
-  public readonly documents?: Base64FileRequestDto[];
+  @RequestDtoObjectProperty(
+    () => CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto,
+    {
+      required: false,
+      isArray: true,
+    },
+  )
+  public readonly documents?: CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto[];
 
   protected override readonly _type =
     CreateDisabilityRetirementPlanningPeriodSpecialTimeRequestDto.name;

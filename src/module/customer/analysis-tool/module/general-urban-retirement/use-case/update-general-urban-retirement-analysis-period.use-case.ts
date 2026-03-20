@@ -272,8 +272,7 @@ export class UpdateGeneralUrbanRetirementAnalysisPeriodUseCase {
             category: periodDto.disability.category,
             description: periodDto.disability.description,
             dailyImpact: periodDto.disability.dailyImpact,
-            lawyerObservations:
-              periodDto.disability.lawyerObservations ?? null,
+            lawyerObservations: periodDto.disability.lawyerObservations ?? null,
             cidTen: cidTenEntity,
             generalUrbanRetirementAnalysisPeriod: period,
           });

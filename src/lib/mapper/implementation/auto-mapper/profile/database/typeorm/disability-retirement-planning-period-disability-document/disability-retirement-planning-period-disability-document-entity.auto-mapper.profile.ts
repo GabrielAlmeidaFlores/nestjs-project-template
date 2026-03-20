@@ -47,6 +47,7 @@ export class DisabilityRetirementPlanningPeriodDisabilityDocumentEntityAutoMappe
           source.id,
         ),
         document: source.document,
+        type: source.type,
         disabilityRetirementPlanningPeriodDisability,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
@@ -76,6 +77,7 @@ export class DisabilityRetirementPlanningPeriodDisabilityDocumentEntityAutoMappe
         {
           id: source.id.toString(),
           document: source.document,
+          type: source.type,
           disabilityRetirementPlanningPeriodDisability,
           createdAt: source.createdAt,
           updatedAt: source.updatedAt,

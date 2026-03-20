@@ -26,7 +26,7 @@ export class AnalysisProcessorService implements AnalysisProcessorGateway {
     return await this.cnisParserGateway.validateCnisDocument(cnisDocument);
   }
 
- public async getCnisCompleteAnalysis(
+  public async getCnisCompleteAnalysis(
     systemInstruction: string,
     cnisAnalysisJson: string,
     files: Buffer[],
@@ -101,7 +101,7 @@ Análise processada do CNIS:
     );
   }
 
-public async getRetirementPlanningRppsCompleteAnalysis(
+  public async getRetirementPlanningRppsCompleteAnalysis(
     systemInstruction: string,
     files: Buffer[],
   ): Promise<string | null> {
@@ -1375,7 +1375,7 @@ public async getRetirementPlanningRppsCompleteAnalysis(
               type: 'string',
               description:
                 'Tempo de contribuição considerando aceleradores. Ex: 30 anos 8 meses',
-            }
+            },
           },
           required: [
             'totalContributionTime',

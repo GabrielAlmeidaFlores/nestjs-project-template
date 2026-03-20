@@ -296,6 +296,7 @@ export class UpdateDisabilityRetirementPlanningPeriodUseCase {
               id: new DisabilityRetirementPlanningPeriodDisabilityDocumentId(),
               disabilityRetirementPlanningPeriodDisability: disability,
               document: documentUrl,
+              type: documentDto.type,
             });
 
           return this.periodDisabilityDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodDisabilityDocument(
@@ -353,6 +354,7 @@ export class UpdateDisabilityRetirementPlanningPeriodUseCase {
               id: new DisabilityRetirementPlanningPeriodSpecialTimeDocumentId(),
               disabilityRetirementPlanningPeriodSpecialTime: specialTime,
               document: documentUrl,
+              type: documentDto.type,
             });
 
           return this.periodSpecialTimeDocumentCommandRepositoryGateway.createDisabilityRetirementPlanningPeriodSpecialTimeDocument(

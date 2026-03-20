@@ -152,8 +152,7 @@ export class GetGeneralUrbanRetirementAnalysisUseCase {
                 startDate: p.specialTimePeriod.startDate,
                 endDate: p.specialTimePeriod.endDate,
                 ...(p.specialTimePeriod.lawyerObservations !== undefined && {
-                  lawyerObservations:
-                    p.specialTimePeriod.lawyerObservations,
+                  lawyerObservations: p.specialTimePeriod.lawyerObservations,
                 }),
                 ...(documents.length > 0 && { documents }),
               },
