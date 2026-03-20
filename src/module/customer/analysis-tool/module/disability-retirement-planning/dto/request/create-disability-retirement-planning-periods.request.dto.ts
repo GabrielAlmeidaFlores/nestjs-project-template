@@ -106,6 +106,11 @@ export class CreateDisabilityRetirementPlanningPeriodSpecialTimeRequestDto exten
   @RequestDtoDateProperty({ required: false })
   public readonly endDate?: Date;
 
+  @RequestDtoEnumProperty(RetirementPlanningDisabilityTimeTypeEnum, {
+    required: true,
+  })
+  public readonly specialPeriodType: RetirementPlanningDisabilityTimeTypeEnum;
+
   @RequestDtoObjectProperty(
     () => CreateDisabilityRetirementPlanningPeriodSpecialTimeDocumentRequestDto,
     {

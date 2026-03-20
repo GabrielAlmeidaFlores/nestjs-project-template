@@ -45,6 +45,7 @@ export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapp
         id: source.id,
         startDate: source.startDate,
         endDate: source.endDate,
+        specialPeriodType: source.specialPeriodType,
         documents,
       });
     };
@@ -71,6 +72,7 @@ export class GetDisabilityRetirementPlanningPeriodSpecialTimeQueryResultAutoMapp
         id: source.id,
         startDate: source.startDate,
         endDate: source.endDate,
+        specialPeriodType: source.specialPeriodType,
         disabilityRetirementPlanningPeriodSpecialTimeDocument: documents,
         createdAt: new Date(),
         updatedAt: new Date(),

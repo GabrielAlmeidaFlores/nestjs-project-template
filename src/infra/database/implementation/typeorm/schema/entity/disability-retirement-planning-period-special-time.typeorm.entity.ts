@@ -4,6 +4,7 @@ import { BaseTypeormEntity } from '@infra/database/implementation/typeorm/schema
 import { DisabilityRetirementPlanningPeriodSpecialTimeDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period-special-time-document.typeorm.entity';
 import { DisabilityRetirementPlanningPeriodTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-retirement-planning-period.typeorm.entity';
 import { DateOnlyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/date-only.transformer';
+import { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
 @Entity({ name: 'disability_retirement_planning_period_special_time' })
 export class DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity extends BaseTypeormEntity {
@@ -21,6 +22,13 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeTypeormEntity extends 
     transformer: DateOnlyTransformer,
   })
   public endDate: Date | null;
+
+  @Column({
+    name: 'special_period_type',
+    type: 'simple-enum',
+    enum: RetirementPlanningDisabilityTimeTypeEnum,
+  })
+  public specialPeriodType: RetirementPlanningDisabilityTimeTypeEnum;
 
   @ManyToOne(
     () => DisabilityRetirementPlanningPeriodTypeormEntity,

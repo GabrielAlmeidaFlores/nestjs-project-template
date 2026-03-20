@@ -71,7 +71,6 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
       source: GeneralUrbanRetirementAnalysisTypeormEntity,
     ): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
       const generalUrbanRetirementAnalysisResult =
-        source.generalUrbanRetirementAnalysisResult !== undefined &&
         source.generalUrbanRetirementAnalysisResult !== null
           ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
               id: new GeneralUrbanRetirementAnalysisResultId(

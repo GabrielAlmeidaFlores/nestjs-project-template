@@ -3,11 +3,13 @@ import { DisabilityRetirementPlanningPeriodSpecialTimeId } from '@module/custome
 
 import type { DisabilityRetirementPlanningPeriodEntity } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period/disability-retirement-planning-period.entity';
 import type { DisabilityRetirementPlanningPeriodSpecialTimeEntityPropsInterface } from '@module/customer/analysis-tool/module/disability-retirement-planning/domain/schema/entity/disability-retirement-planning-period-special-time/disability-retirement-planning-period-special-time.entity.props.interface';
+import type { RetirementPlanningDisabilityTimeTypeEnum } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/schema/entity/retirement-planning-rpps-period-disability/enum/retirement-planning-disability-time-type.enum';
 
 export class DisabilityRetirementPlanningPeriodSpecialTimeEntity extends BaseEntity<DisabilityRetirementPlanningPeriodSpecialTimeId> {
   public readonly disabilityRetirementPlanningPeriod: DisabilityRetirementPlanningPeriodEntity;
   public readonly startDate: Date;
   public readonly endDate: Date | null;
+  public readonly specialPeriodType: RetirementPlanningDisabilityTimeTypeEnum;
 
   protected readonly _type =
     DisabilityRetirementPlanningPeriodSpecialTimeEntity.name;
@@ -20,5 +22,6 @@ export class DisabilityRetirementPlanningPeriodSpecialTimeEntity extends BaseEnt
       props.disabilityRetirementPlanningPeriod;
     this.startDate = props.startDate;
     this.endDate = props.endDate ?? null;
+    this.specialPeriodType = props.specialPeriodType;
   }
 }
