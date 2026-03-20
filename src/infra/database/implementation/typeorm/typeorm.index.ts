@@ -171,6 +171,7 @@ import { DisabilityAssessmentForBpcAnalysisDocumentTypeormEntity } from '@infra/
 import { DisabilityAssessmentForBpcAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-legal-proceeding.entity';
 import { DisabilityAssessmentForBpcAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis-result.entity';
 import { DisabilityAssessmentForBpcAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/disability-assessment-for-bpc-analysis.entity';
+import { EmailTemplateTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/email-template.typeorm.entity';
 import { FullOpinionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/full-opinion-generator.typeorm.entity';
 import { InitialPetitionGeneratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/initial-petition-generator.typeorm.entity';
 import { InsuranceQualityAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/insurance-quality-analysis-document.typeorm.entity';
@@ -278,6 +279,7 @@ export class TypeormIndex {
     AdministrativeProcedureInssAnalysisTypeormEntity,
     AdministrativeProcedureInssAnalysisDocumentTypeormEntity,
     AuthIdentityTypeormEntity,
+    EmailTemplateTypeormEntity,
     CustomerAddressTypeormEntity,
     CustomerEmailSentTypeormEntity,
     CustomerEmailSentAttachmentTypeormEntity,
