@@ -1,0 +1,15 @@
+export enum TutorialFunctionalityEnum {
+  BENEFIT_CALCULATION = 'benefit_calculation',
+  DOCUMENT_UPLOAD = 'document_upload',
+  DOCUMENT_GENERATION = 'document_generation',
+  DOCUMENT_CUSTOMIZATION = 'document_customization',
+  CREDIT_PURCHASE = 'credit_purchase',
+  SUBSCRIPTION_RENEWAL = 'subscription_renewal',
+  EMAIL_SENDING = 'email_sending',
+  AFFILIATE_PANEL = 'affiliate_panel',
+  ELOY_ASSISTANT = 'eloy_assistant',
+  CLIENT_MANAGEMENT = 'client_management',
+  DASHBOARD_DATA = 'dashboard_data',
+  PAYMENTS = 'payments',
+  CANCELLATION = 'cancellation',
+}
