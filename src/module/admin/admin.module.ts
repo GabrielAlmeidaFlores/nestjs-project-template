@@ -4,6 +4,7 @@ import { AccountModule } from '@module/admin/account/account.module';
 import { CustomerManagementModule } from '@module/admin/customer-management/customer-management.module';
 import { DashboardMetricsModule } from '@module/admin/dashboard-metrics/dashboard-metrics.module';
 import { PaymentPlanModule } from '@module/admin/payment-plan/payment-plan.module';
+import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { PaymentPlanModule } from '@module/admin/payment-plan/payment-plan.modul
     CustomerManagementModule,
     DashboardMetricsModule,
     PaymentPlanModule,
+    AdminTutorialModule,
   ],
 })
 export class AdminModule {
