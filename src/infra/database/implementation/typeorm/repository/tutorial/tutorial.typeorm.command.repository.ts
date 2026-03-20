@@ -8,6 +8,7 @@ import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { TutorialCommandRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/command/tutorial.command.repository.gateway';
 import { TutorialEntity } from '@module/customer/tutorial/domain/schema/entity/tutorial/tutorial.entity';
+import { TutorialId } from '@module/customer/tutorial/domain/schema/entity/tutorial/value-object/tutorial-id/tutorial-id.value-object';
 
 @Injectable()
 export class TutorialTypeormCommandRepository
@@ -32,5 +33,22 @@ export class TutorialTypeormCommandRepository
     );
 
     return this.create(mappedData);
+  }
+
+  public updateTutorial(
+    id: TutorialId,
+    props: TutorialEntity,
+  ): TransactionType {
+    const mappedData = this.mapperGateway.map(
+      props,
+      TutorialEntity,
+      TutorialTypeormEntity,
+    );
+
+    return this.update(id.toString(), mappedData);
+  }
+
+  public deleteTutorial(id: TutorialId): TransactionType {
+    return this.delete(id.toString());
   }
 }

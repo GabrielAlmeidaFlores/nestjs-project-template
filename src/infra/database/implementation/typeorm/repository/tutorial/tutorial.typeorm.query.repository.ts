@@ -9,6 +9,7 @@ import { TutorialTypeormEntity } from '@infra/database/implementation/typeorm/sc
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { GetTutorialQueryResult } from '@module/customer/tutorial/domain/repository/tutorial/query/result/get-tutorial.query.result';
 import { TutorialQueryRepositoryGateway } from '@module/customer/tutorial/domain/repository/tutorial/query/tutorial.query.repository.gateway';
+import { TutorialId } from '@module/customer/tutorial/domain/schema/entity/tutorial/value-object/tutorial-id/tutorial-id.value-object';
 
 @Injectable()
 export class TutorialTypeormQueryRepository
@@ -40,5 +41,21 @@ export class TutorialTypeormQueryRepository
       ...data,
       resource: mappedData,
     });
+  }
+
+  public async findOneTutorialById(
+    id: TutorialId,
+  ): Promise<GetTutorialQueryResult | null> {
+    const result = await this.findOne({ where: { id: id.toString() } });
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapperGateway.map(
+      result,
+      TutorialTypeormEntity,
+      GetTutorialQueryResult,
+    );
   }
 }
