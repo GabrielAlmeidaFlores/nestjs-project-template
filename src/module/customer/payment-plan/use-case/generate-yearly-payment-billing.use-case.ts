@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 import moment from 'moment';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
+import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
 import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/create-billing.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
+import { ResolveAffiliatePlanDiscountService } from '@module/customer/affiliate-customer/service/resolve-affiliate-plan-discount.service';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
@@ -27,6 +30,7 @@ import { BankPaymentCommandRepositoryGateway } from '@module/generic/bank/domain
 import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/bank-payment/bank-payment.entity';
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -53,12 +57,14 @@ export class GenerateYearlyPaymentBillingUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountService,
   ) {}
 
   public async execute(
     organizationSessionData: OrganizationSessionDataModel,
     sessionData: SessionDataModel,
     dto: GenerateYearlyPaymentBillingRequestDto,
+    reply: FastifyReply,
   ): Promise<GenerateYearlyPaymentBillingResponseDto> {
     const organizationId = organizationSessionData.organizationId.toString();
 
@@ -98,10 +104,29 @@ export class GenerateYearlyPaymentBillingUseCase {
       .startOf('day')
       .toDate();
 
+    const discountPercentage =
+      await this.resolveAffiliatePlanDiscountService.resolveDiscount(
+        reply.request.cookies[ApiCookieEnum.AFFILIATE],
+        paymentPlan.id,
+      );
+
+    const HUNDRED_PERCENT = 100;
+    const MINIMUM_BILLING_VALUE = 5;
+    const billingValue =
+      discountPercentage !== null
+        ? new DecimalValue(
+            Math.max(
+              paymentPlan.price.toNumber() *
+                (1 - discountPercentage / HUNDRED_PERCENT),
+              MINIMUM_BILLING_VALUE,
+            ).toFixed(2),
+          )
+        : paymentPlan.price;
+
     const createBillingResult = await this.paymentGateway.createBilling(
       CreateBillingInputModel.build({
         customerId: customer.bankExternalId,
-        value: paymentPlan.price,
+        value: billingValue,
         dueDate,
         description: paymentPlan.name,
         externalReference: organizationPaymentPlan.id.toString(),

@@ -27,7 +27,7 @@ export class AffiliateCustomerEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: AffiliateCustomerTypeormEntity,
     ): AffiliateCustomerEntity => {
-      if (!source.customer) {
+      if (source.customer === null) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: AffiliateCustomerEntity.name,
           sourceClass: AffiliateCustomerTypeormEntity.name,
@@ -35,7 +35,7 @@ export class AffiliateCustomerEntityAutoMapperProfile {
       }
 
       const pixAddressKey =
-        source.pixAddressKey && source.pixAddressKeyType
+        source.pixAddressKey !== null && source.pixAddressKeyType !== null
           ? new PixAddressKey(source.pixAddressKey, source.pixAddressKeyType)
           : null;
 

@@ -1,4 +1,12 @@
-import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  Res,
+  RequestMethod,
+} from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 
 import { GenerateMonthlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-monthly-payment-billing.request.dto';
 import { GenerateYearlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-yearly-payment-billing.request.dto';
@@ -114,11 +122,13 @@ export class PaymentPlanController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @GetSessionData() sessionData: SessionDataModel,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<SubscribeToMonthlyRecurringPaymentPlanResponseDto> {
     return this.subscribePaymentPlanUseCase.execute(
       organizationSessionData,
       sessionData,
       body,
+      reply,
     );
   }
 
@@ -191,11 +201,13 @@ export class PaymentPlanController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @GetSessionData() sessionData: SessionDataModel,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<GenerateMonthlyPaymentBillingResponseDto> {
     return this.generateMonthlyPaymentBillingUseCase.execute(
       organizationSessionData,
       sessionData,
       body,
+      reply,
     );
   }
 
@@ -221,11 +233,13 @@ export class PaymentPlanController {
     @Param('bankPaymentId', new ParseValueObjectPipe(BankPaymentId))
     bankPaymentId: BankPaymentId,
     @Body() body: PayBillingRequestDto,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<PayBillingResponseDto> {
     return this.payMonthlyPaymentBillingUseCase.execute(
       organizationSessionData,
       bankPaymentId,
       body,
+      reply,
     );
   }
 
@@ -251,11 +265,13 @@ export class PaymentPlanController {
     @GetOrganizationSessionData()
     organizationSessionData: OrganizationSessionDataModel,
     @GetSessionData() sessionData: SessionDataModel,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<GenerateYearlyPaymentBillingResponseDto> {
     return this.generateYearlyPaymentBillingUseCase.execute(
       organizationSessionData,
       sessionData,
       body,
+      reply,
     );
   }
 

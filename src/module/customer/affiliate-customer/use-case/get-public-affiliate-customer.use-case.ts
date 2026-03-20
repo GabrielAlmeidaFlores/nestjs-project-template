@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 import { AffiliateCustomerPaymentPlanQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-payment-plan/query/affiliate-customer-payment-plan.query.repository.gateway';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
+import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
 import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { FrameworkApplicationVariable } from '@shared/system/constant/application-variable/source/framework.application-variable';
 
@@ -25,7 +25,9 @@ export class GetPublicAffiliateCustomerUseCase {
     affiliateCustomerId: AffiliateCustomerId,
   ): Promise<GetPublicAffiliateCustomerResponseDto> {
     const affiliate =
-      await this.affiliateCustomerQueryRepository.findOneById(affiliateCustomerId);
+      await this.affiliateCustomerQueryRepository.findOneById(
+        affiliateCustomerId,
+      );
 
     if (!affiliate) {
       throw new AffiliateCustomerNotFoundError();
@@ -48,7 +50,8 @@ export class GetPublicAffiliateCustomerUseCase {
       id: affiliate.id,
       paymentPlanDiscountPercentage: affiliate.paymentPlanDiscountPercentage,
       paymentPlanDiscountValidUntil: affiliate.paymentPlanDiscountValidUntil,
-      paymentPlanDiscountRedemptionLimit: affiliate.paymentPlanDiscountRedemptionLimit,
+      paymentPlanDiscountRedemptionLimit:
+        affiliate.paymentPlanDiscountRedemptionLimit,
       paymentPlanIds: linkedPlans.map((p) => p.paymentPlanId),
     });
   }

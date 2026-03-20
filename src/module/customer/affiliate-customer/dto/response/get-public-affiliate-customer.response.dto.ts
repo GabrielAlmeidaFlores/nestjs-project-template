@@ -24,5 +24,6 @@ export class GetPublicAffiliateCustomerResponseDto extends BaseBuildableDtoObjec
   @ResponseDtoObjectProperty(() => PaymentPlanId, { isArray: true })
   public paymentPlanIds: PaymentPlanId[];
 
-  protected override readonly _type = GetPublicAffiliateCustomerResponseDto.name;
+  protected override readonly _type =
+    GetPublicAffiliateCustomerResponseDto.name;
 }

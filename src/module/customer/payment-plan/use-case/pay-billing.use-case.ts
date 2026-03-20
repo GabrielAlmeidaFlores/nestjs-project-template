@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { EmailGateway } from '@infra/email/email.gateway';
@@ -19,6 +20,7 @@ import { BankPaymentEntity } from '@module/generic/bank/domain/schema/entity/ban
 import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-method.enum';
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { EmailApplicationVariable } from '@shared/system/constant/application-variable/source/email.application-variable';
 
@@ -48,6 +50,7 @@ export class PayBillingUseCase {
     organizationSessionData: OrganizationSessionDataModel,
     bankPaymentId: BankPaymentId,
     dto: PayBillingRequestDto,
+    reply: FastifyReply,
   ): Promise<PayBillingResponseDto> {
     const bankPayment =
       await this.bankPaymentQueryRepository.findOneBankPaymentByIdOrFail(
@@ -98,6 +101,8 @@ export class PayBillingUseCase {
     ]);
     await transaction.commit();
 
+    reply.clearCookie(ApiCookieEnum.AFFILIATE);
+
     const organizationPaymentPlanBankPayment =
       await this.organizationPaymentPlanBankPaymentQueryRepository.findOneOrganizationPaymentPlanBankPaymentByBankPaymentId(
         bankPayment.id,
@@ -119,19 +124,22 @@ export class PayBillingUseCase {
         currency: 'BRL',
       }).format(bankPayment.amount.toNumber());
 
-      await this.emailGateway.sendHTMLEmail(
-        SendHTMLEmailInputModel.build({
-          to: creditCardHolderInfo.email.toString(),
-          subject: EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
-          emailTemplateName:
-            EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
-          emailTemplateParameters: {
-            name: creditCardHolderInfo.name,
-            planName: organizationPaymentPlan.name,
-            amount: amount,
-          },
-        }),
-      );
+      this.emailGateway
+        .sendHTMLEmail(
+          SendHTMLEmailInputModel.build({
+            to: creditCardHolderInfo.email.toString(),
+            subject:
+              EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_SUBJECT,
+            emailTemplateName:
+              EmailApplicationVariable.EMAIL_PAYMENT_PLAN_PURCHASE_TEMPLATE,
+            emailTemplateParameters: {
+              name: creditCardHolderInfo.name,
+              planName: organizationPaymentPlan.name,
+              amount: amount,
+            },
+          }),
+        )
+        .catch(() => undefined);
     }
 
     return PayBillingResponseDto.build({

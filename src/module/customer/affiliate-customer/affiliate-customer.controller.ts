@@ -1,8 +1,8 @@
 import { HttpStatus, Param, RequestMethod, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
+import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -17,7 +17,8 @@ export class AffiliateCustomerController {
   ) {}
 
   @BuildEndpointSpecification({
-    summary: 'Buscar informações públicas do afiliado e registrar cookie de indicação',
+    summary:
+      'Buscar informações públicas do afiliado e registrar cookie de indicação',
     http: {
       path: ':affiliateCustomerId',
       method: RequestMethod.GET,
@@ -25,7 +26,8 @@ export class AffiliateCustomerController {
     tag: ['affiliate-customer'],
     successResponse: {
       statusCode: HttpStatus.OK,
-      description: 'Informações públicas do afiliado retornadas e cookie de indicação registrado.',
+      description:
+        'Informações públicas do afiliado retornadas e cookie de indicação registrado.',
       type: GetPublicAffiliateCustomerResponseDto,
     },
   })
@@ -34,6 +36,9 @@ export class AffiliateCustomerController {
     @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
     affiliateCustomerId: AffiliateCustomerId,
   ): Promise<GetPublicAffiliateCustomerResponseDto> {
-    return this.getPublicAffiliateCustomerUseCase.execute(reply, affiliateCustomerId);
+    return this.getPublicAffiliateCustomerUseCase.execute(
+      reply,
+      affiliateCustomerId,
+    );
   }
 }

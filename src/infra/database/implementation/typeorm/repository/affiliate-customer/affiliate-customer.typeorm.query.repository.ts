@@ -82,7 +82,7 @@ export class AffiliateCustomerTypeormQueryRepository
   ): Promise<ListDataOutputModel<GetAffiliateCustomerQueryResult>> {
     const result = await this.list(param, { relations: { customer: true } });
 
-    const resource = await this.mapperGateway.mapArray(
+    const resource = this.mapperGateway.mapArray(
       result.resource,
       AffiliateCustomerTypeormEntity,
       GetAffiliateCustomerQueryResult,

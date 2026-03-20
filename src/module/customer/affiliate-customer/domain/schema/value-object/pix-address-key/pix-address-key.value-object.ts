@@ -14,7 +14,7 @@ export class PixAddressKey extends BaseValueObject<PixAddressKey> {
     const isValid = PixAddressKey.isValid(value, type);
 
     if (!isValid) {
-      throw new InvalidPixAddressKeyError(type);
+      throw new InvalidPixAddressKeyError({ type });
     }
   }
 

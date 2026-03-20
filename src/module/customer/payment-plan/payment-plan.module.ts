@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@infra/database/database.module';
 import { EmailModule } from '@infra/email/email.module';
 import { PaymentGatewayModule } from '@infra/payment-gateway/payment-gateway.module';
+import { ResolveAffiliatePlanDiscountService } from '@module/customer/affiliate-customer/service/resolve-affiliate-plan-discount.service';
 import { PaymentPlanController } from '@module/customer/payment-plan/payment-plan.controller';
 import { CancelPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/cancel-payment-plan.use-case';
 import { DeleteOrganizationPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/delete-organization-payment-plan.use-case';
@@ -47,6 +48,7 @@ import { OrganizationSessionModule } from '@shared/api/gateway/guard/organizatio
     GetPaymentPlanPaidResourcePromptUseCase,
     ListBankPaymentsByOrganizationPaymentPlanUseCase,
     GetBankPaymentDetailsUseCase,
+    ResolveAffiliatePlanDiscountService,
     {
       provide: ValidateOrganizationPaymentPlanStatusUseCaseGateway,
       useClass: ValidateOrganizationPaymentPlanStatusUseCase,
