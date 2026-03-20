@@ -8,7 +8,7 @@ import { CreateBillingInputModel } from '@infra/payment-gateway/model/input/crea
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
-import { ResolveAffiliatePlanDiscountService } from '@module/customer/affiliate-customer/service/resolve-affiliate-plan-discount.service';
+import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
 import { OrganizationPaymentPlanBankPaymentCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-bank-payment/command/organization-payment-plan-bank-payment.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
@@ -54,7 +54,8 @@ export class GenerateMonthlyPaymentBillingUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(CustomerQueryRepositoryGateway)
     private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
-    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountService,
+    @Inject(ResolveAffiliatePlanDiscountGateway)
+    private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
   ) {}
 
   public async execute(
@@ -87,7 +88,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       .startOf('day')
       .toDate();
 
-    const discountPercentage =
+    const discountResult =
       await this.resolveAffiliatePlanDiscountService.resolveDiscount(
         reply.request.cookies[ApiCookieEnum.AFFILIATE],
         paymentPlan.id,
@@ -96,11 +97,11 @@ export class GenerateMonthlyPaymentBillingUseCase {
     const HUNDRED_PERCENT = 100;
     const MINIMUM_BILLING_VALUE = 5;
     const billingValue =
-      discountPercentage !== null
+      discountResult !== null
         ? new DecimalValue(
             Math.max(
               paymentPlan.price.toNumber() *
-                (1 - discountPercentage / HUNDRED_PERCENT),
+                (1 - discountResult.percentage / HUNDRED_PERCENT),
               MINIMUM_BILLING_VALUE,
             ).toFixed(2),
           )
@@ -146,6 +147,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
       organization: organizationId,
       paymentPlan: paymentPlan.id,
       canceled: false,
+      affiliateCustomerId: discountResult?.affiliateCustomerId ?? null,
     });
 
     const organizationPaymentPlanBankPayment =

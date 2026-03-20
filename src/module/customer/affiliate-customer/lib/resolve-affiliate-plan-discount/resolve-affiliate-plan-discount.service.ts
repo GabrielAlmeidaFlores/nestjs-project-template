@@ -3,10 +3,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 import { AffiliateCustomerPaymentPlanQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-payment-plan/query/affiliate-customer-payment-plan.query.repository.gateway';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
+import {
+  AffiliateDiscountResultInterface,
+  ResolveAffiliatePlanDiscountGateway,
+} from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 
 @Injectable()
-export class ResolveAffiliatePlanDiscountService {
+export class ResolveAffiliatePlanDiscountService implements ResolveAffiliatePlanDiscountGateway {
   protected readonly _type = ResolveAffiliatePlanDiscountService.name;
 
   public constructor(
@@ -16,14 +20,10 @@ export class ResolveAffiliatePlanDiscountService {
     private readonly affiliateCustomerPaymentPlanQueryRepository: AffiliateCustomerPaymentPlanQueryRepositoryGateway,
   ) {}
 
-  /**
-   * Returns the discount percentage (0-100) if the affiliate has a valid discount
-   * for the given plan, or null if no discount should be applied.
-   */
   public async resolveDiscount(
     affiliateCustomerIdStr: string | null | undefined,
     paymentPlanId: PaymentPlanId,
-  ): Promise<number | null> {
+  ): Promise<AffiliateDiscountResultInterface | null> {
     if (
       affiliateCustomerIdStr === null ||
       affiliateCustomerIdStr === undefined
@@ -69,6 +69,9 @@ export class ResolveAffiliatePlanDiscountService {
       return null;
     }
 
-    return affiliate.paymentPlanDiscountPercentage;
+    return {
+      percentage: affiliate.paymentPlanDiscountPercentage,
+      affiliateCustomerId,
+    };
   }
 }
