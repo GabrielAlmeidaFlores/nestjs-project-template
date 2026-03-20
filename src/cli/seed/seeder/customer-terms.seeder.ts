@@ -8,17 +8,7 @@ import { CustomerTermsEntity } from '@module/customer/account/domain/schema/enti
 import type { SeederInterface } from '@cli/seed/interface/seeder.interface';
 
 export class CustomerTermsSeeder implements SeederInterface {
-  protected readonly _type = CustomerTermsSeeder.name;
-
-  public constructor(
-    @Inject(CustomerTermsCommandRepositoryGateway)
-    public readonly customerTermsCommandRepositoryGateway: CustomerTermsCommandRepositoryGateway,
-    @Inject(CustomerTermsQueryRepositoryGateway)
-    public readonly customerTermsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
-  ) {}
-
-  public async execute(): Promise<Array<TransactionType>> {
-    const content = `
+  public static readonly content = `
 <html lang="pt-BR">
   <body>
 
@@ -84,22 +74,25 @@ export class CustomerTermsSeeder implements SeederInterface {
 </html>
     `;
 
+  protected readonly _type = CustomerTermsSeeder.name;
+
+  public constructor(
+    @Inject(CustomerTermsCommandRepositoryGateway)
+    public readonly customerTermsCommandRepositoryGateway: CustomerTermsCommandRepositoryGateway,
+    @Inject(CustomerTermsQueryRepositoryGateway)
+    public readonly customerTermsQueryRepositoryGateway: CustomerTermsQueryRepositoryGateway,
+  ) {}
+
+  public async execute(): Promise<Array<TransactionType>> {
     const currentCustomerTerms =
       await this.customerTermsQueryRepositoryGateway.findOneByStatus(true);
 
-    const customerTerms = new CustomerTermsEntity({
-      content,
-      isActive: true,
-    });
+    const transactions = [];
 
-    const customerTermsTransaction =
-      this.customerTermsCommandRepositoryGateway.createCustomerTerms(
-        customerTerms,
-      );
-
-    const transactions = [customerTermsTransaction];
-
-    if (currentCustomerTerms !== null) {
+    if (
+      currentCustomerTerms !== null &&
+      currentCustomerTerms.content !== CustomerTermsSeeder.content
+    ) {
       const updateCustomerTermsTransaction = new CustomerTermsEntity({
         ...currentCustomerTerms,
         isActive: false,
@@ -111,6 +104,29 @@ export class CustomerTermsSeeder implements SeederInterface {
           updateCustomerTermsTransaction,
         ),
       );
+
+      const newCustomerTerms = new CustomerTermsEntity({
+        content: CustomerTermsSeeder.content,
+        isActive: true,
+      });
+
+      transactions.push(
+        this.customerTermsCommandRepositoryGateway.createCustomerTerms(
+          newCustomerTerms,
+        ),
+      );
+    } else if (currentCustomerTerms === null) {
+      const customerTerms = new CustomerTermsEntity({
+        content: CustomerTermsSeeder.content,
+        isActive: true,
+      });
+
+      const customerTermsTransaction =
+        this.customerTermsCommandRepositoryGateway.createCustomerTerms(
+          customerTerms,
+        );
+
+      transactions.push(customerTermsTransaction);
     }
 
     return transactions;

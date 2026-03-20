@@ -81,6 +81,7 @@ export class GetRetirementPlanningRgpsUseCase {
             typeOfContribution: p.typeOfContribution ?? null,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
+            validContributionTime: p.validContributionTime ?? null,
           }),
         ) ?? null,
       createdAt: result.createdAt,
