@@ -5,10 +5,14 @@ import { GeneralUrbanRetirementGrantLegalProceedingId } from '@module/customer/a
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class GeneralUrbanRetirementGrantLegalProceedingEntity extends BaseEntity<GeneralUrbanRetirementGrantLegalProceedingId> {
-  @Description('Número do processo judicial relacionado à concessão de aposentadoria urbana.')
+  @Description(
+    'Número do processo judicial relacionado à concessão de aposentadoria urbana.',
+  )
   public readonly legalProceedingNumber: string;
 
-  @Description('Concessão de aposentadoria urbana associada ao processo judicial.')
+  @Description(
+    'Concessão de aposentadoria urbana associada ao processo judicial.',
+  )
   public readonly generalUrbanRetirementGrant: GeneralUrbanRetirementGrantEntity;
 
   protected readonly _type =

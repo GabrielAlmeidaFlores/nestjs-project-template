@@ -56,7 +56,6 @@ export class GeneralUrbanRetirementAnalysisTypeormQueryRepository
             disabilityPeriod: { disabilityDocuments: true, cid: true },
           },
         },
-        relationLoadStrategy: 'query',
       },
       err,
     );

@@ -7,7 +7,6 @@ import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/
 import { GeneralUrbanRetirementAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/general-urban-retirement-analysis.query.repository.gateway';
 import { GeneralUrbanRetirementAnalysisRemunerationCommandRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/command/general-urban-retirement-analysis-remuneration.command.repository.gateway';
 import { GeneralUrbanRetirementAnalysisRemunerationQueryRepositoryGateway } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/general-urban-retirement-analysis-remuneration.query.repository.gateway';
-import { ListGeneralUrbanRetirementAnalysisRemunerationQueryParam } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis-remuneration/query/param/list-general-urban-retirement-analysis-remuneration.query.param';
 import { GeneralUrbanRetirementAnalysisEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/general-urban-retirement-analysis-entity';
 import { GeneralUrbanRetirementAnalysisId } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis/value-object/general-urban-retirement-analysis-id.value-object';
 import { GeneralUrbanRetirementAnalysisRemunerationEntity } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/schema/entity/general-urban-retirement-analysis-remuneration/general-urban-retirement-analysis-remuneration.entity';
@@ -60,19 +59,15 @@ export class UpdateGeneralUrbanRetirementAnalysisRemunerationUseCase {
       );
 
     const currentRemunerations =
-      await this.generalUrbanRetirementAnalysisRemunerationQueryRepositoryGateway.listByGeneralUrbanRetirementAnalysisIdAndOrganizationIdAndAuthIdentityId(
+      await this.generalUrbanRetirementAnalysisRemunerationQueryRepositoryGateway.findByGeneralUrbanRetirementAnalysisIdAndOrganizationIdAndAuthIdentityId(
         organizationSessionData.organizationId,
         sessionData.authIdentityId,
         generalUrbanRetirementAnalysisId,
-        new ListGeneralUrbanRetirementAnalysisRemunerationQueryParam({
-          page: 1,
-          limit: 1000,
-        }),
       );
 
     const transactionOperations: TransactionType[] = [];
 
-    for (const currentRemuneration of currentRemunerations.resource) {
+    for (const currentRemuneration of currentRemunerations) {
       transactionOperations.push(
         this.generalUrbanRetirementAnalysisRemunerationCommandRepositoryGateway.deleteGeneralUrbanRetirementAnalysisRemuneration(
           currentRemuneration.id,

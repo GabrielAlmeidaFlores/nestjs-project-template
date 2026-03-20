@@ -5,14 +5,15 @@ import { GeneralUrbanRetirementGrantInssBenefitId } from '@module/customer/analy
 import { Description } from '@shared/system/decorator/property/description/description.decorator';
 
 export class GeneralUrbanRetirementGrantInssBenefitEntity extends BaseEntity<GeneralUrbanRetirementGrantInssBenefitId> {
-  @Description('Número do benefício INSS associado à concessão de aposentadoria urbana.')
+  @Description(
+    'Número do benefício INSS associado à concessão de aposentadoria urbana.',
+  )
   public readonly inssBenefitNumber: string;
 
   @Description('Concessão de aposentadoria urbana associada ao benefício INSS.')
   public readonly generalUrbanRetirementGrant: GeneralUrbanRetirementGrantEntity;
 
-  protected readonly _type =
-    GeneralUrbanRetirementGrantInssBenefitEntity.name;
+  protected readonly _type = GeneralUrbanRetirementGrantInssBenefitEntity.name;
 
   public constructor(
     props: GeneralUrbanRetirementGrantInssBenefitEntityPropsInterface,
