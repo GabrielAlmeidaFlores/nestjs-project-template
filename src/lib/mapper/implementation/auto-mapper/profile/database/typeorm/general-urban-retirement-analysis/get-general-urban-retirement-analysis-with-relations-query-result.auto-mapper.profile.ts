@@ -5,8 +5,6 @@ import { Injectable } from '@nestjs/common';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { GeneralUrbanRetirementAnalysisDocumentTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-document.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-legal-proceeding.typeorm.entity';
-import { GeneralUrbanRetirementAnalysisRemunerationTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-remuneration.typeorm.entity';
-import { GeneralUrbanRetirementAnalysisResultTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis-result.typeorm.entity';
 import { GeneralUrbanRetirementAnalysisTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/general-urban-retirement-analysis.typeorm.entity';
 import { CidTenId } from '@module/customer/analysis-tool/domain/schema/entity/cid-ten/value-object/cid-ten-id.value-object';
 import { GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/general-urban-retirement/domain/repository/general-urban-retirement-analysis/query/result/get-general-urban-retirement-analysis-with-relations.query.result';
@@ -37,7 +35,6 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
   private createMappings(): void {
     this.mapOrmEntityToQueryResult();
     this.mapOrmEntityToDomainEntity();
-    this.mapQueryResultToOrmEntity();
   }
 
   private mapOrmEntityToQueryResult(): void {
@@ -74,7 +71,8 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
       source: GeneralUrbanRetirementAnalysisTypeormEntity,
     ): GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult => {
       const generalUrbanRetirementAnalysisResult =
-        source.generalUrbanRetirementAnalysisResult !== undefined
+        source.generalUrbanRetirementAnalysisResult !== undefined &&
+        source.generalUrbanRetirementAnalysisResult !== null
           ? GetGeneralUrbanRetirementAnalysisResultQueryResult.build({
               id: new GeneralUrbanRetirementAnalysisResultId(
                 source.generalUrbanRetirementAnalysisResult.id,
@@ -128,9 +126,8 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
                 type: p.specialTimePeriod.type,
                 startDate: p.specialTimePeriod.startDate,
                 endDate: p.specialTimePeriod.endDate,
-                ...(p.specialTimePeriod.lawyerObservations !== null && {
-                  lawyerObservations: p.specialTimePeriod.lawyerObservations,
-                }),
+                lawyerObservations:
+                  p.specialTimePeriod.lawyerObservations ?? null,
                 documents: (p.specialTimePeriod.specialTimeDocuments ?? []).map(
                   (d) =>
                     GetGeneralUrbanRetirementAnalysisPeriodDocumentQueryResult.build(
@@ -162,9 +159,8 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
                 category: p.disabilityPeriod.category,
                 description: p.disabilityPeriod.description,
                 dailyImpact: p.disabilityPeriod.dailyImpact,
-                ...(p.disabilityPeriod.lawyerObservations !== null && {
-                  lawyerObservations: p.disabilityPeriod.lawyerObservations,
-                }),
+                lawyerObservations:
+                  p.disabilityPeriod.lawyerObservations ?? null,
                 cid: {
                   id: new CidTenId(p.disabilityPeriod.cid.id),
                   code: p.disabilityPeriod.cid.code,
@@ -238,82 +234,6 @@ export class GetGeneralUrbanRetirementAnalysisWithRelationsQueryResultAutoMapper
       GeneralUrbanRetirementAnalysisTypeormEntity,
       GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult,
       mappingFunction,
-    );
-  }
-
-  private mapQueryResultToOrmEntity(): void {
-    const convertQueryResultToOrmEntity = (
-      source: GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult,
-    ): GeneralUrbanRetirementAnalysisTypeormEntity => {
-      const generalUrbanRetirementAnalysisResult =
-        source.generalUrbanRetirementAnalysisResult !== null
-          ? GeneralUrbanRetirementAnalysisResultTypeormEntity.build({
-              id: source.generalUrbanRetirementAnalysisResult.id.toString(),
-              generalUrbanRetirementCompleteAnalysis:
-                source.generalUrbanRetirementAnalysisResult
-                  .generalUrbanRetirementCompleteAnalysis ?? null,
-              generalUrbanRetirementCompleteAnalysisDownload:
-                source.generalUrbanRetirementAnalysisResult
-                  .generalUrbanRetirementCompleteAnalysisDownload ?? null,
-              generalUrbanRetirementSimplifiedAnalysis:
-                source.generalUrbanRetirementAnalysisResult
-                  .generalUrbanRetirementSimplifiedAnalysis ?? null,
-              createdAt: source.generalUrbanRetirementAnalysisResult.createdAt,
-              updatedAt: source.generalUrbanRetirementAnalysisResult.updatedAt,
-              deletedAt:
-                source.generalUrbanRetirementAnalysisResult.deletedAt ?? null,
-              generalUrbanRetirementAnalysis: null,
-            })
-          : null;
-
-      const remunerations = this.mapper.mapArray(
-        source.remunerations,
-        GetGeneralUrbanRetirementAnalysisRemunerationQueryResult,
-        GeneralUrbanRetirementAnalysisRemunerationTypeormEntity,
-      );
-
-      const documents = this.mapper.mapArray(
-        source.documents,
-        GetGeneralUrbanRetirementAnalysisDocumentQueryResult,
-        GeneralUrbanRetirementAnalysisDocumentTypeormEntity,
-      );
-
-      const legalProceedings = this.mapper.mapArray(
-        source.legalProceedings,
-        GetGeneralUrbanRetirementAnalysisLegalProceedingQueryResult,
-        GeneralUrbanRetirementAnalysisLegalProceedingTypeormEntity,
-      );
-
-      return GeneralUrbanRetirementAnalysisTypeormEntity.build({
-        id: source.id.toString(),
-        careerStartDate: source.careerStartDate ?? null,
-        publicServiceStartDate: source.publicServiceStartDate ?? null,
-        generalUrbanRetirementBenefitAnalysis:
-          source.generalUrbanRetirementBenefitAnalysis ?? null,
-        federativeEntity: source.federativeEntity ?? null,
-        state: source.state ?? null,
-        municipality: source.municipality ?? null,
-        name: source.name ?? null,
-        benefitType: source.benefitType ?? null,
-        currentPosition: source.currentPosition ?? null,
-        createdAt: source.createdAt,
-        updatedAt: source.updatedAt,
-        deletedAt: source.deletedAt ?? null,
-        generalUrbanRetirementAnalysisResult,
-        remunerations,
-        documents,
-        legalProceedings,
-        analysisToolRecord: null,
-        periods: null,
-        periodDocuments: null,
-      });
-    };
-
-    createMap(
-      this.mapper,
-      GetGeneralUrbanRetirementAnalysisWithRelationsQueryResult,
-      GeneralUrbanRetirementAnalysisTypeormEntity,
-      constructUsing(convertQueryResultToOrmEntity),
     );
   }
 }
