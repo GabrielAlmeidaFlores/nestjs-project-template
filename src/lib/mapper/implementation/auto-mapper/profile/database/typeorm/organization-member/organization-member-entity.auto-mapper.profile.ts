@@ -40,8 +40,12 @@ export class OrganizationMemberEntityAutoMapperProfile {
       );
 
       return new OrganizationMemberEntity({
-        ...source,
         id: new OrganizationMemberId(source.id),
+        owner: source.owner,
+        isActive: source.isActive,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         customer,
         organization,
       });
@@ -74,8 +78,12 @@ export class OrganizationMemberEntityAutoMapperProfile {
       );
 
       return OrganizationMemberTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        owner: source.owner,
+        isActive: source.isActive,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         customer,
         organization,
       });
