@@ -3,6 +3,7 @@ import type { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/
 
 export interface AffiliateDiscountResultInterface {
   percentage: number;
+  commissionPercentage: number;
   affiliateCustomerId: AffiliateCustomerId;
 }
 

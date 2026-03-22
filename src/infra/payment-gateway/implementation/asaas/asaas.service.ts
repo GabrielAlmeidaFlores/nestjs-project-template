@@ -5,6 +5,7 @@ import { AxiosError, AxiosRequestConfig } from 'axios';
 import { Base64 } from '@core/domain/schema/value-object/base64/base64.value-object';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { Guid } from '@core/domain/schema/value-object/guid/guid.value-object';
+import { PixAddressKeyTypeEnum } from '@infra/payment-gateway/enum/pix-address-key-type.enum';
 import { TransferStatusEnum } from '@infra/payment-gateway/enum/transfer-status.enum';
 import { InvalidBankCustomerDataError } from '@infra/payment-gateway/implementation/asaas/error/invalid-bank-customer-data.error';
 import { PaymentNotApprovedError } from '@infra/payment-gateway/implementation/asaas/error/payment-not-approved.error';
@@ -21,7 +22,6 @@ import { CreateSubscriptionOutputModel } from '@infra/payment-gateway/model/outp
 import { CreateTransferOutputModel } from '@infra/payment-gateway/model/output/create-transfer.output.model';
 import { PayBillingOutputModel } from '@infra/payment-gateway/model/output/pay-billing.output.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
-import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
 import { PaymentGatewayApplicationVariable } from '@shared/system/constant/application-variable/source/payment-gateway.application-variable';
 
@@ -296,6 +296,10 @@ export class AsaasService extends PaymentGateway {
 
       if (props.description !== undefined) {
         data['description'] = props.description;
+      }
+
+      if (props.externalReference !== undefined) {
+        data['externalReference'] = props.externalReference;
       }
 
       const response = await this.makeRequest<

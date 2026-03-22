@@ -15,11 +15,13 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { OrganizationPaymentPlanCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan/command/organization-payment-plan.command.repository.gateway';
+import { OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/command/organization-payment-plan-affiliate-commission.command.repository.gateway';
 import { OrganizationPaymentPlanEnabledPaidResourceCommandRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-enabled-paid-resource/command/organization-payment-plan-enabled-paid-resource.repository.gateway';
 import { PaymentPlanNotFoundError } from '@module/customer/payment-plan/domain/repository/payment-plan/query/error/payment-plan-not-found.error';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { PaymentPlanEnabledPaidResourceQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan-enabled-paid-resource/query/payment-plan-enabled-paid-resource.query.repository.gateway';
 import { OrganizationPaymentPlanEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity';
+import { OrganizationPaymentPlanAffiliateCommissionEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.entity';
 import { OrganizationPaymentPlanEnabledPaidResourceEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-enabled-paid-resource/organization-payment-plan-enabled-paid-resource.entity';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
 import { PaymentPlanCycleEnum } from '@module/customer/payment-plan/domain/schema/enum/payment-plan-cycle.enum';
@@ -56,6 +58,8 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     private readonly emailGateway: EmailGateway,
     @Inject(ResolveAffiliatePlanDiscountGateway)
     private readonly resolveAffiliatePlanDiscountService: ResolveAffiliatePlanDiscountGateway,
+    @Inject(OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway)
+    private readonly organizationPaymentPlanAffiliateCommissionCommandRepository: OrganizationPaymentPlanAffiliateCommissionCommandRepositoryGateway,
   ) {}
 
   public async execute(
@@ -173,9 +177,29 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
         );
       });
 
+    const now = new Date();
+
+    let organizationPaymentPlanAffiliateCommissionTransaction = null;
+    if (discountResult !== null) {
+      const commission = new OrganizationPaymentPlanAffiliateCommissionEntity({
+        organizationPaymentPlan: organizationPaymentPlan.id,
+        affiliateCustomer: discountResult.affiliateCustomerId,
+        commissionPercentage: discountResult.commissionPercentage,
+        createdAt: now,
+        updatedAt: now,
+      });
+      organizationPaymentPlanAffiliateCommissionTransaction =
+        this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
+          commission,
+        );
+    }
+
     const transaction = await this.baseTransactionRepositoryGateway.execute([
       organizationPaymentPlanTransaction,
       ...organizationPaymentPlanEnabledPaidResourceTransactions,
+      ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
+        ? [organizationPaymentPlanAffiliateCommissionTransaction]
+        : []),
     ]);
 
     await transaction.commit();
@@ -206,6 +230,8 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
         }),
       )
       .catch(() => undefined);
+
+    // Affiliate transfer for recurring subscription is processed via webhook on first payment confirmation
 
     return response;
   }

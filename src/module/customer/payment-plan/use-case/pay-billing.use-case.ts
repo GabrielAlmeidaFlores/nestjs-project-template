@@ -108,15 +108,15 @@ export class PayBillingUseCase {
         bankPayment.id,
       );
 
-    await this.deleteOrganizationPaymentPlanUseCase.execute(
-      organizationSessionData.organizationId,
-      organizationPaymentPlanBankPayment?.organizationPaymentPlan,
-    );
-
     const organizationPaymentPlan =
       await this.organizationPaymentPlanQueryRepository.findOneByBankPaymentId(
         bankPayment.id,
       );
+
+    await this.deleteOrganizationPaymentPlanUseCase.execute(
+      organizationSessionData.organizationId,
+      organizationPaymentPlanBankPayment?.organizationPaymentPlan,
+    );
 
     if (organizationPaymentPlan) {
       const amount = new Intl.NumberFormat('pt-BR', {
