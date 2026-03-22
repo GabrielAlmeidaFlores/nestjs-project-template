@@ -1,6 +1,6 @@
-import { InvalidInputError } from '@core/error/invalid-input.error';
+import { ConflictError } from '@core/error/conflict.error';
 
-export class CustomerAlreadyAffiliateError extends InvalidInputError {
+export class CustomerAlreadyAffiliateError extends ConflictError {
   protected override readonly _type = CustomerAlreadyAffiliateError.name;
 
   public constructor() {
