@@ -4,6 +4,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { AffiliateCustomerController } from '@module/customer/affiliate-customer/affiliate-customer.controller';
 import { GetMyAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer.use-case';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
+import { ListMyAffiliateCommissionsUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-commissions.use-case';
 import { UpdateMyAffiliatePixKeyUseCase } from '@module/customer/affiliate-customer/use-case/update-my-affiliate-pix-key.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
@@ -14,6 +15,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     GetPublicAffiliateCustomerUseCase,
     GetMyAffiliateCustomerUseCase,
     UpdateMyAffiliatePixKeyUseCase,
+    ListMyAffiliateCommissionsUseCase,
   ],
 })
 export class AffiliateCustomerModule {

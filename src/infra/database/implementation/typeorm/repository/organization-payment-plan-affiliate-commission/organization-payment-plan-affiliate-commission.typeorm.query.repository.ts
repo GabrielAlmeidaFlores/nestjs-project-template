@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
 import { GetOrganizationPaymentPlanAffiliateCommissionQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/result/get-organization-payment-plan-affiliate-commission.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
@@ -39,6 +40,21 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
 
     return this.mapperGateway.map(
       entity,
+      OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
+      GetOrganizationPaymentPlanAffiliateCommissionQueryResult,
+    );
+  }
+
+  public async findManyByAffiliateCustomerId(
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult[]> {
+    const entities = await this.find({
+      where: { affiliateCustomer: { id: affiliateCustomerId.toString() } },
+      relations: ['organizationPaymentPlan', 'affiliateCustomer'],
+    });
+
+    return this.mapperGateway.mapArray(
+      entities,
       OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
       GetOrganizationPaymentPlanAffiliateCommissionQueryResult,
     );

@@ -6,6 +6,7 @@ import { CreateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer
 import { DeleteAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/delete-affiliate-customer.use-case';
 import { GetAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/get-affiliate-customer.use-case';
 import { ListAffiliateCustomersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-customers.use-case';
+import { ListAffiliateTransfersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-transfers.use-case';
 import { UpdateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/update-affiliate-customer.use-case';
 import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
 
@@ -18,6 +19,7 @@ import { AuthModule } from '@shared/api/gateway/guard/auth/auth.module';
     GetAffiliateCustomerUseCase,
     UpdateAffiliateCustomerUseCase,
     DeleteAffiliateCustomerUseCase,
+    ListAffiliateTransfersUseCase,
   ],
 })
 export class AffiliateCustomerAdminModule {

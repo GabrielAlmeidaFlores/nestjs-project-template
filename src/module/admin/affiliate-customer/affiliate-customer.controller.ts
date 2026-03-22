@@ -5,10 +5,12 @@ import { ListAffiliateCustomersRequestDto } from '@module/admin/affiliate-custom
 import { UpdateAffiliateCustomerRequestDto } from '@module/admin/affiliate-customer/dto/request/update-affiliate-customer.request.dto';
 import { GetAffiliateCustomerResponseDto } from '@module/admin/affiliate-customer/dto/response/get-affiliate-customer.response.dto';
 import { ListAffiliateCustomersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-customers.response.dto';
+import { ListAffiliateTransfersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-transfers.response.dto';
 import { CreateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/create-affiliate-customer.use-case';
 import { DeleteAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/delete-affiliate-customer.use-case';
 import { GetAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/get-affiliate-customer.use-case';
 import { ListAffiliateCustomersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-customers.use-case';
+import { ListAffiliateTransfersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-transfers.use-case';
 import { UpdateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/update-affiliate-customer.use-case';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -27,6 +29,7 @@ export class AffiliateCustomerController {
     private readonly getAffiliateCustomerUseCase: GetAffiliateCustomerUseCase,
     private readonly updateAffiliateCustomerUseCase: UpdateAffiliateCustomerUseCase,
     private readonly deleteAffiliateCustomerUseCase: DeleteAffiliateCustomerUseCase,
+    private readonly listAffiliateTransfersUseCase: ListAffiliateTransfersUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -140,5 +143,27 @@ export class AffiliateCustomerController {
     affiliateCustomerId: AffiliateCustomerId,
   ): Promise<void> {
     return this.deleteAffiliateCustomerUseCase.execute(affiliateCustomerId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar transferências realizadas para o afiliado',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: ':affiliateCustomerId/transfers',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Transferências do afiliado retornadas com sucesso.',
+      type: ListAffiliateTransfersResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listAffiliateTransfers(
+    @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<ListAffiliateTransfersResponseDto> {
+    return this.listAffiliateTransfersUseCase.execute(affiliateCustomerId);
   }
 }

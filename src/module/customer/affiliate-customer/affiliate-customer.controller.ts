@@ -5,8 +5,10 @@ import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/
 import { UpdateMyAffiliatePixKeyRequestDto } from '@module/customer/affiliate-customer/dto/request/update-my-affiliate-pix-key.request.dto';
 import { GetMyAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer.response.dto';
 import { GetPublicAffiliateCustomerResponseDto } from '@module/customer/affiliate-customer/dto/response/get-public-affiliate-customer.response.dto';
+import { ListMyAffiliateCommissionsResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
 import { GetMyAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-my-affiliate-customer.use-case';
 import { GetPublicAffiliateCustomerUseCase } from '@module/customer/affiliate-customer/use-case/get-public-affiliate-customer.use-case';
+import { ListMyAffiliateCommissionsUseCase } from '@module/customer/affiliate-customer/use-case/list-my-affiliate-commissions.use-case';
 import { UpdateMyAffiliatePixKeyUseCase } from '@module/customer/affiliate-customer/use-case/update-my-affiliate-pix-key.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
@@ -24,6 +26,7 @@ export class AffiliateCustomerController {
     private readonly getPublicAffiliateCustomerUseCase: GetPublicAffiliateCustomerUseCase,
     private readonly getMyAffiliateCustomerUseCase: GetMyAffiliateCustomerUseCase,
     private readonly updateMyAffiliatePixKeyUseCase: UpdateMyAffiliatePixKeyUseCase,
+    private readonly listMyAffiliateCommissionsUseCase: ListMyAffiliateCommissionsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -45,6 +48,27 @@ export class AffiliateCustomerController {
     @GetSessionData() sessionData: SessionDataModel,
   ): Promise<GetMyAffiliateCustomerResponseDto> {
     return this.getMyAffiliateCustomerUseCase.execute(sessionData);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar minhas comissões de afiliado com dados de transferência',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'me/commissions',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Comissões do afiliado autenticado retornadas com sucesso.',
+      type: ListMyAffiliateCommissionsResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listMyAffiliateCommissions(
+    @GetSessionData() sessionData: SessionDataModel,
+  ): Promise<ListMyAffiliateCommissionsResponseDto> {
+    return this.listMyAffiliateCommissionsUseCase.execute(sessionData);
   }
 
   @BuildEndpointSpecification({

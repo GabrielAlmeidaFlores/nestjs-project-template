@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { BankTransferTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/bank-transfer.typeorm.entity';
@@ -67,6 +67,24 @@ export class BankTransferTypeormQueryRepository
 
     return this.mapperGateway.map(
       entity,
+      BankTransferTypeormEntity,
+      GetBankTransferQueryResult,
+    );
+  }
+
+  public async findManyByIds(
+    ids: BankTransferId[],
+  ): Promise<GetBankTransferQueryResult[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const entities = await this.find({
+      where: { id: In(ids.map((id) => id.toString())) },
+    });
+
+    return this.mapperGateway.mapArray(
+      entities,
       BankTransferTypeormEntity,
       GetBankTransferQueryResult,
     );
