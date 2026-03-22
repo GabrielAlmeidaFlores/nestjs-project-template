@@ -2,7 +2,9 @@ import { constructUsing, createMap, Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
+import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
+import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { OrganizationPaymentPlanAffiliateCommissionEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.entity';
@@ -25,16 +27,23 @@ export class OrganizationPaymentPlanAffiliateCommissionEntityAutoMapperProfile {
   private mapOrmEntityToDomainEntity(): void {
     const convert = (
       source: OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
-    ): OrganizationPaymentPlanAffiliateCommissionEntity =>
-      new OrganizationPaymentPlanAffiliateCommissionEntity({
+    ): OrganizationPaymentPlanAffiliateCommissionEntity => {
+      if (!source.organizationPaymentPlan || !source.affiliateCustomer) {
+        throw new Error(
+          'OrganizationPaymentPlanAffiliateCommission relations not loaded',
+        );
+      }
+
+      return new OrganizationPaymentPlanAffiliateCommissionEntity({
         ...source,
         id: new OrganizationPaymentPlanAffiliateCommissionId(source.id),
         organizationPaymentPlan: new OrganizationPaymentPlanId(
-          source.organizationPaymentPlanId,
+          source.organizationPaymentPlan.id,
         ),
-        affiliateCustomer: new AffiliateCustomerId(source.affiliateCustomerId),
+        affiliateCustomer: new AffiliateCustomerId(source.affiliateCustomer.id),
         commissionPercentage: parseFloat(source.commissionPercentage),
       });
+    };
 
     createMap(
       this.mapper,
@@ -50,8 +59,12 @@ export class OrganizationPaymentPlanAffiliateCommissionEntityAutoMapperProfile {
     ): OrganizationPaymentPlanAffiliateCommissionTypeormEntity =>
       OrganizationPaymentPlanAffiliateCommissionTypeormEntity.build({
         id: source.id.toString(),
-        organizationPaymentPlanId: source.organizationPaymentPlan.toString(),
-        affiliateCustomerId: source.affiliateCustomer.toString(),
+        organizationPaymentPlan: {
+          id: source.organizationPaymentPlan.toString(),
+        } as OrganizationPaymentPlanTypeormEntity,
+        affiliateCustomer: {
+          id: source.affiliateCustomer.toString(),
+        } as AffiliateCustomerTypeormEntity,
         commissionPercentage: source.commissionPercentage.toString(),
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,

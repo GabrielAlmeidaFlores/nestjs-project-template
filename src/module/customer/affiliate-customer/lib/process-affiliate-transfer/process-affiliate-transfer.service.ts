@@ -6,6 +6,7 @@ import { PixAddressKeyTypeEnum as GatewayPixAddressKeyTypeEnum } from '@infra/pa
 import { CreateTransferInputModel } from '@infra/payment-gateway/model/input/create-transfer.input.model';
 import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { AffiliateBankTransferCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/command/affiliate-bank-transfer.command.repository.gateway';
+import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 import { AffiliateBankTransferEntity } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-bank-transfer/affiliate-bank-transfer.entity';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
@@ -41,6 +42,8 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
     private readonly commissionQueryRepo: OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway,
     @Inject(AffiliateCustomerQueryRepositoryGateway)
     private readonly affiliateQueryRepo: AffiliateCustomerQueryRepositoryGateway,
+    @Inject(AffiliateBankTransferQueryRepositoryGateway)
+    private readonly affiliateBankTransferQueryRepo: AffiliateBankTransferQueryRepositoryGateway,
     @Inject(BankTransferCommandRepositoryGateway)
     private readonly bankTransferCommandRepo: BankTransferCommandRepositoryGateway,
     @Inject(AffiliateBankTransferCommandRepositoryGateway)
@@ -59,6 +62,16 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
     paymentAmount: DecimalValue,
   ): Promise<void> {
     try {
+      // Idempotência: garante que só existe uma transferência por pagamento
+      const existingTransfer =
+        await this.affiliateBankTransferQueryRepo.findOneByBankPaymentId(
+          bankPaymentId,
+        );
+
+      if (existingTransfer !== null) {
+        return;
+      }
+
       const commission =
         await this.commissionQueryRepo.findOneByOrganizationPaymentPlanId(
           organizationPaymentPlanId,
