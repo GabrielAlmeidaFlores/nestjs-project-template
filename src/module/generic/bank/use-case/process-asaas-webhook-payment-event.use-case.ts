@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { ProcessAffiliateTransferGateway } from '@module/customer/affiliate-customer/lib/process-affiliate-transfer/process-affiliate-transfer.gateway';
 import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
 import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
 import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/organization-credit-purchase.entity';
@@ -40,6 +41,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationCreditPurchaseQueryRepository: OrganizationCreditPurchaseQueryRepositoryGateway,
     @Inject(OrganizationCreditPurchaseCommandRepositoryGateway)
     private readonly organizationCreditPurchaseCommandRepository: OrganizationCreditPurchaseCommandRepositoryGateway,
+    @Inject(ProcessAffiliateTransferGateway)
+    private readonly processAffiliateTransferGateway: ProcessAffiliateTransferGateway,
   ) {}
 
   public async execute(
@@ -374,6 +377,10 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       updateBankPaymentTransaction,
     ]);
     await transaction.commit();
+
+    this.processAffiliateTransferGateway
+      .process(bankPayment.id, organizationPaymentPlan.id, bankPayment.amount)
+      .catch(() => undefined);
   }
 
   private async processPaymentFromMonthlyPaymentPlan(
@@ -424,6 +431,14 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
           [createCreditPurchaseTransaction],
         );
         await transaction.commit();
+
+        this.processAffiliateTransferGateway
+          .process(
+            bankPayment.id,
+            organizationPaymentPlan.id,
+            bankPayment.amount,
+          )
+          .catch(() => undefined);
       }
     }
   }
@@ -469,6 +484,14 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
               createCreditPurchaseTransaction,
             ]);
           await transaction.commit();
+
+          this.processAffiliateTransferGateway
+            .process(
+              bankPayment.id,
+              organizationPaymentPlan.id,
+              bankPayment.amount,
+            )
+            .catch(() => undefined);
         }
       }
     }

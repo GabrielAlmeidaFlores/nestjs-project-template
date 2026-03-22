@@ -71,6 +71,7 @@ export class ResolveAffiliatePlanDiscountService implements ResolveAffiliatePlan
 
     return {
       percentage: affiliate.paymentPlanDiscountPercentage,
+      commissionPercentage: affiliate.paymentCommissionPercentage,
       affiliateCustomerId,
     };
   }
