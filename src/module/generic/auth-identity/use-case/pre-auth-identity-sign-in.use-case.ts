@@ -104,7 +104,8 @@ export class PreAuthIdentitySignInUseCase {
     }
 
     if (dto.mfaOption === SignInMFAOptionEnum.EMAIL) {
-      const authIdentityName = authIdentity.customer?.name;
+      const authIdentityName =
+        authIdentity.customer?.name ?? authIdentity.admin?.name;
 
       if (authIdentityName === undefined) {
         throw new WrongSignInCredentialsError();
