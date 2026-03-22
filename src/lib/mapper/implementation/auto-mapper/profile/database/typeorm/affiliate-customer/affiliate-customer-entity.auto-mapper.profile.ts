@@ -27,7 +27,7 @@ export class AffiliateCustomerEntityAutoMapperProfile {
     const convertOrmEntityToDomainEntity = (
       source: AffiliateCustomerTypeormEntity,
     ): AffiliateCustomerEntity => {
-      if (source.customer === null) {
+      if (!source.customer) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: AffiliateCustomerEntity.name,
           sourceClass: AffiliateCustomerTypeormEntity.name,

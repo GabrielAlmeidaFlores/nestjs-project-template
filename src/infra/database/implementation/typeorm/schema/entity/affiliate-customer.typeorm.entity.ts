@@ -10,7 +10,7 @@ import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domai
 export class AffiliateCustomerTypeormEntity extends BaseTypeormEntity {
   @ManyToOne(() => CustomerTypeormEntity)
   @JoinColumn({ name: 'customer_id' })
-  public customer: CustomerTypeormEntity | null;
+  public customer?: CustomerTypeormEntity;
 
   @Column({
     name: 'pix_address_key',
