@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { GetOrganizationPaymentPlanAffiliateCommissionQueryResult } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/result/get-organization-payment-plan-affiliate-commission.query.result';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
@@ -29,9 +30,12 @@ export class GetOrganizationPaymentPlanAffiliateCommissionQueryResultAutoMapperP
       source: OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
     ): GetOrganizationPaymentPlanAffiliateCommissionQueryResult => {
       if (!source.organizationPaymentPlan || !source.affiliateCustomer) {
-        throw new Error(
-          'OrganizationPaymentPlanAffiliateCommission relations not loaded',
-        );
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            GetOrganizationPaymentPlanAffiliateCommissionQueryResult.name,
+          sourceClass:
+            OrganizationPaymentPlanAffiliateCommissionTypeormEntity.name,
+        });
       }
 
       return GetOrganizationPaymentPlanAffiliateCommissionQueryResult.build({

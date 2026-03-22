@@ -3,7 +3,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
-import { CustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/customer.typeorm.entity';
 import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { GetAffiliateCustomerQueryResult } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/result/get-affiliate-customer.query.result';
@@ -28,7 +27,7 @@ export class GetAffiliateCustomerQueryResultAutoMapperProfile {
     const convertOrmEntityToQueryResult = (
       source: AffiliateCustomerTypeormEntity,
     ): GetAffiliateCustomerQueryResult => {
-      if (source.customer === null) {
+      if (!source.customer) {
         throw new IncompleteSourceDataForMappingError({
           destinationClass: GetAffiliateCustomerQueryResult.name,
           sourceClass: AffiliateCustomerTypeormEntity.name,
@@ -63,7 +62,6 @@ export class GetAffiliateCustomerQueryResultAutoMapperProfile {
       return AffiliateCustomerTypeormEntity.build({
         ...source,
         id: source.id.toString(),
-        customer: null as unknown as CustomerTypeormEntity,
         pixAddressKey: source.pixAddressKey?.toString() ?? null,
       });
     };

@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
 import { OrganizationPaymentPlanAffiliateCommissionTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan-affiliate-commission.typeorm.entity';
 import { OrganizationPaymentPlanTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/organization-payment-plan.typeorm.entity';
+import { IncompleteSourceDataForMappingError } from '@lib/mapper/error/incomplete-source-data-for-mapping.error';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { OrganizationPaymentPlanAffiliateCommissionEntity } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission.entity';
@@ -29,9 +30,12 @@ export class OrganizationPaymentPlanAffiliateCommissionEntityAutoMapperProfile {
       source: OrganizationPaymentPlanAffiliateCommissionTypeormEntity,
     ): OrganizationPaymentPlanAffiliateCommissionEntity => {
       if (!source.organizationPaymentPlan || !source.affiliateCustomer) {
-        throw new Error(
-          'OrganizationPaymentPlanAffiliateCommission relations not loaded',
-        );
+        throw new IncompleteSourceDataForMappingError({
+          destinationClass:
+            OrganizationPaymentPlanAffiliateCommissionEntity.name,
+          sourceClass:
+            OrganizationPaymentPlanAffiliateCommissionTypeormEntity.name,
+        });
       }
 
       return new OrganizationPaymentPlanAffiliateCommissionEntity({
