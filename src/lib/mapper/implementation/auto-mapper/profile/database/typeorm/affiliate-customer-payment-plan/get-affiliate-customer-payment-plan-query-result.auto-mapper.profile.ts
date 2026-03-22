@@ -58,8 +58,6 @@ export class GetAffiliateCustomerPaymentPlanQueryResultAutoMapperProfile {
     ): AffiliateCustomerPaymentPlanTypeormEntity => {
       return AffiliateCustomerPaymentPlanTypeormEntity.build({
         id: source.id.toString(),
-        affiliateCustomer: null,
-        paymentPlan: null,
         createdAt: source.createdAt,
         updatedAt: source.updatedAt,
         deletedAt: source.deletedAt ?? null,

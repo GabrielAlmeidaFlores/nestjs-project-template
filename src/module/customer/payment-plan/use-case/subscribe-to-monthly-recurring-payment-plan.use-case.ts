@@ -187,6 +187,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
     const now = new Date();
 
     let organizationPaymentPlanAffiliateCommissionTransaction = null;
+    let affiliateRedemptionLimitUpdateTransaction = null;
     if (discountResult !== null) {
       const commission = new OrganizationPaymentPlanAffiliateCommissionEntity({
         organizationPaymentPlan: organizationPaymentPlan.id,
@@ -199,19 +200,7 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
         this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
           commission,
         );
-    }
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      organizationPaymentPlanTransaction,
-      ...organizationPaymentPlanEnabledPaidResourceTransactions,
-      ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
-        ? [organizationPaymentPlanAffiliateCommissionTransaction]
-        : []),
-    ]);
-
-    await transaction.commit();
-
-    if (discountResult !== null) {
       const affiliate = await this.affiliateCustomerQueryRepository.findOneById(
         discountResult.affiliateCustomerId,
       );
@@ -224,16 +213,26 @@ export class SubscribeToMonthlyRecurringPaymentPlanUseCase {
           ),
           updatedAt: new Date(),
         });
-        const decrementTransaction =
-          await this.baseTransactionRepositoryGateway.execute([
-            this.affiliateCustomerCommandRepository.updateAffiliateCustomer(
-              discountResult.affiliateCustomerId,
-              updatedAffiliate,
-            ),
-          ]);
-        await decrementTransaction.commit();
+        affiliateRedemptionLimitUpdateTransaction =
+          this.affiliateCustomerCommandRepository.updateAffiliateCustomer(
+            discountResult.affiliateCustomerId,
+            updatedAffiliate,
+          );
       }
     }
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      organizationPaymentPlanTransaction,
+      ...organizationPaymentPlanEnabledPaidResourceTransactions,
+      ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
+        ? [organizationPaymentPlanAffiliateCommissionTransaction]
+        : []),
+      ...(affiliateRedemptionLimitUpdateTransaction !== null
+        ? [affiliateRedemptionLimitUpdateTransaction]
+        : []),
+    ]);
+
+    await transaction.commit();
 
     reply.clearCookie(ApiCookieEnum.AFFILIATE);
 

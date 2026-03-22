@@ -183,6 +183,7 @@ export class GenerateMonthlyPaymentBillingUseCase {
     const now = new Date();
 
     let organizationPaymentPlanAffiliateCommissionTransaction = null;
+    let affiliateRedemptionLimitUpdateTransaction = null;
     if (discountResult !== null) {
       const commission = new OrganizationPaymentPlanAffiliateCommissionEntity({
         organizationPaymentPlan: organizationPaymentPlan.id,
@@ -195,6 +196,25 @@ export class GenerateMonthlyPaymentBillingUseCase {
         this.organizationPaymentPlanAffiliateCommissionCommandRepository.createOrganizationPaymentPlanAffiliateCommission(
           commission,
         );
+
+      const affiliate = await this.affiliateCustomerQueryRepository.findOneById(
+        discountResult.affiliateCustomerId,
+      );
+      if (affiliate !== null) {
+        const updatedAffiliate = new AffiliateCustomerEntity({
+          ...affiliate,
+          paymentPlanDiscountRedemptionLimit: Math.max(
+            0,
+            affiliate.paymentPlanDiscountRedemptionLimit - 1,
+          ),
+          updatedAt: new Date(),
+        });
+        affiliateRedemptionLimitUpdateTransaction =
+          this.affiliateCustomerCommandRepository.updateAffiliateCustomer(
+            discountResult.affiliateCustomerId,
+            updatedAffiliate,
+          );
+      }
     }
 
     const transaction = await this.baseTransactionRepositoryGateway.execute([
@@ -209,33 +229,12 @@ export class GenerateMonthlyPaymentBillingUseCase {
       ...(organizationPaymentPlanAffiliateCommissionTransaction !== null
         ? [organizationPaymentPlanAffiliateCommissionTransaction]
         : []),
+      ...(affiliateRedemptionLimitUpdateTransaction !== null
+        ? [affiliateRedemptionLimitUpdateTransaction]
+        : []),
     ]);
 
     await transaction.commit();
-
-    if (discountResult !== null) {
-      const affiliate = await this.affiliateCustomerQueryRepository.findOneById(
-        discountResult.affiliateCustomerId,
-      );
-      if (affiliate !== null) {
-        const updatedAffiliate = new AffiliateCustomerEntity({
-          ...affiliate,
-          paymentPlanDiscountRedemptionLimit: Math.max(
-            0,
-            affiliate.paymentPlanDiscountRedemptionLimit - 1,
-          ),
-          updatedAt: new Date(),
-        });
-        const decrementTransaction =
-          await this.baseTransactionRepositoryGateway.execute([
-            this.affiliateCustomerCommandRepository.updateAffiliateCustomer(
-              discountResult.affiliateCustomerId,
-              updatedAffiliate,
-            ),
-          ]);
-        await decrementTransaction.commit();
-      }
-    }
 
     return GenerateMonthlyPaymentBillingResponseDto.build({
       bankPaymentId: bankPayment.id.toString(),

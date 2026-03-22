@@ -11,11 +11,11 @@ export class AffiliateCustomerPaymentPlanTypeormEntity extends BaseTypeormEntity
     (entity) => entity.affiliateCustomerPaymentPlan,
   )
   @JoinColumn({ name: 'affiliate_customer_id' })
-  public affiliateCustomer: AffiliateCustomerTypeormEntity | null;
+  public affiliateCustomer?: AffiliateCustomerTypeormEntity;
 
   @ManyToOne(() => PaymentPlanTypeormEntity)
   @JoinColumn({ name: 'payment_plan_id' })
-  public paymentPlan: PaymentPlanTypeormEntity | null;
+  public paymentPlan?: PaymentPlanTypeormEntity;
 
   protected override readonly _type =
     AffiliateCustomerPaymentPlanTypeormEntity.name;

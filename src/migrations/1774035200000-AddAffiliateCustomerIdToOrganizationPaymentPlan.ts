@@ -11,7 +11,7 @@ export class AddAffiliateCustomerIdToOrganizationPaymentPlan1774035200000
       `ALTER TABLE \`organization_payment_plan\` ADD \`affiliate_customer_id\` varchar(36) NULL`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`organization_payment_plan\` ADD CONSTRAINT \`FK_opp_affiliate_customer_id\` FOREIGN KEY (\`affiliate_customer_id\`) REFERENCES \`affiliate_customer\`(\`id\`) ON DELETE SET NULL ON UPDATE NO ACTION`,
+      `ALTER TABLE \`organization_payment_plan\` ADD CONSTRAINT \`FK_opp_affiliate_customer_id\` FOREIGN KEY (\`affiliate_customer_id\`) REFERENCES \`affiliate_customer\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
   }
 
