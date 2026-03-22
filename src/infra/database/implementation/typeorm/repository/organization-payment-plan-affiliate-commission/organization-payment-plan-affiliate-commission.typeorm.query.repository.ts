@@ -29,7 +29,8 @@ export class OrganizationPaymentPlanAffiliateCommissionTypeormQueryRepository
     id: OrganizationPaymentPlanId,
   ): Promise<GetOrganizationPaymentPlanAffiliateCommissionQueryResult | null> {
     const entity = await this.findOne({
-      where: { organizationPaymentPlanId: id.toString() },
+      where: { organizationPaymentPlan: { id: id.toString() } },
+      relations: ['organizationPaymentPlan', 'affiliateCustomer'],
     });
 
     if (entity === null) {
