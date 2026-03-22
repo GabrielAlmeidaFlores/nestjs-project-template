@@ -13,4 +13,8 @@ export abstract class BankTransferQueryRepositoryGateway {
   public abstract findOneByBankExternalId(
     bankExternalId: string,
   ): Promise<GetBankTransferQueryResult | null>;
+
+  public abstract findManyByIds(
+    ids: BankTransferId[],
+  ): Promise<GetBankTransferQueryResult[]>;
 }
