@@ -11,6 +11,7 @@ import {
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { InvalidOrganizationSessionError } from '@module/customer/account/error/invalid-organization-session.error';
 import { FileProcessorGateway } from '@module/customer/account/lib/file-processor/file-processor.gateway';
+import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 
 import type { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import type { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
@@ -25,6 +26,8 @@ export class GetAuthenticatedCustomerDataUseCase {
     private readonly fileProcessorGateway: FileProcessorGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AffiliateCustomerQueryRepositoryGateway)
+    private readonly affiliateCustomerQueryRepositoryGateway: AffiliateCustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -46,6 +49,11 @@ export class GetAuthenticatedCustomerDataUseCase {
     if (organizationMember === null) {
       throw new InvalidOrganizationSessionError();
     }
+
+    const affiliate =
+      await this.affiliateCustomerQueryRepositoryGateway.findOneByCustomerId(
+        customer.id,
+      );
 
     const response = GetAuthenticatedCustomerDataResponseDto.build({
       organization: GetOrganizationDataResponseDto.build({
@@ -69,6 +77,7 @@ export class GetAuthenticatedCustomerDataUseCase {
           addressNumber: customer.customerAddress.addressNumber,
         }),
       }),
+      affiliateCustomerId: affiliate?.id ?? null,
     });
 
     if (organizationMember.customer.profilePicture !== null) {
