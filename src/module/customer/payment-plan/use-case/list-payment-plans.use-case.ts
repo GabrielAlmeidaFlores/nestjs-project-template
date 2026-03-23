@@ -1,10 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
-import {
-  AffiliateDiscountContextInterface,
-  ResolveAffiliatePlanDiscountGateway,
-} from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
+import { ResolveAffiliatePlanDiscountGateway } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { PaymentPlanQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/payment-plan/query/payment-plan.query.repository.gateway';
 import { ListPaymentPlansRequestDto } from '@module/customer/payment-plan/dto/request/list-payment-plans.request.dto';
 import { ListPaymentPlansResponseDto } from '@module/customer/payment-plan/dto/response/list-payment-plans.response.dto';
@@ -17,16 +14,12 @@ import {
 export class ListPaymentPlansUseCase {
   protected readonly _type = ListPaymentPlansUseCase.name;
 
-  private readonly PERCENTAGE_DIVISOR: number;
-
   public constructor(
     @Inject(PaymentPlanQueryRepositoryGateway)
     private readonly paymentPlanQueryRepository: PaymentPlanQueryRepositoryGateway,
     @Inject(ResolveAffiliatePlanDiscountGateway)
     private readonly resolveAffiliatePlanDiscountGateway: ResolveAffiliatePlanDiscountGateway,
-  ) {
-    this.PERCENTAGE_DIVISOR = 100;
-  }
+  ) {}
 
   public async execute(
     dto: ListPaymentPlansRequestDto,
@@ -43,11 +36,12 @@ export class ListPaymentPlansUseCase {
     ]);
 
     const resources = result.resource.map((plan) => {
-      const affiliatePrice = this.calculateAffiliatePrice(
-        plan.id.toString(),
-        plan.price.toNumber(),
-        affiliateContext,
-      );
+      const affiliateResult =
+        this.resolveAffiliatePlanDiscountGateway.applyDiscount(
+          plan.id.toString(),
+          plan.price.toNumber(),
+          affiliateContext,
+        );
 
       return PaymentPlanItemResponseDto.build({
         id: plan.id.toString(),
@@ -59,7 +53,10 @@ export class ListPaymentPlansUseCase {
         active: plan.active,
         cycle: plan.cycle,
         highlight: plan.highlight,
-        ...(affiliatePrice !== null && { affiliatePrice }),
+        ...(affiliateResult !== null && {
+          affiliatePrice: affiliateResult.affiliatePrice,
+          affiliateDiscount: affiliateResult.affiliateDiscount,
+        }),
         paidResources: plan.enabledPaidResources.map((resource) =>
           PaymentPlanPaidResourceDto.build({
             id: resource.paymentPlanPaidResource.id.toString(),
@@ -75,22 +72,5 @@ export class ListPaymentPlansUseCase {
       ...result,
       resource: resources,
     });
-  }
-
-  private calculateAffiliatePrice(
-    planId: string,
-    originalPrice: number,
-    context: AffiliateDiscountContextInterface | null,
-  ): number | null {
-    if (context?.linkedPlanIds.has(planId) !== true) {
-      return null;
-    }
-
-    return parseFloat(
-      (
-        originalPrice *
-        (1 - context.percentage / this.PERCENTAGE_DIVISOR)
-      ).toFixed(2),
-    );
   }
 }
