@@ -78,7 +78,7 @@ export class PurchaseCreditPackUseCase {
         customerId: customer.bankExternalId,
         value: creditPack.price,
         dueDate,
-        description: `Compra - ${creditPack.name}`,
+        description: `Compra - Pacote ${creditPack.creditAmount} créditos`,
         externalReference: `CREDIT_PACK_${creditPack.id.toString()}_${Date.now()}`,
       }),
     );

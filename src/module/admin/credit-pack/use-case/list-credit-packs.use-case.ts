@@ -23,8 +23,6 @@ export class ListCreditPacksUseCase {
     const resources = result.resource.map((creditPack) =>
       GetCreditPackResponseDto.build({
         creditPackId: creditPack.id,
-        name: creditPack.name,
-        description: creditPack.description,
         price: creditPack.price,
         creditAmount: creditPack.creditAmount,
         active: creditPack.active,

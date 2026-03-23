@@ -24,8 +24,6 @@ export class CreditPackEntityAutoMapperProfile {
     const convert = (source: CreditPackTypeormEntity): CreditPackEntity => {
       return new CreditPackEntity({
         id: new CreditPackId(source.id),
-        name: source.name,
-        description: source.description,
         price: new DecimalValue(source.price),
         creditAmount: source.creditAmount,
         active: source.active,
@@ -47,8 +45,6 @@ export class CreditPackEntityAutoMapperProfile {
     const convert = (source: CreditPackEntity): CreditPackTypeormEntity => {
       return CreditPackTypeormEntity.build({
         id: source.id.toString(),
-        name: source.name,
-        description: source.description,
         price: source.price.toString(),
         creditAmount: source.creditAmount,
         active: source.active,
