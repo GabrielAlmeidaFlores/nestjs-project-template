@@ -105,14 +105,19 @@ export class GenerateMonthlyPaymentBillingUseCase {
         paymentPlan.id,
       );
 
-    const HUNDRED_PERCENT = 100;
     const MINIMUM_BILLING_VALUE = 5;
     const billingValue =
       discountResult !== null
         ? new DecimalValue(
             Math.max(
-              paymentPlan.price.toNumber() *
-                (1 - discountResult.percentage / HUNDRED_PERCENT),
+              this.resolveAffiliatePlanDiscountService.applyDiscount(
+                paymentPlan.id.toString(),
+                paymentPlan.price.toNumber(),
+                {
+                  percentage: discountResult.percentage,
+                  linkedPlanIds: new Set([paymentPlan.id.toString()]),
+                },
+              )?.affiliatePrice ?? paymentPlan.price.toNumber(),
               MINIMUM_BILLING_VALUE,
             ).toFixed(2),
           )

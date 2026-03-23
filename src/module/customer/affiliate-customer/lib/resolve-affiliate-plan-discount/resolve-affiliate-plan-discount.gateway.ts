@@ -12,6 +12,11 @@ export interface AffiliateDiscountContextInterface {
   linkedPlanIds: Set<string>;
 }
 
+export interface AffiliatePriceResultInterface {
+  affiliatePrice: number;
+  affiliateDiscount: number;
+}
+
 export abstract class ResolveAffiliatePlanDiscountGateway {
   public abstract resolveDiscount(
     affiliateCustomerIdStr: string | null | undefined,
@@ -21,4 +26,10 @@ export abstract class ResolveAffiliatePlanDiscountGateway {
   public abstract resolveDiscountContext(
     affiliateCustomerIdStr: string | null | undefined,
   ): Promise<AffiliateDiscountContextInterface | null>;
+
+  public abstract applyDiscount(
+    planId: string,
+    originalPrice: number,
+    context: AffiliateDiscountContextInterface | null,
+  ): AffiliatePriceResultInterface | null;
 }

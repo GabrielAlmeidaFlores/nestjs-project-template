@@ -54,6 +54,9 @@ export class PaymentPlanItemResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoNumberProperty({ required: false })
   public affiliatePrice?: number;
 
+  @ResponseDtoNumberProperty({ required: false })
+  public affiliateDiscount?: number;
+
   @ResponseDtoObjectProperty(() => PaymentPlanPaidResourceDto, {
     isArray: true,
   })

@@ -7,6 +7,7 @@ import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/
 import {
   AffiliateDiscountContextInterface,
   AffiliateDiscountResultInterface,
+  AffiliatePriceResultInterface,
   ResolveAffiliatePlanDiscountGateway,
 } from '@module/customer/affiliate-customer/lib/resolve-affiliate-plan-discount/resolve-affiliate-plan-discount.gateway';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -15,12 +16,16 @@ import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entit
 export class ResolveAffiliatePlanDiscountService implements ResolveAffiliatePlanDiscountGateway {
   protected readonly _type = ResolveAffiliatePlanDiscountService.name;
 
+  private readonly PERCENTAGE_DIVISOR: number;
+
   public constructor(
     @Inject(AffiliateCustomerQueryRepositoryGateway)
     private readonly affiliateCustomerQueryRepository: AffiliateCustomerQueryRepositoryGateway,
     @Inject(AffiliateCustomerPaymentPlanQueryRepositoryGateway)
     private readonly affiliateCustomerPaymentPlanQueryRepository: AffiliateCustomerPaymentPlanQueryRepositoryGateway,
-  ) {}
+  ) {
+    this.PERCENTAGE_DIVISOR = 100;
+  }
 
   public async resolveDiscount(
     affiliateCustomerIdStr: string | null | undefined,
@@ -70,6 +75,30 @@ export class ResolveAffiliatePlanDiscountService implements ResolveAffiliatePlan
       percentage: affiliate.paymentPlanDiscountPercentage,
       linkedPlanIds: new Set(
         linkedPlans.map((p) => p.paymentPlanId.toString()),
+      ),
+    };
+  }
+
+  public applyDiscount(
+    planId: string,
+    originalPrice: number,
+    context: AffiliateDiscountContextInterface | null,
+  ): AffiliatePriceResultInterface | null {
+    if (context?.linkedPlanIds.has(planId) !== true) {
+      return null;
+    }
+
+    const affiliatePrice = parseFloat(
+      (
+        originalPrice *
+        (1 - context.percentage / this.PERCENTAGE_DIVISOR)
+      ).toFixed(2),
+    );
+
+    return {
+      affiliatePrice,
+      affiliateDiscount: parseFloat(
+        (originalPrice - affiliatePrice).toFixed(2),
       ),
     };
   }
