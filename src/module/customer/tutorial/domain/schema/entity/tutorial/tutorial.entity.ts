@@ -1,7 +1,8 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
-import { TutorialFunctionalityEnum } from '@module/customer/tutorial/domain/schema/entity/tutorial/enum/tutorial-functionality.enum';
-import { TutorialEntityPropsInterface } from '@module/customer/tutorial/domain/schema/entity/tutorial/tutorial.entity.props.interface';
 import { TutorialId } from '@module/customer/tutorial/domain/schema/entity/tutorial/value-object/tutorial-id/tutorial-id.value-object';
+
+import type { TutorialFunctionalityEnum } from '@module/customer/tutorial/domain/schema/entity/tutorial/enum/tutorial-functionality.enum';
+import type { TutorialEntityPropsInterface } from '@module/customer/tutorial/domain/schema/entity/tutorial/tutorial.entity.props.interface';
 
 export class TutorialEntity extends BaseEntity<TutorialId> {
   public readonly name: string;

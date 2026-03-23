@@ -71,9 +71,29 @@ export class EmailApplicationVariable {
       'Agiliza Previ - Atualização de Processo',
     );
 
+  public static readonly EMAIL_ORGANIZATION_INVITE_TEMPLATE =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_ORGANIZATION_INVITE_TEMPLATE',
+      String,
+      'convite-organizacao.html',
+    );
+
+  public static readonly EMAIL_ORGANIZATION_INVITE_SUBJECT =
+    EmailApplicationVariable.source.getValueOrDefault<string>(
+      'EMAIL_ORGANIZATION_INVITE_SUBJECT',
+      String,
+      'Agiliza Previ - Convite para Organização',
+    );
+
   public static readonly EMAIL_SEND_GRID_KEY =
     EmailApplicationVariable.source.getValueOrThrow<string>(
       'EMAIL_SEND_GRID_KEY',
+      String,
+    );
+
+  public static readonly APP_FRONTEND_URL =
+    EmailApplicationVariable.source.getValueOrThrow<string>(
+      'APP_FRONTEND_URL',
       String,
     );
 
