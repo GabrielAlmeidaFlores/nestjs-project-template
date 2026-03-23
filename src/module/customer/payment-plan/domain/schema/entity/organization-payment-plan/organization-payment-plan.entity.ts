@@ -1,6 +1,7 @@
 import { BaseEntity } from '@core/domain/schema/entity/base/base.entity';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
 import { OrganizationId } from '@module/customer/account/domain/schema/entity/organization/value-object/organization-id/organization-id.value-object';
+import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { OrganizationPaymentPlanEntityPropsInterface } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/organization-payment-plan.entity.props.interface';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
 import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/payment-plan/value-object/payment-plan-id/payment-plan-id.value-object';
@@ -42,6 +43,9 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
   @Description('Indica se o plano foi cancelado')
   public readonly canceled: boolean;
 
+  @Description('Afiliado que originou esta contratação')
+  public readonly affiliateCustomerId: AffiliateCustomerId | null;
+
   protected readonly _type = OrganizationPaymentPlanEntity.name;
 
   public constructor(props: OrganizationPaymentPlanEntityPropsInterface) {
@@ -62,6 +66,7 @@ export class OrganizationPaymentPlanEntity extends BaseEntity<OrganizationPaymen
     this.paymentPlan = props.paymentPlan;
     this.bankExternalId = props.bankExternalId;
     this.canceled = props.canceled;
+    this.affiliateCustomerId = props.affiliateCustomerId ?? null;
   }
 
   private static validateTotalInstallments(
