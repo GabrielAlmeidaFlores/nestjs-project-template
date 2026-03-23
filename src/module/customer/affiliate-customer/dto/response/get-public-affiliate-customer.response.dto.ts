@@ -3,7 +3,6 @@ import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entit
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
-import { ResponseDtoObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-object-property/response-dto-object-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
@@ -21,7 +20,7 @@ export class GetPublicAffiliateCustomerResponseDto extends BaseBuildableDtoObjec
   @ResponseDtoNumberProperty()
   public paymentPlanDiscountRedemptionLimit: number;
 
-  @ResponseDtoObjectProperty(() => PaymentPlanId, { isArray: true })
+  @ResponseDtoValueObjectProperty(PaymentPlanId, { isArray: true })
   public paymentPlanIds: PaymentPlanId[];
 
   protected override readonly _type =
