@@ -10,6 +10,7 @@ import { FastifyReply } from 'fastify';
 
 import { GenerateMonthlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-monthly-payment-billing.request.dto';
 import { GenerateYearlyPaymentBillingRequestDto } from '@module/customer/payment-plan/dto/request/generate-yearly-payment-billing.request.dto';
+import { ListPaymentPlansRequestDto } from '@module/customer/payment-plan/dto/request/list-payment-plans.request.dto';
 import { PayBillingRequestDto } from '@module/customer/payment-plan/dto/request/pay-billing.request.dto';
 import { SubscribeToMonthlyRecurringPaymentPlanRequestDto } from '@module/customer/payment-plan/dto/request/subscribe-to-monthly-recurring-payment-plan.request.dto';
 import { CancelPaymentPlanResponseDto } from '@module/customer/payment-plan/dto/response/cancel-payment-plan.response.dto';
@@ -33,6 +34,7 @@ import { ListPaymentPlansUseCase } from '@module/customer/payment-plan/use-case/
 import { PayBillingUseCase } from '@module/customer/payment-plan/use-case/pay-billing.use-case';
 import { SubscribeToMonthlyRecurringPaymentPlanUseCase } from '@module/customer/payment-plan/use-case/subscribe-to-monthly-recurring-payment-plan.use-case';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
+import { ApiCookieEnum } from '@shared/api/enum/api-cookie.enum';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
@@ -77,9 +79,13 @@ export class PaymentPlanController {
     },
   })
   public async list(
-    @Query() dto: ListDataRequestDto,
+    @Query() dto: ListPaymentPlansRequestDto,
+    @Res({ passthrough: true }) reply: FastifyReply,
   ): Promise<ListPaymentPlansResponseDto> {
-    return this.listPaymentPlansUseCase.execute(dto);
+    return this.listPaymentPlansUseCase.execute(
+      dto,
+      reply.request.cookies[ApiCookieEnum.AFFILIATE],
+    );
   }
 
   @BuildEndpointSpecification({

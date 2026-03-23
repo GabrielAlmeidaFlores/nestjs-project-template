@@ -7,9 +7,18 @@ export interface AffiliateDiscountResultInterface {
   affiliateCustomerId: AffiliateCustomerId;
 }
 
+export interface AffiliateDiscountContextInterface {
+  percentage: number;
+  linkedPlanIds: Set<string>;
+}
+
 export abstract class ResolveAffiliatePlanDiscountGateway {
   public abstract resolveDiscount(
     affiliateCustomerIdStr: string | null | undefined,
     paymentPlanId: PaymentPlanId,
   ): Promise<AffiliateDiscountResultInterface | null>;
+
+  public abstract resolveDiscountContext(
+    affiliateCustomerIdStr: string | null | undefined,
+  ): Promise<AffiliateDiscountContextInterface | null>;
 }
