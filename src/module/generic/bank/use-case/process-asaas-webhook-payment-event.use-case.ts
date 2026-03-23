@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { ProcessAffiliateTransferGateway } from '@module/customer/affiliate-customer/lib/process-affiliate-transfer/process-affiliate-transfer.gateway';
 import { OrganizationCreditPackPurchaseQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/query/organization-credit-pack-purchase.query.repository.gateway';
 import { OrganizationCreditPackPurchaseEntity } from '@module/customer/credit-pack/domain/schema/entity/organization-credit-pack-purchase/organization-credit-pack-purchase.entity';
 import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
@@ -46,6 +47,7 @@ type ResolvedPaymentType =
 @Injectable()
 export class ProcessAsaasWebhookPaymentEventUseCase {
   protected readonly _type = ProcessAsaasWebhookPaymentEventUseCase.name;
+  private readonly logger: Logger;
 
   public constructor(
     @Inject(BankPaymentQueryRepositoryGateway)
@@ -66,7 +68,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationCreditPurchaseCommandRepository: OrganizationCreditPurchaseCommandRepositoryGateway,
     @Inject(OrganizationCreditPackPurchaseQueryRepositoryGateway)
     private readonly organizationCreditPackPurchaseQueryRepository: OrganizationCreditPackPurchaseQueryRepositoryGateway,
-  ) {}
+    @Inject(ProcessAffiliateTransferGateway)
+    private readonly processAffiliateTransferGateway: ProcessAffiliateTransferGateway,
+  ) {
+    this.logger = new Logger(ProcessAsaasWebhookPaymentEventUseCase.name);
+  }
 
   public async execute(
     dto: AsaasWebhookPaymentEventRequestDto,
@@ -594,5 +600,11 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
       ),
     ]);
     await transaction.commit();
+
+    this.processAffiliateTransferGateway
+      .process(newPayment.id, organizationPaymentPlan.id, newPayment.amount)
+      .catch((err) =>
+        this.logger.error('Failed to process affiliate transfer', err),
+      );
   }
 }
