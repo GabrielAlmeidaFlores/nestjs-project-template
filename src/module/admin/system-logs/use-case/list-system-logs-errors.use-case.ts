@@ -1,0 +1,49 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { ListDataInputModel } from '@core/domain/repository/base/query/model/input/list-data.input.model';
+import { GetSystemLogQueryResult } from '@module/admin/system-logs/domain/repository/system-logs/query/result/get-system-log.query.result';
+import { SystemLogsQueryRepositoryGateway } from '@module/admin/system-logs/domain/repository/system-logs/query/system-logs.query.repository.gateway';
+import { ListSystemLogsResponseDto } from '@module/admin/system-logs/dto/response/list-system-logs.response.dto';
+import { SystemLogItemResponseDto } from '@module/admin/system-logs/dto/response/system-log-item.response.dto';
+
+@Injectable()
+export class ListSystemLogsErrorsUseCase {
+  protected readonly _type = ListSystemLogsErrorsUseCase.name;
+
+  public constructor(
+    @Inject(SystemLogsQueryRepositoryGateway)
+    private readonly systemLogsQueryRepositoryGateway: SystemLogsQueryRepositoryGateway,
+  ) {}
+
+  public async execute(
+    pagination: ListDataInputModel,
+  ): Promise<ListSystemLogsResponseDto> {
+    const result = await this.systemLogsQueryRepositoryGateway.listByIsError(
+      pagination,
+      true,
+    );
+
+    const resource = result.resource.map((item) => this.buildItem(item));
+
+    return ListSystemLogsResponseDto.build({
+      page: result.page,
+      limit: result.limit,
+      totalItems: result.totalItems,
+      totalPages: result.totalPages,
+      amountItemsCurrentPage: result.amountItemsCurrentPage,
+      resource,
+    });
+  }
+
+  private buildItem(item: GetSystemLogQueryResult): SystemLogItemResponseDto {
+    return SystemLogItemResponseDto.build({
+      code: item.code,
+      endpoint: item.endpoint,
+      data: item.data,
+      isError: item.isError,
+      stackTrace: item.stackTrace ?? null,
+      requestBody: item.requestBody ?? null,
+      responseBody: item.responseBody ?? null,
+    });
+  }
+}
