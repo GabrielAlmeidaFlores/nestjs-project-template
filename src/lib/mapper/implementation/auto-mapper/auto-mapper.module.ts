@@ -17,6 +17,12 @@ import { GetAdministrativeProcedureInssAnalysisLegalProceedingQueryResultAutoMap
 import { AdministrativeProcedureInssAnalysisResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/administrative-procedure-inss-analysis-result-entity.auto-mapper.profile';
 import { GetAdministrativeProcedureInssAnalysisResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-procedure-inss-analysis-result/get-administrative-procedure-inss-analysis-result-query-result.auto-mapper.profile';
 import { AdministrativeRequestGeneratorEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/administrative-request-generator-analysis-result/administrative-request-generator-analysis-result-entity.auto-mapper.profile';
+import { AffiliateBankTransferEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-bank-transfer/affiliate-bank-transfer-entity.auto-mapper.profile';
+import { GetAffiliateBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-bank-transfer/get-affiliate-bank-transfer-query-result.auto-mapper.profile';
+import { AffiliateCustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer/affiliate-customer-entity.auto-mapper.profile';
+import { GetAffiliateCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer/get-affiliate-customer-query-result.auto-mapper.profile';
+import { AffiliateCustomerPaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer-payment-plan/affiliate-customer-payment-plan-entity.auto-mapper.profile';
+import { GetAffiliateCustomerPaymentPlanQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer-payment-plan/get-affiliate-customer-payment-plan-query-result.auto-mapper.profile';
 import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
 import { GetAnalysisToolClientQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-query-result.auto-mapper.profile';
 import { GetAnalysisToolClientWithLimitedResponsibleRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/get-analysis-tool-client-with-limited-relations-query-result.auto-mapper.profile';
@@ -45,6 +51,8 @@ import { GetAuthIdentityQueryResultAutoMapperProfile } from '@lib/mapper/impleme
 import { GetAuthIdentityWithRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/auth-identity/get-auth-identity-with-relations-query-result.auto-mapper.profile';
 import { BankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/bank-payment-entity.auto-mapper.profile';
 import { GetBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-payment/get-bank-payment-query-result.auto-mapper.profile';
+import { BankTransferEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/bank-transfer-entity.auto-mapper.profile';
+import { GetBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/bank-transfer/get-bank-transfer-query-result.auto-mapper.profile';
 import { CidTenEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/cid-ten-entity.auto-mapper.profile';
 import { GetCidTenQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cid-ten/get-cid-ten-query-result.auto-mapper.profile';
 import { CnisFastAnalysisEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/cnis-fast-analysis/cnis-fast-analysis-entity.auto-mapper.profile';
@@ -64,6 +72,8 @@ import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } fr
 import { GetCustomerWithOrganizationForListQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-organization-for-list-query-result.auto-mapper.profile';
 import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
 import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/get-customer-query-result.auto-mapper.profile';
+import { CustomerEmailSentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-email-sent/customer-email-sent-entity.auto-mapper.profile';
+import { CustomerEmailSentAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-email-sent-attachment/customer-email-sent-attachment-entity.auto-mapper.profile';
 import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
 import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
 import { CustomerTermsAcceptanceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/customer-terms-acceptance-entity.auto-mapper.profile';
@@ -147,14 +157,17 @@ import { GetOrganizationCreditPurchaseQueryResultAutoMapperProfile } from '@lib/
 import { GetOrganizationCreditUsageQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/get-organization-credit-usage-query-result.auto-mapper.profile';
 import { OrganizationCreditPurchaseEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/organization-credit-purchase-entity.auto-mapper.profile';
 import { OrganizationCreditUsageEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-credit/organization-credit-usage-entity.auto-mapper.profile';
+import { GetOrganizationMemberCollaboratorQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-collaborator-query-result.auto-mapper.profile';
 import { GetOrganizationMemberQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-query-result.auto-mapper.profile';
 import { GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-and-organization-relations-query-result.auto-mapper.profile';
 import { GetOrganizationMemberWithCustomerRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-customer-relation-query-result.auto-mapper.profile';
-import { GetOrganizationMemberWithOrganizationRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-organization-relations-query-result.auto-mapper.profile copy';
+import { GetOrganizationMemberWithOrganizationRelationQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/get-organization-member-with-organization-relations-query-result.auto-mapper.profile';
 import { OrganizationMemberEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-member/organization-member-entity.auto-mapper.profile';
 import { OrganizationPaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-entity.auto-mapper.profile';
 import { OrganizationPaymentPlanQueryResultWithRelationsAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-query-result-with-relations.auto-mapper.profile';
 import { OrganizationPaymentPlanQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan/organization-payment-plan-query-result.auto-mapper.profile';
+import { GetOrganizationPaymentPlanAffiliateCommissionQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-affiliate-commission/get-organization-payment-plan-affiliate-commission-query-result.auto-mapper.profile';
+import { OrganizationPaymentPlanAffiliateCommissionEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-affiliate-commission/organization-payment-plan-affiliate-commission-entity.auto-mapper.profile';
 import { GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-bank-payment/get-organization-payment-plan-bank-payment-query-result.auto-mapper.profile';
 import { OrganizationPaymentPlanBankPaymentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-bank-payment/organization-payment-plan-bank-payment-entity.auto-mapper.profile';
 import { GetOrganizationPaymentPlanEnabledPaidResourceQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/organization-payment-plan-enabled-paid-resource/get-organization-payment-plan-enabled-paid-resource-query-result.auto-mapper.profile';
@@ -272,8 +285,8 @@ import { GetSpeechGeneratorLegalProceedingQueryResultAutoMapperProfile } from '@
 import { SpeechGeneratorLegalProceedingEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-legal-proceeding/speech-generator-legal-proceeding-entity.auto-mapper.profile';
 import { GetSpeechGeneratorResultQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/get-speech-generator-result-query-result.auto-mapper.profile';
 import { SpeechGeneratorResultEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/speech-generator-result/speech-generator-result-entity.auto-mapper.profile';
-import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/get-tutorial-query-result.auto-mapper.profile';
+import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/tutorial/tutorial-entity.auto-mapper.profile';
 
 @Module({
   imports: [
@@ -291,6 +304,7 @@ import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementat
     GetCnisFastAnalysisQueryResultAutoMapperProfile,
     GetOrganizationQueryResultAutoMapperProfile,
     GetOrganizationMemberQueryResultAutoMapperProfile,
+    GetOrganizationMemberCollaboratorQueryResultAutoMapperProfile,
     GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile,
     GetCustomerWithOrganizationForListQueryResultAutoMapperProfile,
     GetCustomerProfileQueryResultAutoMapperProfile,
@@ -301,6 +315,12 @@ import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementat
     OrganizationEntityAutoMapperProfile,
     OrganizationMemberEntityAutoMapperProfile,
     AuthIdentityEntityAutoMapperProfile,
+    AffiliateCustomerEntityAutoMapperProfile,
+    GetAffiliateCustomerQueryResultAutoMapperProfile,
+    AffiliateBankTransferEntityAutoMapperProfile,
+    GetAffiliateBankTransferQueryResultAutoMapperProfile,
+    AffiliateCustomerPaymentPlanEntityAutoMapperProfile,
+    GetAffiliateCustomerPaymentPlanQueryResultAutoMapperProfile,
     CnisFastAnalysisEntityAutoMapperProfile,
     AnalysisToolClientEntityAutoMapperProfile,
     CnisFastAnalysisInssBenefitEntityAutoMapperProfile,
@@ -397,8 +417,12 @@ import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementat
     PaymentPlanPaidResourceIaConfigEntityAutoMapperProfile,
     BankPaymentEntityAutoMapperProfile,
     GetBankPaymentQueryResultAutoMapperProfile,
+    BankTransferEntityAutoMapperProfile,
+    GetBankTransferQueryResultAutoMapperProfile,
     OrganizationPaymentPlanBankPaymentEntityAutoMapperProfile,
     GetOrganizationPaymentPlanBankPaymentQueryResultAutoMapperProfile,
+    OrganizationPaymentPlanAffiliateCommissionEntityAutoMapperProfile,
+    GetOrganizationPaymentPlanAffiliateCommissionQueryResultAutoMapperProfile,
     RetirementPlanningRppsResultEntityAutoMapperProfile,
     GetRetirementPlanningRppsResultQueryResultAutoMapperProfile,
     RetirementPlanningRppsEntityAutoMapperProfile,
@@ -552,6 +576,8 @@ import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementat
     GetRuralTimelineAnalysisLegalProceedingQueryResultAutoMapperProfile,
     RuralTimelineAnalysisLegalProceedingEntityAutoMapperProfile,
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile,
+    CustomerEmailSentEntityAutoMapperProfile,
+    CustomerEmailSentAttachmentEntityAutoMapperProfile,
     TutorialEntityAutoMapperProfile,
     GetTutorialQueryResultAutoMapperProfile,
   ],
