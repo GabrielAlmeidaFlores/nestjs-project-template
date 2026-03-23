@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { DecimalValue } from '@core/domain/schema/value-object/decimal/decimal.value-object';
+import { OrganizationCreditPackPurchaseQueryRepositoryGateway } from '@module/customer/credit-pack/domain/repository/organization-credit-pack-purchase/query/organization-credit-pack-purchase.query.repository.gateway';
+import { OrganizationCreditPackPurchaseEntity } from '@module/customer/credit-pack/domain/schema/entity/organization-credit-pack-purchase/organization-credit-pack-purchase.entity';
 import { OrganizationCreditPurchaseCommandRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/command/organization-credit-purchase.command.repository.gateway';
 import { OrganizationCreditPurchaseQueryRepositoryGateway } from '@module/customer/organization-credit/domain/repository/organization-credit-purchase/query/organization-credit-purchase.query.repository.gateway';
 import { OrganizationCreditPurchaseEntity } from '@module/customer/organization-credit/domain/schema/entity/organization-credit-purchase/organization-credit-purchase.entity';
@@ -18,6 +20,8 @@ import { PaymentMethodEnum } from '@module/generic/bank/domain/schema/entity/ban
 import { PaymentStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-payment/enum/payment-status.enum';
 import { AsaasWebhookPaymentEventRequestDto } from '@module/generic/bank/dto/request/asaas-webhook-payment-event.request.dto';
 import { AsaasWebhookPaymentEventResponseDto } from '@module/generic/bank/dto/response/asaas-webhook-payment-event.response.dto';
+
+import type { GetBankPaymentQueryResult } from '@module/generic/bank/domain/repository/bank-payment/query/result/get-bank-payment.query.result';
 
 @Injectable()
 export class ProcessAsaasWebhookPaymentEventUseCase {
@@ -40,6 +44,8 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
     private readonly organizationCreditPurchaseQueryRepository: OrganizationCreditPurchaseQueryRepositoryGateway,
     @Inject(OrganizationCreditPurchaseCommandRepositoryGateway)
     private readonly organizationCreditPurchaseCommandRepository: OrganizationCreditPurchaseCommandRepositoryGateway,
+    @Inject(OrganizationCreditPackPurchaseQueryRepositoryGateway)
+    private readonly organizationCreditPackPurchaseQueryRepository: OrganizationCreditPackPurchaseQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -261,6 +267,49 @@ export class ProcessAsaasWebhookPaymentEventUseCase {
         return;
       }
     }
+
+    const creditPackPurchase =
+      await this.organizationCreditPackPurchaseQueryRepository.findOneByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (creditPackPurchase !== null) {
+      await this.processPaymentFromCreditPackPurchase(
+        creditPackPurchase,
+        bankPayment,
+      );
+      return;
+    }
+  }
+
+  private async processPaymentFromCreditPackPurchase(
+    creditPackPurchase: OrganizationCreditPackPurchaseEntity,
+    bankPayment: GetBankPaymentQueryResult,
+  ): Promise<void> {
+    const existingCreditPurchase =
+      await this.organizationCreditPurchaseQueryRepository.findOneOrganizationCreditPurchaseByBankPaymentId(
+        bankPayment.id,
+      );
+
+    if (existingCreditPurchase) {
+      return;
+    }
+
+    const creditPurchase = new OrganizationCreditPurchaseEntity({
+      organization: creditPackPurchase.organizationId,
+      bankPayment: bankPayment.id,
+      creditAmount: creditPackPurchase.creditAmount,
+    });
+
+    const createCreditPurchaseTransaction =
+      this.organizationCreditPurchaseCommandRepository.createOrganizationCreditPurchase(
+        creditPurchase,
+      );
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute([
+      createCreditPurchaseTransaction,
+    ]);
+    await transaction.commit();
   }
 
   private async processPaymentFromYearlyPaymentPlan(
