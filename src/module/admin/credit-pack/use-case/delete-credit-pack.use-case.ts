@@ -37,8 +37,6 @@ export class DeleteCreditPackUseCase {
 
     return GetCreditPackResponseDto.build({
       creditPackId: existing.id,
-      name: existing.name,
-      description: existing.description,
       price: existing.price,
       creditAmount: existing.creditAmount,
       active: existing.active,

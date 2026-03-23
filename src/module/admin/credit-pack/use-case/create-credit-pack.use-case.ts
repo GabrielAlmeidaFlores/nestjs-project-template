@@ -25,8 +25,6 @@ export class CreateCreditPackUseCase {
     dto: CreateCreditPackRequestDto,
   ): Promise<GetCreditPackResponseDto> {
     const creditPack = new CreditPackEntity({
-      name: dto.name,
-      description: dto.description,
       price: dto.price,
       creditAmount: dto.creditAmount,
       active: true,
@@ -47,8 +45,6 @@ export class CreateCreditPackUseCase {
 
     return GetCreditPackResponseDto.build({
       creditPackId: created.id,
-      name: created.name,
-      description: created.description,
       price: created.price,
       creditAmount: created.creditAmount,
       active: created.active,

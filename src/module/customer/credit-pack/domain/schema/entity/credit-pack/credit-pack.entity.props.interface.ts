@@ -3,8 +3,6 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { CreditPackId } from '@module/customer/credit-pack/domain/schema/entity/credit-pack/value-object/credit-pack-id/credit-pack-id.value-object';
 
 export interface CreditPackEntityPropsInterface extends BaseEntityPropsInterface<CreditPackId> {
-  name: string;
-  description: string;
   price: DecimalValue;
   creditAmount: number;
   active: boolean;

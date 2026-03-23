@@ -5,8 +5,6 @@ import type { DecimalValue } from '@core/domain/schema/value-object/decimal/deci
 import type { CreditPackEntityPropsInterface } from '@module/customer/credit-pack/domain/schema/entity/credit-pack/credit-pack.entity.props.interface';
 
 export class CreditPackEntity extends BaseEntity<CreditPackId> {
-  public readonly name: string;
-  public readonly description: string;
   public readonly price: DecimalValue;
   public readonly creditAmount: number;
   public readonly active: boolean;
@@ -15,8 +13,6 @@ export class CreditPackEntity extends BaseEntity<CreditPackId> {
 
   public constructor(props: CreditPackEntityPropsInterface) {
     super(CreditPackId, props);
-    this.name = props.name;
-    this.description = props.description;
     this.price = props.price;
     this.creditAmount = props.creditAmount;
     this.active = props.active;

@@ -35,8 +35,6 @@ export class UpdateCreditPackUseCase {
 
     const updated = new CreditPackEntity({
       id: existing.id,
-      name: dto.name ?? existing.name,
-      description: dto.description ?? existing.description,
       price: dto.price ?? existing.price,
       creditAmount: dto.creditAmount ?? existing.creditAmount,
       active: dto.active ?? existing.active,
@@ -52,8 +50,6 @@ export class UpdateCreditPackUseCase {
 
     return GetCreditPackResponseDto.build({
       creditPackId: updated.id,
-      name: updated.name,
-      description: updated.description,
       price: updated.price,
       creditAmount: updated.creditAmount,
       active: updated.active,

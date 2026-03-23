@@ -26,8 +26,6 @@ export class GetCreditPackUseCase {
 
     return GetCreditPackResponseDto.build({
       creditPackId: creditPack.id,
-      name: creditPack.name,
-      description: creditPack.description,
       price: creditPack.price,
       creditAmount: creditPack.creditAmount,
       active: creditPack.active,
