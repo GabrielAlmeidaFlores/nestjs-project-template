@@ -42,8 +42,11 @@ export class GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResul
 
       return GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResult.build(
         {
-          ...source,
           id: new OrganizationMemberId(source.id),
+          owner: source.owner,
+          createdAt: source.createdAt,
+          updatedAt: source.updatedAt,
+          deletedAt: source.deletedAt,
           customer,
           organization,
         },
@@ -77,8 +80,12 @@ export class GetOrganizationMemberWithCustomerAndOrganizationRelationsQueryResul
       );
 
       return OrganizationMemberTypeormEntity.build({
-        ...source,
         id: source.id.toString(),
+        owner: source.owner,
+        isActive: true,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt,
+        deletedAt: source.deletedAt,
         customer,
         organization,
       });
