@@ -77,13 +77,17 @@ export class SystemLogInterceptor implements NestInterceptor {
     const request = ctx.getRequest<FastifyRequest>();
     const response = ctx.getResponse<FastifyReply>();
 
-    const { url } = request;
+    const { url, method } = request;
 
     return next.handle().pipe(
       tap({
         next: (responseData: unknown) => {
           const statusCode = response.statusCode;
           const isError = statusCode >= this.ERROR_STATUS_CODE;
+
+          if (method === 'GET' && !isError) {
+            return;
+          }
 
           const requestBody = this.serializeBody(request.body);
           const responseBody = this.serializeBody(responseData);
