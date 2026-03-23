@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
 import { AffiliateCustomerPaymentPlanQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-payment-plan/query/affiliate-customer-payment-plan.query.repository.gateway';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
@@ -18,6 +19,8 @@ export class GetPublicAffiliateCustomerUseCase {
     private readonly affiliateCustomerQueryRepository: AffiliateCustomerQueryRepositoryGateway,
     @Inject(AffiliateCustomerPaymentPlanQueryRepositoryGateway)
     private readonly affiliateCustomerPaymentPlanQueryRepository: AffiliateCustomerPaymentPlanQueryRepositoryGateway,
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
   ) {}
 
   public async execute(
@@ -29,14 +32,16 @@ export class GetPublicAffiliateCustomerUseCase {
         affiliateCustomerId,
       );
 
-    if (!affiliate) {
+    if (affiliate === null) {
       throw new AffiliateCustomerNotFoundError();
     }
 
-    const linkedPlans =
-      await this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
+    const [linkedPlans, customer] = await Promise.all([
+      this.affiliateCustomerPaymentPlanQueryRepository.findManyByAffiliateCustomerId(
         affiliate.id,
-      );
+      ),
+      this.customerQueryRepository.findOneByCustomerId(affiliate.customerId),
+    ]);
 
     reply.setCookie(ApiCookieEnum.AFFILIATE, affiliate.id.toString(), {
       httpOnly: FrameworkApplicationVariable.FRAMEWORK_COOKIES_CONFIG_HTTP_ONLY,
@@ -46,7 +51,7 @@ export class GetPublicAffiliateCustomerUseCase {
       path: '/',
     });
 
-    return GetPublicAffiliateCustomerResponseDto.build({
+    const response = GetPublicAffiliateCustomerResponseDto.build({
       id: affiliate.id,
       paymentPlanDiscountPercentage: affiliate.paymentPlanDiscountPercentage,
       paymentPlanDiscountValidUntil: affiliate.paymentPlanDiscountValidUntil,
@@ -54,5 +59,11 @@ export class GetPublicAffiliateCustomerUseCase {
         affiliate.paymentPlanDiscountRedemptionLimit,
       paymentPlanIds: linkedPlans.map((p) => p.paymentPlanId),
     });
+
+    if (customer !== null) {
+      response.affiliateName = customer.name;
+    }
+
+    return response;
   }
 }
