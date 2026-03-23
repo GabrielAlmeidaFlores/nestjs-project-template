@@ -38,6 +38,16 @@ export class SendGridService implements EmailGateway {
       from: EmailApplicationVariable.EMAIL_SENDER,
       subject: props.subject,
       html: emailTemplate,
+      ...(props.attachments && props.attachments.length > 0
+        ? {
+            attachments: props.attachments.map((attachment) => ({
+              filename: attachment.filename,
+              contentType: attachment.contentType,
+              content: attachment.content.toString('base64'),
+              disposition: 'attachment',
+            })),
+          }
+        : {}),
     });
   }
 

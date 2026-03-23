@@ -64,6 +64,8 @@ import { GetCustomerWithCustomerAddressRelationQueryResultAutoMapperProfile } fr
 import { GetCustomerWithOrganizationForListQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer/get-customer-with-organization-for-list-query-result.auto-mapper.profile';
 import { CustomerAddressEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/customer-address-entity.auto-mapper.profile';
 import { GetCustomerAddressQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-address/get-customer-query-result.auto-mapper.profile';
+import { CustomerEmailSentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-email-sent/customer-email-sent-entity.auto-mapper.profile';
+import { CustomerEmailSentAttachmentEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-email-sent-attachment/customer-email-sent-attachment-entity.auto-mapper.profile';
 import { CustomerTermsEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/customer-terms-entity.auto-mapper.profile';
 import { GetCustomerTermsQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms/get-customer-terms-query-result.auto-mapper.profile';
 import { CustomerTermsAcceptanceEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/customer-terms-acceptance/customer-terms-acceptance-entity.auto-mapper.profile';
@@ -552,6 +554,8 @@ import { GetTutorialQueryResultAutoMapperProfile } from '@lib/mapper/implementat
     GetRuralTimelineAnalysisLegalProceedingQueryResultAutoMapperProfile,
     RuralTimelineAnalysisLegalProceedingEntityAutoMapperProfile,
     GetRuralTimelineAnalysisWithRelationsQueryResultAutoMapperProfile,
+    CustomerEmailSentEntityAutoMapperProfile,
+    CustomerEmailSentAttachmentEntityAutoMapperProfile,
     TutorialEntityAutoMapperProfile,
     GetTutorialQueryResultAutoMapperProfile,
   ],
