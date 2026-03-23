@@ -3,6 +3,7 @@ import { PaymentPlanId } from '@module/customer/payment-plan/domain/schema/entit
 import { ResponseDto } from '@shared/api/util/decorator/class/dto-specification/response-dto.decorator';
 import { ResponseDtoDateProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-date-property/response-dto-date-property.decorator';
 import { ResponseDtoNumberProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-number-property/response-dto-number-property.decorator';
+import { ResponseDtoStringProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-string-property/response-dto-string-property.decorator';
 import { ResponseDtoValueObjectProperty } from '@shared/api/util/decorator/property/dto-property/response/response-dto-value-object-property/response-dto-value-object-property.decorator';
 import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-dto.object';
 
@@ -10,6 +11,9 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 export class GetPublicAffiliateCustomerResponseDto extends BaseBuildableDtoObject {
   @ResponseDtoValueObjectProperty(AffiliateCustomerId)
   public id: AffiliateCustomerId;
+
+  @ResponseDtoStringProperty({ required: false })
+  public affiliateName?: string;
 
   @ResponseDtoNumberProperty()
   public paymentPlanDiscountPercentage: number;
