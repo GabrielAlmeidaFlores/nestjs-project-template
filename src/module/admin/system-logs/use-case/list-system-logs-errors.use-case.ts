@@ -7,7 +7,7 @@ import { ListSystemLogsRequestDto } from '@module/admin/system-logs/dto/request/
 import { ListSystemLogsResponseDto } from '@module/admin/system-logs/dto/response/list-system-logs.response.dto';
 import { SystemLogItemResponseDto } from '@module/admin/system-logs/dto/response/system-log-item.response.dto';
 
-import type { SystemLogListFiltersType } from '@module/admin/system-logs/domain/repository/system-logs/query/model/system-log-list.filters';
+import type { SystemLogListFiltersType } from '@module/admin/system-logs/domain/repository/system-logs/query/type/system-log-list.filters';
 
 @Injectable()
 export class ListSystemLogsErrorsUseCase {
