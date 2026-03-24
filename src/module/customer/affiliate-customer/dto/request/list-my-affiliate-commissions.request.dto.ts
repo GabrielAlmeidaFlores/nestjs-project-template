@@ -6,10 +6,10 @@ import { BaseBuildableDtoObject } from '@shared/api/util/object/base-buildable-d
 @RequestDto()
 export class ListMyAffiliateCommissionsRequestDto extends BaseBuildableDtoObject {
   @RequestDtoDateProperty({ required: false })
-  public from?: Date;
+  public startDate?: Date;
 
   @RequestDtoDateProperty({ required: false })
-  public to?: Date;
+  public endDate?: Date;
 
   @RequestDtoStringProperty({ required: false })
   public searchBy?: string;
