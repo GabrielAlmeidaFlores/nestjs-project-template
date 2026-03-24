@@ -3,16 +3,26 @@ import { Body, HttpStatus, Param, Query, RequestMethod } from '@nestjs/common';
 import { CreateAffiliateCustomerRequestDto } from '@module/admin/affiliate-customer/dto/request/create-affiliate-customer.request.dto';
 import { ListAffiliateCustomersRequestDto } from '@module/admin/affiliate-customer/dto/request/list-affiliate-customers.request.dto';
 import { UpdateAffiliateCustomerRequestDto } from '@module/admin/affiliate-customer/dto/request/update-affiliate-customer.request.dto';
+import { UpsertAffiliateCustomerConfigRequestDto } from '@module/admin/affiliate-customer/dto/request/upsert-affiliate-customer-config.request.dto';
+import { AffiliateCustomerConfigItemResponseDto } from '@module/admin/affiliate-customer/dto/response/affiliate-customer-config-item.response.dto';
+import { GetAffiliateCustomerSummaryResponseDto } from '@module/admin/affiliate-customer/dto/response/get-affiliate-customer-summary.response.dto';
 import { GetAffiliateCustomerResponseDto } from '@module/admin/affiliate-customer/dto/response/get-affiliate-customer.response.dto';
+import { ListAffiliateCommissionsResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-commissions.response.dto';
+import { ListAffiliateCustomerConfigsResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-customer-configs.response.dto';
 import { ListAffiliateCustomersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-customers.response.dto';
 import { ListAffiliateTransfersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-transfers.response.dto';
 import { CreateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/create-affiliate-customer.use-case';
 import { DeleteAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/delete-affiliate-customer.use-case';
+import { GetAffiliateCustomerSummaryUseCase } from '@module/admin/affiliate-customer/use-case/get-affiliate-customer-summary.use-case';
 import { GetAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/get-affiliate-customer.use-case';
+import { ListAffiliateCommissionsUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-commissions.use-case';
+import { ListAffiliateCustomerConfigsUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-customer-configs.use-case';
 import { ListAffiliateCustomersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-customers.use-case';
 import { ListAffiliateTransfersUseCase } from '@module/admin/affiliate-customer/use-case/list-affiliate-transfers.use-case';
 import { UpdateAffiliateCustomerUseCase } from '@module/admin/affiliate-customer/use-case/update-affiliate-customer.use-case';
+import { UpsertAffiliateCustomerConfigUseCase } from '@module/admin/affiliate-customer/use-case/upsert-affiliate-customer-config.use-case';
 import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
+import { AffiliateCustomerConfigConfigEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer-config/enum/affiliate-customer-config-config.enum';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
 import { AdminControllerRoute } from '@shared/api/util/decorator/class/controller-route/admin-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -30,6 +40,10 @@ export class AffiliateCustomerController {
     private readonly updateAffiliateCustomerUseCase: UpdateAffiliateCustomerUseCase,
     private readonly deleteAffiliateCustomerUseCase: DeleteAffiliateCustomerUseCase,
     private readonly listAffiliateTransfersUseCase: ListAffiliateTransfersUseCase,
+    private readonly listAffiliateCommissionsUseCase: ListAffiliateCommissionsUseCase,
+    private readonly getAffiliateCustomerSummaryUseCase: GetAffiliateCustomerSummaryUseCase,
+    private readonly listAffiliateCustomerConfigsUseCase: ListAffiliateCustomerConfigsUseCase,
+    private readonly upsertAffiliateCustomerConfigUseCase: UpsertAffiliateCustomerConfigUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -165,5 +179,91 @@ export class AffiliateCustomerController {
     affiliateCustomerId: AffiliateCustomerId,
   ): Promise<ListAffiliateTransfersResponseDto> {
     return this.listAffiliateTransfersUseCase.execute(affiliateCustomerId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar comissões geradas pelo afiliado',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: ':affiliateCustomerId/commissions',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Comissões do afiliado retornadas com sucesso.',
+      type: ListAffiliateCommissionsResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listAffiliateCommissions(
+    @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<ListAffiliateCommissionsResponseDto> {
+    return this.listAffiliateCommissionsUseCase.execute(affiliateCustomerId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Obter resumo financeiro do afiliado',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: ':affiliateCustomerId/summary',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Resumo financeiro do afiliado retornado com sucesso.',
+      type: GetAffiliateCustomerSummaryResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async getAffiliateCustomerSummary(
+    @Param('affiliateCustomerId', new ParseValueObjectPipe(AffiliateCustomerId))
+    affiliateCustomerId: AffiliateCustomerId,
+  ): Promise<GetAffiliateCustomerSummaryResponseDto> {
+    return this.getAffiliateCustomerSummaryUseCase.execute(affiliateCustomerId);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar configurações de afiliados',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'config',
+      method: RequestMethod.GET,
+    },
+    tag: ['affiliate-customer-config'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Configurações de afiliados retornadas com sucesso.',
+      type: ListAffiliateCustomerConfigsResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async listAffiliateCustomerConfigs(): Promise<ListAffiliateCustomerConfigsResponseDto> {
+    return this.listAffiliateCustomerConfigsUseCase.execute();
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Criar ou atualizar configuração de afiliados',
+    userLevel: [UserLevelEnum.ADMIN],
+    http: {
+      path: 'config/:config',
+      method: RequestMethod.PUT,
+      type: UpsertAffiliateCustomerConfigRequestDto,
+    },
+    tag: ['affiliate-customer-config'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Configuração de afiliados salva com sucesso.',
+      type: AffiliateCustomerConfigItemResponseDto,
+    },
+    guard: [AuthGuard],
+  })
+  public async upsertAffiliateCustomerConfig(
+    @Param('config') config: AffiliateCustomerConfigConfigEnum,
+    @Body() dto: UpsertAffiliateCustomerConfigRequestDto,
+  ): Promise<AffiliateCustomerConfigItemResponseDto> {
+    return this.upsertAffiliateCustomerConfigUseCase.execute(config, dto);
   }
 }

@@ -294,6 +294,10 @@ export class AsaasService extends PaymentGateway {
         operationType: 'PIX',
       };
 
+      if (props.scheduleDate !== undefined) {
+        data['scheduleDate'] = props.scheduleDate;
+      }
+
       if (props.description !== undefined) {
         data['description'] = props.description;
       }

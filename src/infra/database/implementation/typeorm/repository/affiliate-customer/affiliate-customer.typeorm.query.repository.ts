@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 
 import { ListDataOutputModel } from '@core/domain/repository/base/query/model/output/list-data.output.model';
 import { BaseTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/base/base.typeorm.query.repository';
 import { AffiliateCustomerTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/affiliate-customer.typeorm.entity';
+import { CryptographyTransformer } from '@infra/database/implementation/typeorm/schema/transformer/cryptography.transformer';
 import { MapperGateway } from '@lib/mapper/mapper.gateway';
 import { CustomerId } from '@module/customer/account/domain/schema/entity/customer/value-object/customer-id/customer-id.value-object';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
@@ -32,7 +33,7 @@ export class AffiliateCustomerTypeormQueryRepository
   ): Promise<GetAffiliateCustomerQueryResult | null> {
     const data = await this.findOne({
       where: { id: id.toString() },
-      relations: { customer: true },
+      relations: { customer: { authIdentity: true } },
     });
 
     if (!data) {
@@ -53,7 +54,7 @@ export class AffiliateCustomerTypeormQueryRepository
       where: {
         customer: { id: customerId.toString() },
       },
-      relations: { customer: true },
+      relations: { customer: { authIdentity: true } },
     });
 
     if (!data) {
@@ -68,7 +69,9 @@ export class AffiliateCustomerTypeormQueryRepository
   }
 
   public async listAll(): Promise<GetAffiliateCustomerQueryResult[]> {
-    const data = await this.find({ relations: { customer: true } });
+    const data = await this.find({
+      relations: { customer: { authIdentity: true } },
+    });
 
     return this.mapperGateway.mapArray(
       data,
@@ -80,18 +83,59 @@ export class AffiliateCustomerTypeormQueryRepository
   public async listWithPagination(
     param: ListAffiliateCustomersQueryParam,
   ): Promise<ListDataOutputModel<GetAffiliateCustomerQueryResult>> {
-    const result = await this.list(param, { relations: { customer: true } });
+    const queryBuilder = this.repository
+      .createQueryBuilder('affiliateCustomer')
+      .leftJoinAndSelect('affiliateCustomer.customer', 'customer')
+      .leftJoinAndSelect('customer.authIdentity', 'authIdentity');
+
+    if (param.searchBy !== null && param.searchBy.trim() !== '') {
+      const searchTerm = `%${param.searchBy.trim().toLowerCase()}%`;
+      const encryptedSearchTerm = CryptographyTransformer.to(
+        param.searchBy.trim(),
+      );
+
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where('LOWER(authIdentity.email) LIKE :searchTerm', {
+            searchTerm,
+          });
+
+          if (encryptedSearchTerm !== undefined) {
+            qb.orWhere('authIdentity.federal_document = :encryptedSearchTerm', {
+              encryptedSearchTerm,
+            });
+          }
+        }),
+      );
+    }
+
+    const maxItemsPerQuery = 100;
+    const limit = Math.min(Math.max(param.limit, 1), maxItemsPerQuery);
+    const page = Math.max(param.page, 1);
+    const skip = (page - 1) * limit;
+
+    const sortField = param.sortField ?? '-createdAt';
+    const isDescending = sortField.startsWith('-');
+    const fieldName = isDescending ? sortField.substring(1) : sortField;
+    const sortDirection = isDescending ? ('DESC' as const) : ('ASC' as const);
+
+    queryBuilder
+      .orderBy(`affiliateCustomer.${fieldName}`, sortDirection)
+      .skip(skip)
+      .take(limit);
+
+    const [data, totalItems] = await queryBuilder.getManyAndCount();
 
     const resource = this.mapperGateway.mapArray(
-      result.resource,
+      data,
       AffiliateCustomerTypeormEntity,
       GetAffiliateCustomerQueryResult,
     );
 
     return new ListDataOutputModel({
-      page: result.page,
-      limit: result.limit,
-      totalItems: result.totalItems,
+      page,
+      limit,
+      totalItems,
       resource,
     });
   }
