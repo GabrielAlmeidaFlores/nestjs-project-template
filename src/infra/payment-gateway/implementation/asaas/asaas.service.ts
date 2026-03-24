@@ -271,10 +271,38 @@ export class AsaasService extends PaymentGateway {
       PaymentGatewayApplicationVariable.BANK_ACCESS_TOKEN.includes('hml');
 
     if (isHmlEnvironment) {
+      const evpKey = new Guid().toString();
+
+      const hmlData: Record<string, unknown> = {
+        value: props.value.toNumber(),
+        pixAddressKey: evpKey,
+        pixAddressKeyType: 'EVP',
+        operationType: 'PIX',
+      };
+
+      if (props.scheduleDate !== undefined) {
+        hmlData['scheduleDate'] = props.scheduleDate;
+      }
+
+      if (props.description !== undefined) {
+        hmlData['description'] = props.description;
+      }
+
+      if (props.externalReference !== undefined) {
+        hmlData['externalReference'] = props.externalReference;
+      }
+
+      const hmlResponse = await this.makeRequest<
+        Record<string, unknown>,
+        { id: string; value: number; status: TransferStatusEnum }
+      >('transfers', 'post', hmlData);
+
       return CreateTransferOutputModel.build({
-        id: new Guid().toString(),
-        value: props.value,
-        status: TransferStatusEnum.PENDING,
+        id: hmlResponse.id,
+        value: new DecimalValue(hmlResponse.value),
+        status: hmlResponse.status,
+        pixAddressKey: evpKey,
+        pixAddressKeyType: PixAddressKeyTypeEnum.RANDOM,
       });
     }
 
@@ -315,6 +343,8 @@ export class AsaasService extends PaymentGateway {
         id: response.id,
         value: new DecimalValue(response.value),
         status: response.status,
+        pixAddressKey: props.pixAddressKey,
+        pixAddressKeyType: props.pixAddressKeyType,
       });
     } catch (error) {
       this.handleAsaasApiError(
