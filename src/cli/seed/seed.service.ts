@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { SeederInterface } from '@cli/seed/interface/seeder.interface';
 import { AdminSeeder } from '@cli/seed/seeder/admin.seeder';
+import { AffiliateCustomerConfigSeeder } from '@cli/seed/seeder/affiliate-customer-config.seeder';
 import { CidTenSeeder } from '@cli/seed/seeder/cid-ten.seeder';
 import { CustomerTermsSeeder } from '@cli/seed/seeder/customer-terms.seeder';
 import { PaymentPlanPaidResourceIaConfigSeeder } from '@cli/seed/seeder/payment-plan-paid-resource-ia-config.seeder';
@@ -19,6 +20,7 @@ export class SeedService {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     private readonly logger: Logger,
     private readonly adminSeeder: AdminSeeder,
+    private readonly affiliateCustomerConfigSeeder: AffiliateCustomerConfigSeeder,
     private readonly cidTenSeeder: CidTenSeeder,
     private readonly customerTermsSeeder: CustomerTermsSeeder,
     private readonly paymentPlanPaidResourceSeeder: PaymentPlanPaidResourceSeeder,
@@ -29,6 +31,7 @@ export class SeedService {
   public async seed(): Promise<void> {
     const seeders: Array<SeederInterface> = [
       this.adminSeeder,
+      this.affiliateCustomerConfigSeeder,
       this.customerTermsSeeder,
       this.paymentPlanPaidResourceSeeder,
       this.paymentPlanPaidResourceIaConfigSeeder,

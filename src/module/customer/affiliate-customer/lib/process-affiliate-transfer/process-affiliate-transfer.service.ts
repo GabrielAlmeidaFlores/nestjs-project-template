@@ -8,8 +8,10 @@ import { PaymentGateway } from '@infra/payment-gateway/payment-gateway.gateway';
 import { AffiliateBankTransferCommandRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/command/affiliate-bank-transfer.command.repository.gateway';
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
+import { AffiliateCustomerConfigQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer-config/query/affiliate-customer-config.query.repository.gateway';
 import { AffiliateBankTransferEntity } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-bank-transfer/affiliate-bank-transfer.entity';
 import { PixAddressKeyTypeEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/enum/pix-address-key-type.enum';
+import { AffiliateCustomerConfigConfigEnum } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer-config/enum/affiliate-customer-config-config.enum';
 import { ProcessAffiliateTransferGateway } from '@module/customer/affiliate-customer/lib/process-affiliate-transfer/process-affiliate-transfer.gateway';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
 import { OrganizationPaymentPlanId } from '@module/customer/payment-plan/domain/schema/entity/organization-payment-plan/value-object/organization-payment-plan-id/organization-payment-plan-id.value-object';
@@ -52,6 +54,8 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
     private readonly transactionRepo: BaseTransactionRepositoryGateway,
     @Inject(PaymentGateway)
     private readonly paymentGateway: PaymentGateway,
+    @Inject(AffiliateCustomerConfigQueryRepositoryGateway)
+    private readonly configQueryRepo: AffiliateCustomerConfigQueryRepositoryGateway,
   ) {
     this.logger = new Logger(ProcessAffiliateTransferService.name);
   }
@@ -138,6 +142,8 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
 
       await createTransaction.commit();
 
+      const scheduleDate = await this.resolveScheduleDate();
+
       const transferResult = await this.paymentGateway.transfer(
         CreateTransferInputModel.build({
           value: commissionAmount,
@@ -146,6 +152,7 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
             DOMAIN_TO_GATEWAY_PIX_KEY_TYPE_MAP[affiliate.pixAddressKeyType],
           description: 'Comissão de afiliado',
           externalReference: bankTransfer.id.toString(),
+          ...(scheduleDate !== undefined && { scheduleDate }),
         }),
       );
 
@@ -168,5 +175,54 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
     } catch (error) {
       this.logger.error('Failed to process affiliate transfer', error);
     }
+  }
+
+  private async resolveScheduleDate(): Promise<string | undefined> {
+    const config = await this.configQueryRepo.findOneByConfig(
+      AffiliateCustomerConfigConfigEnum.TRANSFER_DAY_OF_MONTH,
+    );
+
+    if (config === null) {
+      return undefined;
+    }
+
+    const configuredDay = parseInt(config.value, 10);
+
+    if (isNaN(configuredDay)) {
+      return undefined;
+    }
+
+    return this.nextOccurrenceOfDay(configuredDay);
+  }
+
+  private nextOccurrenceOfDay(day: number): string {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    const year = tomorrow.getFullYear();
+    const month = tomorrow.getMonth();
+
+    const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
+    const targetDayCurrentMonth = Math.min(day, daysInCurrentMonth);
+
+    if (tomorrow.getDate() <= targetDayCurrentMonth) {
+      return this.formatDate(year, month, targetDayCurrentMonth);
+    }
+
+    const nextMonthDate = new Date(year, month + 1, 1);
+    const nextMonth = nextMonthDate.getMonth();
+    const nextYear = nextMonthDate.getFullYear();
+    const daysInNextMonth = new Date(nextYear, nextMonth + 1, 0).getDate();
+    const targetDayNextMonth = Math.min(day, daysInNextMonth);
+
+    return this.formatDate(nextYear, nextMonth, targetDayNextMonth);
+  }
+
+  private formatDate(year: number, month: number, day: number): string {
+    const mm = String(month + 1).padStart(2, '0');
+    const dd = String(day).padStart(2, '0');
+
+    return `${year}-${mm}-${dd}`;
   }
 }

@@ -21,6 +21,7 @@ import { AffiliateBankTransferEntityAutoMapperProfile } from '@lib/mapper/implem
 import { GetAffiliateBankTransferQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-bank-transfer/get-affiliate-bank-transfer-query-result.auto-mapper.profile';
 import { AffiliateCustomerEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer/affiliate-customer-entity.auto-mapper.profile';
 import { GetAffiliateCustomerQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer/get-affiliate-customer-query-result.auto-mapper.profile';
+import { AffiliateCustomerConfigAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer-config/affiliate-customer-config.auto-mapper.profile';
 import { AffiliateCustomerPaymentPlanEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer-payment-plan/affiliate-customer-payment-plan-entity.auto-mapper.profile';
 import { GetAffiliateCustomerPaymentPlanQueryResultAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/affiliate-customer-payment-plan/get-affiliate-customer-payment-plan-query-result.auto-mapper.profile';
 import { AnalysisToolClientEntityAutoMapperProfile } from '@lib/mapper/implementation/auto-mapper/profile/database/typeorm/analysis-tool-client/analysis-tool-client-entity.auto-mapper.profile';
@@ -315,6 +316,7 @@ import { TutorialEntityAutoMapperProfile } from '@lib/mapper/implementation/auto
     AuthIdentityEntityAutoMapperProfile,
     AffiliateCustomerEntityAutoMapperProfile,
     GetAffiliateCustomerQueryResultAutoMapperProfile,
+    AffiliateCustomerConfigAutoMapperProfile,
     AffiliateBankTransferEntityAutoMapperProfile,
     GetAffiliateBankTransferQueryResultAutoMapperProfile,
     AffiliateCustomerPaymentPlanEntityAutoMapperProfile,
