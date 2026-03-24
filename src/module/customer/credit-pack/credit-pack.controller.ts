@@ -7,6 +7,8 @@ import { PurchaseCreditPackResponseDto } from '@module/customer/credit-pack/dto/
 import { ListCreditPacksUseCase } from '@module/customer/credit-pack/use-case/list-credit-packs.use-case';
 import { PayCreditPackBillingUseCase } from '@module/customer/credit-pack/use-case/pay-credit-pack-billing.use-case';
 import { PurchaseCreditPackUseCase } from '@module/customer/credit-pack/use-case/purchase-credit-pack.use-case';
+import { GetBankPaymentResponseDto } from '@module/customer/payment-plan/dto/response/get-bank-payment.response.dto';
+import { GetBankPaymentDetailsUseCase } from '@module/customer/payment-plan/use-case/get-bank-payment-details.use-case';
 import { PayBillingRequestDto } from '@module/customer/payment-plan/dto/request/pay-billing.request.dto';
 import { BankPaymentId } from '@module/generic/bank/domain/schema/entity/bank-payment/value-object/bank-payment-id/bank-payment-id.value-object';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
@@ -30,6 +32,7 @@ export class CreditPackController {
     private readonly listCreditPacksUseCase: ListCreditPacksUseCase,
     private readonly purchaseCreditPackUseCase: PurchaseCreditPackUseCase,
     private readonly payCreditPackBillingUseCase: PayCreditPackBillingUseCase,
+    private readonly getBankPaymentDetailsUseCase: GetBankPaymentDetailsUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -108,5 +111,27 @@ export class CreditPackController {
       bankPaymentId,
       dto,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Buscar status de pagamento de cobrança de pacote de créditos',
+    userLevel: [UserLevelEnum.CUSTOMER, UserLevelEnum.ADMIN],
+    http: {
+      path: 'bank-payment/:bankPaymentId',
+      method: RequestMethod.GET,
+    },
+    tag: ['pacote-de-creditos'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Detalhes do pagamento bancário.',
+      type: GetBankPaymentResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async getCreditPackPaymentStatus(
+    @Param('bankPaymentId', new ParseValueObjectPipe(BankPaymentId))
+    bankPaymentId: BankPaymentId,
+  ): Promise<GetBankPaymentResponseDto> {
+    return this.getBankPaymentDetailsUseCase.execute(bankPaymentId);
   }
 }
