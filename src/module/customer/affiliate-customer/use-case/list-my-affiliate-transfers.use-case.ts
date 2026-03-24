@@ -1,20 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ListAffiliateTransfersResponseDto } from '@module/admin/affiliate-customer/dto/response/list-affiliate-transfers.response.dto';
-import { AffiliateCustomerNotFoundError } from '@module/admin/affiliate-customer/error/affiliate-customer-not-found.error';
+import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/repository/customer/query/customer.query.repository.gateway';
+import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
 import { ListAffiliateTransfersQueryParam } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/param/list-affiliate-transfers.query.param';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
-import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/schema/entity/affiliate-customer/value-object/affiliate-customer-id/affiliate-customer-id.value-object';
 import { AffiliateBankTransferItemResponseDto } from '@module/customer/affiliate-customer/dto/response/affiliate-bank-transfer-item.response.dto';
+import { ListMyAffiliateTransfersResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-transfers.response.dto';
+import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
+import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class ListAffiliateTransfersUseCase {
-  protected readonly _type = ListAffiliateTransfersUseCase.name;
+export class ListMyAffiliateTransfersUseCase {
+  protected readonly _type = ListMyAffiliateTransfersUseCase.name;
 
   public constructor(
+    @Inject(CustomerQueryRepositoryGateway)
+    private readonly customerQueryRepository: CustomerQueryRepositoryGateway,
     @Inject(AffiliateCustomerQueryRepositoryGateway)
     private readonly affiliateCustomerQueryRepository: AffiliateCustomerQueryRepositoryGateway,
     @Inject(OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway)
@@ -26,12 +30,18 @@ export class ListAffiliateTransfersUseCase {
   ) {}
 
   public async execute(
-    affiliateCustomerId: AffiliateCustomerId,
+    sessionData: SessionDataModel,
     filters: ListAffiliateTransfersQueryParam = new ListAffiliateTransfersQueryParam(),
-  ): Promise<ListAffiliateTransfersResponseDto> {
+  ): Promise<ListMyAffiliateTransfersResponseDto> {
+    const customer =
+      await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
+        sessionData.authIdentityId,
+        CustomerNotFoundError,
+      );
+
     const affiliate =
-      await this.affiliateCustomerQueryRepository.findOneById(
-        affiliateCustomerId,
+      await this.affiliateCustomerQueryRepository.findOneByCustomerId(
+        customer.id,
       );
 
     if (!affiliate) {
@@ -99,6 +109,6 @@ export class ListAffiliateTransfersUseCase {
       ];
     });
 
-    return ListAffiliateTransfersResponseDto.build({ transfers });
+    return ListMyAffiliateTransfersResponseDto.build({ transfers });
   }
 }
