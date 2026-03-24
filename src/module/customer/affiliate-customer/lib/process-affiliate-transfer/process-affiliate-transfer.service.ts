@@ -33,11 +33,20 @@ const DOMAIN_TO_GATEWAY_PIX_KEY_TYPE_MAP: Record<
   [PixAddressKeyTypeEnum.RANDOM]: GatewayPixAddressKeyTypeEnum.RANDOM,
 };
 
+const GATEWAY_TO_DOMAIN_PIX_KEY_TYPE_MAP: Record<
+  GatewayPixAddressKeyTypeEnum,
+  PixAddressKeyTypeEnum
+> = {
+  [GatewayPixAddressKeyTypeEnum.CPF]: PixAddressKeyTypeEnum.CPF,
+  [GatewayPixAddressKeyTypeEnum.CNPJ]: PixAddressKeyTypeEnum.CNPJ,
+  [GatewayPixAddressKeyTypeEnum.EMAIL]: PixAddressKeyTypeEnum.EMAIL,
+  [GatewayPixAddressKeyTypeEnum.PHONE]: PixAddressKeyTypeEnum.PHONE,
+  [GatewayPixAddressKeyTypeEnum.RANDOM]: PixAddressKeyTypeEnum.RANDOM,
+};
+
 @Injectable()
 export class ProcessAffiliateTransferService implements ProcessAffiliateTransferGateway {
   protected readonly _type = ProcessAffiliateTransferService.name;
-
-  private readonly logger: Logger;
 
   public constructor(
     @Inject(OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway)
@@ -56,125 +65,121 @@ export class ProcessAffiliateTransferService implements ProcessAffiliateTransfer
     private readonly paymentGateway: PaymentGateway,
     @Inject(AffiliateCustomerConfigQueryRepositoryGateway)
     private readonly configQueryRepo: AffiliateCustomerConfigQueryRepositoryGateway,
-  ) {
-    this.logger = new Logger(ProcessAffiliateTransferService.name);
-  }
+  ) {}
 
   public async process(
     bankPaymentId: BankPaymentId,
     organizationPaymentPlanId: OrganizationPaymentPlanId,
     paymentAmount: DecimalValue,
   ): Promise<void> {
-    try {
-      // Idempotência: garante que só existe uma transferência por pagamento
-      const existingTransfer =
-        await this.affiliateBankTransferQueryRepo.findOneByBankPaymentId(
-          bankPaymentId,
-        );
-
-      if (existingTransfer !== null) {
-        return;
-      }
-
-      const commission =
-        await this.commissionQueryRepo.findOneByOrganizationPaymentPlanId(
-          organizationPaymentPlanId,
-        );
-
-      if (commission === null) {
-        return;
-      }
-
-      const affiliate = await this.affiliateQueryRepo.findOneById(
-        commission.affiliateCustomer,
+    const existingTransfer =
+      await this.affiliateBankTransferQueryRepo.findOneByBankPaymentId(
+        bankPaymentId,
       );
 
-      if (affiliate === null) {
-        return;
-      }
-
-      if (!affiliate.isActive) {
-        return;
-      }
-
-      if (
-        affiliate.pixAddressKey === null ||
-        affiliate.pixAddressKeyType === null
-      ) {
-        return;
-      }
-
-      const commissionAmount = new DecimalValue(
-        (
-          (paymentAmount.toNumber() * commission.commissionPercentage) /
-          HUNDRED_PERCENT
-        ).toFixed(2),
-      );
-
-      const now = new Date();
-
-      const bankTransfer = new BankTransferEntity({
-        bankExternalId: null,
-        amount: commissionAmount,
-        status: TransferStatusEnum.PENDING,
-        pixAddressKey: affiliate.pixAddressKey.toString(),
-        pixAddressKeyType: affiliate.pixAddressKeyType,
-        transferDate: null,
-        description: 'Comissão de afiliado',
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      const affiliateBankTransfer = new AffiliateBankTransferEntity({
-        affiliatePlanCommission: commission.id,
-        bankPayment: bankPaymentId,
-        bankTransfer: bankTransfer.id,
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      const createTransaction = await this.transactionRepo.execute([
-        this.bankTransferCommandRepo.createBankTransfer(bankTransfer),
-        this.affiliateBankTransferCommandRepo.createAffiliateBankTransfer(
-          affiliateBankTransfer,
-        ),
-      ]);
-
-      await createTransaction.commit();
-
-      const scheduleDate = await this.resolveScheduleDate();
-
-      const transferResult = await this.paymentGateway.transfer(
-        CreateTransferInputModel.build({
-          value: commissionAmount,
-          pixAddressKey: affiliate.pixAddressKey.toString(),
-          pixAddressKeyType:
-            DOMAIN_TO_GATEWAY_PIX_KEY_TYPE_MAP[affiliate.pixAddressKeyType],
-          description: 'Comissão de afiliado',
-          externalReference: bankTransfer.id.toString(),
-          ...(scheduleDate !== undefined && { scheduleDate }),
-        }),
-      );
-
-      const updatedBankTransfer = new BankTransferEntity({
-        ...bankTransfer,
-        bankExternalId: transferResult.id,
-        status: transferResult.status,
-        transferDate: new Date(),
-        updatedAt: new Date(),
-      });
-
-      const updateTransaction = await this.transactionRepo.execute([
-        this.bankTransferCommandRepo.updateBankTransfer(
-          bankTransfer.id,
-          updatedBankTransfer,
-        ),
-      ]);
-
-      await updateTransaction.commit();
-    } catch (error) {
-      this.logger.error('Failed to process affiliate transfer', error);
+    if (existingTransfer !== null) {
+      return;
     }
+
+    const commission =
+      await this.commissionQueryRepo.findOneByOrganizationPaymentPlanId(
+        organizationPaymentPlanId,
+      );
+
+    if (commission === null) {
+      return;
+    }
+
+    const affiliate = await this.affiliateQueryRepo.findOneById(
+      commission.affiliateCustomer,
+    );
+
+    if (affiliate === null) {
+      return;
+    }
+
+    if (!affiliate.isActive) {
+      return;
+    }
+
+    if (
+      affiliate.pixAddressKey === null ||
+      affiliate.pixAddressKeyType === null
+    ) {
+      return;
+    }
+
+    const commissionAmount = new DecimalValue(
+      (
+        (paymentAmount.toNumber() * commission.commissionPercentage) /
+        HUNDRED_PERCENT
+      ).toFixed(2),
+    );
+
+    const now = new Date();
+
+    const bankTransfer = new BankTransferEntity({
+      bankExternalId: null,
+      amount: commissionAmount,
+      status: TransferStatusEnum.PENDING,
+      pixAddressKey: affiliate.pixAddressKey.toString(),
+      pixAddressKeyType: affiliate.pixAddressKeyType,
+      transferDate: null,
+      description: 'Comissão de afiliado',
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const affiliateBankTransfer = new AffiliateBankTransferEntity({
+      affiliatePlanCommission: commission.id,
+      bankPayment: bankPaymentId,
+      bankTransfer: bankTransfer.id,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const createTransaction = await this.transactionRepo.execute([
+      this.bankTransferCommandRepo.createBankTransfer(bankTransfer),
+      this.affiliateBankTransferCommandRepo.createAffiliateBankTransfer(
+        affiliateBankTransfer,
+      ),
+    ]);
+
+    await createTransaction.commit();
+
+    const scheduleDate = await this.resolveScheduleDate();
+
+    const transferResult = await this.paymentGateway.transfer(
+      CreateTransferInputModel.build({
+        value: commissionAmount,
+        pixAddressKey: affiliate.pixAddressKey.toString(),
+        pixAddressKeyType:
+          DOMAIN_TO_GATEWAY_PIX_KEY_TYPE_MAP[affiliate.pixAddressKeyType],
+        description: 'Comissão de afiliado',
+        externalReference: bankTransfer.id.toString(),
+        ...(scheduleDate !== undefined && { scheduleDate }),
+      }),
+    );
+
+    const updatedBankTransfer = new BankTransferEntity({
+      ...bankTransfer,
+      bankExternalId: transferResult.id,
+      status: transferResult.status,
+      pixAddressKey: transferResult.pixAddressKey,
+      pixAddressKeyType:
+        GATEWAY_TO_DOMAIN_PIX_KEY_TYPE_MAP[transferResult.pixAddressKeyType],
+      transferDate: new Date(),
+      updatedAt: new Date(),
+    });
+
+    const updateTransaction = await this.transactionRepo.execute([
+      this.bankTransferCommandRepo.updateBankTransfer(
+        bankTransfer.id,
+        updatedBankTransfer,
+      ),
+    ]);
+
+    await updateTransaction.commit();
   }
 
   private async resolveScheduleDate(): Promise<string | undefined> {
