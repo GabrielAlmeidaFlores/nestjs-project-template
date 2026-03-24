@@ -9,8 +9,11 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { SpeechGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/command/speech-generator.command.repository.gateway';
 import { SpeechGeneratorQueryRepositoryGateway } from '@module/customer/analysis-tool/module/speech-generator/domain/repository/speech-generator/query/speech-generator.query.repository.gateway';
@@ -64,6 +67,8 @@ export class UpdateSpeechGeneratorUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -184,8 +189,21 @@ export class UpdateSpeechGeneratorUseCase {
       ),
     );
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: AnalysisToolRecordTypeEnum.SPEECH_GENERATOR,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecord.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecord.id.toString(),
+        transactions,
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
+
     await transaction.commit();
 
     return UpdateSpeechGeneratorResponseDto.build({

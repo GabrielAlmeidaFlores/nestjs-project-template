@@ -8,6 +8,8 @@ import { AnalysisToolRecordId } from '@module/customer/analysis-tool/domain/sche
 import { DeleteAnalysisToolRecordResponseDto } from '@module/customer/analysis-tool/dto/response/delete-analysis-tool-record.response';
 import { AnalysisToolRecordNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-record-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { OrganizationSessionDataModel } from '@shared/api/util/decorator/property/get-organization-session-data/model/generic/organization-session-data.model';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
@@ -24,6 +26,8 @@ export class DeleteAnalysisToolRecordUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -55,8 +59,20 @@ export class DeleteAnalysisToolRecordUseCase {
         organizationMember.id,
       );
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(deleteTransaction);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.DELETED,
+        analysisType: analysisToolRecordResult.type,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecordResult.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecordResult.id.toString(),
+        transactions: [deleteTransaction],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
 

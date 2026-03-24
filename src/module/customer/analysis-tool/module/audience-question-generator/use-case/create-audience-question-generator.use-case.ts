@@ -12,6 +12,8 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { AudienceQuestionGeneratorCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator/command/audience-question-generator.command.repository.gateway';
 import { AudienceQuestionGeneratorBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/audience-question-generator/domain/repository/audience-question-generator-benefit/command/audience-question-generator-benefit.command.repository.gateway';
@@ -51,6 +53,8 @@ export class CreateAudienceQuestionGeneratorUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -191,13 +195,26 @@ export class CreateAudienceQuestionGeneratorUseCase {
         analysisToolRecord,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      audienceQuestionGeneratorTransaction,
-      ...allAudienceQuestionGeneratorDocuments,
-      ...allAudienceQuestionGeneratorBenefits,
-      ...allAudienceQuestionGeneratorLegalProceedings,
-      analysisToolRecordTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.CREATED,
+        analysisType: AnalysisToolRecordTypeEnum.AUDIENCE_QUESTIONS_GENERATOR,
+        organizationMemberId: analysisToolRecord.createdBy.toString(),
+        analysisToolClientId:
+          analysisToolRecord.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecord.id.toString(),
+        transactions: [
+          audienceQuestionGeneratorTransaction,
+          ...allAudienceQuestionGeneratorDocuments,
+          ...allAudienceQuestionGeneratorBenefits,
+          ...allAudienceQuestionGeneratorLegalProceedings,
+          analysisToolRecordTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
   }

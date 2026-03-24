@@ -4,7 +4,10 @@ import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/t
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
 import { RuralTimelineAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/command/rural-timeline-analysis-inss-benefit.command.repository.gateway';
@@ -40,6 +43,8 @@ export class UpdateRuralTimelineAnalysisUseCase {
     private readonly ruralTimelineAnalysisLegalProceedingCommandRepositoryGateway: RuralTimelineAnalysisLegalProceedingCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -58,12 +63,13 @@ export class UpdateRuralTimelineAnalysisUseCase {
       throw new OrganizationMemberNotFoundError();
     }
 
-    await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
-      ruralTimelineAnalysisId,
-      organizationSessionData.organizationId,
-      sessionData.authIdentityId,
-      RuralTimelineAnalysisNotFoundError,
-    );
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRuralTimelineAnalysisIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        ruralTimelineAnalysisId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
+        RuralTimelineAnalysisNotFoundError,
+      );
 
     const existingQueryResult =
       await this.ruralTimelineAnalysisQueryRepositoryGateway.findOneByIdWithRelations(
@@ -131,8 +137,20 @@ export class UpdateRuralTimelineAnalysisUseCase {
       );
     transactions.push(ruralTimelineAnalysisTransaction);
 
-    const transaction =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+        transactions,
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
 

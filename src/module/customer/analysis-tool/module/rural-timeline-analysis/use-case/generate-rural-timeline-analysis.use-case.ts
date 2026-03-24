@@ -8,7 +8,10 @@ import { CnisProcessorGateway } from '@lib/cnis-processor/cnis-processor.gateway
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
 import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
 import { RuralTimelineAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/query/rural-timeline-analysis.query.repository.gateway';
@@ -49,6 +52,8 @@ export class GenerateRuralTimelineAnalysisUseCase {
     private readonly cnisProcessorGateway: CnisProcessorGateway,
     @Inject(CnisAnalyzerGateway)
     private readonly cnisAnalyzerGateway: CnisAnalyzerGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -175,12 +180,25 @@ export class GenerateRuralTimelineAnalysisUseCase {
       deletedAt: null,
     });
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      this.ruralTimelineAnalysisCommandRepositoryGateway.updateRuralTimeline(
-        updatedEntity,
-      ),
-      creditTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.RESULT_ADDED,
+        analysisType: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+        transactions: [
+          this.ruralTimelineAnalysisCommandRepositoryGateway.updateRuralTimeline(
+            updatedEntity,
+          ),
+          creditTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
 

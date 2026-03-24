@@ -3,7 +3,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseTransactionRepositoryGateway } from '@core/domain/repository/base/transaction/base.transaction.repository.gateway';
 import { TransactionType } from '@core/domain/repository/base/transaction/type/transaction.type';
 import { OrganizationMemberQueryRepositoryGateway } from '@module/customer/account/domain/repository/organization-member/query/organization-member.query.repository.gateway';
+import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analysis-tool/domain/repository/analysis-tool-record/query/analysis-tool-record.query.repository.gateway';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { RemunerationDataInputModel } from '@module/customer/analysis-tool/lib/remuneration-calculator/model/input/remuneration-data.input.model';
 import { RemunerationCalculatorGateway } from '@module/customer/analysis-tool/lib/remuneration-calculator/remuneration-calculator.gateway';
 import { RetirementPlanningRppsCommandRepositoryGateway } from '@module/customer/analysis-tool/module/retirement-planning-rpps/domain/repository/retirement-planning-rpps/command/retirement-planning-rpps.command.repository.gateway';
@@ -45,6 +48,10 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
     @Inject(OrganizationMemberQueryRepositoryGateway)
     private readonly organizationMemberQueryRepositoryGateway: OrganizationMemberQueryRepositoryGateway,
+    @Inject(AnalysisToolRecordQueryRepositoryGateway)
+    private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -67,6 +74,14 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
       await this.retirementPlanningRppsQueryRepositoryGateway.findOneByRetirementPlanningIdAndOrganizationIdWithRelationsOrFail(
         retirementPlanningRppsId,
         organizationSessionData.organizationId,
+        RetirementPlanningRppsNotFoundError,
+      );
+
+    const analysisToolRecordQueryResult =
+      await this.analysisToolRecordQueryRepositoryGateway.findWithRelationsByRetirementPlanningRppsIdAndOrganizationIdAndAuthIdentityIdOrFail(
+        retirementPlanningRppsId,
+        organizationSessionData.organizationId,
+        sessionData.authIdentityId,
         RetirementPlanningRppsNotFoundError,
       );
 
@@ -151,8 +166,19 @@ export class UpdateRetirementPlanningRppsRemunerationUseCase {
       ),
     );
 
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: analysisToolRecordQueryResult.type,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+        transactions: transactionOperations,
+      });
+
     const transaction = await this.baseTransactionRepositoryGateway.execute(
-      transactionOperations,
+      transactionsWithActivity,
     );
 
     await transaction.commit();
