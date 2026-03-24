@@ -1,27 +1,50 @@
-import { Body, HttpStatus, Query, RequestMethod, Res } from '@nestjs/common';
+import {
+  Body,
+  HttpStatus,
+  Param,
+  Query,
+  RequestMethod,
+  Res,
+} from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
+import { OrganizationMemberId } from '@module/customer/account/domain/schema/entity/organization-member/value-object/organization-member-id/organization-member-id.value-object';
 import { CustomerSignUpRequestDto } from '@module/customer/account/dto/request/customer-sign-up.request.dto';
+import { FirstAccessInvitedMemberRequestDto } from '@module/customer/account/dto/request/first-access-invited-member.request.dto';
+import { InviteOrganizationMemberRequestDto } from '@module/customer/account/dto/request/invite-organization-member.request.dto';
+import { ListOrganizationCollaboratorsRequestDto } from '@module/customer/account/dto/request/list-organization-collaborators.request.dto';
 import { SetOrganizationForCustomerRequestDto } from '@module/customer/account/dto/request/set-organization-for-customer.request.dto';
 import { UpdateCustomerProfilePictureRequestDto } from '@module/customer/account/dto/request/update-customer-profile-picture.request.dto';
 import { UpdateCustomerRequestDto } from '@module/customer/account/dto/request/update-customer.request.dto';
+import { UpdateOrganizationMemberStatusRequestDto } from '@module/customer/account/dto/request/update-organization-member-status.request.dto';
 import { CustomerSignUpResponseDto } from '@module/customer/account/dto/response/customer-sign-up.response.dto';
 import { CustomerTermsAcceptanceResponseDto } from '@module/customer/account/dto/response/customer-terms-acceptance.response.dto';
+import { FirstAccessInvitedMemberResponseDto } from '@module/customer/account/dto/response/first-access-invited-member.response.dto';
 import { GetAuthenticatedCustomerDataResponseDto } from '@module/customer/account/dto/response/get-authenticated-customer-data.response.dto';
 import { GetCustomerTermsAcceptanceDataResponseDto } from '@module/customer/account/dto/response/get-terms-acceptance-data.response.dto';
 import { ListCustomerOrganizationsResponseDto } from '@module/customer/account/dto/response/list-customer-organizations.response.dto';
+import { ListOrganizationCollaboratorsResponseDto } from '@module/customer/account/dto/response/list-organization-collaborators.response.dto';
 import { SetOrganizationForCustomerResponseDto } from '@module/customer/account/dto/response/set-organization-for-customer.response.dto';
 import { UpdateCustomerProfilePictureResponseDto } from '@module/customer/account/dto/response/update-customer-profile-picture.response.dto';
 import { UpdateCustomerResponseDto } from '@module/customer/account/dto/response/update-customer-response.dto';
+import { UpdateOrganizationMemberStatusResponseDto } from '@module/customer/account/dto/response/update-organization-member-status.response.dto';
+import { ValidateOrganizationInviteResponseDto } from '@module/customer/account/dto/response/validate-organization-invite.response.dto';
 import { ConfirmCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/confirm-customer-terms-acceptance.use-case';
 import { CustomerSignUpUseCase } from '@module/customer/account/use-case/customer-sign-up.use-case';
+import { DeleteOrganizationMemberUseCase } from '@module/customer/account/use-case/delete-organization-member.use-case';
+import { FirstAccessInvitedMemberUseCase } from '@module/customer/account/use-case/first-access-invited-member.use-case';
 import { GetAuthenticatedCustomerDataUseCase } from '@module/customer/account/use-case/get-authenticated-customer-data.use-case';
 import { GetCustomerTermsAcceptanceUseCase } from '@module/customer/account/use-case/get-customer-terms-acceptance.use-case';
+import { InviteOrganizationMemberUseCase } from '@module/customer/account/use-case/invite-organization-member.use-case';
 import { ListCustomerOrganizationsUseCase } from '@module/customer/account/use-case/list-customer-organizations.use-case';
+import { ListOrganizationCollaboratorsUseCase } from '@module/customer/account/use-case/list-organization-collaborators.use-case';
 import { SetOrganizationForCustomerUseCase } from '@module/customer/account/use-case/set-organization-for-customer.use-case';
 import { UpdateCustomerProfilePictureUseCase } from '@module/customer/account/use-case/update-customer-profile-picture.use-case';
 import { UpdateCustomerUseCase } from '@module/customer/account/use-case/update-customer.use-case';
+import { UpdateOrganizationMemberStatusUseCase } from '@module/customer/account/use-case/update-organization-member-status.use-case';
+import { ValidateOrganizationInviteUseCase } from '@module/customer/account/use-case/validate-organization-invite.use-case';
 import { AuthGuard } from '@shared/api/gateway/guard/auth/auth.guard';
+import { OrganizationOwnerGuard } from '@shared/api/gateway/guard/organization-owner/organization-owner.guard';
 import { OrganizationSessionGuard } from '@shared/api/gateway/guard/organization-session/organization-session.guard';
 import { CustomerControllerRoute } from '@shared/api/util/decorator/class/controller-route/customer-controller-route.decorator';
 import { BuildEndpointSpecification } from '@shared/api/util/decorator/method/build-endpoint-specification/build-endpoint-specification.decorator';
@@ -30,6 +53,7 @@ import { OrganizationSessionDataModel } from '@shared/api/util/decorator/propert
 import { GetSessionData } from '@shared/api/util/decorator/property/get-session-data/get-session-data.decorator';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 import { ListDataRequestDto } from '@shared/api/util/dto/request/list-data.request.dto';
+import { ParseValueObjectPipe } from '@shared/api/util/pipe/parse-value-object.pipe';
 import { UserLevelEnum } from '@shared/system/enum/user-level.enum';
 
 @CustomerControllerRoute('account')
@@ -45,6 +69,12 @@ export class AccountController {
     private readonly getAuthenticatedCustomerDataUseCase: GetAuthenticatedCustomerDataUseCase,
     private readonly getCustomerTermsAcceptanceUseCase: GetCustomerTermsAcceptanceUseCase,
     private readonly confirmCustomerTermsAcceptanceUseCase: ConfirmCustomerTermsAcceptanceUseCase,
+    private readonly inviteOrganizationMemberUseCase: InviteOrganizationMemberUseCase,
+    private readonly validateOrganizationInviteUseCase: ValidateOrganizationInviteUseCase,
+    private readonly firstAccessInvitedMemberUseCase: FirstAccessInvitedMemberUseCase,
+    private readonly listOrganizationCollaboratorsUseCase: ListOrganizationCollaboratorsUseCase,
+    private readonly updateOrganizationMemberStatusUseCase: UpdateOrganizationMemberStatusUseCase,
+    private readonly deleteOrganizationMemberUseCase: DeleteOrganizationMemberUseCase,
   ) {}
 
   @BuildEndpointSpecification({
@@ -245,5 +275,164 @@ export class AccountController {
     return await this.confirmCustomerTermsAcceptanceUseCase.execute(
       sessionData,
     );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Convidar colaborador para a organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/collaborator/invite',
+      method: RequestMethod.POST,
+      type: InviteOrganizationMemberRequestDto,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Convite enviado com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+    throttle: {
+      limit: 20,
+      ttlInMinutes: 5,
+    },
+  })
+  public async inviteOrganizationMember(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Body() dto: InviteOrganizationMemberRequestDto,
+  ): Promise<void> {
+    await this.inviteOrganizationMemberUseCase.execute(
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Validar código de convite de organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/invite/:inviteCode/validate',
+      method: RequestMethod.GET,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Convite validado com sucesso.',
+      type: ValidateOrganizationInviteResponseDto,
+    },
+  })
+  public async validateOrganizationInvite(
+    @Param('inviteCode') inviteCode: string,
+  ): Promise<ValidateOrganizationInviteResponseDto> {
+    return await this.validateOrganizationInviteUseCase.execute(inviteCode);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Primeiro acesso de membro convidado',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/invite/first-access',
+      method: RequestMethod.POST,
+      type: FirstAccessInvitedMemberRequestDto,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.CREATED,
+      description: 'Primeiro acesso realizado com sucesso.',
+      type: FirstAccessInvitedMemberResponseDto,
+    },
+    throttle: {
+      limit: 100,
+      ttlInMinutes: 5,
+    },
+  })
+  public async firstAccessInvitedMember(
+    @Res({ passthrough: true }) reply: FastifyReply,
+    @Body() dto: FirstAccessInvitedMemberRequestDto,
+  ): Promise<FirstAccessInvitedMemberResponseDto> {
+    return await this.firstAccessInvitedMemberUseCase.execute(reply, dto);
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Listar colaboradores da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/collaborators',
+      method: RequestMethod.GET,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Colaboradores listados com sucesso.',
+      type: ListOrganizationCollaboratorsResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async listOrganizationCollaborators(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Query() dto: ListOrganizationCollaboratorsRequestDto,
+  ): Promise<ListOrganizationCollaboratorsResponseDto> {
+    return await this.listOrganizationCollaboratorsUseCase.execute(
+      organizationSessionData,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Atualizar status de colaborador da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/collaborator/:organizationMemberId/status',
+      method: RequestMethod.PATCH,
+      type: UpdateOrganizationMemberStatusRequestDto,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.OK,
+      description: 'Status do colaborador atualizado com sucesso.',
+      type: UpdateOrganizationMemberStatusResponseDto,
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async updateOrganizationMemberStatus(
+    @GetOrganizationSessionData()
+    organizationSessionData: OrganizationSessionDataModel,
+    @Param(
+      'organizationMemberId',
+      new ParseValueObjectPipe(OrganizationMemberId),
+    )
+    organizationMemberId: OrganizationMemberId,
+    @Body() dto: UpdateOrganizationMemberStatusRequestDto,
+  ): Promise<UpdateOrganizationMemberStatusResponseDto> {
+    return await this.updateOrganizationMemberStatusUseCase.execute(
+      organizationSessionData,
+      organizationMemberId,
+      dto,
+    );
+  }
+
+  @BuildEndpointSpecification({
+    summary: 'Remover colaborador da organização',
+    userLevel: [UserLevelEnum.CUSTOMER],
+    http: {
+      path: 'organization/collaborator/:organizationMemberId',
+      method: RequestMethod.DELETE,
+    },
+    tag: ['colaboradores'],
+    successResponse: {
+      statusCode: HttpStatus.NO_CONTENT,
+      description: 'Colaborador removido com sucesso.',
+    },
+    guard: [AuthGuard, OrganizationSessionGuard, OrganizationOwnerGuard],
+  })
+  public async deleteOrganizationMember(
+    @Param(
+      'organizationMemberId',
+      new ParseValueObjectPipe(OrganizationMemberId),
+    )
+    organizationMemberId: OrganizationMemberId,
+  ): Promise<void> {
+    await this.deleteOrganizationMemberUseCase.execute(organizationMemberId);
   }
 }

@@ -7,4 +7,5 @@ export interface OrganizationMemberEntityPropsInterface extends BaseEntityPropsI
   organization: OrganizationEntity;
   customer: CustomerEntity;
   owner: boolean;
+  isActive?: boolean | null;
 }
