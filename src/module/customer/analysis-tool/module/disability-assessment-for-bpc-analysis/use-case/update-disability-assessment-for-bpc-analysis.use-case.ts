@@ -11,6 +11,8 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { DisabilityAssessmentForBpcAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/command/disability-assessment-for-bpc-analysis.command.repository.gateway';
 import { DisabilityAssessmentForBpcAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/disability-assessment-for-bpc-analysis/domain/repository/disability-assessment-for-bpc-analysis/query/disability-assessment-for-bpc-analysis.query.repository.gateway';
@@ -66,6 +68,8 @@ export class UpdateDisabilityAssessmentForBpcAnalysisUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(DisabilityAssessmentForBpcAnalysisQueryRepositoryGateway)
     private readonly disabilityAssessmentForBpcAnalysisQueryRepositoryGateway: DisabilityAssessmentForBpcAnalysisQueryRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -218,8 +222,21 @@ export class UpdateDisabilityAssessmentForBpcAnalysisUseCase {
       );
     transactions.push(analysisToolRecordTransaction);
 
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.UPDATED,
+        analysisType: analysisToolRecord.type,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecord.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecord.id.toString(),
+        transactions,
+      });
+
     const executeTransactions =
-      await this.baseTransactionRepositoryGateway.execute(transactions);
+      await this.baseTransactionRepositoryGateway.execute(
+        transactionsWithActivity,
+      );
     await executeTransactions.commit();
 
     return UpdateDisabilityAssessmentForBpcAnalysisResponseDto.build({

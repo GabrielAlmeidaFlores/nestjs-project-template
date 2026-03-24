@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { RetirementPlanningRgpsTimeAcceleratorTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/retirement-planning-rgps-time-accelerator.typeorm.entity';
 import { GetRetirementPlanningRgpsTimeAcceleratorQueryResult } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/repository/retirement-planning-rgps-time-accelerator/query/result/get-retirement-planning-rgps-time-accelerator.query.result';
+import { RetirementPlanningRgpsId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps/value-object/retirement-planning-rgps-id.value-object';
 import { RetirementPlanningRgpsTimeAcceleratorId } from '@module/customer/analysis-tool/module/retirement-planning-rgps/domain/schema/entity/retirement-planning-rgps-time-accelerator/value-object/retirement-planning-rgps-time-accelerator-id.value-object';
 
 @Injectable()
@@ -24,9 +25,14 @@ export class GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfil
     const convertOrmEntityToDomainEntity = (
       source: RetirementPlanningRgpsTimeAcceleratorTypeormEntity,
     ): GetRetirementPlanningRgpsTimeAcceleratorQueryResult => {
+      const { retirementPlanningRgps, ...rest } = source;
       return GetRetirementPlanningRgpsTimeAcceleratorQueryResult.build({
-        ...source,
+        ...rest,
         id: new RetirementPlanningRgpsTimeAcceleratorId(source.id),
+        retirementPlanningRgpsId:
+          retirementPlanningRgps?.id != null
+            ? new RetirementPlanningRgpsId(retirementPlanningRgps.id)
+            : null,
       });
     };
 
@@ -44,8 +50,10 @@ export class GetRetirementPlanningRgpsTimeAcceleratorQueryResultAutoMapperProfil
     const convertDomainEntityToOrmEntity = (
       source: GetRetirementPlanningRgpsTimeAcceleratorQueryResult,
     ): RetirementPlanningRgpsTimeAcceleratorTypeormEntity => {
+      const { retirementPlanningRgpsId: _retirementPlanningRgpsId, ...rest } =
+        source;
       return RetirementPlanningRgpsTimeAcceleratorTypeormEntity.build({
-        ...source,
+        ...rest,
         id: source.id.toString(),
       });
     };

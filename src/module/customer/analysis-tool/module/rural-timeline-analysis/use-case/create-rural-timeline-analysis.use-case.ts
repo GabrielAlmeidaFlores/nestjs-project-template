@@ -12,6 +12,8 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { RuralTimelineAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis/command/rural-timeline-analysis.command.repository.gateway';
 import { RuralTimelineAnalysisInssBenefitCommandRepositoryGateway } from '@module/customer/analysis-tool/module/rural-timeline-analysis/domain/repository/rural-timeline-analysis-inss-benefit/command/rural-timeline-analysis-inss-benefit.command.repository.gateway';
@@ -74,6 +76,8 @@ export class CreateRuralTimelineAnalysisUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(FileProcessorGateway)
     private readonly fileProcessorGateway: FileProcessorGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -403,18 +407,31 @@ export class CreateRuralTimelineAnalysisUseCase {
         analysisToolRecord,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      ruralTimelineAnalysisTransaction,
-      ...ruralTimelineAnalysisInssBenefitTransactions,
-      ...ruralTimelineAnalysisLegalProceedingTransactions,
-      ...residenceTransactions,
-      ...propertyTransactions,
-      ...periodTransactions,
-      ...documentTransactions,
-      ...economicAspectsTransactions,
-      ...familyGroupMemberTransactions,
-      analysisToolRecordTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.CREATED,
+        analysisType: AnalysisToolRecordTypeEnum.RURAL_TIMELINE_ANALYSIS,
+        organizationMemberId: analysisToolRecord.createdBy.toString(),
+        analysisToolClientId:
+          analysisToolRecord.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecord.id.toString(),
+        transactions: [
+          ruralTimelineAnalysisTransaction,
+          ...ruralTimelineAnalysisInssBenefitTransactions,
+          ...ruralTimelineAnalysisLegalProceedingTransactions,
+          ...residenceTransactions,
+          ...propertyTransactions,
+          ...periodTransactions,
+          ...documentTransactions,
+          ...economicAspectsTransactions,
+          ...familyGroupMemberTransactions,
+          analysisToolRecordTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
   }

@@ -7,7 +7,10 @@ import { AnalysisToolRecordQueryRepositoryGateway } from '@module/customer/analy
 import { AnalysisToolClientEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-client/analysis-tool-client.entity';
 import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/analysis-tool-record.entity';
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
+import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-tool-record-type.enum';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { AnalysisProcessorGateway } from '@module/customer/analysis-tool/lib/analysis-processor/analysis-processor.gateway';
 import { ExportDocumentGateway } from '@module/customer/analysis-tool/lib/export-document/export-document.gateway';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
@@ -53,6 +56,8 @@ export class CreateSpecialActivityAnalysisResultUseCase {
     private readonly getPaymentPlanPaidResourcePromptUseCase: GetPaymentPlanPaidResourcePromptUseCaseGateway,
     @Inject(ExportDocumentGateway)
     private readonly exportDocumentGateway: ExportDocumentGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -187,12 +192,25 @@ export class CreateSpecialActivityAnalysisResultUseCase {
         specialActivity,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      consumeCreditTransaction,
-      createSpecialActivityResultTransaction,
-      updateSpecialActivityTransaction,
-      updateAnalysisToolRecordTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.RESULT_ADDED,
+        analysisType: AnalysisToolRecordTypeEnum.SPECIAL_ACTIVITY,
+        organizationMemberId: organizationMember.id.toString(),
+        analysisToolClientId:
+          analysisToolRecordQueryResult.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+        transactions: [
+          consumeCreditTransaction,
+          createSpecialActivityResultTransaction,
+          updateSpecialActivityTransaction,
+          updateAnalysisToolRecordTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
 

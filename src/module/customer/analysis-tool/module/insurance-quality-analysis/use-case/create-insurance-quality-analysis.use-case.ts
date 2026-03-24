@@ -12,6 +12,8 @@ import { AnalysisToolRecordTypeEnum } from '@module/customer/analysis-tool/domai
 import { AnalysisToolRecordCode } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/value-object/analysis-tool-record-code/analysis-tool-record-code.value-object';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { InsuranceQualityAnalysisCommandRepositoryGateway } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/repository/insurance-quality-analysis/command/insurance-quality-analysis.command.repository.gateway';
 import { InsuranceQualityAnalysisEntity } from '@module/customer/analysis-tool/module/insurance-quality-analysis/domain/schema/entity/insurance-quality-analysis/insurance-quality-analysis.entity';
 import { CreateInsuranceQualityAnalysisRequestDto } from '@module/customer/analysis-tool/module/insurance-quality-analysis/dto/request/create-insurance-quality-analysis.request.dto';
@@ -36,6 +38,8 @@ export class CreateInsuranceQualityAnalysisUseCase {
     private readonly analysisToolRecordQueryRepositoryGateway: AnalysisToolRecordQueryRepositoryGateway,
     @Inject(AnalysisToolRecordCommandRepositoryGateway)
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -107,10 +111,23 @@ export class CreateInsuranceQualityAnalysisUseCase {
         analysisToolRecord,
       );
 
-    const transaction = await this.baseTransactionRepositoryGateway.execute([
-      insuranceQualityAnalysisTransaction,
-      analysisToolRecordTransaction,
-    ]);
+    const transactionsWithActivity =
+      this.analysisActivityTrackerGateway.appendActivityTransaction({
+        action: AnalysisActivityActionEnum.CREATED,
+        analysisType: AnalysisToolRecordTypeEnum.INSURANCE_QUALITY_ANALYSIS,
+        organizationMemberId: analysisToolRecord.createdBy.toString(),
+        analysisToolClientId:
+          analysisToolRecord.analysisToolClient.id.toString(),
+        analysisToolRecordId: analysisToolRecord.id.toString(),
+        transactions: [
+          insuranceQualityAnalysisTransaction,
+          analysisToolRecordTransaction,
+        ],
+      });
+
+    const transaction = await this.baseTransactionRepositoryGateway.execute(
+      transactionsWithActivity,
+    );
 
     await transaction.commit();
   }

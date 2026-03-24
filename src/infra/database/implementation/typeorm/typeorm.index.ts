@@ -148,6 +148,7 @@ import { SpeechGeneratorDocumentTypeormCommandRepository } from '@infra/database
 import { SpeechGeneratorLegalProceedingTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-legal-proceeding/speech-generator-legal-proceeding.typeorm.command.repository';
 import { SpeechGeneratorResultTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/speech-generator-result/speech-generator-result.typeorm.command.repository';
 import { SystemActivitiesTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.command.repository';
+import { SystemActivitiesTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/system-activities/system-activities.typeorm.query.repository';
 import { TutorialTypeormCommandRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.command.repository';
 import { TutorialTypeormQueryRepository } from '@infra/database/implementation/typeorm/repository/tutorial/tutorial.typeorm.query.repository';
 import { AdminTypeormEntity } from '@infra/database/implementation/typeorm/schema/entity/admin.typeorm.entity';
@@ -581,6 +582,7 @@ export class TypeormIndex {
     MedicalQuestionGeneratorLegalProceedingTypeormCommandRepository,
     MedicalQuestionGeneratorResultTypeormCommandRepository,
     SystemActivitiesTypeormCommandRepository,
+    SystemActivitiesTypeormQueryRepository,
     TutorialTypeormCommandRepository,
     TutorialTypeormQueryRepository,
   ];

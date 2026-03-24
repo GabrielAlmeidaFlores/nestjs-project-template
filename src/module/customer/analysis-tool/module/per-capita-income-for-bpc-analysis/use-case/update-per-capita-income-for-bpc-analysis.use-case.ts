@@ -11,6 +11,8 @@ import { AnalysisToolRecordEntity } from '@module/customer/analysis-tool/domain/
 import { AnalysisStatusEnum } from '@module/customer/analysis-tool/domain/schema/entity/analysis-tool-record/enum/analysis-status.enum';
 import { AnalysisToolClientNotFoundError } from '@module/customer/analysis-tool/error/analysis-tool-client-not-found.error';
 import { OrganizationMemberNotFoundError } from '@module/customer/analysis-tool/error/organization-member-not-found-error.error';
+import { AnalysisActivityTrackerGateway } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/analysis-activity-tracker.gateway';
+import { AnalysisActivityActionEnum } from '@module/customer/analysis-tool/lib/analysis-activity-tracker/enum/analysis-activity-action.enum';
 import { FileProcessorGateway } from '@module/customer/analysis-tool/lib/file-processor/file-processor.gateway';
 import { PerCapitaIncomeForBpcAnalysisQueryRepositoryGateway } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/per-capita-income-for-bpc-analysis.query.repository.gateway';
 import { GetPerCapitaIncomeForBpcAnalysisWithRelationsQueryResult } from '@module/customer/analysis-tool/module/per-capita-income-for-bpc-analysis/domain/repository/per-capita-income-for-bpc-analysis/query/result/get-per-capita-income-for-bpc-analysis-with-relations.query.result';
@@ -59,6 +61,8 @@ export class UpdatePerCapitaIncomeForBpcAnalysisUseCase {
     private readonly analysisToolRecordCommandRepositoryGateway: AnalysisToolRecordCommandRepositoryGateway,
     @Inject(BaseTransactionRepositoryGateway)
     private readonly baseTransactionRepositoryGateway: BaseTransactionRepositoryGateway,
+    @Inject(AnalysisActivityTrackerGateway)
+    private readonly analysisActivityTrackerGateway: AnalysisActivityTrackerGateway,
   ) {}
 
   public async execute(
@@ -176,10 +180,26 @@ export class UpdatePerCapitaIncomeForBpcAnalysisUseCase {
 
     transactions.push(...legalProceedingNumberTransactions);
 
-    // Execute all transactions
     if (transactions.length > 0) {
+      const analysisToolClientIdForActivity =
+        analysisToolClientId !== undefined
+          ? analysisToolClientId.toString()
+          : analysisToolRecordQueryResult.analysisToolClient.id.toString();
+
+      const transactionsWithActivity =
+        this.analysisActivityTrackerGateway.appendActivityTransaction({
+          action: AnalysisActivityActionEnum.UPDATED,
+          analysisType: analysisToolRecordQueryResult.type,
+          organizationMemberId: organizationMember.id.toString(),
+          analysisToolClientId: analysisToolClientIdForActivity,
+          analysisToolRecordId: analysisToolRecordQueryResult.id.toString(),
+          transactions,
+        });
+
       const executeTransactions =
-        await this.baseTransactionRepositoryGateway.execute(transactions);
+        await this.baseTransactionRepositoryGateway.execute(
+          transactionsWithActivity,
+        );
       await executeTransactions.commit();
     }
 

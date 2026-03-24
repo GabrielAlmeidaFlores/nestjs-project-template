@@ -5,6 +5,7 @@ import { AffiliateCustomerAdminModule } from '@module/admin/affiliate-customer/a
 import { CustomerManagementModule } from '@module/admin/customer-management/customer-management.module';
 import { DashboardMetricsModule } from '@module/admin/dashboard-metrics/dashboard-metrics.module';
 import { PaymentPlanModule } from '@module/admin/payment-plan/payment-plan.module';
+import { SystemActivitiesAdminModule } from '@module/admin/system-activities/system-activities.module';
 import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { AdminTutorialModule } from '@module/admin/tutorial/tutorial.module';
     DashboardMetricsModule,
     PaymentPlanModule,
     AdminTutorialModule,
+    SystemActivitiesAdminModule,
   ],
 })
 export class AdminModule {
