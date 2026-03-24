@@ -8,6 +8,7 @@ import { AffiliateCustomerId } from '@module/customer/affiliate-customer/domain/
 import { AffiliateBankTransferItemResponseDto } from '@module/customer/affiliate-customer/dto/response/affiliate-bank-transfer-item.response.dto';
 import { AffiliateCommissionItemResponseDto } from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
+import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
 
 @Injectable()
@@ -27,6 +28,7 @@ export class ListAffiliateCommissionsUseCase {
 
   public async execute(
     affiliateCustomerId: AffiliateCustomerId,
+    filters: ListAffiliateCommissionsQueryParam = new ListAffiliateCommissionsQueryParam(),
   ): Promise<ListAffiliateCommissionsResponseDto> {
     const affiliate =
       await this.affiliateCustomerQueryRepository.findOneById(
@@ -38,8 +40,9 @@ export class ListAffiliateCommissionsUseCase {
     }
 
     const commissions =
-      await this.commissionQueryRepository.findManyByAffiliateCustomerId(
+      await this.commissionQueryRepository.findManyByAffiliateCustomerIdWithFilters(
         affiliate.id,
+        filters,
       );
 
     const affiliateTransfers =

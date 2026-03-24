@@ -4,20 +4,19 @@ import { CustomerQueryRepositoryGateway } from '@module/customer/account/domain/
 import { CustomerNotFoundError } from '@module/customer/account/error/customer-not-found-error.error';
 import { AffiliateBankTransferQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-bank-transfer/query/affiliate-bank-transfer.query.repository.gateway';
 import { AffiliateCustomerQueryRepositoryGateway } from '@module/customer/affiliate-customer/domain/repository/affiliate-customer/query/affiliate-customer.query.repository.gateway';
-import { AffiliateBankTransferItemResponseDto } from '@module/customer/affiliate-customer/dto/response/affiliate-bank-transfer-item.response.dto';
-import {
-  AffiliateCommissionItemResponseDto,
-  ListMyAffiliateCommissionsResponseDto,
-} from '@module/customer/affiliate-customer/dto/response/list-my-affiliate-commissions.response.dto';
+import { GetMyAffiliateCustomerSummaryResponseDto } from '@module/customer/affiliate-customer/dto/response/get-my-affiliate-customer-summary.response.dto';
 import { AffiliateCustomerNotFoundError } from '@module/customer/affiliate-customer/error/affiliate-customer-not-found.error';
 import { OrganizationPaymentPlanAffiliateCommissionQueryRepositoryGateway } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/organization-payment-plan-affiliate-commission.query.repository.gateway';
-import { ListAffiliateCommissionsQueryParam } from '@module/customer/payment-plan/domain/repository/organization-payment-plan-affiliate-commission/query/param/list-affiliate-commissions.query.param';
 import { BankTransferQueryRepositoryGateway } from '@module/generic/bank/domain/repository/bank-transfer/query/bank-transfer.query.repository.gateway';
+import { TransferStatusEnum } from '@module/generic/bank/domain/schema/entity/bank-transfer/enum/transfer-status.enum';
 import { SessionDataModel } from '@shared/api/util/decorator/property/get-session-data/model/generic/session-data.model';
 
 @Injectable()
-export class ListMyAffiliateCommissionsUseCase {
-  protected readonly _type = ListMyAffiliateCommissionsUseCase.name;
+export class GetMyAffiliateCustomerSummaryUseCase {
+  protected readonly _type = GetMyAffiliateCustomerSummaryUseCase.name;
+
+  private readonly lastMonthInDays: number;
+  private readonly lastYearInDays: number;
 
   public constructor(
     @Inject(CustomerQueryRepositoryGateway)
@@ -30,12 +29,14 @@ export class ListMyAffiliateCommissionsUseCase {
     private readonly affiliateBankTransferQueryRepository: AffiliateBankTransferQueryRepositoryGateway,
     @Inject(BankTransferQueryRepositoryGateway)
     private readonly bankTransferQueryRepository: BankTransferQueryRepositoryGateway,
-  ) {}
+  ) {
+    this.lastMonthInDays = 30;
+    this.lastYearInDays = 365;
+  }
 
   public async execute(
     sessionData: SessionDataModel,
-    filters: ListAffiliateCommissionsQueryParam = new ListAffiliateCommissionsQueryParam(),
-  ): Promise<ListMyAffiliateCommissionsResponseDto> {
+  ): Promise<GetMyAffiliateCustomerSummaryResponseDto> {
     const customer =
       await this.customerQueryRepository.findOneByAuthIdentityIdOrFail(
         sessionData.authIdentityId,
@@ -52,9 +53,8 @@ export class ListMyAffiliateCommissionsUseCase {
     }
 
     const commissions =
-      await this.commissionQueryRepository.findManyByAffiliateCustomerIdWithFilters(
+      await this.commissionQueryRepository.findManyByAffiliateCustomerId(
         affiliate.id,
-        filters,
       );
 
     const affiliateTransfers =
@@ -62,65 +62,64 @@ export class ListMyAffiliateCommissionsUseCase {
         commissions.map((c) => c.id),
       );
 
-    const transferByCommissionId = new Map(
-      affiliateTransfers.map((t) => [
-        t.affiliatePlanCommissionId.toString(),
-        t,
-      ]),
-    );
-
     const bankTransfers = await this.bankTransferQueryRepository.findManyByIds(
       affiliateTransfers.map((t) => t.bankTransferId),
     );
 
-    const bankTransferById = new Map(
-      bankTransfers.map((bt) => [bt.id.toString(), bt]),
+    const now = new Date();
+
+    const cutoffLastMonth = new Date(now);
+    cutoffLastMonth.setDate(cutoffLastMonth.getDate() - this.lastMonthInDays);
+
+    const cutoffLast365Days = new Date(now);
+    cutoffLast365Days.setDate(
+      cutoffLast365Days.getDate() - this.lastYearInDays,
     );
 
-    const commissionItems = commissions.map((commission) => {
-      const affiliateTransfer = transferByCommissionId.get(
-        commission.id.toString(),
-      );
-
-      let transfer: AffiliateBankTransferItemResponseDto | undefined;
-
-      if (affiliateTransfer !== undefined) {
-        const bankTransfer = bankTransferById.get(
-          affiliateTransfer.bankTransferId.toString(),
-        );
-
-        if (bankTransfer !== undefined) {
-          transfer = AffiliateBankTransferItemResponseDto.build({
-            id: affiliateTransfer.id,
-            affiliatePlanCommissionId:
-              affiliateTransfer.affiliatePlanCommissionId,
-            bankPaymentId: affiliateTransfer.bankPaymentId,
-            bankTransferId: affiliateTransfer.bankTransferId,
-            bankExternalId: bankTransfer.bankExternalId ?? null,
-            amount: bankTransfer.amount.toNumber(),
-            status: bankTransfer.status,
-            pixAddressKey: bankTransfer.pixAddressKey,
-            pixAddressKeyType: bankTransfer.pixAddressKeyType,
-            transferDate: bankTransfer.transferDate ?? null,
-            description: bankTransfer.description ?? null,
-            createdAt: affiliateTransfer.createdAt,
-            updatedAt: affiliateTransfer.updatedAt,
-          });
-        }
-      }
-
-      return AffiliateCommissionItemResponseDto.build({
-        id: commission.id,
-        organizationPaymentPlanId: commission.organizationPaymentPlan,
-        commissionPercentage: commission.commissionPercentage,
-        createdAt: commission.createdAt,
-        updatedAt: commission.updatedAt,
-        transfer: transfer ?? null,
-      });
+    return GetMyAffiliateCustomerSummaryResponseDto.build({
+      conversions: commissions.length,
+      earningsLastMonth: this.sumCompletedTransfers(
+        bankTransfers,
+        cutoffLastMonth,
+      ),
+      earningsLast365Days: this.sumCompletedTransfers(
+        bankTransfers,
+        cutoffLast365Days,
+      ),
+      pendingAmount: this.sumPendingTransfers(bankTransfers),
     });
+  }
 
-    return ListMyAffiliateCommissionsResponseDto.build({
-      commissions: commissionItems,
-    });
+  private sumCompletedTransfers(
+    bankTransfers: {
+      amount: { toNumber(): number };
+      status: TransferStatusEnum;
+      transferDate: Date | null;
+      createdAt: Date;
+    }[],
+    since: Date,
+  ): number {
+    return bankTransfers
+      .filter(
+        (bt) =>
+          bt.status === TransferStatusEnum.DONE &&
+          (bt.transferDate ?? bt.createdAt) >= since,
+      )
+      .reduce((sum, bt) => sum + bt.amount.toNumber(), 0);
+  }
+
+  private sumPendingTransfers(
+    bankTransfers: {
+      amount: { toNumber(): number };
+      status: TransferStatusEnum;
+    }[],
+  ): number {
+    return bankTransfers
+      .filter(
+        (bt) =>
+          bt.status === TransferStatusEnum.PENDING ||
+          bt.status === TransferStatusEnum.BANK_PROCESSING,
+      )
+      .reduce((sum, bt) => sum + bt.amount.toNumber(), 0);
   }
 }

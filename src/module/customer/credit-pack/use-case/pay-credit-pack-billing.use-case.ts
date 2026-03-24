@@ -58,6 +58,8 @@ export class PayCreditPackBillingUseCase {
       }),
     );
 
-    return PayCreditPackBillingResponseDto.build({ bankPaymentId: bankPayment.id });
+    return PayCreditPackBillingResponseDto.build({
+      bankPaymentId: bankPayment.id,
+    });
   }
 }
